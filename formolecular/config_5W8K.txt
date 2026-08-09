@@ -1,0 +1,9 @@
+receptor = receptor_5W8K.pdbqt
+ligand = ligante_cerebral.pdbqt
+center_x = 28.43
+center_y = -0.91
+center_z = 26.85
+size_x = 80.0
+size_y = 80.0
+size_z = 80.0
+exhaustiveness = 8

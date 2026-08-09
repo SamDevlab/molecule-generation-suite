@@ -1,0 +1,6 @@
+ID,SMILES,Peso_Molar,Qtd_Aneis,LogP,TPSA,Complexidade,Score_QED,OB_Pct,Energia_3D_Kcal,Num_S,Num_Si,Num_B,Num_P,Num_Cl,Categoria,Num_N,IA_Pred_QED,IA_Pred_OB,IA_Pred_Vol,IA_Pred_Nutri,IA_Pred_TPSA
+Molecula_Util_1741109,O=C=NS(=O)(=O)c1occc1C(=O)OC(=O)NC(=O)OC(=O)Oc1ccccc1C(=O)N,467.324,0.605,0.202,227.8,-73.61,3.0,0.0,Agroquímicos/Fertilizantes,,,,0.0,,Energia/Aeroespacial,0.0,1.0,0.0119269965,163.82056,0.005299433,201.99936
+Molecula_Util_2728771,O=C=NC(=O)OBNC(=O)Oc1ccncc1C(=O)NC(=O)NNN,351.044,-2.273,0.126,203.2,-75.2,7.0,0.0,Agroquímicos/Fertilizantes,,,,0.0,,Química de Materiais,0.0,1.0,1.032551,152.87721,0.006707114,201.05353
+Molecula_Util_1286267,S(=O)(=O)C(=O)OS(=O)(=O)C(=O)Oc1occc1C(=O)NC(=O)N,370.273,-1.335,0.315,206.21,-25.93,2.0,0.0,Energia/Aeroespacial,,,,0.0,,Energia/Aeroespacial,0.0,0.97694784,0.016867904,146.20326,0.006607075,196.50002
+Molecula_Util_2579347,S(=O)(=O)C(=O)OC(=O)OC1CCCCC1c1ccncc1c1ccncc1c1occc1S(=O)(=O)BC(=O)N,575.386,2.518,0.181,202.89,-104.28,3.0,0.0,Agroquímicos/Fertilizantes,,,,0.0,,Química de Materiais,0.0,1.0,-0.0057855733,144.14612,0.0066764597,193.93974
+Molecula_Util_1496748,Oc1occc1S(=O)(=O)PC1CCCC1C(=O)NC(=O)C(=O)OC(=O)N,406.309,-0.214,0.263,183.07,-70.88,2.0,1.0,Agroquímicos/Fertilizantes,,,,0.0,,Energia/Aeroespacial,0.0,1.0,1.0501972,163.5429,0.0058572483,193.39464

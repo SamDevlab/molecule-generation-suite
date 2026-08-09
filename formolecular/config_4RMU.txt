@@ -1,0 +1,9 @@
+receptor = receptor_4RMU.pdbqt
+ligand = ligante_cerebral.pdbqt
+center_x = -6.94
+center_y = -0.85
+center_z = 8.8
+size_x = 80.0
+size_y = 80.0
+size_z = 80.0
+exhaustiveness = 8

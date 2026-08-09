@@ -1,0 +1,14 @@
+receptor = proteina_alvo.pdbqt
+ligand = ligante_cerebral.pdbqt
+
+center_x = 2.0
+center_y = 65.0
+center_z = 63.0
+
+size_x = 30.0
+size_y = 30.0
+size_z = 30.0
+
+exhaustiveness = 8
+num_modes = 9
+out = resultado_encaixe.pdbqt

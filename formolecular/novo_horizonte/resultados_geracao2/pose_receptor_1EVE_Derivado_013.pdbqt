@@ -1,0 +1,477 @@
+MODEL 1
+REMARK VINA RESULT:    -6.613      0.000      0.000
+REMARK INTER + INTRA:          -8.864
+REMARK INTER:                  -8.546
+REMARK INTRA:                  -0.318
+REMARK UNBOUND:                -0.318
+REMARK  Name = ligantes_geracao2\Derivado_013.pdb
+REMARK  8 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C1_1  and  C2_2
+REMARK    2  A    between atoms: C2_2  and  C3_3
+REMARK    3  A    between atoms: C3_3  and  C4_4
+REMARK    4  A    between atoms: C4_4  and  C5_6
+REMARK    5  A    between atoms: C6_7  and  C7_8
+REMARK    6  A    between atoms: C10_11  and  C11_12
+REMARK    7  A    between atoms: C12_13  and  C13_14
+REMARK    8  A    between atoms: C16_19  and  C17_20
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C5  UNL     1       1.327  60.920  71.759  0.00  0.00    +0.000 C 
+ATOM      2  C6  UNL     1       0.687  59.522  71.825  0.00  0.00    +0.000 C 
+ATOM      3  C7  UNL     1       0.095  59.121  73.169  0.00  0.00    +0.000 C 
+ATOM      4  C8  UNL     1       1.757  58.551  71.305  0.00  0.00    +0.000 C 
+ATOM      5  C9  UNL     1       2.836  59.414  70.636  0.00  0.00    +0.000 C 
+ATOM      6  C10 UNL     1       2.207  60.809  70.495  0.00  0.00    +0.000 C 
+ENDROOT
+BRANCH   6   7
+ATOM      7  C11 UNL     1       3.010  62.057  70.142  0.00  0.00    +0.000 C 
+ATOM      8  C12 UNL     1       2.297  63.233  69.770  0.00  0.00    +0.000 C 
+ATOM      9  C14 UNL     1       2.961  64.418  69.443  0.00  0.00    +0.000 C 
+ATOM     10  C15 UNL     1       4.331  64.420  69.491  0.00  0.00    +0.000 C 
+ATOM     11  N2  UNL     1       5.047  63.340  69.835  0.00  0.00    +0.000 NA
+ATOM     12  C16 UNL     1       4.408  62.179  70.154  0.00  0.00    +0.000 C 
+ATOM     13  C17 UNL     1       5.368  61.083  70.506  0.00  0.00    +0.000 C 
+BRANCH   8  14
+ATOM     14  C13 UNL     1       0.861  63.272  69.713  0.00  0.00    +0.000 C 
+ATOM     15  N1  UNL     1      -0.299  63.305  69.688  0.00  0.00    +0.000 NA
+ENDBRANCH   8  14
+ENDBRANCH   6   7
+BRANCH   1  16
+ATOM     16  C4  UNL     1       2.132  61.298  73.006  0.00  0.00    +0.000 C 
+ATOM     17  O1  UNL     1       3.088  60.624  73.389  0.00  0.00    +0.000 OA
+BRANCH  16  18
+ATOM     18  C3  UNL     1       1.703  62.573  73.719  0.00  0.00    +0.000 C 
+BRANCH  18  20
+ATOM     19  C1  UNL     1      -0.506  63.283  74.740  0.00  0.00    +0.000 C 
+ATOM     20  C2  UNL     1       0.253  62.968  73.458  0.00  0.00    +0.000 C 
+ENDBRANCH  18  20
+ENDBRANCH  16  18
+ENDBRANCH   1  16
+TORSDOF 5
+ENDMDL
+MODEL 2
+REMARK VINA RESULT:    -6.467      2.266      4.877
+REMARK INTER + INTRA:          -8.675
+REMARK INTER:                  -8.272
+REMARK INTRA:                  -0.403
+REMARK UNBOUND:                -0.318
+REMARK  Name = ligantes_geracao2\Derivado_013.pdb
+REMARK  8 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C1_1  and  C2_2
+REMARK    2  A    between atoms: C2_2  and  C3_3
+REMARK    3  A    between atoms: C3_3  and  C4_4
+REMARK    4  A    between atoms: C4_4  and  C5_6
+REMARK    5  A    between atoms: C6_7  and  C7_8
+REMARK    6  A    between atoms: C10_11  and  C11_12
+REMARK    7  A    between atoms: C12_13  and  C13_14
+REMARK    8  A    between atoms: C16_19  and  C17_20
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C5  UNL     1       3.045  61.800  70.869  0.00  0.00    +0.000 C 
+ATOM      2  C6  UNL     1       4.466  62.363  70.690  0.00  0.00    +0.000 C 
+ATOM      3  C7  UNL     1       4.675  63.284  69.496  0.00  0.00    +0.000 C 
+ATOM      4  C8  UNL     1       5.400  61.144  70.703  0.00  0.00    +0.000 C 
+ATOM      5  C9  UNL     1       4.566  59.966  71.227  0.00  0.00    +0.000 C 
+ATOM      6  C10 UNL     1       3.293  60.600  71.809  0.00  0.00    +0.000 C 
+ENDROOT
+BRANCH   6   7
+ATOM      7  C11 UNL     1       2.054  59.795  72.186  0.00  0.00    +0.000 C 
+ATOM      8  C12 UNL     1       1.087  60.404  73.035  0.00  0.00    +0.000 C 
+ATOM      9  C14 UNL     1      -0.078  59.735  73.416  0.00  0.00    +0.000 C 
+ATOM     10  C15 UNL     1      -0.270  58.462  72.946  0.00  0.00    +0.000 C 
+ATOM     11  N2  UNL     1       0.610  57.845  72.143  0.00  0.00    +0.000 NA
+ATOM     12  C16 UNL     1       1.750  58.489  71.767  0.00  0.00    +0.000 C 
+ATOM     13  C17 UNL     1       2.611  57.645  70.878  0.00  0.00    +0.000 C 
+BRANCH   8  14
+ATOM     14  C13 UNL     1       1.249  61.739  73.546  0.00  0.00    +0.000 C 
+ATOM     15  N1  UNL     1       1.360  62.816  73.963  0.00  0.00    +0.000 NA
+ENDBRANCH   8  14
+ENDBRANCH   6   7
+BRANCH   1  16
+ATOM     16  C4  UNL     1       2.365  61.393  69.559  0.00  0.00    +0.000 C 
+ATOM     17  O1  UNL     1       2.729  60.406  68.920  0.00  0.00    +0.000 OA
+BRANCH  16  18
+ATOM     18  C3  UNL     1       1.192  62.256  69.117  0.00  0.00    +0.000 C 
+BRANCH  18  20
+ATOM     19  C1  UNL     1       0.561  64.435  70.249  0.00  0.00    +0.000 C 
+ATOM     20  C2  UNL     1       0.443  62.917  70.270  0.00  0.00    +0.000 C 
+ENDBRANCH  18  20
+ENDBRANCH  16  18
+ENDBRANCH   1  16
+TORSDOF 5
+ENDMDL
+MODEL 3
+REMARK VINA RESULT:    -6.183     19.246     21.529
+REMARK INTER + INTRA:          -8.307
+REMARK INTER:                  -7.881
+REMARK INTRA:                  -0.426
+REMARK UNBOUND:                -0.318
+REMARK  Name = ligantes_geracao2\Derivado_013.pdb
+REMARK  8 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C1_1  and  C2_2
+REMARK    2  A    between atoms: C2_2  and  C3_3
+REMARK    3  A    between atoms: C3_3  and  C4_4
+REMARK    4  A    between atoms: C4_4  and  C5_6
+REMARK    5  A    between atoms: C6_7  and  C7_8
+REMARK    6  A    between atoms: C10_11  and  C11_12
+REMARK    7  A    between atoms: C12_13  and  C13_14
+REMARK    8  A    between atoms: C16_19  and  C17_20
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C5  UNL     1       7.095  81.462  65.881  0.00  0.00    +0.000 C 
+ATOM      2  C6  UNL     1       8.176  80.442  66.278  0.00  0.00    +0.000 C 
+ATOM      3  C7  UNL     1       9.234  80.146  65.226  0.00  0.00    +0.000 C 
+ATOM      4  C8  UNL     1       7.414  79.198  66.758  0.00  0.00    +0.000 C 
+ATOM      5  C9  UNL     1       5.956  79.633  66.958  0.00  0.00    +0.000 C 
+ATOM      6  C10 UNL     1       5.983  81.169  66.912  0.00  0.00    +0.000 C 
+ENDROOT
+BRANCH   6   7
+ATOM      7  C11 UNL     1       4.727  82.025  66.785  0.00  0.00    +0.000 C 
+ATOM      8  C12 UNL     1       4.748  83.338  67.336  0.00  0.00    +0.000 C 
+ATOM      9  C14 UNL     1       3.642  84.185  67.252  0.00  0.00    +0.000 C 
+ATOM     10  C15 UNL     1       2.522  83.716  66.615  0.00  0.00    +0.000 C 
+ATOM     11  N2  UNL     1       2.452  82.489  66.079  0.00  0.00    +0.000 NA
+ATOM     12  C16 UNL     1       3.527  81.654  66.159  0.00  0.00    +0.000 C 
+ATOM     13  C17 UNL     1       3.263  80.329  65.512  0.00  0.00    +0.000 C 
+BRANCH   8  14
+ATOM     14  C13 UNL     1       5.905  83.868  68.007  0.00  0.00    +0.000 C 
+ATOM     15  N1  UNL     1       6.845  84.277  68.552  0.00  0.00    +0.000 NA
+ENDBRANCH   8  14
+ENDBRANCH   6   7
+BRANCH   1  16
+ATOM     16  C4  UNL     1       6.609  81.326  64.435  0.00  0.00    +0.000 C 
+ATOM     17  O1  UNL     1       6.357  80.230  63.937  0.00  0.00    +0.000 OA
+BRANCH  16  18
+ATOM     18  C3  UNL     1       6.419  82.627  63.667  0.00  0.00    +0.000 C 
+BRANCH  18  20
+ATOM     19  C1  UNL     1       4.139  82.541  62.560  0.00  0.00    +0.000 C 
+ATOM     20  C2  UNL     1       5.647  82.465  62.361  0.00  0.00    +0.000 C 
+ENDBRANCH  18  20
+ENDBRANCH  16  18
+ENDBRANCH   1  16
+TORSDOF 5
+ENDMDL
+MODEL 4
+REMARK VINA RESULT:    -6.181      2.518      5.763
+REMARK INTER + INTRA:          -8.305
+REMARK INTER:                  -8.184
+REMARK INTRA:                  -0.121
+REMARK UNBOUND:                -0.318
+REMARK  Name = ligantes_geracao2\Derivado_013.pdb
+REMARK  8 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C1_1  and  C2_2
+REMARK    2  A    between atoms: C2_2  and  C3_3
+REMARK    3  A    between atoms: C3_3  and  C4_4
+REMARK    4  A    between atoms: C4_4  and  C5_6
+REMARK    5  A    between atoms: C6_7  and  C7_8
+REMARK    6  A    between atoms: C10_11  and  C11_12
+REMARK    7  A    between atoms: C12_13  and  C13_14
+REMARK    8  A    between atoms: C16_19  and  C17_20
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C5  UNL     1       1.647  60.927  71.261  0.00  0.00    +0.000 C 
+ATOM      2  C6  UNL     1       1.426  61.933  70.118  0.00  0.00    +0.000 C 
+ATOM      3  C7  UNL     1       2.604  62.839  69.788  0.00  0.00    +0.000 C 
+ATOM      4  C8  UNL     1       0.141  62.694  70.477  0.00  0.00    +0.000 C 
+ATOM      5  C9  UNL     1      -0.531  61.899  71.605  0.00  0.00    +0.000 C 
+ATOM      6  C10 UNL     1       0.198  60.546  71.636  0.00  0.00    +0.000 C 
+ENDROOT
+BRANCH   6   7
+ATOM      7  C11 UNL     1       0.056  59.545  72.778  0.00  0.00    +0.000 C 
+ATOM      8  C12 UNL     1       0.677  58.272  72.637  0.00  0.00    +0.000 C 
+ATOM      9  C14 UNL     1       0.602  57.305  73.643  0.00  0.00    +0.000 C 
+ATOM     10  C15 UNL     1      -0.093  57.618  74.782  0.00  0.00    +0.000 C 
+ATOM     11  N2  UNL     1      -0.694  58.804  74.963  0.00  0.00    +0.000 NA
+ATOM     12  C16 UNL     1      -0.627  59.752  73.986  0.00  0.00    +0.000 C 
+ATOM     13  C17 UNL     1      -1.360  61.004  74.362  0.00  0.00    +0.000 C 
+BRANCH   8  14
+ATOM     14  C13 UNL     1       1.419  57.907  71.460  0.00  0.00    +0.000 C 
+ATOM     15  N1  UNL     1       2.031  57.602  70.522  0.00  0.00    +0.000 NA
+ENDBRANCH   8  14
+ENDBRANCH   6   7
+BRANCH   1  16
+ATOM     16  C4  UNL     1       2.434  61.492  72.447  0.00  0.00    +0.000 C 
+ATOM     17  O1  UNL     1       2.049  62.484  73.066  0.00  0.00    +0.000 OA
+BRANCH  16  18
+ATOM     18  C3  UNL     1       3.694  60.733  72.837  0.00  0.00    +0.000 C 
+BRANCH  18  20
+ATOM     19  C1  UNL     1       5.473  60.932  71.041  0.00  0.00    +0.000 C 
+ATOM     20  C2  UNL     1       4.394  60.055  71.663  0.00  0.00    +0.000 C 
+ENDBRANCH  18  20
+ENDBRANCH  16  18
+ENDBRANCH   1  16
+TORSDOF 5
+ENDMDL
+MODEL 5
+REMARK VINA RESULT:    -6.180      1.024      2.466
+REMARK INTER + INTRA:          -8.304
+REMARK INTER:                  -8.710
+REMARK INTRA:                   0.406
+REMARK UNBOUND:                -0.318
+REMARK  Name = ligantes_geracao2\Derivado_013.pdb
+REMARK  8 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C1_1  and  C2_2
+REMARK    2  A    between atoms: C2_2  and  C3_3
+REMARK    3  A    between atoms: C3_3  and  C4_4
+REMARK    4  A    between atoms: C4_4  and  C5_6
+REMARK    5  A    between atoms: C6_7  and  C7_8
+REMARK    6  A    between atoms: C10_11  and  C11_12
+REMARK    7  A    between atoms: C12_13  and  C13_14
+REMARK    8  A    between atoms: C16_19  and  C17_20
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C5  UNL     1       1.086  60.871  71.853  0.00  0.00    +0.000 C 
+ATOM      2  C6  UNL     1       0.705  59.382  71.937  0.00  0.00    +0.000 C 
+ATOM      3  C7  UNL     1       0.357  58.859  73.323  0.00  0.00    +0.000 C 
+ATOM      4  C8  UNL     1       1.852  58.622  71.257  0.00  0.00    +0.000 C 
+ATOM      5  C9  UNL     1       2.681  59.672  70.503  0.00  0.00    +0.000 C 
+ATOM      6  C10 UNL     1       1.812  60.940  70.492  0.00  0.00    +0.000 C 
+ENDROOT
+BRANCH   6   7
+ATOM      7  C11 UNL     1       2.342  62.314  70.099  0.00  0.00    +0.000 C 
+ATOM      8  C12 UNL     1       3.753  62.507  70.064  0.00  0.00    +0.000 C 
+ATOM      9  C14 UNL     1       4.315  63.734  69.704  0.00  0.00    +0.000 C 
+ATOM     10  C15 UNL     1       3.464  64.759  69.380  0.00  0.00    +0.000 C 
+ATOM     11  N2  UNL     1       2.130  64.627  69.396  0.00  0.00    +0.000 NA
+ATOM     12  C16 UNL     1       1.572  63.434  69.749  0.00  0.00    +0.000 C 
+ATOM     13  C17 UNL     1       0.075  63.478  69.716  0.00  0.00    +0.000 C 
+BRANCH   8  14
+ATOM     14  C13 UNL     1       4.678  61.456  70.392  0.00  0.00    +0.000 C 
+ATOM     15  N1  UNL     1       5.438  60.616  70.643  0.00  0.00    +0.000 NA
+ENDBRANCH   8  14
+ENDBRANCH   6   7
+BRANCH   1  16
+ATOM     16  C4  UNL     1       1.960  61.358  73.013  0.00  0.00    +0.000 C 
+ATOM     17  O1  UNL     1       2.971  60.749  73.362  0.00  0.00    +0.000 OA
+BRANCH  16  18
+ATOM     18  C3  UNL     1       1.527  62.657  73.679  0.00  0.00    +0.000 C 
+BRANCH  18  20
+ATOM     19  C1  UNL     1      -0.815  62.608  74.650  0.00  0.00    +0.000 C 
+ATOM     20  C2  UNL     1       0.055  62.999  73.463  0.00  0.00    +0.000 C 
+ENDBRANCH  18  20
+ENDBRANCH  16  18
+ENDBRANCH   1  16
+TORSDOF 5
+ENDMDL
+MODEL 6
+REMARK VINA RESULT:    -6.133      1.808      4.144
+REMARK INTER + INTRA:          -8.244
+REMARK INTER:                  -7.583
+REMARK INTRA:                  -0.661
+REMARK UNBOUND:                -0.318
+REMARK  Name = ligantes_geracao2\Derivado_013.pdb
+REMARK  8 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C1_1  and  C2_2
+REMARK    2  A    between atoms: C2_2  and  C3_3
+REMARK    3  A    between atoms: C3_3  and  C4_4
+REMARK    4  A    between atoms: C4_4  and  C5_6
+REMARK    5  A    between atoms: C6_7  and  C7_8
+REMARK    6  A    between atoms: C10_11  and  C11_12
+REMARK    7  A    between atoms: C12_13  and  C13_14
+REMARK    8  A    between atoms: C16_19  and  C17_20
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C5  UNL     1       1.697  60.645  73.111  0.00  0.00    +0.000 C 
+ATOM      2  C6  UNL     1       1.373  60.953  74.584  0.00  0.00    +0.000 C 
+ATOM      3  C7  UNL     1       0.616  59.872  75.342  0.00  0.00    +0.000 C 
+ATOM      4  C8  UNL     1       0.666  62.316  74.576  0.00  0.00    +0.000 C 
+ATOM      5  C9  UNL     1       0.900  62.918  73.184  0.00  0.00    +0.000 C 
+ATOM      6  C10 UNL     1       1.999  62.051  72.549  0.00  0.00    +0.000 C 
+ENDROOT
+BRANCH   6   7
+ATOM      7  C11 UNL     1       2.356  62.103  71.067  0.00  0.00    +0.000 C 
+ATOM      8  C12 UNL     1       3.622  61.596  70.661  0.00  0.00    +0.000 C 
+ATOM      9  C14 UNL     1       4.017  61.600  69.321  0.00  0.00    +0.000 C 
+ATOM     10  C15 UNL     1       3.143  62.109  68.396  0.00  0.00    +0.000 C 
+ATOM     11  N2  UNL     1       1.938  62.598  68.728  0.00  0.00    +0.000 NA
+ATOM     12  C16 UNL     1       1.546  62.600  70.034  0.00  0.00    +0.000 C 
+ATOM     13  C17 UNL     1       0.179  63.187  70.212  0.00  0.00    +0.000 C 
+BRANCH   8  14
+ATOM     14  C13 UNL     1       4.565  61.049  71.599  0.00  0.00    +0.000 C 
+ATOM     15  N1  UNL     1       5.341  60.609  72.342  0.00  0.00    +0.000 NA
+ENDBRANCH   8  14
+ENDBRANCH   6   7
+BRANCH   1  16
+ATOM     16  C4  UNL     1       0.566  59.940  72.358  0.00  0.00    +0.000 C 
+ATOM     17  O1  UNL     1      -0.541  60.459  72.217  0.00  0.00    +0.000 OA
+BRANCH  16  18
+ATOM     18  C3  UNL     1       0.903  58.580  71.762  0.00  0.00    +0.000 C 
+BRANCH  18  20
+ATOM     19  C1  UNL     1       3.047  57.903  70.589  0.00  0.00    +0.000 C 
+ATOM     20  C2  UNL     1       2.368  58.183  71.923  0.00  0.00    +0.000 C 
+ENDBRANCH  18  20
+ENDBRANCH  16  18
+ENDBRANCH   1  16
+TORSDOF 5
+ENDMDL
+MODEL 7
+REMARK VINA RESULT:    -6.081      2.241      5.056
+REMARK INTER + INTRA:          -8.177
+REMARK INTER:                  -8.579
+REMARK INTRA:                   0.403
+REMARK UNBOUND:                -0.318
+REMARK  Name = ligantes_geracao2\Derivado_013.pdb
+REMARK  8 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C1_1  and  C2_2
+REMARK    2  A    between atoms: C2_2  and  C3_3
+REMARK    3  A    between atoms: C3_3  and  C4_4
+REMARK    4  A    between atoms: C4_4  and  C5_6
+REMARK    5  A    between atoms: C6_7  and  C7_8
+REMARK    6  A    between atoms: C10_11  and  C11_12
+REMARK    7  A    between atoms: C12_13  and  C13_14
+REMARK    8  A    between atoms: C16_19  and  C17_20
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C5  UNL     1       2.768  62.538  70.868  0.00  0.00    +0.000 C 
+ATOM      2  C6  UNL     1       4.201  62.837  70.394  0.00  0.00    +0.000 C 
+ATOM      3  C7  UNL     1       4.325  63.636  69.105  0.00  0.00    +0.000 C 
+ATOM      4  C8  UNL     1       4.916  61.479  70.353  0.00  0.00    +0.000 C 
+ATOM      5  C9  UNL     1       4.020  60.494  71.117  0.00  0.00    +0.000 C 
+ATOM      6  C10 UNL     1       2.994  61.370  71.854  0.00  0.00    +0.000 C 
+ENDROOT
+BRANCH   6   7
+ATOM      7  C11 UNL     1       1.736  60.813  72.511  0.00  0.00    +0.000 C 
+ATOM      8  C12 UNL     1       1.312  59.502  72.151  0.00  0.00    +0.000 C 
+ATOM      9  C14 UNL     1       0.176  58.919  72.718  0.00  0.00    +0.000 C 
+ATOM     10  C15 UNL     1      -0.528  59.649  73.641  0.00  0.00    +0.000 C 
+ATOM     11  N2  UNL     1      -0.168  60.886  74.014  0.00  0.00    +0.000 NA
+ATOM     12  C16 UNL     1       0.937  61.464  73.465  0.00  0.00    +0.000 C 
+ATOM     13  C17 UNL     1       1.177  62.844  73.997  0.00  0.00    +0.000 C 
+BRANCH   8  14
+ATOM     14  C13 UNL     1       2.024  58.703  71.191  0.00  0.00    +0.000 C 
+ATOM     15  N1  UNL     1       2.583  58.046  70.415  0.00  0.00    +0.000 NA
+ENDBRANCH   8  14
+ENDBRANCH   6   7
+BRANCH   1  16
+ATOM     16  C4  UNL     1       1.799  62.177  69.739  0.00  0.00    +0.000 C 
+ATOM     17  O1  UNL     1       2.066  61.308  68.910  0.00  0.00    +0.000 OA
+BRANCH  16  18
+ATOM     18  C3  UNL     1       0.475  62.928  69.727  0.00  0.00    +0.000 C 
+BRANCH  18  20
+ATOM     19  C1  UNL     1       0.511  65.463  69.762  0.00  0.00    +0.000 C 
+ATOM     20  C2  UNL     1       0.471  64.186  70.590  0.00  0.00    +0.000 C 
+ENDBRANCH  18  20
+ENDBRANCH  16  18
+ENDBRANCH   1  16
+TORSDOF 5
+ENDMDL
+MODEL 8
+REMARK VINA RESULT:    -5.733      2.452      3.822
+REMARK INTER + INTRA:          -7.726
+REMARK INTER:                  -7.030
+REMARK INTRA:                  -0.697
+REMARK UNBOUND:                -0.318
+REMARK  Name = ligantes_geracao2\Derivado_013.pdb
+REMARK  8 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C1_1  and  C2_2
+REMARK    2  A    between atoms: C2_2  and  C3_3
+REMARK    3  A    between atoms: C3_3  and  C4_4
+REMARK    4  A    between atoms: C4_4  and  C5_6
+REMARK    5  A    between atoms: C6_7  and  C7_8
+REMARK    6  A    between atoms: C10_11  and  C11_12
+REMARK    7  A    between atoms: C12_13  and  C13_14
+REMARK    8  A    between atoms: C16_19  and  C17_20
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C5  UNL     1       0.043  58.741  74.335  0.00  0.00    +0.000 C 
+ATOM      2  C6  UNL     1      -0.362  57.324  74.777  0.00  0.00    +0.000 C 
+ATOM      3  C7  UNL     1       0.168  56.869  76.129  0.00  0.00    +0.000 C 
+ATOM      4  C8  UNL     1       0.029  56.400  73.615  0.00  0.00    +0.000 C 
+ATOM      5  C9  UNL     1       0.320  57.312  72.415  0.00  0.00    +0.000 C 
+ATOM      6  C10 UNL     1      -0.226  58.692  72.815  0.00  0.00    +0.000 C 
+ENDROOT
+BRANCH   6   7
+ATOM      7  C11 UNL     1       0.092  59.972  72.050  0.00  0.00    +0.000 C 
+ATOM      8  C12 UNL     1      -0.821  61.061  72.150  0.00  0.00    +0.000 C 
+ATOM      9  C14 UNL     1      -0.595  62.269  71.487  0.00  0.00    +0.000 C 
+ATOM     10  C15 UNL     1       0.543  62.383  70.730  0.00  0.00    +0.000 C 
+ATOM     11  N2  UNL     1       1.433  61.387  70.605  0.00  0.00    +0.000 NA
+ATOM     12  C16 UNL     1       1.219  60.204  71.247  0.00  0.00    +0.000 C 
+ATOM     13  C17 UNL     1       2.313  59.214  70.986  0.00  0.00    +0.000 C 
+BRANCH   8  14
+ATOM     14  C13 UNL     1      -2.022  60.984  72.937  0.00  0.00    +0.000 C 
+ATOM     15  N1  UNL     1      -2.992  60.942  73.573  0.00  0.00    +0.000 NA
+ENDBRANCH   8  14
+ENDBRANCH   6   7
+BRANCH   1  16
+ATOM     16  C4  UNL     1       1.493  59.108  74.665  0.00  0.00    +0.000 C 
+ATOM     17  O1  UNL     1       2.443  58.482  74.194  0.00  0.00    +0.000 OA
+BRANCH  16  18
+ATOM     18  C3  UNL     1       1.690  60.311  75.576  0.00  0.00    +0.000 C 
+BRANCH  18  20
+ATOM     19  C1  UNL     1       0.729  62.598  75.048  0.00  0.00    +0.000 C 
+ATOM     20  C2  UNL     1       0.472  61.227  75.659  0.00  0.00    +0.000 C 
+ENDBRANCH  18  20
+ENDBRANCH  16  18
+ENDBRANCH   1  16
+TORSDOF 5
+ENDMDL
+MODEL 9
+REMARK VINA RESULT:    -5.257     28.845     31.304
+REMARK INTER + INTRA:          -7.112
+REMARK INTER:                  -6.352
+REMARK INTRA:                  -0.759
+REMARK UNBOUND:                -0.318
+REMARK  Name = ligantes_geracao2\Derivado_013.pdb
+REMARK  8 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C1_1  and  C2_2
+REMARK    2  A    between atoms: C2_2  and  C3_3
+REMARK    3  A    between atoms: C3_3  and  C4_4
+REMARK    4  A    between atoms: C4_4  and  C5_6
+REMARK    5  A    between atoms: C6_7  and  C7_8
+REMARK    6  A    between atoms: C10_11  and  C11_12
+REMARK    7  A    between atoms: C12_13  and  C13_14
+REMARK    8  A    between atoms: C16_19  and  C17_20
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C5  UNL     1     -18.219  76.789  51.290  0.00  0.00    +0.000 C 
+ATOM      2  C6  UNL     1     -18.715  77.529  50.035  0.00  0.00    +0.000 C 
+ATOM      3  C7  UNL     1     -19.439  78.845  50.277  0.00  0.00    +0.000 C 
+ATOM      4  C8  UNL     1     -19.542  76.502  49.249  0.00  0.00    +0.000 C 
+ATOM      5  C9  UNL     1     -19.229  75.131  49.864  0.00  0.00    +0.000 C 
+ATOM      6  C10 UNL     1     -17.996  75.359  50.752  0.00  0.00    +0.000 C 
+ENDROOT
+BRANCH   6   7
+ATOM      7  C11 UNL     1     -17.501  74.342  51.775  0.00  0.00    +0.000 C 
+ATOM      8  C12 UNL     1     -16.125  74.371  52.142  0.00  0.00    +0.000 C 
+ATOM      9  C14 UNL     1     -15.599  73.479  53.080  0.00  0.00    +0.000 C 
+ATOM     10  C15 UNL     1     -16.450  72.566  53.645  0.00  0.00    +0.000 C 
+ATOM     11  N2  UNL     1     -17.753  72.499  53.333  0.00  0.00    +0.000 NA
+ATOM     12  C16 UNL     1     -18.275  73.363  52.418  0.00  0.00    +0.000 C 
+ATOM     13  C17 UNL     1     -19.739  73.136  52.195  0.00  0.00    +0.000 C 
+BRANCH   8  14
+ATOM     14  C13 UNL     1     -15.201  75.317  51.576  0.00  0.00    +0.000 C 
+ATOM     15  N1  UNL     1     -14.471  76.090  51.111  0.00  0.00    +0.000 NA
+ENDBRANCH   8  14
+ENDBRANCH   6   7
+BRANCH   1  16
+ATOM     16  C4  UNL     1     -19.199  76.830  52.466  0.00  0.00    +0.000 C 
+ATOM     17  O1  UNL     1     -20.386  76.533  52.331  0.00  0.00    +0.000 OA
+BRANCH  16  18
+ATOM     18  C3  UNL     1     -18.611  77.219  53.816  0.00  0.00    +0.000 C 
+BRANCH  18  20
+ATOM     19  C1  UNL     1     -16.300  76.988  54.834  0.00  0.00    +0.000 C 
+ATOM     20  C2  UNL     1     -17.147  77.643  53.751  0.00  0.00    +0.000 C 
+ENDBRANCH  18  20
+ENDBRANCH  16  18
+ENDBRANCH   1  16
+TORSDOF 5
+ENDMDL

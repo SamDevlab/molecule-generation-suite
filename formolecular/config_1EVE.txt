@@ -1,0 +1,9 @@
+receptor = receptor_1EVE.pdbqt
+ligand = ligante_cerebral.pdbqt
+center_x = 5.05
+center_y = 65.02
+center_z = 55.9
+size_x = 80.0
+size_y = 80.0
+size_z = 80.0
+exhaustiveness = 8

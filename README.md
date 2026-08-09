@@ -1,0 +1,73 @@
+# Suite de Geração e Triagem Molecular (Molecule Generation & Virtual Screening Suite)
+
+Esta é uma suite consolidada de projetos voltados para a **Descoberta Computacional de Fármacos (Drug Discovery)**, **Triagem Virtual (Virtual Screening)**, **Acoplamento Molecular (Molecular Docking)** e **Predição de Propriedades por Machine Learning (QED/ADMET)**.
+
+O repositório reúne e organiza dois fluxos de trabalho principais desenvolvidos localmente:
+1. **Biolab**: Esteira HPC para triagem virtual de sinergia molecular e acoplamento molecular automatizado.
+2. **formolecular (Oráculo)**: Modelos de IA baseados em XGBoost para predição rápida de propriedades moleculares e simulações evolucionárias de novos ligantes.
+
+---
+
+## Estrutura do Repositório
+
+```text
+molecule-generation-suite/
+├── Biolab/                     # Triagem virtual & Docking Molecular
+│   ├── fabrica_g2.py           # Esteira principal de acoplamento molecular (AutoDock Vina)
+│   ├── coletor_admet.py        # Coleta de propriedades de toxicidade e ADMET
+│   ├── analiseFinal.py         # Script de consolidação e classificação de acoplamento
+│   ├── TOP_10_HITS_REFINADOS.csv
+│   └── *.pdb / *.pdbqt         # Estruturas 3D de proteínas e ligantes filtrados
+│
+└── formolecular/               # Predição Neural & IA Farmacêutica/Aeroespacial
+    ├── g_oraculo_farma.py      # Motor de treinamento e predição ADMET/QED usando XGBoost
+    ├── g_oraculo_aeroespacial.py# Motor de predição para propelentes/materiais aeroespaciais
+    ├── treinar_oraculo.py      # Script utilitário para retreinamento de modelos de IA
+    ├── modelos_ia/             # Modelos preditivos serializados (.pkl)
+    └── novo_horizonte/         # Simulação evolucionária e laboratório evolutivo de mutantes
+```
+
+---
+
+## 🧪 1. Biolab: Esteira de Triagem Virtual e Sinergia
+O projeto `Biolab` realiza a avaliação termodinâmica de compostos contra alvos biológicos (como COX-2 e COX-1) para identificar potencial de sinergismo e seletividade farmacológica.
+
+### Recursos Principais:
+- **Integração Científica**: Uso do **AutoDock Vina** para simulação física de acoplamento tridimensional receptor-ligante.
+- **Preparação Química**: Automatização via **OpenBabel** (`obabel`) para conversão de formatos tridimensionais (PDB ➡️ PDBQT).
+- **Processamento Concorrente**: Execução paralela em múltiplos cores (via `ProcessPoolExecutor`) para acelerar a triagem de bibliotecas.
+- **Relatório Automático**: Geração de gráficos de sinergismo térmico (mapas de calor com `Seaborn`) e compilação de relatórios regulatórios formais em formato PDF (`FPDF`).
+
+---
+
+## 🧠 2. formolecular: Inteligência Artificial e Modelos Preditivos
+O projeto `formolecular` utiliza Inteligência Artificial para estimar propriedades moleculares críticas instantaneamente, evitando o custo computacional de simulações físicas tradicionais para triagens iniciais.
+
+### Recursos Principais:
+- **Featurização Química**: Conversão de strings SMILES em **Morgan Fingerprints** de 2048 bits de alta densidade usando a biblioteca **RDKit**.
+- **Modelos Preditivos**: Regressores baseados em **XGBoost** treinados em super-bancos de dados moleculares para predição de:
+  - **Score QED** (Quantitative Estimate of Drug-likeness / Potencial de Fármaco).
+  - Propriedades físicas (LogP, TPSA, Peso Molar).
+  - Parâmetros ADMET (Aromatic Rings, H-Donors/Acceptors, Rotatable Bonds).
+- **Algoritmo Evolucionário (`novo_horizonte`)**: Laboratório molecular que gera mutações químicas em estruturas ligantes, selecionando e cruzando as gerações com melhores scores preditos pela IA para gerar novas moléculas candidatas.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+Os projetos foram desenvolvidos utilizando as seguintes bibliotecas do ecossistema científico do Python:
+- **RDKit** (Manipulação e featurização de dados químicos)
+- **XGBoost** & **Scikit-learn** (Modelagem estatística e Machine Learning)
+- **Pandas** & **NumPy** (Processamento analítico de matrizes)
+- **Matplotlib** & **Seaborn** (Visualização de dados químicos e heatmaps)
+- **FPDF** (Geração automatizada de relatórios em PDF)
+
+*Nota: Para rodar as simulações físicas do Biolab, é necessário ter o executável do [AutoDock Vina](https://vina.scripps.edu/) configurado no caminho local.*
+
+---
+
+## 📦 Notas sobre o Repositório
+Para manter este repositório limpo, leve e em conformidade com as diretrizes do GitHub (limite de 100MB por arquivo), os seguintes itens foram propositalmente excluídos através do `.gitignore`:
+- **Datasets Gigantes**: Bases CSV de treino bruto de mais de 500MB (ex. `BASE_ORACULO_FARMACIA_ADMET.csv`).
+- **Executáveis**: Binários de motores de docking e instaladores (ex. `vina.exe` e `install_babel.exe`).
+- **Ambientes Virtuais**: Pastas de dependências e ambientes virtuais Python (`env_biolab/`).
+- **Arquivos Temporários**: Arquivos intermediários de docking e arquivos temporários de sistema.

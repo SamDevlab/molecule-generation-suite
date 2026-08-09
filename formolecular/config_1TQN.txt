@@ -1,0 +1,9 @@
+receptor = receptor_1TQN.pdbqt
+ligand = ligante_cerebral.pdbqt
+center_x = -19.29
+center_y = -23.63
+center_z = -14.17
+size_x = 80.0
+size_y = 80.0
+size_z = 80.0
+exhaustiveness = 8

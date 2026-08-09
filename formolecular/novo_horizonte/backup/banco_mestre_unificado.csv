@@ -1,0 +1,2374 @@
+ID_Mestre,SMILES,1EVE_Eficacia,5W8K_Risco,Indice_Seletividade,Origem_Historica
+MOL_00001,Cc1cc(C=NO)c(C2CCC(C)C2C(=O)CC(C)C)cn1,-10.18,-6.083,4.097,Fase 4_Mutantes Geração 2
+MOL_00002,CC(=O)c1ccncc1C1CCC(C)C1C(=O)CC(C)C,-9.735,-5.679,4.056,Fase 4_Mutantes Geração 2
+MOL_00003,Cc1cc(C=CF)c(C2CCC(F)C2C(=O)C(C)C)cn1,-9.735,-6.639,3.096,Fase 4_Mutantes Geração 2
+MOL_00004,CCC(C)CC(=O)C1C(C)CCC1c1cnc(C)cc1C=NO,-9.422,-6.218,3.2040000000000006,Fase 5_Híbridos Geração 3
+MOL_00005,CC(C)CC(=O)C1C(C)CCC1c1cnccc1C=NO,-9.4,-6.258,3.142,Fase 1_Lote Inicial
+MOL_00006,CC(C)CC(=O)C1C(C)CCC1c1cnccc1NC#N,-9.37,-6.728,2.642,Fase 1_Lote Inicial
+MOL_00007,Cc1cncc(C2CCC(F)C2C(=O)C(C)C)c1C=CF,-9.369,-6.766,2.603,Fase 4_Mutantes Geração 2
+MOL_00008,Cc1nccc(C=NO)c1C1CCC(C)C1C(=O)CC(C)C,-9.313,-6.151,3.162,Fase 4_Mutantes Geração 2
+MOL_00009,CCC1CCC(c2cnc(C)cc2C=NO)C1C(=O)CC(C)C,-9.257,-6.201,3.056,Fase 5_Híbridos Geração 3
+MOL_00010,C=C=Cc1ccncc1C1CCC(C)C1C(=O)C(C)=CC,-9.231,-6.263,2.968,Fase 1_Lote Inicial
+MOL_00011,C=C=Cc1ccncc1C1CCC(C)C1C(=O)CC1CCC1F,-9.228,-7.09,2.138,Fase 1_Lote Inicial
+MOL_00012,CCCC(=O)C1C(C)CCC1c1cnccc1-c1nnn[nH]1,-9.215,-6.77,2.445,Fase 4_Mutantes Geração 2
+MOL_00013,Cc1ncc(C2CCC(C)C2C(=O)CC(C)C)c(C=NO)c1C,-9.187,-5.869,3.318,Evolução Interativa Gen 6
+MOL_00014,CCC(C)CC(=O)C1C(C)CCC1c1cnccc1C=NO,-9.164,-6.392,2.772,Fase 4_Mutantes Geração 2
+MOL_00015,CC(=O)c1cc(C)ncc1C1CCC(C)C1C(=O)CC(C)C,-9.14,-6.522,2.6180000000000003,Fase 5_Híbridos Geração 3
+MOL_00016,CC=C(C)C(=O)C1C(C)CCC1c1cnccc1C1CC1,-9.078,-6.611,2.467,Fase 1_Lote Inicial
+MOL_00017,CC(C)C(=O)C1C(C)CCC1c1cnccc1N,-9.065,-6.22,2.845,Fase 3_Super Elite
+MOL_00018,CC(C)C(=O)C1C(F)CCC1c1cnccc1C=CF,-9.064,-5.899,3.165,Fase 1_Lote Inicial
+MOL_00019,CC(C)C(=O)C1C(C)CCC1c1cnccc1C(F)F,-9.043,-6.399,2.644,Fase 3_Super Elite
+MOL_00020,CCCC(=O)C1C(C)CCC1c1cnccc1C=NO,-9.016,-5.873,3.143,Fase 4_Mutantes Geração 2
+MOL_00021,CC(C)C(=O)C1C(F)CCC1c1cnccc1NC#N,-9.015,-6.505,2.51,Fase 1_Lote Inicial
+MOL_00022,CCC(C)CC(=O)C1C(C)CCC1c1cnccc1C(C)=O,-8.999,-6.541,2.458,Fase 5_Híbridos Geração 3
+MOL_00023,CC(C)c1ccncc1C1CCC(CF)C1C(=O)C(N)=O,-8.977,-6.353,2.624,Fase 2_Seletividade
+MOL_00024,NC(=O)C(=O)C1C(F)CCC1c1cnccc1C(F)F,-8.969,-6.555,2.414,Fase 3_Super Elite
+MOL_00025,CCCC(=O)C1C(C)CCC1c1cnc(C)cc1C#N,-8.958,-5.666,3.292,Fase 4_Mutantes Geração 2
+MOL_00026,O=C(CC(F)(F)F)C1C(F)CCC1c1cnccc1C1CO1,-8.957,-6.325,2.632,Fase 1_Lote Inicial
+MOL_00027,N#CC1CCC(c2cnccc2C2CC2)C1C(=O)C1CCC1,-8.956,-6.209,2.747,Fase 2_Seletividade
+MOL_00028,N#Cc1ccncc1C1CCC(CF)C1C(=O)C1CCC1,-8.956,-6.382,2.574,Fase 2_Seletividade
+MOL_00029,N#Cc1ccncc1C1CCC(O)C1C(=O)C1CCC1,-8.95,-6.332,2.618,Fase 2_Seletividade
+MOL_00030,CC(C)C(=O)C1C(C)CCC1c1cnccc1C1CO1,-8.943,-5.841,3.102,Fase 1_Lote Inicial
+MOL_00031,NC(=O)C(=O)C1C(F)CCC1c1cnccc1F,-8.941,-6.194,2.747,Fase 3_Super Elite
+MOL_00032,CC1CCC(c2cnccc2C=CF)C1C(=O)CC(F)(F)F,-8.935,-6.369,2.566,Fase 1_Lote Inicial
+MOL_00033,Cc1ccncc1C1CCC(F)C1C(=O)C(N)=O,-8.908,-6.218,2.69,Fase 2_Seletividade
+MOL_00034,Cc1ccncc1C1CCC(C)C1C(=O)C(N)=O,-8.906,-6.268,2.638,Fase 2_Seletividade
+MOL_00035,C=CCC(=O)C1C(C)CCC1c1cnccc1C=CF,-8.887,-6.096,2.791,Fase 1_Lote Inicial
+MOL_00036,Cc1ncc(C2CCC(C)C2C(=O)CC(C)C)c(C=NO)c1F,-8.872,-6.033,2.8389999999999995,Evolução Interativa Gen 7
+MOL_00037,CC=CC(=O)C1C(F)CCC1c1cnccc1C1CC1,-8.862,-6.35,2.512,Fase 1_Lote Inicial
+MOL_00038,[N-]=[N+]=Nc1ccncc1C1CCC(F)C1C(=O)CC(F)(F)F,-8.854,-6.179,2.675,Fase 1_Lote Inicial
+MOL_00039,COC(=O)c1ccncc1C1CCC(F)C1C(=O)C(C)C,-8.839,-6.211,2.628,Fase 1_Lote Inicial
+MOL_00040,Cc1cc(C=NO)c(C2CCC(C)C2C(=O)CC(C)C)c(F)n1,-8.829,-5.913,2.9160000000000004,Evolução Interativa Gen 6
+MOL_00041,CCC(F)C(=O)C1C(C)CCC1c1cnccc1C=NO,-8.829,-6.685,2.144,Fase 1_Lote Inicial
+MOL_00042,CC(C)CC(=O)C1C(C)CCC1c1cnccc1C#N,-8.822,-5.517,3.305,Fase 4_Mutantes Geração 2
+MOL_00043,CC1CCC(c2cnccc2C2CC2)C1C(=O)C(N)=O,-8.819,-6.507,2.312,Fase 3_Super Elite
+MOL_00044,C=C=Cc1ccncc1C1CC1C(=O)C1CCCC1C,-8.805,-5.887,2.918,Fase 1_Lote Inicial
+MOL_00045,CC1CCC(c2cnccc2NC#N)C1C(=O)CC1CC1,-8.804,-6.774,2.03,Fase 1_Lote Inicial
+MOL_00046,CC(C)C(=O)C1C(C)CCC1c1cnccc1F,-8.8,-6.052,2.748,Fase 3_Super Elite
+MOL_00047,CC1CCC(c2cnccc2C2CO2)C1C(=O)CC(F)(F)F,-8.793,-6.475,2.318,Fase 1_Lote Inicial
+MOL_00048,CCCCC(=O)C1C(C)CCC1c1cnccc1C=CF,-8.79,-5.61,3.18,Fase 1_Lote Inicial
+MOL_00049,CC1CCC(c2cnccc2C(F)F)C1C(=O)C(N)=O,-8.78,-6.738,2.042,Fase 3_Super Elite
+MOL_00050,C=C=Cc1ccncc1C1CCC(F)C1C(=O)C=CC,-8.774,-6.162,2.612,Fase 1_Lote Inicial
+MOL_00051,CC1CCC(c2cnccc2N=[N+]=[N-])C1C(=O)CC(F)(F)F,-8.76,-6.041,2.719,Fase 1_Lote Inicial
+MOL_00052,CC=C(C)C(=O)C1C(C)CCC1c1cnccc1N=[N+]=[N-],-8.76,-6.505,2.255,Fase 1_Lote Inicial
+MOL_00053,O=C(CC(F)(F)F)C1C(F)CCC1c1cnccc1CF,-8.756,-6.264,2.492,Fase 1_Lote Inicial
+MOL_00054,CC=CC(=O)C1C(C)CCC1c1cnccc1C(F)F,-8.755,-6.143,2.612,Fase 1_Lote Inicial
+MOL_00055,O=C(C1CCC1)C1C(F)CCC1c1cnccc1O,-8.753,-6.514,2.239,Fase 2_Seletividade
+MOL_00056,CC(F)CC(=O)C1C(C)CCC1c1cnccc1C=CF,-8.751,-6.364,2.387,Fase 1_Lote Inicial
+MOL_00057,O=C(C1CCC1)C1C(O)CCC1c1cnccc1C(F)F,-8.746,-6.016,2.73,Fase 2_Seletividade
+MOL_00058,CC1CCC(c2cnccc2C(F)F)C1C(=O)CC(F)(F)F,-8.744,-6.647,2.097,Fase 1_Lote Inicial
+MOL_00059,CCCC(=O)C1C(C)CCC1c1cnccc1C#N,-8.733,-5.528,3.205,Fase 3_Super Elite
+MOL_00060,CC(C)C(=O)C1C(F)CCC1c1cnccc1F,-8.732,-6.027,2.705,Fase 2_Seletividade
+MOL_00061,CC(C)C(=O)C1C(C)CCC1c1cnccc1C=CF,-8.726,-6.491,2.235,Fase 1_Lote Inicial
+MOL_00062,CC(C)c1ccncc1C1CCC(F)C1C(=O)C(N)=O,-8.725,-6.371,2.354,Fase 2_Seletividade
+MOL_00063,CCC(C)C(=O)C1C(F)CCC1c1cnccc1C=CF,-8.723,-6.101,2.622,Fase 4_Mutantes Geração 2
+MOL_00064,CCNC(=O)C1C(C#N)CCC1c1cnccc1C(F)F,-8.722,-6.675,2.047,Fase 2_Seletividade
+MOL_00065,CC1CCC(c2cnccc2F)C1C(=O)C1CCC1,-8.707,-6.204,2.503,Fase 2_Seletividade
+MOL_00066,CC1CCC(c2cnccc2C=NO)C1C(=O)C(C)(C)C,-8.706,-6.77,1.936,Fase 1_Lote Inicial
+MOL_00067,C=C=Cc1ccncc1C1CCC(F)C1C(=O)CC(F)(F)F,-8.705,-6.28,2.425,Fase 1_Lote Inicial
+MOL_00068,O=C(C1CC1)C1C(F)CCC1c1cnccc1C1CC1,-8.702,-6.369,2.333,Fase 2_Seletividade
+MOL_00069,CC=CC(=O)C1C(C)CCC1c1cnccc1C#CF,-8.699,-6.096,2.603,Fase 1_Lote Inicial
+MOL_00070,CCC(C)C(=O)C1C(C)CCC1c1cnccc1C(F)F,-8.696,-6.577,2.119,Fase 1_Lote Inicial
+MOL_00071,CC(C)C(=O)C1C(O)CCC1c1cnccc1CF,-8.693,-5.905,2.788,Fase 2_Seletividade
+MOL_00072,CCC1CCC(c2cnccc2C=NO)C1C(=O)CC(C)C,-8.688,-6.266,2.422,Fase 4_Mutantes Geração 2
+MOL_00073,CC(C)C(=O)C1C(F)CCC1c1cnccc1C=NO,-8.682,-6.415,2.267,Fase 1_Lote Inicial
+MOL_00074,CC1CCC(c2cnccc2CF)C1C(=O)C(N)=O,-8.68,-6.33,2.35,Fase 2_Seletividade
+MOL_00075,CCCC(=O)C1C(C)CCC1c1cnccc1C,-8.679,-5.871,2.808,Fase 2_Seletividade
+MOL_00076,Cc1ccncc1C1CCC(F)C1C(=O)C(=O)O,-8.674,-6.103,2.571,Fase 2_Seletividade
+MOL_00077,NC(=O)C(=O)C1C(CF)CCC1c1cnccc1C(F)F,-8.674,-6.314,2.36,Fase 2_Seletividade
+MOL_00078,CNC(=O)C1C(CF)CCC1c1cnccc1C1CC1,-8.668,-6.476,2.192,Fase 2_Seletividade
+MOL_00079,CC(C)CC(=O)C1C(C)CCC1c1cnccc1C=O,-8.664,-6.106,2.558,Fase 1_Lote Inicial
+MOL_00080,C=C=Cc1ccncc1C1CCC(F)C1C(=O)CCC,-8.663,-5.729,2.934,Fase 1_Lote Inicial
+MOL_00081,CC=CC(=O)C1C(F)CCC1c1cnccc1C(F)F,-8.662,-6.439,2.223,Fase 1_Lote Inicial
+MOL_00082,C=C=Cc1ccncc1C1CCC(C)C1C(=O)CC(C)C,-8.658,-6.036,2.622,Fase 1_Lote Inicial
+MOL_00083,CCC=CC(=O)C1C(C)CCC1c1cnccc1C=CF,-8.654,-6.658,1.996,Fase 1_Lote Inicial
+MOL_00084,CC(C)C(=O)C1C(F)CCC1c1cnccc1Br,-8.651,-5.768,2.883,Fase 3_Super Elite
+MOL_00085,CCC(C)C(=O)C1C(C)CCC1c1cnccc1C#N,-8.65,-5.285,3.365,Fase 4_Mutantes Geração 2
+MOL_00086,COC(=O)c1ccncc1C1CCC(C)C1C(=O)CC1CCC1F,-8.649,-6.312,2.337,Fase 1_Lote Inicial
+MOL_00087,O=C(CC(F)(F)F)C1C(F)CCC1c1cnccc1C=NO,-8.636,-6.902,1.734,Fase 1_Lote Inicial
+MOL_00088,CC(C)C(C)C(=O)C1C(C)CCC1c1cnccc1C=NO,-8.631,-6.518,2.113,Fase 4_Mutantes Geração 2
+MOL_00089,O=C(CC(F)(F)F)C1C(F)CCC1c1cnccc1C#CF,-8.624,-6.881,1.743,Fase 1_Lote Inicial
+MOL_00090,COc1ccncc1C1CCC(C)C1C(=O)C(C)C,-8.623,-5.842,2.781,Fase 2_Seletividade
+MOL_00091,CC=CC(=O)C1C(F)CCC1c1cnccc1N=[N+]=[N-],-8.622,-6.149,2.473,Fase 1_Lote Inicial
+MOL_00092,CC=CC(=O)C1C(F)CCC1c1cnccc1C#CF,-8.618,-6.099,2.519,Fase 1_Lote Inicial
+MOL_00093,C=CCC(=O)C1C(C)CCC1c1cnccc1C1CC1,-8.608,-5.615,2.993,Fase 1_Lote Inicial
+MOL_00094,CCc1ccncc1C1CCC(C#N)C1C(=O)C1CCC1,-8.607,-6.149,2.458,Fase 2_Seletividade
+MOL_00095,CCC(=O)C1C(C)CCC1c1cnccc1C(F)F,-8.605,-5.904,2.701,Fase 3_Super Elite
+MOL_00096,CC1CCC(c2cnccc2C#CF)C1C(=O)CC1CCC1F,-8.604,-6.567,2.037,Fase 1_Lote Inicial
+MOL_00097,CC(C)C(=O)C1C(F)CCC1c1cnccc1N=[N+]=[N-],-8.6,-6.23,2.37,Fase 1_Lote Inicial
+MOL_00098,O=C(C1CCC1)C1C(F)CCC1c1cnccc1S,-8.597,-6.218,2.379,Fase 2_Seletividade
+MOL_00099,CCC1CCC(c2cnccc2C(F)F)C1C(=O)NC,-8.593,-6.48,2.113,Fase 2_Seletividade
+MOL_00100,NC(=O)C(=O)C1C(F)CCC1c1cnccc1C1CC1,-8.591,-6.509,2.082,Fase 3_Super Elite
+MOL_00101,CC(C)C(=O)C1C(C#N)CCC1c1cnccc1C#N,-8.59,-6.423,2.167,Fase 2_Seletividade
+MOL_00102,Cc1ccncc1C1CCC(C)C1C(=O)C(C)C,-8.581,-6.052,2.529,Fase 2_Seletividade
+MOL_00103,CNC(=O)C1C(F)CCC1c1cnccc1C1CC1,-8.579,-6.837,1.742,Fase 2_Seletividade
+MOL_00104,CC=CC(=O)C1C(C)CCC1c1cnccc1C=CF,-8.577,-7.21,1.367,Fase 1_Lote Inicial
+MOL_00105,C=C=Cc1ccncc1C1CCC(C)C1C(=O)CC(F)(F)F,-8.575,-6.678,1.897,Fase 1_Lote Inicial
+MOL_00106,N#Cc1ccncc1C1CCC(F)C1C(=O)C(N)=O,-8.573,-6.751,1.822,Fase 3_Super Elite
+MOL_00107,NC(=O)C(=O)C1C(CF)CCC1c1cnccc1F,-8.571,-6.871,1.7,Fase 2_Seletividade
+MOL_00108,O=C(O)C(=O)C1C(F)CCC1c1cnccc1F,-8.569,-6.247,2.322,Fase 2_Seletividade
+MOL_00109,N#CC1CCC(c2cnccc2CF)C1C(=O)C1CC1,-8.568,-6.071,2.497,Fase 2_Seletividade
+MOL_00110,CCC(=O)C1C(F)CCC1c1cnccc1C#N,-8.567,-5.939,2.628,Fase 1_Lote Inicial
+MOL_00111,Cc1ccncc1C1CCC(O)C1C(=O)C(C)C,-8.565,-6.393,2.172,Fase 2_Seletividade
+MOL_00112,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)CC,-8.561,-6.029,2.532,Fase 1_Lote Inicial
+MOL_00113,O=C(O)C(=O)C1C(F)CCC1c1cnccc1CF,-8.559,-6.167,2.392,Fase 2_Seletividade
+MOL_00114,C=Cc1ccncc1C1CCC(C)C1C(=O)CC(F)(F)F,-8.549,-6.474,2.075,Fase 1_Lote Inicial
+MOL_00115,CC(C)c1ccncc1C1CCC(N)C1C(=O)C1CC1,-8.545,-6.465,2.08,Fase 2_Seletividade
+MOL_00116,CC(C)C(=O)C1C(F)CCC1c1cnccc1C=O,-8.543,-6.003,2.54,Fase 2_Seletividade
+MOL_00117,CC1CCC(c2cnccc2C=O)C1C(=O)C1CC1,-8.543,-6.105,2.438,Fase 2_Seletividade
+MOL_00118,CC1CCC(c2cnccc2C#N)C1C(=O)CC(F)(F)F,-8.543,-6.149,2.394,Fase 1_Lote Inicial
+MOL_00119,CC(C)C(=O)C1C(Cl)CCC1c1cnccc1C=CF,-8.54,-6.057,2.483,Fase 4_Mutantes Geração 2
+MOL_00120,CC=C(C)C(=O)C1C(C)CCC1c1cnccc1C=NO,-8.537,-6.231,2.306,Fase 1_Lote Inicial
+MOL_00121,C=C=Cc1ccncc1C1CCC(C)C1C(=O)CCCC,-8.536,-5.859,2.677,Fase 1_Lote Inicial
+MOL_00122,C=C=Cc1ccncc1C1CCC(F)C1C(=O)C(C)C,-8.532,-6.321,2.211,Fase 1_Lote Inicial
+MOL_00123,CC(F)CC(=O)C1C(C)CCC1c1cnccc1C1CC1,-8.532,-6.414,2.118,Fase 1_Lote Inicial
+MOL_00124,Cc1ccncc1C1CCC(F)C1C(=O)C1CCC1,-8.531,-6.876,1.655,Fase 2_Seletividade
+MOL_00125,CC1CCC(c2cnccc2C2CC2)C1C(N)=O,-8.528,-6.099,2.429,Fase 2_Seletividade
+MOL_00126,CC=CC(=O)C1C(F)CCC1c1cnccc1C#N,-8.527,-5.951,2.576,Fase 1_Lote Inicial
+MOL_00127,CCc1ccncc1C1CCC(C)C1C(N)=O,-8.522,-5.94,2.582,Fase 2_Seletividade
+MOL_00128,O=C(O)C(=O)C1C(F)CCC1c1cnccc1C(F)F,-8.518,-6.641,1.877,Fase 2_Seletividade
+MOL_00129,CCCCC(=O)C1C(C)CCC1c1cnccc1C#N,-8.517,-5.808,2.709,Fase 4_Mutantes Geração 2
+MOL_00130,CC(C)C(=O)C1C(F)CCC1c1cnccc1I,-8.51,-5.778,2.732,Fase 3_Super Elite
+MOL_00131,CCC1CCC(c2cnccc2C2CC2)C1C(N)=O,-8.51,-6.259,2.251,Fase 2_Seletividade
+MOL_00132,CC(C)C(=O)C1C(F)CCC1c1cnccc1C=CCl,-8.51,-6.613,1.897,Fase 4_Mutantes Geração 2
+MOL_00133,NC(=O)C(=O)C1C(F)CCC1c1cnccc1Br,-8.509,-6.006,2.503,Fase 3_Super Elite
+MOL_00134,COC(=O)c1ccncc1C1CCC(C)C1C(=O)CC(C)F,-8.509,-6.208,2.301,Fase 1_Lote Inicial
+MOL_00135,O=C(C1CC1)C1C(F)CCC1c1cnccc1C(F)F,-8.505,-5.898,2.607,Fase 3_Super Elite
+MOL_00136,CC(C)C(=O)C1C(F)CCC1c1cnccc1C1CO1,-8.503,-6.628,1.875,Fase 1_Lote Inicial
+MOL_00137,N#CNc1ccncc1C1CCC(F)C1C(=O)CC(F)(F)F,-8.501,-6.704,1.797,Fase 1_Lote Inicial
+MOL_00138,CC(C)C(=O)C1C(CF)CCC1c1cnccc1C=O,-8.5,-6.332,2.168,Fase 2_Seletividade
+MOL_00139,CCC(=O)C1C(CF)CCC1c1cnccc1C1CC1,-8.498,-6.12,2.378,Fase 3_Super Elite
+MOL_00140,CCc1cc(C=NO)c(C2CCC(C)C2C(=O)CC(C)C)cn1,-8.498,-6.329,2.169,Fase 5_Híbridos Geração 3
+MOL_00141,O=Cc1ccncc1C1CCC(F)C1C(=O)C1CC1,-8.495,-6.091,2.404,Fase 2_Seletividade
+MOL_00142,O=CC1CCC(c2cnccc2C2CC2)C1C(=O)C1CCC1,-8.494,-6.145,2.349,Fase 2_Seletividade
+MOL_00143,C=C=Cc1ccncc1C1CCC(C)C1C(=O)C(F)CC,-8.492,-6.291,2.201,Fase 1_Lote Inicial
+MOL_00144,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)C(C)=CC,-8.489,-6.093,2.396,Fase 1_Lote Inicial
+MOL_00145,CNC(=O)C1C(F)CCC1c1cnccc1C(F)F,-8.488,-6.854,1.634,Fase 2_Seletividade
+MOL_00146,CCC(=O)C1C(C)CCC1c1cnccc1F,-8.485,-5.831,2.654,Fase 3_Super Elite
+MOL_00147,CC1CCC(c2cnccc2CF)C1C(=O)C(=O)O,-8.478,-6.212,2.266,Fase 2_Seletividade
+MOL_00148,N#Cc1ccncc1C1CCC(F)C1C(=O)CC(F)(F)F,-8.474,-6.377,2.097,Fase 1_Lote Inicial
+MOL_00149,O=C(O)C(=O)C1C(CF)CCC1c1cnccc1C(F)F,-8.458,-6.125,2.333,Fase 2_Seletividade
+MOL_00150,CCC(=O)C1C(C)CCC1c1cnccc1C=CF,-8.456,-5.747,2.709,Fase 1_Lote Inicial
+MOL_00151,O=C(CC(F)(F)F)C1C(F)CCC1c1cnccc1C=CF,-8.454,-6.606,1.848,Fase 1_Lote Inicial
+MOL_00152,CCC(F)C(=O)C1C(C)CCC1c1cnccc1C(F)F,-8.453,-6.632,1.821,Fase 1_Lote Inicial
+MOL_00153,Cc1ccncc1C1CCC(C=O)C1C(=O)C(C)C,-8.452,-6.295,2.157,Fase 2_Seletividade
+MOL_00154,C=CCC(=O)C1C(F)CCC1c1cnccc1C#N,-8.451,-6.104,2.347,Fase 1_Lote Inicial
+MOL_00155,N#Cc1ccncc1C1CCC(N)C1C(=O)C1CCC1,-8.451,-6.68,1.771,Fase 2_Seletividade
+MOL_00156,CCC=CC(=O)C1C(C)CCC1c1cnccc1C#N,-8.445,-6.338,2.107,Fase 1_Lote Inicial
+MOL_00157,CCc1ccncc1C1CCC(C)C1C(=O)C(N)=O,-8.44,-6.345,2.095,Fase 2_Seletividade
+MOL_00158,CCC(=O)C1C(F)CCC1c1cnccc1CF,-8.434,-5.916,2.518,Fase 2_Seletividade
+MOL_00159,CCC(=O)C1C(F)CCC1c1cnccc1C1CC1,-8.432,-5.959,2.473,Fase 2_Seletividade
+MOL_00160,COC(=O)c1ccncc1C1CCC(F)C1C(=O)CC(F)(F)F,-8.431,-5.918,2.513,Fase 1_Lote Inicial
+MOL_00161,CC(C)CC(=O)C1C(C)CCC1c1cnccc1C=CF,-8.425,-6.47,1.955,Fase 1_Lote Inicial
+MOL_00162,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)C(F)CC,-8.421,-6.061,2.36,Fase 1_Lote Inicial
+MOL_00163,NC(=O)C1C(F)CCC1c1cnccc1C(F)F,-8.417,-6.714,1.703,Fase 2_Seletividade
+MOL_00164,CC(C)CC(=O)C1C(C)CCC1c1cnccc1C#CF,-8.415,-6.0,2.415,Fase 1_Lote Inicial
+MOL_00165,C=Cc1ccncc1C1CCC(C)C1C(=O)CC,-8.411,-5.922,2.489,Fase 1_Lote Inicial
+MOL_00166,C=C=Cc1ccncc1C1CCC(C)C1C(=O)C=CC,-8.41,-5.71,2.7,Fase 1_Lote Inicial
+MOL_00167,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)CC(C)F,-8.408,-6.066,2.342,Fase 1_Lote Inicial
+MOL_00168,C=CCC(=O)C1C(F)CCC1c1cnccc1C#CF,-8.407,-5.738,2.669,Fase 1_Lote Inicial
+MOL_00169,C=C=Cc1ccncc1C1CCC(C)C1C(=O)CCC,-8.406,-5.522,2.884,Fase 1_Lote Inicial
+MOL_00170,C=C=Cc1ccncc1C1CCC(C)C1C(=O)CC(C)F,-8.401,-6.367,2.034,Fase 1_Lote Inicial
+MOL_00171,O=C(O)C(=O)C1C(F)CCC1c1cnccc1C1CC1,-8.4,-6.153,2.247,Fase 2_Seletividade
+MOL_00172,CC1CCC(c2cnccc2F)C1C(=O)C(N)=O,-8.4,-6.171,2.229,Fase 3_Super Elite
+MOL_00173,CC=C(C)C(=O)C1C(C)CCC1c1cnccc1C=CF,-8.4,-6.278,2.122,Fase 1_Lote Inicial
+MOL_00174,O=C(C1CCC1)C1C(CF)CCC1c1cnccc1O,-8.399,-6.248,2.151,Fase 2_Seletividade
+MOL_00175,CC1CCC(c2cnccc2C=O)C1C(=O)CC(F)(F)F,-8.399,-6.3,2.099,Fase 1_Lote Inicial
+MOL_00176,O=C(CC(F)(F)F)C1C(F)CCC1c1cnccc1C(F)F,-8.399,-6.315,2.084,Fase 1_Lote Inicial
+MOL_00177,O=C(C1CCC1)C1C(O)CCC1c1cnccc1C1CC1,-8.395,-6.984,1.411,Fase 2_Seletividade
+MOL_00178,O=C(C1CC1)C1C(F)CCC1c1cnccc1F,-8.393,-6.247,2.146,Fase 3_Super Elite
+MOL_00179,CC(F)CC(=O)C1C(C)CCC1c1cnccc1C=NO,-8.392,-5.87,2.522,Fase 1_Lote Inicial
+MOL_00180,CC=CC(=O)C1C(F)CCC1c1cnccc1CF,-8.392,-6.394,1.998,Fase 1_Lote Inicial
+MOL_00181,C=CCC(=O)C1C(F)CCC1c1cnccc1C1CC1,-8.389,-6.071,2.318,Fase 1_Lote Inicial
+MOL_00182,[C-]#[N+]c1ccncc1C1CCC(F)C1C(=O)CC=C,-8.388,-6.364,2.024,Fase 1_Lote Inicial
+MOL_00183,CC1CCC(c2cnccc2CF)C1C(=O)O,-8.387,-5.883,2.504,Fase 2_Seletividade
+MOL_00184,CC1CCC(c2cnccc2C#N)C1C(=O)C(N)=O,-8.386,-6.698,1.688,Fase 3_Super Elite
+MOL_00185,CC(C)C(=O)C1C(C#N)CCC1c1cnccc1C=O,-8.385,-6.146,2.239,Fase 2_Seletividade
+MOL_00186,O=C(O)C(=O)C1C(F)CCC1c1cnccc1Br,-8.384,-6.087,2.297,Fase 2_Seletividade
+MOL_00187,NC1CCC(c2cnccc2O)C1C(=O)C1CCC1,-8.381,-6.974,1.407,Fase 2_Seletividade
+MOL_00188,Cc1cc(C=NO)c(C2CCC(C)C2C(=O)CC(C)C)c(C)n1,-8.379,-6.3,2.079,Fase 5_Híbridos Geração 3
+MOL_00189,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)C=CCC,-8.373,-6.093,2.28,Fase 1_Lote Inicial
+MOL_00190,N#Cc1ccncc1C1CCC(F)C1C(=O)C1CC1,-8.371,-6.197,2.174,Fase 2_Seletividade
+MOL_00191,COc1ccncc1C1CCC(C)C1C(=O)C(=O)O,-8.37,-6.043,2.327,Fase 2_Seletividade
+MOL_00192,CCCCC(=O)C1C(C)CCC1c1cnccc1C#CF,-8.369,-5.943,2.426,Fase 1_Lote Inicial
+MOL_00193,CC(C)c1ccncc1C1CCC(O)C1C(=O)C1CCC1,-8.366,-6.075,2.291,Fase 2_Seletividade
+MOL_00194,CC1CCC(c2cnccc2C(F)F)C1C(N)=O,-8.366,-6.191,2.175,Fase 2_Seletividade
+MOL_00195,CC(C)C(=O)C1C(CF)CCC1c1cnccc1N,-8.365,-5.918,2.447,Fase 2_Seletividade
+MOL_00196,Cc1ccncc1C1CCC(C)C1C(=O)C(=O)O,-8.36,-5.984,2.376,Fase 2_Seletividade
+MOL_00197,CNC(=O)C1C(F)CCC1c1cnccc1C#N,-8.359,-6.55,1.809,Fase 2_Seletividade
+MOL_00198,CNC(=O)C1C(C)CCC1c1cnccc1I,-8.357,-6.503,1.854,Fase 2_Seletividade
+MOL_00199,O=C(C1CC1)C1C(O)CCC1c1cnccc1F,-8.355,-6.443,1.912,Fase 2_Seletividade
+MOL_00200,COC(=O)C1C(F)CCC1c1cnccc1C(C)C,-8.353,-6.046,2.307,Fase 2_Seletividade
+MOL_00201,NC(=O)C1C(O)CCC1c1cnccc1C1CC1,-8.353,-6.54,1.813,Fase 2_Seletividade
+MOL_00202,CCCC(=O)C1C(C)CCC1c1cnccc1C1CO1,-8.351,-6.135,2.216,Fase 1_Lote Inicial
+MOL_00203,C=C=Cc1ccncc1C1CCC(C)C1C(=O)C(C)CC,-8.351,-6.414,1.937,Fase 1_Lote Inicial
+MOL_00204,CC=CC(=O)C1C(F)CCC1c1cnccc1C(=O)OC,-8.35,-5.96,2.39,Fase 1_Lote Inicial
+MOL_00205,CC(C)c1ccncc1C1CCC(C)C1C(N)=O,-8.35,-6.705,1.645,Fase 2_Seletividade
+MOL_00206,CCc1ccncc1C1CCC(C)C1C(=O)NC,-8.345,-6.352,1.993,Fase 2_Seletividade
+MOL_00207,CCC1CCC(c2cnccc2C#N)C1C(N)=O,-8.344,-6.007,2.337,Fase 2_Seletividade
+MOL_00208,CCC1CCC(c2cnccc2C2CC2)C1C(=O)O,-8.343,-6.304,2.039,Fase 2_Seletividade
+MOL_00209,CNC(=O)C1C(C=O)CCC1c1cnccc1C1CC1,-8.337,-6.371,1.966,Fase 2_Seletividade
+MOL_00210,CC(C)C(=O)C1C(O)CCC1c1cnccc1C1CC1,-8.336,-6.353,1.983,Fase 2_Seletividade
+MOL_00211,CCC=CC(=O)C1C(C)CCC1c1cnccc1C(F)F,-8.333,-6.039,2.294,Fase 1_Lote Inicial
+MOL_00212,CCc1ccncc1C1CCC(F)C1C(=O)C(C)C,-8.331,-6.164,2.167,Fase 2_Seletividade
+MOL_00213,CC1CCCC1C(=O)C1CC1c1cnccc1CF,-8.33,-5.54,2.79,Fase 1_Lote Inicial
+MOL_00214,CCCC(=O)C1C(F)CCC1c1cnccc1C#CF,-8.327,-5.73,2.597,Fase 1_Lote Inicial
+MOL_00215,CC(C)C(=O)C1C(N)CCC1c1cnccc1C1CC1,-8.327,-6.182,2.145,Fase 2_Seletividade
+MOL_00216,C=CCC(=O)C1C(C)CCC1c1cnccc1C=C,-8.326,-5.796,2.53,Fase 1_Lote Inicial
+MOL_00217,O=C(C1CCC1)C1C(O)CCC1c1cnccc1I,-8.325,-6.559,1.766,Fase 2_Seletividade
+MOL_00218,Cc1ccncc1C1CCC(C=O)C1C(=O)C1CCC1,-8.323,-6.378,1.945,Fase 2_Seletividade
+MOL_00219,CC1CCC(c2cnccc2C=NO)C1C(=O)CC(F)(F)F,-8.318,-6.209,2.109,Fase 1_Lote Inicial
+MOL_00220,C=C=Cc1ccncc1C1CCC(CC)C1C(=O)CCC,-8.314,-5.719,2.595,Fase 1_Lote Inicial
+MOL_00221,O=Cc1ccncc1C1CCC(F)C1C(=O)C1CCC1,-8.313,-5.826,2.487,Fase 2_Seletividade
+MOL_00222,CCC(F)C(=O)C1C(C)CCC1c1cnccc1C1CC1,-8.311,-6.067,2.244,Fase 1_Lote Inicial
+MOL_00223,O=C(C1CCC1)C1C(F)CCC1c1cnccc1F,-8.307,-6.305,2.002,Fase 2_Seletividade
+MOL_00224,CCCCC(=O)C1C(C)CCC1c1cnccc1C1CC1,-8.306,-5.929,2.377,Fase 1_Lote Inicial
+MOL_00225,CC=C(C)C(=O)C1C(C)CCC1c1cnccc1CF,-8.306,-6.091,2.215,Fase 1_Lote Inicial
+MOL_00226,CC(C)C(=O)C1C(F)CCC1c1cnccc1N,-8.3,-5.767,2.533,Fase 3_Super Elite
+MOL_00227,CC1CCC(c2cnccc2C2CC2)C1C(=O)C=O,-8.298,-6.048,2.25,Fase 2_Seletividade
+MOL_00228,CCc1ccncc1C1CCC(F)C1C(=O)C(N)=O,-8.296,-6.165,2.131,Fase 2_Seletividade
+MOL_00229,O=C(C1CCC1)C1C(O)CCC1c1cnccc1Br,-8.295,-6.213,2.082,Fase 2_Seletividade
+MOL_00230,O=C(O)C1C(CF)CCC1c1cnccc1C1CC1,-8.294,-6.09,2.204,Fase 2_Seletividade
+MOL_00231,CNC(=O)C1C(C)CCC1c1cnccc1C(F)F,-8.294,-6.57,1.724,Fase 2_Seletividade
+MOL_00232,CC1CCCC1C(=O)C1CC1c1cnccc1C1CO1,-8.29,-6.067,2.223,Fase 1_Lote Inicial
+MOL_00233,N#Cc1ccncc1C1CCC(CF)C1C(N)=O,-8.289,-6.467,1.822,Fase 2_Seletividade
+MOL_00234,CC1CCC(c2cnccc2C(F)F)C1C(=O)C(=O)O,-8.289,-6.619,1.67,Fase 2_Seletividade
+MOL_00235,CCC(=O)C1C(C)CCC1c1cnccc1C1CC1,-8.288,-6.374,1.914,Fase 1_Lote Inicial
+MOL_00236,CNC(=O)C1C(C)CCC1c1cnccc1O,-8.288,-6.597,1.691,Fase 2_Seletividade
+MOL_00237,CC(F)CC(=O)C1C(C)CCC1c1cnccc1C(F)F,-8.288,-6.628,1.66,Fase 1_Lote Inicial
+MOL_00238,CC=C(C)C(=O)C1C(C)CCC1c1cnccc1C=O,-8.285,-6.306,1.979,Fase 1_Lote Inicial
+MOL_00239,NC(=O)C(=O)C1C(F)CCC1c1cnccc1N,-8.278,-6.658,1.62,Fase 3_Super Elite
+MOL_00240,NC(=O)C(=O)C1C(F)CCC1c1cnccc1I,-8.269,-6.525,1.744,Fase 2_Seletividade
+MOL_00241,CNC(=O)C1C(C)CCC1c1cnccc1N,-8.269,-6.61,1.659,Fase 2_Seletividade
+MOL_00242,C=Cc1ccncc1C1CCC(F)C1C(=O)CC,-8.268,-6.223,2.045,Fase 1_Lote Inicial
+MOL_00243,CNC(=O)C1C(F)CCC1c1cnccc1C,-8.268,-6.276,1.992,Fase 2_Seletividade
+MOL_00244,CCC1CCC(c2cnccc2C(C)C)C1C(=O)C(=O)O,-8.265,-6.374,1.891,Fase 2_Seletividade
+MOL_00245,N#Cc1ccncc1C1CCC(S)C1C(N)=O,-8.264,-5.929,2.335,Fase 2_Seletividade
+MOL_00246,O=C(O)C1C(F)CCC1c1cnccc1C(F)F,-8.258,-6.536,1.722,Fase 2_Seletividade
+MOL_00247,CCCC(=O)C1C(C)CCC1c1cnccc1NC#N,-8.256,-6.155,2.101,Fase 1_Lote Inicial
+MOL_00248,COC1CCC(c2cnccc2C)C1C(=O)C(N)=O,-8.255,-5.97,2.285,Fase 2_Seletividade
+MOL_00249,COC(=O)c1ccncc1C1CCC(C)C1C(=O)CC(C)C,-8.254,-5.966,2.288,Fase 1_Lote Inicial
+MOL_00250,CCNC(=O)C1C(F)CCC1c1cnccc1C(F)F,-8.254,-6.684,1.57,Fase 2_Seletividade
+MOL_00251,CCC=CC(=O)C1C(C)CCC1c1cnccc1C=O,-8.253,-5.758,2.495,Fase 1_Lote Inicial
+MOL_00252,CCC(=O)C1C(F)CCC1c1cnccc1C=CF,-8.249,-5.912,2.337,Fase 4_Mutantes Geração 2
+MOL_00253,NC(=O)C(=O)C1C(O)CCC1c1cnccc1C(F)F,-8.249,-7.222,1.027,Fase 3_Super Elite
+MOL_00254,CCC(=O)C1C(C)CCC1c1cnccc1CC,-8.248,-5.872,2.376,Fase 2_Seletividade
+MOL_00255,CNC(=O)C1C(C)CCC1c1cnccc1Br,-8.246,-6.435,1.811,Fase 2_Seletividade
+MOL_00256,CC(C)C(=O)C1C(C)CCC1c1cnccc1C#N,-8.245,-5.843,2.402,Fase 2_Seletividade
+MOL_00257,NC(=O)C(=O)C1C(F)CCC1c1cnccc1CF,-8.242,-7.065,1.177,Fase 2_Seletividade
+MOL_00258,COC(=O)C1C(CF)CCC1c1cnccc1C(C)C,-8.239,-5.757,2.482,Fase 2_Seletividade
+MOL_00259,Cc1ccncc1C1CCC(CF)C1C(=O)C1CC1,-8.238,-5.858,2.38,Fase 2_Seletividade
+MOL_00260,CC1CCC(c2cnccc2C(F)F)C1C(=O)CC1CC1,-8.237,-6.047,2.19,Fase 1_Lote Inicial
+MOL_00261,NC1CCC(c2cnccc2C2CC2)C1C(=O)C1CCC1,-8.237,-6.256,1.981,Fase 2_Seletividade
+MOL_00262,CC1CCC(c2cnccc2N)C1C(=O)C1CCC1,-8.237,-6.325,1.912,Fase 2_Seletividade
+MOL_00263,O=C(C1CC1)C1C(F)CCC1c1cnccc1CF,-8.232,-5.661,2.571,Fase 2_Seletividade
+MOL_00264,CC(C)CC(=O)C1C(C)CCC1c1cnccc1N=[N+]=[N-],-8.229,-6.349,1.88,Fase 1_Lote Inicial
+MOL_00265,CCCC(=O)C1C(C)CCC1c1cnccc1C=CF,-8.228,-6.014,2.214,Fase 1_Lote Inicial
+MOL_00266,CNC(=O)C1C(F)CCC1c1cnccc1CF,-8.227,-6.517,1.71,Fase 2_Seletividade
+MOL_00267,CCC(C)C(=O)C1C(C)CCC1c1cnccc1N=[N+]=[N-],-8.224,-6.405,1.819,Fase 1_Lote Inicial
+MOL_00268,CC(C)c1ccncc1C1CCC(F)C1C(=O)O,-8.223,-6.248,1.975,Fase 2_Seletividade
+MOL_00269,C=Cc1ccncc1C1CCC(C)C1C(=O)C(C)CC,-8.221,-5.776,2.445,Fase 1_Lote Inicial
+MOL_00270,CCc1ccncc1C1CCC(F)C1C(=O)NC,-8.22,-6.438,1.782,Fase 2_Seletividade
+MOL_00271,CC1CCC(c2cnccc2NC#N)C1C(=O)CC(F)(F)F,-8.22,-6.702,1.518,Fase 1_Lote Inicial
+MOL_00272,CCC(=O)C1C(F)CCC1c1cnccc1C1CO1,-8.218,-5.854,2.364,Fase 1_Lote Inicial
+MOL_00273,CC=C(C)C(=O)C1C(C)CCC1c1cnccc1C(F)F,-8.217,-5.973,2.244,Fase 1_Lote Inicial
+MOL_00274,CCC(=O)C1C(F)CCC1c1cnccc1CC,-8.216,-5.954,2.262,Fase 2_Seletividade
+MOL_00275,C=CCC(=O)C1C(C)CCC1c1cnccc1C#N,-8.214,-6.11,2.104,Fase 1_Lote Inicial
+MOL_00276,CCCC(=O)C1C(F)CCC1c1cnccc1N,-8.213,-5.92,2.293,Fase 2_Seletividade
+MOL_00277,CC1CCC(c2cnccc2C=O)C1C(=O)C(=O)O,-8.21,-6.27,1.94,Fase 2_Seletividade
+MOL_00278,CCC=CC(=O)C1C(C)CCC1c1cnccc1NC#N,-8.21,-6.271,1.939,Fase 1_Lote Inicial
+MOL_00279,NC(=O)C(=O)C1C(O)CCC1c1cnccc1N,-8.206,-6.591,1.615,Fase 3_Super Elite
+MOL_00280,CC1CCC(c2cnccc2CF)C1C(=O)C1CC1,-8.199,-6.229,1.97,Fase 3_Super Elite
+MOL_00281,CC(C)C(=O)C1C(C)CCC1c1cnccc1Br,-8.197,-5.717,2.48,Fase 3_Super Elite
+MOL_00282,CCCC(=O)C1C(C)CCC1c1cnccc1C(F)F,-8.197,-5.862,2.335,Fase 1_Lote Inicial
+MOL_00283,CC(C)C(=O)C1C(C)CCC1c1cnccc1CF,-8.197,-5.997,2.2,Fase 3_Super Elite
+MOL_00284,CC(C)C(=O)C1C(C=O)CCC1c1cnccc1CF,-8.196,-5.707,2.489,Fase 2_Seletividade
+MOL_00285,CC(C)c1ccncc1C1CCC(F)C1C(=O)C(=O)O,-8.195,-6.828,1.367,Fase 2_Seletividade
+MOL_00286,CC1CCC(c2cnccc2C2CC2)C1C(=O)C1CC1,-8.193,-6.043,2.15,Fase 3_Super Elite
+MOL_00287,NC(=O)C1C(CF)CCC1c1cnccc1N,-8.192,-6.258,1.934,Fase 2_Seletividade
+MOL_00288,CC=C(C)C(=O)C1C(C)CCC1c1cnccc1C(=O)OC,-8.189,-6.24,1.949,Fase 1_Lote Inicial
+MOL_00289,O=CC1CCC(c2cnccc2C2CC2)C1C(=O)C(=O)O,-8.189,-6.531,1.658,Fase 2_Seletividade
+MOL_00290,CCCC(=O)C1C(CC)CCC1c1cnccc1C#N,-8.188,-5.522,2.666,Fase 4_Mutantes Geração 2
+MOL_00291,CNC(=O)C1C(N)CCC1c1cnccc1C(F)F,-8.188,-7.102,1.086,Fase 2_Seletividade
+MOL_00292,CC1CCC(c2cnccc2C2CO2)C1C(=O)C(C)(C)C,-8.185,-5.815,2.37,Fase 1_Lote Inicial
+MOL_00293,CCCC(=O)C1C(CC)CCC1c1cnccc1C#CF,-8.184,-5.73,2.454,Fase 1_Lote Inicial
+MOL_00294,CCc1ccncc1C1CCC(O)C1C(=O)C(C)C,-8.184,-6.132,2.052,Fase 2_Seletividade
+MOL_00295,CCCC(=O)C1C(F)CCC1c1cnccc1C(F)F,-8.183,-5.765,2.418,Fase 3_Super Elite
+MOL_00296,CC(=O)C1C(F)CCC1c1cnccc1C,-8.182,-6.304,1.878,Fase 2_Seletividade
+MOL_00297,CCC(=O)C1C(O)CCC1c1cnccc1C(C)C,-8.181,-6.205,1.976,Fase 2_Seletividade
+MOL_00298,CNC(=O)C1C(C)CCC1c1cnccc1C1CC1,-8.18,-6.508,1.672,Fase 2_Seletividade
+MOL_00299,CC1CCC(c2cnccc2O)C1C(=O)C1CCC1,-8.179,-6.407,1.772,Fase 2_Seletividade
+MOL_00300,CC(F)CC(=O)C1C(C)CCC1c1cnccc1C1CO1,-8.176,-6.383,1.793,Fase 1_Lote Inicial
+MOL_00301,CC1CCC(c2cnccc2C=CF)C1C(=O)CC1CCC1F,-8.175,-6.532,1.643,Fase 1_Lote Inicial
+MOL_00302,O=C(C1CC1)C1C(F)CCC1c1cnccc1Br,-8.171,-6.024,2.147,Fase 2_Seletividade
+MOL_00303,C=Cc1ccncc1C1CCC(C)C1C(=O)CC(C)F,-8.171,-6.286,1.885,Fase 1_Lote Inicial
+MOL_00304,CC=C(C)C(=O)C1C(C)CCC1c1cnccc1C#CF,-8.17,-6.059,2.111,Fase 1_Lote Inicial
+MOL_00305,Nc1ccncc1C1CCC(F)C1C(=O)C1CC1,-8.168,-6.512,1.656,Fase 2_Seletividade
+MOL_00306,CCC=CC(=O)C1C(C)CCC1c1cnccc1C=NO,-8.168,-6.729,1.439,Fase 1_Lote Inicial
+MOL_00307,CC1CCC(c2cnccc2C#N)C1C(=O)CC1CC1,-8.166,-5.625,2.541,Fase 1_Lote Inicial
+MOL_00308,CC(C)c1ccncc1C1CCC(N)C1C(N)=O,-8.165,-6.324,1.841,Fase 2_Seletividade
+MOL_00309,CC1CCCC1C(=O)C1CC1c1cnccc1C=CF,-8.165,-6.607,1.558,Fase 1_Lote Inicial
+MOL_00310,CCOC(=O)C1C(C)CCC1c1cnccc1F,-8.164,-5.701,2.463,Fase 2_Seletividade
+MOL_00311,C=C=Cc1ccncc1C1CCC(C)C1C(=O)CC=C,-8.162,-5.481,2.681,Fase 1_Lote Inicial
+MOL_00312,CC=C(C)C(=O)C1C(C)CCC1c1cnccc1C#N,-8.161,-6.383,1.778,Fase 1_Lote Inicial
+MOL_00313,COc1ccncc1C1CCC(F)C1C(=O)C(N)=O,-8.16,-6.156,2.004,Fase 2_Seletividade
+MOL_00314,CCC(F)C(=O)C1C(C)CCC1c1cnccc1C=CF,-8.16,-6.501,1.659,Fase 1_Lote Inicial
+MOL_00315,N#Cc1ccncc1C1CCC(C=O)C1C(=O)C1CC1,-8.157,-6.144,2.013,Fase 2_Seletividade
+MOL_00316,CCC(=O)C1C(C)CCC1c1cnccc1C=NO,-8.157,-6.193,1.964,Fase 1_Lote Inicial
+MOL_00317,CC=CC(=O)C1C(F)CCC1c1cnccc1NC#N,-8.157,-6.547,1.61,Fase 1_Lote Inicial
+MOL_00318,CC=CC(=O)C1C(C)CCC1c1cnccc1C1CO1,-8.153,-6.417,1.736,Fase 1_Lote Inicial
+MOL_00319,CC=CC(=O)C1C(C)CCC1c1cnccc1NC#N,-8.153,-6.452,1.701,Fase 1_Lote Inicial
+MOL_00320,CCCC(=O)C1C(F)CCC1c1cnccc1C1CC1,-8.146,-5.98,2.166,Fase 1_Lote Inicial
+MOL_00321,CCCC(=O)C1C(C)CCC1c1cnccc1N,-8.145,-5.622,2.523,Fase 3_Super Elite
+MOL_00322,O=C(C1CCC1)C1C(O)CCC1c1cnccc1F,-8.14,-6.682,1.458,Fase 2_Seletividade
+MOL_00323,[C-]#[N+]c1ccncc1C1CCC(F)C1C(=O)CC,-8.139,-5.931,2.208,Fase 1_Lote Inicial
+MOL_00324,CC(F)CC(=O)C1C(C)CCC1c1cnccc1C#N,-8.139,-6.25,1.889,Fase 1_Lote Inicial
+MOL_00325,C=CCC(=O)C1C(C)CCC1c1cnccc1C(F)F,-8.139,-6.361,1.778,Fase 1_Lote Inicial
+MOL_00326,CCC(=O)C1C(F)CCC1c1cnccc1NC#N,-8.138,-6.462,1.676,Fase 1_Lote Inicial
+MOL_00327,CCC(=O)C1C(F)CCC1c1cnccc1C(=O)OC,-8.137,-5.489,2.648,Fase 1_Lote Inicial
+MOL_00328,CNC(=O)C1C(CF)CCC1c1cnccc1C(F)F,-8.135,-6.832,1.303,Fase 2_Seletividade
+MOL_00329,CCC(=O)C1C(F)CCC1c1cnccc1C(F)F,-8.134,-5.71,2.424,Fase 3_Super Elite
+MOL_00330,CCc1ccncc1C1CCC(F)C1C(=O)C1CC1,-8.133,-6.04,2.093,Fase 2_Seletividade
+MOL_00331,N#Cc1ccncc1C1CCC(N)C1C(=O)C1CC1,-8.132,-5.949,2.183,Fase 2_Seletividade
+MOL_00332,COC(=O)C1C(C)CCC1c1cnccc1C#N,-8.131,-5.974,2.157,Fase 2_Seletividade
+MOL_00333,C=C=Cc1ccncc1C1CCC(C)C1C(=O)C=CCC,-8.131,-5.989,2.142,Fase 1_Lote Inicial
+MOL_00334,C=Cc1ccncc1C1CCC(F)C1C(=O)C=CC,-8.129,-5.671,2.458,Fase 1_Lote Inicial
+MOL_00335,CC1CCC(c2cnccc2C(F)F)C1C(=O)C=O,-8.128,-6.114,2.014,Fase 2_Seletividade
+MOL_00336,CC=CC(=O)C1C(F)CCC1c1cnccc1C=O,-8.126,-5.736,2.39,Fase 1_Lote Inicial
+MOL_00337,CCC(C)C(=O)C1C(C)CCC1c1cnccc1C=O,-8.126,-5.779,2.347,Fase 1_Lote Inicial
+MOL_00338,NC(=O)C1C(N)CCC1c1cnccc1C(F)F,-8.125,-6.964,1.161,Fase 2_Seletividade
+MOL_00339,C=CCC(=O)C1C(F)CCC1c1cnccc1NC#N,-8.123,-6.422,1.701,Fase 1_Lote Inicial
+MOL_00340,O=C(C1CCC1)C1C(CF)CCC1c1cnccc1S,-8.122,-5.982,2.14,Fase 2_Seletividade
+MOL_00341,CC1CCC(c2cnccc2C#CF)C1C(=O)CC1CC1,-8.122,-5.989,2.133,Fase 1_Lote Inicial
+MOL_00342,CCC(C)C(=O)C1C(C)CCC1c1cnccc1C=CF,-8.121,-6.501,1.62,Fase 1_Lote Inicial
+MOL_00343,CCC(=O)C1C(CF)CCC1c1cnccc1I,-8.118,-5.94,2.178,Fase 3_Super Elite
+MOL_00344,CC(C)c1ccncc1C1CCC(F)C1C(=O)C=O,-8.118,-6.027,2.091,Fase 2_Seletividade
+MOL_00345,COc1ccncc1C1CCC(C)C1C(=O)C1CC1,-8.117,-5.712,2.405,Fase 2_Seletividade
+MOL_00346,CCc1ccncc1C1CCC(C#N)C1C(N)=O,-8.116,-6.335,1.781,Fase 2_Seletividade
+MOL_00347,CC(C)C(=O)C1C(F)CCC1c1cnccc1C(F)F,-8.116,-6.429,1.687,Fase 1_Lote Inicial
+MOL_00348,Cc1ccncc1C1CCC(F)C1C(=O)C1CC1,-8.115,-6.196,1.919,Fase 2_Seletividade
+MOL_00349,CC(C)C(=O)C1C(N)CCC1c1cnccc1N,-8.114,-5.993,2.121,Fase 2_Seletividade
+MOL_00350,CCC(=O)C1C(C=O)CCC1c1cnccc1C(F)F,-8.113,-6.108,2.005,Fase 2_Seletividade
+MOL_00351,CCCC(=O)C1C(C#N)CCC1c1cnccc1C#N,-8.112,-5.986,2.126,Fase 2_Seletividade
+MOL_00352,CCC(=O)C1C(CF)CCC1c1cnccc1C(F)F,-8.109,-6.083,2.026,Fase 3_Super Elite
+MOL_00353,CC(=O)C1C(F)CCC1c1cnccc1CF,-8.107,-5.889,2.218,Fase 2_Seletividade
+MOL_00354,NC(=O)C1C(CF)CCC1c1cnccc1O,-8.103,-6.589,1.514,Fase 2_Seletividade
+MOL_00355,O=CC1CCC(c2cnccc2CF)C1C(=O)C(=O)O,-8.101,-5.7,2.401,Fase 2_Seletividade
+MOL_00356,CC(F)CC(=O)C1C(C)CCC1c1cnccc1NC#N,-8.098,-6.528,1.57,Fase 1_Lote Inicial
+MOL_00357,CCc1ccncc1C1CCC(F)C1C(=O)C(=O)O,-8.098,-6.612,1.486,Fase 2_Seletividade
+MOL_00358,CC(C)C(=O)C1C(F)CCC1c1cnccc1C#CF,-8.097,-5.926,2.171,Fase 1_Lote Inicial
+MOL_00359,CCNC(=O)C1C(C)CCC1c1cnccc1C(F)F,-8.096,-6.748,1.348,Fase 2_Seletividade
+MOL_00360,CCC(=O)C1C(N)CCC1c1cnccc1C(F)F,-8.093,-5.958,2.135,Fase 2_Seletividade
+MOL_00361,O=C(O)C(=O)C1C(O)CCC1c1cnccc1C1CC1,-8.093,-6.603,1.49,Fase 2_Seletividade
+MOL_00362,CCCCC(=O)C1C(C)CCC1c1cnccc1C(=O)OC,-8.092,-5.416,2.676,Fase 1_Lote Inicial
+MOL_00363,COC(=O)C1C(F)CCC1c1cnccc1F,-8.092,-5.521,2.571,Fase 3_Super Elite
+MOL_00364,CCC(F)C(=O)C1C(C)CCC1c1cnccc1C#N,-8.09,-6.508,1.582,Fase 1_Lote Inicial
+MOL_00365,CC=CC(=O)C1C(F)CCC1c1cnccc1C=NO,-8.09,-6.625,1.465,Fase 1_Lote Inicial
+MOL_00366,CCCC(=O)C1C(F)CCC1c1cnccc1CF,-8.089,-6.129,1.96,Fase 1_Lote Inicial
+MOL_00367,N#Cc1ccncc1C1CCC(O)C1C(=O)C(N)=O,-8.089,-6.404,1.685,Fase 3_Super Elite
+MOL_00368,CNC(=O)C1C(N)CCC1c1cnccc1C1CC1,-8.087,-6.522,1.565,Fase 2_Seletividade
+MOL_00369,CC(=O)c1ccncc1C1CCC(C)C1C(=O)C(C)C(C)C,-8.086,-6.226,1.8600000000000003,Fase 5_Híbridos Geração 3
+MOL_00370,COC1CCC(c2cnccc2C)C1C(=O)C1CCC1,-8.083,-5.88,2.203,Fase 2_Seletividade
+MOL_00371,CC(=O)C1C(C)CCC1c1cnccc1C#N,-8.083,-5.972,2.111,Fase 2_Seletividade
+MOL_00372,CC1CCC(c2cnccc2N)C1C(N)=O,-8.083,-6.391,1.692,Fase 2_Seletividade
+MOL_00373,COC(=O)C1C(F)CCC1c1cnccc1CF,-8.082,-5.694,2.388,Fase 2_Seletividade
+MOL_00374,COC(=O)C1C(F)CCC1c1cnccc1C#N,-8.082,-5.727,2.355,Fase 2_Seletividade
+MOL_00375,CCC(=O)C1C(F)CCC1c1cnccc1F,-8.082,-6.225,1.857,Fase 3_Super Elite
+MOL_00376,CC(C)CC(=O)C1C(C)CCC1c1cnccc1CF,-8.081,-5.648,2.433,Fase 1_Lote Inicial
+MOL_00377,CC(C)C(=O)C1C(F)CCC1c1cnccc1O,-8.079,-6.297,1.782,Fase 2_Seletividade
+MOL_00378,CC1CCCC1C(=O)C1CC1c1cnccc1C(F)F,-8.077,-6.371,1.706,Fase 1_Lote Inicial
+MOL_00379,CCc1ccncc1C1CCC(C=O)C1C(N)=O,-8.075,-6.085,1.99,Fase 2_Seletividade
+MOL_00380,CCC1CCC(c2cnccc2C#N)C1C(=O)OC,-8.074,-5.728,2.346,Fase 2_Seletividade
+MOL_00381,CC(C)C(=O)C1C(C)CCC1c1cnccc1I,-8.074,-5.815,2.259,Fase 3_Super Elite
+MOL_00382,O=C(C1CC1)C1C(O)CCC1c1cnccc1O,-8.072,-6.123,1.949,Fase 2_Seletividade
+MOL_00383,[C-]#[N+]c1ccncc1C1CC1C(=O)C1CCCC1C,-8.072,-6.397,1.675,Fase 1_Lote Inicial
+MOL_00384,CC(C)C(=O)C1C(F)CCC1c1cnccc1C1CC1,-8.072,-6.521,1.551,Fase 3_Super Elite
+MOL_00385,CC=CC(=O)C1C(C)CCC1c1cnccc1C=O,-8.07,-5.713,2.357,Fase 1_Lote Inicial
+MOL_00386,CC(C)C(=O)C1C(N)CCC1c1cnccc1C(F)F,-8.069,-6.186,1.883,Fase 2_Seletividade
+MOL_00387,CC1CCC(c2cnccc2NC#N)C1C(=O)CC1CCC1F,-8.068,-6.812,1.256,Fase 1_Lote Inicial
+MOL_00388,CC1CCC(c2cnccc2N)C1C(=O)C(N)=O,-8.067,-6.224,1.843,Fase 3_Super Elite
+MOL_00389,COC1CCC(c2cnccc2C(F)F)C1C(=O)C(N)=O,-8.062,-6.652,1.41,Fase 2_Seletividade
+MOL_00390,C=CCC(=O)C1C(C)CCC1c1cnccc1C=NO,-8.061,-5.596,2.465,Fase 1_Lote Inicial
+MOL_00391,CC1CCC(c2cnccc2C=O)C1C(=O)C1CCC1,-8.06,-5.763,2.297,Fase 2_Seletividade
+MOL_00392,COC(=O)c1ccncc1C1CCC(C)C1C(=O)CC(F)(F)F,-8.059,-5.879,2.18,Fase 1_Lote Inicial
+MOL_00393,CCCC(=O)C1C(CF)CCC1c1cnccc1OC,-8.059,-5.9,2.159,Fase 2_Seletividade
+MOL_00394,CC(C)C(=O)C1C(C)CCC1c1cnccc1C=NO,-8.059,-6.625,1.434,Fase 1_Lote Inicial
+MOL_00395,COC1CCC(c2cnccc2C(F)F)C1C(=O)C(=O)O,-8.057,-6.173,1.884,Fase 2_Seletividade
+MOL_00396,CC(=O)C1C(O)CCC1c1cnccc1C(C)C,-8.056,-6.306,1.75,Fase 2_Seletividade
+MOL_00397,COC1CCC(c2cnccc2C2CC2)C1C(=O)C(N)=O,-8.056,-6.394,1.662,Fase 2_Seletividade
+MOL_00398,C=CCC(=O)C1C(F)CCC1c1cnccc1C=NO,-8.055,-5.79,2.265,Fase 1_Lote Inicial
+MOL_00399,CCC(=O)C1C(F)CCC1c1cnccc1N=[N+]=[N-],-8.055,-6.223,1.832,Fase 1_Lote Inicial
+MOL_00400,Cc1ccncc1C1CCC(O)C1C(=O)C1CCC1,-8.055,-6.879,1.176,Fase 2_Seletividade
+MOL_00401,NC(=O)C1C(F)CCC1c1cnccc1CF,-8.054,-6.194,1.86,Fase 2_Seletividade
+MOL_00402,CCc1ccncc1C1CCC(C=O)C1C(=O)C1CCC1,-8.054,-6.281,1.773,Fase 2_Seletividade
+MOL_00403,NC(=O)C1C(CF)CCC1c1cnccc1CF,-8.052,-6.433,1.619,Fase 2_Seletividade
+MOL_00404,CNC(=O)C1C(O)CCC1c1cnccc1C(F)F,-8.051,-6.669,1.382,Fase 2_Seletividade
+MOL_00405,CCC(C)C(=O)C1C(C)CCC1c1cnccc1NC#N,-8.05,-6.239,1.811,Fase 1_Lote Inicial
+MOL_00406,CC1CCC(c2cnccc2O)C1C(=O)O,-8.049,-6.232,1.817,Fase 2_Seletividade
+MOL_00407,CC1CCC(c2cnccc2I)C1C(=O)C(N)=O,-8.047,-6.17,1.877,Fase 2_Seletividade
+MOL_00408,O=C(O)C(=O)C1C(CF)CCC1c1cnccc1F,-8.047,-6.204,1.843,Fase 2_Seletividade
+MOL_00409,CCCC(=O)C1C(N)CCC1c1cnccc1Br,-8.046,-6.423,1.623,Fase 2_Seletividade
+MOL_00410,CC1CCC(c2cnccc2C#N)C1C(=O)O,-8.045,-6.308,1.737,Fase 2_Seletividade
+MOL_00411,CNC(=O)C1C(CF)CCC1c1cnccc1C(C)C,-8.045,-6.474,1.571,Fase 2_Seletividade
+MOL_00412,CCC1CCC(c2cnccc2C2CC2)C1C(=O)C(=O)O,-8.044,-6.033,2.011,Fase 2_Seletividade
+MOL_00413,CC1CCC(c2cnccc2F)C1C(=O)C1CC1,-8.044,-6.253,1.791,Fase 3_Super Elite
+MOL_00414,CC1CCC(c2cnccc2F)C1C(=O)C(=O)O,-8.041,-6.155,1.886,Fase 2_Seletividade
+MOL_00415,CC(C)C(=O)C1C(C=O)CCC1c1cnccc1C1CC1,-8.041,-6.409,1.632,Fase 2_Seletividade
+MOL_00416,CC(C)CC(=O)C1C(C)CCC1c1cnccc1C1CO1,-8.041,-6.462,1.579,Fase 1_Lote Inicial
+MOL_00417,C=CCC(=O)C1C(C)CCC1c1cnccc1C#CF,-8.04,-6.19,1.85,Fase 1_Lote Inicial
+MOL_00418,COC1CCC(c2cnccc2C(F)F)C1C(N)=O,-8.04,-6.638,1.402,Fase 2_Seletividade
+MOL_00419,CCCC(=O)C1C(C)CCC1c1cnccc1C1CC1,-8.039,-5.834,2.205,Fase 3_Super Elite
+MOL_00420,CC(C)C(=O)C1C(C#N)CCC1c1cnccc1F,-8.039,-6.571,1.468,Fase 2_Seletividade
+MOL_00421,CCNC(=O)C1C(F)CCC1c1cnccc1C,-8.035,-6.683,1.352,Fase 2_Seletividade
+MOL_00422,CCc1ccncc1C1CCC(CF)C1C(=O)C=O,-8.034,-5.892,2.142,Fase 2_Seletividade
+MOL_00423,Cc1ccncc1C1CCC(F)C1C(N)=O,-8.034,-6.048,1.986,Fase 2_Seletividade
+MOL_00424,CCNC(=O)C1C(F)CCC1c1cnccc1F,-8.033,-6.208,1.825,Fase 2_Seletividade
+MOL_00425,CCC(=O)C1C(C)CCC1c1cnccc1N,-8.031,-5.821,2.21,Fase 3_Super Elite
+MOL_00426,O=CC(=O)C1C(F)CCC1c1cnccc1C1CC1,-8.031,-6.076,1.955,Fase 2_Seletividade
+MOL_00427,O=C(C1CC1)C1C(O)CCC1c1cnccc1C1CC1,-8.031,-6.315,1.716,Fase 2_Seletividade
+MOL_00428,CCC1CCC(c2cnccc2O)C1C(=O)NC,-8.031,-6.48,1.551,Fase 2_Seletividade
+MOL_00429,Cc1ccncc1C1CCC(CF)C1C(N)=O,-8.03,-6.188,1.842,Fase 2_Seletividade
+MOL_00430,N#CC1CCC(c2cnccc2F)C1C(=O)C1CC1,-8.029,-5.928,2.101,Fase 2_Seletividade
+MOL_00431,CNC(=O)C1C(F)CCC1c1cnccc1C(C)C,-8.029,-6.751,1.278,Fase 2_Seletividade
+MOL_00432,O=C(C1CC1)C1C(O)CCC1c1cnccc1C(F)F,-8.026,-6.567,1.459,Fase 2_Seletividade
+MOL_00433,CCCC(=O)C1C(F)CCC1c1cnccc1OC,-8.025,-5.942,2.083,Fase 2_Seletividade
+MOL_00434,NC(=O)C(=O)C1C(F)CCC1c1cnccc1S,-8.023,-5.997,2.026,Fase 2_Seletividade
+MOL_00435,COc1ccncc1C1CCC(C)C1C(N)=O,-8.023,-6.019,2.004,Fase 2_Seletividade
+MOL_00436,CC=CC(=O)C1C(F)CCC1c1cnccc1C=CF,-8.023,-6.034,1.989,Fase 1_Lote Inicial
+MOL_00437,Cc1ccncc1C1CCC(C)C1C(=O)C1CC1,-8.022,-6.214,1.808,Fase 2_Seletividade
+MOL_00438,C=CCC(=O)C1C(C)CCC1c1cnccc1C1CO1,-8.022,-6.23,1.792,Fase 1_Lote Inicial
+MOL_00439,CNC(=O)C1C(CF)CCC1c1cnccc1Br,-8.022,-6.596,1.426,Fase 2_Seletividade
+MOL_00440,CCc1ccncc1C1CCC(CF)C1C(=O)C(=O)O,-8.02,-6.042,1.978,Fase 2_Seletividade
+MOL_00441,CC(C)c1ccncc1C1CCC(F)C1C(N)=O,-8.02,-6.441,1.579,Fase 2_Seletividade
+MOL_00442,O=C(C1CC1)C1C(F)CCC1c1cnccc1I,-8.019,-5.82,2.199,Fase 3_Super Elite
+MOL_00443,CC=CC(=O)C1C(C)CCC1c1cnccc1N=[N+]=[N-],-8.016,-6.358,1.658,Fase 1_Lote Inicial
+MOL_00444,CC(=O)C1C(F)CCC1c1cnccc1C(C)C,-8.016,-6.405,1.611,Fase 2_Seletividade
+MOL_00445,CCCC(=O)C1C(F)CCC1c1cnccc1CC,-8.015,-5.866,2.149,Fase 2_Seletividade
+MOL_00446,O=CC(=O)C1C(CF)CCC1c1cnccc1F,-8.014,-5.826,2.188,Fase 2_Seletividade
+MOL_00447,CCCC(=O)C1C(C)CCC1c1cnccc1C#CF,-8.014,-6.005,2.009,Fase 1_Lote Inicial
+MOL_00448,CCOC(=O)C1C(OC)CCC1c1cnccc1C(F)F,-8.013,-5.828,2.185,Fase 2_Seletividade
+MOL_00449,C=CCC(=O)C1C(F)CCC1c1cnccc1N=[N+]=[N-],-8.013,-5.967,2.046,Fase 1_Lote Inicial
+MOL_00450,CCc1ccncc1C1CCC(CC)C1C(N)=O,-8.009,-6.295,1.714,Fase 2_Seletividade
+MOL_00451,CCC(=O)C1C(F)CCC1c1cnccc1C=NO,-8.009,-6.332,1.677,Fase 1_Lote Inicial
+MOL_00452,COc1ccncc1C1CCC(C#N)C1C(=O)C1CCC1,-8.005,-6.187,1.818,Fase 2_Seletividade
+MOL_00453,CCNC(=O)C1C(CC)CCC1c1cnccc1C(F)F,-8.005,-6.576,1.429,Fase 2_Seletividade
+MOL_00454,CC=C(C)C(=O)C1C(C)CCC1c1cnccc1NC#N,-8.004,-6.507,1.497,Fase 1_Lote Inicial
+MOL_00455,COC(=O)C1C(C)CCC1c1cnccc1C(C)C,-8.003,-5.856,2.147,Fase 2_Seletividade
+MOL_00456,NC1CCC(c2cnccc2C=O)C1C(=O)C1CCC1,-8.003,-5.932,2.071,Fase 2_Seletividade
+MOL_00457,CC1CCC(c2cnccc2C2CC2)C1C(=O)C(=O)O,-8.0,-6.009,1.991,Fase 2_Seletividade
+MOL_00458,CC1CCC(c2cnccc2C=NO)C1C(=O)CC1CCC1F,-7.999,-6.309,1.69,Fase 1_Lote Inicial
+MOL_00459,COc1ccncc1C1CCC(F)C1C(=O)C(=O)O,-7.998,-6.072,1.926,Fase 2_Seletividade
+MOL_00460,Cc1ccncc1C1CCC(CF)C1C(=O)O,-7.998,-6.376,1.622,Fase 2_Seletividade
+MOL_00461,Nc1ccncc1C1CCC(O)C1C(=O)C1CC1,-7.997,-6.182,1.815,Fase 2_Seletividade
+MOL_00462,CCC(=O)C1C(C)CCC1c1cnccc1I,-7.995,-6.063,1.932,Fase 2_Seletividade
+MOL_00463,CC1CCC(c2cnccc2CF)C1C(=O)CC1CCC1F,-7.995,-6.392,1.603,Fase 1_Lote Inicial
+MOL_00464,CCCC(=O)C1C(CF)CCC1c1cnccc1C=O,-7.994,-5.864,2.13,Fase 2_Seletividade
+MOL_00465,C=C=Cc1ccncc1C1CCC(O)C1C(=O)CCC,-7.993,-5.813,2.18,Fase 1_Lote Inicial
+MOL_00466,CCc1ccncc1C1CCC(C=O)C1C(=O)C(=O)O,-7.993,-5.949,2.044,Fase 2_Seletividade
+MOL_00467,COC(=O)C1C(C)CCC1c1cnccc1CF,-7.992,-5.715,2.277,Fase 2_Seletividade
+MOL_00468,CCCC(=O)C1C(F)CCC1c1cnccc1N=[N+]=[N-],-7.992,-5.918,2.074,Fase 1_Lote Inicial
+MOL_00469,[C-]#[N+]c1ccncc1C1CCC(F)C1C(=O)CC(F)(F)F,-7.991,-6.475,1.516,Fase 1_Lote Inicial
+MOL_00470,CC1CCCC1C(=O)C1CC1c1cnccc1C#CF,-7.982,-6.449,1.533,Fase 1_Lote Inicial
+MOL_00471,CCC(F)C(=O)C1C(C)CCC1c1cnccc1NC#N,-7.981,-6.908,1.073,Fase 1_Lote Inicial
+MOL_00472,C=C=Cc1ccncc1C1CCC(F)C1C(=O)CC=C,-7.98,-5.814,2.166,Fase 1_Lote Inicial
+MOL_00473,COC(=O)C1C(C)CCC1c1cnccc1N,-7.98,-5.882,2.098,Fase 3_Super Elite
+MOL_00474,CNC(=O)C1C(C#N)CCC1c1cnccc1C,-7.98,-6.602,1.378,Fase 2_Seletividade
+MOL_00475,C=CCC(=O)C1C(F)CCC1c1cnccc1C(F)F,-7.977,-5.995,1.982,Fase 1_Lote Inicial
+MOL_00476,CCC(=O)C1C(C)CCC1c1cnccc1C#N,-7.975,-5.44,2.535,Fase 4_Mutantes Geração 2
+MOL_00477,CCC=CC(=O)C1C(C)CCC1c1cnccc1C1CO1,-7.974,-6.88,1.094,Fase 1_Lote Inicial
+MOL_00478,CCNC(=O)C1C(F)CCC1c1cnccc1C(C)C,-7.972,-6.781,1.191,Fase 2_Seletividade
+MOL_00479,CCc1ccncc1C1CCC(C)C1C(=O)OC,-7.968,-5.626,2.342,Fase 2_Seletividade
+MOL_00480,CCC(=O)C1C(F)CCC1c1cnccc1C#CF,-7.968,-5.689,2.279,Fase 1_Lote Inicial
+MOL_00481,Nc1ccncc1C1CCC(C=O)C1C(=O)C1CCC1,-7.968,-6.165,1.803,Fase 2_Seletividade
+MOL_00482,O=Cc1ccncc1C1CCC(F)C1C(=O)C(=O)O,-7.968,-6.252,1.716,Fase 2_Seletividade
+MOL_00483,CCc1ccncc1C1CCC(N)C1C(=O)C1CC1,-7.966,-6.026,1.94,Fase 2_Seletividade
+MOL_00484,CC1CCC(c2cnccc2S)C1C(=O)C(=O)O,-7.965,-5.893,2.072,Fase 2_Seletividade
+MOL_00485,CNC(=O)C1C(CF)CCC1c1cnccc1I,-7.965,-6.274,1.691,Fase 2_Seletividade
+MOL_00486,O=C(C1CCC1)C1C(O)CCC1c1cnccc1O,-7.965,-6.951,1.014,Fase 2_Seletividade
+MOL_00487,CCC1CCC(c2cnccc2C(F)F)C1C(=O)OC,-7.964,-6.113,1.851,Fase 2_Seletividade
+MOL_00488,CNC(=O)C1C(F)CCC1c1cnccc1OC,-7.963,-6.029,1.934,Fase 2_Seletividade
+MOL_00489,O=C(O)C1C(F)CCC1c1cnccc1F,-7.962,-6.662,1.3,Fase 2_Seletividade
+MOL_00490,CC(C)C(=O)C1C(C)CCC1c1cnccc1C1CC1,-7.96,-5.805,2.155,Fase 1_Lote Inicial
+MOL_00491,CCc1ccncc1C1CCC(N)C1C(N)=O,-7.96,-6.119,1.841,Fase 2_Seletividade
+MOL_00492,CC(C)c1ccncc1C1CCC(C)C1C(=O)C=O,-7.958,-5.849,2.109,Fase 2_Seletividade
+MOL_00493,CC(C)C(=O)C1C(O)CCC1c1cnccc1N,-7.957,-6.075,1.882,Fase 2_Seletividade
+MOL_00494,CC(C)C(=O)C1C(C)CCC1c1cnccc1C#CF,-7.957,-6.378,1.579,Fase 1_Lote Inicial
+MOL_00495,NC1CCC(c2cnccc2Br)C1C(=O)C1CC1,-7.957,-6.474,1.483,Fase 2_Seletividade
+MOL_00496,Cc1ccncc1C1CCC(S)C1C(=O)C1CCC1,-7.954,-6.139,1.815,Fase 2_Seletividade
+MOL_00497,COc1ccncc1C1CCC(F)C1C(=O)C(C)C,-7.953,-5.666,2.287,Fase 2_Seletividade
+MOL_00498,CCCC(=O)C1C(C)CCC1c1cnccc1O,-7.953,-5.812,2.141,Fase 2_Seletividade
+MOL_00499,CCC(F)C(=O)C1C(C)CCC1c1cnccc1CF,-7.953,-6.461,1.492,Fase 1_Lote Inicial
+MOL_00500,CCC(=O)C1C(C)CCC1c1cnccc1C1CO1,-7.95,-6.122,1.828,Fase 1_Lote Inicial
+MOL_00501,Cc1ccncc1C1CCC(O)C1C(=O)C1CC1,-7.949,-6.395,1.554,Fase 2_Seletividade
+MOL_00502,CC1CCC(c2cnccc2C(F)F)C1C(=O)C1CC1,-7.949,-6.471,1.478,Fase 3_Super Elite
+MOL_00503,CCC1CCC(c2cnccc2Br)C1C(N)=O,-7.948,-5.886,2.062,Fase 2_Seletividade
+MOL_00504,C=C=Cc1ccncc1C1CCC(C)C1C(=O)C(C)C,-7.943,-6.54,1.403,Fase 1_Lote Inicial
+MOL_00505,C=C=Cc1ccncc1C1CCC(C)C1C(=O)CC,-7.942,-5.974,1.968,Fase 1_Lote Inicial
+MOL_00506,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)CC(F)(F)F,-7.942,-6.5,1.442,Fase 1_Lote Inicial
+MOL_00507,C=CCC(=O)C1C(C)CCC1c1cnccc1CF,-7.94,-6.015,1.925,Fase 1_Lote Inicial
+MOL_00508,CCNC(=O)C1C(CC)CCC1c1cnccc1N,-7.94,-6.542,1.398,Fase 2_Seletividade
+MOL_00509,N#Cc1ccncc1C1CCC(CF)C1C(=O)C(N)=O,-7.94,-6.592,1.348,Fase 3_Super Elite
+MOL_00510,CCC(=O)C1C(N)CCC1c1cnccc1F,-7.939,-6.166,1.773,Fase 2_Seletividade
+MOL_00511,CCCC(=O)C1C(F)CCC1c1cnccc1F,-7.938,-6.394,1.544,Fase 2_Seletividade
+MOL_00512,CCC(=O)C1C(N)CCC1c1cnccc1C#N,-7.938,-6.452,1.486,Fase 2_Seletividade
+MOL_00513,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)C=CC,-7.937,-5.918,2.019,Fase 1_Lote Inicial
+MOL_00514,CC1CCC(c2cnccc2N=[N+]=[N-])C1C(=O)CC1CCC1F,-7.936,-6.548,1.388,Fase 1_Lote Inicial
+MOL_00515,CCC1CCC(c2cnccc2OC)C1C(=O)C1CC1,-7.935,-6.189,1.746,Fase 2_Seletividade
+MOL_00516,Cc1ccncc1C1CCC(O)C1C(=O)C(=O)O,-7.935,-6.27,1.665,Fase 2_Seletividade
+MOL_00517,NC(=O)C1C(N)CCC1c1cnccc1C1CC1,-7.935,-6.488,1.447,Fase 2_Seletividade
+MOL_00518,CCc1ccncc1C1CCC(C#N)C1C(=O)NC,-7.934,-6.527,1.407,Fase 2_Seletividade
+MOL_00519,CC1CCC(c2cnccc2C(F)F)C1C(=O)O,-7.933,-6.301,1.632,Fase 2_Seletividade
+MOL_00520,CCNC(=O)C1C(N)CCC1c1cnccc1C(F)F,-7.933,-6.699,1.234,Fase 2_Seletividade
+MOL_00521,CCCC(=O)C1C(CF)CCC1c1cnccc1F,-7.932,-6.305,1.627,Fase 3_Super Elite
+MOL_00522,CC=CC(=O)C1C(C)CCC1c1cnccc1C=NO,-7.932,-6.415,1.517,Fase 1_Lote Inicial
+MOL_00523,CCC(=O)C1C(CF)CCC1c1cnccc1CC,-7.931,-5.82,2.111,Fase 2_Seletividade
+MOL_00524,NC1CCC(c2cnccc2C(F)F)C1C(=O)C1CCC1,-7.931,-6.278,1.653,Fase 2_Seletividade
+MOL_00525,CCNC(=O)C1C(O)CCC1c1cnccc1F,-7.927,-6.694,1.233,Fase 2_Seletividade
+MOL_00526,CCOC(=O)C1C(F)CCC1c1cnccc1C(F)F,-7.926,-6.185,1.741,Fase 2_Seletividade
+MOL_00527,CCCC(=O)C1CCCC1(C)Cc1cnccc1C#N,-7.924,-5.745,2.179,Fase 1_Lote Inicial
+MOL_00528,CC(C)C(=O)C1C(CF)CCC1c1cnccc1C#N,-7.924,-6.091,1.833,Fase 2_Seletividade
+MOL_00529,COC(=O)C1C(F)CCC1c1cnccc1C(F)F,-7.924,-6.125,1.799,Fase 3_Super Elite
+MOL_00530,[C-]#[N+]c1ccncc1C1CCC(F)C1C(=O)C(C)C,-7.923,-5.934,1.989,Fase 1_Lote Inicial
+MOL_00531,NC1CCC(c2cnccc2C2CC2)C1C(=O)C=O,-7.923,-6.336,1.587,Fase 2_Seletividade
+MOL_00532,CC1CCC(c2cnccc2C#N)C1C(=O)C1CCC1,-7.923,-6.643,1.28,Fase 2_Seletividade
+MOL_00533,CC(C)C(=O)C1C(C)CCC1c1cnccc1C=O,-7.921,-5.992,1.929,Fase 1_Lote Inicial
+MOL_00534,CC1CCC(c2cnccc2O)C1C(=O)C1CC1,-7.92,-6.279,1.641,Fase 2_Seletividade
+MOL_00535,CCNC(=O)C1C(C=O)CCC1c1cnccc1C1CC1,-7.918,-6.372,1.546,Fase 2_Seletividade
+MOL_00536,CCNC(=O)C1C(CF)CCC1c1cnccc1F,-7.918,-6.765,1.153,Fase 2_Seletividade
+MOL_00537,CCC1CCC(c2cnccc2CF)C1C(=O)O,-7.916,-6.215,1.701,Fase 2_Seletividade
+MOL_00538,CC1CCC(c2cnccc2C#N)C1C(N)=O,-7.916,-6.436,1.48,Fase 2_Seletividade
+MOL_00539,CCCC(=O)C1C(CF)CCC1c1cnccc1C#N,-7.914,-5.824,2.09,Fase 2_Seletividade
+MOL_00540,CC1CCC(c2cnccc2Br)C1C(=O)C(=O)O,-7.912,-6.156,1.756,Fase 2_Seletividade
+MOL_00541,CCC1CCC(c2cnccc2C=O)C1C(=O)C(=O)O,-7.912,-6.343,1.569,Fase 2_Seletividade
+MOL_00542,CNC(=O)C1C(O)CCC1c1cnccc1C1CC1,-7.911,-6.654,1.257,Fase 2_Seletividade
+MOL_00543,CCCC(=O)C1C(C)CCC1c1cnccc1OC,-7.91,-5.752,2.158,Fase 2_Seletividade
+MOL_00544,C=Cc1ccncc1C1CCC(C)C1C(=O)C=CC,-7.91,-6.049,1.861,Fase 1_Lote Inicial
+MOL_00545,CCOC(=O)C1C(F)CCC1c1cnccc1CF,-7.909,-5.864,2.045,Fase 2_Seletividade
+MOL_00546,CC1CCC(c2cnccc2C2CC2)C1C(=O)O,-7.909,-6.423,1.486,Fase 2_Seletividade
+MOL_00547,CC1CCC(c2cnccc2CF)C1C(=O)CC(F)(F)F,-7.908,-6.008,1.9,Fase 1_Lote Inicial
+MOL_00548,O=C(O)C1C(F)CCC1c1cnccc1C1CC1,-7.908,-6.178,1.73,Fase 2_Seletividade
+MOL_00549,CCc1ccncc1C1CCC(C)C1C(C)=O,-7.908,-6.214,1.694,Fase 2_Seletividade
+MOL_00550,O=C(O)C(=O)C1C(O)CCC1c1cnccc1CF,-7.907,-6.479,1.428,Fase 2_Seletividade
+MOL_00551,CCc1ccncc1C1CCC(C)C1C(=O)O,-7.907,-6.531,1.376,Fase 2_Seletividade
+MOL_00552,CNC(=O)C1C(C#N)CCC1c1cnccc1C(F)F,-7.906,-6.892,1.014,Fase 2_Seletividade
+MOL_00553,CC=CC(=O)C1C(F)CCC1c1cnccc1C1CO1,-7.904,-5.909,1.995,Fase 1_Lote Inicial
+MOL_00554,O=Cc1ccncc1C1CCC(O)C1C(=O)C1CCC1,-7.903,-5.826,2.077,Fase 2_Seletividade
+MOL_00555,CCCCC(=O)C1C(C)CCC1c1cnccc1C1CO1,-7.903,-5.967,1.936,Fase 1_Lote Inicial
+MOL_00556,CCC(=O)C1C(F)CCC1c1cnccc1C=O,-7.902,-6.109,1.793,Fase 1_Lote Inicial
+MOL_00557,CCc1ccncc1C1CCC(C)C1C(=O)C=O,-7.901,-5.586,2.315,Fase 2_Seletividade
+MOL_00558,N#CC1CCC(c2cnccc2Br)C1C(=O)C1CC1,-7.9,-6.265,1.635,Fase 2_Seletividade
+MOL_00559,Cc1ccncc1C1CCC(O)C1C(=O)C=O,-7.899,-6.086,1.813,Fase 2_Seletividade
+MOL_00560,O=C(C1CC1)C1C(O)CCC1c1cnccc1CF,-7.899,-6.533,1.366,Fase 2_Seletividade
+MOL_00561,CCCC(=O)C1C(O)CCC1c1cnccc1C#CF,-7.898,-5.785,2.113,Fase 1_Lote Inicial
+MOL_00562,COC(=O)c1ccncc1C1CCC(C)C1C(=O)C(C)C,-7.898,-6.016,1.882,Fase 1_Lote Inicial
+MOL_00563,O=CC1CCC(c2cnccc2CF)C1C(=O)C1CC1,-7.897,-5.972,1.925,Fase 2_Seletividade
+MOL_00564,CCc1ccncc1C1CCC(C#N)C1C(=O)OC,-7.897,-6.291,1.606,Fase 2_Seletividade
+MOL_00565,CCc1ccncc1C1CCC(F)C1C(N)=O,-7.897,-6.49,1.407,Fase 2_Seletividade
+MOL_00566,COC1CCC(c2cnccc2N)C1C(=O)C(C)C,-7.896,-6.523,1.373,Fase 2_Seletividade
+MOL_00567,CCCC(=O)C1C(F)CCC1c1cnccc1C,-7.895,-6.07,1.825,Fase 2_Seletividade
+MOL_00568,O=C(C1CC1)C1C(CF)CCC1c1cnccc1C(F)F,-7.895,-6.35,1.545,Fase 3_Super Elite
+MOL_00569,[C-]#[N+]c1ccncc1CC1(C)CCCC1C(=O)CCC,-7.895,-6.663,1.232,Fase 1_Lote Inicial
+MOL_00570,CCc1ccncc1C1CCC(CF)C1C(N)=O,-7.894,-6.329,1.565,Fase 2_Seletividade
+MOL_00571,COc1ccncc1C1CCC(OC)C1C(=O)C1CC1,-7.892,-5.922,1.97,Fase 2_Seletividade
+MOL_00572,N#CC1CCC(c2cnccc2C2CC2)C1C(=O)C1CC1,-7.891,-5.991,1.9,Fase 2_Seletividade
+MOL_00573,CCC1CCC(c2cnccc2C)C1C(=O)C(=O)O,-7.891,-6.097,1.794,Fase 2_Seletividade
+MOL_00574,CC(=O)C1C(F)CCC1c1cnccc1C(F)F,-7.889,-6.121,1.768,Fase 2_Seletividade
+MOL_00575,CCC(=O)C1C(O)CCC1c1cnccc1N,-7.888,-6.561,1.327,Fase 3_Super Elite
+MOL_00576,C=Cc1ccncc1C1CCC(C)C1C(=O)C(F)CC,-7.887,-5.853,2.034,Fase 1_Lote Inicial
+MOL_00577,CC1CCC(c2cnccc2S)C1C(=O)C1CC1,-7.887,-6.06,1.827,Fase 2_Seletividade
+MOL_00578,CCNC(=O)C1C(O)CCC1c1cnccc1Br,-7.887,-6.387,1.5,Fase 2_Seletividade
+MOL_00579,CCc1ccncc1C1CCC(CC)C1C(=O)O,-7.886,-5.703,2.183,Fase 2_Seletividade
+MOL_00580,N#CC1CCC(c2cnccc2C=O)C1C(=O)C1CC1,-7.886,-5.864,2.022,Fase 2_Seletividade
+MOL_00581,NC1CCC(c2cnccc2I)C1C(=O)C1CC1,-7.885,-6.644,1.241,Fase 2_Seletividade
+MOL_00582,CC(C)C(=O)C1C(C=O)CCC1c1cnccc1C(F)F,-7.881,-6.14,1.741,Fase 2_Seletividade
+MOL_00583,CC(=O)c1ccncc1C1CCC(C)C1C(N)=O,-7.881,-6.294,1.5870000000000006,Fase 5_Híbridos Geração 3
+MOL_00584,CNC(=O)C1C(F)CCC1c1cnccc1F,-7.877,-6.013,1.864,Fase 2_Seletividade
+MOL_00585,COC(=O)C1C(C)CCC1c1cnccc1C,-7.876,-5.87,2.006,Fase 2_Seletividade
+MOL_00586,CCc1ccncc1C1CCC(N)C1C(C)=O,-7.876,-6.316,1.56,Fase 2_Seletividade
+MOL_00587,NC(=O)C(=O)C1C(CF)CCC1c1cnccc1Br,-7.875,-6.523,1.352,Fase 3_Super Elite
+MOL_00588,O=CC(=O)C1C(F)CCC1c1cnccc1CF,-7.874,-5.821,2.053,Fase 2_Seletividade
+MOL_00589,CC(C)C(=O)C1C(CF)CCC1c1cnccc1CF,-7.873,-5.838,2.035,Fase 2_Seletividade
+MOL_00590,C=Cc1ccncc1C1CCC(F)C1C(=O)C(C)C,-7.873,-6.192,1.681,Fase 1_Lote Inicial
+MOL_00591,CCc1ccncc1C1CCC(C=O)C1C(=O)C(C)C,-7.872,-5.599,2.273,Fase 2_Seletividade
+MOL_00592,CCOC(=O)C1C(CF)CCC1c1cnccc1O,-7.872,-5.999,1.873,Fase 2_Seletividade
+MOL_00593,CC(=O)C1C(F)CCC1c1cnccc1C1CC1,-7.872,-6.065,1.807,Fase 2_Seletividade
+MOL_00594,CCCC(=O)C1C(O)CCC1c1cnccc1CF,-7.87,-6.082,1.788,Fase 1_Lote Inicial
+MOL_00595,O=C(C1CC1)C1C(F)CCC1c1cnccc1O,-7.87,-6.329,1.541,Fase 2_Seletividade
+MOL_00596,O=C(O)C1C(CF)CCC1c1cnccc1F,-7.869,-6.071,1.798,Fase 2_Seletividade
+MOL_00597,COC(=O)C1C(CF)CCC1c1cnccc1C(F)F,-7.866,-6.013,1.853,Fase 3_Super Elite
+MOL_00598,CC(=O)C1C(C)CCC1c1cnccc1CF,-7.865,-6.006,1.859,Fase 2_Seletividade
+MOL_00599,CC1CCC(c2cnccc2C=NO)C1C(=O)CC1CC1,-7.865,-6.059,1.806,Fase 1_Lote Inicial
+MOL_00600,CC(F)CC(=O)C1C(C)CCC1c1cnccc1CF,-7.865,-6.262,1.603,Fase 1_Lote Inicial
+MOL_00601,Cc1ccncc1C1CCC(C)C1C(=O)C1CCC1,-7.865,-6.517,1.348,Fase 2_Seletividade
+MOL_00602,CNC(=O)C1C(F)CCC1c1cnccc1C=O,-7.865,-6.618,1.247,Fase 2_Seletividade
+MOL_00603,NC(=O)C1C(F)CCC1c1cnccc1F,-7.864,-6.14,1.724,Fase 2_Seletividade
+MOL_00604,O=C(O)C(=O)C1C(F)CCC1c1cnccc1O,-7.862,-6.15,1.712,Fase 2_Seletividade
+MOL_00605,N#Cc1ccncc1C1CCC(C#N)C1C(=O)C1CCC1,-7.862,-7.002,0.86,Fase 2_Seletividade
+MOL_00606,COc1ccncc1C1CCC(C=O)C1C(=O)C1CC1,-7.861,-5.909,1.952,Fase 2_Seletividade
+MOL_00607,O=Cc1ccncc1C1CCC(F)C1C(=O)CC(F)(F)F,-7.86,-5.783,2.077,Fase 1_Lote Inicial
+MOL_00608,CCC(=O)C1C(C)CCC1c1cnccc1O,-7.86,-5.797,2.063,Fase 2_Seletividade
+MOL_00609,CCCC(=O)C1C(OC)CCC1c1cnccc1C=CF,-7.86,-6.185,1.675,Fase 1_Lote Inicial
+MOL_00610,CC(C)C(=O)C1C(F)CCC1c1cnccc1CF,-7.86,-6.196,1.664,Fase 1_Lote Inicial
+MOL_00611,NC(=O)C(=O)C1C(O)CCC1c1cnccc1F,-7.86,-6.408,1.452,Fase 3_Super Elite
+MOL_00612,CNC(=O)C1C(F)CCC1c1cnccc1Br,-7.86,-6.657,1.203,Fase 2_Seletividade
+MOL_00613,CC(C)C(=O)C1C(C#N)CCC1c1cnccc1N,-7.858,-6.486,1.372,Fase 2_Seletividade
+MOL_00614,CCOC(=O)C1C(C)CCC1c1cnccc1O,-7.857,-5.904,1.953,Fase 2_Seletividade
+MOL_00615,CNC(=O)C1C(C)CCC1c1cnccc1C(C)C,-7.857,-6.322,1.535,Fase 2_Seletividade
+MOL_00616,CCC1CCC(c2cnccc2O)C1C(=O)C1CCC1,-7.857,-6.368,1.489,Fase 2_Seletividade
+MOL_00617,CNC(=O)C1C(CF)CCC1c1cnccc1CF,-7.856,-6.265,1.591,Fase 2_Seletividade
+MOL_00618,C=CCC(=O)C1C(F)CCC1c1cnccc1C=C,-7.855,-5.454,2.401,Fase 1_Lote Inicial
+MOL_00619,CCOC(=O)C1C(F)CCC1c1cnccc1C1CC1,-7.855,-5.874,1.981,Fase 2_Seletividade
+MOL_00620,COC1CCC(c2cnccc2F)C1C(=O)C1CCC1,-7.854,-5.751,2.103,Fase 2_Seletividade
+MOL_00621,C=Cc1ccncc1C1CCC(C)C1C(=O)C(C)C,-7.853,-6.318,1.535,Fase 1_Lote Inicial
+MOL_00622,CCc1ccncc1C1CCC(O)C1C(C)=O,-7.851,-5.977,1.874,Fase 2_Seletividade
+MOL_00623,N#CC1CCC(c2cnccc2CF)C1C(N)=O,-7.851,-6.29,1.561,Fase 2_Seletividade
+MOL_00624,Cc1cc(C=NO)c(C2CCC(C)C2C(=O)C(C)C(C)C)cn1,-7.851,-6.846,1.005,Fase 5_Híbridos Geração 3
+MOL_00625,CC(C)C(=O)C1C(O)CCC1c1cnccc1F,-7.85,-6.343,1.507,Fase 3_Super Elite
+MOL_00626,CCC(=O)C1C(C)CCC1c1cnccc1NC#N,-7.85,-6.395,1.455,Fase 1_Lote Inicial
+MOL_00627,Nc1ccncc1C1CCC(F)C1C(=O)C1CCC1,-7.85,-6.42,1.43,Fase 2_Seletividade
+MOL_00628,CNC(=O)C1C(N)CCC1c1cnccc1C(C)C,-7.849,-6.53,1.319,Fase 2_Seletividade
+MOL_00629,CCC(=O)C1C(F)CCC1c1cnccc1I,-7.848,-6.107,1.741,Fase 3_Super Elite
+MOL_00630,CCC(=O)C1C(CF)CCC1c1cnccc1C#N,-7.847,-6.608,1.239,Fase 2_Seletividade
+MOL_00631,CCC(=O)C1C(C)CCC1c1cnccc1Br,-7.846,-6.082,1.764,Fase 3_Super Elite
+MOL_00632,O=CC(=O)C1C(F)CCC1c1cnccc1C(F)F,-7.843,-6.201,1.642,Fase 2_Seletividade
+MOL_00633,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)C(C)CC,-7.841,-5.791,2.05,Fase 1_Lote Inicial
+MOL_00634,CCc1ccncc1C1CCC(C=O)C1C(=O)NC,-7.841,-6.449,1.392,Fase 2_Seletividade
+MOL_00635,COC1CCC(c2cnccc2Br)C1C(N)=O,-7.839,-5.901,1.938,Fase 2_Seletividade
+MOL_00636,NC(=O)C(=O)C1C(CF)CCC1c1cnccc1I,-7.839,-6.267,1.572,Fase 3_Super Elite
+MOL_00637,O=CC1CCC(c2cnccc2F)C1C(=O)O,-7.838,-6.063,1.775,Fase 2_Seletividade
+MOL_00638,CCc1ccncc1C1CCC(CF)C1C(=O)C(N)=O,-7.837,-6.473,1.364,Fase 2_Seletividade
+MOL_00639,CCNC(=O)C1C(O)CCC1c1cnccc1C#N,-7.836,-6.722,1.114,Fase 2_Seletividade
+MOL_00640,C=Cc1ccncc1C1CCC(F)C1C(=O)CCC,-7.835,-5.562,2.273,Fase 1_Lote Inicial
+MOL_00641,COc1ccncc1C1CCC(O)C1C(=O)C(C)C,-7.835,-6.031,1.804,Fase 2_Seletividade
+MOL_00642,CCOC(=O)C1C(C)CCC1c1cnccc1C1CC1,-7.831,-5.891,1.94,Fase 2_Seletividade
+MOL_00643,CCC(C)C(=O)C1C(C)CCC1c1cnccc1C=NO,-7.831,-6.49,1.341,Fase 1_Lote Inicial
+MOL_00644,CCC1CCC(c2cnccc2CF)C1C(=O)NC,-7.829,-6.136,1.693,Fase 2_Seletividade
+MOL_00645,COC1CCC(c2cnccc2F)C1C(=O)C(N)=O,-7.829,-6.336,1.493,Fase 2_Seletividade
+MOL_00646,N#CC1CCC(c2cnccc2Br)C1C(=O)C1CCC1,-7.828,-6.328,1.5,Fase 2_Seletividade
+MOL_00647,CCNC(=O)C1C(CC)CCC1c1cnccc1C,-7.828,-6.338,1.49,Fase 2_Seletividade
+MOL_00648,CCc1ccncc1C1CCC(O)C1C(=O)NC,-7.828,-6.575,1.253,Fase 2_Seletividade
+MOL_00649,CCc1ccncc1C1CCC(O)C1C(=O)C1CC1,-7.826,-6.589,1.237,Fase 2_Seletividade
+MOL_00650,CCC(=O)C1C(F)CCC1c1cnccc1Br,-7.824,-6.021,1.803,Fase 3_Super Elite
+MOL_00651,NC1CCC(c2cnccc2C(F)F)C1C(=O)C1CC1,-7.824,-6.149,1.675,Fase 2_Seletividade
+MOL_00652,CC=CC(=O)C1C(C)CCC1c1cnccc1CF,-7.82,-5.937,1.883,Fase 1_Lote Inicial
+MOL_00653,COC(=O)C1C(O)CCC1c1cnccc1C(F)F,-7.82,-6.117,1.703,Fase 2_Seletividade
+MOL_00654,CCNC(=O)C1C(F)CCC1c1cnccc1CF,-7.819,-6.563,1.256,Fase 2_Seletividade
+MOL_00655,O=Cc1ccncc1C1CCC(CF)C1C(=O)C(=O)O,-7.818,-5.869,1.949,Fase 2_Seletividade
+MOL_00656,Cc1ccncc1C1CCC(C#N)C1C(N)=O,-7.818,-6.238,1.58,Fase 2_Seletividade
+MOL_00657,CCCCC(=O)C1C(C)CCC1c1cnccc1C(F)F,-7.817,-5.583,2.234,Fase 1_Lote Inicial
+MOL_00658,CCc1ccncc1C1CCC(OC)C1C(=O)O,-7.817,-5.801,2.016,Fase 2_Seletividade
+MOL_00659,CCOC(=O)C1C(C)CCC1c1cnccc1C(F)F,-7.817,-6.054,1.763,Fase 2_Seletividade
+MOL_00660,NC(=O)C(=O)C1C(O)CCC1c1cnccc1C1CC1,-7.817,-6.179,1.638,Fase 3_Super Elite
+MOL_00661,O=C(O)C(=O)C1C(O)CCC1c1cnccc1F,-7.816,-6.084,1.732,Fase 2_Seletividade
+MOL_00662,CCCC(=O)C1C(CC)CCC1c1cnccc1C=CF,-7.815,-6.146,1.669,Fase 1_Lote Inicial
+MOL_00663,CCCC(=O)C1C(CF)CCC1c1cnccc1CF,-7.815,-6.473,1.342,Fase 3_Super Elite
+MOL_00664,Cc1ccncc1C1CCC(N)C1C(N)=O,-7.814,-6.567,1.247,Fase 2_Seletividade
+MOL_00665,Cc1ccncc1C1CCC(S)C1C(=O)C(N)=O,-7.814,-6.616,1.198,Fase 2_Seletividade
+MOL_00666,CCCC(=O)C1C(O)CCC1c1cnccc1CC,-7.813,-5.585,2.228,Fase 2_Seletividade
+MOL_00667,CCNC(=O)C1C(O)CCC1c1cnccc1C(C)C,-7.813,-6.974,0.839,Fase 2_Seletividade
+MOL_00668,CCC(=O)C1C(O)CCC1c1cnccc1OC,-7.812,-5.542,2.27,Fase 2_Seletividade
+MOL_00669,CCCC(=O)C1C(C)CCC1c1cnccc1CF,-7.812,-6.413,1.399,Fase 3_Super Elite
+MOL_00670,COC1CCC(c2cnccc2C#N)C1C(N)=O,-7.81,-5.982,1.828,Fase 2_Seletividade
+MOL_00671,CNC(=O)C1C(C)CCC1c1cnccc1S,-7.81,-6.228,1.582,Fase 2_Seletividade
+MOL_00672,CCNC(=O)C1C(CF)CCC1c1cnccc1OC,-7.81,-6.39,1.42,Fase 2_Seletividade
+MOL_00673,CCNC(=O)C1C(F)CCC1c1cnccc1N,-7.809,-6.458,1.351,Fase 2_Seletividade
+MOL_00674,Nc1ccncc1C1CCC(CF)C1C(=O)C1CC1,-7.808,-6.116,1.692,Fase 2_Seletividade
+MOL_00675,COC(=O)C1C(S)CCC1c1cnccc1C(C)C,-7.807,-5.69,2.117,Fase 2_Seletividade
+MOL_00676,Cc1ccncc1C1CCC(N)C1C(=O)C1CC1,-7.807,-6.053,1.754,Fase 2_Seletividade
+MOL_00677,O=Cc1ccncc1C1CCC(C=O)C1C(=O)C1CC1,-7.805,-6.023,1.782,Fase 2_Seletividade
+MOL_00678,CCc1ccncc1C1CCC(N)C1C(=O)C=O,-7.804,-6.132,1.672,Fase 2_Seletividade
+MOL_00679,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)C(C)C,-7.803,-5.976,1.827,Fase 1_Lote Inicial
+MOL_00680,O=Cc1ccncc1C1CCC(C=O)C1C(=O)C1CCC1,-7.801,-5.957,1.844,Fase 2_Seletividade
+MOL_00681,COc1ccncc1C1CCC(CF)C1C(=O)C(N)=O,-7.801,-6.163,1.638,Fase 2_Seletividade
+MOL_00682,N#CC1CCC(c2cnccc2O)C1C(=O)C1CCC1,-7.801,-6.69,1.111,Fase 2_Seletividade
+MOL_00683,COC1CCC(c2cnccc2N)C1C(=O)C1CC1,-7.799,-6.118,1.681,Fase 2_Seletividade
+MOL_00684,CC1CCC(c2cnccc2C2CC2)C1C(=O)CC(F)(F)F,-7.799,-6.334,1.465,Fase 1_Lote Inicial
+MOL_00685,CCCC(=O)C1C(OC)CCC1c1cnccc1C=NO,-7.799,-6.902,0.897,Fase 1_Lote Inicial
+MOL_00686,NC(=O)C1C(CF)CCC1c1cnccc1C(F)F,-7.797,-6.014,1.783,Fase 2_Seletividade
+MOL_00687,NC(=O)C(=O)C1C(CF)CCC1c1cnccc1CF,-7.796,-6.114,1.682,Fase 2_Seletividade
+MOL_00688,CC(C)C(=O)C1C(C=O)CCC1c1cnccc1N,-7.795,-5.874,1.921,Fase 2_Seletividade
+MOL_00689,O=CC(=O)C1C(CF)CCC1c1cnccc1Br,-7.794,-5.84,1.954,Fase 2_Seletividade
+MOL_00690,CCc1ccncc1C1CCC(F)C1C(=O)O,-7.794,-6.228,1.566,Fase 2_Seletividade
+MOL_00691,CC(C)C(=O)C1C(C)CCC1c1cnccc1N=[N+]=[N-],-7.794,-6.501,1.293,Fase 1_Lote Inicial
+MOL_00692,C=CCC(=O)C1C(F)CCC1c1cnccc1C=O,-7.793,-5.337,2.456,Fase 1_Lote Inicial
+MOL_00693,CCC(=O)C1C(C=O)CCC1c1cnccc1C#N,-7.793,-5.85,1.943,Fase 2_Seletividade
+MOL_00694,CC(C)C(=O)C1C(C)CCC1c1cnccc1S,-7.793,-6.077,1.716,Fase 2_Seletividade
+MOL_00695,CCNC(=O)C1C(O)CCC1c1cnccc1I,-7.793,-6.454,1.339,Fase 2_Seletividade
+MOL_00696,CNC(=O)C1C(O)CCC1c1cnccc1F,-7.792,-6.439,1.353,Fase 2_Seletividade
+MOL_00697,CCOC(=O)C1C(CC)CCC1c1cnccc1C#N,-7.791,-6.133,1.658,Fase 2_Seletividade
+MOL_00698,Cc1ccncc1C1CCC(C=O)C1C(N)=O,-7.79,-6.406,1.384,Fase 2_Seletividade
+MOL_00699,CCNC(=O)C1C(N)CCC1c1cnccc1OC,-7.788,-6.169,1.619,Fase 2_Seletividade
+MOL_00700,Nc1ccncc1C1CCC(CF)C1C(=O)C=O,-7.787,-5.816,1.971,Fase 2_Seletividade
+MOL_00701,CC1CCC(c2cnccc2I)C1C(=O)C(=O)O,-7.786,-6.214,1.572,Fase 2_Seletividade
+MOL_00702,CCC(C)C(=O)C1C(C)CCC1c1cnccc1C#CF,-7.785,-6.332,1.453,Fase 1_Lote Inicial
+MOL_00703,O=CC(=O)C1C(CF)CCC1c1cnccc1CF,-7.781,-5.9,1.881,Fase 2_Seletividade
+MOL_00704,CC1CCC(c2cnccc2C(F)F)C1C(=O)CC1CCC1F,-7.781,-6.48,1.301,Fase 1_Lote Inicial
+MOL_00705,CCNC(=O)C1C(C#N)CCC1c1cnccc1C,-7.78,-6.417,1.363,Fase 2_Seletividade
+MOL_00706,CC(=O)C1C(C)CCC1c1cnccc1O,-7.779,-5.87,1.909,Fase 2_Seletividade
+MOL_00707,COC(=O)C1C(F)CCC1c1cnccc1C,-7.778,-5.551,2.227,Fase 2_Seletividade
+MOL_00708,O=C(O)C1C(F)CCC1c1cnccc1Br,-7.778,-6.473,1.305,Fase 2_Seletividade
+MOL_00709,CCOC(=O)C1C(CC)CCC1c1cnccc1F,-7.776,-5.542,2.234,Fase 2_Seletividade
+MOL_00710,COc1ccncc1C1CCC(CF)C1C(=O)C(C)C,-7.776,-5.746,2.03,Fase 2_Seletividade
+MOL_00711,CCCC(=O)C1C(N)CCC1c1cnccc1C1CC1,-7.776,-5.78,1.996,Fase 2_Seletividade
+MOL_00712,CCC(=O)C1C(C#N)CCC1c1cnccc1C,-7.776,-5.893,1.883,Fase 2_Seletividade
+MOL_00713,CCC(=O)C1C(C)CCC1c1cnccc1N=[N+]=[N-],-7.776,-6.232,1.544,Fase 1_Lote Inicial
+MOL_00714,NC(=O)C1C(F)CCC1c1cnccc1C1CC1,-7.772,-6.254,1.518,Fase 2_Seletividade
+MOL_00715,CCc1ccncc1C1CCC(C=O)C1C(=O)O,-7.771,-6.008,1.763,Fase 2_Seletividade
+MOL_00716,C=Cc1ccncc1C1CCC(F)C1C(=O)CC(F)(F)F,-7.771,-6.297,1.474,Fase 1_Lote Inicial
+MOL_00717,CNC(=O)C1C(O)CCC1c1cnccc1Br,-7.77,-6.282,1.488,Fase 2_Seletividade
+MOL_00718,NC(=O)C(=O)C1C(O)CCC1c1cnccc1Br,-7.766,-6.487,1.279,Fase 3_Super Elite
+MOL_00719,COC1CCC(c2cnccc2O)C1C(=O)C1CCC1,-7.766,-6.518,1.248,Fase 2_Seletividade
+MOL_00720,Cc1ccncc1C1CCC(CF)C1C(=O)C(C)C,-7.764,-5.935,1.829,Fase 2_Seletividade
+MOL_00721,O=C(O)C1C(F)CCC1c1cnccc1I,-7.764,-6.219,1.545,Fase 2_Seletividade
+MOL_00722,COc1ccncc1C1CCC(C)C1C(=O)C(N)=O,-7.763,-6.255,1.508,Fase 2_Seletividade
+MOL_00723,CCc1ccncc1C1CCC(OC)C1C(N)=O,-7.762,-5.938,1.824,Fase 2_Seletividade
+MOL_00724,CCNC(=O)C1C(CF)CCC1c1cnccc1C,-7.762,-6.413,1.349,Fase 2_Seletividade
+MOL_00725,CCC1CCC(c2cnccc2N)C1C(=O)C(C)C,-7.761,-5.861,1.9,Fase 2_Seletividade
+MOL_00726,C=Cc1ccncc1C1CCC(C)C1C(=O)CCC,-7.761,-6.117,1.644,Fase 1_Lote Inicial
+MOL_00727,COC1CCC(c2cnccc2F)C1C(N)=O,-7.761,-6.238,1.523,Fase 2_Seletividade
+MOL_00728,CC1CCC(c2cnccc2C#CF)C1C(=O)CC(F)(F)F,-7.758,-5.906,1.852,Fase 1_Lote Inicial
+MOL_00729,C=CCC(=O)C1C(C)CCC1c1cnccc1C(=O)OC,-7.758,-6.394,1.364,Fase 1_Lote Inicial
+MOL_00730,CCCC(=O)C1C(F)CCC1c1cnccc1C=O,-7.757,-6.325,1.432,Fase 1_Lote Inicial
+MOL_00731,CCOC(=O)C1C(N)CCC1c1cnccc1C(C)C,-7.756,-6.137,1.619,Fase 2_Seletividade
+MOL_00732,Nc1ccncc1C1CCC(CF)C1C(=O)C1CCC1,-7.756,-6.155,1.601,Fase 2_Seletividade
+MOL_00733,CCNC(=O)C1C(O)CCC1c1cnccc1C1CC1,-7.756,-6.747,1.009,Fase 2_Seletividade
+MOL_00734,CC(C)C(=O)C1C(C=O)CCC1c1cnccc1C=O,-7.754,-5.448,2.306,Fase 2_Seletividade
+MOL_00735,CCCC(=O)C1C(O)CCC1c1cnccc1C,-7.753,-5.462,2.291,Fase 2_Seletividade
+MOL_00736,CCCC(=O)C1C(C)CCC1c1cnccc1N=[N+]=[N-],-7.753,-6.059,1.694,Fase 1_Lote Inicial
+MOL_00737,CCc1ccncc1C1CCC(CC)C1C(C)=O,-7.753,-6.276,1.477,Fase 2_Seletividade
+MOL_00738,CC(=O)C1C(F)CCC1c1cnccc1C=O,-7.752,-5.686,2.066,Fase 2_Seletividade
+MOL_00739,NC(=O)C1C(O)CCC1c1cnccc1CF,-7.752,-6.483,1.269,Fase 2_Seletividade
+MOL_00740,CCC(=O)C1C(O)CCC1c1cnccc1C=O,-7.752,-6.546,1.206,Fase 2_Seletividade
+MOL_00741,CCCC(=O)C1C(CC)CCC1c1cnccc1C(F)F,-7.748,-6.358,1.39,Fase 1_Lote Inicial
+MOL_00742,CCC(=O)C1C(CF)CCC1c1cnccc1CF,-7.747,-5.854,1.893,Fase 2_Seletividade
+MOL_00743,CC(=O)C1C(N)CCC1c1cnccc1O,-7.746,-6.14,1.606,Fase 2_Seletividade
+MOL_00744,CCOC(=O)C1C(CF)CCC1c1cnccc1C1CC1,-7.745,-5.957,1.788,Fase 2_Seletividade
+MOL_00745,CCC(=O)C1C(N)CCC1c1cnccc1S,-7.745,-6.099,1.646,Fase 2_Seletividade
+MOL_00746,CCCC(=O)C1C(S)CCC1c1cnccc1C=O,-7.744,-5.347,2.397,Fase 2_Seletividade
+MOL_00747,O=C(O)C(=O)C1C(CF)CCC1c1cnccc1Br,-7.744,-6.341,1.403,Fase 2_Seletividade
+MOL_00748,CC1CCC(c2cnccc2N)C1C(=O)C=O,-7.743,-5.843,1.9,Fase 2_Seletividade
+MOL_00749,C=CCC(=O)C1C(C)CCC1c1cnccc1C=O,-7.743,-5.977,1.766,Fase 1_Lote Inicial
+MOL_00750,C=Cc1ccncc1C1CCC(O)C1C(=O)CCC,-7.742,-5.929,1.813,Fase 1_Lote Inicial
+MOL_00751,CCC(=O)C1C(OC)CCC1c1cnccc1N,-7.74,-5.586,2.154,Fase 2_Seletividade
+MOL_00752,COc1ccncc1C1CCC(CF)C1C(=O)C1CC1,-7.74,-5.849,1.891,Fase 2_Seletividade
+MOL_00753,C=Cc1ccncc1C1CCC(C)C1C(=O)CC1CC1,-7.74,-6.355,1.385,Fase 1_Lote Inicial
+MOL_00754,N#Cc1ccncc1C1CCC(S)C1C(=O)C1CC1,-7.739,-6.173,1.566,Fase 2_Seletividade
+MOL_00755,COc1ccncc1C1CCC(OC)C1C(=O)C(=O)O,-7.739,-6.241,1.498,Fase 2_Seletividade
+MOL_00756,Cc1ccncc1C1CCC(C)C1C(=O)C=O,-7.738,-5.844,1.894,Fase 2_Seletividade
+MOL_00757,CCC(=O)C1C(O)CCC1c1cnccc1I,-7.736,-5.678,2.058,Fase 2_Seletividade
+MOL_00758,CNC(=O)C1C(C)CCC1c1cnccc1C,-7.736,-6.33,1.406,Fase 2_Seletividade
+MOL_00759,C=CCC(=O)C1C(F)CCC1c1cnccc1C=CF,-7.735,-5.795,1.94,Fase 1_Lote Inicial
+MOL_00760,COC1CCC(c2cnccc2CF)C1C(=O)O,-7.735,-5.917,1.818,Fase 2_Seletividade
+MOL_00761,CCc1ccncc1C1CCC(C#N)C1C(C)=O,-7.735,-5.941,1.794,Fase 2_Seletividade
+MOL_00762,CCCC(=O)C1C(C=O)CCC1c1cnccc1C1CC1,-7.734,-6.003,1.731,Fase 2_Seletividade
+MOL_00763,C=CCC(=O)C1C(C)CCC1c1cnccc1N=[N+]=[N-],-7.734,-6.039,1.695,Fase 1_Lote Inicial
+MOL_00764,NC1CCC(c2cnccc2C2CC2)C1C(=O)O,-7.733,-6.35,1.383,Fase 2_Seletividade
+MOL_00765,CCCC(=O)C1C(N)CCC1c1cnccc1O,-7.732,-6.183,1.549,Fase 2_Seletividade
+MOL_00766,O=C(C1CC1)C1C(F)CCC1c1cnccc1S,-7.732,-6.239,1.493,Fase 2_Seletividade
+MOL_00767,CCC(=O)C1C(N)CCC1c1cnccc1O,-7.731,-6.208,1.523,Fase 2_Seletividade
+MOL_00768,CCC(=O)C1C(O)CCC1c1cnccc1CC,-7.73,-5.448,2.282,Fase 2_Seletividade
+MOL_00769,COC(=O)C1C(C)CCC1c1cnccc1C=O,-7.729,-5.663,2.066,Fase 2_Seletividade
+MOL_00770,CCc1ccncc1C1CCC(N)C1C(=O)C(C)C,-7.729,-6.062,1.667,Fase 2_Seletividade
+MOL_00771,O=CC1CCC(c2cnccc2S)C1C(=O)C1CCC1,-7.729,-6.239,1.49,Fase 2_Seletividade
+MOL_00772,CCOC(=O)C1C(F)CCC1c1cnccc1C(C)C,-7.729,-6.261,1.468,Fase 2_Seletividade
+MOL_00773,CC1CCC(c2cnccc2C#N)C1C(=O)C1CC1,-7.728,-5.861,1.867,Fase 3_Super Elite
+MOL_00774,CC(=O)C1C(C)CCC1c1cnccc1C(C)C,-7.728,-6.045,1.683,Fase 2_Seletividade
+MOL_00775,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)CC1CC1,-7.727,-6.396,1.331,Fase 1_Lote Inicial
+MOL_00776,COc1ccncc1C1CCC(O)C1C(=O)C1CC1,-7.727,-6.425,1.302,Fase 2_Seletividade
+MOL_00777,CCC(=O)C1C(N)CCC1c1cnccc1Br,-7.725,-5.693,2.032,Fase 2_Seletividade
+MOL_00778,Nc1ccncc1C1CCC(N)C1C(=O)C1CCC1,-7.725,-6.583,1.142,Fase 2_Seletividade
+MOL_00779,Cc1cc(C=NO)c(C2CCC(C)C2C(N)=O)cn1,-7.724,-5.86,1.864,Fase 5_Híbridos Geração 3
+MOL_00780,CC1CCCC1C(=O)C1CC1c1cnccc1C1CC1,-7.723,-5.87,1.853,Fase 1_Lote Inicial
+MOL_00781,NC1CCC(c2cnccc2CF)C1C(=O)C1CC1,-7.722,-6.162,1.56,Fase 2_Seletividade
+MOL_00782,CC(C)C(=O)C1C(S)CCC1c1cnccc1I,-7.721,-5.506,2.215,Fase 2_Seletividade
+MOL_00783,CC(C)c1ccncc1C1CCC(C)C1C(=O)O,-7.721,-6.595,1.126,Fase 2_Seletividade
+MOL_00784,C=Cc1ccncc1C1CCC(C)C1C(=O)C(C)=CC,-7.72,-6.345,1.375,Fase 1_Lote Inicial
+MOL_00785,CC(=O)C1C(C#N)CCC1c1cnccc1C#N,-7.719,-6.215,1.504,Fase 2_Seletividade
+MOL_00786,O=C(C1CC1)C1C(S)CCC1c1cnccc1F,-7.718,-6.011,1.707,Fase 2_Seletividade
+MOL_00787,CCC(=O)C1C(O)CCC1c1cnccc1Br,-7.717,-5.936,1.781,Fase 3_Super Elite
+MOL_00788,CCC=CC(=O)C1C(C)CCC1c1cnccc1C1CC1,-7.717,-5.972,1.745,Fase 1_Lote Inicial
+MOL_00789,Nc1ccncc1C1CCC(S)C1C(=O)C1CCC1,-7.717,-6.122,1.595,Fase 2_Seletividade
+MOL_00790,CCCC(=O)C1C(C)CCC1c1cnccc1S,-7.716,-5.661,2.055,Fase 2_Seletividade
+MOL_00791,CCC(C)C(=O)C1C(C)CCC1c1cnccc1C1CO1,-7.716,-6.368,1.348,Fase 1_Lote Inicial
+MOL_00792,CCC=CC(=O)C1C(C)CCC1c1cnccc1N=[N+]=[N-],-7.715,-5.746,1.969,Fase 1_Lote Inicial
+MOL_00793,CCNC(=O)C1C(CF)CCC1c1cnccc1C#N,-7.715,-6.588,1.127,Fase 2_Seletividade
+MOL_00794,CC(C)c1ccncc1C1CCC(CF)C1C(N)=O,-7.715,-6.68,1.035,Fase 2_Seletividade
+MOL_00795,COC1CCC(c2cnccc2F)C1C(=O)C1CC1,-7.714,-6.071,1.643,Fase 2_Seletividade
+MOL_00796,CCc1ccncc1C1CCC(O)C1C(=O)OC,-7.713,-6.093,1.62,Fase 2_Seletividade
+MOL_00797,CC(C)c1ccncc1C1CCC(C)C1C(=O)C(=O)O,-7.713,-6.212,1.501,Fase 2_Seletividade
+MOL_00798,CCC(=O)C1C(O)CCC1c1cnccc1C1CC1,-7.713,-6.264,1.449,Fase 3_Super Elite
+MOL_00799,CC1CCCC1C(=O)C1CC1c1cnccc1C=NO,-7.713,-6.854,0.859,Fase 1_Lote Inicial
+MOL_00800,CC=CC(=O)C1C(C)CCC1c1cnccc1C1CC1,-7.711,-6.065,1.646,Fase 1_Lote Inicial
+MOL_00801,CCC1CCC(c2cnccc2O)C1C(=O)C(C)C,-7.711,-6.115,1.596,Fase 2_Seletividade
+MOL_00802,CCCC(=O)C1C(O)CCC1c1cnccc1C=CF,-7.709,-5.711,1.998,Fase 1_Lote Inicial
+MOL_00803,CCC(=O)C1C(OC)CCC1c1cnccc1C(C)C,-7.709,-5.724,1.985,Fase 2_Seletividade
+MOL_00804,CCC(F)C(=O)C1C(C)CCC1c1cnccc1C#CF,-7.709,-5.958,1.751,Fase 1_Lote Inicial
+MOL_00805,NC(=O)C1C(S)CCC1c1cnccc1C(F)F,-7.709,-6.336,1.373,Fase 2_Seletividade
+MOL_00806,O=CC1CCC(c2cnccc2Br)C1C(=O)O,-7.708,-6.11,1.598,Fase 2_Seletividade
+MOL_00807,COC(=O)C1C(C)CCC1c1cnccc1C(F)F,-7.708,-6.158,1.55,Fase 3_Super Elite
+MOL_00808,CCNC(=O)C1C(CC)CCC1c1cnccc1CC,-7.708,-6.491,1.217,Fase 2_Seletividade
+MOL_00809,CC(C)c1ccncc1C1CCC(N)C1C(=O)C1CCC1,-7.708,-6.794,0.914,Fase 2_Seletividade
+MOL_00810,CCC1CCC(c2cnccc2C(F)F)C1C(N)=O,-7.706,-6.45,1.256,Fase 2_Seletividade
+MOL_00811,COc1ccncc1C1CCC(S)C1C(=O)C(C)C,-7.703,-5.878,1.825,Fase 2_Seletividade
+MOL_00812,CCC1CCC(c2cnccc2CF)C1C(=O)C(N)=O,-7.703,-6.035,1.668,Fase 2_Seletividade
+MOL_00813,C=C=Cc1ccncc1CC1(C)CCCC1C(=O)CCC,-7.702,-5.655,2.047,Fase 1_Lote Inicial
+MOL_00814,CC=CC(=O)C1C(C)CCC1c1cnccc1C#N,-7.702,-5.883,1.819,Fase 1_Lote Inicial
+MOL_00815,COC(=O)C1C(C)CCC1c1cnccc1F,-7.701,-5.736,1.965,Fase 2_Seletividade
+MOL_00816,CCOC(=O)C1C(N)CCC1c1cnccc1C,-7.701,-5.824,1.877,Fase 2_Seletividade
+MOL_00817,C=C=Cc1ccncc1C1CCC(F)C1C(=O)CC,-7.7,-5.672,2.028,Fase 1_Lote Inicial
+MOL_00818,CCNC(=O)C1C(C#N)CCC1c1cnccc1C1CC1,-7.7,-6.96,0.74,Fase 2_Seletividade
+MOL_00819,NC(=O)C1C(N)CCC1c1cnccc1F,-7.699,-6.231,1.468,Fase 2_Seletividade
+MOL_00820,CNC(=O)C1C(CF)CCC1c1cnccc1C,-7.699,-6.349,1.35,Fase 2_Seletividade
+MOL_00821,CC(C)c1ccncc1C1CCC(C#N)C1C(N)=O,-7.698,-6.51,1.188,Fase 2_Seletividade
+MOL_00822,CC(=O)C1C(C=O)CCC1c1cnccc1C=O,-7.697,-5.698,1.999,Fase 2_Seletividade
+MOL_00823,COc1ccncc1C1CCC(F)C1C(=O)C1CCC1,-7.696,-5.98,1.716,Fase 2_Seletividade
+MOL_00824,COC1CCC(c2cnccc2Br)C1C(=O)C(N)=O,-7.696,-6.073,1.623,Fase 2_Seletividade
+MOL_00825,Cc1ccncc1C1CCC(C=O)C1C(=O)O,-7.696,-6.859,0.837,Fase 2_Seletividade
+MOL_00826,CC1CCC(c2cnccc2C=O)C1C(=O)C=O,-7.695,-5.767,1.928,Fase 2_Seletividade
+MOL_00827,N#Cc1ccncc1C1CCC(F)C1C(=O)C=O,-7.695,-5.914,1.781,Fase 2_Seletividade
+MOL_00828,CC(C)C(=O)C1C(C#N)CCC1c1cnccc1Br,-7.695,-6.101,1.594,Fase 2_Seletividade
+MOL_00829,CC1CCC(c2cnccc2CF)C1C(=O)CC1CC1,-7.693,-5.368,2.325,Fase 1_Lote Inicial
+MOL_00830,CNC(=O)C1C(C=O)CCC1c1cnccc1C,-7.693,-6.222,1.471,Fase 2_Seletividade
+MOL_00831,N#CC1CCC(c2cnccc2I)C1C(=O)C1CC1,-7.692,-5.793,1.899,Fase 2_Seletividade
+MOL_00832,CNC(=O)C1C(C=O)CCC1c1cnccc1Br,-7.692,-6.081,1.611,Fase 2_Seletividade
+MOL_00833,CCCC(=O)C1C(O)CCC1c1cnccc1C(C)C,-7.691,-6.01,1.681,Fase 2_Seletividade
+MOL_00834,NC(=O)C(=O)C1C(CF)CCC1c1cnccc1C1CC1,-7.691,-6.463,1.228,Fase 3_Super Elite
+MOL_00835,CCC(=O)C1C(C#N)CCC1c1cnccc1C(F)F,-7.691,-6.608,1.083,Fase 2_Seletividade
+MOL_00836,CCC(=O)C1C(CC)CCC1c1cnccc1C#N,-7.69,-5.89,1.8,Fase 2_Seletividade
+MOL_00837,O=C(C1CC1)C1C(O)CCC1c1cnccc1I,-7.689,-5.649,2.04,Fase 3_Super Elite
+MOL_00838,COC1CCC(c2cnccc2Br)C1C(=O)C(C)C,-7.689,-6.248,1.441,Fase 2_Seletividade
+MOL_00839,CC1CCC(c2cnccc2O)C1C(=O)C=O,-7.687,-5.798,1.889,Fase 2_Seletividade
+MOL_00840,C=CCC(=O)C1C(F)CCC1c1cnccc1C(=O)OC,-7.687,-6.27,1.417,Fase 1_Lote Inicial
+MOL_00841,CCCC(=O)C1C(O)CCC1c1cnccc1C(=O)OC,-7.687,-6.538,1.149,Fase 1_Lote Inicial
+MOL_00842,CCCC(=O)C1C(O)CCC1c1cnccc1N=[N+]=[N-],-7.686,-5.568,2.118,Fase 1_Lote Inicial
+MOL_00843,O=CC1CCC(c2cnccc2S)C1C(=O)C(=O)O,-7.686,-5.708,1.978,Fase 2_Seletividade
+MOL_00844,C=CCC(=O)C1C(F)CCC1c1cnccc1CF,-7.686,-5.86,1.826,Fase 1_Lote Inicial
+MOL_00845,CC(=O)C1C(CF)CCC1c1cnccc1C(F)F,-7.686,-6.067,1.619,Fase 2_Seletividade
+MOL_00846,COc1ccncc1C1CCC(F)C1C(N)=O,-7.685,-6.599,1.086,Fase 2_Seletividade
+MOL_00847,CCC(=O)C1C(C)CCC1c1cnccc1CF,-7.683,-5.18,2.503,Fase 1_Lote Inicial
+MOL_00848,CCC(=O)C1C(N)CCC1c1cnccc1I,-7.683,-5.713,1.97,Fase 2_Seletividade
+MOL_00849,CCCC(=O)C1C(F)CCC1c1cnccc1O,-7.682,-6.536,1.146,Fase 2_Seletividade
+MOL_00850,CCNC(=O)C1C(N)CCC1c1cnccc1C1CC1,-7.681,-6.493,1.188,Fase 2_Seletividade
+MOL_00851,CCOC(=O)C1C(C)CCC1c1cnccc1C#N,-7.679,-5.414,2.265,Fase 2_Seletividade
+MOL_00852,CCOC(=O)C1C(F)CCC1c1cnccc1N,-7.679,-5.986,1.693,Fase 2_Seletividade
+MOL_00853,CCOC(=O)C1C(CC)CCC1c1cnccc1N,-7.678,-5.766,1.912,Fase 2_Seletividade
+MOL_00854,CC(C)C(=O)C1C(O)CCC1c1cnccc1C(F)F,-7.678,-6.869,0.809,Fase 2_Seletividade
+MOL_00855,CC(F)CC(=O)C1C(C)CCC1c1cnccc1C=O,-7.677,-5.538,2.139,Fase 1_Lote Inicial
+MOL_00856,CC(C)C(=O)C1C(C)CCC1c1cnccc1O,-7.676,-6.21,1.466,Fase 2_Seletividade
+MOL_00857,CCNC(=O)C1C(C)CCC1c1cnccc1C,-7.676,-6.7,0.976,Fase 2_Seletividade
+MOL_00858,CCCCC(=O)C1C(C)CCC1c1cnccc1CF,-7.675,-6.128,1.547,Fase 1_Lote Inicial
+MOL_00859,CCCC(=O)C1C(C)CCC1c1cnccc1C=O,-7.674,-5.25,2.424,Fase 1_Lote Inicial
+MOL_00860,COC(=O)C1C(C)CCC1c1cnccc1OC,-7.674,-5.548,2.126,Fase 2_Seletividade
+MOL_00861,O=Cc1ccncc1C1CCC(C=O)C1C(=O)O,-7.673,-6.065,1.608,Fase 2_Seletividade
+MOL_00862,O=C(O)C(=O)C1C(CF)CCC1c1cnccc1CF,-7.673,-6.295,1.378,Fase 2_Seletividade
+MOL_00863,CCC(=O)C1C(C)CCC1c1cnccc1C#CF,-7.671,-6.182,1.489,Fase 1_Lote Inicial
+MOL_00864,CC1CCC(c2cnccc2O)C1C(N)=O,-7.671,-6.386,1.285,Fase 2_Seletividade
+MOL_00865,COC1CCC(c2cnccc2F)C1C(=O)C(C)C,-7.668,-6.074,1.594,Fase 2_Seletividade
+MOL_00866,COC(=O)C1C(N)CCC1c1cnccc1C#N,-7.668,-6.282,1.386,Fase 2_Seletividade
+MOL_00867,COC1CCC(c2cnccc2C2CC2)C1C(=O)C=O,-7.667,-6.001,1.666,Fase 2_Seletividade
+MOL_00868,NC(=O)C1C(F)CCC1c1cnccc1Br,-7.667,-6.088,1.579,Fase 2_Seletividade
+MOL_00869,O=C(C1CCC1)C1C(O)CCC1c1cnccc1CF,-7.664,-6.378,1.286,Fase 2_Seletividade
+MOL_00870,CCC1CCC(c2cnccc2C=O)C1C(=O)O,-7.663,-5.85,1.813,Fase 2_Seletividade
+MOL_00871,CC(C)c1ccncc1C1CCC(CF)C1C(=O)O,-7.663,-6.215,1.448,Fase 2_Seletividade
+MOL_00872,O=C(C1CC1)C1C(O)CCC1c1cnccc1Br,-7.662,-5.614,2.048,Fase 2_Seletividade
+MOL_00873,O=CC1CCC(c2cnccc2F)C1C(=O)C1CC1,-7.662,-5.992,1.67,Fase 2_Seletividade
+MOL_00874,NC1CCC(c2cnccc2F)C1C(=O)C1CC1,-7.662,-6.135,1.527,Fase 2_Seletividade
+MOL_00875,C=CCC(=O)C1C(F)CCC1c1cnccc1C1CO1,-7.662,-6.264,1.398,Fase 1_Lote Inicial
+MOL_00876,NC1CCC(c2cnccc2C(F)F)C1C(=O)O,-7.662,-6.667,0.995,Fase 2_Seletividade
+MOL_00877,CCC1CCC(c2cnccc2O)C1C(=O)C=O,-7.661,-5.787,1.874,Fase 2_Seletividade
+MOL_00878,O=C(C1CCC1)C1C(CF)CCC1c1cnccc1CF,-7.661,-6.056,1.605,Fase 2_Seletividade
+MOL_00879,COC(=O)C1C(CF)CCC1c1cnccc1C1CC1,-7.661,-6.06,1.601,Fase 2_Seletividade
+MOL_00880,CNC(=O)C1C(OC)CCC1c1cnccc1O,-7.661,-6.425,1.236,Fase 2_Seletividade
+MOL_00881,CCC1CCC(c2cnccc2C(F)F)C1C(=O)C(=O)O,-7.661,-6.568,1.093,Fase 2_Seletividade
+MOL_00882,CCc1ccncc1C1CCC(CF)C1C(=O)NC,-7.657,-6.256,1.401,Fase 2_Seletividade
+MOL_00883,CC1CCC(c2cnccc2Br)C1C(=O)C(N)=O,-7.657,-6.392,1.265,Fase 2_Seletividade
+MOL_00884,NC(=O)C(=O)C1C(O)CCC1c1cnccc1I,-7.657,-6.547,1.11,Fase 3_Super Elite
+MOL_00885,CCOC(=O)C1C(C)CCC1c1cnccc1CC,-7.656,-5.633,2.023,Fase 2_Seletividade
+MOL_00886,NC1CCC(c2cnccc2CF)C1C(=O)C1CCC1,-7.655,-6.226,1.429,Fase 2_Seletividade
+MOL_00887,CCOC(=O)C1C(C)CCC1c1cnccc1CF,-7.653,-5.858,1.795,Fase 2_Seletividade
+MOL_00888,CCNC(=O)C1C(O)CCC1c1cnccc1CF,-7.653,-6.382,1.271,Fase 2_Seletividade
+MOL_00889,CCNC(=O)C1C(C)CCC1c1cnccc1CF,-7.652,-6.142,1.51,Fase 2_Seletividade
+MOL_00890,Cc1ccncc1C1CCC(C#N)C1C(=O)C1CC1,-7.652,-6.359,1.293,Fase 2_Seletividade
+MOL_00891,CCNC(=O)C1C(CF)CCC1c1cnccc1C(F)F,-7.651,-6.676,0.975,Fase 2_Seletividade
+MOL_00892,CCc1ccncc1C1CCC(C)C1C(=O)C1CC1,-7.647,-5.824,1.823,Fase 2_Seletividade
+MOL_00893,CCC(=O)C1C(F)CCC1c1cnccc1OC,-7.647,-6.175,1.472,Fase 2_Seletividade
+MOL_00894,CC(F)CC(=O)C1C(C)CCC1c1cnccc1N=[N+]=[N-],-7.647,-6.211,1.436,Fase 1_Lote Inicial
+MOL_00895,CCC1CCC(c2cnccc2OC)C1C(N)=O,-7.647,-6.302,1.345,Fase 2_Seletividade
+MOL_00896,CCC(F)C(=O)C1C(C)CCC1c1cnccc1C1CO1,-7.645,-5.758,1.887,Fase 1_Lote Inicial
+MOL_00897,O=C(O)C(=O)C1C(F)CCC1c1cnccc1S,-7.645,-6.086,1.559,Fase 2_Seletividade
+MOL_00898,C=CCC(=O)C1C(C)CCC1c1cnccc1NC#N,-7.645,-6.292,1.353,Fase 1_Lote Inicial
+MOL_00899,NC(=O)C1C(O)CCC1c1cnccc1C(F)F,-7.643,-6.526,1.117,Fase 2_Seletividade
+MOL_00900,CCCC(=O)C1C(F)CCC1c1cnccc1S,-7.642,-5.558,2.084,Fase 2_Seletividade
+MOL_00901,CC1CCCC1C(=O)C1CC1c1cnccc1C=O,-7.642,-5.815,1.827,Fase 1_Lote Inicial
+MOL_00902,CC1CCC(c2cnccc2O)C1C(=O)C(=O)O,-7.641,-6.699,0.942,Fase 2_Seletividade
+MOL_00903,CCNC(=O)C1C(CC)CCC1c1cnccc1C1CC1,-7.64,-6.472,1.168,Fase 2_Seletividade
+MOL_00904,CC(=O)C1C(C)CCC1c1cnccc1C,-7.639,-5.761,1.878,Fase 2_Seletividade
+MOL_00905,COC(=O)C1C(C)CCC1c1cnccc1O,-7.639,-5.844,1.795,Fase 2_Seletividade
+MOL_00906,CCNC(=O)C1C(F)CCC1c1cnccc1OC,-7.639,-6.053,1.586,Fase 2_Seletividade
+MOL_00907,CC1CCC(c2cnccc2C#N)C1C(=O)C=O,-7.638,-6.06,1.578,Fase 2_Seletividade
+MOL_00908,O=Cc1ccncc1C1CCC(CF)C1C(=O)C1CC1,-7.638,-6.112,1.526,Fase 2_Seletividade
+MOL_00909,O=C(O)C(=O)C1C(O)CCC1c1cnccc1I,-7.638,-6.226,1.412,Fase 2_Seletividade
+MOL_00910,COC(=O)C1C(C=O)CCC1c1cnccc1CF,-7.637,-5.461,2.176,Fase 2_Seletividade
+MOL_00911,NC(=O)C1C(CF)CCC1c1cnccc1C=O,-7.636,-6.391,1.245,Fase 2_Seletividade
+MOL_00912,CCNC(=O)C1C(C)CCC1c1cnccc1C=O,-7.636,-6.467,1.169,Fase 2_Seletividade
+MOL_00913,COC(=O)C1C(C#N)CCC1c1cnccc1C(F)F,-7.635,-6.426,1.209,Fase 2_Seletividade
+MOL_00914,O=CC(=O)C1C(F)CCC1c1cnccc1O,-7.634,-5.788,1.846,Fase 2_Seletividade
+MOL_00915,CCC(=O)C1C(F)CCC1c1cnccc1C,-7.634,-5.799,1.835,Fase 2_Seletividade
+MOL_00916,CC1CCC(c2cnccc2C=CF)C1C(=O)CC1CC1,-7.633,-6.015,1.618,Fase 1_Lote Inicial
+MOL_00917,CCC(=O)C1C(O)CCC1c1cnccc1C#N,-7.633,-6.229,1.404,Fase 3_Super Elite
+MOL_00918,CNC(=O)C1C(F)CCC1c1cnccc1I,-7.633,-6.62,1.013,Fase 2_Seletividade
+MOL_00919,CCC1CCC(c2cnccc2F)C1C(=O)NC,-7.632,-6.402,1.23,Fase 2_Seletividade
+MOL_00920,O=C(O)C(=O)C1C(O)CCC1c1cnccc1Br,-7.631,-6.171,1.46,Fase 2_Seletividade
+MOL_00921,CC(C)c1ccncc1C1CCC(O)C1C(=O)C(=O)O,-7.631,-6.182,1.449,Fase 2_Seletividade
+MOL_00922,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)CC=C,-7.63,-5.805,1.825,Fase 1_Lote Inicial
+MOL_00923,CCc1ccncc1C1CCC(C#N)C1C(=O)C=O,-7.63,-5.947,1.683,Fase 2_Seletividade
+MOL_00924,NC1CCC(c2cnccc2F)C1C(=O)C1CCC1,-7.63,-6.194,1.436,Fase 2_Seletividade
+MOL_00925,CCCC(=O)C1C(OC)CCC1c1cnccc1C(F)F,-7.63,-6.254,1.376,Fase 2_Seletividade
+MOL_00926,CCC(=O)C1C(S)CCC1c1cnccc1CC,-7.627,-5.551,2.076,Fase 2_Seletividade
+MOL_00927,O=C(O)C(=O)C1C(F)CCC1c1cnccc1I,-7.627,-6.087,1.54,Fase 2_Seletividade
+MOL_00928,COc1ccncc1C1CCC(O)C1C(=O)C1CCC1,-7.627,-6.435,1.192,Fase 2_Seletividade
+MOL_00929,CCNC(=O)C1C(C#N)CCC1c1cnccc1O,-7.627,-6.784,0.843,Fase 2_Seletividade
+MOL_00930,CCc1ccncc1C1CCC(S)C1C(=O)C(N)=O,-7.626,-6.133,1.493,Fase 2_Seletividade
+MOL_00931,COC(=O)C1C(F)CCC1c1cnccc1C1CC1,-7.625,-6.111,1.514,Fase 3_Super Elite
+MOL_00932,CCC1CCC(c2cnccc2O)C1C(=O)OC,-7.624,-5.944,1.68,Fase 2_Seletividade
+MOL_00933,C=Cc1ccncc1C1CCC(C)C1C(=O)C=CCC,-7.624,-6.127,1.497,Fase 1_Lote Inicial
+MOL_00934,CC1CCC(c2cnccc2F)C1C(N)=O,-7.624,-6.173,1.451,Fase 2_Seletividade
+MOL_00935,CNC(=O)C1C(CF)CCC1c1cnccc1C=O,-7.624,-6.321,1.303,Fase 2_Seletividade
+MOL_00936,CCNC(=O)C1C(C=O)CCC1c1cnccc1C(C)C,-7.624,-6.439,1.185,Fase 2_Seletividade
+MOL_00937,CNC(=O)C1C(S)CCC1c1cnccc1C(F)F,-7.623,-6.62,1.003,Fase 2_Seletividade
+MOL_00938,CCC(=O)C1C(C#N)CCC1c1cnccc1OC,-7.622,-6.05,1.572,Fase 2_Seletividade
+MOL_00939,CC1CCC(c2cnccc2N)C1C(=O)C1CC1,-7.622,-6.354,1.268,Fase 2_Seletividade
+MOL_00940,CCNC(=O)C1C(CF)CCC1c1cnccc1N,-7.622,-6.594,1.028,Fase 2_Seletividade
+MOL_00941,CC(C)c1ccncc1C1CCC(C)C1C(=O)C(N)=O,-7.62,-6.037,1.583,Fase 2_Seletividade
+MOL_00942,CCC(=O)C1C(C)CCC1c1cnccc1S,-7.618,-5.701,1.917,Fase 2_Seletividade
+MOL_00943,CC(C)c1ccncc1C1CCC(C=O)C1C(=O)C1CC1,-7.618,-5.781,1.837,Fase 2_Seletividade
+MOL_00944,CCOC(=O)C1C(F)CCC1c1cnccc1C,-7.618,-6.124,1.494,Fase 2_Seletividade
+MOL_00945,CCC(=O)C1C(C)CCC1c1cnccc1C(=O)OC,-7.617,-6.04,1.577,Fase 1_Lote Inicial
+MOL_00946,CC(=O)C1C(CF)CCC1c1cnccc1F,-7.615,-5.695,1.92,Fase 2_Seletividade
+MOL_00947,CCOC(=O)C1C(C=O)CCC1c1cnccc1C(C)C,-7.615,-5.782,1.833,Fase 2_Seletividade
+MOL_00948,CC1CCC(c2cnccc2S)C1C(=O)C=O,-7.615,-5.846,1.769,Fase 2_Seletividade
+MOL_00949,CC(=O)C1C(N)CCC1c1cnccc1C#N,-7.614,-6.243,1.371,Fase 2_Seletividade
+MOL_00950,CC(=O)C1C(C)CCC1c1cnccc1C=O,-7.613,-5.689,1.924,Fase 2_Seletividade
+MOL_00951,CCc1ccncc1C1CCC(O)C1C(=O)C(=O)O,-7.613,-6.001,1.612,Fase 2_Seletividade
+MOL_00952,CCC1CCC(c2cnccc2N)C1C(=O)OC,-7.612,-5.729,1.883,Fase 2_Seletividade
+MOL_00953,CCC1CCC(c2cnccc2CF)C1C(=O)OC,-7.612,-5.757,1.855,Fase 2_Seletividade
+MOL_00954,O=C(C1CC1)C1C(CF)CCC1c1cnccc1CF,-7.611,-5.843,1.768,Fase 2_Seletividade
+MOL_00955,CCCC(=O)C1C(C#N)CCC1c1cnccc1CF,-7.61,-5.825,1.785,Fase 2_Seletividade
+MOL_00956,CCOC(=O)C1C(CF)CCC1c1cnccc1C#N,-7.61,-6.136,1.474,Fase 2_Seletividade
+MOL_00957,CC(=O)C1C(N)CCC1c1cnccc1C(C)C,-7.609,-5.772,1.837,Fase 2_Seletividade
+MOL_00958,CCCC(=O)C1C(OC)CCC1c1cnccc1O,-7.609,-5.976,1.633,Fase 2_Seletividade
+MOL_00959,Cc1ccncc1C1CCC(CF)C1C(=O)C(=O)O,-7.609,-6.098,1.511,Fase 2_Seletividade
+MOL_00960,COC1CCC(c2cnccc2C2CC2)C1C(N)=O,-7.608,-6.611,0.997,Fase 2_Seletividade
+MOL_00961,CCCC(=O)C1C(O)CCC1c1cnccc1C#N,-7.607,-5.662,1.945,Fase 1_Lote Inicial
+MOL_00962,CC(=O)C1C(CF)CCC1c1cnccc1Br,-7.607,-5.7,1.907,Fase 2_Seletividade
+MOL_00963,CCNC(=O)C1C(N)CCC1c1cnccc1S,-7.606,-5.983,1.623,Fase 2_Seletividade
+MOL_00964,CC(C)c1ccncc1C1CCC(CF)C1C(=O)C=O,-7.604,-5.899,1.705,Fase 2_Seletividade
+MOL_00965,CCNC(=O)C1C(F)CCC1c1cnccc1C=O,-7.604,-6.498,1.106,Fase 2_Seletividade
+MOL_00966,CC1CCC(c2cnccc2Br)C1C(=O)C1CC1,-7.602,-6.281,1.321,Fase 2_Seletividade
+MOL_00967,CCC1CCC(c2cnccc2CF)C1C(N)=O,-7.602,-6.331,1.271,Fase 2_Seletividade
+MOL_00968,O=CC1CCC(c2cnccc2CF)C1C(=O)O,-7.6,-5.951,1.649,Fase 2_Seletividade
+MOL_00969,CNC(=O)C1C(C=O)CCC1c1cnccc1F,-7.6,-6.095,1.505,Fase 2_Seletividade
+MOL_00970,CCNC(=O)C1C(C)CCC1c1cnccc1F,-7.6,-6.263,1.337,Fase 2_Seletividade
+MOL_00971,N#CC1CCC(c2cnccc2CF)C1C(=O)C=O,-7.599,-5.906,1.693,Fase 2_Seletividade
+MOL_00972,COc1ccncc1C1CCC(N)C1C(=O)C(C)C,-7.599,-6.361,1.238,Fase 2_Seletividade
+MOL_00973,CNC(=O)C1C(CF)CCC1c1cnccc1F,-7.598,-6.329,1.269,Fase 2_Seletividade
+MOL_00974,O=CC1CCC(c2cnccc2O)C1C(=O)C1CCC1,-7.598,-6.375,1.223,Fase 2_Seletividade
+MOL_00975,N#CC1CCC(c2cnccc2C2CC2)C1C(=O)C=O,-7.597,-5.899,1.698,Fase 2_Seletividade
+MOL_00976,CCC(=O)C1C(C=O)CCC1c1cnccc1F,-7.597,-5.98,1.617,Fase 2_Seletividade
+MOL_00977,Cc1ccncc1C1CCC(F)C1C(=O)C=O,-7.595,-5.854,1.741,Fase 2_Seletividade
+MOL_00978,N#Cc1ccncc1C1CCC(C=O)C1C(=O)C=O,-7.595,-5.955,1.64,Fase 2_Seletividade
+MOL_00979,CCC(=O)C1C(F)CCC1c1cnccc1O,-7.595,-6.001,1.594,Fase 2_Seletividade
+MOL_00980,CCC1CCC(c2cnccc2C=O)C1C(=O)C1CC1,-7.595,-6.021,1.574,Fase 2_Seletividade
+MOL_00981,O=C(O)C(=O)C1C(CF)CCC1c1cnccc1S,-7.592,-5.8,1.792,Fase 2_Seletividade
+MOL_00982,CCOC(=O)C1C(CC)CCC1c1cnccc1O,-7.59,-5.597,1.993,Fase 2_Seletividade
+MOL_00983,CCC(=O)C1C(CF)CCC1c1cnccc1C,-7.59,-5.967,1.623,Fase 2_Seletividade
+MOL_00984,[C-]#[N+]c1ccncc1C1CCC(CC)C1C(=O)CCC,-7.589,-6.065,1.524,Fase 1_Lote Inicial
+MOL_00985,O=C(C1CCC1)C1C(S)CCC1c1cnccc1I,-7.588,-6.019,1.569,Fase 2_Seletividade
+MOL_00986,O=C(O)C1C(CF)CCC1c1cnccc1O,-7.588,-6.552,1.036,Fase 2_Seletividade
+MOL_00987,N#Cc1ccncc1C1CCC(O)C1C(=O)C1CC1,-7.587,-6.522,1.065,Fase 2_Seletividade
+MOL_00988,N#Cc1ccncc1C1CCC(CF)C1C(=O)O,-7.586,-6.043,1.543,Fase 2_Seletividade
+MOL_00989,CCOC(=O)C1C(O)CCC1c1cnccc1C#N,-7.585,-6.301,1.284,Fase 2_Seletividade
+MOL_00990,CCOC(=O)C1C(N)CCC1c1cnccc1C=O,-7.584,-5.794,1.79,Fase 2_Seletividade
+MOL_00991,CC(C)C(=O)C1C(N)CCC1c1cnccc1C(C)C,-7.584,-6.156,1.428,Fase 2_Seletividade
+MOL_00992,CCNC(=O)C1C(O)CCC1c1cnccc1C(F)F,-7.584,-6.591,0.993,Fase 2_Seletividade
+MOL_00993,CC(C)c1ccncc1C1CCC(S)C1C(=O)O,-7.583,-6.404,1.179,Fase 2_Seletividade
+MOL_00994,CCCC(=O)C1C(F)CCC1c1cnccc1C1CO1,-7.582,-5.719,1.863,Fase 1_Lote Inicial
+MOL_00995,COC(=O)C1C(C=O)CCC1c1cnccc1C(F)F,-7.582,-5.828,1.754,Fase 2_Seletividade
+MOL_00996,CCCC(=O)C1C(CC)CCC1c1cnccc1NC#N,-7.581,-5.979,1.602,Fase 1_Lote Inicial
+MOL_00997,CCC(=O)C1C(C)CCC1c1cnccc1C,-7.58,-5.442,2.138,Fase 2_Seletividade
+MOL_00998,CCNC(=O)C1C(C)CCC1c1cnccc1C#N,-7.58,-6.29,1.29,Fase 2_Seletividade
+MOL_00999,CCC(=O)C1C(O)CCC1c1cnccc1C(F)F,-7.578,-5.878,1.7,Fase 3_Super Elite
+MOL_01000,CNC(=O)C1C(O)CCC1c1cnccc1O,-7.578,-6.772,0.806,Fase 2_Seletividade
+MOL_01001,CCCC(=O)C1C(CC)CCC1c1cnccc1N=[N+]=[N-],-7.577,-5.786,1.791,Fase 1_Lote Inicial
+MOL_01002,CCNC(=O)C1C(F)CCC1c1cnccc1O,-7.577,-6.555,1.022,Fase 2_Seletividade
+MOL_01003,CCc1ccncc1C1CCC(OC)C1C(=O)C=O,-7.575,-5.419,2.156,Fase 2_Seletividade
+MOL_01004,O=CC(=O)C1C(O)CCC1c1cnccc1CF,-7.574,-6.05,1.524,Fase 2_Seletividade
+MOL_01005,CCNC(=O)C1C(C)CCC1c1cnccc1CC,-7.574,-6.488,1.086,Fase 2_Seletividade
+MOL_01006,N#CC1CCC(c2cnccc2F)C1C(=O)C1CCC1,-7.574,-6.492,1.082,Fase 2_Seletividade
+MOL_01007,CCC(=O)C1C(O)CCC1c1cnccc1C,-7.573,-6.11,1.463,Fase 2_Seletividade
+MOL_01008,CCCC(=O)C1C(N)CCC1c1cnccc1C,-7.573,-6.239,1.334,Fase 2_Seletividade
+MOL_01009,CCNC(=O)C1C(O)CCC1c1cnccc1C=O,-7.573,-6.44,1.133,Fase 2_Seletividade
+MOL_01010,COC(=O)C1C(C=O)CCC1c1cnccc1C,-7.569,-5.644,1.925,Fase 2_Seletividade
+MOL_01011,CCCC(=O)C1C(F)CCC1c1cnccc1C=CF,-7.569,-5.657,1.912,Fase 1_Lote Inicial
+MOL_01012,CC(C)C(=O)C1C(N)CCC1c1cnccc1CF,-7.569,-5.893,1.676,Fase 2_Seletividade
+MOL_01013,CC(F)CC(=O)C1C(C)CCC1c1cnccc1C#CF,-7.568,-5.704,1.864,Fase 1_Lote Inicial
+MOL_01014,CCCC(=O)C1C(OC)CCC1c1cnccc1C#CF,-7.568,-6.024,1.544,Fase 1_Lote Inicial
+MOL_01015,NC(=O)C(=O)C1C(S)CCC1c1cnccc1F,-7.568,-6.353,1.215,Fase 2_Seletividade
+MOL_01016,COC(=O)C1C(CF)CCC1c1cnccc1C#N,-7.566,-5.952,1.614,Fase 2_Seletividade
+MOL_01017,CCNC(=O)C1C(C=O)CCC1c1cnccc1C(F)F,-7.566,-6.555,1.011,Fase 2_Seletividade
+MOL_01018,CCNC(=O)C1C(C=O)CCC1c1cnccc1O,-7.566,-6.68,0.886,Fase 2_Seletividade
+MOL_01019,CCC(=O)C1C(N)CCC1c1cnccc1C=O,-7.564,-5.996,1.568,Fase 2_Seletividade
+MOL_01020,CNC(=O)C1C(C=O)CCC1c1cnccc1I,-7.563,-6.107,1.456,Fase 2_Seletividade
+MOL_01021,CNC(=O)C1C(C=O)CCC1c1cnccc1C#N,-7.562,-6.428,1.134,Fase 2_Seletividade
+MOL_01022,CCOC(=O)C1C(O)CCC1c1cnccc1C(F)F,-7.561,-6.397,1.164,Fase 2_Seletividade
+MOL_01023,CCc1ccncc1C1CCC(CF)C1C(=O)O,-7.56,-5.929,1.631,Fase 2_Seletividade
+MOL_01024,CCCC(=O)C1C(F)CCC1c1cnccc1Br,-7.559,-6.278,1.281,Fase 3_Super Elite
+MOL_01025,CC(C)C(=O)C1C(F)CCC1c1cnccc1S,-7.558,-6.032,1.526,Fase 2_Seletividade
+MOL_01026,N#CC1CCC(c2cnccc2S)C1C(N)=O,-7.557,-6.334,1.223,Fase 2_Seletividade
+MOL_01027,CC1CCC(c2cnccc2CF)C1C(=O)C(C)(C)C,-7.556,-6.444,1.112,Fase 1_Lote Inicial
+MOL_01028,CCCC(=O)C1C(C#N)CCC1c1cnccc1C1CC1,-7.555,-5.828,1.727,Fase 2_Seletividade
+MOL_01029,N#CC1CCC(c2cnccc2O)C1C(=O)C1CC1,-7.555,-6.013,1.542,Fase 2_Seletividade
+MOL_01030,CCNC(=O)C1C(CC)CCC1c1cnccc1C=O,-7.555,-6.14,1.415,Fase 2_Seletividade
+MOL_01031,CCCC(=O)C1CCCC1(C)Cc1cnccc1N=[N+]=[N-],-7.554,-5.555,1.999,Fase 1_Lote Inicial
+MOL_01032,Cc1ccncc1C1CCC(C=O)C1C(=O)C1CC1,-7.554,-5.806,1.748,Fase 2_Seletividade
+MOL_01033,C=C=Cc1ccncc1C1CCC(C)C1C(=O)CC1CC1,-7.554,-5.814,1.74,Fase 1_Lote Inicial
+MOL_01034,CCc1ccncc1C1CCC(F)C1C(=O)OC,-7.553,-5.343,2.21,Fase 2_Seletividade
+MOL_01035,COC1CCC(c2cnccc2I)C1C(=O)C(C)C,-7.553,-6.197,1.356,Fase 2_Seletividade
+MOL_01036,CCCCC(=O)C1C(C)CCC1c1cnccc1NC#N,-7.553,-6.446,1.107,Fase 1_Lote Inicial
+MOL_01037,CC1CCC(c2cnccc2Br)C1C(=O)C=O,-7.552,-5.708,1.844,Fase 2_Seletividade
+MOL_01038,COc1ccncc1C1CCC(CF)C1C(=O)C(=O)O,-7.552,-6.115,1.437,Fase 2_Seletividade
+MOL_01039,CCCC(=O)C1C(C=O)CCC1c1cnccc1N,-7.551,-5.585,1.966,Fase 2_Seletividade
+MOL_01040,COC1CCC(c2cnccc2S)C1C(=O)C1CCC1,-7.551,-5.882,1.669,Fase 2_Seletividade
+MOL_01041,CCCC(=O)C1C(OC)CCC1c1cnccc1C#N,-7.551,-6.388,1.163,Fase 2_Seletividade
+MOL_01042,COC(=O)C1C(C)CCC1c1cnccc1I,-7.55,-5.794,1.756,Fase 2_Seletividade
+MOL_01043,CC(=O)C1C(CF)CCC1c1cnccc1CF,-7.55,-6.182,1.368,Fase 2_Seletividade
+MOL_01044,CC(C)C(=O)C1C(C#N)CCC1c1cnccc1I,-7.549,-6.043,1.506,Fase 2_Seletividade
+MOL_01045,CCCC(=O)C1C(OC)CCC1c1cnccc1C1CO1,-7.549,-6.115,1.434,Fase 1_Lote Inicial
+MOL_01046,CCCC(=O)C1C(O)CCC1c1cnccc1OC,-7.548,-5.4,2.148,Fase 2_Seletividade
+MOL_01047,COC(=O)C1C(CF)CCC1c1cnccc1F,-7.548,-5.467,2.081,Fase 3_Super Elite
+MOL_01048,NC(=O)C1C(CF)CCC1c1cnccc1C1CC1,-7.548,-6.576,0.972,Fase 2_Seletividade
+MOL_01049,COC(=O)C1C(OC)CCC1c1cnccc1C1CC1,-7.546,-5.944,1.602,Fase 2_Seletividade
+MOL_01050,CC1CCC(c2cnccc2S)C1C(=O)O,-7.546,-5.966,1.58,Fase 2_Seletividade
+MOL_01051,COC1CCC(c2cnccc2C#N)C1C(=O)O,-7.546,-6.283,1.263,Fase 2_Seletividade
+MOL_01052,CCNC(=O)C1C(F)CCC1c1cnccc1C#N,-7.546,-7.067,0.479,Fase 2_Seletividade
+MOL_01053,CC(=O)C1C(C#N)CCC1c1cnccc1C(F)F,-7.543,-6.455,1.088,Fase 2_Seletividade
+MOL_01054,O=C(CC(F)(F)F)C1C(F)CCC1c1cnccc1C1CC1,-7.542,-6.075,1.467,Fase 1_Lote Inicial
+MOL_01055,CCOC(=O)C1C(C)CCC1c1cnccc1C,-7.541,-6.153,1.388,Fase 2_Seletividade
+MOL_01056,CC(C)c1ccncc1C1CCC(O)C1C(N)=O,-7.541,-6.499,1.042,Fase 2_Seletividade
+MOL_01057,COC(=O)C1C(C=O)CCC1c1cnccc1C#N,-7.54,-5.647,1.893,Fase 2_Seletividade
+MOL_01058,CNC(=O)C1C(N)CCC1c1cnccc1C,-7.54,-6.65,0.89,Fase 2_Seletividade
+MOL_01059,CNC(=O)C1C(OC)CCC1c1cnccc1F,-7.539,-6.06,1.479,Fase 2_Seletividade
+MOL_01060,CC1CCC(c2cnccc2I)C1C(=O)C1CC1,-7.535,-6.015,1.52,Fase 3_Super Elite
+MOL_01061,CCC(F)C(=O)C1C(C)CCC1c1cnccc1C=O,-7.535,-6.311,1.224,Fase 1_Lote Inicial
+MOL_01062,CC(C)C(=O)C1C(C#N)CCC1c1cnccc1C1CC1,-7.534,-6.261,1.273,Fase 2_Seletividade
+MOL_01063,CCc1ccncc1C1CCC(S)C1C(C)=O,-7.533,-5.915,1.618,Fase 2_Seletividade
+MOL_01064,N#CC1CCC(c2cnccc2C2CC2)C1C(=O)O,-7.532,-6.64,0.892,Fase 2_Seletividade
+MOL_01065,CNC(=O)C1C(C#N)CCC1c1cnccc1F,-7.531,-6.499,1.032,Fase 2_Seletividade
+MOL_01066,O=CC1CCC(c2cnccc2I)C1C(=O)O,-7.53,-6.027,1.503,Fase 2_Seletividade
+MOL_01067,CCOC(=O)C1C(CC)CCC1c1cnccc1I,-7.528,-5.583,1.945,Fase 2_Seletividade
+MOL_01068,CCOC(=O)C1C(F)CCC1c1cnccc1C=O,-7.528,-5.763,1.765,Fase 2_Seletividade
+MOL_01069,N#Cc1ccncc1C1CCC(CF)C1C(=O)C1CC1,-7.528,-5.967,1.561,Fase 2_Seletividade
+MOL_01070,COc1ccncc1C1CCC(CF)C1C(=O)C=O,-7.527,-5.789,1.738,Fase 2_Seletividade
+MOL_01071,CNC(=O)C1C(N)CCC1c1cnccc1C=O,-7.527,-6.27,1.257,Fase 2_Seletividade
+MOL_01072,COC(=O)c1ccncc1C1CCC(C)C1C(=O)CC1CC1,-7.525,-6.07,1.455,Fase 1_Lote Inicial
+MOL_01073,CC(C)c1ccncc1C1CCC(N)C1C(=O)C=O,-7.525,-6.094,1.431,Fase 2_Seletividade
+MOL_01074,CC(C)c1ccncc1C1CCC(O)C1C(=O)O,-7.525,-6.18,1.345,Fase 2_Seletividade
+MOL_01075,CNC(=O)C1C(C#N)CCC1c1cnccc1O,-7.524,-6.558,0.966,Fase 2_Seletividade
+MOL_01076,CC1CCC(c2cnccc2CF)C1C(N)=O,-7.522,-5.91,1.612,Fase 2_Seletividade
+MOL_01077,CC(C)C(=O)C1C(CF)CCC1c1cnccc1C(F)F,-7.522,-5.941,1.581,Fase 3_Super Elite
+MOL_01078,CCCC(=O)C1C(CF)CCC1c1cnccc1Br,-7.521,-6.274,1.247,Fase 3_Super Elite
+MOL_01079,O=CC(=O)C1C(O)CCC1c1cnccc1F,-7.52,-5.739,1.781,Fase 2_Seletividade
+MOL_01080,N#CC1CCC(c2cnccc2C2CC2)C1C(N)=O,-7.52,-6.295,1.225,Fase 2_Seletividade
+MOL_01081,CCNC(=O)C1C(OC)CCC1c1cnccc1C(F)F,-7.52,-6.367,1.153,Fase 2_Seletividade
+MOL_01082,CC(=O)C1C(C#N)CCC1c1cnccc1C,-7.519,-6.233,1.286,Fase 2_Seletividade
+MOL_01083,CC(=O)C1C(O)CCC1c1cnccc1C(F)F,-7.518,-5.985,1.533,Fase 2_Seletividade
+MOL_01084,NC(=O)C1C(F)CCC1c1cnccc1O,-7.518,-6.395,1.123,Fase 2_Seletividade
+MOL_01085,O=CC1CCC(c2cnccc2F)C1C(=O)C(=O)O,-7.517,-6.056,1.461,Fase 2_Seletividade
+MOL_01086,Cc1ccncc1C1CCC(O)C1C(N)=O,-7.516,-5.862,1.654,Fase 2_Seletividade
+MOL_01087,CC(=O)C1C(F)CCC1c1cnccc1F,-7.514,-5.67,1.844,Fase 2_Seletividade
+MOL_01088,CCc1ccncc1C1CCC(S)C1C(=O)C(=O)O,-7.514,-5.982,1.532,Fase 2_Seletividade
+MOL_01089,CCNC(=O)C1C(OC)CCC1c1cnccc1F,-7.514,-6.392,1.122,Fase 2_Seletividade
+MOL_01090,COC(=O)C1C(C)CCC1c1cnccc1C1CC1,-7.513,-5.981,1.532,Fase 2_Seletividade
+MOL_01091,CCCC(=O)C1C(C=O)CCC1c1cnccc1O,-7.513,-5.99,1.523,Fase 2_Seletividade
+MOL_01092,CCCC(=O)C1C(C#N)CCC1c1cnccc1C,-7.51,-5.645,1.865,Fase 2_Seletividade
+MOL_01093,CCCC(=O)C1C(CF)CCC1c1cnccc1N,-7.51,-5.892,1.618,Fase 3_Super Elite
+MOL_01094,NC(=O)C1C(S)CCC1c1cnccc1N,-7.51,-6.002,1.508,Fase 2_Seletividade
+MOL_01095,CC(=O)C1C(O)CCC1c1cnccc1CF,-7.51,-6.345,1.165,Fase 2_Seletividade
+MOL_01096,CCCC(=O)C1C(OC)CCC1c1cnccc1C=O,-7.509,-5.965,1.544,Fase 1_Lote Inicial
+MOL_01097,CCC1CCC(c2cnccc2OC)C1C(=O)NC,-7.509,-6.019,1.49,Fase 2_Seletividade
+MOL_01098,CCc1ccncc1C1CCC(N)C1C(=O)NC,-7.509,-6.536,0.973,Fase 2_Seletividade
+MOL_01099,CCc1ccncc1C1CCC(O)C1C(N)=O,-7.508,-6.31,1.198,Fase 2_Seletividade
+MOL_01100,CC(C)CC(=O)C1C(C)CCC1c1cnccc1C(F)F,-7.508,-6.803,0.705,Fase 1_Lote Inicial
+MOL_01101,COC(=O)C1C(O)CCC1c1cnccc1CF,-7.507,-5.814,1.693,Fase 3_Super Elite
+MOL_01102,CC(=O)C1C(C=O)CCC1c1cnccc1F,-7.507,-6.067,1.44,Fase 2_Seletividade
+MOL_01103,CCOC(=O)C1C(C#N)CCC1c1cnccc1C,-7.506,-5.769,1.737,Fase 2_Seletividade
+MOL_01104,CCc1ccncc1C1CCC(N)C1C(=O)O,-7.506,-6.346,1.16,Fase 2_Seletividade
+MOL_01105,CC(C)C(=O)C1C(C#N)CCC1c1cnccc1CF,-7.506,-6.62,0.886,Fase 2_Seletividade
+MOL_01106,CCOC(=O)C1C(C)CCC1c1cnccc1C=O,-7.505,-5.44,2.065,Fase 2_Seletividade
+MOL_01107,CCC(=O)C1C(C=O)CCC1c1cnccc1O,-7.505,-6.031,1.474,Fase 2_Seletividade
+MOL_01108,CCc1ccncc1C1CCC(F)C1C(=O)C1CCC1,-7.505,-6.3,1.205,Fase 2_Seletividade
+MOL_01109,CC(C)c1ccncc1C1CCC(C=O)C1C(=O)C(=O)O,-7.505,-6.447,1.058,Fase 2_Seletividade
+MOL_01110,CC(=O)C1C(S)CCC1c1cnccc1C(C)C,-7.503,-5.809,1.694,Fase 2_Seletividade
+MOL_01111,O=C(O)C1C(CF)CCC1c1cnccc1C(F)F,-7.502,-6.697,0.805,Fase 2_Seletividade
+MOL_01112,COC(=O)C1C(CF)CCC1c1cnccc1N,-7.501,-5.834,1.667,Fase 3_Super Elite
+MOL_01113,Nc1ccncc1C1CCC(N)C1C(=O)C1CC1,-7.5,-6.062,1.438,Fase 2_Seletividade
+MOL_01114,COC(=O)C1C(C)CCC1c1cnccc1Br,-7.498,-5.538,1.96,Fase 3_Super Elite
+MOL_01115,NC(=O)C1C(F)CCC1c1cnccc1S,-7.498,-6.061,1.437,Fase 2_Seletividade
+MOL_01116,CCC(=O)C1C(S)CCC1c1cnccc1C=O,-7.497,-5.775,1.722,Fase 2_Seletividade
+MOL_01117,CCOC(=O)C1C(C=O)CCC1c1cnccc1F,-7.497,-5.959,1.538,Fase 2_Seletividade
+MOL_01118,CCNC(=O)C1C(CF)CCC1c1cnccc1CF,-7.497,-6.145,1.352,Fase 2_Seletividade
+MOL_01119,N#CC1CCC(c2cnccc2C(F)F)C1C(=O)C=O,-7.495,-6.21,1.285,Fase 2_Seletividade
+MOL_01120,CCC1CCC(c2cnccc2S)C1C(N)=O,-7.494,-5.812,1.682,Fase 2_Seletividade
+MOL_01121,O=C(O)C1C(O)CCC1c1cnccc1Br,-7.494,-5.956,1.538,Fase 2_Seletividade
+MOL_01122,CNC(=O)C1C(S)CCC1c1cnccc1F,-7.494,-6.082,1.412,Fase 2_Seletividade
+MOL_01123,CCC(=O)C1C(C#N)CCC1c1cnccc1I,-7.494,-6.124,1.37,Fase 2_Seletividade
+MOL_01124,CC(C)c1ccncc1C1CCC(CF)C1C(=O)C(=O)O,-7.494,-6.396,1.098,Fase 2_Seletividade
+MOL_01125,COC(=O)C1C(F)CCC1c1cnccc1C=O,-7.492,-5.691,1.801,Fase 2_Seletividade
+MOL_01126,CCOC(=O)C1C(F)CCC1c1cnccc1CC,-7.492,-5.957,1.535,Fase 2_Seletividade
+MOL_01127,CCNC(=O)C1C(C)CCC1c1cnccc1N,-7.491,-6.565,0.926,Fase 2_Seletividade
+MOL_01128,Cc1ccncc1C1CCC(S)C1C(=O)C1CC1,-7.488,-5.688,1.8,Fase 2_Seletividade
+MOL_01129,CCC(=O)C1C(N)CCC1c1cnccc1C,-7.488,-6.218,1.27,Fase 2_Seletividade
+MOL_01130,Cc1ccncc1C1CCC(C#N)C1C(=O)O,-7.488,-6.497,0.991,Fase 2_Seletividade
+MOL_01131,CCC1CCC(c2cnccc2OC)C1C(=O)C(N)=O,-7.487,-6.356,1.131,Fase 2_Seletividade
+MOL_01132,CCC1CCC(c2cnccc2N)C1C(=O)C1CC1,-7.486,-6.134,1.352,Fase 2_Seletividade
+MOL_01133,O=C(C1CCC1)C1C(S)CCC1c1cnccc1F,-7.486,-6.177,1.309,Fase 2_Seletividade
+MOL_01134,Cc1ccncc1C1CCC(C=O)C1C(=O)C=O,-7.486,-6.314,1.172,Fase 2_Seletividade
+MOL_01135,Cc1ccncc1C1CCC(F)C1C(=O)C(C)C,-7.485,-5.552,1.933,Fase 2_Seletividade
+MOL_01136,CCCC(=O)C1C(O)CCC1c1cnccc1C=NO,-7.484,-5.485,1.999,Fase 1_Lote Inicial
+MOL_01137,CCCC(=O)C1CCCC1(C)Cc1cnccc1C1CC1,-7.484,-5.886,1.598,Fase 1_Lote Inicial
+MOL_01138,CCOC(=O)C1C(CF)CCC1c1cnccc1CF,-7.484,-6.02,1.464,Fase 2_Seletividade
+MOL_01139,CC(=O)C1C(S)CCC1c1cnccc1C(F)F,-7.483,-5.595,1.888,Fase 2_Seletividade
+MOL_01140,CCC(=O)C1C(S)CCC1c1cnccc1O,-7.483,-5.831,1.652,Fase 2_Seletividade
+MOL_01141,O=C(O)C1C(O)CCC1c1cnccc1F,-7.483,-6.423,1.06,Fase 2_Seletividade
+MOL_01142,CCCC(=O)C1C(F)CCC1c1cnccc1NC#N,-7.482,-5.897,1.585,Fase 1_Lote Inicial
+MOL_01143,COC1CCC(c2cnccc2C(F)F)C1C(C)=O,-7.482,-6.082,1.4,Fase 2_Seletividade
+MOL_01144,COc1ccncc1C1CCC(C=O)C1C(=O)C(C)C,-7.482,-6.1,1.382,Fase 2_Seletividade
+MOL_01145,CCOC(=O)C1C(OC)CCC1c1cnccc1C#N,-7.481,-5.579,1.902,Fase 2_Seletividade
+MOL_01146,CCOC(=O)C1C(O)CCC1c1cnccc1F,-7.481,-5.997,1.484,Fase 2_Seletividade
+MOL_01147,COC(=O)c1ccncc1C1CC1C(=O)C1CCCC1C,-7.481,-6.032,1.449,Fase 1_Lote Inicial
+MOL_01148,CC(C)c1ccncc1C1CCC(S)C1C(=O)C(=O)O,-7.478,-5.645,1.833,Fase 2_Seletividade
+MOL_01149,O=C(C1CC1)C1C(S)CCC1c1cnccc1Br,-7.478,-5.703,1.775,Fase 2_Seletividade
+MOL_01150,CCC=CC(=O)C1C(C)CCC1c1cnccc1C(=O)OC,-7.478,-6.354,1.124,Fase 1_Lote Inicial
+MOL_01151,CCC(=O)C1C(O)CCC1c1cnccc1F,-7.478,-6.387,1.091,Fase 2_Seletividade
+MOL_01152,CCCC(=O)C1C(N)CCC1c1cnccc1CF,-7.477,-6.221,1.256,Fase 2_Seletividade
+MOL_01153,CC(C)C(=O)C1C(S)CCC1c1cnccc1F,-7.476,-5.804,1.672,Fase 2_Seletividade
+MOL_01154,Nc1ccncc1C1CCC(C=O)C1C(=O)C1CC1,-7.476,-6.163,1.313,Fase 2_Seletividade
+MOL_01155,CCNC(=O)C1C(O)CCC1c1cnccc1OC,-7.476,-6.242,1.234,Fase 2_Seletividade
+MOL_01156,CC(C)C(=O)C1C(O)CCC1c1cnccc1C=O,-7.474,-5.891,1.583,Fase 2_Seletividade
+MOL_01157,NC(=O)C1C(O)CCC1c1cnccc1F,-7.474,-6.055,1.419,Fase 2_Seletividade
+MOL_01158,CCCC(=O)C1C(OC)CCC1c1cnccc1C1CC1,-7.474,-6.113,1.361,Fase 2_Seletividade
+MOL_01159,CC(=O)C1C(C=O)CCC1c1cnccc1N,-7.473,-5.932,1.541,Fase 2_Seletividade
+MOL_01160,CC(C)c1ccncc1C1CCC(N)C1C(=O)O,-7.473,-6.184,1.289,Fase 2_Seletividade
+MOL_01161,COc1ccncc1C1CCC(F)C1C(C)=O,-7.472,-6.076,1.396,Fase 2_Seletividade
+MOL_01162,O=CC(=O)C1C(F)CCC1c1cnccc1C=O,-7.47,-5.941,1.529,Fase 2_Seletividade
+MOL_01163,CCCC(=O)C1C(C)CCC1c1cnccc1F,-7.47,-6.058,1.412,Fase 3_Super Elite
+MOL_01164,CCc1ccncc1C1CCC(OC)C1C(=O)C1CCC1,-7.47,-6.154,1.316,Fase 2_Seletividade
+MOL_01165,CNC(=O)C1C(C)CCC1c1cnccc1F,-7.469,-6.587,0.882,Fase 2_Seletividade
+MOL_01166,CCCC(=O)C1C(OC)CCC1c1cnccc1CF,-7.468,-5.902,1.566,Fase 1_Lote Inicial
+MOL_01167,CCC1CCC(c2cnccc2C)C1C(=O)C1CC1,-7.468,-6.229,1.239,Fase 2_Seletividade
+MOL_01168,CCCC(=O)C1C(O)CCC1c1cnccc1C(F)F,-7.467,-6.006,1.461,Fase 3_Super Elite
+MOL_01169,[C-]#[N+]c1ccncc1C1CCC(O)C1C(=O)CCC,-7.467,-6.285,1.182,Fase 1_Lote Inicial
+MOL_01170,COC(=O)C1C(O)CCC1c1cnccc1C#N,-7.466,-6.015,1.451,Fase 3_Super Elite
+MOL_01171,COc1ccncc1C1CCC(CF)C1C(=O)C1CCC1,-7.466,-6.673,0.793,Fase 2_Seletividade
+MOL_01172,COc1ccncc1C1CCC(F)C1C(=O)C1CC1,-7.465,-5.788,1.677,Fase 2_Seletividade
+MOL_01173,O=CC1CCC(c2cnccc2C(F)F)C1C(=O)C(=O)O,-7.465,-5.939,1.526,Fase 2_Seletividade
+MOL_01174,CC(C)C(=O)C1C(C)CCC1c1cnccc1NC#N,-7.465,-6.08,1.385,Fase 1_Lote Inicial
+MOL_01175,C=Cc1ccncc1C1CC1C(=O)C1CCCC1C,-7.464,-6.032,1.432,Fase 1_Lote Inicial
+MOL_01176,COc1ccncc1C1CCC(C#N)C1C(=O)C(C)C,-7.464,-6.277,1.187,Fase 2_Seletividade
+MOL_01177,CCNC(=O)C1C(CF)CCC1c1cnccc1O,-7.464,-6.525,0.939,Fase 2_Seletividade
+MOL_01178,O=C(O)C1C(S)CCC1c1cnccc1C1CC1,-7.463,-5.547,1.916,Fase 2_Seletividade
+MOL_01179,CC1CCC(c2cnccc2Br)C1C(N)=O,-7.463,-6.133,1.33,Fase 2_Seletividade
+MOL_01180,CNC(=O)C1C(O)CCC1c1cnccc1C,-7.461,-6.396,1.065,Fase 2_Seletividade
+MOL_01181,CCC(=O)C1C(S)CCC1c1cnccc1C1CC1,-7.459,-5.509,1.95,Fase 2_Seletividade
+MOL_01182,CC(=O)C1C(C=O)CCC1c1cnccc1C(F)F,-7.458,-5.886,1.572,Fase 2_Seletividade
+MOL_01183,CC(=O)C1C(CF)CCC1c1cnccc1C,-7.456,-5.89,1.566,Fase 2_Seletividade
+MOL_01184,O=CC(=O)C1C(F)CCC1c1cnccc1I,-7.455,-5.676,1.779,Fase 2_Seletividade
+MOL_01185,CCC(=O)C1C(C#N)CCC1c1cnccc1Br,-7.455,-6.277,1.178,Fase 2_Seletividade
+MOL_01186,COC(=O)C1C(C=O)CCC1c1cnccc1C=O,-7.454,-5.544,1.91,Fase 2_Seletividade
+MOL_01187,CCC1CCC(c2cnccc2S)C1C(=O)OC,-7.454,-5.563,1.891,Fase 2_Seletividade
+MOL_01188,NC(=O)C1C(N)CCC1c1cnccc1Br,-7.454,-6.101,1.353,Fase 2_Seletividade
+MOL_01189,NC1CCC(c2cnccc2C(F)F)C1C(=O)C=O,-7.454,-6.477,0.977,Fase 2_Seletividade
+MOL_01190,COC1CCC(c2cnccc2C(C)C)C1C(=O)C(C)C,-7.453,-5.741,1.712,Fase 2_Seletividade
+MOL_01191,CCCC(=O)C1C(N)CCC1c1cnccc1C(F)F,-7.452,-5.943,1.509,Fase 2_Seletividade
+MOL_01192,CCC1CCC(c2cnccc2C=O)C1C(C)=O,-7.452,-6.199,1.253,Fase 2_Seletividade
+MOL_01193,COc1ccncc1C1CCC(O)C1C(=O)O,-7.452,-6.265,1.187,Fase 2_Seletividade
+MOL_01194,CCCC(=O)C1C(O)CCC1c1cnccc1F,-7.451,-6.234,1.217,Fase 2_Seletividade
+MOL_01195,COC(=O)C1C(C)CCC1c1cnccc1S,-7.45,-5.575,1.875,Fase 2_Seletividade
+MOL_01196,CCC(=O)C1C(CF)CCC1c1cnccc1C=O,-7.45,-5.777,1.673,Fase 2_Seletividade
+MOL_01197,CCC(=O)C1C(C#N)CCC1c1cnccc1C1CC1,-7.449,-6.669,0.78,Fase 2_Seletividade
+MOL_01198,C=Cc1ccncc1CC1(C)CCCC1C(=O)CCC,-7.448,-5.686,1.762,Fase 1_Lote Inicial
+MOL_01199,CCC(=O)C1C(O)CCC1c1cnccc1O,-7.448,-6.116,1.332,Fase 2_Seletividade
+MOL_01200,NC1CCC(c2cnccc2CF)C1C(=O)O,-7.447,-6.261,1.186,Fase 2_Seletividade
+MOL_01201,CCc1ccncc1C1CCC(CF)C1C(=O)OC,-7.445,-6.256,1.189,Fase 2_Seletividade
+MOL_01202,CCOC(=O)C1C(O)CCC1c1cnccc1C=O,-7.443,-6.176,1.267,Fase 2_Seletividade
+MOL_01203,NC1CCC(c2cnccc2F)C1C(=O)O,-7.443,-6.187,1.256,Fase 2_Seletividade
+MOL_01204,CCCC(=O)C1C(CC)CCC1c1cnccc1C1CC1,-7.442,-5.704,1.738,Fase 1_Lote Inicial
+MOL_01205,CCNC(=O)C1C(N)CCC1c1cnccc1F,-7.441,-6.53,0.911,Fase 2_Seletividade
+MOL_01206,Cc1ccncc1C1CCC(N)C1C(=O)C(C)C,-7.44,-5.876,1.564,Fase 2_Seletividade
+MOL_01207,CCNC(=O)C1C(S)CCC1c1cnccc1C(C)C,-7.44,-6.372,1.068,Fase 2_Seletividade
+MOL_01208,CCC(=O)C1C(S)CCC1c1cnccc1C#N,-7.439,-5.62,1.819,Fase 2_Seletividade
+MOL_01209,CC(=O)C1C(O)CCC1c1cnccc1C#N,-7.439,-6.162,1.277,Fase 2_Seletividade
+MOL_01210,N#CC1CCC(c2cnccc2C(F)F)C1C(N)=O,-7.439,-6.629,0.81,Fase 2_Seletividade
+MOL_01211,CCC(=O)C1C(C#N)CCC1c1cnccc1C(C)C,-7.438,-5.857,1.581,Fase 2_Seletividade
+MOL_01212,CCNC(=O)C1C(N)CCC1c1cnccc1O,-7.438,-6.503,0.935,Fase 2_Seletividade
+MOL_01213,NC(=O)C1C(S)CCC1c1cnccc1O,-7.437,-5.907,1.53,Fase 2_Seletividade
+MOL_01214,CNC(=O)C1C(N)CCC1c1cnccc1O,-7.437,-6.514,0.923,Fase 2_Seletividade
+MOL_01215,CC1CCC(c2cnccc2N)C1C(=O)O,-7.436,-6.068,1.368,Fase 2_Seletividade
+MOL_01216,CCNC(=O)C1C(C)CCC1c1cnccc1C1CC1,-7.436,-6.481,0.955,Fase 2_Seletividade
+MOL_01217,CCCC(=O)C1C(O)CCC1c1cnccc1C1CO1,-7.434,-5.897,1.537,Fase 1_Lote Inicial
+MOL_01218,CCCC(=O)C1C(OC)CCC1c1cnccc1NC#N,-7.434,-6.553,0.881,Fase 1_Lote Inicial
+MOL_01219,CCc1ccncc1C1CCC(O)C1C(=O)O,-7.433,-6.068,1.365,Fase 2_Seletividade
+MOL_01220,CC(=O)C1C(N)CCC1c1cnccc1CF,-7.433,-6.252,1.181,Fase 2_Seletividade
+MOL_01221,CCNC(=O)C1C(C)CCC1c1cnccc1Br,-7.429,-6.347,1.082,Fase 2_Seletividade
+MOL_01222,NC(=O)C(=O)C1C(O)CCC1c1cnccc1CF,-7.428,-6.66,0.768,Fase 3_Super Elite
+MOL_01223,CCOC(=O)C1C(C)CCC1c1cnccc1OC,-7.427,-5.431,1.996,Fase 2_Seletividade
+MOL_01224,COc1ccncc1C1CCC(N)C1C(C)=O,-7.427,-5.744,1.683,Fase 2_Seletividade
+MOL_01225,CCc1ccncc1C1CCC(C#N)C1C(=O)C1CC1,-7.427,-5.902,1.525,Fase 2_Seletividade
+MOL_01226,CNC(=O)C1C(CF)CCC1c1cnccc1N,-7.427,-6.394,1.033,Fase 2_Seletividade
+MOL_01227,CC=C(C)C(=O)C1C(C)CCC1c1cnccc1C1CO1,-7.426,-5.916,1.51,Fase 1_Lote Inicial
+MOL_01228,[C-]#[N+]c1ccncc1C1CCC(F)C1C(=O)CCC,-7.425,-5.696,1.729,Fase 1_Lote Inicial
+MOL_01229,CNC(=O)C1C(C#N)CCC1c1cnccc1CF,-7.425,-6.586,0.839,Fase 2_Seletividade
+MOL_01230,O=CC(=O)C1C(CF)CCC1c1cnccc1O,-7.424,-5.714,1.71,Fase 2_Seletividade
+MOL_01231,CCCC(=O)C1C(CC)CCC1c1cnccc1O,-7.424,-6.268,1.156,Fase 2_Seletividade
+MOL_01232,CC1CCC(c2cnccc2F)C1C(=O)O,-7.424,-6.305,1.119,Fase 2_Seletividade
+MOL_01233,CCNC(=O)C1C(CC)CCC1c1cnccc1F,-7.424,-6.353,1.071,Fase 2_Seletividade
+MOL_01234,CCNC(=O)C1C(N)CCC1c1cnccc1C,-7.424,-6.511,0.913,Fase 2_Seletividade
+MOL_01235,N#Cc1ccncc1C1CCC(F)C1C(=O)C1CCC1,-7.424,-6.685,0.739,Fase 2_Seletividade
+MOL_01236,CCC1CCC(c2cnccc2F)C1C(=O)C1CC1,-7.423,-5.594,1.829,Fase 2_Seletividade
+MOL_01237,CCNC(=O)C1C(C#N)CCC1c1cnccc1C=O,-7.423,-6.69,0.733,Fase 2_Seletividade
+MOL_01238,COc1ccncc1C1CCC(OC)C1C(=O)C=O,-7.421,-5.745,1.676,Fase 2_Seletividade
+MOL_01239,CCCC(=O)C1C(C#N)CCC1c1cnccc1CC,-7.421,-6.027,1.394,Fase 2_Seletividade
+MOL_01240,O=C(C1CC1)C1C(S)CCC1c1cnccc1CF,-7.421,-6.077,1.344,Fase 2_Seletividade
+MOL_01241,CCOC(=O)C1C(CF)CCC1c1cnccc1S,-7.42,-5.466,1.954,Fase 2_Seletividade
+MOL_01242,CCC(F)C(=O)C1C(C)CCC1c1cnccc1N=[N+]=[N-],-7.42,-6.228,1.192,Fase 1_Lote Inicial
+MOL_01243,CC(=O)C1C(O)CCC1c1cnccc1C,-7.42,-6.244,1.176,Fase 2_Seletividade
+MOL_01244,CCNC(=O)C1C(CC)CCC1c1cnccc1Br,-7.418,-5.969,1.449,Fase 2_Seletividade
+MOL_01245,CCc1ccncc1C1CCC(OC)C1C(C)=O,-7.417,-5.518,1.899,Fase 2_Seletividade
+MOL_01246,CCNC(=O)C1C(C#N)CCC1c1cnccc1F,-7.417,-6.372,1.045,Fase 2_Seletividade
+MOL_01247,COC(=O)C1C(CF)CCC1c1cnccc1C,-7.416,-5.815,1.601,Fase 2_Seletividade
+MOL_01248,O=C(C1CC1)C1C(CF)CCC1c1cnccc1F,-7.415,-5.885,1.53,Fase 3_Super Elite
+MOL_01249,CCc1ccncc1C1CCC(N)C1C(=O)OC,-7.415,-6.157,1.258,Fase 2_Seletividade
+MOL_01250,CCNC(=O)C1C(CC)CCC1c1cnccc1O,-7.415,-6.647,0.768,Fase 2_Seletividade
+MOL_01251,CCCC(=O)C1C(O)CCC1c1cnccc1N,-7.414,-6.143,1.271,Fase 2_Seletividade
+MOL_01252,O=CC(=O)C1C(CF)CCC1c1cnccc1C1CC1,-7.412,-5.811,1.601,Fase 2_Seletividade
+MOL_01253,CCOC(=O)C1C(CF)CCC1c1cnccc1C(C)C,-7.411,-5.966,1.445,Fase 2_Seletividade
+MOL_01254,CCOC(=O)C1C(C#N)CCC1c1cnccc1Br,-7.411,-6.204,1.207,Fase 2_Seletividade
+MOL_01255,CCC(=O)C1C(CF)CCC1c1cnccc1OC,-7.41,-5.536,1.874,Fase 2_Seletividade
+MOL_01256,CCc1ccncc1C1CCC(OC)C1C(=O)C(C)C,-7.41,-6.005,1.405,Fase 2_Seletividade
+MOL_01257,CCC(=O)C1C(CF)CCC1c1cnccc1N,-7.41,-6.005,1.405,Fase 2_Seletividade
+MOL_01258,CCC(=O)C1C(O)CCC1c1cnccc1S,-7.41,-6.054,1.356,Fase 2_Seletividade
+MOL_01259,CC(=O)C1C(C)CCC1c1cnccc1C(F)F,-7.409,-5.734,1.675,Fase 2_Seletividade
+MOL_01260,CCC(=O)C1C(CF)CCC1c1cnccc1F,-7.408,-5.741,1.667,Fase 2_Seletividade
+MOL_01261,CCNC(=O)C1C(C=O)CCC1c1cnccc1C,-7.408,-5.757,1.651,Fase 2_Seletividade
+MOL_01262,CCC(=O)C1C(C)CCC1c1cnccc1OC,-7.407,-5.947,1.46,Fase 2_Seletividade
+MOL_01263,COC1CCC(c2cnccc2C(F)F)C1C(=O)O,-7.406,-5.972,1.434,Fase 2_Seletividade
+MOL_01264,Nc1ccncc1C1CCC(S)C1C(=O)C1CC1,-7.406,-6.194,1.212,Fase 2_Seletividade
+MOL_01265,CCOC(=O)C1C(F)CCC1c1cnccc1OC,-7.405,-5.568,1.837,Fase 2_Seletividade
+MOL_01266,CC(=O)C1C(F)CCC1c1cnccc1C#N,-7.405,-5.876,1.529,Fase 2_Seletividade
+MOL_01267,CC(C)c1ccncc1C1CCC(C#N)C1C(=O)C=O,-7.405,-6.18,1.225,Fase 2_Seletividade
+MOL_01268,COC(=O)C1C(S)CCC1c1cnccc1F,-7.404,-5.449,1.955,Fase 2_Seletividade
+MOL_01269,CC(C)C(=O)C1C(C=O)CCC1c1cnccc1F,-7.404,-5.925,1.479,Fase 2_Seletividade
+MOL_01270,CC1CCC(c2cnccc2S)C1C(=O)C(N)=O,-7.403,-5.727,1.676,Fase 2_Seletividade
+MOL_01271,CC(C)C(=O)C1C(C=O)CCC1c1cnccc1S,-7.403,-5.751,1.652,Fase 2_Seletividade
+MOL_01272,O=C(O)C1C(F)CCC1c1cnccc1O,-7.403,-5.983,1.42,Fase 2_Seletividade
+MOL_01273,CCNC(=O)C1C(F)CCC1c1cnccc1C1CC1,-7.403,-6.448,0.955,Fase 2_Seletividade
+MOL_01274,CCNC(=O)C1C(CC)CCC1c1cnccc1OC,-7.401,-6.074,1.327,Fase 2_Seletividade
+MOL_01275,CC1CCCC1C(=O)C1CC1c1cnccc1NC#N,-7.401,-6.639,0.762,Fase 1_Lote Inicial
+MOL_01276,CCOC(=O)C1C(N)CCC1c1cnccc1C(F)F,-7.399,-6.26,1.139,Fase 2_Seletividade
+MOL_01277,CCNC(=O)C1C(CF)CCC1c1cnccc1C(C)C,-7.399,-6.45,0.949,Fase 2_Seletividade
+MOL_01278,CC(C)C(=O)C1C(C=O)CCC1c1cnccc1Br,-7.398,-6.112,1.286,Fase 2_Seletividade
+MOL_01279,CC1CCC(c2cnccc2I)C1C(=O)O,-7.396,-5.838,1.558,Fase 2_Seletividade
+MOL_01280,CCOC(=O)C1C(F)CCC1c1cnccc1Br,-7.396,-5.982,1.414,Fase 2_Seletividade
+MOL_01281,CC1CCC(c2cnccc2I)C1C(N)=O,-7.396,-6.138,1.258,Fase 2_Seletividade
+MOL_01282,CC(=O)C1C(O)CCC1c1cnccc1N,-7.396,-6.14,1.256,Fase 2_Seletividade
+MOL_01283,O=Cc1ccncc1C1CCC(F)C1C(=O)O,-7.395,-5.779,1.616,Fase 2_Seletividade
+MOL_01284,CCC1CCC(c2cnccc2C#N)C1C(C)=O,-7.395,-6.0,1.395,Fase 2_Seletividade
+MOL_01285,COC1CCC(c2cnccc2C(C)C)C1C(=O)O,-7.395,-6.174,1.221,Fase 2_Seletividade
+MOL_01286,O=C(O)C(=O)C1C(S)CCC1c1cnccc1F,-7.394,-6.204,1.19,Fase 2_Seletividade
+MOL_01287,CCOC(=O)C1C(C)CCC1c1cnccc1Br,-7.393,-5.607,1.786,Fase 2_Seletividade
+MOL_01288,COC1CCC(c2cnccc2S)C1C(=O)C(N)=O,-7.393,-5.814,1.579,Fase 2_Seletividade
+MOL_01289,COC(=O)C1C(OC)CCC1c1cnccc1O,-7.393,-5.846,1.547,Fase 2_Seletividade
+MOL_01290,O=C(O)C(=O)C1C(CF)CCC1c1cnccc1I,-7.393,-6.438,0.955,Fase 2_Seletividade
+MOL_01291,N#CC1CCC(c2cnccc2I)C1C(=O)C1CCC1,-7.392,-6.336,1.056,Fase 2_Seletividade
+MOL_01292,COc1ccncc1C1CCC(CF)C1C(N)=O,-7.392,-6.417,0.975,Fase 2_Seletividade
+MOL_01293,CCNC(=O)C1C(CF)CCC1c1cnccc1Br,-7.392,-6.592,0.8,Fase 2_Seletividade
+MOL_01294,CCC1CCC(c2cnccc2C)C1C(=O)O,-7.391,-6.174,1.217,Fase 2_Seletividade
+MOL_01295,CCc1ccncc1C1CCC(F)C1C(C)=O,-7.39,-6.086,1.304,Fase 2_Seletividade
+MOL_01296,COC(=O)C1C(N)CCC1c1cnccc1CF,-7.389,-5.751,1.638,Fase 2_Seletividade
+MOL_01297,CCOC(=O)C1C(N)CCC1c1cnccc1CF,-7.389,-5.889,1.5,Fase 2_Seletividade
+MOL_01298,CCC1CCC(c2cnccc2C2CC2)C1C(=O)C(N)=O,-7.389,-6.358,1.031,Fase 2_Seletividade
+MOL_01299,NC1CCC(c2cnccc2S)C1C(=O)C1CC1,-7.388,-5.774,1.614,Fase 2_Seletividade
+MOL_01300,CCC(=O)C1C(C=O)CCC1c1cnccc1CF,-7.388,-5.813,1.575,Fase 2_Seletividade
+MOL_01301,COC1CCC(c2cnccc2O)C1C(=O)C1CC1,-7.388,-6.244,1.144,Fase 2_Seletividade
+MOL_01302,CNC(=O)C1C(C)CCC1c1cnccc1CF,-7.387,-5.759,1.628,Fase 2_Seletividade
+MOL_01303,COC1CCC(c2cnccc2C#N)C1C(=O)C(C)C,-7.387,-5.964,1.423,Fase 2_Seletividade
+MOL_01304,CC(C)C(=O)C1C(CF)CCC1c1cnccc1O,-7.387,-6.026,1.361,Fase 2_Seletividade
+MOL_01305,CNC(=O)C1C(O)CCC1c1cnccc1C=O,-7.386,-6.226,1.16,Fase 2_Seletividade
+MOL_01306,CCCC(=O)C1C(F)CCC1c1cnccc1I,-7.385,-6.291,1.094,Fase 2_Seletividade
+MOL_01307,CCC(=O)C1C(O)CCC1c1cnccc1CF,-7.384,-6.021,1.363,Fase 2_Seletividade
+MOL_01308,CCC=CC(=O)C1C(C)CCC1c1cnccc1CF,-7.383,-5.724,1.659,Fase 1_Lote Inicial
+MOL_01309,CC1CCC(c2cnccc2I)C1C(=O)C=O,-7.381,-5.834,1.547,Fase 2_Seletividade
+MOL_01310,CCCC(=O)C1C(O)CCC1c1cnccc1O,-7.381,-6.336,1.045,Fase 2_Seletividade
+MOL_01311,CC1CCC(c2cnccc2N=[N+]=[N-])C1C(=O)CC1CC1,-7.38,-5.608,1.772,Fase 1_Lote Inicial
+MOL_01312,NC(=O)C1C(CF)CCC1c1cnccc1I,-7.379,-6.204,1.175,Fase 2_Seletividade
+MOL_01313,O=CC(=O)C1C(CF)CCC1c1cnccc1C=O,-7.378,-5.727,1.651,Fase 2_Seletividade
+MOL_01314,O=C(C1CC1)C1C(CF)CCC1c1cnccc1Br,-7.378,-5.996,1.382,Fase 3_Super Elite
+MOL_01315,COC(=O)C1C(OC)CCC1c1cnccc1N,-7.377,-5.72,1.657,Fase 2_Seletividade
+MOL_01316,NC1CCC(c2cnccc2F)C1C(=O)C=O,-7.376,-5.442,1.934,Fase 2_Seletividade
+MOL_01317,CCOC(=O)C1C(C=O)CCC1c1cnccc1C1CC1,-7.376,-5.87,1.506,Fase 2_Seletividade
+MOL_01318,O=C(O)C(=O)C1C(S)CCC1c1cnccc1CF,-7.376,-5.873,1.503,Fase 2_Seletividade
+MOL_01319,CCNC(=O)C1C(O)CCC1c1cnccc1C,-7.376,-6.521,0.855,Fase 2_Seletividade
+MOL_01320,N#CC1CCC(c2cnccc2F)C1C(=O)O,-7.376,-6.568,0.808,Fase 2_Seletividade
+MOL_01321,CC1CCC(c2cnccc2C=O)C1C(=O)CC1CC1,-7.375,-5.98,1.395,Fase 1_Lote Inicial
+MOL_01322,CCNC(=O)C1C(C#N)CCC1c1cnccc1C(C)C,-7.375,-6.527,0.848,Fase 2_Seletividade
+MOL_01323,O=CC1CCC(c2cnccc2Br)C1C(=O)C1CC1,-7.373,-6.234,1.139,Fase 2_Seletividade
+MOL_01324,CCC(=O)C1C(N)CCC1c1cnccc1CF,-7.369,-5.623,1.746,Fase 2_Seletividade
+MOL_01325,COC1CCC(c2cnccc2C(C)C)C1C(N)=O,-7.369,-6.004,1.365,Fase 2_Seletividade
+MOL_01326,NC(=O)C1C(C=O)CCC1c1cnccc1C(F)F,-7.369,-6.599,0.77,Fase 2_Seletividade
+MOL_01327,NC(=O)C(=O)C1C(S)CCC1c1cnccc1I,-7.367,-5.646,1.721,Fase 2_Seletividade
+MOL_01328,CCC1CCC(c2cnccc2S)C1C(=O)C(N)=O,-7.367,-6.217,1.15,Fase 2_Seletividade
+MOL_01329,CCC(=O)C1C(C=O)CCC1c1cnccc1Br,-7.366,-5.541,1.825,Fase 2_Seletividade
+MOL_01330,CCC(=O)C1C(S)CCC1c1cnccc1N,-7.365,-5.381,1.984,Fase 2_Seletividade
+MOL_01331,Cc1ccncc1C1CCC(C#N)C1C(=O)C1CCC1,-7.364,-6.292,1.072,Fase 2_Seletividade
+MOL_01332,CNC(=O)C1C(CF)CCC1c1cnccc1OC,-7.364,-6.294,1.07,Fase 2_Seletividade
+MOL_01333,O=C(C1CCC1)C1C(O)CCC1c1cnccc1S,-7.364,-6.458,0.906,Fase 2_Seletividade
+MOL_01334,CCCC(=O)C1C(F)CCC1c1cnccc1C=NO,-7.363,-5.906,1.457,Fase 1_Lote Inicial
+MOL_01335,CC(C)C(=O)C1C(CF)CCC1c1cnccc1C1CC1,-7.363,-6.351,1.012,Fase 3_Super Elite
+MOL_01336,COc1ccncc1C1CCC(C#N)C1C(=O)C=O,-7.36,-6.006,1.354,Fase 2_Seletividade
+MOL_01337,CC1CCC(c2cnccc2Br)C1C(=O)O,-7.357,-5.767,1.59,Fase 2_Seletividade
+MOL_01338,CCc1ccncc1C1CCC(C#N)C1C(=O)C(C)C,-7.357,-6.301,1.056,Fase 2_Seletividade
+MOL_01339,CC(C)C(=O)C1C(O)CCC1c1cnccc1C(C)C,-7.357,-6.389,0.968,Fase 2_Seletividade
+MOL_01340,CCOC(=O)C1C(CC)CCC1c1cnccc1Br,-7.356,-5.695,1.661,Fase 2_Seletividade
+MOL_01341,CC(=O)C1C(C=O)CCC1c1cnccc1C,-7.355,-6.151,1.204,Fase 2_Seletividade
+MOL_01342,COC(=O)C1C(CF)CCC1c1cnccc1O,-7.354,-5.763,1.591,Fase 2_Seletividade
+MOL_01343,CCNC(=O)C1C(N)CCC1c1cnccc1Br,-7.354,-6.31,1.044,Fase 2_Seletividade
+MOL_01344,COc1ccncc1C1CCC(C)C1C(C)=O,-7.352,-5.852,1.5,Fase 2_Seletividade
+MOL_01345,CCNC(=O)C1C(CF)CCC1c1cnccc1I,-7.352,-6.674,0.678,Fase 2_Seletividade
+MOL_01346,CC(C)C(=O)C1C(S)CCC1c1cnccc1Br,-7.351,-5.496,1.855,Fase 2_Seletividade
+MOL_01347,NC(=O)C1C(S)CCC1c1cnccc1Br,-7.35,-5.637,1.713,Fase 2_Seletividade
+MOL_01348,CC(=O)C1C(F)CCC1c1cnccc1O,-7.348,-5.684,1.664,Fase 2_Seletividade
+MOL_01349,CCCC(=O)C1C(CC)CCC1c1cnccc1C1CO1,-7.347,-5.879,1.468,Fase 1_Lote Inicial
+MOL_01350,CCC(=O)C1C(C=O)CCC1c1cnccc1CC,-7.347,-6.106,1.241,Fase 2_Seletividade
+MOL_01351,CCC(=O)C1C(F)CCC1c1cnccc1N,-7.346,-5.915,1.431,Fase 2_Seletividade
+MOL_01352,O=C(O)C1C(S)CCC1c1cnccc1F,-7.345,-5.768,1.577,Fase 2_Seletividade
+MOL_01353,COc1ccncc1C1CCC(C)C1C(=O)O,-7.345,-6.037,1.308,Fase 2_Seletividade
+MOL_01354,O=Cc1ccncc1C1CCC(CF)C1C(=O)O,-7.344,-6.1,1.244,Fase 2_Seletividade
+MOL_01355,CC(C)C(=O)C1C(C=O)CCC1c1cnccc1C#N,-7.342,-5.764,1.578,Fase 2_Seletividade
+MOL_01356,CC(=O)C1C(C#N)CCC1c1cnccc1N,-7.342,-6.243,1.099,Fase 2_Seletividade
+MOL_01357,CCC(=O)C1C(C#N)CCC1c1cnccc1F,-7.341,-6.356,0.985,Fase 2_Seletividade
+MOL_01358,CC(=O)C1C(C)CCC1c1cnccc1N,-7.339,-5.846,1.493,Fase 2_Seletividade
+MOL_01359,CCC(=O)C1C(F)CCC1c1cnccc1S,-7.339,-5.927,1.412,Fase 2_Seletividade
+MOL_01360,CCC(=O)C1C(OC)CCC1c1cnccc1C1CC1,-7.338,-5.633,1.705,Fase 2_Seletividade
+MOL_01361,O=CC(=O)C1C(C=O)CCC1c1cnccc1CF,-7.338,-5.739,1.599,Fase 2_Seletividade
+MOL_01362,CCC(=O)C1C(C#N)CCC1c1cnccc1CF,-7.338,-5.893,1.445,Fase 2_Seletividade
+MOL_01363,CC(=O)C1C(N)CCC1c1cnccc1C1CC1,-7.338,-6.477,0.861,Fase 2_Seletividade
+MOL_01364,CC(=O)C1C(CF)CCC1c1cnccc1C1CC1,-7.337,-6.109,1.228,Fase 2_Seletividade
+MOL_01365,O=C(C1CC1)C1C(S)CCC1c1cnccc1C1CC1,-7.337,-6.257,1.08,Fase 2_Seletividade
+MOL_01366,CCOC(=O)C1C(O)CCC1c1cnccc1CC,-7.336,-5.86,1.476,Fase 2_Seletividade
+MOL_01367,COC(=O)C1C(O)CCC1c1cnccc1N,-7.336,-5.946,1.39,Fase 3_Super Elite
+MOL_01368,CCCC(=O)C1C(O)CCC1c1cnccc1NC#N,-7.335,-6.113,1.222,Fase 1_Lote Inicial
+MOL_01369,COC1CCC(c2cnccc2C(C)C)C1C(=O)C(=O)O,-7.335,-6.326,1.009,Fase 2_Seletividade
+MOL_01370,CCOC(=O)C1C(OC)CCC1c1cnccc1CC,-7.334,-5.444,1.89,Fase 2_Seletividade
+MOL_01371,CCCC(=O)C1C(OC)CCC1c1cnccc1N,-7.334,-5.904,1.43,Fase 2_Seletividade
+MOL_01372,O=CC(=O)C1C(F)CCC1c1cnccc1Br,-7.333,-5.63,1.703,Fase 2_Seletividade
+MOL_01373,O=C(C1CC1)C1C(CF)CCC1c1cnccc1I,-7.333,-5.782,1.551,Fase 2_Seletividade
+MOL_01374,CCNC(=O)C1C(C=O)CCC1c1cnccc1F,-7.332,-6.661,0.671,Fase 2_Seletividade
+MOL_01375,COC(=O)C1C(C#N)CCC1c1cnccc1O,-7.331,-5.848,1.483,Fase 2_Seletividade
+MOL_01376,CCc1ccncc1C1CCC(S)C1C(N)=O,-7.331,-6.197,1.134,Fase 2_Seletividade
+MOL_01377,CCOC(=O)C1C(C#N)CCC1c1cnccc1C1CC1,-7.331,-6.267,1.064,Fase 2_Seletividade
+MOL_01378,CCOC(=O)C1C(S)CCC1c1cnccc1CC,-7.33,-5.501,1.829,Fase 2_Seletividade
+MOL_01379,COC1CCC(c2cnccc2C(F)F)C1C(=O)C1CCC1,-7.33,-6.952,0.378,Fase 2_Seletividade
+MOL_01380,CNC(=O)C1C(CF)CCC1c1cnccc1O,-7.329,-6.376,0.953,Fase 2_Seletividade
+MOL_01381,CCNC(=O)C1C(CF)CCC1c1cnccc1C1CC1,-7.329,-6.611,0.718,Fase 2_Seletividade
+MOL_01382,CCC1CCC(c2cnccc2Br)C1C(=O)OC,-7.328,-5.687,1.641,Fase 2_Seletividade
+MOL_01383,CNC(=O)C1C(CF)CCC1c1cnccc1S,-7.327,-5.696,1.631,Fase 2_Seletividade
+MOL_01384,CCCC(=O)C1CCCC1(C)Cc1cnccc1NC#N,-7.327,-6.011,1.316,Fase 1_Lote Inicial
+MOL_01385,COC(=O)C1C(C#N)CCC1c1cnccc1C(C)C,-7.327,-6.115,1.212,Fase 2_Seletividade
+MOL_01386,CCc1ccncc1C1CCC(S)C1C(=O)C1CCC1,-7.327,-6.361,0.966,Fase 2_Seletividade
+MOL_01387,CC(=O)C1C(C=O)CCC1c1cnccc1C#N,-7.326,-5.951,1.375,Fase 2_Seletividade
+MOL_01388,CCOC(=O)C1C(OC)CCC1c1cnccc1C(C)C,-7.325,-5.635,1.69,Fase 2_Seletividade
+MOL_01389,O=C(C1CC1)C1C(S)CCC1c1cnccc1C(F)F,-7.325,-6.335,0.99,Fase 2_Seletividade
+MOL_01390,NC(=O)C1C(CF)CCC1c1cnccc1S,-7.325,-6.34,0.985,Fase 2_Seletividade
+MOL_01391,NC(=O)C1C(CF)CCC1c1cnccc1Br,-7.324,-6.241,1.083,Fase 2_Seletividade
+MOL_01392,O=CC(=O)C1C(O)CCC1c1cnccc1C=O,-7.323,-5.87,1.453,Fase 2_Seletividade
+MOL_01393,CCC(=O)C1C(C#N)CCC1c1cnccc1CC,-7.322,-5.634,1.688,Fase 2_Seletividade
+MOL_01394,CCC1CCC(c2cnccc2OC)C1C(=O)C=O,-7.32,-5.745,1.575,Fase 2_Seletividade
+MOL_01395,CCOC(=O)C1C(C#N)CCC1c1cnccc1C=O,-7.32,-5.865,1.455,Fase 2_Seletividade
+MOL_01396,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)CC(C)C,-7.319,-6.004,1.315,Fase 1_Lote Inicial
+MOL_01397,CC(C)C(=O)C1C(C=O)CCC1c1cnccc1I,-7.318,-5.821,1.497,Fase 2_Seletividade
+MOL_01398,CCCC(=O)C1C(OC)CCC1c1cnccc1C,-7.317,-6.374,0.943,Fase 2_Seletividade
+MOL_01399,O=CC(=O)C1C(C=O)CCC1c1cnccc1C=O,-7.316,-5.562,1.754,Fase 2_Seletividade
+MOL_01400,CC(=O)C1C(C#N)CCC1c1cnccc1C=O,-7.316,-6.05,1.266,Fase 2_Seletividade
+MOL_01401,O=C(O)C(=O)C1C(O)CCC1c1cnccc1C(F)F,-7.315,-6.85,0.465,Fase 2_Seletividade
+MOL_01402,CCc1ccncc1C1CCC(C)C1C(=O)C(C)C,-7.313,-5.896,1.417,Fase 2_Seletividade
+MOL_01403,Nc1ccncc1C1CCC(O)C1C(=O)C1CCC1,-7.313,-7.001,0.312,Fase 2_Seletividade
+MOL_01404,CCC(=O)C1C(CF)CCC1c1cnccc1Br,-7.312,-5.804,1.508,Fase 3_Super Elite
+MOL_01405,CC(C)CC(=O)C1C(C)CCC1c1cnccc1C1CC1,-7.312,-6.642,0.67,Fase 1_Lote Inicial
+MOL_01406,N#Cc1ccncc1C1CCC(F)C1C(=O)O,-7.311,-5.822,1.489,Fase 2_Seletividade
+MOL_01407,O=C(O)C1C(F)CCC1c1cnccc1CF,-7.31,-5.572,1.738,Fase 2_Seletividade
+MOL_01408,CCOC(=O)C1C(C#N)CCC1c1cnccc1I,-7.31,-5.744,1.566,Fase 2_Seletividade
+MOL_01409,CCC1CCC(c2cnccc2O)C1C(=O)C1CC1,-7.31,-5.996,1.314,Fase 2_Seletividade
+MOL_01410,NC(=O)C(=O)C1C(CF)CCC1c1cnccc1S,-7.309,-5.843,1.466,Fase 2_Seletividade
+MOL_01411,COC1CCC(c2cnccc2C=O)C1C(=O)C(C)C,-7.307,-5.624,1.683,Fase 2_Seletividade
+MOL_01412,CC1CCC(c2cnccc2C2CC2)C1C(=O)CC1CC1,-7.306,-6.049,1.257,Fase 1_Lote Inicial
+MOL_01413,C=Cc1ccncc1C1CCC(CC)C1C(=O)CCC,-7.305,-5.316,1.989,Fase 1_Lote Inicial
+MOL_01414,CCOC(=O)C1C(C=O)CCC1c1cnccc1CC,-7.305,-5.791,1.514,Fase 2_Seletividade
+MOL_01415,CCC1CCC(c2cnccc2OC)C1C(=O)C(=O)O,-7.304,-6.352,0.952,Fase 2_Seletividade
+MOL_01416,CC(C)c1ccncc1C1CCC(C=O)C1C(=O)C1CCC1,-7.303,-6.364,0.939,Fase 2_Seletividade
+MOL_01417,COc1ccncc1C1CCC(O)C1C(N)=O,-7.303,-6.889,0.414,Fase 2_Seletividade
+MOL_01418,CC(C)C(=O)C1C(F)CCC1c1cnccc1C#N,-7.302,-6.026,1.276,Fase 3_Super Elite
+MOL_01419,O=CC(=O)C1C(F)CCC1c1cnccc1F,-7.301,-5.601,1.7,Fase 2_Seletividade
+MOL_01420,O=C(O)C1C(CF)CCC1c1cnccc1CF,-7.301,-5.999,1.302,Fase 2_Seletividade
+MOL_01421,O=C(C1CC1)C1C(S)CCC1c1cnccc1O,-7.301,-6.066,1.235,Fase 2_Seletividade
+MOL_01422,CNC(=O)C1C(O)CCC1c1cnccc1N,-7.301,-6.433,0.868,Fase 2_Seletividade
+MOL_01423,CCOC(=O)C1C(F)CCC1c1cnccc1S,-7.3,-5.515,1.785,Fase 2_Seletividade
+MOL_01424,CCOC(=O)C1C(C=O)CCC1c1cnccc1C=O,-7.299,-5.524,1.775,Fase 2_Seletividade
+MOL_01425,CNC(=O)C1C(N)CCC1c1cnccc1CF,-7.299,-6.088,1.211,Fase 2_Seletividade
+MOL_01426,CCC1CCC(c2cnccc2F)C1C(N)=O,-7.297,-6.122,1.175,Fase 2_Seletividade
+MOL_01427,CCc1ccncc1C1CCC(OC)C1C(=O)NC,-7.297,-6.177,1.12,Fase 2_Seletividade
+MOL_01428,CC(C)c1ccncc1C1CCC(C#N)C1C(=O)C1CC1,-7.296,-6.415,0.881,Fase 2_Seletividade
+MOL_01429,CCOC(=O)C1C(OC)CCC1c1cnccc1O,-7.295,-5.715,1.58,Fase 2_Seletividade
+MOL_01430,N#CC1CCC(c2cnccc2S)C1C(=O)C1CC1,-7.295,-6.05,1.245,Fase 2_Seletividade
+MOL_01431,COC1CCC(c2cnccc2I)C1C(=O)C(=O)O,-7.295,-6.094,1.201,Fase 2_Seletividade
+MOL_01432,O=C(O)C(=O)C1C(CF)CCC1c1cnccc1C1CC1,-7.295,-6.14,1.155,Fase 2_Seletividade
+MOL_01433,COc1ccncc1C1CCC(C)C1C(=O)C1CCC1,-7.295,-6.313,0.982,Fase 2_Seletividade
+MOL_01434,CCOC(=O)C1C(O)CCC1c1cnccc1S,-7.294,-6.028,1.266,Fase 2_Seletividade
+MOL_01435,CCC(=O)C1C(C#N)CCC1c1cnccc1O,-7.294,-6.348,0.946,Fase 2_Seletividade
+MOL_01436,COC1CCC(c2cnccc2C2CC2)C1C(C)=O,-7.293,-5.615,1.678,Fase 2_Seletividade
+MOL_01437,CCNC(=O)C1C(CF)CCC1c1cnccc1CC,-7.293,-6.248,1.045,Fase 2_Seletividade
+MOL_01438,CCNC(=O)C1C(O)CCC1c1cnccc1O,-7.293,-6.623,0.67,Fase 2_Seletividade
+MOL_01439,CCC(F)C(=O)C1C(C)CCC1c1cnccc1C(=O)OC,-7.292,-5.79,1.502,Fase 1_Lote Inicial
+MOL_01440,CCC=CC(=O)C1C(C)CCC1c1cnccc1C#CF,-7.292,-6.158,1.134,Fase 1_Lote Inicial
+MOL_01441,Cc1ccncc1C1CCC(CF)C1C(=O)C1CCC1,-7.291,-6.049,1.242,Fase 2_Seletividade
+MOL_01442,CC=CC(=O)C1C(C)CCC1c1cnccc1C(=O)OC,-7.291,-6.39,0.901,Fase 1_Lote Inicial
+MOL_01443,CNC(=O)C1C(F)CCC1c1cnccc1N,-7.29,-6.204,1.086,Fase 2_Seletividade
+MOL_01444,CCC1CCC(c2cnccc2O)C1C(N)=O,-7.29,-6.331,0.959,Fase 2_Seletividade
+MOL_01445,CCOC(=O)C1C(OC)CCC1c1cnccc1C1CC1,-7.288,-5.987,1.301,Fase 2_Seletividade
+MOL_01446,CCC(=O)C1C(CC)CCC1c1cnccc1O,-7.287,-5.953,1.334,Fase 2_Seletividade
+MOL_01447,COc1ccncc1C1CCC(CF)C1C(C)=O,-7.287,-6.074,1.213,Fase 2_Seletividade
+MOL_01448,N#CC1CCC(c2cnccc2S)C1C(=O)O,-7.287,-6.245,1.042,Fase 2_Seletividade
+MOL_01449,CCOC(=O)C1C(OC)CCC1c1cnccc1F,-7.283,-6.164,1.119,Fase 2_Seletividade
+MOL_01450,O=C(O)C(=O)C1C(CF)CCC1c1cnccc1O,-7.283,-6.265,1.018,Fase 2_Seletividade
+MOL_01451,NC1CCC(c2cnccc2O)C1C(=O)C1CC1,-7.281,-5.992,1.289,Fase 2_Seletividade
+MOL_01452,CCC(=O)C1C(C#N)CCC1c1cnccc1N,-7.281,-6.358,0.923,Fase 2_Seletividade
+MOL_01453,[C-]#[N+]c1ccncc1C1CCC(OC)C1C(=O)CCC,-7.28,-5.314,1.966,Fase 1_Lote Inicial
+MOL_01454,CCCC(=O)C1C(C=O)CCC1c1cnccc1CF,-7.28,-5.336,1.944,Fase 2_Seletividade
+MOL_01455,COc1ccncc1C1CCC(F)C1C(=O)C=O,-7.28,-5.548,1.732,Fase 2_Seletividade
+MOL_01456,CCOC(=O)C1C(C)CCC1c1cnccc1N,-7.279,-5.768,1.511,Fase 2_Seletividade
+MOL_01457,CCOC(=O)C1C(C=O)CCC1c1cnccc1I,-7.277,-5.511,1.766,Fase 2_Seletividade
+MOL_01458,O=CC(=O)C1C(CF)CCC1c1cnccc1S,-7.275,-5.534,1.741,Fase 2_Seletividade
+MOL_01459,CCc1ccncc1C1CCC(S)C1C(=O)C1CC1,-7.275,-5.866,1.409,Fase 2_Seletividade
+MOL_01460,CCCC(=O)C1C(CC)CCC1c1cnccc1N,-7.274,-6.11,1.164,Fase 2_Seletividade
+MOL_01461,CCCC(=O)C1CCCC1(C)Cc1cnccc1C#CF,-7.273,-6.0,1.273,Fase 1_Lote Inicial
+MOL_01462,COC(=O)C1C(N)CCC1c1cnccc1C=O,-7.271,-5.791,1.48,Fase 2_Seletividade
+MOL_01463,COC(=O)C1C(C#N)CCC1c1cnccc1I,-7.271,-5.836,1.435,Fase 2_Seletividade
+MOL_01464,CCC1CCC(c2cnccc2C=O)C1C(N)=O,-7.271,-6.024,1.247,Fase 2_Seletividade
+MOL_01465,Cc1cncc(C2CCC(C)C2C(=O)CC(C)C)c1C=NO,-7.27,-5.8,1.47,Fase 4_Mutantes Geração 2
+MOL_01466,COC(=O)C1C(N)CCC1c1cnccc1C,-7.27,-6.006,1.264,Fase 2_Seletividade
+MOL_01467,COC(=O)C1C(F)CCC1c1cnccc1I,-7.269,-5.448,1.821,Fase 2_Seletividade
+MOL_01468,COC(=O)C1C(C#N)CCC1c1cnccc1C=O,-7.269,-5.938,1.331,Fase 2_Seletividade
+MOL_01469,COC(=O)C1C(C=O)CCC1c1cnccc1C1CC1,-7.268,-5.663,1.605,Fase 2_Seletividade
+MOL_01470,CC1CCC(c2cnccc2C=O)C1C(N)=O,-7.268,-5.914,1.354,Fase 2_Seletividade
+MOL_01471,CNC(=O)C1C(C#N)CCC1c1cnccc1C(C)C,-7.267,-6.724,0.543,Fase 2_Seletividade
+MOL_01472,CCOC(=O)C1C(N)CCC1c1cnccc1O,-7.264,-5.937,1.327,Fase 2_Seletividade
+MOL_01473,CC(C)C(=O)C1C(S)CCC1c1cnccc1CF,-7.264,-6.183,1.081,Fase 2_Seletividade
+MOL_01474,CCNC(=O)C1C(O)CCC1c1cnccc1S,-7.263,-6.503,0.76,Fase 2_Seletividade
+MOL_01475,CCCC(=O)C1C(C=O)CCC1c1cnccc1I,-7.261,-5.688,1.573,Fase 2_Seletividade
+MOL_01476,COC1CCC(c2cnccc2N)C1C(=O)C1CCC1,-7.261,-6.639,0.622,Fase 2_Seletividade
+MOL_01477,CC1CCCC1C(=O)C1CC1c1cnccc1N=[N+]=[N-],-7.26,-6.163,1.097,Fase 1_Lote Inicial
+MOL_01478,CC(C)C(=O)C1C(O)CCC1c1cnccc1O,-7.26,-6.488,0.772,Fase 2_Seletividade
+MOL_01479,CCOC(=O)C1C(O)CCC1c1cnccc1I,-7.259,-5.846,1.413,Fase 2_Seletividade
+MOL_01480,COC1CCC(c2cnccc2C(F)F)C1C(=O)C=O,-7.259,-6.096,1.163,Fase 2_Seletividade
+MOL_01481,CCNC(=O)C1C(N)CCC1c1cnccc1CF,-7.259,-6.237,1.022,Fase 2_Seletividade
+MOL_01482,COc1ccncc1C1CCC(N)C1C(=O)C1CCC1,-7.257,-6.159,1.098,Fase 2_Seletividade
+MOL_01483,O=C(C1CC1)C1C(S)CCC1c1cnccc1I,-7.256,-5.903,1.353,Fase 2_Seletividade
+MOL_01484,CC(C)C(=O)C1C(C=O)CCC1c1cnccc1O,-7.256,-6.057,1.199,Fase 2_Seletividade
+MOL_01485,CCC1CCC(c2cnccc2N)C1C(=O)NC,-7.256,-6.464,0.792,Fase 2_Seletividade
+MOL_01486,CCOC(=O)C1C(CF)CCC1c1cnccc1C=O,-7.255,-5.864,1.391,Fase 2_Seletividade
+MOL_01487,CCCC(=O)C1CCCC1(C)Cc1cnccc1C=NO,-7.253,-5.978,1.275,Fase 1_Lote Inicial
+MOL_01488,O=C(C1CC1)C1C(O)CCC1c1cnccc1S,-7.253,-6.078,1.175,Fase 2_Seletividade
+MOL_01489,O=Cc1ccncc1C1CCC(O)C1C(=O)O,-7.251,-5.956,1.295,Fase 2_Seletividade
+MOL_01490,COC1CCC(c2cnccc2I)C1C(=O)C1CCC1,-7.251,-6.177,1.074,Fase 2_Seletividade
+MOL_01491,COC(=O)C1C(O)CCC1c1cnccc1Br,-7.25,-5.808,1.442,Fase 3_Super Elite
+MOL_01492,O=C(O)C1C(O)CCC1c1cnccc1C1CC1,-7.25,-6.322,0.928,Fase 2_Seletividade
+MOL_01493,CCNC(=O)C1C(S)CCC1c1cnccc1F,-7.249,-6.123,1.126,Fase 2_Seletividade
+MOL_01494,CCNC(=O)C1C(C#N)CCC1c1cnccc1OC,-7.249,-6.178,1.071,Fase 2_Seletividade
+MOL_01495,NC(=O)C1C(F)CCC1c1cnccc1C=O,-7.248,-6.091,1.157,Fase 2_Seletividade
+MOL_01496,COC(=O)C1C(C#N)CCC1c1cnccc1C,-7.247,-5.791,1.456,Fase 2_Seletividade
+MOL_01497,COC1CCC(c2cnccc2I)C1C(=O)O,-7.247,-6.02,1.227,Fase 2_Seletividade
+MOL_01498,CC(=O)C1C(CF)CCC1c1cnccc1C(C)C,-7.247,-6.083,1.164,Fase 2_Seletividade
+MOL_01499,CCNC(=O)C1C(N)CCC1c1cnccc1C=O,-7.246,-6.182,1.064,Fase 2_Seletividade
+MOL_01500,CCOC(=O)C1C(O)CCC1c1cnccc1C,-7.245,-6.069,1.176,Fase 2_Seletividade
+MOL_01501,CCNC(=O)C1C(C)CCC1c1cnccc1S,-7.245,-6.093,1.152,Fase 2_Seletividade
+MOL_01502,CCCC(=O)C1C(C#N)CCC1c1cnccc1O,-7.244,-5.793,1.451,Fase 2_Seletividade
+MOL_01503,CNC(=O)C1C(C=O)CCC1c1cnccc1C=O,-7.244,-5.978,1.266,Fase 2_Seletividade
+MOL_01504,CCC1CCC(c2cnccc2CF)C1C(C)=O,-7.244,-5.991,1.253,Fase 2_Seletividade
+MOL_01505,NC(=O)C(=O)C1C(S)CCC1c1cnccc1C(F)F,-7.244,-6.665,0.579,Fase 2_Seletividade
+MOL_01506,CCCC(=O)C1CCCC1(C)Cc1cnccc1C1CO1,-7.241,-5.631,1.61,Fase 1_Lote Inicial
+MOL_01507,COc1ccncc1C1CCC(S)C1C(N)=O,-7.241,-6.105,1.136,Fase 2_Seletividade
+MOL_01508,CCCC(=O)C1C(C#N)CCC1c1cnccc1OC,-7.24,-5.814,1.426,Fase 2_Seletividade
+MOL_01509,O=CC1CCC(c2cnccc2C2CC2)C1C(=O)O,-7.24,-6.309,0.931,Fase 2_Seletividade
+MOL_01510,CCCC(=O)C1C(C)CCC1c1cncc(C)c1C#N,-7.239,-5.624,1.615,Fase 4_Mutantes Geração 2
+MOL_01511,O=CC(=O)C1C(C=O)CCC1c1cnccc1C(F)F,-7.239,-5.844,1.395,Fase 2_Seletividade
+MOL_01512,CNC(=O)C1C(OC)CCC1c1cnccc1Br,-7.239,-6.093,1.146,Fase 2_Seletividade
+MOL_01513,CC(C)C(=O)C1C(S)CCC1c1cnccc1C1CC1,-7.239,-6.159,1.08,Fase 2_Seletividade
+MOL_01514,CCOC(=O)C1C(S)CCC1c1cnccc1C(F)F,-7.238,-5.729,1.509,Fase 2_Seletividade
+MOL_01515,CC(=O)C1C(C=O)CCC1c1cnccc1C1CC1,-7.235,-5.612,1.623,Fase 2_Seletividade
+MOL_01516,CNC(=O)C1C(N)CCC1c1cnccc1OC,-7.234,-6.081,1.153,Fase 2_Seletividade
+MOL_01517,CNC(=O)C1C(C=O)CCC1c1cnccc1CF,-7.234,-6.14,1.094,Fase 2_Seletividade
+MOL_01518,CCC(=O)C1C(N)CCC1c1cnccc1OC,-7.233,-5.868,1.365,Fase 2_Seletividade
+MOL_01519,Cc1ccncc1C1CCC(C)C1C(N)=O,-7.233,-6.582,0.651,Fase 2_Seletividade
+MOL_01520,CC1CCC(c2cnccc2C2CO2)C1C(=O)CC1CC1,-7.232,-6.526,0.706,Fase 1_Lote Inicial
+MOL_01521,CCOC(=O)C1C(OC)CCC1c1cnccc1C=O,-7.23,-5.66,1.57,Fase 2_Seletividade
+MOL_01522,CCOC(=O)C1C(O)CCC1c1cnccc1O,-7.23,-5.944,1.286,Fase 2_Seletividade
+MOL_01523,CNC(=O)C1C(O)CCC1c1cnccc1C#N,-7.23,-6.656,0.574,Fase 2_Seletividade
+MOL_01524,COC(=O)C1C(S)CCC1c1cnccc1CF,-7.228,-5.462,1.766,Fase 2_Seletividade
+MOL_01525,O=CC1CCC(c2cnccc2F)C1C(=O)C1CCC1,-7.228,-5.648,1.58,Fase 2_Seletividade
+MOL_01526,O=CC1CCC(c2cnccc2C(F)F)C1C(=O)C1CC1,-7.228,-6.259,0.969,Fase 2_Seletividade
+MOL_01527,COC1CCC(c2cnccc2CF)C1C(=O)C(C)C,-7.227,-5.823,1.404,Fase 2_Seletividade
+MOL_01528,CNC(=O)C1C(CF)CCC1c1cnccc1C#N,-7.226,-6.447,0.779,Fase 2_Seletividade
+MOL_01529,CCCC(=O)C1C(C#N)CCC1c1cnccc1C=O,-7.225,-5.939,1.286,Fase 2_Seletividade
+MOL_01530,COC(=O)C1C(F)CCC1c1cnccc1OC,-7.224,-5.5,1.724,Fase 2_Seletividade
+MOL_01531,CCCC(=O)C1C(N)CCC1c1cnccc1OC,-7.224,-6.214,1.01,Fase 2_Seletividade
+MOL_01532,CC(=O)C1C(O)CCC1c1cnccc1C=O,-7.224,-6.292,0.932,Fase 2_Seletividade
+MOL_01533,CC(=O)C1C(C#N)CCC1c1cnccc1CF,-7.223,-6.106,1.117,Fase 2_Seletividade
+MOL_01534,CCC(=O)C1C(CF)CCC1c1cnccc1S,-7.222,-5.55,1.672,Fase 2_Seletividade
+MOL_01535,CC1CCC(c2cnccc2C2CC2)C1C(=O)CC1CCC1F,-7.222,-6.225,0.997,Fase 1_Lote Inicial
+MOL_01536,CCCCC(=O)C1C(C)CCC1c1cnccc1C=O,-7.221,-6.032,1.189,Fase 1_Lote Inicial
+MOL_01537,CCNC(=O)C1C(CC)CCC1c1cnccc1C#N,-7.221,-6.465,0.756,Fase 2_Seletividade
+MOL_01538,COC1CCC(c2cnccc2CF)C1C(=O)C(N)=O,-7.22,-5.817,1.403,Fase 2_Seletividade
+MOL_01539,CCOC(=O)C1C(C=O)CCC1c1cnccc1Br,-7.218,-5.748,1.47,Fase 2_Seletividade
+MOL_01540,CCC(=O)C1C(C=O)CCC1c1cnccc1C,-7.218,-5.795,1.423,Fase 2_Seletividade
+MOL_01541,CNC(=O)C1C(N)CCC1c1cnccc1F,-7.218,-6.397,0.821,Fase 2_Seletividade
+MOL_01542,O=CC1CCC(c2cnccc2CF)C1C(=O)C1CCC1,-7.218,-6.415,0.803,Fase 2_Seletividade
+MOL_01543,N#CC1CCC(c2cnccc2C(F)F)C1C(=O)O,-7.218,-6.642,0.576,Fase 2_Seletividade
+MOL_01544,CCC(=O)C1C(C=O)CCC1c1cnccc1N,-7.217,-5.797,1.42,Fase 2_Seletividade
+MOL_01545,CCOC(=O)C1C(C#N)CCC1c1cnccc1F,-7.217,-6.363,0.854,Fase 2_Seletividade
+MOL_01546,CC(C)C(=O)C1C(N)CCC1c1cnccc1F,-7.217,-6.534,0.683,Fase 2_Seletividade
+MOL_01547,CCc1ccncc1C1CCC(C)C1C(=O)C(=O)O,-7.216,-6.48,0.736,Fase 2_Seletividade
+MOL_01548,CNC(=O)C1C(C#N)CCC1c1cnccc1C#N,-7.216,-6.999,0.217,Fase 2_Seletividade
+MOL_01549,CCOC(=O)C1C(S)CCC1c1cnccc1C1CC1,-7.215,-5.652,1.563,Fase 2_Seletividade
+MOL_01550,COc1ccncc1C1CCC(OC)C1C(=O)C(C)C,-7.215,-5.682,1.533,Fase 2_Seletividade
+MOL_01551,CC(=O)C1C(CF)CCC1c1cnccc1O,-7.215,-5.949,1.266,Fase 2_Seletividade
+MOL_01552,C=Cc1ccncc1C1CCC(C)C1C(=O)CCCC,-7.213,-5.49,1.723,Fase 1_Lote Inicial
+MOL_01553,Nc1ccncc1C1CCC(F)C1C(=O)O,-7.213,-6.06,1.153,Fase 2_Seletividade
+MOL_01554,N#Cc1ccncc1C1CCC(F)C1C(N)=O,-7.213,-6.217,0.996,Fase 2_Seletividade
+MOL_01555,CC(=O)C1C(C)CCC1c1cnccc1S,-7.212,-5.686,1.526,Fase 2_Seletividade
+MOL_01556,CNC(=O)C1C(C=O)CCC1c1cnccc1C(C)C,-7.212,-6.361,0.851,Fase 2_Seletividade
+MOL_01557,CCOC(=O)C1C(CF)CCC1c1cnccc1C(F)F,-7.211,-5.738,1.473,Fase 2_Seletividade
+MOL_01558,CCOC(=O)C1C(OC)CCC1c1cnccc1Br,-7.209,-6.026,1.183,Fase 2_Seletividade
+MOL_01559,CCC(C)C(=O)C1C(C)CCC1c1cnccc1C1CC1,-7.209,-6.081,1.128,Fase 1_Lote Inicial
+MOL_01560,Cc1ccncc1C1CCC(C#N)C1C(=O)C(C)C,-7.209,-6.118,1.091,Fase 2_Seletividade
+MOL_01561,CC(C)C(=O)C1C(C#N)CCC1c1cnccc1O,-7.209,-6.373,0.836,Fase 2_Seletividade
+MOL_01562,CNC(=O)C1C(S)CCC1c1cnccc1Br,-7.206,-5.866,1.34,Fase 2_Seletividade
+MOL_01563,O=C(O)C1C(S)CCC1c1cnccc1Br,-7.205,-5.788,1.417,Fase 2_Seletividade
+MOL_01564,CCCC(=O)C1C(C)CCC1c1cnccc1C(N)=O,-7.204,-5.997,1.207,Fase 4_Mutantes Geração 2
+MOL_01565,NC(=O)C1C(S)CCC1c1cnccc1I,-7.203,-5.367,1.836,Fase 2_Seletividade
+MOL_01566,COC1CCC(c2cnccc2F)C1C(=O)O,-7.203,-6.141,1.062,Fase 2_Seletividade
+MOL_01567,CCc1ccncc1C1CCC(CC)C1C(=O)C(N)=O,-7.203,-6.349,0.854,Fase 2_Seletividade
+MOL_01568,CCC1CCC(c2cnccc2C(C)C)C1C(=O)NC,-7.203,-6.919,0.284,Fase 2_Seletividade
+MOL_01569,CCC(=O)C1C(C=O)CCC1c1cnccc1S,-7.202,-5.762,1.44,Fase 2_Seletividade
+MOL_01570,CCCCC(=O)C1C(C)CCC1c1cnccc1N=[N+]=[N-],-7.201,-6.205,0.996,Fase 1_Lote Inicial
+MOL_01571,CNC(=O)C1C(OC)CCC1c1cnccc1C(F)F,-7.2,-6.496,0.704,Fase 2_Seletividade
+MOL_01572,COC(=O)C1C(C=O)CCC1c1cnccc1O,-7.199,-5.875,1.324,Fase 2_Seletividade
+MOL_01573,CCNC(=O)C1C(OC)CCC1c1cnccc1C(C)C,-7.199,-6.238,0.961,Fase 2_Seletividade
+MOL_01574,CC(=O)C1C(C#N)CCC1c1cnccc1F,-7.199,-6.587,0.612,Fase 2_Seletividade
+MOL_01575,CC(=O)C1C(C=O)CCC1c1cnccc1Br,-7.198,-5.537,1.661,Fase 2_Seletividade
+MOL_01576,CCC(=O)C1C(OC)CCC1c1cnccc1CF,-7.198,-5.646,1.552,Fase 2_Seletividade
+MOL_01577,CC(=O)C1C(O)CCC1c1cnccc1C1CC1,-7.198,-6.065,1.133,Fase 2_Seletividade
+MOL_01578,CCOC(=O)C1C(O)CCC1c1cnccc1CF,-7.198,-6.171,1.027,Fase 2_Seletividade
+MOL_01579,CCc1ccncc1C1CCC(C=O)C1C(C)=O,-7.197,-5.856,1.341,Fase 2_Seletividade
+MOL_01580,N#CC1CCC(c2cnccc2Br)C1C(=O)O,-7.196,-6.159,1.037,Fase 2_Seletividade
+MOL_01581,CCOC(=O)C1C(S)CCC1c1cnccc1C=O,-7.194,-5.371,1.823,Fase 2_Seletividade
+MOL_01582,CCc1ccncc1C1CCC(O)C1C(=O)C=O,-7.194,-5.873,1.321,Fase 2_Seletividade
+MOL_01583,O=CC(=O)C1C(C=O)CCC1c1cnccc1O,-7.192,-5.943,1.249,Fase 2_Seletividade
+MOL_01584,COC1CCC(c2cnccc2C)C1C(=O)C(C)C,-7.191,-5.635,1.556,Fase 2_Seletividade
+MOL_01585,CC1CCC(c2cnccc2S)C1C(=O)C1CCC1,-7.191,-5.701,1.49,Fase 2_Seletividade
+MOL_01586,CCC1CCC(c2cnccc2Br)C1C(=O)O,-7.19,-5.774,1.416,Fase 2_Seletividade
+MOL_01587,COC1CCC(c2cnccc2Br)C1C(=O)C(=O)O,-7.19,-6.123,1.067,Fase 2_Seletividade
+MOL_01588,CCCC(=O)C1C(N)CCC1c1cnccc1C(C)C,-7.188,-5.575,1.613,Fase 2_Seletividade
+MOL_01589,N#CC1CCC(c2cnccc2Br)C1C(=O)C=O,-7.186,-5.918,1.268,Fase 2_Seletividade
+MOL_01590,CCNC(=O)C1C(F)CCC1c1cnccc1CC,-7.186,-6.301,0.885,Fase 2_Seletividade
+MOL_01591,COC(=O)C1C(C#N)CCC1c1cnccc1C1CC1,-7.185,-5.722,1.463,Fase 2_Seletividade
+MOL_01592,CCC1CCC(c2cnccc2OC)C1C(C)=O,-7.185,-5.933,1.252,Fase 2_Seletividade
+MOL_01593,CCCC(=O)C1C(F)CCC1c1cnccc1C#N,-7.184,-5.744,1.44,Fase 3_Super Elite
+MOL_01594,C=C=Cc1ccncc1C1CCC(OC)C1C(=O)CCC,-7.184,-6.141,1.043,Fase 1_Lote Inicial
+MOL_01595,COc1ccncc1C1CCC(N)C1C(=O)C=O,-7.183,-5.707,1.476,Fase 2_Seletividade
+MOL_01596,COC(=O)C1C(OC)CCC1c1cnccc1C(C)C,-7.183,-5.711,1.472,Fase 2_Seletividade
+MOL_01597,O=C(C1CCC1)C1C(F)CCC1c1cnccc1CF,-7.183,-5.996,1.187,Fase 2_Seletividade
+MOL_01598,O=C(O)C1C(O)CCC1c1cnccc1C(F)F,-7.182,-6.161,1.021,Fase 2_Seletividade
+MOL_01599,CCC1CCC(c2cnccc2C#N)C1C(=O)C(C)C,-7.182,-6.47,0.712,Fase 2_Seletividade
+MOL_01600,CCNC(=O)C1C(C=O)CCC1c1cnccc1CF,-7.18,-5.759,1.421,Fase 2_Seletividade
+MOL_01601,CNC(=O)C1C(O)CCC1c1cnccc1S,-7.18,-5.866,1.314,Fase 2_Seletividade
+MOL_01602,CCC(=O)C1C(C#N)CCC1c1cnccc1C=O,-7.179,-6.213,0.966,Fase 2_Seletividade
+MOL_01603,CC1CCC(c2cnccc2C=O)C1C(=O)CC1CCC1F,-7.178,-6.385,0.793,Fase 1_Lote Inicial
+MOL_01604,CNC(=O)C1C(C#N)CCC1c1cnccc1C1CC1,-7.177,-6.811,0.366,Fase 2_Seletividade
+MOL_01605,CCC1CCC(c2cnccc2C(C)C)C1C(N)=O,-7.176,-6.41,0.766,Fase 2_Seletividade
+MOL_01606,COC1CCC(c2cnccc2C2CC2)C1C(=O)C1CC1,-7.175,-6.105,1.07,Fase 2_Seletividade
+MOL_01607,NC(=O)C1C(N)CCC1c1cnccc1I,-7.174,-6.118,1.056,Fase 2_Seletividade
+MOL_01608,CCCC(=O)C1C(C=O)CCC1c1cnccc1Br,-7.173,-5.571,1.602,Fase 2_Seletividade
+MOL_01609,CCOC(=O)C1C(OC)CCC1c1cnccc1N,-7.172,-5.655,1.517,Fase 2_Seletividade
+MOL_01610,N#CC1CCC(c2cnccc2C=O)C1C(=O)C1CCC1,-7.169,-5.962,1.207,Fase 2_Seletividade
+MOL_01611,CCOC(=O)C1C(OC)CCC1c1cnccc1I,-7.167,-5.768,1.399,Fase 2_Seletividade
+MOL_01612,CCC1CCC(c2cnccc2S)C1C(=O)NC,-7.167,-6.198,0.969,Fase 2_Seletividade
+MOL_01613,COC(=O)C1C(F)CCC1c1cnccc1Br,-7.166,-5.444,1.722,Fase 2_Seletividade
+MOL_01614,CCCC(=O)C1CCCC1(C)Cc1cnccc1C=CF,-7.165,-5.765,1.4,Fase 1_Lote Inicial
+MOL_01615,CCOC(=O)C1C(CF)CCC1c1cnccc1Br,-7.165,-5.792,1.373,Fase 2_Seletividade
+MOL_01616,CCC1CCC(c2cnccc2C(C)C)C1C(=O)C(N)=O,-7.165,-6.127,1.038,Fase 2_Seletividade
+MOL_01617,CCNC(=O)C1C(OC)CCC1c1cnccc1Br,-7.165,-6.318,0.847,Fase 2_Seletividade
+MOL_01618,N#CC1CCC(c2cnccc2I)C1C(=O)O,-7.164,-6.171,0.993,Fase 2_Seletividade
+MOL_01619,CCC(=O)C1C(CF)CCC1c1cnccc1O,-7.163,-5.868,1.295,Fase 2_Seletividade
+MOL_01620,COC(=O)C1C(O)CCC1c1cnccc1C=O,-7.162,-5.717,1.445,Fase 2_Seletividade
+MOL_01621,CCC(C)C(=O)C1C(C)CCC1c1cnccc1C(=O)OC,-7.162,-5.775,1.387,Fase 1_Lote Inicial
+MOL_01622,CCC(=O)C1C(C=O)CCC1c1cnccc1C1CC1,-7.162,-5.793,1.369,Fase 2_Seletividade
+MOL_01623,COc1ccncc1C1CCC(C)C1C(=O)C=O,-7.161,-5.788,1.373,Fase 2_Seletividade
+MOL_01624,O=C(C1CCC1)C1C(CF)CCC1c1cnccc1F,-7.161,-6.067,1.094,Fase 2_Seletividade
+MOL_01625,CCNC(=O)C1C(OC)CCC1c1cnccc1CF,-7.161,-6.135,1.026,Fase 2_Seletividade
+MOL_01626,CCc1ccncc1C1CCC(N)C1C(=O)C1CCC1,-7.161,-6.418,0.743,Fase 2_Seletividade
+MOL_01627,CC(=O)C1C(N)CCC1c1cnccc1C,-7.159,-5.811,1.348,Fase 2_Seletividade
+MOL_01628,CC(=O)C1C(C)CCC1c1cnccc1C1CC1,-7.155,-6.005,1.15,Fase 2_Seletividade
+MOL_01629,N#Cc1ccncc1C1CCC(S)C1C(=O)C1CCC1,-7.155,-6.425,0.73,Fase 2_Seletividade
+MOL_01630,CCC1CCC(c2cnccc2F)C1C(=O)OC,-7.154,-5.745,1.409,Fase 2_Seletividade
+MOL_01631,CCCC(=O)C1C(O)CCC1c1cnccc1Br,-7.154,-6.328,0.826,Fase 2_Seletividade
+MOL_01632,CCC1CCC(c2cnccc2N)C1C(N)=O,-7.152,-6.218,0.934,Fase 2_Seletividade
+MOL_01633,Cc1ccncc1C1CCC(CF)C1C(=O)C=O,-7.151,-5.792,1.359,Fase 2_Seletividade
+MOL_01634,CCC(=O)C1C(OC)CCC1c1cnccc1O,-7.15,-5.935,1.215,Fase 2_Seletividade
+MOL_01635,CNC(=O)C1C(C)CCC1c1cnccc1C=O,-7.15,-6.068,1.082,Fase 2_Seletividade
+MOL_01636,COC(=O)C1C(C#N)CCC1c1cnccc1CF,-7.15,-6.105,1.045,Fase 2_Seletividade
+MOL_01637,CCOC(=O)C1C(N)CCC1c1cnccc1OC,-7.148,-5.961,1.187,Fase 2_Seletividade
+MOL_01638,CCC1CCC(c2cnccc2S)C1C(=O)C(=O)O,-7.148,-5.97,1.178,Fase 2_Seletividade
+MOL_01639,CCCC(=O)C1C(C=O)CCC1c1cnccc1CC,-7.146,-5.425,1.721,Fase 2_Seletividade
+MOL_01640,O=CC1CCC(c2cnccc2S)C1C(=O)C1CC1,-7.145,-5.502,1.643,Fase 2_Seletividade
+MOL_01641,Cc1ccncc1C1CCC(S)C1C(=O)C=O,-7.144,-5.653,1.491,Fase 2_Seletividade
+MOL_01642,CNC(=O)C1C(OC)CCC1c1cnccc1I,-7.139,-6.132,1.007,Fase 2_Seletividade
+MOL_01643,CCC1CCC(c2cnccc2F)C1C(C)=O,-7.138,-5.648,1.49,Fase 2_Seletividade
+MOL_01644,Cc1nccc(C=CF)c1C1CCC(F)C1C(=O)C(C)C,-7.138,-6.076,1.062,Fase 4_Mutantes Geração 2
+MOL_01645,CCCC(=O)C1C(N)CCC1c1cnccc1C#N,-7.135,-5.77,1.365,Fase 2_Seletividade
+MOL_01646,COc1ccncc1C1CCC(C#N)C1C(=O)C1CC1,-7.134,-5.919,1.215,Fase 2_Seletividade
+MOL_01647,CC(C)C(=O)C1C(O)CCC1c1cnccc1Br,-7.134,-6.29,0.844,Fase 2_Seletividade
+MOL_01648,CCC(=O)C1C(C=O)CCC1c1cnccc1C=O,-7.133,-6.084,1.049,Fase 2_Seletividade
+MOL_01649,COC1CCC(c2cnccc2I)C1C(N)=O,-7.131,-5.66,1.471,Fase 2_Seletividade
+MOL_01650,CC(C)C(=O)C1C(N)CCC1c1cnccc1O,-7.131,-5.958,1.173,Fase 2_Seletividade
+MOL_01651,CCNC(=O)C1C(OC)CCC1c1cnccc1CC,-7.131,-6.063,1.068,Fase 2_Seletividade
+MOL_01652,CCC1CCC(c2cnccc2F)C1C(=O)C(N)=O,-7.131,-6.102,1.029,Fase 2_Seletividade
+MOL_01653,CCOC(=O)C1C(OC)CCC1c1cnccc1C,-7.13,-5.806,1.324,Fase 2_Seletividade
+MOL_01654,CCCC(=O)C1C(O)CCC1c1cnccc1I,-7.129,-5.919,1.21,Fase 2_Seletividade
+MOL_01655,CC(C)C(=O)C1C(CF)CCC1c1cnccc1F,-7.128,-5.668,1.46,Fase 2_Seletividade
+MOL_01656,CCC(=O)C1C(S)CCC1c1cnccc1C(F)F,-7.128,-5.743,1.385,Fase 2_Seletividade
+MOL_01657,CC(C)c1ccncc1C1CCC(C#N)C1C(=O)O,-7.126,-6.149,0.977,Fase 2_Seletividade
+MOL_01658,COC1CCC(c2cnccc2C#N)C1C(=O)C=O,-7.125,-5.893,1.232,Fase 2_Seletividade
+MOL_01659,O=C(O)C(=O)C1C(O)CCC1c1cnccc1S,-7.123,-5.941,1.182,Fase 2_Seletividade
+MOL_01660,CCNC(=O)C1C(OC)CCC1c1cnccc1I,-7.122,-6.223,0.899,Fase 2_Seletividade
+MOL_01661,COC(=O)C1C(CF)CCC1c1cnccc1Br,-7.12,-5.722,1.398,Fase 3_Super Elite
+MOL_01662,NC(=O)C1C(C=O)CCC1c1cnccc1S,-7.12,-5.771,1.349,Fase 2_Seletividade
+MOL_01663,CC(=O)C1C(N)CCC1c1cnccc1S,-7.12,-5.843,1.277,Fase 2_Seletividade
+MOL_01664,NC(=O)C1C(O)CCC1c1cnccc1I,-7.119,-6.023,1.096,Fase 2_Seletividade
+MOL_01665,C=C=Cc1ccncc1C1CCC(C)C1C(=O)C(C)(C)C,-7.119,-6.34,0.779,Fase 1_Lote Inicial
+MOL_01666,CCOC(=O)C1C(CF)CCC1c1cnccc1F,-7.118,-5.491,1.627,Fase 2_Seletividade
+MOL_01667,CCCC(=O)C1C(N)CCC1c1cnccc1C=O,-7.118,-6.055,1.063,Fase 2_Seletividade
+MOL_01668,CC1CCCC1C(=O)C1CC1c1cnccc1C#N,-7.118,-6.229,0.889,Fase 1_Lote Inicial
+MOL_01669,O=C(O)C1C(CF)CCC1c1cnccc1Br,-7.116,-6.006,1.11,Fase 2_Seletividade
+MOL_01670,CNC(=O)C1C(C=O)CCC1c1cnccc1N,-7.116,-6.432,0.684,Fase 2_Seletividade
+MOL_01671,CCOC(=O)C1C(F)CCC1c1cnccc1I,-7.114,-5.734,1.38,Fase 2_Seletividade
+MOL_01672,CCC1CCC(c2cnccc2N)C1C(=O)C1CCC1,-7.112,-6.384,0.728,Fase 2_Seletividade
+MOL_01673,CCOC(=O)C1C(C=O)CCC1c1cnccc1OC,-7.111,-5.513,1.598,Fase 2_Seletividade
+MOL_01674,CCNC(=O)C1C(F)CCC1c1cnccc1S,-7.11,-5.634,1.476,Fase 2_Seletividade
+MOL_01675,CC(=O)C1C(N)CCC1c1cnccc1I,-7.11,-5.689,1.421,Fase 2_Seletividade
+MOL_01676,CNC(=O)C1C(C=O)CCC1c1cnccc1OC,-7.11,-6.25,0.86,Fase 2_Seletividade
+MOL_01677,COC(=O)C1C(F)CCC1c1cnccc1N,-7.109,-6.041,1.068,Fase 3_Super Elite
+MOL_01678,COC1CCC(c2cnccc2C)C1C(=O)C(=O)O,-7.108,-6.127,0.981,Fase 2_Seletividade
+MOL_01679,CCC(C)C(=O)C1C(C)CCC1c1cnccc1CF,-7.107,-5.356,1.751,Fase 1_Lote Inicial
+MOL_01680,COC(=O)C1C(N)CCC1c1cnccc1C(F)F,-7.103,-6.145,0.958,Fase 2_Seletividade
+MOL_01681,Cc1ccncc1C1CCC(C=O)C1C(=O)C(=O)O,-7.102,-5.849,1.253,Fase 2_Seletividade
+MOL_01682,CCOC(=O)C1C(N)CCC1c1cnccc1I,-7.101,-5.393,1.708,Fase 2_Seletividade
+MOL_01683,CNC(=O)C1C(C=O)CCC1c1cnccc1C(F)F,-7.101,-6.363,0.738,Fase 2_Seletividade
+MOL_01684,CC1CCC(c2cnccc2S)C1C(N)=O,-7.1,-5.793,1.307,Fase 2_Seletividade
+MOL_01685,CCCC(=O)C1C(N)CCC1c1cnccc1S,-7.1,-5.797,1.303,Fase 2_Seletividade
+MOL_01686,N#CC1CCC(c2cnccc2F)C1C(=O)C=O,-7.098,-5.857,1.241,Fase 2_Seletividade
+MOL_01687,O=C(O)C(=O)C1C(S)CCC1c1cnccc1C1CC1,-7.098,-6.348,0.75,Fase 2_Seletividade
+MOL_01688,CCC1CCC(c2cnccc2C(F)F)C1C(=O)C=O,-7.097,-5.981,1.116,Fase 2_Seletividade
+MOL_01689,COc1ccncc1C1CCC(F)C1C(=O)O,-7.097,-6.24,0.857,Fase 2_Seletividade
+MOL_01690,CCNC(=O)C1C(C)CCC1c1cnccc1O,-7.097,-6.649,0.448,Fase 2_Seletividade
+MOL_01691,COC(=O)C1C(CF)CCC1c1cnccc1CF,-7.096,-5.629,1.467,Fase 2_Seletividade
+MOL_01692,CCCC(=O)C1CCCC1(C)Cc1cnccc1C=O,-7.096,-5.682,1.414,Fase 1_Lote Inicial
+MOL_01693,CCCC(=O)C1C(C=O)CCC1c1cnccc1C=O,-7.095,-5.135,1.96,Fase 2_Seletividade
+MOL_01694,CC(=O)C1C(N)CCC1c1cnccc1Br,-7.094,-5.794,1.3,Fase 2_Seletividade
+MOL_01695,CCC(=O)C1C(S)CCC1c1cnccc1OC,-7.093,-5.598,1.495,Fase 2_Seletividade
+MOL_01696,CCOC(=O)C1C(CF)CCC1c1cnccc1I,-7.093,-5.719,1.374,Fase 2_Seletividade
+MOL_01697,CC(=O)C1C(C=O)CCC1c1cnccc1CF,-7.093,-5.89,1.203,Fase 2_Seletividade
+MOL_01698,CCC(=O)C1C(CC)CCC1c1cnccc1C,-7.091,-5.811,1.28,Fase 2_Seletividade
+MOL_01699,CCOC(=O)C1C(C=O)CCC1c1cnccc1C(F)F,-7.091,-5.874,1.217,Fase 2_Seletividade
+MOL_01700,CC(=O)C1C(C#N)CCC1c1cnccc1S,-7.091,-5.992,1.099,Fase 2_Seletividade
+MOL_01701,CC1CCC(c2cnccc2F)C1C(=O)C=O,-7.09,-5.747,1.343,Fase 2_Seletividade
+MOL_01702,NC1CCC(c2cnccc2CF)C1C(=O)C=O,-7.09,-6.16,0.93,Fase 2_Seletividade
+MOL_01703,CCNC(=O)C1C(O)CCC1c1cnccc1N,-7.09,-6.528,0.562,Fase 2_Seletividade
+MOL_01704,CCOC(=O)C1C(C=O)CCC1c1cnccc1C,-7.089,-5.545,1.544,Fase 2_Seletividade
+MOL_01705,CC(=O)C1C(C=O)CCC1c1cnccc1I,-7.089,-5.699,1.39,Fase 2_Seletividade
+MOL_01706,COC(=O)C1C(F)CCC1c1cnccc1S,-7.089,-5.796,1.293,Fase 2_Seletividade
+MOL_01707,CNC(=O)C1C(C#N)CCC1c1cnccc1OC,-7.089,-6.239,0.85,Fase 2_Seletividade
+MOL_01708,CCc1ccncc1C1CCC(C=O)C1C(=O)C=O,-7.088,-5.567,1.521,Fase 2_Seletividade
+MOL_01709,CCOC(=O)C1C(O)CCC1c1cnccc1OC,-7.088,-5.884,1.204,Fase 2_Seletividade
+MOL_01710,CCOC(=O)C1C(C#N)CCC1c1cnccc1C(F)F,-7.088,-5.94,1.148,Fase 2_Seletividade
+MOL_01711,COC1CCC(c2cnccc2F)C1C(=O)C(=O)O,-7.088,-6.03,1.058,Fase 2_Seletividade
+MOL_01712,CNC(=O)C1C(S)CCC1c1cnccc1N,-7.087,-5.971,1.116,Fase 2_Seletividade
+MOL_01713,CC(C)C(=O)C1C(N)CCC1c1cnccc1C#N,-7.086,-6.079,1.007,Fase 2_Seletividade
+MOL_01714,NC(=O)C1C(F)CCC1c1cnccc1N,-7.086,-6.199,0.887,Fase 2_Seletividade
+MOL_01715,O=C(C1CCC1)C1C(S)CCC1c1cnccc1O,-7.086,-6.205,0.881,Fase 2_Seletividade
+MOL_01716,CNC(=O)C1C(S)CCC1c1cnccc1I,-7.085,-5.815,1.27,Fase 2_Seletividade
+MOL_01717,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)CCC,-7.084,-5.483,1.601,Fase 1_Lote Inicial
+MOL_01718,NC(=O)C1C(S)CCC1c1cnccc1C1CC1,-7.08,-6.215,0.865,Fase 2_Seletividade
+MOL_01719,CCC(=O)C1C(OC)CCC1c1cnccc1C=O,-7.077,-5.693,1.384,Fase 2_Seletividade
+MOL_01720,CC(C)C(=O)C1C(N)CCC1c1cnccc1C=O,-7.076,-6.347,0.729,Fase 2_Seletividade
+MOL_01721,N#CC1CCC(c2cnccc2N)C1C(=O)C1CCC1,-7.076,-6.639,0.437,Fase 2_Seletividade
+MOL_01722,CCOC(=O)C1C(C)CCC1c1cnccc1I,-7.075,-5.549,1.526,Fase 2_Seletividade
+MOL_01723,CC(=O)C1C(C#N)CCC1c1cnccc1O,-7.075,-6.037,1.038,Fase 2_Seletividade
+MOL_01724,COC1CCC(c2cnccc2Br)C1C(=O)C1CCC1,-7.074,-6.172,0.902,Fase 2_Seletividade
+MOL_01725,NC1CCC(c2cnccc2S)C1C(=O)C=O,-7.072,-5.466,1.606,Fase 2_Seletividade
+MOL_01726,CCc1ccncc1C1CCC(CC)C1C(=O)C(=O)O,-7.072,-5.884,1.188,Fase 2_Seletividade
+MOL_01727,CCC1CCC(c2cnccc2F)C1C(=O)O,-7.072,-6.003,1.069,Fase 2_Seletividade
+MOL_01728,Cc1ccncc1C1CCC(N)C1C(=O)C1CCC1,-7.072,-6.014,1.058,Fase 2_Seletividade
+MOL_01729,NC(=O)C1C(C=O)CCC1c1cnccc1CF,-7.072,-6.352,0.72,Fase 2_Seletividade
+MOL_01730,CNC(=O)C1C(S)CCC1c1cnccc1S,-7.069,-5.71,1.359,Fase 2_Seletividade
+MOL_01731,CCC1CCC(c2cnccc2C(C)C)C1C(=O)O,-7.069,-6.068,1.001,Fase 2_Seletividade
+MOL_01732,COC(=O)C1C(S)CCC1c1cnccc1C(F)F,-7.068,-5.692,1.376,Fase 2_Seletividade
+MOL_01733,CCCC(=O)C1C(C)CCC1c1cnccc1I,-7.065,-6.08,0.985,Fase 3_Super Elite
+MOL_01734,CCOC(=O)C1C(F)CCC1c1cnccc1F,-7.063,-5.648,1.415,Fase 2_Seletividade
+MOL_01735,COc1ccncc1C1CCC(O)C1C(C)=O,-7.062,-5.605,1.457,Fase 2_Seletividade
+MOL_01736,Cc1ccncc1C1CCC(S)C1C(=O)C(=O)O,-7.062,-5.759,1.303,Fase 2_Seletividade
+MOL_01737,CCOC(=O)C1C(S)CCC1c1cnccc1C(C)C,-7.061,-5.424,1.637,Fase 2_Seletividade
+MOL_01738,O=C(C1CCC1)C1C(S)CCC1c1cnccc1S,-7.061,-5.8,1.261,Fase 2_Seletividade
+MOL_01739,O=CC(=O)C1C(F)CCC1c1cnccc1S,-7.06,-5.98,1.08,Fase 2_Seletividade
+MOL_01740,CCNC(=O)C1C(C#N)CCC1c1cnccc1CC,-7.06,-6.852,0.208,Fase 2_Seletividade
+MOL_01741,CCOC(=O)C1C(OC)CCC1c1cnccc1OC,-7.059,-5.67,1.389,Fase 2_Seletividade
+MOL_01742,NC1CCC(c2cnccc2Br)C1C(=O)O,-7.059,-6.466,0.593,Fase 2_Seletividade
+MOL_01743,O=C(O)C1C(CF)CCC1c1cnccc1I,-7.058,-6.024,1.034,Fase 2_Seletividade
+MOL_01744,CC(C)C(=O)C1C(S)CCC1c1cnccc1S,-7.057,-5.666,1.391,Fase 2_Seletividade
+MOL_01745,CCNC(=O)C1C(CF)CCC1c1cnccc1C=O,-7.057,-6.113,0.944,Fase 2_Seletividade
+MOL_01746,CCNC(=O)C1C(C=O)CCC1c1cnccc1OC,-7.057,-6.318,0.739,Fase 2_Seletividade
+MOL_01747,CC1CCC(c2cnccc2CF)C1C(=O)C=O,-7.054,-5.325,1.729,Fase 2_Seletividade
+MOL_01748,CCc1ccncc1C1CCC(S)C1C(=O)OC,-7.054,-5.362,1.692,Fase 2_Seletividade
+MOL_01749,CC(C)c1ccncc1C1CCC(O)C1C(=O)C1CC1,-7.054,-5.92,1.134,Fase 2_Seletividade
+MOL_01750,COC1CCC(c2cnccc2CF)C1C(=O)C1CCC1,-7.053,-6.05,1.003,Fase 2_Seletividade
+MOL_01751,N#CC1CCC(c2cnccc2I)C1C(=O)C=O,-7.051,-5.719,1.332,Fase 2_Seletividade
+MOL_01752,CC(=O)C1C(O)CCC1c1cnccc1Br,-7.051,-6.177,0.874,Fase 2_Seletividade
+MOL_01753,CCOC(=O)C1C(O)CCC1c1cnccc1Br,-7.049,-5.963,1.086,Fase 2_Seletividade
+MOL_01754,CC(=O)C1C(C=O)CCC1c1cnccc1O,-7.049,-5.966,1.083,Fase 2_Seletividade
+MOL_01755,CC(C)c1ccncc1C1CCC(S)C1C(=O)C=O,-7.048,-5.192,1.856,Fase 2_Seletividade
+MOL_01756,CCC(=O)C1C(N)CCC1c1cnccc1C(C)C,-7.048,-6.138,0.91,Fase 2_Seletividade
+MOL_01757,CCc1ccncc1C1CCC(F)C1C(=O)C=O,-7.047,-5.556,1.491,Fase 2_Seletividade
+MOL_01758,CCCC(=O)C1C(C#N)CCC1c1cnccc1N,-7.047,-6.126,0.921,Fase 2_Seletividade
+MOL_01759,O=C(C1CCC1)C1C(F)CCC1c1cnccc1I,-7.045,-6.137,0.908,Fase 2_Seletividade
+MOL_01760,CCOC(=O)C1C(CC)CCC1c1cnccc1S,-7.044,-5.634,1.41,Fase 2_Seletividade
+MOL_01761,CNC(=O)C1C(OC)CCC1c1cnccc1C,-7.044,-5.76,1.284,Fase 2_Seletividade
+MOL_01762,O=C(O)C1C(O)CCC1c1cnccc1I,-7.044,-5.986,1.058,Fase 2_Seletividade
+MOL_01763,CC(C)c1ccncc1C1CCC(S)C1C(N)=O,-7.044,-6.322,0.722,Fase 2_Seletividade
+MOL_01764,CCC1CCC(c2cnccc2C#N)C1C(=O)C1CCC1,-7.044,-6.555,0.489,Fase 2_Seletividade
+MOL_01765,CCCC(=O)C1C(O)CCC1c1cnccc1C1CC1,-7.042,-5.86,1.182,Fase 2_Seletividade
+MOL_01766,CC(=O)C1C(N)CCC1c1cnccc1N,-7.042,-6.227,0.815,Fase 2_Seletividade
+MOL_01767,COC1CCC(c2cnccc2C#N)C1C(=O)C1CC1,-7.041,-5.921,1.12,Fase 2_Seletividade
+MOL_01768,NC(=O)C1C(F)CCC1c1cnccc1I,-7.041,-6.309,0.732,Fase 2_Seletividade
+MOL_01769,CC(=O)C1C(C=O)CCC1c1cnccc1C(C)C,-7.039,-5.583,1.456,Fase 2_Seletividade
+MOL_01770,CCCC(=O)C1CCCC1(C)Cc1cnccc1CF,-7.038,-5.479,1.559,Fase 1_Lote Inicial
+MOL_01771,CCC(=O)C1C(N)CCC1c1cnccc1CC,-7.038,-5.724,1.314,Fase 2_Seletividade
+MOL_01772,O=CC(=O)C1C(O)CCC1c1cnccc1O,-7.037,-5.902,1.135,Fase 2_Seletividade
+MOL_01773,CCOC(=O)C1C(CC)CCC1c1cnccc1C=O,-7.036,-5.775,1.261,Fase 2_Seletividade
+MOL_01774,CCCC(=O)C1C(CF)CCC1c1cnccc1O,-7.036,-6.154,0.882,Fase 2_Seletividade
+MOL_01775,COC(=O)C1C(S)CCC1c1cnccc1C=O,-7.035,-5.537,1.498,Fase 2_Seletividade
+MOL_01776,COC(=O)C1C(CF)CCC1c1cnccc1OC,-7.035,-5.66,1.375,Fase 2_Seletividade
+MOL_01777,CC(=O)C1C(O)CCC1c1cnccc1I,-7.035,-5.728,1.307,Fase 2_Seletividade
+MOL_01778,COc1ccncc1C1CCC(CF)C1C(=O)O,-7.035,-5.862,1.173,Fase 2_Seletividade
+MOL_01779,NC(=O)C1C(CF)CCC1c1cnccc1F,-7.035,-6.128,0.907,Fase 2_Seletividade
+MOL_01780,COC(=O)C1C(O)CCC1c1cnccc1C1CC1,-7.031,-5.856,1.175,Fase 2_Seletividade
+MOL_01781,O=C(C1CC1)C1C(CF)CCC1c1cnccc1O,-7.031,-5.905,1.126,Fase 2_Seletividade
+MOL_01782,CNC(=O)C1C(S)CCC1c1cnccc1C,-7.03,-6.002,1.028,Fase 2_Seletividade
+MOL_01783,COC1CCC(c2cnccc2S)C1C(=O)C1CC1,-7.028,-5.612,1.416,Fase 2_Seletividade
+MOL_01784,CCC1CCC(c2cnccc2C#N)C1C(=O)O,-7.028,-6.083,0.945,Fase 2_Seletividade
+MOL_01785,CCOC(=O)C1C(OC)CCC1c1cnccc1S,-7.027,-5.658,1.369,Fase 2_Seletividade
+MOL_01786,COC(=O)C1C(C#N)CCC1c1cnccc1OC,-7.027,-5.812,1.215,Fase 2_Seletividade
+MOL_01787,CCNC(=O)C1C(CC)CCC1c1cnccc1C(C)C,-7.027,-6.473,0.554,Fase 2_Seletividade
+MOL_01788,CCC1CCC(c2cnccc2OC)C1C(=O)O,-7.026,-5.649,1.377,Fase 2_Seletividade
+MOL_01789,COc1ccncc1C1CCC(C=O)C1C(=O)C1CCC1,-7.025,-5.883,1.142,Fase 2_Seletividade
+MOL_01790,CC(=O)C1C(C#N)CCC1c1cnccc1C1CC1,-7.024,-6.287,0.737,Fase 2_Seletividade
+MOL_01791,Cc1ccncc1C1CCC(N)C1C(=O)O,-7.023,-5.958,1.065,Fase 2_Seletividade
+MOL_01792,COC1CCC(c2cnccc2C)C1C(C)=O,-7.022,-5.967,1.055,Fase 2_Seletividade
+MOL_01793,Cc1ccncc1C1CCC(N)C1C(=O)C=O,-7.022,-6.413,0.609,Fase 2_Seletividade
+MOL_01794,O=CC(=O)C1C(C=O)CCC1c1cnccc1I,-7.021,-5.609,1.412,Fase 2_Seletividade
+MOL_01795,CCOC(=O)C1C(CF)CCC1c1cnccc1OC,-7.02,-6.244,0.776,Fase 2_Seletividade
+MOL_01796,CC(C)c1ccncc1C1CCC(S)C1C(=O)C1CC1,-7.018,-5.845,1.173,Fase 2_Seletividade
+MOL_01797,COc1ccncc1C1CCC(N)C1C(=O)O,-7.017,-6.085,0.932,Fase 2_Seletividade
+MOL_01798,CCCC(=O)C1C(CF)CCC1c1cnccc1C,-7.016,-5.838,1.178,Fase 2_Seletividade
+MOL_01799,NC(=O)C1C(O)CCC1c1cnccc1Br,-7.016,-6.11,0.906,Fase 2_Seletividade
+MOL_01800,CCC1CCC(c2cnccc2I)C1C(=O)NC,-7.015,-6.31,0.705,Fase 2_Seletividade
+MOL_01801,CCC1CCC(c2cnccc2C)C1C(C)=O,-7.014,-5.799,1.215,Fase 2_Seletividade
+MOL_01802,CCNC(=O)C1C(N)CCC1c1cnccc1C(C)C,-7.014,-6.372,0.642,Fase 2_Seletividade
+MOL_01803,CCOC(=O)C1C(N)CCC1c1cnccc1Br,-7.013,-5.528,1.485,Fase 2_Seletividade
+MOL_01804,CC(C)C(=O)C1C(C#N)CCC1c1cnccc1C(F)F,-7.013,-6.236,0.777,Fase 2_Seletividade
+MOL_01805,O=CC(=O)C1C(O)CCC1c1cnccc1Br,-7.012,-5.805,1.207,Fase 2_Seletividade
+MOL_01806,CCNC(=O)C1C(C#N)CCC1c1cnccc1Br,-7.012,-6.626,0.386,Fase 2_Seletividade
+MOL_01807,COC1CCC(c2cnccc2C2CC2)C1C(=O)C(C)C,-7.01,-5.816,1.194,Fase 2_Seletividade
+MOL_01808,CC(=O)C1C(F)CCC1c1cnccc1Br,-7.01,-5.909,1.101,Fase 2_Seletividade
+MOL_01809,CCNC(=O)C1C(CF)CCC1c1cnccc1S,-7.01,-6.421,0.589,Fase 2_Seletividade
+MOL_01810,CCCC(=O)C1C(C)CCC1c1cnccc1Br,-7.009,-5.854,1.155,Fase 3_Super Elite
+MOL_01811,COC(=O)C1C(N)CCC1c1cnccc1OC,-7.008,-5.859,1.149,Fase 2_Seletividade
+MOL_01812,O=CC1CCC(c2cnccc2Br)C1C(=O)C(=O)O,-7.007,-6.036,0.971,Fase 2_Seletividade
+MOL_01813,O=CC(=O)C1C(C=O)CCC1c1cnccc1F,-7.006,-5.811,1.195,Fase 2_Seletividade
+MOL_01814,CCC(=O)C1C(OC)CCC1c1cnccc1CC,-7.005,-5.48,1.525,Fase 2_Seletividade
+MOL_01815,CCOC(=O)C1C(S)CCC1c1cnccc1CF,-7.005,-5.567,1.438,Fase 2_Seletividade
+MOL_01816,CCNC(=O)C1C(F)CCC1c1cnccc1Br,-7.005,-5.969,1.036,Fase 2_Seletividade
+MOL_01817,COc1ccncc1C1CCC(C=O)C1C(C)=O,-7.004,-5.527,1.477,Fase 2_Seletividade
+MOL_01818,CNC(=O)C1C(C=O)CCC1c1cnccc1S,-7.004,-5.835,1.169,Fase 2_Seletividade
+MOL_01819,CC(=O)C1C(C#N)CCC1c1cnccc1Br,-7.003,-6.056,0.947,Fase 2_Seletividade
+MOL_01820,COC1CCC(c2cnccc2S)C1C(N)=O,-7.002,-5.778,1.224,Fase 2_Seletividade
+MOL_01821,O=Cc1ccncc1C1CCC(S)C1C(=O)C(=O)O,-7.0,-6.029,0.971,Fase 2_Seletividade
+MOL_01822,COC(=O)C1C(O)CCC1c1cnccc1S,-6.998,-5.684,1.314,Fase 2_Seletividade
+MOL_01823,N#CC1CCC(c2cnccc2C(F)F)C1C(=O)C1CC1,-6.997,-6.163,0.834,Fase 2_Seletividade
+MOL_01824,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)CC1CCC1F,-6.995,-6.64,0.355,Fase 1_Lote Inicial
+MOL_01825,CCOC(=O)C1C(F)CCC1c1cnccc1O,-6.992,-5.575,1.417,Fase 2_Seletividade
+MOL_01826,COC(=O)C1C(O)CCC1c1cnccc1OC,-6.992,-5.779,1.213,Fase 2_Seletividade
+MOL_01827,CC(C)C(=O)C1C(N)CCC1c1cnccc1Br,-6.991,-6.199,0.792,Fase 2_Seletividade
+MOL_01828,CCc1ccncc1C1CCC(S)C1C(=O)C=O,-6.99,-5.522,1.468,Fase 2_Seletividade
+MOL_01829,CCc1ccncc1C1CCC(C=O)C1C(=O)C1CC1,-6.989,-5.626,1.363,Fase 2_Seletividade
+MOL_01830,CC(C)C(=O)C1C(CF)CCC1c1cnccc1S,-6.988,-5.905,1.083,Fase 2_Seletividade
+MOL_01831,CCC(=O)C1C(C=O)CCC1c1cnccc1OC,-6.987,-5.645,1.342,Fase 2_Seletividade
+MOL_01832,CCCC(=O)C1C(CF)CCC1c1cnccc1S,-6.986,-5.463,1.523,Fase 2_Seletividade
+MOL_01833,COC1CCC(c2cnccc2C(C)C)C1C(=O)C(N)=O,-6.986,-6.222,0.764,Fase 2_Seletividade
+MOL_01834,CCC1CCC(c2cnccc2O)C1C(=O)O,-6.986,-6.409,0.577,Fase 2_Seletividade
+MOL_01835,CCOC(=O)C1C(N)CCC1c1cnccc1C1CC1,-6.984,-6.028,0.956,Fase 2_Seletividade
+MOL_01836,NC(=O)C(=O)C1C(CF)CCC1c1cnccc1N,-6.984,-6.403,0.581,Fase 3_Super Elite
+MOL_01837,O=CC(=O)C1C(S)CCC1c1cnccc1CF,-6.982,-5.746,1.236,Fase 2_Seletividade
+MOL_01838,CCCC(=O)C1C(O)CCC1c1cnccc1S,-6.981,-6.148,0.833,Fase 2_Seletividade
+MOL_01839,CC(=O)C1C(F)CCC1c1cnccc1S,-6.98,-5.299,1.681,Fase 2_Seletividade
+MOL_01840,CCC(=O)C1C(C)CCC1c1cnccc1C=O,-6.979,-5.539,1.44,Fase 1_Lote Inicial
+MOL_01841,CCC1CCC(c2cnccc2S)C1C(=O)O,-6.977,-5.879,1.098,Fase 2_Seletividade
+MOL_01842,CCCC(=O)C1C(C)CCC1c1cnccc1C(=O)OC,-6.977,-5.951,1.026,Fase 1_Lote Inicial
+MOL_01843,CCCC(=O)C1C(S)CCC1c1cnccc1O,-6.977,-5.953,1.024,Fase 2_Seletividade
+MOL_01844,CCC1CCC(c2cnccc2I)C1C(=O)C(N)=O,-6.977,-6.13,0.847,Fase 2_Seletividade
+MOL_01845,CNC(=O)C1C(O)CCC1c1cnccc1OC,-6.976,-6.162,0.814,Fase 2_Seletividade
+MOL_01846,O=CC(=O)C1C(C=O)CCC1c1cnccc1Br,-6.973,-5.81,1.163,Fase 2_Seletividade
+MOL_01847,CCC1CCC(c2cnccc2CF)C1C(=O)C=O,-6.973,-5.829,1.144,Fase 2_Seletividade
+MOL_01848,CNC(=O)C1C(OC)CCC1c1cnccc1N,-6.973,-6.329,0.644,Fase 2_Seletividade
+MOL_01849,CC(=O)C1C(S)CCC1c1cnccc1F,-6.971,-5.524,1.447,Fase 2_Seletividade
+MOL_01850,CC(C)C(=O)C1C(N)CCC1c1cnccc1I,-6.971,-5.726,1.245,Fase 2_Seletividade
+MOL_01851,CCNC(=O)C1C(N)CCC1c1cnccc1I,-6.971,-6.139,0.832,Fase 2_Seletividade
+MOL_01852,O=CC(=O)C1C(CF)CCC1c1cnccc1I,-6.97,-5.672,1.298,Fase 2_Seletividade
+MOL_01853,O=C(C1CC1)C1C(CF)CCC1c1cnccc1C1CC1,-6.97,-5.903,1.067,Fase 3_Super Elite
+MOL_01854,CCNC(=O)C1C(CC)CCC1c1cnccc1I,-6.97,-6.052,0.918,Fase 2_Seletividade
+MOL_01855,CCCC(=O)C1C(S)CCC1c1cnccc1CC,-6.968,-4.994,1.974,Fase 2_Seletividade
+MOL_01856,COC(=O)C1C(S)CCC1c1cnccc1C,-6.968,-5.798,1.17,Fase 2_Seletividade
+MOL_01857,NC1CCC(c2cnccc2Br)C1C(=O)C1CCC1,-6.968,-6.128,0.84,Fase 2_Seletividade
+MOL_01858,O=C(O)C1C(O)CCC1c1cnccc1S,-6.965,-5.961,1.004,Fase 2_Seletividade
+MOL_01859,CC(=O)C1C(O)CCC1c1cnccc1F,-6.964,-6.127,0.837,Fase 2_Seletividade
+MOL_01860,COC(=O)C1C(S)CCC1c1cnccc1C#N,-6.963,-5.563,1.4,Fase 2_Seletividade
+MOL_01861,CCC1CCC(c2cnccc2C)C1C(=O)C=O,-6.959,-5.619,1.34,Fase 2_Seletividade
+MOL_01862,COC(=O)C1C(N)CCC1c1cnccc1O,-6.959,-5.681,1.278,Fase 2_Seletividade
+MOL_01863,CCC(=O)C1C(CC)CCC1c1cnccc1OC,-6.958,-5.563,1.395,Fase 2_Seletividade
+MOL_01864,CC(=O)C1C(N)CCC1c1cnccc1C=O,-6.956,-5.971,0.985,Fase 2_Seletividade
+MOL_01865,NC1CCC(c2cnccc2I)C1C(=O)O,-6.955,-5.979,0.976,Fase 2_Seletividade
+MOL_01866,COC1CCC(c2cnccc2C(C)C)C1C(C)=O,-6.955,-6.103,0.852,Fase 2_Seletividade
+MOL_01867,NC(=O)C1C(N)CCC1c1cnccc1S,-6.954,-5.783,1.171,Fase 2_Seletividade
+MOL_01868,COC(=O)C1C(C#N)CCC1c1cnccc1F,-6.953,-5.831,1.122,Fase 2_Seletividade
+MOL_01869,CNC(=O)C1C(S)CCC1c1cnccc1O,-6.953,-6.407,0.546,Fase 2_Seletividade
+MOL_01870,COC(=O)C1C(F)CCC1c1cnccc1O,-6.949,-5.624,1.325,Fase 2_Seletividade
+MOL_01871,CCC1CCC(c2cnccc2C)C1C(N)=O,-6.947,-5.958,0.989,Fase 2_Seletividade
+MOL_01872,O=C(O)C(=O)C1C(S)CCC1c1cnccc1Br,-6.947,-5.978,0.969,Fase 2_Seletividade
+MOL_01873,O=CC1CCC(c2cnccc2I)C1C(=O)C1CC1,-6.946,-5.792,1.154,Fase 2_Seletividade
+MOL_01874,CCc1ccncc1C1CCC(OC)C1C(=O)C(=O)O,-6.942,-5.893,1.049,Fase 2_Seletividade
+MOL_01875,CNC(=O)C1C(S)CCC1c1cnccc1C(C)C,-6.941,-6.444,0.497,Fase 2_Seletividade
+MOL_01876,CCCC(=O)C1C(S)CCC1c1cnccc1F,-6.94,-5.332,1.608,Fase 2_Seletividade
+MOL_01877,NC(=O)C1C(C=O)CCC1c1cnccc1I,-6.939,-5.93,1.009,Fase 2_Seletividade
+MOL_01878,O=C(O)C(=O)C1C(S)CCC1c1cnccc1I,-6.939,-6.012,0.927,Fase 2_Seletividade
+MOL_01879,CCC1CCC(c2cnccc2C#N)C1C(=O)NC,-6.938,-5.803,1.135,Fase 2_Seletividade
+MOL_01880,CCOC(=O)C1C(F)CCC1c1cnccc1C#N,-6.937,-5.809,1.128,Fase 2_Seletividade
+MOL_01881,CCOC(=O)C1C(C#N)CCC1c1cnccc1CC,-6.935,-5.974,0.961,Fase 2_Seletividade
+MOL_01882,CCC1CCC(c2cnccc2CF)C1C(=O)C(=O)O,-6.935,-6.054,0.881,Fase 2_Seletividade
+MOL_01883,CCOC(=O)C1C(N)CCC1c1cnccc1C#N,-6.935,-6.151,0.784,Fase 2_Seletividade
+MOL_01884,COC(=O)C1C(C#N)CCC1c1cnccc1N,-6.934,-5.724,1.21,Fase 2_Seletividade
+MOL_01885,COC1CCC(c2cnccc2Br)C1C(=O)O,-6.934,-5.868,1.066,Fase 2_Seletividade
+MOL_01886,CC(C)c1ccncc1C1CCC(C=O)C1C(N)=O,-6.934,-6.379,0.555,Fase 2_Seletividade
+MOL_01887,CCCC(=O)C1C(N)CCC1c1cnccc1F,-6.931,-5.535,1.396,Fase 2_Seletividade
+MOL_01888,CC(=O)C1C(O)CCC1c1cnccc1O,-6.93,-6.311,0.619,Fase 2_Seletividade
+MOL_01889,COC1CCC(c2cnccc2F)C1C(C)=O,-6.929,-5.493,1.436,Fase 2_Seletividade
+MOL_01890,CCOC(=O)C1C(N)CCC1c1cnccc1F,-6.929,-5.703,1.226,Fase 2_Seletividade
+MOL_01891,CCC(=O)C1C(OC)CCC1c1cnccc1C(F)F,-6.928,-5.729,1.199,Fase 2_Seletividade
+MOL_01892,CC(=O)C1C(S)CCC1c1cnccc1C#N,-6.927,-5.655,1.272,Fase 2_Seletividade
+MOL_01893,COC(=O)C1C(C#N)CCC1c1cnccc1Br,-6.926,-5.897,1.029,Fase 2_Seletividade
+MOL_01894,CCCC(=O)C1C(O)CCC1c1cnccc1C=O,-6.925,-5.675,1.25,Fase 2_Seletividade
+MOL_01895,CCC1CCC(c2cnccc2F)C1C(=O)C=O,-6.924,-5.407,1.517,Fase 2_Seletividade
+MOL_01896,CCc1ccncc1C1CCC(CC)C1C(=O)NC,-6.924,-6.409,0.515,Fase 2_Seletividade
+MOL_01897,NC1CCC(c2cnccc2I)C1C(=O)C1CCC1,-6.923,-5.889,1.034,Fase 2_Seletividade
+MOL_01898,CCNC(=O)C1C(C)CCC1c1cnccc1I,-6.923,-6.273,0.65,Fase 2_Seletividade
+MOL_01899,NC(=O)C1C(C=O)CCC1c1cnccc1F,-6.923,-6.326,0.597,Fase 2_Seletividade
+MOL_01900,COC1CCC(c2cnccc2C(F)F)C1C(=O)C(C)C,-6.921,-5.933,0.988,Fase 2_Seletividade
+MOL_01901,NC(=O)C(=O)C1C(S)CCC1c1cnccc1CF,-6.918,-5.809,1.109,Fase 2_Seletividade
+MOL_01902,CCc1ccncc1C1CCC(C=O)C1C(=O)OC,-6.918,-5.91,1.008,Fase 2_Seletividade
+MOL_01903,CCCC(=O)C1C(CF)CCC1c1cnccc1C(F)F,-6.917,-5.463,1.454,Fase 3_Super Elite
+MOL_01904,CC(=O)C1C(N)CCC1c1cnccc1F,-6.916,-5.765,1.151,Fase 2_Seletividade
+MOL_01905,CCNC(=O)C1C(OC)CCC1c1cnccc1N,-6.916,-6.691,0.225,Fase 2_Seletividade
+MOL_01906,COC(=O)C1C(OC)CCC1c1cnccc1C(F)F,-6.914,-5.491,1.423,Fase 2_Seletividade
+MOL_01907,CCc1ccncc1C1CCC(CF)C1C(C)=O,-6.913,-5.839,1.074,Fase 2_Seletividade
+MOL_01908,CC(=O)C1C(CF)CCC1c1cnccc1N,-6.913,-5.857,1.056,Fase 2_Seletividade
+MOL_01909,CC(=O)C1C(C#N)CCC1c1cnccc1I,-6.912,-5.904,1.008,Fase 2_Seletividade
+MOL_01910,COc1ccncc1C1CCC(C=O)C1C(=O)C=O,-6.91,-5.756,1.154,Fase 2_Seletividade
+MOL_01911,CC(C)C(=O)C1C(O)CCC1c1cnccc1C#N,-6.91,-6.096,0.814,Fase 2_Seletividade
+MOL_01912,COc1ccncc1C1CCC(OC)C1C(C)=O,-6.908,-5.677,1.231,Fase 2_Seletividade
+MOL_01913,CCC1CCC(c2cnccc2Br)C1C(=O)C(N)=O,-6.908,-6.211,0.697,Fase 2_Seletividade
+MOL_01914,NC(=O)C1C(N)CCC1c1cnccc1CF,-6.904,-6.111,0.793,Fase 2_Seletividade
+MOL_01915,COC1CCC(c2cnccc2C2CC2)C1C(=O)C(=O)O,-6.904,-6.276,0.628,Fase 2_Seletividade
+MOL_01916,O=CC(=O)C1C(S)CCC1c1cnccc1F,-6.902,-5.307,1.595,Fase 2_Seletividade
+MOL_01917,CCNC(=O)C1C(S)CCC1c1cnccc1C#N,-6.902,-6.314,0.588,Fase 2_Seletividade
+MOL_01918,CCCC(=O)C1C(C#N)CCC1c1cnccc1S,-6.901,-5.602,1.299,Fase 2_Seletividade
+MOL_01919,COC1CCC(c2cnccc2N)C1C(=O)O,-6.9,-5.978,0.922,Fase 2_Seletividade
+MOL_01920,COC(=O)C1C(N)CCC1c1cnccc1C(C)C,-6.899,-5.722,1.177,Fase 2_Seletividade
+MOL_01921,CCC1CCC(c2cnccc2N)C1C(=O)C=O,-6.899,-5.831,1.068,Fase 2_Seletividade
+MOL_01922,COC1CCC(c2cnccc2O)C1C(=O)O,-6.899,-6.06,0.839,Fase 2_Seletividade
+MOL_01923,N#Cc1ccncc1C1CCC(S)C1C(=O)O,-6.898,-6.017,0.881,Fase 2_Seletividade
+MOL_01924,CCCC(=O)C1C(OC)CCC1c1cnccc1CC,-6.897,-5.19,1.707,Fase 2_Seletividade
+MOL_01925,COC(=O)C1C(O)CCC1c1cnccc1C(C)C,-6.897,-5.741,1.156,Fase 2_Seletividade
+MOL_01926,COC1CCC(c2cnccc2O)C1C(=O)C=O,-6.897,-6.027,0.87,Fase 2_Seletividade
+MOL_01927,CCc1ccncc1C1CCC(O)C1C(=O)C1CCC1,-6.894,-5.784,1.11,Fase 2_Seletividade
+MOL_01928,CCC1CCC(c2cnccc2OC)C1C(=O)C(C)C,-6.894,-5.837,1.057,Fase 2_Seletividade
+MOL_01929,CCNC(=O)C1C(S)CCC1c1cnccc1C(F)F,-6.893,-6.282,0.611,Fase 2_Seletividade
+MOL_01930,CCC(=O)C1C(S)CCC1c1cnccc1C(C)C,-6.892,-5.384,1.508,Fase 2_Seletividade
+MOL_01931,N#CC1CCC(c2cnccc2Br)C1C(N)=O,-6.891,-6.282,0.609,Fase 2_Seletividade
+MOL_01932,CCC(=O)C1C(N)CCC1c1cnccc1N,-6.89,-5.837,1.053,Fase 2_Seletividade
+MOL_01933,Cc1ccncc1C1CCC(CF)C1C(=O)C(N)=O,-6.89,-6.237,0.653,Fase 2_Seletividade
+MOL_01934,CCOC(=O)C1C(C=O)CCC1c1cnccc1N,-6.887,-5.898,0.989,Fase 2_Seletividade
+MOL_01935,CCCCC(=O)C1C(C)CCC1c1cnccc1C=NO,-6.886,-6.529,0.357,Fase 1_Lote Inicial
+MOL_01936,CCOC(=O)C1C(C#N)CCC1c1cnccc1N,-6.885,-6.089,0.796,Fase 2_Seletividade
+MOL_01937,O=CC(=O)C1C(C=O)CCC1c1cnccc1S,-6.884,-5.609,1.275,Fase 2_Seletividade
+MOL_01938,CCOC(=O)C1C(CF)CCC1c1cnccc1CC,-6.882,-5.613,1.269,Fase 2_Seletividade
+MOL_01939,CC1CCC(c2cnccc2C=O)C1C(=O)O,-6.882,-5.913,0.969,Fase 2_Seletividade
+MOL_01940,CCC1CCC(c2cnccc2O)C1C(=O)C(=O)O,-6.881,-6.311,0.57,Fase 2_Seletividade
+MOL_01941,Nc1ccncc1C1CCC(CF)C1C(=O)O,-6.877,-6.192,0.685,Fase 2_Seletividade
+MOL_01942,CCNC(=O)C1C(C=O)CCC1c1cnccc1S,-6.877,-6.353,0.524,Fase 2_Seletividade
+MOL_01943,CNC(=O)C1C(C)CCC1c1cnccc1C#N,-6.873,-6.38,0.493,Fase 2_Seletividade
+MOL_01944,N#Cc1ccncc1C1CCC(C#N)C1C(=O)C1CC1,-6.869,-6.145,0.724,Fase 2_Seletividade
+MOL_01945,COC1CCC(c2cnccc2CF)C1C(C)=O,-6.868,-5.774,1.094,Fase 2_Seletividade
+MOL_01946,CC(=O)C1C(O)CCC1c1cnccc1S,-6.868,-5.97,0.898,Fase 2_Seletividade
+MOL_01947,CC(=O)C1C(F)CCC1c1cnccc1I,-6.868,-6.009,0.859,Fase 2_Seletividade
+MOL_01948,CCNC(=O)C1C(C#N)CCC1c1cnccc1S,-6.868,-6.387,0.481,Fase 2_Seletividade
+MOL_01949,CCC1CCC(c2cnccc2N)C1C(=O)O,-6.863,-6.276,0.587,Fase 2_Seletividade
+MOL_01950,COC1CCC(c2cnccc2I)C1C(=O)C(N)=O,-6.861,-6.18,0.681,Fase 2_Seletividade
+MOL_01951,CCNC(=O)C1C(OC)CCC1c1cnccc1C,-6.861,-6.302,0.559,Fase 2_Seletividade
+MOL_01952,CCOC(=O)C1C(S)CCC1c1cnccc1I,-6.859,-5.493,1.366,Fase 2_Seletividade
+MOL_01953,CCCC(=O)C1C(CC)CCC1c1cnccc1C=NO,-6.857,-6.005,0.852,Fase 1_Lote Inicial
+MOL_01954,COC1CCC(c2cnccc2C2CC2)C1C(=O)O,-6.857,-6.021,0.836,Fase 2_Seletividade
+MOL_01955,CC(C)C(=O)C1C(S)CCC1c1cnccc1O,-6.855,-6.084,0.771,Fase 2_Seletividade
+MOL_01956,CCCC(=O)C1CCCC1(C)Cc1cnccc1C(=O)OC,-6.853,-5.614,1.239,Fase 1_Lote Inicial
+MOL_01957,NC(=O)C(=O)C1C(S)CCC1c1cnccc1Br,-6.853,-6.027,0.826,Fase 2_Seletividade
+MOL_01958,CCNC(=O)C1C(S)CCC1c1cnccc1CC,-6.85,-5.795,1.055,Fase 2_Seletividade
+MOL_01959,CCCC(=O)C1C(OC)CCC1c1cnccc1N=[N+]=[N-],-6.849,-5.684,1.165,Fase 1_Lote Inicial
+MOL_01960,CCc1ccncc1C1CCC(S)C1C(=O)NC,-6.848,-6.099,0.749,Fase 2_Seletividade
+MOL_01961,COC(=O)C1C(C#N)CCC1c1cnccc1C#N,-6.848,-6.111,0.737,Fase 2_Seletividade
+MOL_01962,CCNC(=O)C1C(S)CCC1c1cnccc1C1CC1,-6.848,-6.285,0.563,Fase 2_Seletividade
+MOL_01963,CC(=O)C1C(F)CCC1c1cnccc1N,-6.846,-5.82,1.026,Fase 2_Seletividade
+MOL_01964,COC(=O)C1C(N)CCC1c1cnccc1F,-6.846,-5.858,0.988,Fase 2_Seletividade
+MOL_01965,COC(=O)C1C(N)CCC1c1cnccc1S,-6.844,-5.548,1.296,Fase 2_Seletividade
+MOL_01966,CCC1CCC(c2cnccc2C(C)C)C1C(=O)C=O,-6.844,-5.823,1.021,Fase 2_Seletividade
+MOL_01967,CCOC(=O)C1C(O)CCC1c1cnccc1N,-6.844,-6.22,0.624,Fase 2_Seletividade
+MOL_01968,O=CC(=O)C1C(O)CCC1c1cnccc1I,-6.843,-5.822,1.021,Fase 2_Seletividade
+MOL_01969,CCNC(=O)C1C(OC)CCC1c1cnccc1C=O,-6.843,-6.411,0.432,Fase 2_Seletividade
+MOL_01970,CC(C)C(=O)C1C(O)CCC1c1cnccc1I,-6.842,-5.855,0.987,Fase 2_Seletividade
+MOL_01971,CNC(=O)C1C(S)CCC1c1cnccc1C#N,-6.84,-6.127,0.713,Fase 2_Seletividade
+MOL_01972,CCC1CCC(c2cnccc2C)C1C(=O)C(N)=O,-6.838,-6.04,0.798,Fase 2_Seletividade
+MOL_01973,CCOC(=O)C1C(O)CCC1c1cnccc1C(C)C,-6.835,-5.737,1.098,Fase 2_Seletividade
+MOL_01974,O=C(O)C1C(O)CCC1c1cnccc1CF,-6.834,-6.113,0.721,Fase 2_Seletividade
+MOL_01975,CCC1CCC(c2cnccc2S)C1C(=O)C=O,-6.832,-5.579,1.253,Fase 2_Seletividade
+MOL_01976,CCOC(=O)C1C(CC)CCC1c1cnccc1C,-6.832,-5.742,1.09,Fase 2_Seletividade
+MOL_01977,COC(=O)C1C(O)CCC1c1cnccc1F,-6.832,-5.813,1.019,Fase 3_Super Elite
+MOL_01978,CC(=O)C1C(CF)CCC1c1cnccc1C=O,-6.828,-5.856,0.972,Fase 2_Seletividade
+MOL_01979,CC1CCC(c2cnccc2C#N)C1C(=O)CC1CCC1F,-6.827,-6.903,-0.076,Fase 1_Lote Inicial
+MOL_01980,O=CC(=O)C1C(S)CCC1c1cnccc1O,-6.825,-5.872,0.953,Fase 2_Seletividade
+MOL_01981,CC(=O)C1C(N)CCC1c1cnccc1C(F)F,-6.825,-6.249,0.576,Fase 2_Seletividade
+MOL_01982,COC(=O)C1C(CF)CCC1c1cnccc1C=O,-6.822,-5.693,1.129,Fase 2_Seletividade
+MOL_01983,CCC1CCC(c2cnccc2C#N)C1C(=O)C1CC1,-6.82,-5.931,0.889,Fase 2_Seletividade
+MOL_01984,CCC(=O)C1C(C#N)CCC1c1cnccc1C#N,-6.82,-6.021,0.799,Fase 2_Seletividade
+MOL_01985,CNC(=O)C1C(OC)CCC1c1cnccc1C#N,-6.82,-6.606,0.214,Fase 2_Seletividade
+MOL_01986,O=CC(=O)C1C(CF)CCC1c1cnccc1C(F)F,-6.819,-5.895,0.924,Fase 2_Seletividade
+MOL_01987,COC(=O)C1C(S)CCC1c1cnccc1N,-6.818,-5.795,1.023,Fase 2_Seletividade
+MOL_01988,NC1CCC(c2cnccc2C=O)C1C(=O)C1CC1,-6.817,-5.977,0.84,Fase 2_Seletividade
+MOL_01989,CCNC(=O)C1C(CC)CCC1c1cnccc1CF,-6.816,-6.004,0.812,Fase 2_Seletividade
+MOL_01990,N#CC1CCC(c2cnccc2C=O)C1C(=O)C=O,-6.815,-5.8,1.015,Fase 2_Seletividade
+MOL_01991,N#CC1CCC(c2cnccc2I)C1C(N)=O,-6.815,-6.167,0.648,Fase 2_Seletividade
+MOL_01992,NC(=O)C1C(C=O)CCC1c1cnccc1Br,-6.814,-6.353,0.461,Fase 2_Seletividade
+MOL_01993,CCC(=O)C1C(OC)CCC1c1cnccc1F,-6.813,-5.419,1.394,Fase 2_Seletividade
+MOL_01994,CCC(=O)C1C(S)CCC1c1cnccc1I,-6.81,-5.259,1.551,Fase 2_Seletividade
+MOL_01995,CCOC(=O)C1C(S)CCC1c1cnccc1Br,-6.808,-5.481,1.327,Fase 2_Seletividade
+MOL_01996,COC1CCC(c2cnccc2C2CC2)C1C(=O)C1CCC1,-6.808,-6.374,0.434,Fase 2_Seletividade
+MOL_01997,CCNC(=O)C1C(C)CCC1c1cnccc1OC,-6.808,-6.773,0.035,Fase 2_Seletividade
+MOL_01998,N#CC1CCC(c2cnccc2F)C1C(N)=O,-6.805,-6.398,0.407,Fase 2_Seletividade
+MOL_01999,CNC(=O)C1C(C=O)CCC1c1cnccc1O,-6.804,-6.298,0.506,Fase 2_Seletividade
+MOL_02000,CCOC(=O)C1C(N)CCC1c1cnccc1S,-6.803,-5.619,1.184,Fase 2_Seletividade
+MOL_02001,CCCC(=O)C1C(S)CCC1c1cnccc1OC,-6.802,-5.44,1.362,Fase 2_Seletividade
+MOL_02002,NC(=O)C1C(C=O)CCC1c1cnccc1C1CC1,-6.802,-6.498,0.304,Fase 2_Seletividade
+MOL_02003,COC(=O)C1C(C=O)CCC1c1cnccc1S,-6.801,-5.541,1.26,Fase 2_Seletividade
+MOL_02004,NC(=O)C1C(S)CCC1c1cnccc1C=O,-6.801,-5.603,1.198,Fase 2_Seletividade
+MOL_02005,CNC(=O)C1C(OC)CCC1c1cnccc1S,-6.798,-5.585,1.213,Fase 2_Seletividade
+MOL_02006,COC(=O)C1C(CF)CCC1c1cnccc1I,-6.798,-5.736,1.062,Fase 3_Super Elite
+MOL_02007,COC1CCC(c2cnccc2C(C)C)C1C(=O)C=O,-6.798,-5.783,1.015,Fase 2_Seletividade
+MOL_02008,Cc1ccncc1C1CCC(F)C1C(=O)O,-6.798,-5.877,0.921,Fase 2_Seletividade
+MOL_02009,CC(=O)C1C(CF)CCC1c1cnccc1I,-6.796,-5.646,1.15,Fase 2_Seletividade
+MOL_02010,CCCC(=O)C1C(CF)CCC1c1cnccc1I,-6.793,-5.921,0.872,Fase 3_Super Elite
+MOL_02011,CCOC(=O)C1C(S)CCC1c1cnccc1C,-6.79,-5.07,1.72,Fase 2_Seletividade
+MOL_02012,NC(=O)C(=O)C1C(S)CCC1c1cnccc1C1CC1,-6.789,-5.889,0.9,Fase 2_Seletividade
+MOL_02013,N#CC1CCC(c2cnccc2N)C1C(=O)C1CC1,-6.789,-6.434,0.355,Fase 2_Seletividade
+MOL_02014,O=CC(=O)C1C(C=O)CCC1c1cnccc1C1CC1,-6.788,-5.841,0.947,Fase 2_Seletividade
+MOL_02015,CCC1CCC(c2cnccc2I)C1C(=O)O,-6.787,-5.852,0.935,Fase 2_Seletividade
+MOL_02016,CCC(=O)C1C(S)CCC1c1cnccc1F,-6.786,-5.599,1.187,Fase 2_Seletividade
+MOL_02017,COC(=O)C1C(C#N)CCC1c1cnccc1S,-6.781,-5.697,1.084,Fase 2_Seletividade
+MOL_02018,NC1CCC(c2cnccc2S)C1C(=O)C1CCC1,-6.781,-6.036,0.745,Fase 2_Seletividade
+MOL_02019,CCNC(=O)C1C(C=O)CCC1c1cnccc1CC,-6.781,-6.207,0.574,Fase 2_Seletividade
+MOL_02020,COC(=O)C1C(C=O)CCC1c1cnccc1N,-6.78,-5.957,0.823,Fase 2_Seletividade
+MOL_02021,CC(=O)C1C(C#N)CCC1c1cnccc1C(C)C,-6.779,-6.128,0.651,Fase 2_Seletividade
+MOL_02022,CC1CCC(c2cnccc2C2CC2)C1C(=O)C(C)(C)C,-6.779,-6.799,-0.02,Fase 1_Lote Inicial
+MOL_02023,CCOC(=O)C1C(C=O)CCC1c1cnccc1CF,-6.778,-5.399,1.379,Fase 2_Seletividade
+MOL_02024,COc1ccncc1C1CCC(C#N)C1C(N)=O,-6.777,-6.16,0.617,Fase 2_Seletividade
+MOL_02025,CCNC(=O)C1C(O)CCC1c1cnccc1CC,-6.775,-5.967,0.808,Fase 2_Seletividade
+MOL_02026,CCNC(=O)C1C(C=O)CCC1c1cnccc1Br,-6.774,-6.165,0.609,Fase 2_Seletividade
+MOL_02027,N#Cc1ccncc1C1CCC(CF)C1C(=O)C=O,-6.772,-6.037,0.735,Fase 2_Seletividade
+MOL_02028,CCOC(=O)C1C(CF)CCC1c1cnccc1C,-6.77,-5.386,1.384,Fase 2_Seletividade
+MOL_02029,CCCC(=O)C1CCCC1(C)Cc1cnccc1C(F)F,-6.769,-5.76,1.009,Fase 1_Lote Inicial
+MOL_02030,Nc1ccncc1C1CCC(F)C1C(=O)C=O,-6.768,-5.813,0.955,Fase 2_Seletividade
+MOL_02031,CNC(=O)C1C(N)CCC1c1cnccc1S,-6.767,-6.183,0.584,Fase 2_Seletividade
+MOL_02032,CNC(=O)C1C(OC)CCC1c1cnccc1C(C)C,-6.764,-6.178,0.586,Fase 2_Seletividade
+MOL_02033,CNC(=O)C1C(N)CCC1c1cnccc1Br,-6.757,-6.253,0.504,Fase 2_Seletividade
+MOL_02034,CCc1ccncc1C1CCC(CC)C1C(=O)C=O,-6.756,-5.872,0.884,Fase 2_Seletividade
+MOL_02035,CC(C)C(=O)C1C(S)CCC1c1cnccc1C#N,-6.755,-5.545,1.21,Fase 2_Seletividade
+MOL_02036,CCc1ccncc1C1CCC(CC)C1C(=O)OC,-6.755,-5.69,1.065,Fase 2_Seletividade
+MOL_02037,COC1CCC(c2cnccc2C(F)F)C1C(=O)C1CC1,-6.754,-6.038,0.716,Fase 2_Seletividade
+MOL_02038,CNC(=O)C1C(F)CCC1c1cnccc1O,-6.753,-6.389,0.364,Fase 2_Seletividade
+MOL_02039,O=CC(=O)C1C(O)CCC1c1cnccc1C(F)F,-6.751,-5.896,0.855,Fase 2_Seletividade
+MOL_02040,O=C(O)C1C(S)CCC1c1cnccc1S,-6.749,-5.568,1.181,Fase 2_Seletividade
+MOL_02041,CCC(=O)C1C(S)CCC1c1cnccc1S,-6.748,-5.304,1.444,Fase 2_Seletividade
+MOL_02042,CC(C)c1ccncc1C1CCC(C=O)C1C(=O)O,-6.748,-6.235,0.513,Fase 2_Seletividade
+MOL_02043,CCCC(=O)C1C(CC)CCC1c1cnccc1OC,-6.747,-5.864,0.883,Fase 2_Seletividade
+MOL_02044,COC1CCC(c2cnccc2O)C1C(C)=O,-6.746,-5.886,0.86,Fase 2_Seletividade
+MOL_02045,CC(C)C(=O)C1C(CF)CCC1c1cnccc1Br,-6.744,-5.723,1.021,Fase 3_Super Elite
+MOL_02046,CNC(=O)C1C(OC)CCC1c1cnccc1C1CC1,-6.744,-6.609,0.135,Fase 2_Seletividade
+MOL_02047,COC1CCC(c2cnccc2C)C1C(=O)O,-6.743,-5.977,0.766,Fase 2_Seletividade
+MOL_02048,CCCC(=O)C1C(OC)CCC1c1cnccc1OC,-6.741,-5.23,1.511,Fase 2_Seletividade
+MOL_02049,CCC(=O)C1C(S)CCC1c1cnccc1Br,-6.741,-5.32,1.421,Fase 2_Seletividade
+MOL_02050,COC(=O)C1C(CF)CCC1c1cnccc1S,-6.74,-5.707,1.033,Fase 2_Seletividade
+MOL_02051,CCC1CCC(c2cnccc2I)C1C(=O)OC,-6.738,-5.605,1.133,Fase 2_Seletividade
+MOL_02052,NC(=O)C1C(S)CCC1c1cnccc1CF,-6.736,-6.105,0.631,Fase 2_Seletividade
+MOL_02053,CCc1ccncc1C1CCC(CF)C1C(=O)C(C)C,-6.731,-5.627,1.104,Fase 2_Seletividade
+MOL_02054,COC(=O)C1C(OC)CCC1c1cnccc1C=O,-6.729,-5.91,0.819,Fase 2_Seletividade
+MOL_02055,O=CC(=O)C1C(S)CCC1c1cnccc1C(F)F,-6.728,-5.652,1.076,Fase 2_Seletividade
+MOL_02056,NC(=O)C1C(O)CCC1c1cnccc1S,-6.728,-5.913,0.815,Fase 2_Seletividade
+MOL_02057,CCNC(=O)C1C(S)CCC1c1cnccc1C,-6.727,-5.743,0.984,Fase 2_Seletividade
+MOL_02058,CC(C)C(=O)C1C(O)CCC1c1cnccc1S,-6.727,-5.877,0.85,Fase 2_Seletividade
+MOL_02059,CCOC(=O)C1C(S)CCC1c1cnccc1O,-6.727,-6.0,0.727,Fase 2_Seletividade
+MOL_02060,CCNC(=O)C1C(OC)CCC1c1cnccc1O,-6.725,-6.313,0.412,Fase 2_Seletividade
+MOL_02061,CCC(=O)C1C(CC)CCC1c1cnccc1C=O,-6.722,-5.852,0.87,Fase 2_Seletividade
+MOL_02062,CC(=O)C1C(S)CCC1c1cnccc1CF,-6.72,-5.735,0.985,Fase 2_Seletividade
+MOL_02063,O=CC1CCC(c2cnccc2O)C1C(=O)C1CC1,-6.719,-5.994,0.725,Fase 2_Seletividade
+MOL_02064,O=CC(=O)C1C(S)CCC1c1cnccc1C=O,-6.718,-5.182,1.536,Fase 2_Seletividade
+MOL_02065,O=CC1CCC(c2cnccc2I)C1C(=O)C(=O)O,-6.717,-6.077,0.64,Fase 2_Seletividade
+MOL_02066,O=C(O)C(=O)C1C(S)CCC1c1cnccc1O,-6.714,-6.335,0.379,Fase 2_Seletividade
+MOL_02067,CC(=O)C1C(S)CCC1c1cnccc1C=O,-6.713,-6.012,0.701,Fase 2_Seletividade
+MOL_02068,CNC(=O)C1C(C#N)CCC1c1cnccc1C=O,-6.712,-6.433,0.279,Fase 2_Seletividade
+MOL_02069,COC(=O)C1C(C=O)CCC1c1cnccc1OC,-6.711,-5.457,1.254,Fase 2_Seletividade
+MOL_02070,CCCC(=O)C1C(N)CCC1c1cnccc1I,-6.711,-5.458,1.253,Fase 2_Seletividade
+MOL_02071,CCOC(=O)C1C(CC)CCC1c1cnccc1CF,-6.709,-5.734,0.975,Fase 2_Seletividade
+MOL_02072,CCOC(=O)C1C(C#N)CCC1c1cnccc1O,-6.708,-5.943,0.765,Fase 2_Seletividade
+MOL_02073,CCC(=O)C1C(CC)CCC1c1cnccc1F,-6.707,-5.989,0.718,Fase 2_Seletividade
+MOL_02074,CCCC(=O)C1C(S)CCC1c1cnccc1S,-6.705,-5.376,1.329,Fase 2_Seletividade
+MOL_02075,COC1CCC(c2cnccc2C=O)C1C(=O)C1CC1,-6.705,-5.962,0.743,Fase 2_Seletividade
+MOL_02076,CNC(=O)C1C(C#N)CCC1c1cnccc1S,-6.705,-6.446,0.259,Fase 2_Seletividade
+MOL_02077,CCNC(=O)C1C(C=O)CCC1c1cnccc1C=O,-6.703,-6.409,0.294,Fase 2_Seletividade
+MOL_02078,O=C(O)C1C(F)CCC1c1cnccc1S,-6.702,-5.549,1.153,Fase 2_Seletividade
+MOL_02079,CCCC(=O)C1C(F)CCC1c1cnccc1C(=O)OC,-6.701,-5.508,1.193,Fase 1_Lote Inicial
+MOL_02080,CNC(=O)C1C(S)CCC1c1cnccc1C1CC1,-6.7,-6.403,0.297,Fase 2_Seletividade
+MOL_02081,CCC1CCC(c2cnccc2C(F)F)C1C(=O)C(N)=O,-6.697,-6.693,0.004,Fase 2_Seletividade
+MOL_02082,CCCC(=O)C1C(C=O)CCC1c1cnccc1S,-6.693,-5.38,1.313,Fase 2_Seletividade
+MOL_02083,COC(=O)C1C(OC)CCC1c1cnccc1C#N,-6.693,-5.808,0.885,Fase 2_Seletividade
+MOL_02084,CCc1ccncc1C1CCC(CF)C1C(=O)C1CC1,-6.692,-5.667,1.025,Fase 2_Seletividade
+MOL_02085,CC(=O)C1C(S)CCC1c1cnccc1C,-6.692,-5.715,0.977,Fase 2_Seletividade
+MOL_02086,Cc1ccncc1C1CCC(C)C1C(=O)O,-6.69,-5.964,0.726,Fase 2_Seletividade
+MOL_02087,COC(=O)C1C(O)CCC1c1cnccc1C,-6.689,-6.059,0.63,Fase 2_Seletividade
+MOL_02088,COC(=O)C1C(S)CCC1c1cnccc1Br,-6.684,-5.379,1.305,Fase 2_Seletividade
+MOL_02089,C=Cc1ccncc1C1CCC(C)C1C(=O)C(C)(C)C,-6.684,-6.128,0.556,Fase 1_Lote Inicial
+MOL_02090,COC1CCC(c2cnccc2S)C1C(=O)C(=O)O,-6.683,-5.81,0.873,Fase 2_Seletividade
+MOL_02091,COC1CCC(c2cnccc2C)C1C(N)=O,-6.682,-5.925,0.757,Fase 2_Seletividade
+MOL_02092,CCNC(=O)C1C(OC)CCC1c1cnccc1C#N,-6.681,-6.156,0.525,Fase 2_Seletividade
+MOL_02093,CC(=O)C1C(CF)CCC1c1cnccc1C#N,-6.68,-5.724,0.956,Fase 2_Seletividade
+MOL_02094,CCCC(=O)C1C(C=O)CCC1c1cnccc1C(F)F,-6.68,-5.837,0.843,Fase 2_Seletividade
+MOL_02095,CCCC(=O)C1C(OC)CCC1c1cnccc1F,-6.678,-5.395,1.283,Fase 2_Seletividade
+MOL_02096,CCC(=O)C1C(N)CCC1c1cnccc1C1CC1,-6.677,-5.734,0.943,Fase 2_Seletividade
+MOL_02097,O=C(O)C1C(S)CCC1c1cnccc1I,-6.676,-5.771,0.905,Fase 2_Seletividade
+MOL_02098,COC(=O)C1C(O)CCC1c1cnccc1I,-6.674,-5.821,0.853,Fase 2_Seletividade
+MOL_02099,Cc1ccncc1C1CCC(O)C1C(=O)O,-6.673,-5.931,0.742,Fase 2_Seletividade
+MOL_02100,CCC1CCC(c2cnccc2I)C1C(N)=O,-6.672,-5.879,0.793,Fase 2_Seletividade
+MOL_02101,COC(=O)C1C(N)CCC1c1cnccc1C1CC1,-6.668,-5.867,0.801,Fase 2_Seletividade
+MOL_02102,CCCC(=O)C1C(C=O)CCC1c1cnccc1OC,-6.664,-5.681,0.983,Fase 2_Seletividade
+MOL_02103,CCC1CCC(c2cnccc2C=O)C1C(=O)C(C)C,-6.664,-5.765,0.899,Fase 2_Seletividade
+MOL_02104,O=C(O)C(=O)C1C(S)CCC1c1cnccc1C(F)F,-6.664,-5.863,0.801,Fase 2_Seletividade
+MOL_02105,CCCC(=O)C1C(C#N)CCC1c1cnccc1F,-6.663,-5.756,0.907,Fase 2_Seletividade
+MOL_02106,O=Cc1ccncc1C1CCC(O)C1C(=O)C1CC1,-6.663,-5.984,0.679,Fase 2_Seletividade
+MOL_02107,CCC(=O)C1C(C=O)CCC1c1cnccc1I,-6.661,-5.638,1.023,Fase 2_Seletividade
+MOL_02108,CCC1CCC(c2cnccc2C2CC2)C1C(=O)NC,-6.66,-6.388,0.272,Fase 2_Seletividade
+MOL_02109,CC(=O)C1C(S)CCC1c1cnccc1C1CC1,-6.659,-5.242,1.417,Fase 2_Seletividade
+MOL_02110,CC(=O)C1C(CF)CCC1c1cnccc1S,-6.659,-5.53,1.129,Fase 2_Seletividade
+MOL_02111,CC(=O)C1C(S)CCC1c1cnccc1O,-6.658,-5.933,0.725,Fase 2_Seletividade
+MOL_02112,CCCC(=O)C1C(N)CCC1c1cnccc1CC,-6.654,-5.639,1.015,Fase 2_Seletividade
+MOL_02113,O=CC(=O)C1C(O)CCC1c1cnccc1S,-6.653,-5.62,1.033,Fase 2_Seletividade
+MOL_02114,COC1CCC(c2cnccc2CF)C1C(=O)C=O,-6.647,-5.534,1.113,Fase 2_Seletividade
+MOL_02115,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)C(C)(C)C,-6.647,-6.194,0.453,Fase 1_Lote Inicial
+MOL_02116,CCCC(=O)C1C(S)CCC1c1cnccc1C,-6.646,-4.921,1.725,Fase 2_Seletividade
+MOL_02117,COC(=O)C1C(O)CCC1c1cnccc1O,-6.645,-5.905,0.74,Fase 2_Seletividade
+MOL_02118,O=C(C1CC1)C1C(CF)CCC1c1cnccc1S,-6.644,-5.418,1.226,Fase 2_Seletividade
+MOL_02119,COC(=O)C1C(N)CCC1c1cnccc1I,-6.643,-5.595,1.048,Fase 2_Seletividade
+MOL_02120,COc1ccncc1C1CCC(C=O)C1C(=O)O,-6.636,-5.936,0.7,Fase 2_Seletividade
+MOL_02121,COC1CCC(c2cnccc2O)C1C(N)=O,-6.631,-6.023,0.608,Fase 2_Seletividade
+MOL_02122,CCC1CCC(c2cnccc2C2CC2)C1C(=O)OC,-6.63,-6.06,0.57,Fase 2_Seletividade
+MOL_02123,CCC(=O)C1C(OC)CCC1c1cnccc1C,-6.629,-5.442,1.187,Fase 2_Seletividade
+MOL_02124,C=Cc1ccncc1C1CCC(C)C1C(=O)CC(C)C,-6.627,-5.371,1.256,Fase 1_Lote Inicial
+MOL_02125,CCOC(=O)C1C(C#N)CCC1c1cnccc1CF,-6.626,-5.589,1.037,Fase 2_Seletividade
+MOL_02126,CCNC(=O)C1C(C=O)CCC1c1cnccc1N,-6.622,-6.339,0.283,Fase 2_Seletividade
+MOL_02127,CCC(=O)C1C(CC)CCC1c1cnccc1S,-6.619,-5.62,0.999,Fase 2_Seletividade
+MOL_02128,CCCC(=O)C1C(S)CCC1c1cnccc1C#N,-6.617,-5.722,0.895,Fase 2_Seletividade
+MOL_02129,O=C(O)C1C(S)CCC1c1cnccc1C(F)F,-6.617,-5.81,0.807,Fase 2_Seletividade
+MOL_02130,CCCC(=O)C1C(C)CCC1c1c(C#N)ccnc1C,-6.613,-5.839,0.774,Fase 4_Mutantes Geração 2
+MOL_02131,CCc1ccncc1C1CCC(C#N)C1C(=O)O,-6.612,-5.785,0.827,Fase 2_Seletividade
+MOL_02132,CCNC(=O)C1C(N)CCC1c1cnccc1CC,-6.61,-5.993,0.617,Fase 2_Seletividade
+MOL_02133,CC(C)c1ccncc1C1CCC(S)C1C(=O)C(N)=O,-6.604,-6.609,-0.005,Fase 2_Seletividade
+MOL_02134,Nc1ccncc1C1CCC(S)C1C(=O)O,-6.603,-5.842,0.761,Fase 2_Seletividade
+MOL_02135,CCC1CCC(c2cnccc2C(C)C)C1C(=O)OC,-6.601,-5.838,0.763,Fase 2_Seletividade
+MOL_02136,CC1CCC(c2cnccc2C=O)C1C(=O)C(C)(C)C,-6.601,-6.346,0.255,Fase 1_Lote Inicial
+MOL_02137,CCC1CCC(c2cnccc2C=O)C1C(=O)NC,-6.6,-6.108,0.492,Fase 2_Seletividade
+MOL_02138,CCC1CCC(c2cnccc2F)C1C(=O)C(=O)O,-6.599,-6.292,0.307,Fase 2_Seletividade
+MOL_02139,CNC(=O)C1C(S)CCC1c1cnccc1CF,-6.597,-5.667,0.93,Fase 2_Seletividade
+MOL_02140,CCNC(=O)C1C(OC)CCC1c1cnccc1C1CC1,-6.597,-6.48,0.117,Fase 2_Seletividade
+MOL_02141,O=CC(=O)C1C(O)CCC1c1cnccc1C1CC1,-6.595,-5.588,1.007,Fase 2_Seletividade
+MOL_02142,CC(C)C(=O)C1C(S)CCC1c1cnccc1N,-6.595,-5.996,0.599,Fase 2_Seletividade
+MOL_02143,CNC(=O)C1C(O)CCC1c1cnccc1CF,-6.593,-6.204,0.389,Fase 2_Seletividade
+MOL_02144,CCCC(=O)C1C(S)CCC1c1cnccc1CF,-6.588,-5.768,0.82,Fase 2_Seletividade
+MOL_02145,COc1ccncc1C1CCC(S)C1C(=O)C(=O)O,-6.586,-5.946,0.64,Fase 2_Seletividade
+MOL_02146,CCC1CCC(c2cnccc2O)C1C(C)=O,-6.585,-5.751,0.834,Fase 2_Seletividade
+MOL_02147,CNC(=O)C1C(OC)CCC1c1cnccc1C=O,-6.585,-5.754,0.831,Fase 2_Seletividade
+MOL_02148,CC1CCC(c2cnccc2NC#N)C1C(=O)C(C)(C)C,-6.582,-6.479,0.103,Fase 1_Lote Inicial
+MOL_02149,CCCC(=O)C1C(C=O)CCC1c1cnccc1C#N,-6.58,-5.459,1.121,Fase 2_Seletividade
+MOL_02150,NC1CCC(c2cnccc2C2CC2)C1C(=O)C1CC1,-6.573,-6.142,0.431,Fase 2_Seletividade
+MOL_02151,CCCC(=O)C1C(C=O)CCC1c1cnccc1C,-6.571,-5.297,1.274,Fase 2_Seletividade
+MOL_02152,CNC(=O)C1C(S)CCC1c1cnccc1OC,-6.571,-5.996,0.575,Fase 2_Seletividade
+MOL_02153,CCCC(=O)C1C(CC)CCC1c1cnccc1CF,-6.569,-5.984,0.585,Fase 1_Lote Inicial
+MOL_02154,CCCC(=O)C1C(OC)CCC1c1cnccc1C(=O)OC,-6.568,-5.489,1.079,Fase 1_Lote Inicial
+MOL_02155,CCNC(=O)C1C(C=O)CCC1c1cnccc1I,-6.567,-6.305,0.262,Fase 2_Seletividade
+MOL_02156,CCC1CCC(c2cnccc2C=O)C1C(=O)OC,-6.563,-5.575,0.988,Fase 2_Seletividade
+MOL_02157,CCCC(=O)C1C(CC)CCC1c1cnccc1C(=O)OC,-6.563,-6.328,0.235,Fase 1_Lote Inicial
+MOL_02158,CCc1ccncc1C1CCC(S)C1C(=O)C(C)C,-6.562,-5.455,1.107,Fase 2_Seletividade
+MOL_02159,COC1CCC(c2cnccc2CF)C1C(N)=O,-6.562,-6.056,0.506,Fase 2_Seletividade
+MOL_02160,CCOC(=O)C1C(S)CCC1c1cnccc1C#N,-6.561,-5.428,1.133,Fase 2_Seletividade
+MOL_02161,CCOC(=O)C1C(C)CCC1c1cnccc1S,-6.56,-4.984,1.576,Fase 2_Seletividade
+MOL_02162,O=C(O)C1C(S)CCC1c1cnccc1CF,-6.56,-5.787,0.773,Fase 2_Seletividade
+MOL_02163,COC1CCC(c2cnccc2Br)C1C(C)=O,-6.553,-5.708,0.845,Fase 2_Seletividade
+MOL_02164,CC(=O)C1C(S)CCC1c1cnccc1Br,-6.552,-5.556,0.996,Fase 2_Seletividade
+MOL_02165,COC1CCC(c2cnccc2C)C1C(=O)C=O,-6.55,-5.566,0.984,Fase 2_Seletividade
+MOL_02166,CCOC(=O)C1C(S)CCC1c1cnccc1F,-6.545,-5.864,0.681,Fase 2_Seletividade
+MOL_02167,O=Cc1ccncc1C1CCC(S)C1C(=O)O,-6.544,-5.509,1.035,Fase 2_Seletividade
+MOL_02168,CCNC(=O)C1C(F)CCC1c1cnccc1I,-6.544,-5.931,0.613,Fase 2_Seletividade
+MOL_02169,CCC(=O)C1C(S)CCC1c1cnccc1CF,-6.541,-5.131,1.41,Fase 2_Seletividade
+MOL_02170,CCCC(=O)C1C(C=O)CCC1c1cnccc1C(C)C,-6.541,-5.496,1.045,Fase 2_Seletividade
+MOL_02171,COC(=O)C1C(OC)CCC1c1cnccc1F,-6.538,-5.955,0.583,Fase 2_Seletividade
+MOL_02172,CCCC(=O)C1C(CC)CCC1c1cnccc1C=O,-6.536,-5.221,1.315,Fase 1_Lote Inicial
+MOL_02173,COc1ccncc1C1CCC(S)C1C(=O)C1CC1,-6.536,-5.748,0.788,Fase 2_Seletividade
+MOL_02174,CNC(=O)C1C(OC)CCC1c1cnccc1OC,-6.534,-5.989,0.545,Fase 2_Seletividade
+MOL_02175,CCOC(=O)C1C(S)CCC1c1cnccc1S,-6.531,-5.185,1.346,Fase 2_Seletividade
+MOL_02176,CCCC(=O)C1C(CF)CCC1c1cnccc1C1CC1,-6.529,-5.668,0.861,Fase 3_Super Elite
+MOL_02177,CC(=O)C1C(C)CCC1c1cnccc1F,-6.527,-5.707,0.82,Fase 2_Seletividade
+MOL_02178,CCC1CCC(c2cnccc2C)C1C(=O)NC,-6.525,-6.183,0.342,Fase 2_Seletividade
+MOL_02179,CCc1ccncc1C1CCC(OC)C1C(=O)OC,-6.523,-5.615,0.908,Fase 2_Seletividade
+MOL_02180,CCOC(=O)C1C(CF)CCC1c1cnccc1N,-6.523,-5.735,0.788,Fase 2_Seletividade
+MOL_02181,CCNC(=O)C1C(S)CCC1c1cnccc1Br,-6.522,-5.972,0.55,Fase 2_Seletividade
+MOL_02182,COC(=O)C1C(OC)CCC1c1cnccc1OC,-6.521,-5.886,0.635,Fase 2_Seletividade
+MOL_02183,N#CC1CCC(c2cnccc2CF)C1C(=O)C1CCC1,-6.52,-6.531,-0.011,Fase 2_Seletividade
+MOL_02184,CCC1CCC(c2cnccc2Br)C1C(C)=O,-6.517,-5.65,0.867,Fase 2_Seletividade
+MOL_02185,O=CC1CCC(c2cnccc2C(F)F)C1C(=O)O,-6.517,-5.753,0.764,Fase 2_Seletividade
+MOL_02186,CCC(=O)C1C(OC)CCC1c1cnccc1I,-6.517,-5.904,0.613,Fase 2_Seletividade
+MOL_02187,NC(=O)C(=O)C1C(S)CCC1c1cnccc1S,-6.516,-5.54,0.976,Fase 2_Seletividade
+MOL_02188,CCNC(=O)C1C(C)CCC1c1cnccc1C(C)C,-6.513,-6.658,-0.145,Fase 2_Seletividade
+MOL_02189,CCOC(=O)C1C(OC)CCC1c1cnccc1CF,-6.495,-5.729,0.766,Fase 2_Seletividade
+MOL_02190,CCC1CCC(c2cnccc2I)C1C(C)=O,-6.495,-5.774,0.721,Fase 2_Seletividade
+MOL_02191,COC1CCC(c2cnccc2C)C1C(=O)C1CC1,-6.494,-5.743,0.751,Fase 2_Seletividade
+MOL_02192,O=Cc1ccncc1C1CCC(S)C1C(=O)C1CC1,-6.492,-5.562,0.93,Fase 2_Seletividade
+MOL_02193,N#CC1CCC(c2cnccc2CF)C1C(=O)O,-6.491,-5.797,0.694,Fase 2_Seletividade
+MOL_02194,O=CC(=O)C1C(S)CCC1c1cnccc1Br,-6.487,-5.44,1.047,Fase 2_Seletividade
+MOL_02195,CCNC(=O)C1C(OC)CCC1c1cnccc1OC,-6.487,-6.31,0.177,Fase 2_Seletividade
+MOL_02196,COc1ccncc1C1CCC(S)C1C(=O)C(N)=O,-6.48,-5.676,0.804,Fase 2_Seletividade
+MOL_02197,CCOC(=O)C1C(C#N)CCC1c1cnccc1C(C)C,-6.477,-5.661,0.816,Fase 2_Seletividade
+MOL_02198,CCCC(=O)C1C(N)CCC1c1cnccc1N,-6.477,-5.806,0.671,Fase 2_Seletividade
+MOL_02199,O=CC1CCC(c2cnccc2I)C1C(=O)C1CCC1,-6.476,-5.613,0.863,Fase 2_Seletividade
+MOL_02200,COC1CCC(c2cnccc2C=O)C1C(N)=O,-6.476,-5.667,0.809,Fase 2_Seletividade
+MOL_02201,CCc1ccncc1C1CCC(S)C1C(=O)O,-6.475,-5.777,0.698,Fase 2_Seletividade
+MOL_02202,COC1CCC(c2cnccc2I)C1C(C)=O,-6.473,-5.39,1.083,Fase 2_Seletividade
+MOL_02203,CC(=O)C1C(S)CCC1c1cnccc1N,-6.473,-5.699,0.774,Fase 2_Seletividade
+MOL_02204,O=C(C1CCC1)C1C(S)CCC1c1cnccc1CF,-6.468,-5.986,0.482,Fase 2_Seletividade
+MOL_02205,O=Cc1ccncc1C1CCC(CF)C1C(=O)C1CCC1,-6.467,-6.301,0.166,Fase 2_Seletividade
+MOL_02206,CCOC(=O)C1C(S)CCC1c1cnccc1OC,-6.459,-5.583,0.876,Fase 2_Seletividade
+MOL_02207,CCOC(=O)C1C(C#N)CCC1c1cnccc1OC,-6.457,-5.326,1.131,Fase 2_Seletividade
+MOL_02208,[C-]#[N+]c1ccncc1C1CCC(F)C1C(=O)C=CC,-6.454,-6.42,0.034,Fase 1_Lote Inicial
+MOL_02209,COC(=O)C1C(S)CCC1c1cnccc1I,-6.449,-5.295,1.154,Fase 2_Seletividade
+MOL_02210,CCOC(=O)C1C(C)CCC1c1cnccc1C(C)C,-6.448,-5.844,0.604,Fase 2_Seletividade
+MOL_02211,Nc1ccncc1C1CCC(S)C1C(=O)C=O,-6.447,-5.666,0.781,Fase 2_Seletividade
+MOL_02212,COC1CCC(c2cnccc2O)C1C(=O)C(C)C,-6.44,-6.092,0.348,Fase 2_Seletividade
+MOL_02213,CCC1CCC(c2cnccc2F)C1C(=O)C(C)C,-6.439,-5.975,0.464,Fase 2_Seletividade
+MOL_02214,COC1CCC(c2cnccc2C=O)C1C(=O)C=O,-6.438,-5.368,1.07,Fase 2_Seletividade
+MOL_02215,COC(=O)C1C(C=O)CCC1c1cnccc1F,-6.436,-5.38,1.056,Fase 2_Seletividade
+MOL_02216,CCNC(=O)C1C(S)CCC1c1cnccc1N,-6.435,-5.95,0.485,Fase 2_Seletividade
+MOL_02217,NC1CCC(c2cnccc2S)C1C(=O)O,-6.434,-5.824,0.61,Fase 2_Seletividade
+MOL_02218,CC1CCC(c2cnccc2C(F)F)C1C(=O)C(C)(C)C,-6.434,-6.279,0.155,Fase 1_Lote Inicial
+MOL_02219,COc1ccncc1C1CCC(S)C1C(=O)O,-6.432,-5.566,0.866,Fase 2_Seletividade
+MOL_02220,CCC1CCC(c2cnccc2C(F)F)C1C(=O)O,-6.427,-5.966,0.461,Fase 2_Seletividade
+MOL_02221,O=C(C1CC1)C1C(S)CCC1c1cnccc1S,-6.425,-5.612,0.813,Fase 2_Seletividade
+MOL_02222,COC1CCC(c2cnccc2Br)C1C(=O)C=O,-6.424,-5.789,0.635,Fase 2_Seletividade
+MOL_02223,COC1CCC(c2cnccc2Br)C1C(=O)C1CC1,-6.423,-5.647,0.776,Fase 2_Seletividade
+MOL_02224,CCC1CCC(c2cnccc2N)C1C(C)=O,-6.42,-5.853,0.567,Fase 2_Seletividade
+MOL_02225,COc1ccncc1C1CCC(S)C1C(=O)C=O,-6.418,-5.431,0.987,Fase 2_Seletividade
+MOL_02226,CCNC(=O)C1C(C=O)CCC1c1cnccc1C#N,-6.418,-6.317,0.101,Fase 2_Seletividade
+MOL_02227,CCNC(=O)C1C(S)CCC1c1cnccc1CF,-6.417,-5.985,0.432,Fase 2_Seletividade
+MOL_02228,CCNC(=O)C1C(S)CCC1c1cnccc1O,-6.417,-6.392,0.025,Fase 2_Seletividade
+MOL_02229,CCC1CCC(c2cnccc2C)C1C(=O)OC,-6.414,-5.447,0.967,Fase 2_Seletividade
+MOL_02230,CCCC(=O)C1C(S)CCC1c1cnccc1N,-6.412,-5.867,0.545,Fase 2_Seletividade
+MOL_02231,CNC(=O)C1C(C)CCC1c1cnccc1OC,-6.406,-6.172,0.234,Fase 2_Seletividade
+MOL_02232,CCNC(=O)C1C(S)CCC1c1cnccc1C=O,-6.406,-6.339,0.067,Fase 2_Seletividade
+MOL_02233,CCC1CCC(c2cnccc2Br)C1C(=O)NC,-6.402,-6.252,0.15,Fase 2_Seletividade
+MOL_02234,CC(C)C(=O)C1C(CF)CCC1c1cnccc1I,-6.401,-5.508,0.893,Fase 3_Super Elite
+MOL_02235,CNC(=O)C1C(OC)CCC1c1cnccc1CF,-6.401,-6.043,0.358,Fase 2_Seletividade
+MOL_02236,CC(=O)C1C(S)CCC1c1cnccc1S,-6.398,-5.449,0.949,Fase 2_Seletividade
+MOL_02237,CCNC(=O)C1C(S)CCC1c1cnccc1I,-6.394,-5.646,0.748,Fase 2_Seletividade
+MOL_02238,COC(=O)C1C(OC)CCC1c1cnccc1C,-6.392,-5.894,0.498,Fase 2_Seletividade
+MOL_02239,CCNC(=O)C1C(OC)CCC1c1cnccc1S,-6.391,-5.672,0.719,Fase 2_Seletividade
+MOL_02240,CCNC(=O)C1C(S)CCC1c1cnccc1OC,-6.39,-5.609,0.781,Fase 2_Seletividade
+MOL_02241,CCC1CCC(c2cnccc2C=O)C1C(=O)C=O,-6.39,-5.622,0.768,Fase 2_Seletividade
+MOL_02242,CCC(=O)C1C(C=O)CCC1c1cnccc1C(C)C,-6.385,-5.547,0.838,Fase 2_Seletividade
+MOL_02243,N#CC1CCC(c2cnccc2S)C1C(=O)C=O,-6.384,-5.682,0.702,Fase 2_Seletividade
+MOL_02244,COC(=O)C1C(OC)CCC1c1cnccc1CF,-6.383,-5.795,0.588,Fase 2_Seletividade
+MOL_02245,O=CC1CCC(c2cnccc2Br)C1C(=O)C1CCC1,-6.374,-5.663,0.711,Fase 2_Seletividade
+MOL_02246,N#Cc1ccncc1C1CCC(C=O)C1C(=O)C1CCC1,-6.37,-6.487,-0.117,Fase 2_Seletividade
+MOL_02247,COc1ccncc1C1CCC(S)C1C(=O)C1CCC1,-6.369,-5.895,0.474,Fase 2_Seletividade
+MOL_02248,COC(=O)C1C(N)CCC1c1cnccc1Br,-6.368,-5.903,0.465,Fase 2_Seletividade
+MOL_02249,CCC1CCC(c2cnccc2C#N)C1C(=O)C=O,-6.365,-5.441,0.924,Fase 2_Seletividade
+MOL_02250,CCCC(=O)C1C(S)CCC1c1cnccc1I,-6.351,-5.823,0.528,Fase 2_Seletividade
+MOL_02251,CCC1CCC(c2cnccc2I)C1C(=O)C=O,-6.349,-5.295,1.054,Fase 2_Seletividade
+MOL_02252,COC1CCC(c2cnccc2C=O)C1C(=O)O,-6.349,-5.665,0.684,Fase 2_Seletividade
+MOL_02253,CCC(=O)C1C(CC)CCC1c1cnccc1N,-6.347,-5.689,0.658,Fase 2_Seletividade
+MOL_02254,CCCC(=O)C1C(C#N)CCC1c1cnccc1Br,-6.344,-5.79,0.554,Fase 2_Seletividade
+MOL_02255,CC(C)c1ccncc1C1CCC(O)C1C(=O)C=O,-6.342,-6.126,0.216,Fase 2_Seletividade
+MOL_02256,CNC(=O)C1C(C#N)CCC1c1cnccc1Br,-6.336,-6.43,-0.094,Fase 2_Seletividade
+MOL_02257,CC1CCC(c2cnccc2C#N)C1C(=O)C(C)(C)C,-6.334,-6.083,0.251,Fase 1_Lote Inicial
+MOL_02258,COC1CCC(c2cnccc2C#N)C1C(C)=O,-6.332,-5.716,0.616,Fase 2_Seletividade
+MOL_02259,CCC1CCC(c2cnccc2C=O)C1C(=O)C1CCC1,-6.324,-5.682,0.642,Fase 2_Seletividade
+MOL_02260,Cc1ccncc1C1CCC(S)C1C(=O)O,-6.314,-5.726,0.588,Fase 2_Seletividade
+MOL_02261,CNC(=O)C1C(N)CCC1c1cnccc1I,-6.312,-5.956,0.356,Fase 2_Seletividade
+MOL_02262,O=CC1CCC(c2cnccc2O)C1C(=O)O,-6.308,-5.906,0.402,Fase 2_Seletividade
+MOL_02263,CCOC(=O)C1C(C#N)CCC1c1cnccc1C#N,-6.306,-5.576,0.73,Fase 2_Seletividade
+MOL_02264,COc1ccncc1C1CCC(N)C1C(=O)C1CC1,-6.3,-5.668,0.632,Fase 2_Seletividade
+MOL_02265,CC(C)c1ccncc1C1CCC(C=O)C1C(=O)C=O,-6.298,-5.901,0.397,Fase 2_Seletividade
+MOL_02266,COc1ccncc1C1CCC(O)C1C(=O)C=O,-6.296,-5.417,0.879,Fase 2_Seletividade
+MOL_02267,CCC(=O)C1C(OC)CCC1c1cnccc1S,-6.295,-5.489,0.806,Fase 2_Seletividade
+MOL_02268,COC1CCC(c2cnccc2C=O)C1C(C)=O,-6.29,-5.531,0.759,Fase 2_Seletividade
+MOL_02269,COC1CCC(c2cnccc2F)C1C(=O)C=O,-6.288,-5.695,0.593,Fase 2_Seletividade
+MOL_02270,COC1CCC(c2cnccc2C=O)C1C(=O)C1CCC1,-6.284,-5.982,0.302,Fase 2_Seletividade
+MOL_02271,C=Cc1ccncc1C1CCC(OC)C1C(=O)CCC,-6.283,-5.541,0.742,Fase 1_Lote Inicial
+MOL_02272,COC1CCC(c2cnccc2CF)C1C(=O)C1CC1,-6.275,-5.687,0.588,Fase 2_Seletividade
+MOL_02273,C=Cc1ccncc1C1CCC(C)C1C(=O)CC1CCC1F,-6.274,-6.097,0.177,Fase 1_Lote Inicial
+MOL_02274,N#Cc1ccncc1C1CCC(S)C1C(=O)C=O,-6.272,-5.603,0.669,Fase 2_Seletividade
+MOL_02275,CC(=O)C1C(C)CCC1c1cnccc1I,-6.271,-5.918,0.353,Fase 2_Seletividade
+MOL_02276,CCOC(=O)C1C(CC)CCC1c1cnccc1OC,-6.269,-5.421,0.848,Fase 2_Seletividade
+MOL_02277,COC1CCC(c2cnccc2I)C1C(=O)C1CC1,-6.268,-5.655,0.613,Fase 2_Seletividade
+MOL_02278,COC1CCC(c2cnccc2C#N)C1C(=O)C1CCC1,-6.265,-6.361,-0.096,Fase 2_Seletividade
+MOL_02279,CCCC(=O)C1C(C#N)CCC1c1cnccc1I,-6.26,-5.615,0.645,Fase 2_Seletividade
+MOL_02280,CCC1CCC(c2cnccc2S)C1C(C)=O,-6.237,-5.633,0.604,Fase 2_Seletividade
+MOL_02281,CCC(=O)C1C(C#N)CCC1c1cnccc1S,-6.232,-5.263,0.969,Fase 2_Seletividade
+MOL_02282,CCc1ccncc1C1CCC(OC)C1C(=O)C1CC1,-6.229,-5.788,0.441,Fase 2_Seletividade
+MOL_02283,COC(=O)C1C(OC)CCC1c1cnccc1Br,-6.227,-5.539,0.688,Fase 2_Seletividade
+MOL_02284,CCOC(=O)C1C(C=O)CCC1c1cnccc1O,-6.226,-5.545,0.681,Fase 2_Seletividade
+MOL_02285,COC1CCC(c2cnccc2S)C1C(=O)O,-6.225,-5.622,0.603,Fase 2_Seletividade
+MOL_02286,CCNC(=O)C1C(C#N)CCC1c1cnccc1CF,-6.225,-6.977,-0.752,Fase 2_Seletividade
+MOL_02287,CCOC(=O)C1C(C#N)CCC1c1cnccc1S,-6.211,-5.657,0.554,Fase 2_Seletividade
+MOL_02288,CCNC(=O)C1C(C#N)CCC1c1cnccc1C#N,-6.198,-6.798,-0.6,Fase 2_Seletividade
+MOL_02289,CCc1ccncc1C1CCC(OC)C1C(=O)C(N)=O,-6.197,-6.075,0.122,Fase 2_Seletividade
+MOL_02290,COc1ccncc1C1CCC(OC)C1C(N)=O,-6.197,-6.365,-0.168,Fase 2_Seletividade
+MOL_02291,O=CC1CCC(c2cnccc2S)C1C(=O)O,-6.196,-5.935,0.261,Fase 2_Seletividade
+MOL_02292,[C-]#[N+]c1ccncc1C1CCC(C)C1C(=O)CCCC,-6.193,-5.511,0.682,Fase 1_Lote Inicial
+MOL_02293,O=CC1CCC(c2cnccc2C2CC2)C1C(=O)C1CC1,-6.19,-6.072,0.118,Fase 2_Seletividade
+MOL_02294,COC(=O)C1C(C=O)CCC1c1cnccc1Br,-6.183,-5.605,0.578,Fase 2_Seletividade
+MOL_02295,COC(=O)C1C(S)CCC1c1cnccc1C1CC1,-6.176,-5.294,0.882,Fase 2_Seletividade
+MOL_02296,CCOC(=O)C1C(CC)CCC1c1cnccc1CC,-6.174,-5.371,0.803,Fase 2_Seletividade
+MOL_02297,CC(C)C(=O)C1C(N)CCC1c1cnccc1S,-6.164,-5.688,0.476,Fase 2_Seletividade
+MOL_02298,CCC(=O)C1C(OC)CCC1c1cnccc1Br,-6.159,-5.563,0.596,Fase 2_Seletividade
+MOL_02299,CCC(=O)C1C(S)CCC1c1cnccc1C,-6.146,-4.992,1.154,Fase 2_Seletividade
+MOL_02300,COc1ccncc1C1CCC(OC)C1C(=O)O,-6.144,-5.825,0.319,Fase 2_Seletividade
+MOL_02301,CCNC(=O)C1C(CC)CCC1c1cnccc1S,-6.143,-6.187,-0.044,Fase 2_Seletividade
+MOL_02302,COC(=O)C1C(OC)CCC1c1cnccc1S,-6.139,-5.512,0.627,Fase 2_Seletividade
+MOL_02303,CCC1CCC(c2cnccc2OC)C1C(=O)C1CCC1,-6.136,-6.325,-0.189,Fase 2_Seletividade
+MOL_02304,CCCC(=O)C1C(OC)CCC1c1cnccc1I,-6.134,-5.691,0.443,Fase 2_Seletividade
+MOL_02305,Cc1ccncc1C1CCC(S)C1C(N)=O,-6.133,-5.88,0.253,Fase 2_Seletividade
+MOL_02306,COc1ccncc1C1CCC(C=O)C1C(N)=O,-6.126,-5.946,0.18,Fase 2_Seletividade
+MOL_02307,CCCC(=O)C1C(OC)CCC1c1cnccc1Br,-6.121,-5.75,0.371,Fase 2_Seletividade
+MOL_02308,CCOC(=O)C1C(C=O)CCC1c1cnccc1S,-6.12,-5.246,0.874,Fase 2_Seletividade
+MOL_02309,CNC(=O)C1C(S)CCC1c1cnccc1C=O,-6.119,-5.366,0.753,Fase 2_Seletividade
+MOL_02310,CC(=O)C1C(S)CCC1c1cnccc1I,-6.117,-5.205,0.912,Fase 2_Seletividade
+MOL_02311,CCOC(=O)C1C(O)CCC1c1cnccc1C1CC1,-6.115,-6.039,0.076,Fase 2_Seletividade
+MOL_02312,CC(=O)C1C(C)CCC1c1cnccc1Br,-6.111,-5.842,0.269,Fase 2_Seletividade
+MOL_02313,CCOC(=O)C1C(C=O)CCC1c1cnccc1C#N,-6.108,-5.455,0.653,Fase 2_Seletividade
+MOL_02314,COC1CCC(c2cnccc2C(C)C)C1C(=O)C1CC1,-6.093,-5.74,0.353,Fase 2_Seletividade
+MOL_02315,CNC(=O)C1C(C#N)CCC1c1cnccc1I,-6.087,-6.498,-0.411,Fase 2_Seletividade
+MOL_02316,CNC(=O)C1C(F)CCC1c1cnccc1S,-6.085,-5.614,0.471,Fase 2_Seletividade
+MOL_02317,CCCC(=O)C1C(C=O)CCC1c1cnccc1F,-6.085,-5.661,0.424,Fase 2_Seletividade
+MOL_02318,NC1CCC(c2cnccc2I)C1C(=O)C=O,-6.08,-5.497,0.583,Fase 2_Seletividade
+MOL_02319,O=C(O)C1C(CF)CCC1c1cnccc1S,-6.075,-5.513,0.562,Fase 2_Seletividade
+MOL_02320,CCOC(=O)C1C(N)CCC1c1cnccc1CC,-6.075,-5.661,0.414,Fase 2_Seletividade
+MOL_02321,COC1CCC(c2cnccc2S)C1C(C)=O,-6.071,-5.248,0.823,Fase 2_Seletividade
+MOL_02322,O=CC(=O)C1C(S)CCC1c1cnccc1S,-6.071,-5.361,0.71,Fase 2_Seletividade
+MOL_02323,NC1CCC(c2cnccc2Br)C1C(=O)C=O,-6.07,-5.519,0.551,Fase 2_Seletividade
+MOL_02324,CCC1CCC(c2cnccc2Br)C1C(=O)C(=O)O,-6.06,-5.915,0.145,Fase 2_Seletividade
+MOL_02325,COC1CCC(c2cnccc2I)C1C(=O)C=O,-6.057,-5.754,0.303,Fase 2_Seletividade
+MOL_02326,COC(=O)C1C(C=O)CCC1c1cnccc1I,-6.05,-5.593,0.457,Fase 2_Seletividade
+MOL_02327,COc1ccncc1C1CCC(C#N)C1C(C)=O,-6.042,-5.8,0.242,Fase 2_Seletividade
+MOL_02328,CCC1CCC(c2cnccc2S)C1C(=O)C1CC1,-6.035,-5.48,0.555,Fase 2_Seletividade
+MOL_02329,COC1CCC(c2cnccc2CF)C1C(=O)C(=O)O,-6.032,-6.017,0.015,Fase 2_Seletividade
+MOL_02330,CCNC(=O)C1C(S)CCC1c1cnccc1S,-6.026,-5.917,0.109,Fase 2_Seletividade
+MOL_02331,CCC1CCC(c2cnccc2I)C1C(=O)C(=O)O,-6.025,-5.83,0.195,Fase 2_Seletividade
+MOL_02332,O=CC1CCC(c2cnccc2C(F)F)C1C(=O)C1CCC1,-6.019,-6.216,-0.197,Fase 2_Seletividade
+MOL_02333,COC1CCC(c2cnccc2S)C1C(=O)C(C)C,-6.018,-5.546,0.472,Fase 2_Seletividade
+MOL_02334,CCOC(=O)C1C(S)CCC1c1cnccc1N,-6.016,-5.293,0.723,Fase 2_Seletividade
+MOL_02335,O=C(O)C(=O)C1C(S)CCC1c1cnccc1S,-6.012,-5.371,0.641,Fase 2_Seletividade
+MOL_02336,O=Cc1ccncc1C1CCC(S)C1C(=O)C1CCC1,-6.012,-5.952,0.06,Fase 2_Seletividade
+MOL_02337,COC1CCC(c2cnccc2N)C1C(=O)C=O,-6.01,-5.489,0.521,Fase 2_Seletividade
+MOL_02338,CCC1CCC(c2cnccc2Br)C1C(=O)C=O,-6.007,-5.344,0.663,Fase 2_Seletividade
+MOL_02339,CC1CCC(c2cnccc2C2CO2)C1C(=O)CC1CCC1F,-5.995,-6.29,-0.295,Fase 1_Lote Inicial
+MOL_02340,CNC(=O)C1C(O)CCC1c1cnccc1I,-5.965,-5.793,0.172,Fase 2_Seletividade
+MOL_02341,O=CC(=O)C1C(S)CCC1c1cnccc1I,-5.95,-5.357,0.593,Fase 2_Seletividade
+MOL_02342,COC(=O)C1C(S)CCC1c1cnccc1O,-5.949,-5.413,0.536,Fase 2_Seletividade
+MOL_02343,CCCC(=O)C1C(OC)CCC1c1cnccc1S,-5.935,-5.413,0.522,Fase 2_Seletividade
+MOL_02344,COC(=O)c1ccncc1C1CCC(C)C1C(=O)C(C)(C)C,-5.912,-6.549,-0.637,Fase 1_Lote Inicial
+MOL_02345,COC1CCC(c2cnccc2N)C1C(C)=O,-5.901,-5.837,0.064,Fase 2_Seletividade
+MOL_02346,CCC(=O)C1C(OC)CCC1c1cnccc1OC,-5.897,-5.26,0.637,Fase 2_Seletividade
+MOL_02347,COc1ccncc1C1CCC(C#N)C1C(=O)O,-5.886,-5.79,0.096,Fase 2_Seletividade
+MOL_02348,COC(=O)C1C(C=O)CCC1c1cnccc1C(C)C,-5.881,-5.808,0.073,Fase 2_Seletividade
+MOL_02349,CCC1CCC(c2cnccc2OC)C1C(=O)OC,-5.874,-5.525,0.349,Fase 2_Seletividade
+MOL_02350,CC(C)C(=O)C1C(C#N)CCC1c1cnccc1S,-5.867,-5.923,-0.056,Fase 2_Seletividade
+MOL_02351,CC(C)C(=O)C1C(S)CCC1c1cnccc1C=O,-5.861,-5.384,0.477,Fase 2_Seletividade
+MOL_02352,COC(=O)C1C(OC)CCC1c1cnccc1I,-5.854,-5.428,0.426,Fase 2_Seletividade
+MOL_02353,COc1ccncc1C1CCC(OC)C1C(=O)C1CCC1,-5.842,-5.811,0.031,Fase 2_Seletividade
+MOL_02354,N#CC1CCC(c2cnccc2S)C1C(=O)C1CCC1,-5.838,-5.721,0.117,Fase 2_Seletividade
+MOL_02355,O=C(O)C1C(S)CCC1c1cnccc1O,-5.823,-5.599,0.224,Fase 2_Seletividade
+MOL_02356,COC(=O)C1C(S)CCC1c1cnccc1OC,-5.791,-5.034,0.757,Fase 2_Seletividade
+MOL_02357,CC(=O)C1C(C=O)CCC1c1cnccc1S,-5.766,-5.192,0.574,Fase 2_Seletividade
+MOL_02358,CNC(=O)C1C(O)CCC1c1cnccc1C(C)C,-5.762,-6.214,-0.452,Fase 2_Seletividade
+MOL_02359,NC(=O)C1C(S)CCC1c1cnccc1F,-5.754,-5.437,0.317,Fase 2_Seletividade
+MOL_02360,CCC(=O)C1C(OC)CCC1c1cnccc1C#N,-5.732,-5.434,0.298,Fase 2_Seletividade
+MOL_02361,O=CC(=O)C1C(S)CCC1c1cnccc1C1CC1,-5.731,-5.569,0.162,Fase 2_Seletividade
+MOL_02362,NC(=O)C1C(S)CCC1c1cnccc1S,-5.666,-5.675,-0.009,Fase 2_Seletividade
+MOL_02363,COC1CCC(c2cnccc2S)C1C(=O)C=O,-5.631,-5.292,0.339,Fase 2_Seletividade
+MOL_02364,Cc1ccncc1C1CCC(C#N)C1C(=O)C=O,-5.613,-5.472,0.141,Fase 2_Seletividade
+MOL_02365,CC(C)C(=O)C1C(C=O)CCC1c1cnccc1C(C)C,-5.594,-5.904,-0.31,Fase 2_Seletividade
+MOL_02366,Cc1ccncc1C1CCC(S)C1C(=O)C(C)C,-5.53,-5.515,0.015,Fase 2_Seletividade
+MOL_02367,CCNC(=O)C1C(C#N)CCC1c1cnccc1I,-5.527,-6.518,-0.991,Fase 2_Seletividade
+MOL_02368,CC1CCC(c2cnccc2C=CF)C1C(=O)C(C)(C)C,-5.413,-6.107,-0.694,Fase 1_Lote Inicial
+MOL_02369,COc1ccncc1C1CCC(S)C1C(C)=O,-5.395,-5.598,-0.203,Fase 2_Seletividade
+MOL_02370,CCC1CCC(c2cnccc2C2CC2)C1C(=O)C=O,-5.274,-5.517,-0.243,Fase 2_Seletividade
+MOL_02371,COC(=O)C1C(S)CCC1c1cnccc1S,-5.23,-4.999,0.231,Fase 2_Seletividade
+MOL_02372,CC1CCC(c2cnccc2N=[N+]=[N-])C1C(=O)C(C)(C)C,-5.064,-6.126,-1.062,Fase 1_Lote Inicial
+MOL_02373,CC1CCC(c2cnccc2C#CF)C1C(=O)C(C)(C)C,-4.567,-6.22,-1.653,Fase 1_Lote Inicial

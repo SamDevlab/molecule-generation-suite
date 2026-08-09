@@ -1,0 +1,6 @@
+ID,SMILES,Peso_Molar,Qtd_Aneis,LogP,TPSA,Complexidade,Score_QED,OB_Pct,Energia_3D_Kcal,Num_S,Num_Si,Num_B,Num_P,Num_Cl,Categoria,Num_N,IA_Pred_QED,IA_Pred_OB,IA_Pred_Vol,IA_Pred_Nutri,IA_Pred_TPSA
+Molecula_Util_21966,N#CCOC(=O)CN,114.104,0.0,-0.98812,76.11000000000001,115.69694286392864,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,Energia/Aeroespacial,0.0,1.0,-0.01951006,132.65347,0.006991389,71.388405
+Molecula_Util_2993937,c1ccncc1c1occc1c1sccc1c1sccc1C#N,334.425,5.67,0.485,49.82,-172.24,2.0,0.0,Química de Materiais,,,,0.0,,Energia/Aeroespacial,0.0,1.0,0.0003731727,128.11694,0.008040203,52.494682
+Molecula_Util_2994119,C1CCCCC1c1ccncc1COc1ccccc1C1CC1,307.437,5.586,0.718,22.12,-215.98,1.0,0.0,Biologia/Farmácia,,,,0.0,,Biologia/Farmácia,0.0,1.0,0.01445986,154.8567,0.0056433976,25.736979
+Molecula_Util_2994162,C1CCCC1C(=O)Oc1ccncc1c1ccccc1c1occc1C(=O)Nc1occc1c1occc1C1CCCC1,576.649,8.867,0.184,107.71,-180.35,2.0,0.0,Química de Materiais,,,,0.0,,Energia/Aeroespacial,0.0,1.0,0.015252819,151.46811,0.0052067237,96.25765
+Molecula_Util_2994254,c1ccncc1c1ccccc1OC1CC1Cc1ccncc1c1ccccc1,378.475,5.821,0.424,35.01,-219.83,2.0,0.0,Química de Materiais,,,,0.0,,Energia/Aeroespacial,0.0,1.0,0.014958655,155.11325,0.0057119885,40.97468

@@ -1,0 +1,9 @@
+receptor = receptor_4EY7.pdbqt
+ligand = ligante_cerebral.pdbqt
+center_x = -0.92
+center_y = -51.77
+center_z = 2.76
+size_x = 80.0
+size_y = 80.0
+size_z = 80.0
+exhaustiveness = 8

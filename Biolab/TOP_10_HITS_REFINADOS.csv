@@ -1,0 +1,11 @@
+Par_Molecular,E_Isolada,E_Sinergica,Delta_G_Consenso_C2,Desvio_Padrão_C2,Índice_Seletividade,LE_Isolado,Delta_LE,MW_Complexo,LogP_Complexo,TPSA_Complexo,Filtro_Lipinski_ADME,Ki_Isolado_uM,Ki_Sinergico_uM,Docking_Reverso_Tox,Veredito
+Celecoxib + Resveratrol,0.27,-2.45,-2.72,0.450,2.67,-0.010,0.105,609.63,6.49,138.67,Alerta ADME Restrito,0.00,15868.58,Seguro Hepat.,HIT C/ RESSALVA ⚠
+Celecoxib + Sulforaphane,-0.61,-2.44,-1.83,0.496,2.13,0.024,0.070,558.67,4.76,107.41,Aprovado Lipinski,354557.58,16273.81,Seguro Hepat.,HIT REFINADO ★
+Indomethacin + Resveratrol,-3.74,-4.60,-0.86,0.225,0.45,0.150,0.034,586.04,6.90,129.22,Aprovado Lipinski,1818.08,426.68,Seguro Hepat.,HIT REFINADO ★
+Indomethacin + Eugenol,-3.74,-4.37,-0.63,0.033,1.21,0.150,0.025,522.00,6.06,97.99,Aprovado Lipinski,1818.08,623.95,Seguro Hepat.,HIT REFINADO ★
+Celecoxib + Carvacrol,-1.93,-2.44,-0.52,0.257,-0.01,0.074,0.020,531.60,6.34,98.21,Aprovado Lipinski,38564.92,16135.69,N/A,NEUTRO
+Piroxicam + Eugenol,-6.34,-6.58,-0.25,0.012,0.26,0.275,0.011,495.56,3.71,129.06,Aprovado Lipinski,22.69,14.91,N/A,NEUTRO
+Meloxicam + Sulforaphane,-6.52,-6.71,-0.19,0.014,0.69,0.284,0.008,528.70,3.20,129.03,Aprovado Lipinski,16.56,11.98,N/A,NEUTRO
+Ibuprofen + Curcumin,-4.94,-5.11,-0.17,0.016,-0.03,0.329,0.012,574.67,6.44,130.36,Aprovado Lipinski,239.02,178.14,N/A,NEUTRO
+Piroxicam + Resveratrol,-6.41,-6.56,-0.14,0.022,-0.70,0.279,0.006,559.60,4.55,160.29,Aprovado Lipinski,19.92,15.61,N/A,NEUTRO
+Ibuprofen + Genistein,-4.91,-5.03,-0.12,0.066,0.10,0.327,0.008,476.52,5.65,128.20,Aprovado Lipinski,252.29,204.59,N/A,NEUTRO

@@ -1,0 +1,9 @@
+receptor=1EVE.pdbqt
+ligand=laboratorio_evolutivo\Gen8_Mut_4.pdbqt
+center_x=2.8
+center_y=64.4
+center_z=67.9
+size_x=50
+size_y=50
+size_z=50
+cpu=1

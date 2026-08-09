@@ -1,0 +1,6 @@
+ID,SMILES,Peso_Molar,Qtd_Aneis,LogP,TPSA,Complexidade,Score_QED,OB_Pct,Energia_3D_Kcal,Num_S,Num_Si,Num_B,Num_P,Num_Cl,Categoria,Num_N,IA_Pred_QED,IA_Pred_OB,IA_Pred_Vol,IA_Pred_Nutri,IA_Pred_TPSA
+Molecula_Util_751278,O=NS(=O)(=O)CO,125.105,-0.968,0.481,83.8,19.18,1.0,0.0,Energia/Aeroespacial,,,,0.0,,Biologia/Farmácia,0.0,1.0,0.019505499,114.98144,0.007634345,91.1396
+Molecula_Util_751348,CS(=O)(=O)CN,109.15,-1.053,0.467,60.16,-36.65,1.0,0.0,Energia/Aeroespacial,,,,0.0,,Biologia/Farmácia,0.0,1.0,0.020304514,109.95114,0.0081018135,62.311295
+Molecula_Util_751351,N#CCC(=O)C1CCCC1,137.182,1.659,0.58,40.86,-180.78,1.0,0.0,Alimentos/Aromas,,,,0.0,,Biologia/Farmácia,0.0,1.0,0.0063960003,123.017586,0.0072762473,41.622753
+Molecula_Util_751482,NC(=O)c1ccccc1-c1ccccc1N=O,226.235,2.85,0.817,72.52,-176.81,2.0,0.0,Biologia/Farmácia,,,,0.0,,Energia/Aeroespacial,0.0,1.0,-0.013422349,150.46985,0.005027092,72.97216
+Molecula_Util_751596,NC1CCCC1c1ccccc1SC1CCCC1,261.434,4.316,0.877,26.02,-198.9,1.0,0.0,Biologia/Farmácia,,,,0.0,,Biologia/Farmácia,0.0,1.0,-0.0021344267,149.5154,0.0054836413,27.525816

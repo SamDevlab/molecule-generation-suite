@@ -1,0 +1,9 @@
+receptor = receptor_6OIJ.pdbqt
+ligand = ligante_cerebral.pdbqt
+center_x = 118.18
+center_y = 102.26
+center_z = 113.22
+size_x = 80.0
+size_y = 80.0
+size_z = 80.0
+exhaustiveness = 8

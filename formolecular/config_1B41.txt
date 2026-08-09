@@ -1,0 +1,9 @@
+receptor = receptor_1B41.pdbqt
+ligand = ligante_cerebral.pdbqt
+center_x = 117.56
+center_y = 105.76
+center_z = -140.15
+size_x = 80.0
+size_y = 80.0
+size_z = 80.0
+exhaustiveness = 8

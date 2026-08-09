@@ -1,0 +1,49 @@
+Par_Molecular,E_Isolada,E_Sinergica,Delta_G_Consenso_C2,Desvio_Padrão_C2,Índice_Seletividade,LE_Isolado,Delta_LE,MW_Complexo,LogP_Complexo,TPSA_Complexo,Filtro_Lipinski_ADME,Ki_Isolado_uM,Ki_Sinergico_uM,Docking_Reverso_Tox,Veredito
+Indomethacin + Thymol,40.02,52.19,12.17,0.000,-12.35,-1.601,-0.487,508.01,6.75,88.76,Aprovado Lipinski,0.00,0.00,N/A,NEUTRO
+Indomethacin + Carvacrol,40.02,61.03,21.01,0.000,-21.47,-1.601,-0.840,508.01,6.75,88.76,Aprovado Lipinski,0.00,0.00,N/A,NEUTRO
+Indomethacin + Sulforaphane,47.24,61.18,13.94,0.000,-14.19,-1.890,-0.558,535.09,5.18,97.96,Aprovado Lipinski,0.00,0.00,N/A,NEUTRO
+Indomethacin + Quercetin,47.24,55.90,8.66,0.000,-9.42,-1.890,-0.346,660.03,5.92,199.89,Aprovado Lipinski,0.00,0.00,N/A,NEUTRO
+Indomethacin + Genistein,-3.74,-2.46,1.28,0.239,-1.16,0.150,-0.051,628.03,6.50,159.43,Alerta ADME Restrito,1818.08,15801.50,N/A,NEUTRO
+Indomethacin + Eugenol,-3.74,-4.37,-0.63,0.033,1.21,0.150,0.025,522.00,6.06,97.99,Aprovado Lipinski,1818.08,623.95,Seguro Hepat.,HIT REFINADO ★
+Indomethacin + Resveratrol,-3.74,-4.60,-0.86,0.225,0.45,0.150,0.034,586.04,6.90,129.22,Aprovado Lipinski,1818.08,426.68,Seguro Hepat.,HIT REFINADO ★
+Indomethacin + Curcumin,-3.74,-1.95,1.79,0.771,-1.14,0.150,-0.072,726.18,7.30,161.59,Alerta ADME Restrito,1818.08,37349.92,N/A,NEUTRO
+Ketoprofen + Thymol,-6.10,-5.69,0.41,0.071,-0.77,0.321,-0.021,404.51,5.93,74.60,Aprovado Lipinski,33.71,67.02,N/A,NEUTRO
+Ketoprofen + Carvacrol,-6.35,-5.61,0.74,0.034,-1.55,0.334,-0.039,404.51,5.93,74.60,Aprovado Lipinski,22.03,76.61,N/A,NEUTRO
+Ketoprofen + Quercetin,-6.50,-5.69,0.81,0.010,-1.12,0.342,-0.043,556.52,5.09,185.73,Aprovado Lipinski,17.34,67.94,N/A,NEUTRO
+Ketoprofen + Sulforaphane,-6.03,-5.78,0.25,0.172,-0.06,0.317,-0.013,431.58,4.35,83.80,Aprovado Lipinski,37.93,57.81,N/A,NEUTRO
+Ketoprofen + Resveratrol,-6.59,-5.96,0.63,0.032,-0.82,0.347,-0.033,482.53,6.08,115.06,Aprovado Lipinski,14.72,42.73,N/A,NEUTRO
+Ketoprofen + Genistein,-6.54,-6.44,0.10,0.283,-0.32,0.344,-0.005,524.52,5.68,145.27,Aprovado Lipinski,16.11,18.96,N/A,NEUTRO
+Ketoprofen + Curcumin,-6.18,-5.78,0.40,0.135,0.73,0.325,-0.021,622.67,6.48,147.43,Alerta ADME Restrito,29.55,58.31,N/A,NEUTRO
+Ketoprofen + Eugenol,-6.53,-5.74,0.79,0.207,-0.75,0.344,-0.041,418.49,5.24,83.83,Aprovado Lipinski,16.44,61.88,N/A,NEUTRO
+Piroxicam + Thymol,-6.46,-6.25,0.21,0.058,-0.74,0.281,-0.009,481.57,4.41,119.83,Aprovado Lipinski,18.49,26.36,N/A,NEUTRO
+Piroxicam + Carvacrol,-6.45,-6.08,0.37,0.012,-1.12,0.280,-0.016,481.57,4.41,119.83,Aprovado Lipinski,18.86,34.98,N/A,NEUTRO
+Piroxicam + Sulforaphane,-6.54,-6.39,0.14,0.112,0.37,0.284,-0.006,508.65,2.83,129.03,Aprovado Lipinski,16.19,20.57,N/A,NEUTRO
+Piroxicam + Quercetin,-6.31,-6.00,0.31,0.018,-0.57,0.275,-0.014,633.59,3.57,230.96,Alerta ADME Restrito,23.52,39.74,N/A,NEUTRO
+Piroxicam + Resveratrol,-6.41,-6.56,-0.14,0.022,-0.70,0.279,0.006,559.60,4.55,160.29,Aprovado Lipinski,19.92,15.61,N/A,NEUTRO
+Piroxicam + Genistein,-6.50,-3.99,2.51,0.475,-2.94,0.283,-0.109,601.59,4.16,190.50,Aprovado Lipinski,17.23,1182.74,N/A,NEUTRO
+Piroxicam + Eugenol,-6.34,-6.58,-0.25,0.012,0.26,0.275,0.011,495.56,3.71,129.06,Aprovado Lipinski,22.69,14.91,N/A,NEUTRO
+Piroxicam + Curcumin,-6.53,-3.63,2.91,1.638,-2.24,0.284,-0.126,699.74,4.95,192.66,Aprovado Lipinski,16.26,2195.90,N/A,NEUTRO
+Celecoxib + Thymol,-1.87,-1.46,0.41,0.912,-0.98,0.072,-0.016,531.60,6.34,98.21,Aprovado Lipinski,42653.35,84533.80,N/A,NEUTRO
+Celecoxib + Carvacrol,-1.93,-2.44,-0.52,0.257,-0.01,0.074,0.020,531.60,6.34,98.21,Aprovado Lipinski,38564.92,16135.69,N/A,NEUTRO
+Celecoxib + Quercetin,0.69,4.10,3.41,0.514,-3.68,-0.027,-0.131,683.62,5.50,209.34,Aprovado Lipinski,0.00,0.00,N/A,NEUTRO
+Celecoxib + Sulforaphane,-0.61,-2.44,-1.83,0.496,2.13,0.024,0.070,558.67,4.76,107.41,Aprovado Lipinski,354557.58,16273.81,Seguro Hepat.,HIT REFINADO ★
+Celecoxib + Genistein,-0.03,4.37,4.40,0.346,-4.40,0.001,-0.169,651.62,6.09,168.88,Alerta ADME Restrito,948489.04,0.00,N/A,NEUTRO
+Celecoxib + Resveratrol,0.27,-2.45,-2.72,0.450,2.67,-0.010,0.105,609.63,6.49,138.67,Alerta ADME Restrito,0.00,15868.58,Seguro Hepat.,HIT C/ RESSALVA ⚠
+Celecoxib + Curcumin,-2.11,3.62,5.74,0.849,-5.58,0.081,-0.221,749.76,6.88,171.04,Alerta ADME Restrito,28194.86,0.00,N/A,NEUTRO
+Celecoxib + Eugenol,0.95,2.30,1.36,5.802,-1.13,-0.036,-0.052,545.58,5.64,107.44,Aprovado Lipinski,0.00,0.00,N/A,NEUTRO
+Ibuprofen + Thymol,-4.85,-4.81,0.04,0.010,-0.38,0.323,-0.003,356.51,5.90,57.53,Aprovado Lipinski,278.55,297.58,N/A,NEUTRO
+Ibuprofen + Carvacrol,-4.97,-4.66,0.30,0.006,-0.93,0.331,-0.020,356.51,5.90,57.53,Aprovado Lipinski,228.76,382.24,N/A,NEUTRO
+Ibuprofen + Quercetin,-4.98,-4.96,0.03,0.043,0.27,0.332,-0.002,508.52,5.06,168.66,Aprovado Lipinski,222.54,232.59,N/A,NEUTRO
+Ibuprofen + Sulforaphane,-4.82,-4.62,0.19,0.035,0.25,0.321,-0.013,383.58,4.32,66.73,Aprovado Lipinski,294.25,408.82,N/A,NEUTRO
+Ibuprofen + Resveratrol,-4.99,-4.86,0.13,0.031,-0.13,0.333,-0.009,434.53,6.05,97.99,Aprovado Lipinski,219.99,273.42,N/A,NEUTRO
+Ibuprofen + Genistein,-4.91,-5.03,-0.12,0.066,0.10,0.327,0.008,476.52,5.65,128.20,Aprovado Lipinski,252.29,204.59,N/A,NEUTRO
+Ibuprofen + Eugenol,-5.00,-4.64,0.36,0.011,-0.35,0.333,-0.024,370.49,5.20,66.76,Aprovado Lipinski,216.49,394.58,N/A,NEUTRO
+Ibuprofen + Curcumin,-4.94,-5.11,-0.17,0.016,-0.03,0.329,0.012,574.67,6.44,130.36,Aprovado Lipinski,239.02,178.14,N/A,NEUTRO
+Meloxicam + Thymol,-6.33,-5.98,0.35,0.011,-0.16,0.275,-0.015,501.63,4.77,119.83,Aprovado Lipinski,22.99,41.37,N/A,NEUTRO
+Meloxicam + Carvacrol,-6.29,-5.89,0.39,0.068,-0.67,0.273,-0.017,501.63,4.77,119.83,Aprovado Lipinski,24.70,47.86,N/A,NEUTRO
+Meloxicam + Quercetin,-6.32,-2.42,3.90,0.011,-3.89,0.275,-0.170,653.65,3.94,230.96,Alerta ADME Restrito,23.18,16827.80,N/A,NEUTRO
+Meloxicam + Sulforaphane,-6.52,-6.71,-0.19,0.014,0.69,0.284,0.008,528.70,3.20,129.03,Aprovado Lipinski,16.56,11.98,N/A,NEUTRO
+Meloxicam + Resveratrol,-6.17,-6.03,0.14,0.022,-0.57,0.268,-0.006,579.66,4.92,160.29,Aprovado Lipinski,29.87,37.80,N/A,NEUTRO
+Meloxicam + Genistein,-6.68,-1.33,5.35,0.428,-5.04,0.290,-0.233,621.65,4.53,190.50,Aprovado Lipinski,12.67,105591.53,N/A,NEUTRO
+Meloxicam + Eugenol,-6.37,-6.08,0.29,0.037,-0.12,0.277,-0.013,515.61,4.08,129.06,Aprovado Lipinski,21.37,34.84,N/A,NEUTRO
+Meloxicam + Curcumin,-6.31,-1.71,4.61,0.131,-3.38,0.274,-0.200,719.79,5.32,192.66,Aprovado Lipinski,23.60,56198.82,N/A,NEUTRO

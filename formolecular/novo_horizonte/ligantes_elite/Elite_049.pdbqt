@@ -1,0 +1,39 @@
+REMARK  Name = ligantes_elite\Elite_049.pdb
+REMARK  5 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C1_1  and  O1_2
+REMARK    2  A    between atoms: O1_2  and  C2_3
+REMARK    3  A    between atoms: C2_3  and  C3_5
+REMARK    4  A    between atoms: C4_6  and  C5_7
+REMARK    5  A    between atoms: C8_11  and  C9_12
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C3  UNL     1      -0.956  -0.739   0.077  0.00  0.00    +0.000 C 
+ATOM      2  C4  UNL     1      -0.664  -1.690   1.250  0.00  0.00    +0.000 C 
+ATOM      3  C6  UNL     1       0.145  -2.794   0.577  0.00  0.00    +0.000 C 
+ATOM      4  C7  UNL     1       1.101  -2.032  -0.331  0.00  0.00    +0.000 C 
+ATOM      5  C8  UNL     1       0.332  -0.769  -0.786  0.00  0.00    +0.000 C 
+ENDROOT
+BRANCH   5   6
+ATOM      6  C9  UNL     1       1.218   0.454  -0.767  0.00  0.00    +0.000 C 
+ATOM      7  C10 UNL     1       1.798   0.959   0.391  0.00  0.00    +0.000 C 
+ATOM      8  N1  UNL     1       2.596   2.052   0.429  0.00  0.00    +0.000 NA
+ATOM      9  C11 UNL     1       2.835   2.685  -0.738  0.00  0.00    +0.000 C 
+ATOM     10  C12 UNL     1       2.313   2.274  -1.945  0.00  0.00    +0.000 C 
+ATOM     11  C13 UNL     1       1.503   1.149  -1.942  0.00  0.00    +0.000 C 
+ATOM     12  F2  UNL     1       0.988   0.733  -3.108  0.00  0.00    +0.000 F 
+ENDBRANCH   5   6
+BRANCH   1  13
+ATOM     13  C2  UNL     1      -1.409   0.632   0.530  0.00  0.00    +0.000 C 
+ATOM     14  O2  UNL     1      -1.434   1.002   1.696  0.00  0.00    +0.000 OA
+BRANCH  13  16
+ATOM     15  C1  UNL     1      -2.214   2.701  -0.208  0.00  0.00    +0.000 C 
+ATOM     16  O1  UNL     1      -1.799   1.376  -0.541  0.00  0.00    +0.000 OA
+ENDBRANCH  13  16
+ENDBRANCH   1  13
+BRANCH   2  17
+ATOM     17  C5  UNL     1      -1.920  -2.213   1.930  0.00  0.00    +0.000 C 
+ATOM     18  F1  UNL     1      -2.712  -2.821   1.006  0.00  0.00    +0.000 F 
+ENDBRANCH   2  17
+TORSDOF 4

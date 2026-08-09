@@ -1,0 +1,6 @@
+ID,SMILES,Peso_Molar,Qtd_Aneis,LogP,TPSA,Complexidade,Score_QED,OB_Pct,Energia_3D_Kcal,Num_S,Num_Si,Num_B,Num_P,Num_Cl,Categoria,Num_N,IA_Pred_QED,IA_Pred_OB,IA_Pred_Vol,IA_Pred_Nutri,IA_Pred_TPSA
+Molecula_Util_1607372,NIIC#CC,310.904,1.162,0.439,26.02,-33.45,1.0,0.0,Energia/Aeroespacial,,,,0.0,,Biologia/Farmácia,0.0,1.0,-0.05251204,79.85256,0.009168826,26.996471
+Molecula_Util_2066874,NC#CIC#CC,207.014,0.547,0.35,26.02,-81.15,1.0,0.0,Química de Materiais,,,,0.0,,Biologia/Farmácia,0.0,1.0,0.023423504,79.85256,0.009168826,27.340607
+Molecula_Util_1662416,NIIC#CC,310.904,1.162,0.439,26.02,-33.45,1.0,0.0,Energia/Aeroespacial,,,,0.0,,Biologia/Farmácia,0.0,1.0,-0.05251204,79.85256,0.009168826,26.996471
+Molecula_Util_2248848,COC#CIN,198.991,0.128,0.342,35.25,-44.22,1.0,0.0,Química de Materiais,,,,0.0,,Biologia/Farmácia,0.0,1.0,-0.004377823,88.91296,0.009119047,35.872257
+Molecula_Util_1285681,NOCC#CC#COC,125.127,-0.513,0.379,44.48,-134.26,1.0,0.0,Alimentos/Aromas,,,,0.0,,Biologia/Farmácia,0.0,0.9992741,0.006467211,100.44799,0.009082182,39.389206

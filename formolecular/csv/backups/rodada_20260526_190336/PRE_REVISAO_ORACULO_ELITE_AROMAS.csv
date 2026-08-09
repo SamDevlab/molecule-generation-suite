@@ -1,0 +1,6 @@
+ID,SMILES,Peso_Molar,Qtd_Aneis,LogP,TPSA,Complexidade,Score_QED,OB_Pct,Energia_3D_Kcal,Num_S,Num_Si,Num_B,Num_P,Num_Cl,Categoria,Num_N,IA_Pred_QED,IA_Pred_OB,IA_Pred_Vol,IA_Pred_Nutri,IA_Pred_TPSA
+Molecula_Util_796421,NCCC#N,70.095,-0.141,0.466,49.81,-159.78,2.0,0.0,Alimentos/Aromas,,,,0.0,,Energia/Aeroespacial,0.0,0.9953938,-0.025281599,96.47569,0.008712272,50.115826
+Molecula_Util_1059705,NCCC#N,70.095,-0.141,0.466,49.81,-159.78,2.0,0.0,Alimentos/Aromas,,,,0.0,,Energia/Aeroespacial,0.0,0.9953938,-0.025281599,96.47569,0.008712272,50.115826
+Molecula_Util_856285,NCCC#N,70.095,-0.141,0.466,49.81,-159.78,2.0,0.0,Alimentos/Aromas,,,,0.0,,Energia/Aeroespacial,0.0,0.9953938,-0.025281599,96.47569,0.008712272,50.115826
+Molecula_Util_1083451,NCCC#N,70.095,-0.141,0.466,49.81,-159.78,2.0,0.0,Alimentos/Aromas,,,,0.0,,Energia/Aeroespacial,0.0,0.9953938,-0.025281599,96.47569,0.008712272,50.115826
+Molecula_Util_769141,NCCC#N,70.095,-0.141,0.466,49.81,-159.78,2.0,0.0,Alimentos/Aromas,,,,0.0,,Energia/Aeroespacial,0.0,0.9953938,-0.025281599,96.47569,0.008712272,50.115826
