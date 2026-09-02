@@ -32,6 +32,8 @@ from research_os.ml.validation import (
     PredictionIntervalEstimator,
     validate_regression,
 )
+from research_os.ml.training import CandidateModel, FeatureSchema, TrainingRunManifest
+from research_os.ml.golden import GoldenMLResult, run_ml_golden_path
 from research_os.ml.promotion import (
     ModelPromotionEngine,
     PromotionDecision,
@@ -45,6 +47,8 @@ __all__ = [
     "ApplicabilityDomainResult",
     "CalibrationChecker",
     "DataSplit",
+    "CandidateModel",
+    "FeatureSchema",
     "ModelPromotionEngine",
     "ModelRecord",
     "ModelRegistry",
@@ -60,6 +64,9 @@ __all__ = [
     "SplitStrategy",
     "ValidationGate",
     "ValidationReport",
+    "TrainingRunManifest",
+    "GoldenMLResult",
+    "run_ml_golden_path",
     "cluster_split",
     "compute_regression_metrics",
     "external_test",
