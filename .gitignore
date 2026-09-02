@@ -58,3 +58,6 @@ formolecular/backup/universo_utilidade_filtrada2.csv
 formolecular/csv/universo_utilidade_filtrada.csv
 formolecular/novo_horizonte/receptor_5W8K.pdbqt
 Biolab/repo_vina/
+
+# Generated golden-workflow artifacts (manifests and source fixture remain tracked)
+examples/golden_workflow/output/
