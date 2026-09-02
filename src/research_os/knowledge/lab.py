@@ -30,4 +30,8 @@ class KnowledgeLab(Lab):
         if not m.passed:return m
         z=Zettel(title=n["title"],summary=n["summary"],zettel_type=ZettelType(n["zettel_type"]),domain=n["domain"],evidence_level=EvidenceLevel(n["evidence_level"]),review_status=ReviewStatus(n["review_status"]),mechanism=n["mechanism"],equation=n["equation"],conditions=n["conditions"],limitations=n["limitations"],tags=n["tags"],links=n["links"],sources=tuple(SourceLocator(**s) for s in n["sources"])); m.evidence.append(Evidence(evidence_id=f"EVD-{uuid.uuid4().hex[:12].upper()}",kind="zettelkasten_note",level=z.evidence_level,source="KnowledgeLab validated Zettel",payload={"zettel":z.to_dict(),"digest":z.digest})); return m
 def zettel_to_training_record(z:Zettel):
+    if z.review_status != ReviewStatus.VERIFIED:
+        raise ValueError("training/RAG records require a VERIFIED atomized Zettel")
+    if not z.sources or any(not source.source_id for source in z.sources):
+        raise ValueError("training/RAG records require source locators")
     return {"id":z.zettel_id,"instruction":f"Explain the concept: {z.title}","response":z.summary,"domain":z.domain,"type":z.zettel_type.value,"conditions":z.conditions,"limitations":list(z.limitations),"links":list(z.links),"sources":[s.__dict__ for s in z.sources],"evidence_level":z.evidence_level.value,"review_status":z.review_status.value,"digest":z.digest}

@@ -14,6 +14,27 @@ class ReviewStatus(str,Enum):
 @dataclass(frozen=True)
 class SourceLocator:
     source_id:str; chapter:str|None=None; page:str|None=None; section:str|None=None; doi:str|None=None; url:str|None=None
+
+
+@dataclass(frozen=True)
+class Source:
+    """Bibliographic/provenance record; a locator alone is not a full source."""
+
+    source_id: str
+    title: str
+    authors: tuple[str, ...] = ()
+    year: int | None = None
+    edition: str | None = None
+    doi: str | None = None
+    isbn: str | None = None
+    license: str | None = None
+    status: str | None = None
+    locator: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        data = asdict(self)
+        data["authors"] = list(self.authors)
+        return data
 @dataclass(frozen=True)
 class Zettel:
     title:str; summary:str; zettel_type:ZettelType; domain:str; evidence_level:EvidenceLevel; review_status:ReviewStatus=ReviewStatus.REVIEW_REQUIRED
