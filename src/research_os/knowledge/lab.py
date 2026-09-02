@@ -3,6 +3,7 @@ from typing import Any
 import uuid
 from research_os.core.types import Evidence,EvidenceLevel,GateResult,GateStatus,RunManifest
 from research_os.knowledge.zettel import ReviewStatus,SourceLocator,Zettel,ZettelType
+from research_os.knowledge.moc import MOC, moc_integrity_gate
 from research_os.labs.base import Lab
 from research_os.proof.engine import ProofEngine
 from research_os.proof.rules import Rule,require_fields
@@ -29,6 +30,17 @@ class KnowledgeLab(Lab):
         n=self.normalize(raw); m=RunManifest(lab=self.name,experiment=experiment,inputs=n); ProofEngine().evaluate(m,self.rules())
         if not m.passed:return m
         z=Zettel(title=n["title"],summary=n["summary"],zettel_type=ZettelType(n["zettel_type"]),domain=n["domain"],evidence_level=EvidenceLevel(n["evidence_level"]),review_status=ReviewStatus(n["review_status"]),mechanism=n["mechanism"],equation=n["equation"],conditions=n["conditions"],limitations=n["limitations"],tags=n["tags"],links=n["links"],sources=tuple(SourceLocator(**s) for s in n["sources"])); m.evidence.append(Evidence(evidence_id=f"EVD-{uuid.uuid4().hex[:12].upper()}",kind="zettelkasten_note",level=z.evidence_level,source="KnowledgeLab validated Zettel",payload={"zettel":z.to_dict(),"digest":z.digest})); return m
+
+    def run_moc(self, raw: dict[str, Any], *, known_zettel_ids: set[str], known_moc_ids: set[str] | None = None, experiment: str = "moc_validation") -> RunManifest:
+        try:
+            moc = MOC(moc_id=str(raw.get("moc_id") or ""), title=str(raw.get("title") or ""), domain=str(raw.get("domain") or ""), description=str(raw.get("description") or ""), zettel_ids=tuple(str(value) for value in raw.get("zettel_ids") or ()), child_mocs=tuple(str(value) for value in raw.get("child_mocs") or ()), tags=tuple(str(value) for value in raw.get("tags") or ()), review_status=ReviewStatus(str(raw.get("review_status", ReviewStatus.REVIEW_REQUIRED.value))))
+        except ValueError as exc:
+            manifest = RunManifest(lab=self.name, experiment=experiment, inputs=dict(raw))
+            manifest.gates.append(GateResult("GATE-KNOW-MOC", "KNOW-MOC-002", GateStatus.FAIL, "invalid MOC schema", diagnostics={"error_type": type(exc).__name__, "error": str(exc)}))
+            return manifest
+        manifest = RunManifest(lab=self.name, experiment=experiment, inputs=moc.to_dict())
+        ProofEngine().evaluate(manifest, [Rule("KNOW-MOC-001", "MOC references must resolve", lambda context, evidence: moc_integrity_gate(moc, known_zettel_ids=known_zettel_ids, known_moc_ids=known_moc_ids or set()))])
+        return manifest
 def zettel_to_training_record(z:Zettel):
     if z.review_status != ReviewStatus.VERIFIED:
         raise ValueError("training/RAG records require a VERIFIED atomized Zettel")

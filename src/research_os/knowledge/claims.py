@@ -14,6 +14,7 @@ class ClaimStatus(str, Enum):
 
 
 _LEVEL_ORDER = {
+    EvidenceLevel.TEST_SYNTHETIC: -1,
     EvidenceLevel.E0_HEURISTIC: 0,
     EvidenceLevel.E1_ML: 1,
     EvidenceLevel.E2_COMPUTATIONAL: 2,
@@ -32,17 +33,20 @@ class ScientificClaim:
     status: ClaimStatus
     claim_id: str = field(default_factory=lambda: f"CLM-{uuid.uuid4().hex[:12].upper()}")
     limitations: tuple[str, ...] = ()
+    conditions: dict[str, object] = field(default_factory=dict)
 
     def to_dict(self):
         data = asdict(self)
         data["minimum_evidence_level"] = self.minimum_evidence_level.value
         data["status"] = self.status.value
+        data["limitations"] = list(self.limitations)
+        data["evidence_ids"] = list(self.evidence_ids)
         return data
 
 
-def claim_from_run(run: RunManifest, statement: str, *, minimum_evidence_level: EvidenceLevel, evidence_ids: tuple[str, ...] | None = None, limitations: tuple[str, ...] = ()) -> ScientificClaim:
+def claim_from_run(run: RunManifest, statement: str, *, minimum_evidence_level: EvidenceLevel, evidence_ids: tuple[str, ...] | None = None, limitations: tuple[str, ...] = (), conditions: dict[str, object] | None = None) -> ScientificClaim:
     selected = [e for e in run.evidence if evidence_ids is None or e.evidence_id in evidence_ids]
     required = _LEVEL_ORDER[minimum_evidence_level]
-    qualifies = [e for e in selected if _LEVEL_ORDER[e.level] >= required]
+    qualifies = [e for e in selected if _LEVEL_ORDER.get(e.level, -1) >= required]
     status = ClaimStatus.SUPPORTED if run.passed and qualifies else ClaimStatus.INSUFFICIENT_EVIDENCE
-    return ScientificClaim(statement=statement, run_id=run.run_id, evidence_ids=tuple(e.evidence_id for e in qualifies), minimum_evidence_level=minimum_evidence_level, status=status, limitations=limitations)
+    return ScientificClaim(statement=statement, run_id=run.run_id, evidence_ids=tuple(e.evidence_id for e in qualifies), minimum_evidence_level=minimum_evidence_level, status=status, limitations=limitations, conditions=dict(conditions or {}))
