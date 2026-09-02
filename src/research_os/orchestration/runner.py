@@ -9,6 +9,7 @@ import uuid
 
 from research_os.core.hashing import sha256_json
 from research_os.core.types import GateResult, GateStatus, RunManifest
+from research_os.observability import StructuredLogger
 from research_os.orchestration.registry import LabRegistry
 
 
@@ -72,6 +73,7 @@ class PlanRun:
     runs: dict[str, RunManifest] = field(default_factory=dict)
     skipped: dict[str, str] = field(default_factory=dict)
     steps: dict[str, WorkflowStepRecord] = field(default_factory=dict)
+    events: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def passed(self) -> bool:
@@ -88,6 +90,7 @@ class PlanRun:
             "runs": {step_id: _run_to_dict(run) for step_id, run in self.runs.items()},
             "skipped": dict(self.skipped),
             "steps": {step_id: record.to_dict() for step_id, record in self.steps.items()},
+            "events": list(self.events),
         }
 
 
@@ -104,8 +107,9 @@ def _run_to_dict(run: RunManifest) -> dict[str, Any]:
 class ResearchOrchestrator:
     """Executes only a validated, materialized lab plan."""
 
-    def __init__(self, registry: LabRegistry):
+    def __init__(self, registry: LabRegistry, *, logger: StructuredLogger | None = None):
         self.registry = registry
+        self.logger = logger or StructuredLogger()
 
     def materialize(self, steps: Sequence[PlanStep]) -> WorkflowPlan:
         materialized = tuple(steps)
@@ -145,6 +149,8 @@ class ResearchOrchestrator:
             unmet = [dependency.step_id for dependency in dependencies if dependency.status != "PASS"]
             consumed = _unique((*step.consumed_evidence_ids, *(evidence_id for dependency in dependencies for evidence_id in dependency.produced_evidence_ids)))
             record = WorkflowStepRecord(step.step_id, step.lab, step.experiment, dict(step.inputs), tuple(step.requires), consumed_evidence_ids=consumed, started_at=_now())
+            started_event = self.logger.emit("workflow_step_started", lab=step.lab, step_id=step.step_id, status="RUNNING", fields={"plan_id": plan.plan_id, "experiment": step.experiment})
+            result.events.append(started_event.to_dict())
             if unmet:
                 reason = f"upstream requirements not satisfied: {', '.join(unmet)}"
                 loss = GateResult("GATE-WORKFLOW-UPSTREAM", "WORKFLOW-UPSTREAM-001", GateStatus.SKIPPED, reason, evidence_ids=consumed)
@@ -154,18 +160,22 @@ class ResearchOrchestrator:
                 record.completed_at = _now()
                 result.skipped[step.step_id] = reason
                 result.steps[step.step_id] = record
+                skipped_event = self.logger.emit("workflow_step_skipped", lab=step.lab, step_id=step.step_id, status="SKIPPED", message=reason, fields={"plan_id": plan.plan_id, "rule_id": loss.rule_id})
+                result.events.append(skipped_event.to_dict())
                 continue
             try:
                 run = self.registry.get(step.lab).run(dict(step.inputs), experiment=step.experiment)
             except Exception as exc:
                 run = RunManifest(lab=step.lab, experiment=step.experiment, inputs=dict(step.inputs))
                 run.gates.append(GateResult("GATE-WORKFLOW-EXECUTION", "WORKFLOW-EXECUTION-001", GateStatus.FAIL, "lab execution failed before producing a result", diagnostics={"error_type": type(exc).__name__, "error": str(exc)}))
-            record.status = "PASS" if run.passed else "FAIL"
+            record.status = "PASS" if run.passed else run.status
             record.first_loss = run.first_loss
             record.produced_evidence_ids = tuple(evidence.evidence_id for evidence in run.evidence)
             record.completed_at = _now()
             result.runs[step.step_id] = run
             result.steps[step.step_id] = record
+            completed_event = self.logger.emit("workflow_step_completed", run_id=run.run_id, lab=step.lab, step_id=step.step_id, status=record.status, fields={"plan_id": plan.plan_id, "rule_id": run.first_loss_rule_id})
+            result.events.append(completed_event.to_dict())
         return result
 
     def write_ledger(self, plan_run: PlanRun, root: str | Path) -> Path:
