@@ -17,7 +17,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
-      - name: Install Research OS core + molecular dependencies
-        run: python -m pip install -e ".[dev,molecule]"
+      - name: Install Research OS core + molecular + data dependencies
+        run: python -m pip install -e ".[dev,molecule,data]"
       - name: Run Research OS tests
         run: pytest -q
