@@ -42,6 +42,8 @@ class MetalLab(Lab):
             items.append({"element": str(item.get("element")).strip(), "fraction": fraction / 100.0 if percent else fraction})
         items.sort(key=lambda value: value["element"])
         requested_features = raw.get("features")
+        if isinstance(requested_features, str):
+            requested_features = (requested_features,)
         return {
             "name": raw.get("name"),
             "components": items,

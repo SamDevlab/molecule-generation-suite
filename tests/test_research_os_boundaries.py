@@ -7,7 +7,7 @@ from research_os.biolab import BiolabConfig, BiolabRunner, load_biolab_config
 from research_os.core.types import EvidenceLevel, GateStatus
 from research_os.datasets import DatasetManifest, DatasetRegistry, DatasetSourceType, dataset_ground_truth_gate
 from research_os.knowledge import ReviewStatus, SourceLocator, Zettel, ZettelType, zettel_to_training_record
-from research_os.ml import ModelPromotionEngine, PromotionStatus, SplitStrategy, compute_regression_metrics, group_split, validate_regression
+from research_os.ml import ModelPromotionEngine, PromotionStatus, SplitStrategy, compute_regression_metrics, external_test, group_split, validate_regression
 from research_os.metal import MetalLab
 from research_os.orchestration import LabRegistry, PlanStep, ResearchOrchestrator
 
@@ -52,6 +52,13 @@ def test_group_split_keeps_groups_together():
         for record in bucket:
             previous = locations.setdefault(record["group_id"], name)
             assert previous == name
+
+
+def test_external_split_keeps_all_internal_and_explicit_external_records():
+    records = [{"id": i, "is_external": i >= 8} for i in range(10)]
+    split = external_test(records, validation_size=0.2)
+    assert {record["id"] for record in (*split.train, *split.validation, *split.test)} == set(range(10))
+    assert {record["id"] for record in split.test} == {8, 9}
 
 
 def _model(model_id: str, mae: float) -> ModelArtifactManifest:

@@ -23,8 +23,8 @@ def _strategy(value: SplitStrategy | str) -> SplitStrategy:
 
 
 def _fractions(validation_size: float, test_size: float) -> tuple[float, float]:
-    if not 0 <= validation_size < 1 or not 0 < test_size < 1 or validation_size + test_size >= 1:
-        raise SplitError("validation_size and test_size must be positive fractions with total below one")
+    if not 0 <= validation_size < 1 or not 0 <= test_size < 1 or validation_size + test_size >= 1:
+        raise SplitError("validation_size and test_size must be non-negative fractions with total below one")
     return validation_size, test_size
 
 
@@ -32,7 +32,7 @@ def _three_way(items: Sequence[T], *, seed: int, validation_size: float, test_si
     validation_size, test_size = _fractions(validation_size, test_size)
     shuffled = list(items)
     random.Random(seed).shuffle(shuffled)
-    test_count = max(1, round(len(shuffled) * test_size)) if len(shuffled) >= 3 else 0
+    test_count = max(1, round(len(shuffled) * test_size)) if test_size > 0 and len(shuffled) >= 3 else 0
     validation_count = max(1, round(len(shuffled) * validation_size)) if len(shuffled) - test_count >= 3 else 0
     if test_count + validation_count >= len(shuffled) and len(shuffled) > 1:
         validation_count = min(validation_count, max(0, len(shuffled) - test_count - 1))
@@ -156,7 +156,7 @@ def external_test(records: Sequence[T], *, external_records: Sequence[T] | None 
     internal = [record for record in records if id(record) not in external_ids] if external_records is not None else [record for record in records if not bool(key_fn(record))]
     if not external:
         raise SplitError("external_test requires explicitly marked external records")
-    internal_split = _three_way(internal, seed=seed, validation_size=validation_size, test_size=0.01 if len(internal) >= 3 else 0.001)
+    internal_split = _three_way(internal, seed=seed, validation_size=validation_size, test_size=0.0)
     return DataSplit(SplitStrategy.EXTERNAL_TEST, internal_split.train, internal_split.validation, tuple(external), seed=seed, metadata={"external_count": len(external)})
 
 

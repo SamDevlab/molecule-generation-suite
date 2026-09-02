@@ -73,7 +73,7 @@ class ModelPromotionEngine:
         else:
             gates.append(GateResult("GATE-ML-PROMOTION", "ML-PROMO-MAE-001", GateStatus.PASS, "candidate MAE is better than the champion or no champion exists", diagnostics={"candidate_mae": candidate_mae, "champion_mae": champion_mae}))
 
-        for name, rule_id, comparator, label in (("rmse", "ML-PROMO-RMSE-001", lambda value, threshold: value <= threshold, "RMSE"), ("r2", "ML-PROMO-R2-001", lambda value, threshold: value >= threshold, "R2")):
+        for name, rule_id, comparator, label in (("mae", "ML-PROMO-MAE-THRESHOLD-001", lambda value, threshold: value <= threshold, "MAE"), ("rmse", "ML-PROMO-RMSE-001", lambda value, threshold: value <= threshold, "RMSE"), ("r2", "ML-PROMO-R2-001", lambda value, threshold: value >= threshold, "R2")):
             threshold = getattr(policy, f"min_{name}" if name == "r2" else f"max_{name}")
             if threshold is None:
                 continue
