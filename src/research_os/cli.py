@@ -22,6 +22,7 @@ from research_os.ledger import RunRegistry
 from research_os.ledger.schema import LedgerError
 from research_os.ml.real_golden import run_real_data_golden
 from research_os.orchestration import default_registry
+from research_os.oracle import OraclePlanner
 
 
 def _json(value: object) -> None:
@@ -72,6 +73,11 @@ def build_parser() -> argparse.ArgumentParser:
     bundle_verify.add_argument("bundle")
 
     commands.add_parser("labs", help="list registered labs")
+
+    oracle = commands.add_parser("oracle", help="create and validate structured research plans")
+    oracle_commands = oracle.add_subparsers(dest="oracle_command", required=True)
+    oracle_ask = oracle_commands.add_parser("ask")
+    oracle_ask.add_argument("text")
 
 
     engines = commands.add_parser("engines", help="inspect optional scientific engines")
@@ -213,6 +219,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.command == "labs":
             _json({"labs": list(default_registry().names())})
             return 0
+        if args.command == "oracle" and args.oracle_command == "ask":
+            planner = OraclePlanner()
+            planning = planner.ask(args.text)
+            _json({"question": planning.question.to_dict(), "plan": planning.plan.to_dict(), "validation": planning.validation.to_dict(), "answer": planner.answer_from_plan(planning).to_dict(), "llm_audits": [item.to_dict() for item in planning.audits]})
+            return 0 if planning.validation.status != "FAIL" else 1
         if args.command == "engines":
             registry = EngineRegistry()
             if args.engines_command in {"list", "probe"}:
