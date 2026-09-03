@@ -1,6 +1,6 @@
 # Research OS 3.1 — Operational Oracle Experience
 
-Status: implemented locally on `research-os-v1.3`.
+Status: remotely validated on `research-os-v1.3`.
 
 ## Product boundary
 
@@ -77,3 +77,11 @@ exclusion, prompt-injection allowlisting, persistence/reload, continuation
 lineage, Knowledge citation boundaries, engine status, import/review and
 fail-closed explanations. Existing core, bundle, Ledger, dataset, ML,
 Knowledge, legacy and engine suites remain active.
+
+## Validation record
+
+The Oracle checkpoint CI run `33795616635` passed on Python 3.11 and 3.12.
+The operational web commit CI run `33798333792` also passed on both versions.
+The final local suite contains 128 passing tests on Python 3.11 and 128 on
+Python 3.12. The only CI annotation is GitHub's Node 20 action deprecation
+warning; it does not affect test results.

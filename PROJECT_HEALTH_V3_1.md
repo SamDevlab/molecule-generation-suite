@@ -45,3 +45,11 @@ milestone. Cantera, Open Babel, Vina and materials engines depend on optional
 local installations and therefore truthfully remain unavailable or
 not-configured when absent. The existing `Biolab/` and `formolecular/` trees
 remain preserved until their independent retirement gates are met.
+
+## Remote validation
+
+Checkpoint Oracle CI: PASS (`33795616635`). Final operational experience CI:
+PASS (`33798333792`) on Python 3.11 and 3.12. Local final verification:
+128 passed on each requested Python version, compileall PASS and diff check
+PASS. CI reports only the Node 20 deprecation annotation from existing GitHub
+Actions versions.
