@@ -11,7 +11,12 @@ from research_os.bundles import verify_bundle
 from research_os.datasets import DatasetRegistry, inspect_dataset
 from research_os.environment import capture_environment
 from research_os.engines import EngineRegistry
-from research_os.legacy import legacy_engine_audit
+from research_os.legacy import (
+    deterministic_property_parity,
+    legacy_engine_audit,
+    migration_decisions,
+    scan_legacy,
+)
 from research_os.golden import run_golden_workflow
 from research_os.ledger import RunRegistry
 from research_os.ledger.schema import LedgerError
@@ -68,6 +73,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     commands.add_parser("labs", help="list registered labs")
 
+
     engines = commands.add_parser("engines", help="inspect optional scientific engines")
     engine_commands = engines.add_subparsers(dest="engines_command", required=True)
     engine_commands.add_parser("list")
@@ -77,6 +83,18 @@ def build_parser() -> argparse.ArgumentParser:
     engine_verify = engine_commands.add_parser("verify")
     engine_verify.add_argument("manifest")
     engine_commands.add_parser("audit-legacy")
+
+    legacy = commands.add_parser("legacy", help="inventory and assess preserved legacy workflows")
+    legacy_commands = legacy.add_subparsers(dest="legacy_command", required=True)
+    legacy_commands.add_parser("list")
+    legacy_show = legacy_commands.add_parser("show")
+    legacy_show.add_argument("component")
+    legacy_commands.add_parser("audit")
+    legacy_parity = legacy_commands.add_parser("parity")
+    legacy_parity.add_argument("--smiles", default="CCO")
+    legacy_commands.add_parser("datasets")
+    legacy_commands.add_parser("quarantine")
+    legacy_commands.add_parser("retirement-check")
 
     runs = commands.add_parser("runs", help="query the persistent run ledger")
     runs_commands = runs.add_subparsers(dest="runs_command", required=True)
@@ -214,6 +232,28 @@ def main(argv: Sequence[str] | None = None) -> int:
             valid = result if isinstance(result, bool) else all(result)
             _json({"valid": valid})
             return 0 if valid else 1
+        if args.command == "legacy":
+            inventory = scan_legacy(Path.cwd())
+            if args.legacy_command == "list":
+                _json({"counts": inventory.to_dict()["counts"], "flows": [flow.to_dict() for flow in inventory.flows], "replacements": [item.to_dict() for item in inventory.replacements]})
+                return 0
+            if args.legacy_command == "show":
+                needle = args.component.lower()
+                matches = [item.to_dict() for item in inventory.components if item.component_id.lower() == needle or item.path.lower() == needle or item.path.lower().endswith(needle)]
+                _json({"matches": matches})
+                return 0 if matches else 1
+            if args.legacy_command == "audit":
+                _json(inventory.to_dict())
+                return 0
+            if args.legacy_command == "parity":
+                _json(deterministic_property_parity(args.smiles).to_dict())
+                return 0
+            if args.legacy_command in {"datasets", "quarantine"}:
+                _json({"policy": "eligible_for_training=false until independent provenance review", "manifests": [item.to_dict() for item in inventory.quarantine]})
+                return 0
+            decisions = migration_decisions(inventory)
+            _json({"retirement_allowed": False, "reason": "legacy components still have active dependencies or incomplete parity/evidence gates", "decisions": [item.to_dict() for item in decisions]})
+            return 0
         if args.command == "runs":
             registry = RunRegistry(args.root)
             try:
