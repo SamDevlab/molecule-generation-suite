@@ -65,3 +65,7 @@ examples/golden_workflow/output/
 # Local operational Oracle state (Ledger, sessions, bundles and retrieval DB)
 .research-os/
 .tmp-web-check/
+.tmp-live-run/
+.tmp-live-run2/
+.research-os-live-3.2*/
+.tmp-package-check/

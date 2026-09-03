@@ -14,14 +14,20 @@ the Knowledge review queue and is not auto-verified.
 ## Scan result
 
 The new `src/research_os` and `web/` paths contain no `shell=True`, `eval`,
-`exec`, direct LLM subprocess or unvalidated tool dispatch. SQL in the
-experience store uses fixed statements and bound parameters; the existing
-Ledger allowlists dynamic sort columns.
+`exec`, unsandboxed subprocess or unvalidated tool dispatch. The 3.2 live
+bridge is the explicit exception: it uses the fixed read-only Codex command
+described below. SQL in the experience store uses fixed statements and bound
+parameters; the existing Ledger allowlists dynamic sort columns.
 
 The preserved legacy `Biolab/` tree still contains historical `shell=True`
 subprocess calls. It remains outside the Research OS web/service import graph
 and was not modified because its retirement gate is not satisfied. This is an
 explicit legacy finding, not a claim that those scripts are safe for web use.
+
+Research OS 3.2's live Oracle bridge uses a fixed argv, `shell=False`, read-only
+Codex sandbox, strict JSON envelope and timeout. Its output is treated as
+untrusted planning/narration data and is checked by the same allowlist,
+evidence-ceiling and grounding gates before any Lab execution.
 
 ## Scientific invariants
 

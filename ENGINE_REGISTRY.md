@@ -23,6 +23,16 @@ a heuristic fallback or a successful result.
 Vina and Open Babel are external executables and are intentionally not declared
 as pip dependencies. Their adapters use argv execution with `shell=False` and
 timeouts.
+
+## Research OS 3.2 operational note
+
+The live Codex Oracle may inspect the registry's actual capability and engine
+status, but it cannot mark an engine available or manufacture its output.
+The validated local acceptance environment executed real RDKit molecular
+calculations and Cantera 3.2.0 `gri30.yaml` combustion/ideal-nozzle paths.
+`gri30.yaml` is mechanism-scoped: a fuel absent from its species list remains
+an explicit mechanism/input loss. Vina and Open Babel remain
+`NOT_CONFIGURED` when their executables are absent.
 # 3.1 status surface
 
 The operational UI consumes the existing safe `EngineRegistry` probes and

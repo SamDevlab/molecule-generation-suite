@@ -10,6 +10,14 @@ The repository has four separable layers:
 The preserved `Biolab/` and `formolecular/` trees are audit inputs only. New
 flows cross typed contracts for conditions, units, evidence level, engine
 manifest, dataset/model/source provenance, lineage and first loss.
+
+## 3.2 live operational boundary
+
+The web server can select `test` or `live` Oracle mode. Live mode uses the
+active Codex host's local CLI bridge for structured reasoning only; the
+Research OS executor and registered Labs remain the source of scientific
+truth. Deterministic CI continues to use `CodexTestProvider` and does not
+depend on a live model.
 # Research OS 3.1 operational boundary
 
 The supported web entry point is `research_os.web`, which calls the typed
