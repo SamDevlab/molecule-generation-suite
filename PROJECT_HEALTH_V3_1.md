@@ -49,7 +49,8 @@ remain preserved until their independent retirement gates are met.
 ## Remote validation
 
 Checkpoint Oracle CI: PASS (`33795616635`). Final operational experience CI:
-PASS (`33798333792`) on Python 3.11 and 3.12. Local final verification:
+PASS (`33798333792`) and follow-up final CI PASS (`33798770764`) on Python
+3.11 and 3.12. Local final verification:
 128 passed on each requested Python version, compileall PASS and diff check
 PASS. CI reports only the Node 20 deprecation annotation from existing GitHub
 Actions versions.

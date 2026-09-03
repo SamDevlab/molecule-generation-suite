@@ -84,6 +84,8 @@ Knowledge, legacy and engine suites remain active.
 
 The Oracle checkpoint CI run `33795616635` passed on Python 3.11 and 3.12.
 The operational web commit CI run `33798333792` also passed on both versions.
+The continuation and evidence-filter follow-up CI run `33798770764` passed on
+both versions as well.
 The final local suite contains 128 passing tests on Python 3.11 and 128 on
 Python 3.12. The only CI annotation is GitHub's Node 20 action deprecation
 warning; it does not affect test results.
