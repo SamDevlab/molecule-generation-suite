@@ -31,6 +31,10 @@ class BiolabRunner:
             "cpu": self.config.vina.cpu,
             "seed": seed,
             "output_path": output_path,
+            "species": target.species,
+            "require_species": target.species is not None,
+            "role": target.role,
+            "receptor_metadata": {"species": target.species, "structure_id": target.structure_id, "source": target.structure_source},
         }
 
     def run_target(self, target_id: str, *, ligand_path: str | Path, output_path: str | Path | None = None, experiment: str = "configured_docking") -> RunManifest:

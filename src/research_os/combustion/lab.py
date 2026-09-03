@@ -6,6 +6,7 @@ import uuid
 from research_os.combustion.rules import combustion_request_rules, engine_available_rule
 from research_os.core.types import Evidence, EvidenceLevel, GateResult, GateStatus, RunManifest
 from research_os.engines import CanteraEquilibriumEngine, EquilibriumRequest
+from research_os.engines.cantera import CanteraMechanismUnavailableError
 from research_os.labs.base import Lab
 from research_os.proof.engine import ProofEngine
 from research_os.proof.rules import Rule
@@ -32,15 +33,28 @@ class CombustionLab(Lab):
 
     def run(self, raw: dict[str, Any], experiment: str = "adiabatic_equilibrium_hp") -> RunManifest:
         normalized = self.normalize(raw)
-        manifest = RunManifest(lab=self.name, experiment=experiment, inputs=normalized, config={"engine": type(self.engine).__name__, "engine_version": self.engine.version, "model": "adiabatic_chemical_equilibrium_HP"})
+        manifest = RunManifest(lab=self.name, experiment=experiment, inputs=normalized, config={"engine": type(self.engine).__name__, "engine_version": self.engine.version, "engine_id": "cantera", "protocol_id": "cantera.equilibrium.hp.v1", "model": "adiabatic_chemical_equilibrium_HP"})
         ProofEngine().evaluate(manifest, self.rules())
         if not manifest.passed: return manifest
         try:
             result = self.engine.simulate_equilibrium(EquilibriumRequest(**normalized))
+        except (CanteraMechanismUnavailableError, FileNotFoundError) as exc:
+            manifest.gates.append(GateResult("GATE-PHYSICS-SIMULATION", "COMB-MECHANISM-001", GateStatus.INDETERMINATE, "required combustion mechanism is unavailable; equilibrium was not executed", diagnostics={"error_type": type(exc).__name__, "error": str(exc)}))
+            return manifest
         except Exception as exc:
             manifest.gates.append(GateResult("GATE-PHYSICS-SIMULATION", "COMB-SIM-001", GateStatus.FAIL, "combustion physics engine execution failed", diagnostics={"error_type": type(exc).__name__, "error": str(exc)}))
             return manifest
-        evidence = Evidence(evidence_id=f"EVD-{uuid.uuid4().hex[:12].upper()}", kind="combustion_equilibrium_simulation", level=EvidenceLevel.E3_PHYSICS, source=f"{result.engine} {result.engine_version or 'unknown'} / {result.mechanism}", payload=result.to_dict())
+        engine_payload = result.to_dict()
+        if engine_payload.get("engine_manifest"):
+            manifest.config["engine_manifest"] = engine_payload["engine_manifest"]
+        if hasattr(self.engine, "engine_manifest"):
+            try:
+                engine_payload["engine_manifest"] = self.engine.engine_manifest(EquilibriumRequest(**normalized), executed=True).to_dict()
+            except Exception:
+                # The result remains valid, but the missing manifest is explicit in
+                # the evidence rather than being replaced with guessed metadata.
+                engine_payload["engine_manifest_status"] = "INDETERMINATE"
+        evidence = Evidence(evidence_id=f"EVD-{uuid.uuid4().hex[:12].upper()}", kind="combustion_equilibrium_simulation", level=EvidenceLevel.E3_PHYSICS, source=f"{result.engine} {result.engine_version or 'unknown'} / {result.mechanism}", payload=engine_payload)
         manifest.evidence.append(evidence)
         manifest.gates.append(GateResult("GATE-PHYSICS-SIMULATION", "COMB-SIM-001", GateStatus.PASS, "adiabatic HP equilibrium calculation completed", evidence_ids=(evidence.evidence_id,), diagnostics={"model": result.model}))
         return manifest

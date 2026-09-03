@@ -8,6 +8,7 @@ import subprocess
 from typing import Any
 
 from research_os.environment.manifest import DependencyInfo, EnvironmentManifest
+from research_os.engines.registry import EngineRegistry
 
 
 def _command(*args: str, cwd: str | Path | None = None) -> str | None:
@@ -71,10 +72,12 @@ def capture_environment(*, repo_root: str | Path | None = None) -> EnvironmentMa
         "branch": _command("git", "branch", "--show-current", cwd=root),
         "dirty": bool(_command("git", "status", "--porcelain", cwd=root)),
     }
+    engine_manifests = tuple(item.to_dict() for item in EngineRegistry().probe_all())
     return EnvironmentManifest(
         python={"version": platform.python_version(), "implementation": platform.python_implementation()},
         platform={"system": platform.system(), "release": platform.release(), "machine": platform.machine(), "architecture": platform.architecture()[0]},
         git=git,
         dependencies=dependencies,
         engines=engines,
+        engine_manifests=engine_manifests,
     )

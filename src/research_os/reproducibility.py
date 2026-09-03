@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
 from enum import Enum
-from typing import Any, Callable
+from typing import Any, Callable, Mapping
 import copy
 
 from research_os.core.hashing import sha256_json
@@ -30,11 +30,14 @@ class RunComparison:
     same_evidence_values: bool | None
     same_claims: bool | None
     differences: tuple[str, ...] = ()
+    engine_differences: tuple[str, ...] = ()
+    first_divergence: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         data = asdict(self)
         data["status"] = self.status.value
         data["differences"] = list(self.differences)
+        data["engine_differences"] = list(self.engine_differences)
         return data
 
 
@@ -86,8 +89,9 @@ def compare_runs(original: RunManifest, rerun_run: RunManifest) -> RunComparison
     same_environment: bool | None = original_environment == rerun_environment if original_environment and rerun_environment else None
     same_evidence_values = _evidence_values(original) == _evidence_values(rerun_run)
     same_claims = _claims_values(original) == _claims_values(rerun_run)
-    differences = tuple(name for name, value in (("inputs", same_inputs), ("config", same_config), ("dataset_hashes", same_dataset_hashes), ("code_commit", same_code_commit), ("environment", same_environment), ("evidence_values", same_evidence_values), ("claims", same_claims)) if value is False)
-    if not same_inputs or not same_config or same_dataset_hashes is False or same_code_commit is False or not same_evidence_values or not same_claims:
+    engine_differences = _engine_differences(original, rerun_run)
+    differences = tuple(name for name, value in (("inputs", same_inputs), ("config", same_config), ("dataset_hashes", same_dataset_hashes), ("code_commit", same_code_commit), ("environment", same_environment), ("evidence_values", same_evidence_values), ("claims", same_claims)) if value is False) + engine_differences
+    if not same_inputs or not same_config or same_dataset_hashes is False or same_code_commit is False or not same_evidence_values or not same_claims or engine_differences:
         status = ReproducibilityStatus.DIVERGED
     elif same_environment is False:
         status = ReproducibilityStatus.REPRODUCED_WITH_ENVIRONMENT_CHANGE
@@ -95,7 +99,8 @@ def compare_runs(original: RunManifest, rerun_run: RunManifest) -> RunComparison
         status = ReproducibilityStatus.NOT_COMPARABLE
     else:
         status = ReproducibilityStatus.REPRODUCED
-    return RunComparison(original.run_id, rerun_run.run_id, status, same_inputs, same_config, same_dataset_hashes, same_code_commit, same_environment, same_evidence_values, same_claims, differences)
+    first = {"category": engine_differences[0], "reason": "engine provenance changed"} if engine_differences else None
+    return RunComparison(original.run_id, rerun_run.run_id, status, same_inputs, same_config, same_dataset_hashes, same_code_commit, same_environment, same_evidence_values, same_claims, differences, engine_differences, first)
 
 
 def _environment_value(run: RunManifest, section: str, key: str) -> Any:
@@ -123,3 +128,36 @@ def _claims_values(run: RunManifest) -> str:
         data.pop("claim_id", None)
         values.append(data)
     return sha256_json(values)
+
+
+def _collect_engine_manifests(value: Any, output: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
+    output = output if output is not None else []
+    if isinstance(value, Mapping):
+        if "engine_id" in value and ("manifest_hash" in value or "configuration_hash" in value):
+            output.append(dict(value))
+        for item in value.values():
+            _collect_engine_manifests(item, output)
+    elif isinstance(value, (list, tuple)):
+        for item in value:
+            _collect_engine_manifests(item, output)
+    return output
+
+
+def _engine_differences(original: RunManifest, rerun_run: RunManifest) -> tuple[str, ...]:
+    left_environment = original.environment_manifest.to_dict() if hasattr(original.environment_manifest, "to_dict") else original.environment_manifest
+    right_environment = rerun_run.environment_manifest.to_dict() if hasattr(rerun_run.environment_manifest, "to_dict") else rerun_run.environment_manifest
+    left = {item.get("engine_id"): item for item in _collect_engine_manifests({"config": original.config, "evidence": [asdict(item) for item in original.evidence], "environment": left_environment}) if item.get("engine_id")}
+    right = {item.get("engine_id"): item for item in _collect_engine_manifests({"config": rerun_run.config, "evidence": [asdict(item) for item in rerun_run.evidence], "environment": right_environment}) if item.get("engine_id")}
+    result: list[str] = []
+    if set(left) != set(right):
+        result.append("ENGINE_CHANGED")
+    for engine_id in sorted(set(left) & set(right)):
+        a, b = left[engine_id], right[engine_id]
+        if a.get("version") != b.get("version") or a.get("library_version") != b.get("library_version"):
+            result.append("ENGINE_VERSION_CHANGED")
+        if a.get("configuration_hash") is not None and b.get("configuration_hash") is not None and a.get("configuration_hash") != b.get("configuration_hash"):
+            result.append("PROTOCOL_CHANGED")
+        for key, category in (("mechanism_sha256", "MECHANISM_CHANGED"), ("mechanism_hash", "MECHANISM_CHANGED"), ("database_sha256", "DATABASE_CHANGED"), ("database_hash", "DATABASE_CHANGED"), ("receptor_sha256", "RECEPTOR_CHANGED"), ("grid_hash", "GRID_CHANGED"), ("protocol_id", "PROTOCOL_CHANGED")):
+            if a.get(key) is not None and b.get(key) is not None and a.get(key) != b.get(key):
+                result.append(category)
+    return tuple(dict.fromkeys(result))

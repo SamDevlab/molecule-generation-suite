@@ -13,6 +13,8 @@ class EquilibriumRequest:
     pressure_pa: float = 101325.0
     basis: str = "mole"
     mechanism: str = "gri30.yaml"
+    phase: str | None = None
+    protocol_id: str = "cantera.equilibrium.hp.v1"
 
 
 @dataclass(frozen=True)
@@ -28,6 +30,14 @@ class EquilibriumResult:
     cp_mass_j_kg_k: float | None = None
     cv_mass_j_kg_k: float | None = None
     model: str = "adiabatic_chemical_equilibrium_HP"
+    mechanism_id: str | None = None
+    mechanism_sha256: str | None = None
+    phase_name: str | None = None
+    species_count: int | None = None
+    reaction_count: int | None = None
+    mechanism_manifest: dict[str, Any] | None = None
+    engine_manifest: dict[str, Any] | None = None
+    solver_assumptions: tuple[str, ...] = ()
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

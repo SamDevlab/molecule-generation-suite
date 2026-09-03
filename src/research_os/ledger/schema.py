@@ -90,10 +90,11 @@ class RunIndexRecord:
     claim_ids: tuple[str, ...] = ()
     model_ids: tuple[str, ...] = ()
     evidence_ids: tuple[str, ...] = ()
+    engine_ids: tuple[str, ...] = ()
 
     def to_dict(self) -> dict[str, Any]:
         data = asdict(self)
-        for name in ("tags", "dataset_ids", "claim_ids", "model_ids", "evidence_ids"):
+        for name in ("tags", "dataset_ids", "claim_ids", "model_ids", "evidence_ids", "engine_ids"):
             data[name] = list(data[name])
         return data
 
@@ -222,6 +223,7 @@ class WorkflowComparison:
     first_divergence_rule_id: str | None = None
     differences: tuple[str, ...] = ()
     first_divergence: "FirstDivergence | None" = None
+    engine_differences: tuple[str, ...] = ()
 
     @property
     def same_dataset_hashes(self) -> bool | None:
@@ -237,6 +239,7 @@ class WorkflowComparison:
         data["steps_compared"] = list(self.steps_compared)
         data["differences"] = list(self.differences)
         data["first_divergence"] = self.first_divergence.to_dict() if self.first_divergence else None
+        data["engine_differences"] = list(self.engine_differences)
         return data
 
 

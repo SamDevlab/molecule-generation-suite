@@ -65,6 +65,19 @@ def _all_provenance(run: Any) -> list[Any]:
     return [item for child in getattr(run, "runs", {}).values() for item in child.provenance]
 
 
+def _engine_manifests(value: Any, output: list[Any] | None = None) -> list[Any]:
+    output = output if output is not None else []
+    if isinstance(value, Mapping):
+        if "engine_id" in value and ("manifest_hash" in value or "configuration_hash" in value):
+            output.append(dict(value))
+        for item in value.values():
+            _engine_manifests(item, output)
+    elif isinstance(value, (list, tuple)):
+        for item in value:
+            _engine_manifests(item, output)
+    return output
+
+
 @dataclass(frozen=True)
 class ResearchBundle:
     bundle_id: str
@@ -85,13 +98,15 @@ class ResearchBundle:
         claims: Iterable[Any] = (),
         artifacts: Mapping[str, str | Path] | None = None,
         pack_artifacts: bool = False,
+        engine_manifests: Iterable[Any] = (),
+        scientific_artifacts: Iterable[Any] = (),
     ) -> "ResearchBundle":
         bundle_id = f"BND-{uuid.uuid4().hex[:12].upper()}"
         run_id = _run_id(run)
         target = Path(root) / run_id
         if target.exists():
             raise ResearchBundleError(f"bundle target already exists: {target}")
-        for directory in (target, target / "datasets", target / "provenance", target / "steps", target / "evidence", target / "claims", target / "artifacts"):
+        for directory in (target, target / "datasets", target / "provenance", target / "steps", target / "evidence", target / "claims", target / "artifacts", target / "engines"):
             directory.mkdir(parents=True, exist_ok=True)
 
         run_payload = _run_payload(run)
@@ -113,6 +128,13 @@ class ResearchBundle:
         evidence = _all_evidence(run)
         _write_json(target / "evidence" / "evidence.json", [_jsonable(item) for item in evidence])
         _write_json(target / "claims" / "claims.json", [_jsonable(item) for item in claim_items])
+        declared_engines = list(engine_manifests) or list(getattr(run, "engine_manifests", ()))
+        if not declared_engines:
+            declared_engines = _engine_manifests(run_payload)
+        declared_engines = [_jsonable(item) for item in declared_engines]
+        declared_engines = list({(str(item.get("engine_id")), str(item.get("manifest_hash"))): item for item in declared_engines if isinstance(item, Mapping) and item.get("engine_id")}.values())
+        _write_json(target / "engines" / "manifests.json", [_jsonable(item) for item in declared_engines])
+        _write_json(target / "engines" / "scientific_artifacts.json", [_jsonable(item) for item in scientific_artifacts])
         artifact_index: dict[str, Any] = {}
         for name, path_value in (artifacts or {}).items():
             source = Path(path_value)

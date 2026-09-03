@@ -53,6 +53,9 @@ class TargetConfig:
     role: str
     receptor: str
     grid: GridBox
+    species: str | None = None
+    structure_id: str | None = None
+    structure_source: str | None = None
 
     def receptor_path(self, *, base_dir: str | Path | None = None) -> Path:
         path = Path(self.receptor)
@@ -102,7 +105,7 @@ class BiolabConfig:
             key = str(target_id).strip().lower()
             if not key:
                 raise BiolabConfigError("target id cannot be empty")
-            targets[key] = TargetConfig(key, str(role), str(receptor), grid)
+            targets[key] = TargetConfig(key, str(role), str(receptor), grid, _optional_str(target_raw.get("species")), _optional_str(target_raw.get("structure_id")), _optional_str(target_raw.get("structure_source")))
 
         return cls(
             vina=VinaConfig(

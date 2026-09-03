@@ -39,6 +39,7 @@ class EnvironmentManifest:
     dependencies: dict[str, DependencyInfo] = field(default_factory=dict)
     engines: dict[str, DependencyInfo] = field(default_factory=dict)
     environment_hash: str | None = None
+    engine_manifests: tuple[dict[str, Any], ...] = ()
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "python", _mapping(self.python))
@@ -46,17 +47,21 @@ class EnvironmentManifest:
         object.__setattr__(self, "git", _mapping(self.git))
         object.__setattr__(self, "dependencies", _FrozenDict({str(name): _dependency(value) for name, value in self.dependencies.items()}))
         object.__setattr__(self, "engines", _FrozenDict({str(name): _dependency(value) for name, value in self.engines.items()}))
+        object.__setattr__(self, "engine_manifests", tuple(dict(value) for value in self.engine_manifests))
         if self.environment_hash is None:
             object.__setattr__(self, "environment_hash", sha256_json(self._hash_payload()))
 
     def _hash_payload(self) -> dict[str, Any]:
-        return {
+        payload = {
             "python": self.python,
             "platform": self.platform,
             "git": self.git,
             "dependencies": {key: asdict(value) for key, value in sorted(self.dependencies.items())},
             "engines": {key: asdict(value) for key, value in sorted(self.engines.items())},
         }
+        if self.engine_manifests:
+            payload["engine_manifests"] = [{key: value for key, value in item.items() if key != "created_at"} for item in self.engine_manifests]
+        return payload
 
     @property
     def computed_hash(self) -> str:
@@ -76,6 +81,7 @@ class EnvironmentManifest:
             "dependencies": {key: asdict(value) for key, value in sorted(self.dependencies.items())},
             "engines": {key: asdict(value) for key, value in sorted(self.engines.items())},
             "environment_hash": self.environment_hash,
+            "engine_manifests": list(self.engine_manifests),
         }
 
     def to_json(self) -> str:
@@ -92,6 +98,7 @@ class EnvironmentManifest:
             dependencies={str(key): _dependency(value) for key, value in _mapping(raw.get("dependencies")).items()},
             engines={str(key): _dependency(value) for key, value in _mapping(raw.get("engines")).items()},
             environment_hash=raw.get("environment_hash"),
+            engine_manifests=tuple(raw.get("engine_manifests") or ()),
         )
 
 

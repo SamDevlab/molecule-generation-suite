@@ -131,6 +131,30 @@ def _ids(value: Any) -> tuple[str, ...]:
     return ()
 
 
+def _engine_items(value: Any, output: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
+    output = output if output is not None else []
+    if isinstance(value, Mapping):
+        if "engine_id" in value and ("manifest_hash" in value or "configuration_hash" in value):
+            output.append(dict(value))
+        for item in value.values():
+            _engine_items(item, output)
+    elif isinstance(value, (list, tuple)):
+        for item in value:
+            _engine_items(item, output)
+    return output
+
+
+def _engine_field(item: Mapping[str, Any], *keys: str) -> Any:
+    for key in keys:
+        if item.get(key) is not None:
+            return item.get(key)
+    metadata = item.get("metadata") if isinstance(item.get("metadata"), Mapping) else {}
+    for key in keys:
+        if metadata.get(key) is not None:
+            return metadata.get(key)
+    return None
+
+
 class RunRegistry:
     """Persistent, reconstructible index over sealed Research OS bundles.
 
@@ -184,6 +208,35 @@ class RunRegistry:
             tables = {row[0] for row in self._connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
             if not required.issubset(tables):
                 raise LedgerSchemaError("ledger schema is missing required tables")
+            self._ensure_engine_tables()
+
+    def _ensure_engine_tables(self) -> None:
+        self._connection.executescript(
+            """
+            CREATE TABLE IF NOT EXISTS run_engines (
+                run_id TEXT NOT NULL,
+                engine_id TEXT NOT NULL,
+                version TEXT,
+                status TEXT,
+                readiness TEXT,
+                manifest_hash TEXT,
+                configuration_hash TEXT,
+                protocol_id TEXT,
+                mechanism_hash TEXT,
+                database_hash TEXT,
+                receptor_hash TEXT,
+                grid_hash TEXT,
+                manifest_json TEXT NOT NULL DEFAULT '{}',
+                PRIMARY KEY (run_id, engine_id, manifest_hash)
+            );
+            CREATE INDEX IF NOT EXISTS idx_run_engines_id ON run_engines(engine_id, version);
+            CREATE INDEX IF NOT EXISTS idx_run_engines_mechanism ON run_engines(mechanism_hash);
+            CREATE INDEX IF NOT EXISTS idx_run_engines_database ON run_engines(database_hash);
+            CREATE INDEX IF NOT EXISTS idx_run_engines_receptor ON run_engines(receptor_hash);
+            CREATE INDEX IF NOT EXISTS idx_run_engines_grid ON run_engines(grid_hash);
+            """
+        )
+        self._connection.commit()
 
     def _migrate_v1_to_v2(self) -> None:
         self._connection.execute("CREATE TABLE IF NOT EXISTS saved_queries(name TEXT PRIMARY KEY, query_json TEXT NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL)")
@@ -445,6 +498,7 @@ class RunRegistry:
         datasets = _load(root / "datasets" / "manifests.json", [])
         evidence = _load(root / "evidence" / "evidence.json", [])
         claims = _load(root / "claims" / "claims.json", [])
+        engines = _load(root / "engines" / "manifests.json", [])
         steps = _load(root / "steps" / "steps.json", [])
         if not isinstance(manifest, Mapping) or not isinstance(bundle, Mapping) or not bundle.get("bundle_id"):
             raise LedgerIntegrityError(f"bundle metadata is incomplete: {root}")
@@ -472,6 +526,8 @@ class RunRegistry:
             if not child_claims and run_id == primary_id:
                 child_claims = [item for item in claims if isinstance(item, Mapping)]
             child_datasets = payload.get("dataset_manifests") if isinstance(payload.get("dataset_manifests"), list) and payload.get("dataset_manifests") else datasets
+            engine_items = _engine_items(engines) + _engine_items(payload)
+            unique_engines = {(item.get("engine_id"), item.get("manifest_hash"), item.get("protocol_id")): item for item in engine_items if item.get("engine_id")}
             row_model_ids = set(base_model_ids)
             model_refs: dict[str, str | None] = {}
             for item in child_evidence:
@@ -513,6 +569,7 @@ class RunRegistry:
                 "evidence": tuple(item for item in child_evidence if isinstance(item, Mapping)),
                 "model_ids": tuple(sorted(row_model_ids)),
                 "model_refs": model_refs,
+                "engines": tuple(unique_engines.values()),
             })
         workflow = self._workflow_from_payload(manifest, records, steps, environment, root) if is_workflow and resolved_workflow_id else None
         return records, workflow
@@ -605,6 +662,12 @@ class RunRegistry:
                 connection.execute("INSERT OR IGNORE INTO run_evidence(run_id,evidence_id,kind,level,source,provenance_ids_json,payload_json,created_at) VALUES(?,?,?,?,?,?,?,?)", (row["run_id"], evidence_id, str(item.get("kind", "")), _enum_value(item.get("level")) or "UNKNOWN", item.get("source"), _json(item.get("provenance_ids", [])), _json(item.get("payload", {})), item.get("created_at") or row.get("created_at")))
         for model_id in row.get("model_ids", ()):
             connection.execute("INSERT OR IGNORE INTO run_models(run_id,model_id,training_run_id) VALUES(?,?,?)", (row["run_id"], model_id, (row.get("model_refs") or {}).get(model_id)))
+        for item in row.get("engines", ()):
+            connection.execute(
+                """INSERT OR IGNORE INTO run_engines(run_id,engine_id,version,status,readiness,manifest_hash,configuration_hash,protocol_id,mechanism_hash,database_hash,receptor_hash,grid_hash,manifest_json)
+                   VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                (row["run_id"], item.get("engine_id"), item.get("version") or item.get("library_version"), item.get("status"), item.get("readiness"), item.get("manifest_hash"), item.get("configuration_hash"), item.get("protocol_id"), _engine_field(item, "mechanism_sha256", "mechanism_hash"), _engine_field(item, "database_sha256", "database_hash"), _engine_field(item, "receptor_sha256", "receptor_hash"), _engine_field(item, "grid_hash"), _json(item)),
+            )
 
     def _lineage_dependencies(self, records: Sequence[Mapping[str, Any]]) -> tuple[RunDependency, ...]:
         result: list[RunDependency] = []
@@ -673,7 +736,7 @@ class RunRegistry:
     def _record(self, row: sqlite3.Row) -> RunIndexRecord:
         run_id = str(row["run_id"])
         values = lambda table, column: tuple(str(item[0]) for item in self._connection.execute(f"SELECT {column} FROM {table} WHERE run_id=? ORDER BY {column}", (run_id,)))
-        return RunIndexRecord(run_id=run_id, bundle_id=row["bundle_id"], bundle_path=row["bundle_path"], bundle_hash=row["bundle_hash"], status=row["status"], sealed=bool(row["sealed"]), lab=row["lab"], experiment=row["experiment"], workflow_id=row["workflow_id"], plan_id=row["plan_id"], created_at=row["created_at"], started_at=row["started_at"], completed_at=row["completed_at"], git_commit=row["git_commit"], environment_id=row["environment_id"], environment_hash=row["environment_hash"], first_loss_rule_id=row["first_loss_rule_id"], first_loss_status=row["first_loss_status"], parent_run_id=row["parent_run_id"], rerun_of=row["rerun_of"], supersedes=row["supersedes"], index_created_at=row["index_created_at"], index_updated_at=row["index_updated_at"], tags=values("run_tags", "tag"), dataset_ids=values("run_datasets", "dataset_id"), claim_ids=values("run_claims", "claim_id"), model_ids=values("run_models", "model_id"), evidence_ids=values("run_evidence", "evidence_id"))
+        return RunIndexRecord(run_id=run_id, bundle_id=row["bundle_id"], bundle_path=row["bundle_path"], bundle_hash=row["bundle_hash"], status=row["status"], sealed=bool(row["sealed"]), lab=row["lab"], experiment=row["experiment"], workflow_id=row["workflow_id"], plan_id=row["plan_id"], created_at=row["created_at"], started_at=row["started_at"], completed_at=row["completed_at"], git_commit=row["git_commit"], environment_id=row["environment_id"], environment_hash=row["environment_hash"], first_loss_rule_id=row["first_loss_rule_id"], first_loss_status=row["first_loss_status"], parent_run_id=row["parent_run_id"], rerun_of=row["rerun_of"], supersedes=row["supersedes"], index_created_at=row["index_created_at"], index_updated_at=row["index_updated_at"], tags=values("run_tags", "tag"), dataset_ids=values("run_datasets", "dataset_id"), claim_ids=values("run_claims", "claim_id"), model_ids=values("run_models", "model_id"), evidence_ids=values("run_evidence", "evidence_id"), engine_ids=values("run_engines", "engine_id"))
 
     def list_runs(self, *, limit: int = 100, offset: int = 0, order_by: str = "created_at", descending: bool = True) -> list[RunIndexRecord]:
         column = _ORDER_COLUMNS.get(order_by)
@@ -770,8 +833,11 @@ class RunRegistry:
         same_environment = _optional_equal(left_record.environment_hash, right_record.environment_hash)
         same_evidence_values = _normalise({"evidence": left.get("evidence", []), "gates": left.get("gates", [])}) == _normalise({"evidence": right.get("evidence", []), "gates": right.get("gates", [])})
         same_claims = _normalise(left.get("claims", [])) == _normalise(right.get("claims", []))
-        differences = tuple(name for name, value in (("inputs", same_inputs), ("config", same_config), ("dataset_hashes", same_dataset_hashes), ("code_commit", same_code_commit), ("environment", same_environment), ("evidence_values", same_evidence_values), ("claims", same_claims)) if value is False)
-        if not same_inputs or not same_config or not same_dataset_hashes or not same_evidence_values or not same_claims:
+        left_engines = _engine_items({"manifests": _load(Path(left_record.bundle_path) / "engines" / "manifests.json", []), "payload": left})
+        right_engines = _engine_items({"manifests": _load(Path(right_record.bundle_path) / "engines" / "manifests.json", []), "payload": right})
+        engine_differences = _engine_provenance_differences(left_engines, right_engines)
+        differences = tuple(name for name, value in (("inputs", same_inputs), ("config", same_config), ("dataset_hashes", same_dataset_hashes), ("code_commit", same_code_commit), ("environment", same_environment), ("evidence_values", same_evidence_values), ("claims", same_claims)) if value is False) + engine_differences
+        if not same_inputs or not same_config or not same_dataset_hashes or not same_evidence_values or not same_claims or engine_differences:
             status = ReproducibilityStatus.DIVERGED
         elif same_environment is False:
             status = ReproducibilityStatus.REPRODUCED_WITH_ENVIRONMENT_CHANGE
@@ -779,7 +845,8 @@ class RunRegistry:
             status = ReproducibilityStatus.NOT_COMPARABLE
         else:
             status = ReproducibilityStatus.REPRODUCED
-        result = RunComparison(original, rerun, status, same_inputs, same_config, same_dataset_hashes, same_code_commit, same_environment, same_evidence_values, same_claims, differences)
+        first = {"category": engine_differences[0], "reason": "engine provenance changed"} if engine_differences else None
+        result = RunComparison(original, rerun, status, same_inputs, same_config, same_dataset_hashes, same_code_commit, same_environment, same_evidence_values, same_claims, differences, engine_differences, first)
         self._log("compare_runs", run_id=rerun, status=status.value, fields={"original_run_id": original})
         return result
 
@@ -801,7 +868,7 @@ class RunRegistry:
             connection.execute("DELETE FROM workflow_steps WHERE workflow_run_id=? OR run_id=?", (run_id, run_id))
             connection.execute("DELETE FROM workflows WHERE workflow_run_id=?", (run_id,))
             connection.execute("DELETE FROM run_dependencies WHERE downstream_run_id=? OR upstream_run_id=?", (run_id, run_id))
-            for table in ("run_tags", "run_datasets", "run_models", "run_claims", "run_evidence"):
+            for table in ("run_tags", "run_datasets", "run_models", "run_claims", "run_evidence", "run_engines"):
                 connection.execute(f"DELETE FROM {table} WHERE run_id=?", (run_id,))
             connection.execute("DELETE FROM runs WHERE run_id=?", (run_id,))
         self._log("remove_index_entry", run_id=run_id, status=LedgerOperationStatus.REMOVED.value)
@@ -954,6 +1021,41 @@ class RunRegistry:
         provenance = [item for item in sources if isinstance(item, Mapping) and item.get("provenance_id") in evidence.provenance_ids]
         return {"evidence": evidence.to_dict(), "run": run.to_dict(), "provenance": provenance, "claims": [claim.to_dict() for claim in self._claims_for_evidence(evidence_id)]}
 
+    def engine_manifests_for_run(self, run_id: str, engine_id: str | None = None) -> list[dict[str, Any]]:
+        self.get_run(run_id)
+        query = "SELECT manifest_json FROM run_engines WHERE run_id=?"
+        params: list[Any] = [run_id]
+        if engine_id is not None:
+            query += " AND engine_id=?"
+            params.append(engine_id)
+        return [dict(json.loads(row[0])) for row in self._connection.execute(query, params)]
+
+    def trace_engine_run(self, run_id: str, engine_id: str | None = None) -> dict[str, Any]:
+        record = self.get_run(run_id)
+        manifests = self.engine_manifests_for_run(run_id, engine_id)
+        if not manifests:
+            raise KeyError(f"engine manifest not indexed for run: {run_id}")
+        return {"run": record.to_dict(), "engines": manifests, "environment": _load(Path(record.bundle_path) / "environment.json", {}), "evidence": _load(Path(record.bundle_path) / "evidence" / "evidence.json", [])}
+
+    def runs_using_engine(self, engine_id: str) -> list[RunIndexRecord]:
+        rows = self._connection.execute("SELECT DISTINCT run_id FROM run_engines WHERE engine_id=? ORDER BY run_id", (engine_id,)).fetchall()
+        return [self.get_run(row[0]) for row in rows]
+
+    def runs_using_engine_version(self, engine_id: str, version: str) -> list[RunIndexRecord]:
+        rows = self._connection.execute("SELECT DISTINCT run_id FROM run_engines WHERE engine_id=? AND version=? ORDER BY run_id", (engine_id, version)).fetchall()
+        return [self.get_run(row[0]) for row in rows]
+
+    def _runs_using_engine_hash(self, column: str, value: str) -> list[RunIndexRecord]:
+        if column not in {"mechanism_hash", "database_hash", "receptor_hash", "grid_hash"}:
+            raise ValueError("unsupported engine provenance field")
+        rows = self._connection.execute(f"SELECT DISTINCT run_id FROM run_engines WHERE {column}=? ORDER BY run_id", (value,)).fetchall()
+        return [self.get_run(row[0]) for row in rows]
+
+    def runs_using_mechanism(self, mechanism_hash: str) -> list[RunIndexRecord]: return self._runs_using_engine_hash("mechanism_hash", mechanism_hash)
+    def runs_using_database(self, database_hash: str) -> list[RunIndexRecord]: return self._runs_using_engine_hash("database_hash", database_hash)
+    def runs_using_receptor(self, receptor_hash: str) -> list[RunIndexRecord]: return self._runs_using_engine_hash("receptor_hash", receptor_hash)
+    def runs_using_grid(self, grid_hash: str) -> list[RunIndexRecord]: return self._runs_using_engine_hash("grid_hash", grid_hash)
+
     def _evidence_exists(self, evidence_id: str) -> bool:
         return self._connection.execute("SELECT 1 FROM run_evidence WHERE evidence_id=?", (evidence_id,)).fetchone() is not None
 
@@ -1002,6 +1104,7 @@ class RunRegistry:
         flags: dict[str, bool | None] = {"same_inputs": True, "same_config": True, "same_datasets": True, "same_code": _optional_equal(left_wf.git_commit, right_wf.git_commit), "same_environment": _optional_equal(left_wf.environment_hash, right_wf.environment_hash)}
         first: FirstDivergence | None = None
         differences: list[str] = []
+        engine_differences: list[str] = []
         if not same_plan:
             differences.append("plan")
             for left_step, right_step in zip(left_wf.steps, right_wf.steps):
@@ -1024,6 +1127,14 @@ class RunRegistry:
                 differences.append("datasets")
                 if first is None:
                     first = FirstDivergence(step_id, "LEDGER-DATASET-001", "dataset hash changed", left_data, right_data)
+            step_engine_differences = _engine_provenance_differences(_engine_items(left_payload), _engine_items(right_payload))
+            for category in step_engine_differences:
+                if category not in engine_differences:
+                    engine_differences.append(category)
+                if category not in differences:
+                    differences.append(category)
+                if first is None:
+                    first = FirstDivergence(step_id, category, "engine provenance changed", left_payload.get("config"), right_payload.get("config"))
             if _normalise({"status": left_payload.get("status"), "gates": left_payload.get("gates", []), "evidence": left_payload.get("evidence", [])}) != _normalise({"status": right_payload.get("status"), "gates": right_payload.get("gates", []), "evidence": right_payload.get("evidence", [])}):
                 differences.append("result")
                 loss = _first_loss(right_payload) or _first_loss(left_payload)
@@ -1033,7 +1144,7 @@ class RunRegistry:
             if flag is False and name not in differences:
                 differences.append(name.removeprefix("same_"))
         status = _comparison_status(left_wf, right_wf, same_plan, flags, first)
-        comparison = WorkflowComparison(original_id, rerun_id, status, same_plan, flags["same_inputs"], flags["same_config"], flags["same_datasets"], flags["same_code"], flags["same_environment"], shared, first.step_id if first else None, first.rule_id if first else None, tuple(dict.fromkeys(differences)), first)
+        comparison = WorkflowComparison(original_id, rerun_id, status, same_plan, flags["same_inputs"], flags["same_config"], flags["same_datasets"], flags["same_code"], flags["same_environment"], shared, first.step_id if first else None, first.rule_id if first else None, tuple(dict.fromkeys(differences)), first, tuple(engine_differences))
         with self._transaction() as connection:
             connection.execute("INSERT OR REPLACE INTO workflow_comparisons(original_workflow_id,rerun_workflow_id,status,same_plan,same_inputs,same_config,same_datasets,same_code,same_environment,steps_compared_json,first_divergence_step,first_divergence_rule_id,first_divergence_json,differences_json,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", (original_id, rerun_id, status.value, _bit(same_plan), _bit(flags["same_inputs"]), _bit(flags["same_config"]), _bit(flags["same_datasets"]), _bit(flags["same_code"]), _bit(flags["same_environment"]), _json(shared), comparison.first_divergence_step, comparison.first_divergence_rule_id, _json(first.to_dict()) if first else None, _json(comparison.differences), _now()))
         self._log("compare_workflows", workflow_id=rerun_id, status=status.value, fields={"original_workflow_id": original_id, "first_divergence_step": comparison.first_divergence_step})
@@ -1045,7 +1156,9 @@ class RunRegistry:
             return self.compare_workflows(original, rerun)
         first_raw = json.loads(row["first_divergence_json"]) if row["first_divergence_json"] else None
         first = FirstDivergence(**first_raw) if first_raw else None
-        return WorkflowComparison(original, rerun, ReproducibilityStatus(row["status"]), bool_or_none(row["same_plan"]), bool_or_none(row["same_inputs"]), bool_or_none(row["same_config"]), bool_or_none(row["same_datasets"]), bool_or_none(row["same_code"]), bool_or_none(row["same_environment"]), tuple(json.loads(row["steps_compared_json"])), row["first_divergence_step"], row["first_divergence_rule_id"], tuple(json.loads(row["differences_json"])), first)
+        differences = tuple(json.loads(row["differences_json"]))
+        categories = {"ENGINE_CHANGED", "ENGINE_VERSION_CHANGED", "MECHANISM_CHANGED", "DATABASE_CHANGED", "RECEPTOR_CHANGED", "GRID_CHANGED", "PROTOCOL_CHANGED"}
+        return WorkflowComparison(original, rerun, ReproducibilityStatus(row["status"]), bool_or_none(row["same_plan"]), bool_or_none(row["same_inputs"]), bool_or_none(row["same_config"]), bool_or_none(row["same_datasets"]), bool_or_none(row["same_code"]), bool_or_none(row["same_environment"]), tuple(json.loads(row["steps_compared_json"])), row["first_divergence_step"], row["first_divergence_rule_id"], differences, first, tuple(item for item in differences if item in categories))
 
     def workflow_regressions(self, original: str, rerun: str):
         from research_os.ledger.regression import detect_regressions
@@ -1238,6 +1351,26 @@ def bool_or_none(value: Any) -> bool | None:
     return None if value is None else bool(value)
 
 
+def _engine_provenance_differences(left_items: Sequence[Mapping[str, Any]], right_items: Sequence[Mapping[str, Any]]) -> tuple[str, ...]:
+    left = {str(item.get("engine_id")): item for item in left_items if item.get("engine_id")}
+    right = {str(item.get("engine_id")): item for item in right_items if item.get("engine_id")}
+    result: list[str] = []
+    if set(left) != set(right):
+        result.append("ENGINE_CHANGED")
+    for engine_id in sorted(set(left) & set(right)):
+        a, b = left[engine_id], right[engine_id]
+        if (a.get("version") or a.get("library_version")) != (b.get("version") or b.get("library_version")):
+            result.append("ENGINE_VERSION_CHANGED")
+        if a.get("configuration_hash") is not None and b.get("configuration_hash") is not None and a.get("configuration_hash") != b.get("configuration_hash"):
+            result.append("PROTOCOL_CHANGED")
+        for keys, category in ((("mechanism_sha256", "mechanism_hash"), "MECHANISM_CHANGED"), (("database_sha256", "database_hash"), "DATABASE_CHANGED"), (("receptor_sha256", "receptor_hash"), "RECEPTOR_CHANGED"), (("grid_hash",), "GRID_CHANGED"), (("protocol_id",), "PROTOCOL_CHANGED")):
+            av = _engine_field(a, *keys)
+            bv = _engine_field(b, *keys)
+            if av is not None and bv is not None and av != bv:
+                result.append(category)
+    return tuple(dict.fromkeys(result))
+
+
 def rebuild_index(bundle_root: str | Path, registry: RunRegistry | None = None) -> RebuildReport:
     owned = registry is None
     current = registry or RunRegistry(Path(bundle_root).parent)
@@ -1280,3 +1413,31 @@ def verify_run(registry: RunRegistry, run_id: str):
 
 def remove_index_entry(registry: RunRegistry, run_id: str) -> LedgerRegistration:
     return registry.remove_index_entry(run_id)
+
+
+def runs_using_engine(registry: RunRegistry, engine_id: str) -> list[RunIndexRecord]:
+    return registry.runs_using_engine(engine_id)
+
+
+def runs_using_engine_version(registry: RunRegistry, engine_id: str, version: str) -> list[RunIndexRecord]:
+    return registry.runs_using_engine_version(engine_id, version)
+
+
+def runs_using_mechanism(registry: RunRegistry, mechanism_hash: str) -> list[RunIndexRecord]:
+    return registry.runs_using_mechanism(mechanism_hash)
+
+
+def runs_using_database(registry: RunRegistry, database_hash: str) -> list[RunIndexRecord]:
+    return registry.runs_using_database(database_hash)
+
+
+def runs_using_receptor(registry: RunRegistry, receptor_hash: str) -> list[RunIndexRecord]:
+    return registry.runs_using_receptor(receptor_hash)
+
+
+def runs_using_grid(registry: RunRegistry, grid_hash: str) -> list[RunIndexRecord]:
+    return registry.runs_using_grid(grid_hash)
+
+
+def trace_engine_run(registry: RunRegistry, run_id: str, engine_id: str | None = None) -> dict[str, Any]:
+    return registry.trace_engine_run(run_id, engine_id)

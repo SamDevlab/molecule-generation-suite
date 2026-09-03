@@ -10,6 +10,8 @@ from typing import Sequence
 from research_os.bundles import verify_bundle
 from research_os.datasets import DatasetRegistry, inspect_dataset
 from research_os.environment import capture_environment
+from research_os.engines import EngineRegistry
+from research_os.legacy import legacy_engine_audit
 from research_os.golden import run_golden_workflow
 from research_os.ledger import RunRegistry
 from research_os.ledger.schema import LedgerError
@@ -65,6 +67,16 @@ def build_parser() -> argparse.ArgumentParser:
     bundle_verify.add_argument("bundle")
 
     commands.add_parser("labs", help="list registered labs")
+
+    engines = commands.add_parser("engines", help="inspect optional scientific engines")
+    engine_commands = engines.add_subparsers(dest="engines_command", required=True)
+    engine_commands.add_parser("list")
+    engine_commands.add_parser("probe")
+    engine_show = engine_commands.add_parser("show")
+    engine_show.add_argument("engine_id")
+    engine_verify = engine_commands.add_parser("verify")
+    engine_verify.add_argument("manifest")
+    engine_commands.add_parser("audit-legacy")
 
     runs = commands.add_parser("runs", help="query the persistent run ledger")
     runs_commands = runs.add_subparsers(dest="runs_command", required=True)
@@ -183,6 +195,25 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.command == "labs":
             _json({"labs": list(default_registry().names())})
             return 0
+        if args.command == "engines":
+            registry = EngineRegistry()
+            if args.engines_command in {"list", "probe"}:
+                _json([item.to_dict() for item in registry.probe_all()])
+                return 0
+            if args.engines_command == "show":
+                _json(registry.get_engine(args.engine_id).to_dict())
+                return 0
+            if args.engines_command == "audit-legacy":
+                _json(legacy_engine_audit(Path.cwd()))
+                return 0
+            raw = json.loads(Path(args.manifest).read_text(encoding="utf-8"))
+            if isinstance(raw, list):
+                result = [registry.verify_engine(item) for item in raw]
+            else:
+                result = registry.verify_engine(raw)
+            valid = result if isinstance(result, bool) else all(result)
+            _json({"valid": valid})
+            return 0 if valid else 1
         if args.command == "runs":
             registry = RunRegistry(args.root)
             try:

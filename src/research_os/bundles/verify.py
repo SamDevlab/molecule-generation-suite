@@ -102,6 +102,16 @@ def verify_bundle(root: str | Path) -> BundleVerificationResult:
     missing_evidence = sorted({evidence_id for claim in claims if isinstance(claim, dict) for evidence_id in claim.get("evidence_ids", []) if evidence_id not in evidence_ids})
     gates.append(BundleGate("BUNDLE-EVIDENCE-001", BundleVerificationStatus.FAIL if missing_evidence else BundleVerificationStatus.PASS, "claim evidence references are valid" if not missing_evidence else "claims reference missing evidence", {"missing": missing_evidence} if missing_evidence else None))
 
+    engine_manifest_path = target / "engines" / "manifests.json"
+    if engine_manifest_path.is_file():
+        try:
+            raw_engines = _read(engine_manifest_path)
+            from research_os.engines.manifest import EngineManifest
+            invalid = [item.get("engine_id", "unknown") for item in raw_engines if isinstance(item, dict) and not EngineManifest.from_mapping(item).valid]
+        except (OSError, TypeError, ValueError, json.JSONDecodeError):
+            invalid = ["engines/manifests.json"]
+        gates.append(BundleGate("BUNDLE-ENGINE-001", BundleVerificationStatus.FAIL if invalid else BundleVerificationStatus.PASS, "engine manifests are valid" if not invalid else "engine manifest hash validation failed", {"invalid": invalid} if invalid else None))
+
     steps = _read(target / "steps/steps.json")
     missing_step_evidence = sorted({evidence_id for step in steps if isinstance(step, dict) for evidence_id in [*step.get("consumed_evidence_ids", []), *step.get("produced_evidence_ids", [])] if evidence_id not in evidence_ids})
     gates.append(BundleGate("BUNDLE-STEP-001", BundleVerificationStatus.FAIL if missing_step_evidence else BundleVerificationStatus.PASS, "step evidence references are valid" if not missing_step_evidence else "steps reference missing evidence", {"missing": missing_step_evidence} if missing_step_evidence else None))

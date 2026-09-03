@@ -4,6 +4,7 @@ import uuid
 from research_os.core.provenance import provenance_from_mapping
 from research_os.core.types import Evidence, EvidenceLevel, GateResult, GateStatus, RunManifest
 from research_os.docking.lab import DockingLab
+from research_os.engines.openbabel import OpenBabelEngine
 from research_os.knowledge.claims import claim_from_run
 from research_os.labs.base import Lab
 from research_os.molecule.lab import MoleculeLab
@@ -25,7 +26,10 @@ class PharmaLab(Lab):
             loss = mr.first_loss; m.gates.append(GateResult("GATE-PHARMA-MOLECULE", "PHARMA-MOL-002", loss.status if loss else GateStatus.FAIL, "nested MoleculeLab validation failed", diagnostics={"nested_run_id": mr.run_id, "nested_first_loss": loss.rule_id if loss else None})); return m
         mev = Evidence(evidence_id=f"EVD-{uuid.uuid4().hex[:12].upper()}", kind="pharma_molecular_characterization", level=EvidenceLevel.E2_COMPUTATIONAL, source="MoleculeLab/RDKit", provenance_ids=(prv.provenance_id,), payload={"nested_run_id": mr.run_id, "nested_evidence": [e.payload for e in mr.evidence]}); m.evidence.append(mev); m.gates.append(GateResult("GATE-PHARMA-MOLECULE", "PHARMA-MOL-002", GateStatus.PASS, "molecular characterization completed", evidence_ids=(mev.evidence_id,), diagnostics={"nested_run_id": mr.run_id}))
         if n.get("docking"):
-            dr = self.docking_lab.run(dict(n["docking"]), experiment="pharma_target_docking")
+            docking_input = dict(n["docking"])
+            if docking_input.get("reference_case") and (not getattr(self.docking_lab.engine, "available", False) or not OpenBabelEngine().available):
+                m.gates.append(GateResult("GATE-PHARMA-DOCKING", "PHARMA-DOCK-000", GateStatus.INDETERMINATE, "pharma reference docking requires both AutoDock Vina and Open Babel; the reference was not executed", diagnostics={"vina_available": bool(getattr(self.docking_lab.engine, "available", False)), "openbabel_available": OpenBabelEngine().available})); return m
+            dr = self.docking_lab.run(docking_input, experiment="pharma_target_docking")
             if not dr.passed:
                 loss = dr.first_loss; m.gates.append(GateResult("GATE-PHARMA-DOCKING", "PHARMA-DOCK-001", loss.status if loss else GateStatus.FAIL, "requested docking did not complete successfully", diagnostics={"nested_run_id": dr.run_id, "nested_first_loss": loss.rule_id if loss else None})); return m
             result = next((e for e in reversed(dr.evidence) if e.kind == "molecular_docking_result"), None)
