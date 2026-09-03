@@ -76,17 +76,28 @@ class OraclePlanner:
 
     def answer_from_plan(self, result: PlanningResult) -> OracleAnswer:
         validation = result.validation
+        metadata = self._answer_metadata()
         if result.reformulated_from:
-            return OracleAnswer(OracleAnswerStatus.REJECTED, "A solicitação de eficácia clínica foi rejeitada e reformulada como hipótese computacional.", limitations=("docking has an E2 computational ceiling", "no clinical or cure claim was executed"), first_loss={"rule_id": "ORACLE-CLAIM-001", "status": "FAIL", "message": "unsupported clinical claim"})
+            return OracleAnswer(OracleAnswerStatus.REJECTED, "A solicitação de eficácia clínica foi rejeitada e reformulada como hipótese computacional.", limitations=("docking has an E2 computational ceiling", "no clinical or cure claim was executed"), first_loss={"rule_id": "ORACLE-CLAIM-001", "status": "FAIL", "message": "unsupported clinical claim"}, metadata=metadata)
         if any(issue.rule_id == "ORACLE-CLAIM-001" for issue in validation.issues):
-            return OracleAnswer(OracleAnswerStatus.REJECTED, "A claim de eficácia clínica/cura não pode ser executada como docking.", limitations=("docking has an E2 computational ceiling", "plan requires reformulation as a computational hypothesis"), first_loss=validation.first_loss.to_dict() if validation.first_loss else None)
+            return OracleAnswer(OracleAnswerStatus.REJECTED, "A claim de eficácia clínica/cura não pode ser executada como docking.", limitations=("docking has an E2 computational ceiling", "plan requires reformulation as a computational hypothesis"), first_loss=validation.first_loss.to_dict() if validation.first_loss else None, metadata=metadata)
         if validation.status == "INDETERMINATE":
-            return OracleAnswer(OracleAnswerStatus.INDETERMINATE, "O plano foi estruturado, mas depende de recursos externos indisponíveis.", limitations=("required engine is unavailable",), first_loss=validation.first_loss.to_dict() if validation.first_loss else None)
+            return OracleAnswer(OracleAnswerStatus.INDETERMINATE, "O plano foi estruturado, mas depende de recursos externos indisponíveis.", limitations=("required engine is unavailable",), first_loss=validation.first_loss.to_dict() if validation.first_loss else None, metadata=metadata)
         if validation.status == "INSUFFICIENT_EVIDENCE":
-            return OracleAnswer(OracleAnswerStatus.INSUFFICIENT_EVIDENCE, "O plano não pode atender ao nível de evidência solicitado com os Labs disponíveis.", limitations=("requested evidence level exceeds the plan ceiling",), first_loss=validation.first_loss.to_dict() if validation.first_loss else None)
+            return OracleAnswer(OracleAnswerStatus.INSUFFICIENT_EVIDENCE, "O plano não pode atender ao nível de evidência solicitado com os Labs disponíveis.", limitations=("requested evidence level exceeds the plan ceiling",), first_loss=validation.first_loss.to_dict() if validation.first_loss else None, metadata=metadata)
         if validation.status == "FAIL":
-            return OracleAnswer(OracleAnswerStatus.REJECTED, "O plano não passou pela validação tipada e não foi executado.", limitations=("structured plan validation failed",), first_loss=validation.first_loss.to_dict() if validation.first_loss else None)
-        return OracleAnswer(OracleAnswerStatus.INSUFFICIENT_EVIDENCE, "Plano validado; nenhuma execução científica foi realizada por esta etapa de planejamento.", limitations=("planning is not execution",))
+            return OracleAnswer(OracleAnswerStatus.REJECTED, "O plano não passou pela validação tipada e não foi executado.", limitations=("structured plan validation failed",), first_loss=validation.first_loss.to_dict() if validation.first_loss else None, metadata=metadata)
+        return OracleAnswer(OracleAnswerStatus.INSUFFICIENT_EVIDENCE, "Plano validado; nenhuma execução científica foi realizada por esta etapa de planejamento.", limitations=("planning is not execution",), metadata=metadata)
+
+    def _answer_metadata(self) -> dict[str, Any]:
+        provider_metadata = getattr(self.provider, "audit_metadata", {})
+        if not isinstance(provider_metadata, dict):
+            provider_metadata = {}
+        return {
+            "grounded": False,
+            "provider": provider_metadata.get("provider", self.provider.provider_id),
+            "provider_metadata": dict(provider_metadata),
+        }
 
     @staticmethod
     def _plan_from_raw(question: ResearchQuestion, raw: dict[str, Any]) -> ResearchPlan:
