@@ -10,4 +10,10 @@ The repository has four separable layers:
 The preserved `Biolab/` and `formolecular/` trees are audit inputs only. New
 flows cross typed contracts for conditions, units, evidence level, engine
 manifest, dataset/model/source provenance, lineage and first loss.
+# Research OS 3.1 operational boundary
 
+The supported web entry point is `research_os.web`, which calls the typed
+`research_os.service` facade. `ResearchStore` persists conversational
+sessions/jobs while the existing Ledger remains the immutable source of truth
+for scientific runs, bundles and lineage. The client never selects a Lab or
+executes free-form model output.

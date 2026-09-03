@@ -23,3 +23,9 @@ a heuristic fallback or a successful result.
 Vina and Open Babel are external executables and are intentionally not declared
 as pip dependencies. Their adapters use argv execution with `shell=False` and
 timeouts.
+# 3.1 status surface
+
+The operational UI consumes the existing safe `EngineRegistry` probes and
+reports Boundary, Available, Configured, Executed and Reference Validated as
+separate facts. Missing optional binaries/packages are shown as
+`NOT_CONFIGURED` or `UNAVAILABLE`; an adapter alone is not readiness.

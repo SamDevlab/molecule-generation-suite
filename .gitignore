@@ -61,3 +61,7 @@ Biolab/repo_vina/
 
 # Generated golden-workflow artifacts (manifests and source fixture remain tracked)
 examples/golden_workflow/output/
+
+# Local operational Oracle state (Ledger, sessions, bundles and retrieval DB)
+.research-os/
+.tmp-web-check/

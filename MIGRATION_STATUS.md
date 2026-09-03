@@ -11,4 +11,9 @@
 
 Retirement is intentionally not claimed. `Biolab/` and `formolecular/` remain
 untouched and available for audit.
+# 3.1 web boundary status
 
+Research OS 3.1 now provides a chat-first operational boundary without
+retiring `Biolab/` or `formolecular/`. Those legacy trees remain preserved
+until their existing parity, provenance and retirement gates are independently
+satisfied.
