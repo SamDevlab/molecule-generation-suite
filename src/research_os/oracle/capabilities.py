@@ -89,7 +89,7 @@ def default_capabilities() -> tuple[LabCapability, ...]:
         LabCapability("FuelLab", ("fuel_catalog",), EvidenceLevel.E2_COMPUTATIONAL),
         LabCapability("CombustionLab", ("adiabatic_equilibrium_hp",), EvidenceLevel.E3_PHYSICS, ("cantera",), ("fuel", "mechanism", "temperature", "pressure")),
         LabCapability("ThermalLab", ("steady_planar_conduction",), EvidenceLevel.E2_COMPUTATIONAL),
-        LabCapability("PropulsionLab", ("ideal_nozzle_from_combustion",), EvidenceLevel.E3_PHYSICS, ("cantera",), ("combustion", "chamber_temperature", "gamma", "molecular_weight")),
+        LabCapability("PropulsionLab", ("ideal_nozzle_from_combustion",), EvidenceLevel.E3_PHYSICS, ("cantera",), ("combustion", "exit_pressure_pa")),
         LabCapability("MetalLab", ("alloy_catalog",), EvidenceLevel.E2_COMPUTATIONAL),
         LabCapability("DegradationLab", ("degradation_evidence",), EvidenceLevel.E2_COMPUTATIONAL),
         LabCapability("DockingLab", ("vina_docking",), EvidenceLevel.E2_COMPUTATIONAL, ("autodock-vina",), ("receptor", "ligand", "grid"), ("writes docking outputs",)),

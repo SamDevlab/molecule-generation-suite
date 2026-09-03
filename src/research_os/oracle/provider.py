@@ -2,10 +2,15 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
+from datetime import datetime, timezone
 import hashlib
 import json
+import os
 import re
+import shutil
+import subprocess
+from pathlib import Path
 from typing import Any, Protocol
 
 
@@ -37,9 +42,18 @@ class LLMCallAudit:
     response_hash: str
     planning_run_id: str
     metadata: dict[str, Any] = field(default_factory=dict)
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    session_id: str | None = None
+    question_id: str | None = None
+    plan_id: str | None = None
+    validation_result: str | None = None
+    repair_count: int = 0
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
+
+    def with_validation_context(self, *, session_id: str | None, question_id: str | None, plan_id: str | None, validation_result: str | None, repair_count: int) -> "LLMCallAudit":
+        return replace(self, session_id=session_id, question_id=question_id, plan_id=plan_id, validation_result=validation_result, repair_count=repair_count)
 
 
 class LLMProvider(Protocol):
@@ -56,6 +70,331 @@ class LLMProvider(Protocol):
 
 class StructuredOutputError(ValueError):
     pass
+
+
+class LiveCodexUnavailable(RuntimeError):
+    """The local Codex bridge could not produce a structured response."""
+
+
+class LiveCodexProtocolError(StructuredOutputError):
+    """The live model returned a response outside the planning contract."""
+
+
+def _canonical_evidence_level(value: Any) -> Any:
+    if not isinstance(value, str):
+        return value
+    normalized = value.strip().upper().replace("-", "_").replace(" ", "_").replace("+", "_OR_HIGHER")
+    aliases = {
+        "E0": "E0_HEURISTIC",
+        "E1": "E1_ML",
+        "E2": "E2_COMPUTATIONAL",
+        "E3": "E3_PHYSICS",
+        "E4": "E4_CURATED_EXPERIMENTAL",
+        "E4_EXPERIMENTAL": "E4_CURATED_EXPERIMENTAL",
+        "E5": "E5_VALIDATED_EXPERIMENTAL",
+        "E5_EXPERIMENTAL": "E5_VALIDATED_EXPERIMENTAL",
+        "E4_OR_HIGHER": "E4_CURATED_EXPERIMENTAL",
+        "E5_OR_HIGHER": "E5_VALIDATED_EXPERIMENTAL",
+    }
+    if normalized in aliases:
+        return aliases[normalized]
+    if normalized.startswith("E4_"):
+        return "E4_CURATED_EXPERIMENTAL"
+    if normalized.startswith("E5_"):
+        return "E5_VALIDATED_EXPERIMENTAL"
+    return normalized
+
+
+def _reject_scientific_authority(value: dict[str, Any], *, operation: str) -> dict[str, Any]:
+    """Enforce the invariant that LLM output cannot create scientific evidence."""
+    forbidden = {
+        "evidence", "evidence_level", "runs", "bundle", "bundle_id",
+        "scientific_result", "experimental_result", "engine_result",
+    }
+    present = sorted(key for key in value if str(key).lower() in forbidden)
+    if present:
+        raise LiveCodexProtocolError(
+            f"LLM_OUTPUT_CANNOT_CREATE_SCIENTIFIC_EVIDENCE: forbidden fields in {operation}: {present}"
+        )
+    return value
+
+
+class CodexCliTransport:
+    """Fixed, read-only transport to the locally installed Codex CLI.
+
+    The request is a structured planning/narration prompt.  It is never
+    treated as a command, and the returned object is still validated by the
+    Oracle planner and PlanValidator before any Lab can run.
+    """
+
+    def __init__(self, executable: str | os.PathLike[str] | None = None, *, workdir: str | os.PathLike[str] | None = None, timeout_seconds: int = 120, schema_path: str | os.PathLike[str] | None = None):
+        resolved = str(executable) if executable else shutil.which("codex")
+        self.executable = resolved
+        self.workdir = str(workdir) if workdir else None
+        self.timeout_seconds = int(timeout_seconds)
+        self.schema_path = Path(schema_path) if schema_path else Path(__file__).with_name("live_output.schema.json")
+        self.last_runtime_model = "MODEL_ID_UNVERIFIED_FROM_RUNTIME"
+        self.last_cli_version: str | None = None
+
+    @property
+    def available(self) -> bool:
+        return bool(self.executable and self.schema_path.is_file())
+
+    def __call__(self, operation: str, payload: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
+        if not self.available:
+            raise LiveCodexUnavailable("Codex CLI or live output schema is not available")
+        request = {
+            "operation": operation,
+            "contract": "Research OS live Oracle planning boundary v1",
+            "payload": redact_secrets(payload),
+            "context": redact_secrets(context),
+        }
+        prompt = self._prompt(request)
+        command = [
+            self.executable,
+            "exec",
+            "--ephemeral",
+            "--skip-git-repo-check",
+            "--sandbox",
+            "read-only",
+            "--color",
+            "never",
+            "--output-schema",
+            str(self.schema_path),
+            "-",
+        ]
+        try:
+            completed = subprocess.run(
+                command,
+                input=prompt,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                cwd=self.workdir,
+                timeout=self.timeout_seconds,
+                check=False,
+                shell=False,
+            )
+        except (OSError, subprocess.SubprocessError) as exc:
+            raise LiveCodexUnavailable(f"Codex CLI invocation failed: {type(exc).__name__}") from exc
+        combined = f"{completed.stdout}\n{completed.stderr}"
+        self._capture_runtime(combined)
+        if completed.returncode != 0:
+            raise LiveCodexUnavailable(f"Codex CLI returned exit code {completed.returncode}")
+        result = self._extract_json(completed.stdout)
+        if not isinstance(result, dict):
+            raise LiveCodexProtocolError("Codex CLI did not return a JSON object")
+        return result
+
+    @staticmethod
+    def _prompt(request: dict[str, Any]) -> str:
+        operation = request["operation"]
+        shape = {
+            "interpret_question": '{"text":"...","domain":"...","objective":"...","constraints":{},"required_evidence_level":"E2_COMPUTATIONAL","allowed_tools":[],"forbidden_tools":[]}',
+            "generate_plan": '{"question_id":"...","steps":[{"step_id":"...","lab":"registered Lab","experiment":"registered experiment","inputs":{},"requires":[],"produces":[],"minimum_evidence_level":"E2_COMPUTATIONAL"}],"assumptions":[],"required_sources":[],"expected_outputs":[],"risk_flags":[],"claim_targets":[]}',
+            "repair_plan": '{"question_id":"...","steps":[{"step_id":"...","lab":"registered Lab","experiment":"registered experiment","inputs":{},"requires":[],"produces":[],"minimum_evidence_level":"E2_COMPUTATIONAL"}],"assumptions":[],"required_sources":[],"expected_outputs":[],"risk_flags":[],"claim_targets":[]}',
+            "summarize_results": '{"summary":"brief grounded summary","status":"SUPPORTED","evidence_ids":[],"run_ids":[],"limitations":[]}',
+            "propose_followup": '{"text":"...","domain":"...","objective":"...","required_evidence_level":"E2_COMPUTATIONAL","gaps":[]}',
+            "explain_ranking": '{"summary":"brief explanation grounded in the supplied ranking","status":"SUPPORTED","winner":"candidate-id","metric":"metric","direction":"max","candidate_ids":[]}',
+        }.get(operation, "{}")
+        narration_safety = ""
+        if operation == "summarize_results":
+            narration_safety = "For narration, do not repeat numeric scientific values, units, or derived comparisons from memory. Refer to recorded evidence IDs/runs and limitations only; the UI obtains values directly from the Lab payload.\n"
+        return (
+            "You are the live reasoning component of Research OS.\n"
+            "Return ONLY one JSON object matching the supplied output schema. The schema requires a string field named result; put the minified JSON object for the operation inside that string, with no markdown or prose.\n"
+            f"For operation {operation}, the inner result must have this shape: {shape}\n"
+            + narration_safety
+            + "You may interpret the question, select registered Labs, propose a typed plan, "
+            "summarize recorded results, or propose a bounded next step.\n"
+            "Research OS is the executor and source of truth. Never create or alter Evidence, "
+            "EvidenceLevel, runs, bundles, engine results, sources, datasets, conditions, or claims "
+            "of scientific fact. Never request shell, subprocess, filesystem mutation, clinical efficacy, "
+            "cure, safety, or experimental validation from a computational result.\n"
+            "Use only capabilities and engines present in context. If evidence is insufficient or an "
+            "engine is unavailable, say so in the structured fields. Do not include chain-of-thought; "
+            "reasoning_summary must be brief and auditable.\n"
+            f"REQUEST_JSON={json.dumps(request, ensure_ascii=False, sort_keys=True)}"
+        )
+
+    @staticmethod
+    def _extract_json(stdout: str) -> Any:
+        candidates: list[str] = []
+        for line in stdout.splitlines():
+            stripped = line.strip()
+            if not stripped:
+                continue
+            try:
+                event = json.loads(stripped)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(event, dict) and event.get("type") == "item.completed":
+                item = event.get("item") or {}
+                if item.get("type") == "agent_message":
+                    candidates.append(str(item.get("text", "")))
+            elif isinstance(event, dict) and "type" not in event:
+                candidates.append(stripped)
+        candidates.extend([stdout.strip()])
+        for candidate in reversed(candidates):
+            text = candidate.strip()
+            if not text:
+                continue
+            try:
+                return parse_structured_output(text)
+            except StructuredOutputError:
+                match = re.search(r"\{.*\}", text, re.DOTALL)
+                if match:
+                    try:
+                        return parse_structured_output(match.group(0))
+                    except StructuredOutputError:
+                        continue
+        raise LiveCodexProtocolError("Codex CLI response did not contain valid JSON")
+
+    def _capture_runtime(self, output: str) -> None:
+        match = re.search(r"(?im)^model:\s*([^\s]+)", output)
+        if match:
+            self.last_runtime_model = match.group(1)
+        version = re.search(r"OpenAI Codex v([^\s]+)", output)
+        if version:
+            self.last_cli_version = version.group(1)
+
+
+class CodexLiveProvider:
+    """Live Oracle provider backed by the local Codex session boundary.
+
+    This is intentionally not a scientific engine and not an external API
+    client.  By default it uses the installed ``codex exec`` CLI; a callable
+    transport can be injected by a host session harness.  Both paths return
+    planning/narration structures only and are fail-closed before execution.
+    """
+
+    provider_id = "CODEX_LIVE"
+    provider = provider_id
+    mode = "LIVE_ORACLE"
+    deterministic = False
+    production_validation = True
+    external_api = False
+    scientific_evidence_provider = False
+    standalone_web = False
+
+    def __init__(self, *, transport: Any | None = None, executable: str | os.PathLike[str] | None = None, workdir: str | os.PathLike[str] | None = None, timeout_seconds: int = 120):
+        self.transport = transport or CodexCliTransport(executable, workdir=workdir, timeout_seconds=timeout_seconds)
+        self._request_context: dict[str, Any] = {}
+
+    @property
+    def model(self) -> str:
+        return str(getattr(self.transport, "last_runtime_model", "MODEL_ID_UNVERIFIED_FROM_RUNTIME"))
+
+    @property
+    def model_version(self) -> str | None:
+        return getattr(self.transport, "last_cli_version", None)
+
+    @property
+    def audit_metadata(self) -> dict[str, Any]:
+        return {
+            "provider": self.provider_id,
+            "mode": self.mode,
+            "deterministic": self.deterministic,
+            "production_validation": self.production_validation,
+            "external_api": self.external_api,
+            "scientific_evidence_provider": self.scientific_evidence_provider,
+            "standalone_web": self.standalone_web,
+            "transport": type(self.transport).__name__,
+            "model_identity": self.model,
+            "model_identity_source": "codex_runtime_header" if self.model != "MODEL_ID_UNVERIFIED_FROM_RUNTIME" else "MODEL_ID_UNVERIFIED_FROM_RUNTIME",
+        }
+
+    def set_request_context(self, context: dict[str, Any] | None) -> None:
+        self._request_context = dict(context or {})
+
+    def available(self) -> bool:
+        return bool(getattr(self.transport, "available", True))
+
+    def audit(self) -> dict[str, Any]:
+        return {
+            **self.audit_metadata,
+            "status": "LIVE_CODEX_VALIDATED" if self.available() else "LIVE_CODEX_UNAVAILABLE",
+            "standalone_status": "STANDALONE_LLM_BRIDGE_NOT_IMPLEMENTED",
+            "external_status": "NOT_REQUIRED_FOR_THIS_MILESTONE",
+        }
+
+    def _call(self, operation: str, payload: dict[str, Any]) -> dict[str, Any]:
+        raw = self.transport(operation, payload, self._request_context)
+        parsed = parse_structured_output(raw)
+        if set(parsed) == {"result"} and isinstance(parsed.get("result"), str):
+            parsed = parse_structured_output(parsed["result"])
+        return _reject_scientific_authority(parsed, operation=operation)
+
+    def interpret_question(self, text: str) -> dict[str, Any]:
+        raw = self._call("interpret_question", {"user_message": str(text)})
+        if "question" in raw and isinstance(raw["question"], dict):
+            question = dict(raw["question"])
+            question["required_evidence_level"] = _canonical_evidence_level(question.get("required_evidence_level", "E2_COMPUTATIONAL"))
+            return question
+        if {"text", "domain", "objective"}.issubset(raw):
+            question = dict(raw)
+            question["required_evidence_level"] = _canonical_evidence_level(question.get("required_evidence_level", "E2_COMPUTATIONAL"))
+            return question
+        interpretation = raw.get("interpretation") if isinstance(raw.get("interpretation"), dict) else {}
+        subject = str(interpretation.get("subject") or text)
+        return {"text": str(raw.get("text") or text), "domain": "molecule" if subject else "general", "objective": str(raw.get("objective") or interpretation.get("requested_scope") or text), "constraints": {"smiles": subject} if subject else {}, "required_evidence_level": "E2_COMPUTATIONAL", "allowed_tools": list(raw.get("selected_labs") or ()), "forbidden_tools": ["shell", "arbitrary_command", "clinical_claim"]}
+
+    def generate_plan(self, question: dict[str, Any], memory: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+        raw = self._call("generate_plan", {"question": question, "prior_research": memory or []})
+        return self._normalize_plan(raw["plan"] if isinstance(raw.get("plan"), dict) else raw)
+
+    def repair_plan(self, plan: dict[str, Any], issues: list[dict[str, Any]]) -> dict[str, Any]:
+        raw = self._call("repair_plan", {"plan": plan, "validation_issues": issues})
+        return self._normalize_plan(raw["plan"] if isinstance(raw.get("plan"), dict) else raw)
+
+    @staticmethod
+    def _normalize_plan(plan: dict[str, Any]) -> dict[str, Any]:
+        """Coerce harmless JSON shape drift without adding scientific data."""
+        normalized = dict(plan)
+        steps = []
+        for raw_step in normalized.get("steps") or ():
+            if not isinstance(raw_step, dict):
+                raise LiveCodexProtocolError("steps must contain objects")
+            step = dict(raw_step)
+            inputs = dict(step.get("inputs") or {})
+            # These aliases are shape normalization only; no value or result
+            # is synthesized.  Missing required fields still fail validation.
+            if "receptor" not in inputs and "receptor_path" in inputs:
+                inputs["receptor"] = inputs.pop("receptor_path")
+            if "ligand" not in inputs and "ligand_path" in inputs:
+                inputs["ligand"] = inputs.pop("ligand_path")
+            step["inputs"] = inputs
+            step["minimum_evidence_level"] = _canonical_evidence_level(step.get("minimum_evidence_level", "E0_HEURISTIC"))
+            steps.append(step)
+        normalized["steps"] = steps
+        known_step_ids = {str(step.get("step_id")) for step in steps}
+        for step in steps:
+            step["requires"] = [str(dep) for dep in step.get("requires") or () if str(dep) in known_step_ids]
+        targets = []
+        for target in normalized.get("claim_targets") or ():
+            if isinstance(target, str):
+                targets.append({"statement": target, "required_evidence_level": "E2_COMPUTATIONAL"})
+            elif isinstance(target, dict):
+                item = dict(target)
+                item["required_evidence_level"] = _canonical_evidence_level(item.get("required_evidence_level", "E2_COMPUTATIONAL"))
+                targets.append(item)
+            else:
+                raise LiveCodexProtocolError("claim_targets must contain objects or strings")
+        normalized["claim_targets"] = targets
+        return normalized
+
+    def summarize_results(self, results: dict[str, Any]) -> dict[str, Any]:
+        raw = self._call("summarize_results", {"recorded_execution": results})
+        return dict(raw.get("narration", raw))
+
+    def propose_followup(self, gaps: list[dict[str, Any]]) -> dict[str, Any]:
+        raw = self._call("propose_followup", {"research_gaps": gaps})
+        return dict(raw.get("follow_up", raw))
+
+    def explain_ranking(self, ranking: dict[str, Any]) -> dict[str, Any]:
+        raw = self._call("explain_ranking", {"recorded_ranking": ranking})
+        return dict(raw.get("explanation", raw))
 
 
 class RuleBasedLLMProvider:
@@ -115,6 +454,8 @@ class CodexTestProvider:
     model = "codex-test"
     model_version = "1"
     mode = "INTEGRATION_TEST"
+    deterministic = True
+    production_validation = False
     external_api = False
     scientific_evidence_provider = False
     production_llm = False

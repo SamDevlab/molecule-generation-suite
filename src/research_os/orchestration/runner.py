@@ -146,9 +146,17 @@ class ResearchOrchestrator:
         result = PlanRun(plan_id=plan.plan_id, created_at=plan.created_at)
         for step in plan.steps:
             dependencies = [result.steps[dependency] for dependency in step.requires]
-            unmet = [dependency.step_id for dependency in dependencies if dependency.status != "PASS"]
-            consumed = _unique((*step.consumed_evidence_ids, *(evidence_id for dependency in dependencies for evidence_id in dependency.produced_evidence_ids)))
-            record = WorkflowStepRecord(step.step_id, step.lab, step.experiment, dict(step.inputs), tuple(step.requires), consumed_evidence_ids=consumed, started_at=_now())
+            references = _referenced_steps(step.inputs)
+            reference_records = [result.steps[reference] for reference in references if reference in result.steps]
+            unmet = [dependency.step_id for dependency in (*dependencies, *reference_records) if dependency.status != "PASS"]
+            consumed = _unique(
+                (
+                    *step.consumed_evidence_ids,
+                    *(evidence_id for dependency in (*dependencies, *reference_records) for evidence_id in dependency.produced_evidence_ids),
+                )
+            )
+            resolved_inputs = _resolve_step_references(step.inputs, result.runs)
+            record = WorkflowStepRecord(step.step_id, step.lab, step.experiment, resolved_inputs, tuple(step.requires), consumed_evidence_ids=consumed, started_at=_now())
             started_event = self.logger.emit("workflow_step_started", lab=step.lab, step_id=step.step_id, status="RUNNING", fields={"plan_id": plan.plan_id, "experiment": step.experiment})
             result.events.append(started_event.to_dict())
             if unmet:
@@ -164,7 +172,7 @@ class ResearchOrchestrator:
                 result.events.append(skipped_event.to_dict())
                 continue
             try:
-                run = self.registry.get(step.lab).run(dict(step.inputs), experiment=step.experiment)
+                run = self.registry.get(step.lab).run(dict(resolved_inputs), experiment=step.experiment)
             except Exception as exc:
                 run = RunManifest(lab=step.lab, experiment=step.experiment, inputs=dict(step.inputs))
                 run.gates.append(GateResult("GATE-WORKFLOW-EXECUTION", "WORKFLOW-EXECUTION-001", GateStatus.FAIL, "lab execution failed before producing a result", diagnostics={"error_type": type(exc).__name__, "error": str(exc)}))
@@ -189,3 +197,40 @@ class ResearchOrchestrator:
 
 def _unique(values: Iterable[str]) -> tuple[str, ...]:
     return tuple(dict.fromkeys(value for value in values if value))
+
+
+def _referenced_steps(value: Any) -> tuple[str, ...]:
+    """Return explicit ``from_step`` references embedded in typed inputs."""
+    found: list[str] = []
+    if isinstance(value, dict):
+        reference = value.get("from_step")
+        if reference not in (None, ""):
+            found.append(str(reference))
+        for child in value.values():
+            found.extend(_referenced_steps(child))
+    elif isinstance(value, (list, tuple)):
+        for child in value:
+            found.extend(_referenced_steps(child))
+    return _unique(found)
+
+
+def _resolve_step_references(value: Any, runs: dict[str, RunManifest]) -> Any:
+    """Resolve typed step references to recorded upstream run inputs.
+
+    Labs remain the only producers of scientific values.  The orchestrator
+    merely routes the upstream request shape already recorded by a completed
+    run into the dependent Lab; it never copies evidence or invents results.
+    """
+    if isinstance(value, dict):
+        reference = value.get("from_step")
+        if reference not in (None, "") and str(reference) in runs:
+            source = runs[str(reference)]
+            resolved = dict(source.inputs)
+            resolved.update({key: _resolve_step_references(child, runs) for key, child in value.items() if key != "from_step"})
+            return resolved
+        return {key: _resolve_step_references(child, runs) for key, child in value.items()}
+    if isinstance(value, list):
+        return [_resolve_step_references(child, runs) for child in value]
+    if isinstance(value, tuple):
+        return tuple(_resolve_step_references(child, runs) for child in value)
+    return value

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "research-os-core"
-version = "3.1.0"
+version = "3.2.0"
 description = "Research Core + Proof Engine for molecule-generation-suite"
 requires-python = ">=3.10"
 dependencies = []
@@ -23,6 +23,9 @@ query = ["duckdb>=1.0"]
 [project.scripts]
 research-os = "research_os.cli:main"
 research-os-web = "research_os.web:main"
+
+[tool.setuptools.package-data]
+research_os = ["oracle/live_output.schema.json"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

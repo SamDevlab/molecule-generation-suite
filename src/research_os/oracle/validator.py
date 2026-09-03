@@ -76,15 +76,19 @@ class PlanValidator:
                 issues.append(ValidationIssue("ORACLE-LAB-001", "FAIL", f"unknown Lab: {step.lab}", step.step_id))
                 continue
             if question is not None:
-                if question.allowed_tools and step.lab not in question.allowed_tools and step.experiment not in question.allowed_tools:
+                allowed = set(question.allowed_tools)
+                tool_match = step.lab in allowed or step.experiment in allowed or f"{step.lab}.{step.experiment}" in allowed
+                if question.allowed_tools and not tool_match:
                     issues.append(ValidationIssue("ORACLE-TOOL-001", "FAIL", f"step is outside the question allowlist: {step.lab}/{step.experiment}", step.step_id))
-                if step.lab in question.forbidden_tools or step.experiment in question.forbidden_tools:
+                forbidden = set(question.forbidden_tools)
+                if step.lab in forbidden or step.experiment in forbidden or f"{step.lab}.{step.experiment}" in forbidden:
                     issues.append(ValidationIssue("ORACLE-TOOL-002", "FAIL", f"forbidden tool requested: {step.lab}/{step.experiment}", step.step_id))
             if step.experiment not in capability.experiments:
                 issues.append(ValidationIssue("ORACLE-EXPERIMENT-001", "FAIL", f"unknown experiment {step.experiment} for {step.lab}", step.step_id))
             missing = [name for name in capability.required_inputs if name not in step.inputs or step.inputs.get(name) in (None, "", "REQUIRED")]
             if missing:
                 issues.append(ValidationIssue("ORACLE-CONFIG-001", "FAIL", "required plan inputs are missing", step.step_id, {"missing": missing}))
+            self._validate_input_shapes(step, issues)
             if _LEVEL_ORDER[step.minimum_evidence_level] > _LEVEL_ORDER[capability.evidence_ceiling]:
                 issues.append(ValidationIssue("ORACLE-EVIDENCE-001", "FAIL", "step requests evidence above Lab ceiling", step.step_id, {"requested": step.minimum_evidence_level.value, "ceiling": capability.evidence_ceiling.value}))
             for engine_id in capability.required_engines:
@@ -92,6 +96,7 @@ class PlanValidator:
                     issues.append(ValidationIssue("ORACLE-ENGINE-001", "INDETERMINATE", f"required engine unavailable: {engine_id}", step.step_id))
             self._validate_units(step.inputs, step.step_id, issues)
             self._validate_references(step.inputs, step.step_id, issues)
+            self._validate_step_references(step.inputs, step.step_id, step.requires, known, issues)
             unknown = sorted(set(step.requires) - known)
             if unknown:
                 issues.append(ValidationIssue("ORACLE-DEPENDENCY-001", "FAIL", "plan references unknown dependencies", step.step_id, {"unknown": unknown}))
@@ -111,7 +116,15 @@ class PlanValidator:
                     "question requires evidence above the proposed Lab ceiling",
                     diagnostics={"required": question.required_evidence_level.value, "plan_ceiling": CANONICAL_EVIDENCE_LEVELS[plan_ceiling].value if plan_ceiling >= 0 else None},
                 ))
-        if any(issue.status == "FAIL" for issue in issues):
+        engine_issues = [issue for issue in issues if issue.rule_id == "ORACLE-ENGINE-001"]
+        severe_failures = {"ORACLE-LAB-001", "ORACLE-TOOL-001", "ORACLE-TOOL-002", "ORACLE-EXPERIMENT-001", "ORACLE-UNITS-001", "ORACLE-DEPENDENCY-001", "ORACLE-DEPENDENCY-002", "ORACLE-DEPENDENCY-003", "ORACLE-CLAIM-001", "ORACLE-CLAIM-002"}
+        if engine_issues and not any(issue.rule_id in severe_failures for issue in issues):
+            # An unavailable required engine is the first operational loss;
+            # malformed optional configuration must not turn this into a
+            # misleading executable-plan rejection.
+            issues = [*engine_issues, *(issue for issue in issues if issue not in engine_issues)]
+            status = "INDETERMINATE"
+        elif any(issue.status == "FAIL" for issue in issues):
             status = "FAIL"
         elif any(issue.status == "INDETERMINATE" for issue in issues):
             status = "INDETERMINATE"
@@ -145,6 +158,13 @@ class PlanValidator:
                 except (UnitError, TypeError, ValueError) as exc:
                     issues.append(ValidationIssue("ORACLE-UNITS-001", "FAIL", f"invalid units for {key}", step_id, {"error": str(exc)}))
 
+    @staticmethod
+    def _validate_input_shapes(step: Any, issues: list[ValidationIssue]) -> None:
+        if step.lab == "PropulsionLab" and not isinstance(step.inputs.get("combustion"), dict):
+            issues.append(ValidationIssue("ORACLE-INPUT-001", "FAIL", "PropulsionLab.combustion must be a structured combustion input object; result text is not an input", step.step_id))
+        if step.lab == "FuelLab" and not isinstance(step.inputs.get("components"), (list, tuple)):
+            issues.append(ValidationIssue("ORACLE-INPUT-002", "FAIL", "FuelLab.components must be a list of identified components", step.step_id))
+
     def _validate_references(self, inputs: dict[str, Any], step_id: str, issues: list[ValidationIssue]) -> None:
         for key, registry in (("dataset_id", self.dataset_registry), ("model_id", self.model_registry), ("source_id", self.source_registry)):
             value = inputs.get(key)
@@ -153,6 +173,16 @@ class PlanValidator:
                     registry.get(str(value))
                 except (KeyError, ValueError):
                     issues.append(ValidationIssue("ORACLE-REFERENCE-001", "FAIL", f"unknown {key}: {value}", step_id))
+
+    @classmethod
+    def _validate_step_references(cls, inputs: dict[str, Any], step_id: str, requires: tuple[str, ...], known: set[str], issues: list[ValidationIssue]) -> None:
+        references = _input_step_references(inputs)
+        unknown = sorted(reference for reference in references if reference not in known)
+        if unknown:
+            issues.append(ValidationIssue("ORACLE-DEPENDENCY-001", "FAIL", "typed input references unknown steps", step_id, {"unknown": unknown}))
+        undeclared = sorted(reference for reference in references if reference in known and reference not in requires)
+        if undeclared:
+            issues.append(ValidationIssue("ORACLE-DEPENDENCY-003", "FAIL", "typed input references must be declared in requires", step_id, {"undeclared": undeclared}))
 
     @staticmethod
     def _has_cycle(plan: ResearchPlan) -> bool:
@@ -181,3 +211,17 @@ class PlanValidator:
             ceiling = max((_LEVEL_ORDER[self.capabilities[lab].evidence_ceiling] for lab in labs if lab in self.capabilities), default=0)
             if _LEVEL_ORDER[target.required_evidence_level] > ceiling:
                 issues.append(ValidationIssue("ORACLE-CLAIM-002", "FAIL", "claim requires evidence above the proposed plan ceiling", diagnostics={"claim": target.statement, "required": target.required_evidence_level.value}))
+
+
+def _input_step_references(value: Any) -> set[str]:
+    references: set[str] = set()
+    if isinstance(value, dict):
+        reference = value.get("from_step")
+        if reference not in (None, ""):
+            references.add(str(reference))
+        for child in value.values():
+            references.update(_input_step_references(child))
+    elif isinstance(value, (list, tuple)):
+        for child in value:
+            references.update(_input_step_references(child))
+    return references
