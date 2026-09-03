@@ -34,6 +34,10 @@ def test_operational_web_chat_persists_session_and_reopens(tmp_path: Path):
     assert continuation_status == 200
     assert continuation["response"]["planning"]["plan"]["rerun_of"] == response["planning"]["plan"]["plan_id"]
     assert continuation["response"]["job"]["job_id"] != job_id
+    natural_status, natural = reopened.dispatch("POST", "/api/chat", {"message": "Continue essa pesquisa.", "session_id": session_id})
+    assert natural_status == 200
+    assert natural["response"]["planning"]["plan"]["rerun_of"] == continuation["response"]["planning"]["plan"]["plan_id"]
+    assert reopened.dispatch("GET", f"/api/jobs/{job_id}/evidence?minimum=E4_CURATED_EXPERIMENTAL")[1]["status"] == "INSUFFICIENT_EVIDENCE"
     app.close()
     reopened.close()
 

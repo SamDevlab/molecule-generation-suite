@@ -42,7 +42,9 @@ The chat-first UI provides:
 
 The API is intentionally small and transport-safe: `/api/chat`, session and
 job reads, plan/results/evidence/sources/runs/lineage views, engine status,
-Knowledge import/review and a fail-closed explanation endpoint.
+Knowledge import/review, minimum-Evidence filtering and a fail-closed
+explanation endpoint. A natural-language `Continue essa pesquisa.` message
+routes to the active session's immutable context and creates a new workflow.
 
 ## Scientific boundaries
 

@@ -125,7 +125,7 @@ class OracleWebApplication:
                     return 400, {"error": {"code": "RUN_IDS_REQUIRED", "message": "original_run_id and rerun_run_id are required"}}
                 return 200, self.service.compare_runs(original, rerun)
             if method == "GET" and route.startswith("/api/jobs/"):
-                return self.job_view(route.split("/")[3], route.rsplit("/", 1)[-1])
+                return self.job_view(route.split("/")[3], route.rsplit("/", 1)[-1], query)
             if method == "POST" and route == "/api/explain":
                 ranking_raw = body.get("ranking")
                 if not isinstance(ranking_raw, dict):
@@ -147,7 +147,7 @@ class OracleWebApplication:
             # user response.
             return 500, {"error": {"code": "INTERNAL_ERROR", "message": "The research service could not complete this request."}}
 
-    def job_view(self, job_id: str, leaf: str) -> tuple[int, dict[str, Any]]:
+    def job_view(self, job_id: str, leaf: str, query: dict[str, list[str]] | None = None) -> tuple[int, dict[str, Any]]:
         if leaf == job_id:
             return 200, self.service.get_response(job_id)
         if leaf == "plan":
@@ -155,6 +155,9 @@ class OracleWebApplication:
         if leaf == "results":
             return 200, self.service.get_results(job_id)
         if leaf == "evidence":
+            minimum = (query or {}).get("minimum", [None])[0]
+            if minimum:
+                return 200, self.service.filter_evidence(job_id, minimum)
             return 200, {"evidence": self.service.get_evidence(job_id)}
         if leaf == "sources":
             return 200, {"sources": self.service.get_source_records(job_id)}

@@ -64,6 +64,8 @@ class OracleService:
 
     def ask(self, text: str, *, session_id: str | None = None) -> ServiceResponse:
         session = self._get_or_create_session(session_id, text)
+        if session.active_job_id and _is_continue_request(text):
+            return self.continue_research(session.active_job_id, prompt=text)
         planning = self.planner.ask(text, memory=[item.to_dict() for item in self.memory.search(text)])
         job = ResearchJob(planning.question.question_id, session_id=session.session_id, plan_id=planning.plan.plan_id, status=ResearchJobStatus.PLANNING, started_at=datetime.now(timezone.utc).isoformat())
         self._record_user_message(session, text, question_id=planning.question.question_id, job_id=job.job_id)
@@ -108,13 +110,13 @@ class OracleService:
         self.memory.remember("plan", planning.plan.plan_id, planning.plan.to_dict())
         return response
 
-    def continue_research(self, job_id: str) -> ServiceResponse:
+    def continue_research(self, job_id: str, *, prompt: str = "Continue essa pesquisa.") -> ServiceResponse:
         previous = self._get_response(job_id)
         session = self._get_or_create_session(previous.job.session_id, "Continue research")
         question, plan = self.memory.continue_research(previous.planning.plan)
         planning = PlanningResult(question, plan, self.planner.validator.validate(plan, question=question), previous.planning.audits, previous.planning.plan.plan_id)
         job = ResearchJob(question.question_id, session_id=session.session_id, plan_id=plan.plan_id, status=ResearchJobStatus.VALIDATING, started_at=datetime.now(timezone.utc).isoformat())
-        self._record_user_message(session, "Continue essa pesquisa.", question_id=question.question_id, job_id=job.job_id)
+        self._record_user_message(session, prompt, question_id=question.question_id, job_id=job.job_id)
         self._save_job(job)
         job.emit("plan_created", "new continuation plan created; previous plan remains immutable", completed=True, rerun_of=plan.rerun_of)
         job.emit("plan_validated", f"plan validation status: {planning.validation.status}", completed=True)
@@ -171,6 +173,11 @@ class OracleService:
 
     def get_evidence(self, job_id: str) -> list[dict[str, Any]]:
         return list(self._response_payload(job_id)["answer"].get("evidence") or [])
+
+    def filter_evidence(self, job_id: str, minimum: str | EvidenceLevel) -> dict[str, Any]:
+        required = minimum if isinstance(minimum, EvidenceLevel) else EvidenceLevel(str(minimum))
+        evidence = [item for item in self.get_evidence(job_id) if _evidence_rank(item.get("level")) >= _evidence_rank(required)]
+        return {"minimum_evidence": required.value, "status": "SUPPORTED" if evidence else "INSUFFICIENT_EVIDENCE", "evidence": evidence, "message": "No recorded evidence meets the requested minimum level." if not evidence else "Evidence is filtered from recorded runs only."}
 
     def get_sources(self, job_id: str) -> list[str]:
         return list(self._response_payload(job_id)["answer"].get("sources") or [])
@@ -453,6 +460,11 @@ def _evidence_rank(value: Any) -> int:
     except (TypeError, ValueError):
         return -1
     return {level: index for index, level in enumerate((EvidenceLevel.E0_HEURISTIC, EvidenceLevel.E1_ML, EvidenceLevel.E2_COMPUTATIONAL, EvidenceLevel.E3_PHYSICS, EvidenceLevel.E4_CURATED_EXPERIMENTAL, EvidenceLevel.E5_VALIDATED_EXPERIMENTAL))}.get(level, -1)
+
+
+def _is_continue_request(text: str) -> bool:
+    normalized = re.sub(r"\s+", " ", text.lower()).strip()
+    return any(phrase in normalized for phrase in ("continue essa pesquisa", "continue a pesquisa", "continue research", "continue esta pesquisa"))
 
 
 def _evidence_to_dict(evidence: Any) -> dict[str, Any]:
