@@ -67,3 +67,33 @@ class StructuredLogger:
         record = StructuredEvent(event, run_id=run_id, lab=lab, step_id=step_id, status=status, message=message, fields=dict(fields or {}))
         self.logger.info(record.to_json())
         return record
+
+
+@dataclass
+class ObservabilityMetrics:
+    """Counters/timings kept separate from scientific evidence."""
+
+    run_durations_seconds: list[float] = field(default_factory=list)
+    workflow_durations_seconds: list[float] = field(default_factory=list)
+    engine_availability: dict[str, int] = field(default_factory=dict)
+    failure_rates: dict[str, int] = field(default_factory=dict)
+    first_loss_counts: dict[str, int] = field(default_factory=dict)
+    cache_hits: int = 0
+    job_states: dict[str, int] = field(default_factory=dict)
+
+    def observe_engine(self, engine_id: str, available: bool) -> None:
+        key = "available" if available else "unavailable"
+        self.engine_availability[f"{engine_id}:{key}"] = self.engine_availability.get(f"{engine_id}:{key}", 0) + 1
+
+    def observe_state(self, state: str) -> None:
+        self.job_states[state] = self.job_states.get(state, 0) + 1
+
+    def observe_first_loss(self, rule_id: str | None) -> None:
+        if rule_id:
+            self.first_loss_counts[rule_id] = self.first_loss_counts.get(rule_id, 0) + 1
+
+    def observe_failure(self, category: str) -> None:
+        self.failure_rates[category] = self.failure_rates.get(category, 0) + 1
+
+    def to_dict(self) -> dict[str, Any]:
+        return {"run_durations_seconds": list(self.run_durations_seconds), "workflow_durations_seconds": list(self.workflow_durations_seconds), "engine_availability": dict(self.engine_availability), "failure_rates": dict(self.failure_rates), "first_loss_counts": dict(self.first_loss_counts), "cache_hits": self.cache_hits, "job_states": dict(self.job_states)}
