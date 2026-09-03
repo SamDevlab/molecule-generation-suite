@@ -73,3 +73,19 @@ class MOCRegistry:
 
     def validate(self, moc: MOC, *, known_zettel_ids: Iterable[str]) -> GateResult:
         return moc_integrity_gate(moc, known_zettel_ids=known_zettel_ids, known_moc_ids=self._mocs)
+
+
+DEFAULT_MOC_DEFINITIONS = (
+    ("MOC-FUELS", "Fuels", "fuels"),
+    ("MOC-COMBUSTION", "Combustion", "combustion"),
+    ("MOC-PROPULSION", "Propulsion", "propulsion"),
+    ("MOC-METALLURGY", "Metallurgy", "metallurgy"),
+    ("MOC-DEGRADATION", "Degradation", "degradation"),
+    ("MOC-PHARMA", "Pharma", "pharma"),
+    ("MOC-HYDROGEN-MATERIALS", "Hydrogen materials", "hydrogen-materials"),
+)
+
+
+def default_mocs() -> tuple[MOC, ...]:
+    """Return navigation objects without claiming any source-backed content."""
+    return tuple(MOC(moc_id, title, domain, f"Navigation map for {title}; populate only with reviewed knowledge atoms.", tags=(domain,)) for moc_id, title, domain in DEFAULT_MOC_DEFINITIONS)
