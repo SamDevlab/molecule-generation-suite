@@ -13,6 +13,7 @@ from research_os.environment import capture_environment
 from research_os.golden import run_golden_workflow
 from research_os.ledger import RunRegistry
 from research_os.ledger.schema import LedgerError
+from research_os.ml.real_golden import run_real_data_golden
 from research_os.orchestration import default_registry
 
 
@@ -51,6 +52,10 @@ def build_parser() -> argparse.ArgumentParser:
     golden = run_commands.add_parser("golden")
     golden.add_argument("--mode", choices=("stub", "real"), default="stub")
     golden.add_argument("--output", default="runs/golden")
+    real_data_golden = run_commands.add_parser("real-data-golden", help="run the pinned real-data validation golden path")
+    real_data_golden.add_argument("--source", default=None, help="optional local AqSolDB-G CSV; defaults to the checked-in CC0-derived sample")
+    real_data_golden.add_argument("--output", default="runs/real-data-golden")
+    real_data_golden.add_argument("--repo-root", default=None)
     run_verify = run_commands.add_parser("verify")
     run_verify.add_argument("bundle")
 
@@ -162,6 +167,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.command == "run" and args.run_command == "golden":
             result = run_golden_workflow(args.output, mode=args.mode)
             _json({"plan_id": result.plan_run.plan_id, "bundle": result.bundle.root, "verification": result.verification.status.value, "claim_id": result.claim.claim_id})
+            return 0 if result.verification.status.value != "FAIL" else 1
+        if args.command == "run" and args.run_command == "real-data-golden":
+            result = run_real_data_golden(args.output, source_path=args.source, repo_root=args.repo_root)
+            _json({"run_id": result.run.run_id, "run_status": result.run.status, "dataset_id": result.ingestion.manifest.dataset_id, "rows": result.ingestion.validation.row_count, "model_id": result.ml.model_artifact.model_id, "metrics": result.ml.validation.metrics, "promotion": result.promotion.status.value, "first_loss": result.run.first_loss_rule_id, "bundle": result.bundle.root, "bundle_verification": result.verification.status.value, "ledger": result.ledger_record.to_dict()})
             return 0 if result.verification.status.value != "FAIL" else 1
         if args.command == "run" and args.run_command == "verify":
             result = verify_bundle(args.bundle)

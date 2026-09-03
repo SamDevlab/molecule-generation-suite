@@ -335,6 +335,17 @@ class RunManifest:
 
     def _serializable(self, *, include_seal: bool = True) -> dict[str, Any]:
         data = asdict(self)
+        # ``inputs``/``evidence``/``gates`` are guarded containers.  Calling
+        # dataclasses.asdict directly on their subclasses can lose their
+        # contents during deepcopy, so materialize each public collection
+        # explicitly before hashing or writing a bundle.
+        data["inputs"] = dict(self.inputs)
+        data["config"] = dict(self.config)
+        data["evidence"] = [asdict(item) if isinstance(item, Evidence) else item for item in self.evidence]
+        data["provenance"] = [item.to_dict() if hasattr(item, "to_dict") else item for item in self.provenance]
+        data["gates"] = [asdict(item) if isinstance(item, GateResult) else item for item in self.gates]
+        data["dataset_manifests"] = [item.to_dict() if hasattr(item, "to_dict") else item for item in self.dataset_manifests]
+        data["claims"] = [item.to_dict() if hasattr(item, "to_dict") else item for item in self.claims]
         data["lifecycle"] = self.lifecycle.value
         data["lineage"] = self.lineage.to_dict()
         if self.environment_manifest is not None and hasattr(self.environment_manifest, "to_dict"):

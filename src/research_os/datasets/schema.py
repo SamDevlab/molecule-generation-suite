@@ -82,6 +82,17 @@ class DatasetManifest:
     source_file_hash: str | None = None
     artifact_path: str | None = None
     source_path: str | None = None
+    # v1.6 measurement and redistribution metadata.  These fields are
+    # intentionally appended so manifests written before v1.6 remain valid.
+    target: str | None = None
+    units: str | None = None
+    conditions: dict[str, Any] = field(default_factory=dict)
+    measurement_method: str | None = None
+    uncertainty: str | None = None
+    source_url: str | None = None
+    redistribution_status: str | None = None
+    provenance: tuple[str, ...] = ()
+    license: str | None = None
 
     def __post_init__(self) -> None:
         if not self.dataset_id.strip() or not self.version.strip() or not self.schema_id.strip():
@@ -97,6 +108,12 @@ class DatasetManifest:
         object.__setattr__(self, "parent_datasets", tuple(str(value) for value in _values(self.parent_datasets)))
         object.__setattr__(self, "source_types", tuple(_source_type(value) for value in _values(self.source_types)))
         object.__setattr__(self, "evidence_levels", _levels(_values(self.evidence_levels)))
+        object.__setattr__(self, "conditions", dict(self.conditions or {}))
+        object.__setattr__(self, "provenance", tuple(str(value) for value in _values(self.provenance)))
+        if self.license is None and self.licenses:
+            object.__setattr__(self, "license", self.licenses[0])
+        elif self.license is not None and not self.licenses:
+            object.__setattr__(self, "licenses", (str(self.license),))
         fractions = (self.synthetic_fraction, self.experimental_fraction, self.computational_fraction)
         if any(not math.isfinite(float(value)) or not 0 <= float(value) <= 1 for value in fractions):
             raise ValueError("dataset fractions must be finite values in [0,1]")
@@ -135,6 +152,15 @@ class DatasetManifest:
             "source_file_hash": self.source_file_hash,
             "artifact_path": self.artifact_path,
             "source_path": self.source_path,
+            "target": self.target,
+            "units": self.units,
+            "conditions": dict(self.conditions),
+            "measurement_method": self.measurement_method,
+            "uncertainty": self.uncertainty,
+            "source_url": self.source_url,
+            "redistribution_status": self.redistribution_status,
+            "provenance": list(self.provenance),
+            "license": self.license,
         }
 
     @classmethod
@@ -155,7 +181,7 @@ class DatasetManifest:
     @classmethod
     def from_mapping(cls, raw: Mapping[str, Any]) -> "DatasetManifest":
         return cls(
-            dataset_id=str(raw["dataset_id"]), version=str(raw["version"]), schema_id=str(raw["schema_id"]), sha256=str(raw["sha256"]), row_count=int(raw["row_count"]), column_count=int(raw.get("column_count", 0)), created_at=str(raw.get("created_at") or datetime.now(timezone.utc).isoformat()), sources=_values(raw.get("sources")), licenses=_values(raw.get("licenses")), source_types=_values(raw.get("source_types")), evidence_levels=_values(raw.get("evidence_levels")), synthetic_fraction=float(raw.get("synthetic_fraction", 0.0)), experimental_fraction=float(raw.get("experimental_fraction", 0.0)), computational_fraction=float(raw.get("computational_fraction", 0.0)), parent_datasets=_values(raw.get("parent_datasets")), transformation_run_id=raw.get("transformation_run_id"), notes=raw.get("notes"), storage_format=str(raw.get("storage_format", "records")), source_file_hash=raw.get("source_file_hash"), artifact_path=raw.get("artifact_path"), source_path=raw.get("source_path"),
+            dataset_id=str(raw["dataset_id"]), version=str(raw["version"]), schema_id=str(raw["schema_id"]), sha256=str(raw["sha256"]), row_count=int(raw["row_count"]), column_count=int(raw.get("column_count", 0)), created_at=str(raw.get("created_at") or datetime.now(timezone.utc).isoformat()), sources=_values(raw.get("sources")), licenses=_values(raw.get("licenses")), source_types=_values(raw.get("source_types")), evidence_levels=_values(raw.get("evidence_levels")), synthetic_fraction=float(raw.get("synthetic_fraction", 0.0)), experimental_fraction=float(raw.get("experimental_fraction", 0.0)), computational_fraction=float(raw.get("computational_fraction", 0.0)), parent_datasets=_values(raw.get("parent_datasets")), transformation_run_id=raw.get("transformation_run_id"), notes=raw.get("notes"), storage_format=str(raw.get("storage_format", "records")), source_file_hash=raw.get("source_file_hash"), artifact_path=raw.get("artifact_path"), source_path=raw.get("source_path"), target=raw.get("target"), units=raw.get("units"), conditions=dict(raw.get("conditions") or {}), measurement_method=raw.get("measurement_method"), uncertainty=raw.get("uncertainty"), source_url=raw.get("source_url"), redistribution_status=raw.get("redistribution_status"), provenance=_values(raw.get("provenance")), license=raw.get("license"),
         )
 
 

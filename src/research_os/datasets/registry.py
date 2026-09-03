@@ -160,7 +160,7 @@ def convert_csv_to_parquet(
         **_manifest_kwargs({
             **metadata,
             "storage_format": "parquet",
-            "source_file_hash": sha256_file(source),
+            "source_file_hash": metadata.get("source_file_hash") or sha256_file(source),
             "artifact_path": target,
             "source_path": source,
             "transformation_run_id": transformation_run_id,
@@ -210,6 +210,15 @@ def _manifest_kwargs(kwargs: Mapping[str, Any]) -> dict[str, Any]:
         "source_file_hash": kwargs.get("source_file_hash"),
         "artifact_path": str(kwargs["artifact_path"]) if kwargs.get("artifact_path") is not None else None,
         "source_path": str(kwargs["source_path"]) if kwargs.get("source_path") is not None else None,
+        "target": kwargs.get("target"),
+        "units": kwargs.get("units"),
+        "conditions": dict(kwargs.get("conditions") or {}),
+        "measurement_method": kwargs.get("measurement_method"),
+        "uncertainty": kwargs.get("uncertainty"),
+        "source_url": kwargs.get("source_url"),
+        "redistribution_status": kwargs.get("redistribution_status"),
+        "provenance": tuple(kwargs.get("provenance") or ()),
+        "license": kwargs.get("license"),
     }
 
 

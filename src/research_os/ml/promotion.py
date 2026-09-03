@@ -25,6 +25,10 @@ class PromotionPolicy:
     max_mae: float | None = None
     max_rmse: float | None = None
     min_r2: float | None = None
+    require_applicability_domain: bool = False
+    require_calibration: bool = False
+    max_ood_score: float | None = None
+    max_uncertainty: float | None = None
 
 
 @dataclass(frozen=True)
@@ -94,6 +98,41 @@ class ModelPromotionEngine:
             else:
                 gates.append(GateResult("GATE-ML-PROMOTION", "ML-PROMO-EXT-001", GateStatus.INSUFFICIENT_EVIDENCE, "external test acceptability is required for promotion"))
 
+        if policy.require_applicability_domain:
+            domain = validation.applicability_domain if validation is not None else None
+            if domain is None:
+                gates.append(GateResult("GATE-ML-PROMOTION", "ML-PROMO-AD-001", GateStatus.INSUFFICIENT_EVIDENCE, "applicability-domain assessment is required for promotion"))
+            elif domain.in_domain:
+                gates.append(GateResult("GATE-ML-PROMOTION", "ML-PROMO-AD-001", GateStatus.PASS, "declared validation set is inside the applicability domain", diagnostics={"method": domain.method, "score": domain.score}))
+            else:
+                gates.append(GateResult("GATE-ML-PROMOTION", "ML-PROMO-AD-001", GateStatus.OUT_OF_DOMAIN, "declared validation set contains out-of-domain observations", diagnostics={"method": domain.method, "score": domain.score}))
+
+        if policy.require_calibration:
+            calibration = validation.calibration if validation is not None else None
+            if isinstance(calibration, dict) and calibration.get("method") and int(calibration.get("calibration_count", 0)) > 0:
+                gates.append(GateResult("GATE-ML-PROMOTION", "ML-PROMO-CAL-001", GateStatus.PASS, "explicit residual-calibrated prediction interval is recorded; it is not a certainty claim", diagnostics={"method": calibration.get("method"), "calibration_count": calibration.get("calibration_count")}))
+            else:
+                gates.append(GateResult("GATE-ML-PROMOTION", "ML-PROMO-CAL-001", GateStatus.INSUFFICIENT_EVIDENCE, "an explicit uncertainty calibration record is required for promotion"))
+
+        if policy.max_ood_score is not None:
+            observed_ood = validation.out_of_domain_score if validation is not None else None
+            if observed_ood is None:
+                gates.append(GateResult("GATE-ML-PROMOTION", "ML-PROMO-OOD-001", GateStatus.INSUFFICIENT_EVIDENCE, "an applicability-domain OOD score is required by policy"))
+            elif observed_ood <= policy.max_ood_score:
+                gates.append(GateResult("GATE-ML-PROMOTION", "ML-PROMO-OOD-001", GateStatus.PASS, "OOD score is within the explicit promotion threshold", diagnostics={"value": observed_ood, "threshold": policy.max_ood_score}))
+            else:
+                gates.append(GateResult("GATE-ML-PROMOTION", "ML-PROMO-OOD-001", GateStatus.OUT_OF_DOMAIN, "OOD score exceeds the explicit promotion threshold", diagnostics={"value": observed_ood, "threshold": policy.max_ood_score}))
+
+        if policy.max_uncertainty is not None:
+            interval = validation.prediction_interval if validation is not None else None
+            observed_uncertainty = interval.get("radius") if isinstance(interval, dict) else None
+            if observed_uncertainty is None:
+                gates.append(GateResult("GATE-ML-PROMOTION", "ML-PROMO-UNCERTAINTY-001", GateStatus.INSUFFICIENT_EVIDENCE, "an uncertainty radius is required by policy"))
+            elif float(observed_uncertainty) <= policy.max_uncertainty:
+                gates.append(GateResult("GATE-ML-PROMOTION", "ML-PROMO-UNCERTAINTY-001", GateStatus.PASS, "residual-calibrated uncertainty is within the explicit threshold", diagnostics={"value": observed_uncertainty, "threshold": policy.max_uncertainty}))
+            else:
+                gates.append(GateResult("GATE-ML-PROMOTION", "ML-PROMO-UNCERTAINTY-001", GateStatus.FAIL, "residual-calibrated uncertainty exceeds the explicit threshold", diagnostics={"value": observed_uncertainty, "threshold": policy.max_uncertainty}))
+
         promoted = bool(gates) and all(gate.status == GateStatus.PASS for gate in gates)
         status = PromotionStatus.PROMOTED if promoted else PromotionStatus.REJECTED
         rule_ids = [gate.rule_id for gate in gates]
@@ -102,7 +141,7 @@ class ModelPromotionEngine:
             kind="model_promotion_decision",
             level=EvidenceLevel.E1_ML,
             source="Research OS ModelPromotionEngine",
-            payload={"status": status.value, "candidate_model_id": candidate.model_id, "champion_model_id": champion.model_id if champion else None, "rule_ids": rule_ids, "gates": [{"rule_id": gate.rule_id, "status": gate.status.value, "reason": gate.reason, "diagnostics": gate.diagnostics} for gate in gates]},
+            payload={"status": status.value, "model_id": candidate.model_id, "training_run_id": candidate.training_run_id, "candidate_model_id": candidate.model_id, "champion_model_id": champion.model_id if champion else None, "candidate_model": {"model_id": candidate.model_id, "training_run_id": candidate.training_run_id}, "champion_model": {"model_id": champion.model_id, "training_run_id": champion.training_run_id} if champion else None, "rule_ids": rule_ids, "gates": [{"rule_id": gate.rule_id, "status": gate.status.value, "reason": gate.reason, "diagnostics": gate.diagnostics} for gate in gates], "validation_metrics": dict(validation.metrics) if validation is not None else {}, "external_test_acceptable": external, "applicability_domain": validation.applicability_domain.to_dict() if validation is not None and validation.applicability_domain else None, "calibration": validation.calibration if validation is not None else None, "uncertainty": validation.prediction_interval if validation is not None else None, "regression_check": {"candidate_mae": candidate_mae, "champion_mae": champion_mae, "status": "compared" if champion is not None else "no_champion_baseline"}},
         )
         reason = "candidate passed explicit promotion gates" if promoted else f"candidate rejected at {next((gate.rule_id for gate in gates if gate.status != GateStatus.PASS), 'unknown gate')}"
         decision = PromotionDecision(status, candidate.model_id, champion.model_id if champion else None, tuple(gates), evidence, reason)

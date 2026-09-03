@@ -41,6 +41,20 @@ from research_os.ml.promotion import (
     PromotionStatus,
     promote_candidate,
 )
+from research_os.ml.real import (
+    REAL_FEATURE_SCHEMA,
+    REAL_SOLUBILITY_TASK,
+    MorganTanimotoApplicabilityDomain,
+    PredictionResult,
+    RealMLResult,
+    ResidualIntervalEstimator,
+    RidgeFingerprintModel,
+    SplitManifest,
+    make_real_split,
+    rank_in_domain,
+    train_real_solubility_model,
+)
+from research_os.ml.real_golden import RealGoldenRunResult, run_real_data_golden
 
 __all__ = [
     "ApplicabilityDomain",
@@ -78,4 +92,17 @@ __all__ = [
     "split_records",
     "temporal_split",
     "validate_regression",
+    "REAL_FEATURE_SCHEMA",
+    "REAL_SOLUBILITY_TASK",
+    "MorganTanimotoApplicabilityDomain",
+    "PredictionResult",
+    "RealMLResult",
+    "ResidualIntervalEstimator",
+    "RidgeFingerprintModel",
+    "SplitManifest",
+    "make_real_split",
+    "rank_in_domain",
+    "train_real_solubility_model",
+    "RealGoldenRunResult",
+    "run_real_data_golden",
 ]
