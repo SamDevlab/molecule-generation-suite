@@ -11,6 +11,8 @@ from research_os.bundles import verify_bundle
 from research_os.datasets import DatasetRegistry, inspect_dataset
 from research_os.environment import capture_environment
 from research_os.golden import run_golden_workflow
+from research_os.ledger import RunRegistry
+from research_os.ledger.schema import LedgerError
 from research_os.orchestration import default_registry
 
 
@@ -58,51 +60,189 @@ def build_parser() -> argparse.ArgumentParser:
     bundle_verify.add_argument("bundle")
 
     commands.add_parser("labs", help="list registered labs")
+
+    runs = commands.add_parser("runs", help="query the persistent run ledger")
+    runs_commands = runs.add_subparsers(dest="runs_command", required=True)
+    runs_list = runs_commands.add_parser("list")
+    runs_list.add_argument("--root", default="research-ledger")
+    runs_list.add_argument("--limit", type=int, default=100)
+    runs_list.add_argument("--offset", type=int, default=0)
+    runs_list.add_argument("--order-by", default="created_at")
+    runs_list.add_argument("--ascending", action="store_true")
+    runs_show = runs_commands.add_parser("show")
+    runs_show.add_argument("run_id")
+    runs_show.add_argument("--root", default="research-ledger")
+    runs_search = runs_commands.add_parser("search")
+    runs_search.add_argument("--root", default="research-ledger")
+    for name in ("status", "lab", "experiment", "workflow-id", "dataset-id", "claim-id", "model-id", "rule-id", "tag", "git-commit", "environment-hash", "date-from", "date-to"):
+        runs_search.add_argument(f"--{name}", dest=name.replace("-", "_"), default=None)
+    runs_search.add_argument("--limit", type=int, default=100)
+    runs_search.add_argument("--offset", type=int, default=0)
+    runs_search.add_argument("--order-by", default="created_at")
+    runs_search.add_argument("--ascending", action="store_true")
+    runs_verify = runs_commands.add_parser("verify")
+    runs_verify.add_argument("run_id")
+    runs_verify.add_argument("--root", default="research-ledger")
+    runs_rebuild = runs_commands.add_parser("rebuild-index")
+    runs_rebuild.add_argument("bundle_root")
+    runs_rebuild.add_argument("--root", default="research-ledger")
+    runs_lineage = runs_commands.add_parser("lineage")
+    runs_lineage.add_argument("run_id")
+    runs_lineage.add_argument("--root", default="research-ledger")
+    runs_compare = runs_commands.add_parser("compare")
+    runs_compare.add_argument("original_run_id")
+    runs_compare.add_argument("rerun_run_id")
+    runs_compare.add_argument("--root", default="research-ledger")
+
+    workflows = commands.add_parser("workflows", help="query and operate workflow executions")
+    workflows_commands = workflows.add_subparsers(dest="workflows_command", required=True)
+    workflows_list = workflows_commands.add_parser("list")
+    workflows_list.add_argument("--root", default="research-ledger")
+    workflows_list.add_argument("--limit", type=int, default=100)
+    workflows_list.add_argument("--offset", type=int, default=0)
+    workflows_show = workflows_commands.add_parser("show")
+    workflows_show.add_argument("workflow_id")
+    workflows_show.add_argument("--root", default="research-ledger")
+    workflows_rerun = workflows_commands.add_parser("rerun")
+    workflows_rerun.add_argument("workflow_id")
+    workflows_rerun.add_argument("--root", default="research-ledger")
+    workflows_rerun.add_argument("--output", default=None)
+    workflows_compare = workflows_commands.add_parser("compare")
+    workflows_compare.add_argument("original_workflow_id")
+    workflows_compare.add_argument("rerun_workflow_id")
+    workflows_compare.add_argument("--root", default="research-ledger")
+    workflows_lineage = workflows_commands.add_parser("lineage")
+    workflows_lineage.add_argument("workflow_id")
+    workflows_lineage.add_argument("--root", default="research-ledger")
+    workflows_regressions = workflows_commands.add_parser("regressions")
+    workflows_regressions.add_argument("original_workflow_id")
+    workflows_regressions.add_argument("rerun_workflow_id")
+    workflows_regressions.add_argument("--root", default="research-ledger")
+
+    ledger = commands.add_parser("ledger", help="verify ledger structure and references")
+    ledger_commands = ledger.add_subparsers(dest="ledger_command", required=True)
+    ledger_verify = ledger_commands.add_parser("verify")
+    ledger_verify.add_argument("--root", default="research-ledger")
+
+    export = commands.add_parser("export", help="export ledger records as JSON")
+    export_commands = export.add_subparsers(dest="export_command", required=True)
+    export_json = export_commands.add_parser("json")
+    export_json.add_argument("--root", default="research-ledger")
+    export_json.add_argument("--output", default=None)
     return parser
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    if args.command == "env":
-        manifest = capture_environment(repo_root=args.repo_root)
-        if args.output:
-            target = Path(args.output)
-            target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_text(manifest.to_json(), encoding="utf-8")
-        _json(manifest.to_dict())
-        return 0
-    if args.command == "dataset":
-        if args.dataset_command == "inspect":
-            _json(inspect_dataset(args.path).to_dict())
-            return 0
-        if args.dataset_command == "register":
-            root = Path(args.root)
-            curated = args.curated_path
-            if curated is None and Path(args.path).suffix.lower() == ".csv":
-                curated = str(root / "curated" / f"{args.dataset_id}-{args.version}.parquet")
-            registry = DatasetRegistry(root=root)
-            manifest = registry.register_dataset(dataset_id=args.dataset_id, version=args.version, schema_id=args.schema_id, path=args.path, curated_path=curated)
+    try:
+        if args.command == "env":
+            manifest = capture_environment(repo_root=args.repo_root)
+            if args.output:
+                target = Path(args.output)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(manifest.to_json(), encoding="utf-8")
             _json(manifest.to_dict())
             return 0
-        registry = DatasetRegistry(root=args.root)
-        _json({"dataset_id": args.dataset_id, "version": args.version, "verified": registry.verify_dataset(args.dataset_id, args.version)})
-        return 0
-    if args.command == "run" and args.run_command == "golden":
-        result = run_golden_workflow(args.output, mode=args.mode)
-        _json({"plan_id": result.plan_run.plan_id, "bundle": result.bundle.root, "verification": result.verification.status.value, "claim_id": result.claim.claim_id})
-        return 0 if result.verification.status.value != "FAIL" else 1
-    if args.command == "run" and args.run_command == "verify":
-        result = verify_bundle(args.bundle)
-        _json({"status": result.status.value, "first_loss": result.first_loss.rule_id if result.first_loss else None})
-        return 0 if result.status.value != "FAIL" else 1
-    if args.command == "bundle":
-        result = verify_bundle(args.bundle)
-        _json({"status": result.status.value, "first_loss": result.first_loss.rule_id if result.first_loss else None})
-        return 0 if result.status.value != "FAIL" else 1
-    if args.command == "labs":
-        _json({"labs": list(default_registry().names())})
-        return 0
-    return 2
+        if args.command == "dataset":
+            if args.dataset_command == "inspect":
+                _json(inspect_dataset(args.path).to_dict())
+                return 0
+            if args.dataset_command == "register":
+                root = Path(args.root)
+                curated = args.curated_path
+                if curated is None and Path(args.path).suffix.lower() == ".csv":
+                    curated = str(root / "curated" / f"{args.dataset_id}-{args.version}.parquet")
+                registry = DatasetRegistry(root=root)
+                manifest = registry.register_dataset(dataset_id=args.dataset_id, version=args.version, schema_id=args.schema_id, path=args.path, curated_path=curated)
+                _json(manifest.to_dict())
+                return 0
+            registry = DatasetRegistry(root=args.root)
+            _json({"dataset_id": args.dataset_id, "version": args.version, "verified": registry.verify_dataset(args.dataset_id, args.version)})
+            return 0
+        if args.command == "run" and args.run_command == "golden":
+            result = run_golden_workflow(args.output, mode=args.mode)
+            _json({"plan_id": result.plan_run.plan_id, "bundle": result.bundle.root, "verification": result.verification.status.value, "claim_id": result.claim.claim_id})
+            return 0 if result.verification.status.value != "FAIL" else 1
+        if args.command == "run" and args.run_command == "verify":
+            result = verify_bundle(args.bundle)
+            _json({"status": result.status.value, "first_loss": result.first_loss.rule_id if result.first_loss else None})
+            return 0 if result.status.value != "FAIL" else 1
+        if args.command == "bundle":
+            result = verify_bundle(args.bundle)
+            _json({"status": result.status.value, "first_loss": result.first_loss.rule_id if result.first_loss else None})
+            return 0 if result.status.value != "FAIL" else 1
+        if args.command == "labs":
+            _json({"labs": list(default_registry().names())})
+            return 0
+        if args.command == "runs":
+            registry = RunRegistry(args.root)
+            try:
+                if args.runs_command == "list":
+                    _json([item.to_dict() for item in registry.list_runs(limit=args.limit, offset=args.offset, order_by=args.order_by, descending=not args.ascending)])
+                elif args.runs_command == "show":
+                    _json(registry.get_run(args.run_id).to_dict())
+                elif args.runs_command == "search":
+                    filters = {key: value for key, value in vars(args).items() if key in {"status", "lab", "experiment", "workflow_id", "dataset_id", "claim_id", "model_id", "rule_id", "tag", "git_commit", "environment_hash", "date_from", "date_to"} and value is not None}
+                    _json([item.to_dict() for item in registry.search_runs(**filters, limit=args.limit, offset=args.offset, order_by=args.order_by, descending=not args.ascending)])
+                elif args.runs_command == "verify":
+                    result = registry.verify_run(args.run_id)
+                    _json({"status": result.status.value, "gates": [{"rule_id": gate.rule_id, "status": gate.status.value, "reason": gate.reason} for gate in result.gates]})
+                    return 0 if result.status.value != "FAIL" else 1
+                elif args.runs_command == "rebuild-index":
+                    _json(registry.rebuild_index(args.bundle_root).to_dict())
+                elif args.runs_command == "lineage":
+                    _json(registry.get_lineage(args.run_id).to_dict())
+                elif args.runs_command == "compare":
+                    _json(registry.compare_runs(args.original_run_id, args.rerun_run_id).to_dict())
+                return 0
+            finally:
+                registry.close()
+        if args.command == "workflows":
+            registry = RunRegistry(args.root)
+            try:
+                if args.workflows_command == "list":
+                    _json([item.to_dict() for item in registry.list_workflows(limit=args.limit, offset=args.offset)])
+                elif args.workflows_command == "show":
+                    _json(registry.get_workflow(args.workflow_id).to_dict())
+                elif args.workflows_command == "rerun":
+                    result = registry.rerun_workflow(args.workflow_id, output_root=args.output)
+                    _json(result.to_dict())
+                elif args.workflows_command == "compare":
+                    _json(registry.compare_workflows(args.original_workflow_id, args.rerun_workflow_id).to_dict())
+                elif args.workflows_command == "lineage":
+                    workflow = registry.get_workflow(args.workflow_id)
+                    _json({"workflow": workflow.to_dict(), "steps": {step.step_id: registry.get_lineage(step.run_id).to_dict() for step in workflow.steps if step.run_id}})
+                elif args.workflows_command == "regressions":
+                    from research_os.ledger.regression import detect_regressions
+                    comparison = registry.compare_workflows(args.original_workflow_id, args.rerun_workflow_id)
+                    _json([item.to_dict() for item in detect_regressions(comparison)])
+                return 0
+            finally:
+                registry.close()
+        if args.command == "ledger" and args.ledger_command == "verify":
+            registry = RunRegistry(args.root)
+            try:
+                result = registry.verify_ledger()
+                _json(result.to_dict())
+                return 0 if result.status != "FAIL" else 1
+            finally:
+                registry.close()
+        if args.command == "export" and args.export_command == "json":
+            registry = RunRegistry(args.root)
+            try:
+                payload = {"schema_version": 2, "runs": [item.to_dict() for item in registry.list_runs(limit=1_000_000)], "workflows": [item.to_dict() for item in registry.list_workflows(limit=1_000_000)]}
+                if args.output:
+                    target = Path(args.output)
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_text(json.dumps(payload, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
+                _json(payload)
+                return 0
+            finally:
+                registry.close()
+        return 2
+    except (LedgerError, KeyError, ValueError, OSError) as exc:
+        _json({"error": str(exc), "rule_id": getattr(exc, "rule_id", None)})
+        return 1
 
 
 if __name__ == "__main__":

@@ -9,6 +9,7 @@ import uuid
 
 from research_os.core.hashing import sha256_file, sha256_json
 from research_os.core.types import Evidence, GateResult, GateStatus, RunManifest
+from research_os.artifacts.store import ContentAddressedArtifactStore
 
 
 class ResearchBundleError(RuntimeError):
@@ -83,6 +84,7 @@ class ResearchBundle:
         dataset_manifests: Iterable[Any] = (),
         claims: Iterable[Any] = (),
         artifacts: Mapping[str, str | Path] | None = None,
+        pack_artifacts: bool = False,
     ) -> "ResearchBundle":
         bundle_id = f"BND-{uuid.uuid4().hex[:12].upper()}"
         run_id = _run_id(run)
@@ -116,10 +118,26 @@ class ResearchBundle:
             source = Path(path_value)
             if not source.is_file():
                 raise FileNotFoundError(source)
-            destination = target / "artifacts" / name
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            destination.write_bytes(source.read_bytes())
-            artifact_index[name] = {"path": str(destination.relative_to(target)), "sha256": sha256_file(destination)}
+            if pack_artifacts:
+                if _is_executable_artifact(source):
+                    raise ResearchBundleError(f"packed artifacts cannot contain executable or engine binaries: {source.name}")
+                ref = ContentAddressedArtifactStore(target / "artifacts").put_artifact(source)
+                artifact_index[name] = {
+                    "path": str(Path(ref.stored_path).relative_to(target)).replace("\\", "/"),
+                    "sha256": ref.artifact_hash,
+                    "artifact_hash": ref.artifact_hash,
+                    "size": ref.size,
+                    "original_path": str(source),
+                    "packed": True,
+                }
+            else:
+                relative_name = Path(name)
+                if relative_name.is_absolute() or ".." in relative_name.parts:
+                    raise ResearchBundleError(f"artifact name must stay inside the bundle: {name}")
+                destination = target / "artifacts" / relative_name
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(source.read_bytes())
+                artifact_index[name] = {"path": str(destination.relative_to(target)).replace("\\", "/"), "sha256": sha256_file(destination), "size": destination.stat().st_size, "original_path": str(source)}
         _write_json(target / "artifacts" / "index.json", artifact_index)
         first_loss = run_payload.get("first_loss")
         _write_json(target / "first_loss.json", first_loss)
@@ -147,3 +165,7 @@ def _write_json(path: Path, value: Any) -> None:
 
 def create_bundle(run: Any, root: str | Path, **kwargs: Any) -> ResearchBundle:
     return ResearchBundle.create(run, root, **kwargs)
+
+
+def _is_executable_artifact(path: Path) -> bool:
+    return path.suffix.lower() in {".exe", ".dll", ".so", ".dylib", ".bin", ".app", ".msi", ".pyd"}
