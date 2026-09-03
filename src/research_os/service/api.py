@@ -6,7 +6,7 @@ expose Lab internals to the frontend and never executes free-form model text.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
 import re
@@ -16,7 +16,8 @@ from research_os.candidates import CandidateRanking
 from research_os.bundles import ResearchBundle
 from research_os.core.types import EvidenceLevel, RunLineage
 from research_os.environment import capture_environment
-from research_os.oracle import ClaimTarget, OracleAnswer, OracleAnswerStatus, OraclePlanner, PlanStatus, PlanningResult, ResearchMemory, ResearchPlan, ResearchQuestion
+from research_os.oracle import ClaimTarget, OracleAnswer, OracleAnswerStatus, OraclePlanner, PlanStatus, PlanningResult, ResearchMemory, ResearchPlan, ResearchQuestion, default_capabilities
+from research_os.oracle.grounding import validate_narration
 from research_os.oracle.models import PlanStep
 from research_os.oracle.validator import PlanValidationResult, ValidationIssue
 from research_os.orchestration import ResearchOrchestrator, default_registry
@@ -66,7 +67,8 @@ class OracleService:
         session = self._get_or_create_session(session_id, text)
         if session.active_job_id and _is_continue_request(text):
             return self.continue_research(session.active_job_id, prompt=text)
-        planning = self.planner.ask(text, memory=[item.to_dict() for item in self.memory.search(text)])
+        memory_records = [item.to_dict() for item in self.memory.search(text)]
+        planning = self.planner.ask(text, memory=memory_records, context=self._planning_context(session, text, memory_records))
         job = ResearchJob(planning.question.question_id, session_id=session.session_id, plan_id=planning.plan.plan_id, status=ResearchJobStatus.PLANNING, started_at=datetime.now(timezone.utc).isoformat())
         self._record_user_message(session, text, question_id=planning.question.question_id, job_id=job.job_id)
         self._save_job(job)
@@ -78,8 +80,12 @@ class OracleService:
         self._save_job(job)
         execution = None
         bundle = None
-        if planning.reformulated_from or planning.validation.status == "FAIL":
+        live_validation_block = getattr(self.planner.provider, "mode", None) == "LIVE_ORACLE" and planning.validation.status == "INDETERMINATE"
+        if planning.reformulated_from or planning.validation.status == "FAIL" or live_validation_block:
             answer = self.planner.answer_from_plan(planning)
+            retrieved = self._retrieve(planning.question.text)
+            if retrieved:
+                answer = replace(answer, sources=tuple(item["source_id"] for item in retrieved if item.get("source_id")), metadata={**answer.metadata, "retrieved_sources": retrieved})
         else:
             job.status = ResearchJobStatus.RUNNING
             job.emit("execution_started", "validated plan submitted to ResearchOrchestrator", completed=False)
@@ -113,8 +119,18 @@ class OracleService:
     def continue_research(self, job_id: str, *, prompt: str = "Continue essa pesquisa.") -> ServiceResponse:
         previous = self._get_response(job_id)
         session = self._get_or_create_session(previous.job.session_id, "Continue research")
-        question, plan = self.memory.continue_research(previous.planning.plan)
-        planning = PlanningResult(question, plan, self.planner.validator.validate(plan, question=question), previous.planning.audits, previous.planning.plan.plan_id)
+        if getattr(self.planner.provider, "mode", None) == "LIVE_ORACLE":
+            prior = [item.to_dict() for item in self.memory.search(str(previous.planning.plan.plan_id))]
+            context = self._planning_context(session, prompt, prior)
+            context["continuation_parent"] = {"question": previous.planning.question.to_dict(), "plan": previous.planning.plan.to_dict(), "answer": previous.answer.to_dict()}
+            live = self.planner.ask(prompt, memory=prior, context=context)
+            question = live.question
+            plan = replace(live.plan, rerun_of=previous.planning.plan.plan_id)
+            validation = self.planner.validator.validate(plan, question=live.question)
+            planning = PlanningResult(live.question, plan, validation, live.audits, previous.planning.plan.plan_id)
+        else:
+            question, plan = self.memory.continue_research(previous.planning.plan)
+            planning = PlanningResult(question, plan, self.planner.validator.validate(plan, question=question), previous.planning.audits, previous.planning.plan.plan_id)
         job = ResearchJob(question.question_id, session_id=session.session_id, plan_id=plan.plan_id, status=ResearchJobStatus.VALIDATING, started_at=datetime.now(timezone.utc).isoformat())
         self._record_user_message(session, prompt, question_id=question.question_id, job_id=job.job_id)
         self._save_job(job)
@@ -122,7 +138,8 @@ class OracleService:
         job.emit("plan_validated", f"plan validation status: {planning.validation.status}", completed=True)
         execution = None
         bundle = None
-        if planning.validation.status != "FAIL":
+        live_validation_block = getattr(self.planner.provider, "mode", None) == "LIVE_ORACLE" and planning.validation.status == "INDETERMINATE"
+        if planning.validation.status != "FAIL" and not live_validation_block:
             job.status = ResearchJobStatus.RUNNING
             job.emit("execution_started", "continuation plan submitted to ResearchOrchestrator", completed=False)
             execution = self._execute(planning)
@@ -134,6 +151,9 @@ class OracleService:
             job.emit("execution_completed", f"execution status: {answer.status.value}", completed=True, workflow_id=execution.plan_id)
         else:
             answer = self.planner.answer_from_plan(planning)
+            retrieved = self._retrieve(planning.question.text)
+            if retrieved:
+                answer = replace(answer, sources=tuple(item["source_id"] for item in retrieved if item.get("source_id")), metadata={**answer.metadata, "retrieved_sources": retrieved})
         job.status = ResearchJobStatus.INDETERMINATE if answer.status is OracleAnswerStatus.INDETERMINATE else ResearchJobStatus.COMPLETED if answer.status is not OracleAnswerStatus.REJECTED else ResearchJobStatus.FAILED
         job.error_code = answer.first_loss.get("rule_id") if answer.first_loss and job.status is not ResearchJobStatus.COMPLETED else None
         job.first_loss = answer.first_loss
@@ -232,7 +252,25 @@ class OracleService:
         right = next((item for item in ranking.ranked if item.candidate_id == candidate_b), None)
         if left is None or right is None:
             return {"status": "INSUFFICIENT_EVIDENCE", "reason": "one or both candidates are not in the auditable ranking"}
-        return {"status": "SUPPORTED", "metric": ranking.metric, "direction": ranking.direction, "winner": candidate_a if (left.value >= right.value if ranking.direction == "max" else left.value <= right.value) else candidate_b, "comparison": {candidate_a: left.to_dict(), candidate_b: right.to_dict()}, "reason": "comparison is derived only from recorded metric, evidence, status, OOD, uncertainty and conditions"}
+        winner = candidate_a if (left.value >= right.value if ranking.direction == "max" else left.value <= right.value) else candidate_b
+        result = {"status": "SUPPORTED", "metric": ranking.metric, "direction": ranking.direction, "winner": winner, "comparison": {candidate_a: left.to_dict(), candidate_b: right.to_dict()}, "reason": "comparison is derived only from recorded metric, evidence, status, OOD, uncertainty and conditions"}
+        provider = self.planner.provider
+        live_explainer = getattr(provider, "explain_ranking", None)
+        if getattr(provider, "mode", None) == "LIVE_ORACLE" and callable(live_explainer):
+            try:
+                generated = live_explainer(ranking.to_dict())
+            except Exception:
+                return {"status": "NARRATION_GROUNDING_FAILURE", "reason": "live ranking narration was unavailable; no unverified explanation was persisted", "comparison": result["comparison"]}
+            if str(generated.get("status", "SUPPORTED")) != "SUPPORTED" or str(generated.get("winner", "")) != winner or str(generated.get("metric", ranking.metric)) != ranking.metric or str(generated.get("direction", ranking.direction)) != ranking.direction or not {candidate_a, candidate_b}.issubset({str(item) for item in generated.get("candidate_ids") or ()}):
+                return {"status": "NARRATION_GROUNDING_FAILURE", "reason": "live ranking narration contradicted the recorded ranking", "comparison": result["comparison"]}
+            summary = str(generated.get("summary", "")).strip()
+            numeric_text = re.sub(r"\b(?:EVD|RUN|PLAN|JOB|Q|SESSION)-[A-Z0-9-]+\b", "", summary.upper())
+            numeric_values = [float(value) for value in re.findall(r"(?<![A-Z])[-+]?\d+(?:\.\d+)?(?:[Ee][-+]?\d+)?", numeric_text)]
+            recorded_values = {float(item.value) for item in (left, right) if item.value is not None}
+            if any(value not in recorded_values for value in numeric_values):
+                return {"status": "NARRATION_GROUNDING_FAILURE", "reason": "live ranking narration contained unverified numeric content", "comparison": result["comparison"]}
+            result["oracle_narration"] = generated
+        return result
 
     def _execute(self, planning: PlanningResult) -> Any:
         steps = tuple(
@@ -301,11 +339,17 @@ class OracleService:
         provider = self.planner.provider
         summary_payload = execution.to_dict()
         summary_payload.update({"status": status.value, "evidence": evidence_items})
+        narration_gate = None
         try:
             generated = provider.summarize_results(summary_payload)
+            if getattr(provider, "mode", None) == "LIVE_ORACLE":
+                narration_gate = validate_narration(generated, summary_payload, expected_status=status.value)
         except Exception:
             generated = {"summary": "Recorded execution result; provider narration was unavailable."}
-        summary = str(generated.get("summary", "Recorded execution result."))
+        if narration_gate is not None and not narration_gate.passed:
+            summary = f"NARRATION_GROUNDING_FAILURE: {narration_gate.reason}. Scientific answer remains limited to the recorded payload."
+        else:
+            summary = str(generated.get("summary", "Recorded execution result."))
         summary += f" Status={status.value}; steps=" + ", ".join(f"{record.step_id}:{record.status}" for record in records) + "."
         if first_loss is not None:
             summary += f" FIRST_LOSS={first_loss.get('rule_id')} at {first_loss.get('step_id', 'validation')}."
@@ -318,13 +362,25 @@ class OracleService:
             limitations.append("downstream steps remain SKIPPED after the first unavailable or indeterminate dependency")
         if status in {OracleAnswerStatus.SUPPORTED, OracleAnswerStatus.INSUFFICIENT_EVIDENCE}:
             limitations.append("computational and curated knowledge records do not prove experiment, efficacy, safety, cure or clinical outcome")
+        if narration_gate is not None and not narration_gate.passed:
+            limitations.append("NARRATION_GROUNDING_FAILURE: live narration was not accepted as grounded")
         run_ids = tuple(run.run_id for run in execution.runs.values())
         metadata = {
             "grounded": True,
             "provider": getattr(provider, "provider_id", type(provider).__name__),
             "provider_metadata": dict(getattr(provider, "audit_metadata", {}) or {}),
             "workflow_id": execution.plan_id,
+            "oracle_audit": [item.to_dict() for item in planning.audits if hasattr(item, "to_dict")],
+            "oracle_trace": {
+                "plan_id": planning.plan.plan_id,
+                "validation": planning.validation.status,
+                "repair_count": planning.validation.repairs,
+                "request_digests": [item.prompt_hash for item in planning.audits if hasattr(item, "prompt_hash")],
+                "response_digests": [item.response_hash for item in planning.audits if hasattr(item, "response_hash")],
+            },
         }
+        if narration_gate is not None:
+            metadata["narration_grounding"] = narration_gate.to_dict()
         if status is OracleAnswerStatus.INSUFFICIENT_EVIDENCE:
             metadata["research_gap"] = {
                 "what_we_know": [item.get("kind") for item in evidence_items],
@@ -363,6 +419,37 @@ class OracleService:
         # Retrieval failure is recorded as an absent citation, never as
         # scientific evidence and never as a reason to invent a source.
         return []
+
+    def _planning_context(self, session: ResearchSession, user_message: str, memory_records: list[dict[str, Any]]) -> dict[str, Any]:
+        """Build a read-only capability snapshot for a live Oracle turn."""
+        capabilities = [item.to_dict() for item in default_capabilities()]
+        engines: list[dict[str, Any]] = []
+        if self.engine_registry is not None:
+            try:
+                engines = [item.to_dict() for item in self.engine_registry.probe_all()]
+            except Exception:
+                engines = [{"status": "INDETERMINATE", "reason": "engine probe failed"}]
+        return {
+            "user_message": user_message,
+            "session_id": session.session_id,
+            "session": {"active_job_id": session.active_job_id, "active_workflow_id": session.active_workflow_id, "related_run_ids": list(session.related_run_ids), "related_bundle_ids": list(session.related_bundle_ids)},
+            "available_labs": list(self.registry.names()) if hasattr(self.registry, "names") else [],
+            "available_capabilities": capabilities,
+            "tool_contracts": {
+                "MoleculeLab.deterministic_properties": {"inputs": {"smiles": "a user-supplied SMILES string"}, "ceiling": "E2_COMPUTATIONAL"},
+                "FuelLab.fuel_catalog": {"inputs": {"components": "list of {name, smiles, fraction} with fractions summing to 1"}, "ceiling": "E2_COMPUTATIONAL"},
+                "CombustionLab.adiabatic_equilibrium_hp": {"inputs": {"fuel": "Cantera species composition, e.g. CH4:1 or H2:2", "mechanism": "gri30.yaml", "temperature": {"value": 300, "unit": "K"}, "pressure": {"value": 1, "unit": "atm"}, "temperature_k": 300.0, "pressure_pa": 101325.0, "oxidizer": "O2:0.21,N2:0.79", "equivalence_ratio": 1.0, "basis": "mole"}, "supported_gri30_species_examples": ["CH4:1", "H2:2", "CO:1"], "ceiling": "E3_PHYSICS", "engine": "cantera"},
+                "PropulsionLab.ideal_nozzle_from_combustion": {"inputs": {"combustion": {"fuel": "CH4:1", "mechanism": "gri30.yaml", "temperature_k": 300.0, "pressure_pa": 101325.0, "oxidizer": "O2:0.21,N2:0.79", "equivalence_ratio": 1.0, "basis": "mole"}, "exit_pressure_pa": 10000.0, "nozzle_efficiency": 1.0}, "ceiling": "E3_PHYSICS", "engine": "cantera", "limitations": ["ideal kinetic nozzle model, not an experimental engine measurement", "combustion is executed by the nested registered CombustionLab"]},
+                "DockingLab.vina_docking": {"inputs": {"receptor": "registered receptor path or identifier", "ligand": "registered ligand path or identifier", "grid": "registered grid definition"}, "ceiling": "E2_COMPUTATIONAL", "engine": "autodock-vina"},
+            },
+            "engine_status": engines,
+            "datasets": [],
+            "models": [],
+            "retrieved_sources": self._retrieve(user_message),
+            "prior_research": memory_records,
+            "evidence_requirement": "Use the requested level only if recorded execution can meet it.",
+            "scientific_constraints": ["Only registered Labs create Evidence.", "Computational evidence is not experimental evidence.", "Docking cannot establish clinical efficacy or cure."],
+        }
 
     def _get_or_create_session(self, session_id: str | None, text: str) -> ResearchSession:
         if session_id:

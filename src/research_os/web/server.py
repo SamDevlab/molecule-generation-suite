@@ -25,7 +25,7 @@ from research_os.candidates import CandidateEvaluation, CandidateRanking
 from research_os.environment import capture_environment
 from research_os.engines import EngineRegistry, run_cantera_reference_case
 from research_os.knowledge import KnowledgeIngestionPipeline, KnowledgeRetriever, ReviewStatus, SourceLocator, SourceRecord, SourceRegistry, SourceType, Zettel, ZettelType, write_zettel
-from research_os.oracle import CodexTestProvider, OraclePlanner, PlanValidator
+from research_os.oracle import CodexLiveProvider, CodexTestProvider, OraclePlanner, PlanValidator
 from research_os.service import OracleService, ResearchStore
 from research_os.ledger import RunRegistry
 
@@ -77,7 +77,11 @@ class OracleWebApplication:
         try:
             if method == "GET" and route == "/api/health":
                 provider = self.service.planner.provider
-                return 200, {"status": "ok", "service": "Research OS 3.1", "provider": dict(getattr(provider, "audit_metadata", {}) or {}), "ledger_source_of_truth": True}
+                return 200, {"status": "ok", "service": "Research OS 3.2", "provider": dict(getattr(provider, "audit_metadata", {}) or {}), "oracle": self.oracle_status(), "ledger_source_of_truth": True}
+            if method == "GET" and route == "/api/oracle/audit":
+                return 200, self.oracle_status()
+            if method == "GET" and route == "/api/capabilities":
+                return 200, {"capabilities": [item.to_dict() for item in self.service.planner.validator.capabilities.values()]}
             if method == "GET" and route == "/api/engines":
                 return 200, {"engines": self.engine_status()}
             if method == "POST" and route == "/api/engines/reference":
@@ -215,6 +219,24 @@ class OracleWebApplication:
             result.append({**item, "boundary": "IMPLEMENTED", "available": item.get("availability") == "AVAILABLE", "configured": item.get("readiness") in {"CONFIGURED", "PROTOCOL_READY", "REFERENCE_VALIDATED"}, "executed": executed, "reference_validated": reference_validated, "reference_case": reference or None})
         return result
 
+    def oracle_status(self) -> dict[str, Any]:
+        provider = self.service.planner.provider
+        metadata = dict(getattr(provider, "audit_metadata", {}) or {})
+        audit = provider.audit() if hasattr(provider, "audit") else {**metadata, "status": "DETERMINISTIC_TEST_ONLY"}
+        return {
+            "oracle_llm": "CODEX LIVE" if getattr(provider, "mode", None) == "LIVE_ORACLE" else "CODEX TEST",
+            "mode": getattr(provider, "mode", "TEST"),
+            "live_oracle_validation": "PASS" if getattr(provider, "mode", None) == "LIVE_ORACLE" and bool(getattr(provider, "available", lambda: True)()) else "NOT_VALIDATED",
+            "scientific_evidence_provider": False,
+            "external_api": "NOT_REQUIRED_FOR_THIS_MILESTONE",
+            "standalone_web_llm": "STANDALONE_LLM_BRIDGE_NOT_IMPLEMENTED",
+            "planner": "ACTIVE",
+            "narrator": "ACTIVE",
+            "plan_validator": "ENFORCED",
+            "grounding": "ENFORCED",
+            "provider_audit": audit,
+        }
+
     def run_cantera_reference(self) -> dict[str, Any]:
         case = run_cantera_reference_case()
         if case.result_status == "SUPPORTED_AND_EXECUTED":
@@ -328,7 +350,7 @@ class OracleWebApplication:
                 return
 
         server = ThreadingHTTPServer((host, port), Handler)
-        print(f"Research OS 3.1 listening at http://{host}:{port}")
+        print(f"Research OS 3.2 listening at http://{host}:{port}")
         try:
             server.serve_forever()
         except KeyboardInterrupt:
@@ -338,7 +360,7 @@ class OracleWebApplication:
             self.close()
 
 
-def build_default_application(data_root: str | Path | None = None) -> OracleWebApplication:
+def build_default_application(data_root: str | Path | None = None, *, oracle_mode: str | None = None, codex_executable: str | Path | None = None) -> OracleWebApplication:
     root = Path(data_root or os.environ.get("RESEARCH_OS_DATA", Path.cwd() / ".research-os")).resolve()
     root.mkdir(parents=True, exist_ok=True)
     ledger = RunRegistry(root / "ledger")
@@ -348,7 +370,14 @@ def build_default_application(data_root: str | Path | None = None) -> OracleWebA
     source_registry = SourceRegistry(root / "knowledge")
     retriever = KnowledgeRetriever(sqlite3.connect(root / "knowledge" / "retrieval.sqlite", check_same_thread=False))
     _bootstrap_knowledge(source_registry, retriever)
-    service = OracleService(OraclePlanner(CodexTestProvider(), validator=PlanValidator(engine_registry=engine_registry)), ledger=ledger, store=store, bundle_root=root / "bundles", knowledge_retriever=retriever, source_registry=source_registry, engine_registry=engine_registry)
+    selected_mode = str(oracle_mode or os.environ.get("RESEARCH_OS_ORACLE_MODE", "test")).strip().lower()
+    if selected_mode in {"live", "codex_live", "live_oracle"}:
+        provider = CodexLiveProvider(executable=codex_executable, workdir=Path.cwd())
+    elif selected_mode in {"test", "codex_test", "deterministic"}:
+        provider = CodexTestProvider()
+    else:
+        raise ValueError("oracle_mode must be test or live")
+    service = OracleService(OraclePlanner(provider, validator=PlanValidator(engine_registry=engine_registry)), ledger=ledger, store=store, bundle_root=root / "bundles", knowledge_retriever=retriever, source_registry=source_registry, engine_registry=engine_registry)
     application = OracleWebApplication(service, data_root=root)
     if not application._reference_cases:
         application.run_cantera_reference()
@@ -366,10 +395,11 @@ def _bootstrap_knowledge(source_registry: SourceRegistry, retriever: KnowledgeRe
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Run the Research OS 3.1 operational Oracle web app")
+    parser = argparse.ArgumentParser(description="Run the Research OS 3.2 operational Oracle web app")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--data-root", default=None)
+    parser.add_argument("--oracle-mode", choices=("test", "live"), default=None)
     args = parser.parse_args(argv)
-    build_default_application(args.data_root).serve(args.host, args.port)
+    build_default_application(args.data_root, oracle_mode=args.oracle_mode).serve(args.host, args.port)
     return 0
