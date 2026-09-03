@@ -85,7 +85,7 @@ TypedToolRegistry = ToolRegistry
 
 def default_capabilities() -> tuple[LabCapability, ...]:
     return (
-        LabCapability("MoleculeLab", ("deterministic_properties",), EvidenceLevel.E2_COMPUTATIONAL),
+        LabCapability("MoleculeLab", ("deterministic_properties",), EvidenceLevel.E2_COMPUTATIONAL, required_inputs=("smiles",)),
         LabCapability("FuelLab", ("fuel_catalog",), EvidenceLevel.E2_COMPUTATIONAL),
         LabCapability("CombustionLab", ("adiabatic_equilibrium_hp",), EvidenceLevel.E3_PHYSICS, ("cantera",), ("fuel", "mechanism", "temperature", "pressure")),
         LabCapability("ThermalLab", ("steady_planar_conduction",), EvidenceLevel.E2_COMPUTATIONAL),

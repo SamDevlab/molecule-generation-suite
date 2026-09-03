@@ -11,7 +11,15 @@ from research_os.oracle.capabilities import LabCapability, default_capabilities
 from research_os.oracle.models import ClaimTarget, PlanStatus, ResearchPlan, ResearchQuestion
 
 
-_LEVEL_ORDER = {level: index for index, level in enumerate((EvidenceLevel.E0_HEURISTIC, EvidenceLevel.E1_ML, EvidenceLevel.E2_COMPUTATIONAL, EvidenceLevel.E3_PHYSICS, EvidenceLevel.E4_CURATED_EXPERIMENTAL, EvidenceLevel.E5_VALIDATED_EXPERIMENTAL))}
+CANONICAL_EVIDENCE_LEVELS = (
+    EvidenceLevel.E0_HEURISTIC,
+    EvidenceLevel.E1_ML,
+    EvidenceLevel.E2_COMPUTATIONAL,
+    EvidenceLevel.E3_PHYSICS,
+    EvidenceLevel.E4_CURATED_EXPERIMENTAL,
+    EvidenceLevel.E5_VALIDATED_EXPERIMENTAL,
+)
+_LEVEL_ORDER = {level: index for index, level in enumerate(CANONICAL_EVIDENCE_LEVELS)}
 
 
 @dataclass(frozen=True)
@@ -32,6 +40,8 @@ class PlanValidationResult:
     plan_id: str
     issues: tuple[ValidationIssue, ...] = ()
     normalized_plan: ResearchPlan | None = None
+    attempts: int = 1
+    repairs: int = 0
 
     @property
     def passed(self) -> bool:
@@ -42,7 +52,7 @@ class PlanValidationResult:
         return self.issues[0] if self.issues else None
 
     def to_dict(self) -> dict[str, Any]:
-        return {"status": self.status, "plan_id": self.plan_id, "issues": [item.to_dict() for item in self.issues], "normalized_plan": self.normalized_plan.to_dict() if self.normalized_plan else None}
+        return {"status": self.status, "plan_id": self.plan_id, "issues": [item.to_dict() for item in self.issues], "normalized_plan": self.normalized_plan.to_dict() if self.normalized_plan else None, "attempts": self.attempts, "repairs": self.repairs}
 
 
 class PlanValidator:
@@ -55,6 +65,8 @@ class PlanValidator:
 
     def validate(self, plan: ResearchPlan, *, question: ResearchQuestion | None = None) -> PlanValidationResult:
         issues: list[ValidationIssue] = []
+        if not plan.steps:
+            issues.append(ValidationIssue("ORACLE-PLAN-SCHEMA-002", "FAIL", "a research plan must contain at least one typed step"))
         known = {step.step_id for step in plan.steps}
         if len(known) != len(plan.steps):
             issues.append(ValidationIssue("ORACLE-PLAN-SCHEMA-001", "FAIL", "plan step IDs must be unique"))
@@ -86,13 +98,33 @@ class PlanValidator:
         if self._has_cycle(plan):
             issues.append(ValidationIssue("ORACLE-DEPENDENCY-002", "FAIL", "plan dependency graph contains a cycle"))
         self._validate_claims(plan.claim_targets, plan, issues)
+        if question is not None:
+            plan_ceiling = max(
+                (_LEVEL_ORDER[self.capabilities[step.lab].evidence_ceiling] for step in plan.steps if step.lab in self.capabilities),
+                default=-1,
+            )
+            required = _LEVEL_ORDER[question.required_evidence_level]
+            if required > plan_ceiling:
+                issues.append(ValidationIssue(
+                    "ORACLE-EVIDENCE-002",
+                    "INSUFFICIENT_EVIDENCE",
+                    "question requires evidence above the proposed Lab ceiling",
+                    diagnostics={"required": question.required_evidence_level.value, "plan_ceiling": CANONICAL_EVIDENCE_LEVELS[plan_ceiling].value if plan_ceiling >= 0 else None},
+                ))
         if any(issue.status == "FAIL" for issue in issues):
             status = "FAIL"
         elif any(issue.status == "INDETERMINATE" for issue in issues):
             status = "INDETERMINATE"
+        elif any(issue.status == "INSUFFICIENT_EVIDENCE" for issue in issues):
+            status = "INSUFFICIENT_EVIDENCE"
         else:
             status = "PASS"
-        normalized = ResearchPlan(plan.question_id, plan.steps, plan.assumptions, plan.required_sources, plan.expected_outputs, plan.risk_flags, plan.claim_targets, PlanStatus.VALIDATED if status == "PASS" else PlanStatus.INDETERMINATE if status == "INDETERMINATE" else PlanStatus.INVALID, plan.plan_id, plan.created_at, plan.rerun_of)
+        normalized_status = {
+            "PASS": PlanStatus.VALIDATED,
+            "INDETERMINATE": PlanStatus.INDETERMINATE,
+            "INSUFFICIENT_EVIDENCE": PlanStatus.INSUFFICIENT_EVIDENCE,
+        }.get(status, PlanStatus.INVALID)
+        normalized = ResearchPlan(plan.question_id, plan.steps, plan.assumptions, plan.required_sources, plan.expected_outputs, plan.risk_flags, plan.claim_targets, normalized_status, plan.plan_id, plan.created_at, plan.rerun_of)
         return PlanValidationResult(status, plan.plan_id, tuple(issues), normalized)
 
     def _engine_unavailable(self, engine_id: str) -> bool:

@@ -20,6 +20,7 @@ class PlanStatus(str, Enum):
     VALIDATED = "VALIDATED"
     INVALID = "INVALID"
     INDETERMINATE = "INDETERMINATE"
+    INSUFFICIENT_EVIDENCE = "INSUFFICIENT_EVIDENCE"
     EXECUTED = "EXECUTED"
 
 
@@ -164,6 +165,7 @@ class OracleAnswer:
     run_ids: tuple[str, ...] = ()
     workflow_ids: tuple[str, ...] = ()
     bundle_ids: tuple[str, ...] = ()
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "status", self.status if isinstance(self.status, OracleAnswerStatus) else OracleAnswerStatus(str(self.status)))
@@ -174,4 +176,3 @@ class OracleAnswer:
         for name in ("claims", "evidence", "sources", "datasets", "models", "run_ids", "workflow_ids", "bundle_ids", "limitations"):
             data[name] = list(data[name])
         return data
-

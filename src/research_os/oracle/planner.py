@@ -25,9 +25,12 @@ class PlanningResult:
 
 
 class OraclePlanner:
-    def __init__(self, provider: LLMProvider | None = None, *, validator: PlanValidator | None = None):
+    def __init__(self, provider: LLMProvider | None = None, *, validator: PlanValidator | None = None, max_plan_repair_attempts: int = 1):
         self.provider = provider or RuleBasedLLMProvider()
         self.validator = validator or PlanValidator()
+        if max_plan_repair_attempts < 0:
+            raise ValueError("max_plan_repair_attempts must be non-negative")
+        self.max_plan_repair_attempts = max_plan_repair_attempts
 
     def interpret(self, text: str) -> ResearchQuestion:
         raw = parse_structured_output(self.provider.interpret_question(text))
@@ -36,15 +39,28 @@ class OraclePlanner:
     def propose(self, question: ResearchQuestion, *, memory: list[dict[str, Any]] | None = None) -> PlanningResult:
         planning_run_id = f"PLANRUN-{uuid.uuid4().hex[:12].upper()}"
         raw = parse_structured_output(self.provider.generate_plan(question.to_dict(), memory))
-        steps = tuple(self._step(item) for item in raw.get("steps") or ())
-        targets = tuple(ClaimTarget(str(item.get("statement", "")), item.get("required_evidence_level", EvidenceLevel.E2_COMPUTATIONAL.value), str(item.get("claim_id")) if item.get("claim_id") else ClaimTarget.__dataclass_fields__["claim_id"].default_factory()) for item in raw.get("claim_targets") or () if item.get("statement"))
-        lower_objective = question.objective.lower()
-        if not targets and "DockingLab" in {step.lab for step in steps} and any(term in lower_objective for term in ("cure", "cura", "clinical", "clínica", "treat", "trata")):
-            targets = (ClaimTarget(question.objective, EvidenceLevel.E4_CURATED_EXPERIMENTAL),)
-        plan = ResearchPlan(question.question_id, steps, tuple(raw.get("assumptions") or ()), tuple(raw.get("required_sources") or ()), tuple(raw.get("expected_outputs") or ()), tuple(raw.get("risk_flags") or ()), targets)
-        validation = self.validator.validate(plan)
-        audit = audit_llm_call(self.provider, "generate_plan", question.to_dict(), raw, planning_run_id)
-        return PlanningResult(question, plan, validation, (audit,))
+        audits: list[Any] = [audit_llm_call(self.provider, "generate_plan", question.to_dict(), raw, planning_run_id)]
+        plan = self._plan_from_raw(question, raw)
+        validation = self.validator.validate(plan, question=question)
+        repairs = 0
+        attempts = 1
+        # Repair is deliberately bounded and never attempts to repair an
+        # unsupported scientific claim or a missing external engine.
+        while (
+            validation.status == "FAIL"
+            and repairs < self.max_plan_repair_attempts
+            and not any(issue.rule_id == "ORACLE-CLAIM-001" for issue in validation.issues)
+            and not any(issue.rule_id == "ORACLE-ENGINE-001" for issue in validation.issues)
+        ):
+            repaired_raw = parse_structured_output(self.provider.repair_plan(raw, [issue.to_dict() for issue in validation.issues]))
+            audits.append(audit_llm_call(self.provider, "repair_plan", {"plan": raw, "issues": [issue.to_dict() for issue in validation.issues]}, repaired_raw, planning_run_id))
+            raw = repaired_raw
+            plan = self._plan_from_raw(question, raw)
+            validation = self.validator.validate(plan, question=question)
+            repairs += 1
+            attempts += 1
+        validation = PlanValidationResult(validation.status, validation.plan_id, validation.issues, validation.normalized_plan, attempts, repairs)
+        return PlanningResult(question, plan, validation, tuple(audits))
 
     def ask(self, text: str, *, memory: list[dict[str, Any]] | None = None) -> PlanningResult:
         planning_run_id = f"PLANRUN-{uuid.uuid4().hex[:12].upper()}"
@@ -66,9 +82,20 @@ class OraclePlanner:
             return OracleAnswer(OracleAnswerStatus.REJECTED, "A claim de eficácia clínica/cura não pode ser executada como docking.", limitations=("docking has an E2 computational ceiling", "plan requires reformulation as a computational hypothesis"), first_loss=validation.first_loss.to_dict() if validation.first_loss else None)
         if validation.status == "INDETERMINATE":
             return OracleAnswer(OracleAnswerStatus.INDETERMINATE, "O plano foi estruturado, mas depende de recursos externos indisponíveis.", limitations=("required engine is unavailable",), first_loss=validation.first_loss.to_dict() if validation.first_loss else None)
+        if validation.status == "INSUFFICIENT_EVIDENCE":
+            return OracleAnswer(OracleAnswerStatus.INSUFFICIENT_EVIDENCE, "O plano não pode atender ao nível de evidência solicitado com os Labs disponíveis.", limitations=("requested evidence level exceeds the plan ceiling",), first_loss=validation.first_loss.to_dict() if validation.first_loss else None)
         if validation.status == "FAIL":
             return OracleAnswer(OracleAnswerStatus.REJECTED, "O plano não passou pela validação tipada e não foi executado.", limitations=("structured plan validation failed",), first_loss=validation.first_loss.to_dict() if validation.first_loss else None)
         return OracleAnswer(OracleAnswerStatus.INSUFFICIENT_EVIDENCE, "Plano validado; nenhuma execução científica foi realizada por esta etapa de planejamento.", limitations=("planning is not execution",))
+
+    @staticmethod
+    def _plan_from_raw(question: ResearchQuestion, raw: dict[str, Any]) -> ResearchPlan:
+        steps = tuple(OraclePlanner._step(item) for item in raw.get("steps") or ())
+        targets = tuple(ClaimTarget(str(item.get("statement", "")), item.get("required_evidence_level", EvidenceLevel.E2_COMPUTATIONAL.value), str(item.get("claim_id")) if item.get("claim_id") else ClaimTarget.__dataclass_fields__["claim_id"].default_factory()) for item in raw.get("claim_targets") or () if item.get("statement"))
+        lower_objective = question.objective.lower()
+        if not targets and "DockingLab" in {step.lab for step in steps} and any(term in lower_objective for term in ("cure", "cura", "clinical", "clínica", "treat", "trata")):
+            targets = (ClaimTarget(question.objective, EvidenceLevel.E4_CURATED_EXPERIMENTAL),)
+        return ResearchPlan(question.question_id, steps, tuple(raw.get("assumptions") or ()), tuple(raw.get("required_sources") or ()), tuple(raw.get("expected_outputs") or ()), tuple(raw.get("risk_flags") or ()), targets)
 
     @staticmethod
     def _step(raw: dict[str, Any]) -> PlanStep:
