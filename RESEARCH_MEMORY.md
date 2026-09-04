@@ -17,3 +17,10 @@ the live provider again while preserving the parent plan and run lineage.
 `ResearchMemory` remains the immutable context/follow-up layer. The web
 experience persists its conversation in `ResearchStore`; a continuation creates
 a new question, workflow and runs with lineage and never edits the prior run.
+
+## Campaign memory in 3.3
+
+`CampaignManager.cross_campaign_memory()` joins persisted campaigns, Ledger
+run metadata and reviewed citation hits as read-only context. It lets the live
+researcher see what has already been attempted without treating previous
+narration as evidence or allowing source content to become instructions.

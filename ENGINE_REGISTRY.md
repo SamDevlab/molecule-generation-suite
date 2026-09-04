@@ -39,3 +39,11 @@ The operational UI consumes the existing safe `EngineRegistry` probes and
 reports Boundary, Available, Configured, Executed and Reference Validated as
 separate facts. Missing optional binaries/packages are shown as
 `NOT_CONFIGURED` or `UNAVAILABLE`; an adapter alone is not readiness.
+
+## Research OS 3.3 campaign use
+
+Campaigns record the engine and protocol ceiling before execution. The real
+Cantera campaign is limited to `gri30.yaml` equilibrium HP at explicitly
+recorded conditions and retains mechanism/configuration hashes. Missing Vina,
+battery and materials engines/data are surfaced as first-gate gaps; no source
+metadata or Codex narration can make an engine ready.

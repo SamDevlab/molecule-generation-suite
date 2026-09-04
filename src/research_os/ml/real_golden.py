@@ -59,6 +59,7 @@ def run_real_data_golden(
     *,
     source_path: str | Path | None = None,
     repo_root: str | Path | None = None,
+    run_id: str | None = None,
 ) -> RealGoldenRunResult:
     """Run the checked-in real-data sample through curation, ML and ledger."""
 
@@ -73,7 +74,7 @@ def run_real_data_golden(
     run = RunManifest(
         lab="ResearchOS-ML",
         experiment="real_data_validation_aqsoldb_g",
-        run_id="REAL-DATA-GOLDEN-RUN",
+        run_id=run_id or "REAL-DATA-GOLDEN-RUN",
         inputs={"dataset_id": ingestion.manifest.dataset_id, "dataset_version": ingestion.manifest.version, "source_id": ingestion.source.source_id, "target": ingestion.manifest.target, "units": ingestion.manifest.units},
         config={"split_strategy": ml.split.strategy.value, "split_manifest_hash": ml.split.manifest_hash, "model_id": ml.model_artifact.model_id, "training_run_id": ml.training_run.training_run_id, "champion_model_id": ml.champion.model_id, "promotion_policy": {"require_external_test": True, "require_applicability_domain": True, "require_calibration": True, "max_ood_score": 0.7}},
     )

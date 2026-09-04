@@ -28,6 +28,7 @@ from research_os.knowledge import KnowledgeIngestionPipeline, KnowledgeRetriever
 from research_os.oracle import CodexLiveProvider, CodexTestProvider, OraclePlanner, PlanValidator
 from research_os.service import OracleService, ResearchStore
 from research_os.ledger import RunRegistry
+from research_os.campaigns import CampaignManager, CampaignStore
 
 
 def _jsonable(value: Any) -> Any:
@@ -45,8 +46,9 @@ def _jsonable(value: Any) -> Any:
 class OracleWebApplication:
     """Dispatches web requests against one long-lived OracleService."""
 
-    def __init__(self, service: OracleService, *, data_root: str | Path, static_root: str | Path | None = None):
+    def __init__(self, service: OracleService, *, data_root: str | Path, static_root: str | Path | None = None, campaigns: CampaignManager | None = None):
         self.service = service
+        self.campaigns = campaigns
         self.data_root = Path(data_root).resolve()
         self.static_root = Path(static_root or Path(__file__).resolve().parents[3] / "web").resolve()
         self.knowledge_root = self.data_root / "knowledge"
@@ -67,6 +69,9 @@ class OracleWebApplication:
         connection = getattr(retriever, "connection", None)
         if connection is not None:
             connection.close()
+        campaign_store = getattr(self.campaigns, "store", None)
+        if campaign_store is not None:
+            campaign_store.close()
 
     def dispatch(self, method: str, path: str, body: dict[str, Any] | None = None) -> tuple[int, dict[str, Any]]:
         """Return an HTTP-like `(status, JSON payload)` tuple for tests and handlers."""
@@ -77,13 +82,48 @@ class OracleWebApplication:
         try:
             if method == "GET" and route == "/api/health":
                 provider = self.service.planner.provider
-                return 200, {"status": "ok", "service": "Research OS 3.2", "provider": dict(getattr(provider, "audit_metadata", {}) or {}), "oracle": self.oracle_status(), "ledger_source_of_truth": True}
+                return 200, {"status": "ok", "service": "Research OS 3.3", "provider": dict(getattr(provider, "audit_metadata", {}) or {}), "oracle": self.oracle_status(), "ledger_source_of_truth": True}
             if method == "GET" and route == "/api/oracle/audit":
                 return 200, self.oracle_status()
             if method == "GET" and route == "/api/capabilities":
                 return 200, {"capabilities": [item.to_dict() for item in self.service.planner.validator.capabilities.values()]}
             if method == "GET" and route == "/api/engines":
                 return 200, {"engines": self.engine_status()}
+            if method == "GET" and route == "/api/campaigns":
+                if self.campaigns is None:
+                    return 200, {"campaigns": []}
+                return 200, {"campaigns": self.campaigns.list()}
+            if method == "GET" and route == "/api/campaigns/memory":
+                if self.campaigns is None:
+                    return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
+                return 200, self.campaigns.cross_campaign_memory(str(query.get("q", [""])[0]) or None)
+            if method == "GET" and route.startswith("/api/campaigns/") and route.count("/") == 3:
+                if self.campaigns is None:
+                    return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
+                return 200, self.campaigns.get(route.rsplit("/", 1)[1])
+            if method == "POST" and route == "/api/campaigns/discover":
+                if self.campaigns is None:
+                    return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
+                return 200, self.campaigns.discover().to_dict()
+            if method == "POST" and route == "/api/campaigns/start":
+                if self.campaigns is None:
+                    return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
+                problem_id = str(body.get("problem_id") or "").strip()
+                if not problem_id:
+                    return 400, {"error": {"code": "PROBLEM_ID_REQUIRED", "message": "problem_id is required"}}
+                return 201, self.campaigns.start(problem_id, campaign_id=body.get("campaign_id")).to_dict()
+            if method == "POST" and route.startswith("/api/campaigns/") and route.endswith("/continue"):
+                if self.campaigns is None:
+                    return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
+                return 200, self.campaigns.continue_campaign(route.split("/")[3]).to_dict()
+            if method == "POST" and route.startswith("/api/campaigns/") and route.endswith("/close"):
+                if self.campaigns is None:
+                    return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
+                return 200, self.campaigns.close(route.split("/")[3]).to_dict()
+            if method == "POST" and route == "/api/campaigns/researcher":
+                if self.campaigns is None:
+                    return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
+                return 200, self.campaigns.final_researcher_prompt()
             if method == "POST" and route == "/api/engines/reference":
                 return 200, {"reference": self.run_cantera_reference() , "engines": self.engine_status()}
             if method == "GET" and route == "/api/sessions":
@@ -350,7 +390,7 @@ class OracleWebApplication:
                 return
 
         server = ThreadingHTTPServer((host, port), Handler)
-        print(f"Research OS 3.2 listening at http://{host}:{port}")
+        print(f"Research OS 3.3 listening at http://{host}:{port}")
         try:
             server.serve_forever()
         except KeyboardInterrupt:
@@ -378,7 +418,9 @@ def build_default_application(data_root: str | Path | None = None, *, oracle_mod
     else:
         raise ValueError("oracle_mode must be test or live")
     service = OracleService(OraclePlanner(provider, validator=PlanValidator(engine_registry=engine_registry)), ledger=ledger, store=store, bundle_root=root / "bundles", knowledge_retriever=retriever, source_registry=source_registry, engine_registry=engine_registry)
-    application = OracleWebApplication(service, data_root=root)
+    campaign_store = CampaignStore(root / "campaigns.sqlite")
+    campaigns = CampaignManager(service, campaign_store, source_registry=source_registry, retriever=retriever, data_root=root)
+    application = OracleWebApplication(service, data_root=root, campaigns=campaigns)
     if not application._reference_cases:
         application.run_cantera_reference()
     return application
@@ -395,7 +437,7 @@ def _bootstrap_knowledge(source_registry: SourceRegistry, retriever: KnowledgeRe
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Run the Research OS 3.2 operational Oracle web app")
+    parser = argparse.ArgumentParser(description="Run the Research OS 3.3 operational Oracle web app")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--data-root", default=None)

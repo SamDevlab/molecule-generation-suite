@@ -1,4 +1,4 @@
-# ORÁCULO · Research OS 3.2
+# ORÁCULO · Research OS 3.3
 
 The operational client is a dependency-free HTML/CSS/JS chat served by the
 Python standard library. It calls `research_os.service` through the typed HTTP
@@ -35,6 +35,14 @@ engine manifests, hashes, bundles and lineage for technical inspection. A
 process restart recovers non-terminal jobs as `FAILED` with
 `PROCESS_RESTARTED`; it never pretends that execution resumed.
 
+The Research OS 3.3 sidebar adds persistent Real Campaigns. “Discover
+source-backed problems” invokes live Codex discovery/ranking, while campaign
+history and the inspector expose sources, datasets, models, engines, gaps,
+conditions, runs and bundles. Campaign execution is bounded to registered
+problem IDs; source text remains DATA ONLY.
+
 The live audit trace is available at `/api/oracle/audit` and is surfaced in the
-system-status panel. The non-CI live acceptance command is documented in
-`RESEARCH_OS_V3_2.md`; deterministic CI never depends on a live Codex call.
+system-status panel. Campaign routes include `/api/campaigns`,
+`/api/campaigns/discover`, `/api/campaigns/start` and
+`/api/campaigns/memory`. The non-CI live acceptance command is documented in
+`REAL_CAMPAIGNS_V3_3.md`; deterministic CI never depends on a live Codex call.

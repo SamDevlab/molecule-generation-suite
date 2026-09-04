@@ -12,3 +12,11 @@ Imported material enters `REVIEW_REQUIRED`; human review may verify, reject or
 edit it, but review status never promotes EvidenceLevel. Retrieval remains a
 citation/context operation and cannot turn a computational result into
 experimental evidence.
+
+## 3.3 real source-backed campaigns
+
+The real campaign catalog registers primary/official source metadata before
+discovery. Source URLs and retrieved summaries are DATA ONLY, never
+instructions. `CampaignStore` keeps campaign history separately from the
+immutable Ledger; source-synthesis campaigns stop at `INSUFFICIENT_EVIDENCE`
+when condition-matched records are unavailable.

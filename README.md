@@ -71,3 +71,15 @@ Para manter este repositório limpo, leve e em conformidade com as diretrizes do
 - **Executáveis**: Binários de motores de docking e instaladores (ex. `vina.exe` e `install_babel.exe`).
 - **Ambientes Virtuais**: Pastas de dependências e ambientes virtuais Python (`env_biolab/`).
 - **Arquivos Temporários**: Arquivos intermediários de docking e arquivos temporários de sistema.
+
+## 🔬 3. Research OS 3.3: campanhas científicas reais
+
+O Research OS coordena campanhas source-backed com o Codex local como camada de
+descoberta, planejamento e narração. A execução científica continua limitada a
+Labs/engines registrados; fontes externas são tratadas como dados, e Evidence,
+Claims, bundles e histórico permanecem no Ledger.
+
+- Catálogo e problemas reais: [`REAL_RESEARCH_PROBLEMS_V3_3.md`](REAL_RESEARCH_PROBLEMS_V3_3.md)
+- Campanhas e aceitação live: [`REAL_CAMPAIGNS_V3_3.md`](REAL_CAMPAIGNS_V3_3.md)
+- Saúde científica: [`PROJECT_HEALTH_V3_3.md`](PROJECT_HEALTH_V3_3.md)
+- Auditoria de segurança: [`SECURITY_AUDIT_V3_3.md`](SECURITY_AUDIT_V3_3.md)
