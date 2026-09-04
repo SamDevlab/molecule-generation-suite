@@ -433,7 +433,12 @@ def build_default_application(data_root: str | Path | None = None, *, oracle_mod
     ledger = RunRegistry(root / "ledger")
     store = ResearchStore(root / "experience.sqlite")
     store.recover_interrupted_jobs()
-    engine_registry = EngineRegistry(root / "engines")
+    engine_configuration = {}
+    if os.environ.get("RESEARCH_OS_VINA_EXECUTABLE"):
+        engine_configuration["autodock-vina"] = {"executable": os.environ["RESEARCH_OS_VINA_EXECUTABLE"]}
+    if os.environ.get("RESEARCH_OS_OPENBABEL_EXECUTABLE"):
+        engine_configuration["openbabel"] = {"executable": os.environ["RESEARCH_OS_OPENBABEL_EXECUTABLE"]}
+    engine_registry = EngineRegistry(root / "engines", configuration=engine_configuration)
     source_registry = SourceRegistry(root / "knowledge")
     retriever = KnowledgeRetriever(sqlite3.connect(root / "knowledge" / "retrieval.sqlite", check_same_thread=False))
     _bootstrap_knowledge(source_registry, retriever)

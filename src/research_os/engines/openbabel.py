@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -34,7 +35,7 @@ class OpenBabelEngine:
     """Safe argv-based adapter for optional ligand/receptor conversion."""
 
     def __init__(self, executable: str | None = None):
-        self.executable = shutil.which(executable) if executable else (shutil.which("obabel") or shutil.which("obabel.exe"))
+        self.executable = shutil.which(executable) if executable else (os.environ.get("RESEARCH_OS_OPENBABEL_EXECUTABLE") or shutil.which("obabel") or shutil.which("obabel.exe"))
         if executable and self.executable is None and Path(executable).is_file():
             self.executable = str(Path(executable))
 
@@ -65,9 +66,9 @@ class OpenBabelEngine:
         try:
             result = subprocess.run(command, capture_output=True, text=True, check=False, timeout=timeout, shell=False)
         except subprocess.TimeoutExpired as exc:
-            return OpenBabelResult(source, target, -1, str(exc.stdout or ""), str(exc.stderr or ""), command, version_or_none(self), "EXECUTION_FAILED", sha256_file(source), None, True, protocol_id, time.monotonic() - started)
+            return OpenBabelResult(source, target, -1, str(exc.stdout or ""), str(exc.stderr or ""), command, engine_version=version_or_none(self), status="EXECUTION_FAILED", input_sha256=sha256_file(source), timed_out=True, protocol_id=protocol_id, elapsed_seconds=time.monotonic() - started)
         output_hash = sha256_file(target) if Path(target).is_file() else None
-        return OpenBabelResult(source, target, result.returncode, result.stdout, result.stderr, command, version_or_none(self), "SUPPORTED_AND_EXECUTED" if result.returncode == 0 else "EXECUTION_FAILED", sha256_file(source), output_hash, False, protocol_id, time.monotonic() - started)
+        return OpenBabelResult(source, target, result.returncode, result.stdout, result.stderr, command, engine_version=version_or_none(self), status="SUPPORTED_AND_EXECUTED" if result.returncode == 0 else "EXECUTION_FAILED", input_sha256=sha256_file(source), output_sha256=output_hash, timed_out=False, protocol_id=protocol_id, elapsed_seconds=time.monotonic() - started)
 
 
 def version_or_none(engine: OpenBabelEngine) -> str | None:

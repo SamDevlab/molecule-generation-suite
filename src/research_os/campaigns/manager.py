@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import replace
+from dataclasses import asdict, replace
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -16,6 +16,7 @@ from research_os.campaigns.catalog import REAL_PROBLEM_CATALOG, REAL_SOURCE_CATA
 from research_os.campaigns.models import CampaignStatus, NegativeResult, ProblemCandidate, ProblemDiscoveryResult, ResearchCampaign, ResearchCampaignBundle, ResearchGap, SourceConflict, TargetRecord, new_campaign_id
 from research_os.campaigns.store import CampaignStore
 from research_os.core.provenance import ProvenanceRecord, SourceType
+from research_os.core.hashing import sha256_file
 from research_os.core.types import Evidence, EvidenceLevel, GateResult, GateStatus, RunManifest
 from research_os.environment import capture_environment
 from research_os.docking.campaign import DockingCampaign
@@ -46,6 +47,14 @@ _TERMINAL_CAMPAIGN_STATUSES = {
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+
+def _evidence_dict(item: Any) -> dict[str, Any]:
+    """Serialize core Evidence without coupling campaigns to the service API."""
+    data = asdict(item)
+    level = data.get("level")
+    data["level"] = level.value if hasattr(level, "value") else str(level)
+    return data
 
 
 class CampaignManager:
@@ -215,7 +224,7 @@ class CampaignManager:
     def _resolve_pharma_gap(self, campaign: ResearchCampaign, gap: ResearchGap, resolution_id: str, strategy: str, plan: dict[str, Any]) -> GapResolution:
         vina = VinaEngine(str(plan["vina_executable"])) if plan.get("vina_executable") else VinaEngine()
         obabel = OpenBabelEngine(str(plan["openbabel_executable"])) if plan.get("openbabel_executable") else OpenBabelEngine()
-        engine_probe = {"autodock-vina": {"available": vina.available, "version": vina.version}, "openbabel": {"available": obabel.available, "version": obabel.version}}
+        engine_probe = {"autodock-vina": {"available": vina.available, "version": vina.version, "executable": str(vina.executable) if vina.executable else None, "executable_sha256": sha256_file(vina.executable) if vina.available else None}, "openbabel": {"available": obabel.available, "version": obabel.version, "executable": str(obabel.executable) if obabel.executable else None, "executable_sha256": sha256_file(obabel.executable) if obabel.available else None}}
         reproducibility = DockingReproducibilityAssessment(campaign.campaign_id, (), (), (), False, "INDETERMINATE", notes=("No docking replicate was run because the current runtime lacks the required executables.",))
         if not (vina.available and obabel.available):
             return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, campaign.dataset_ids, ("autodock-vina", "openbabel"), (), gap.current_evidence, gap.current_evidence, ResolutionStatus.BLOCKED, "AutoDock Vina and Open Babel are not both configured in this runtime; receptor/ligand preparation and the 1PXX reference docking were not executed.", campaign_id=campaign.campaign_id, plan={"reference_structure_id": "1PXX", "receptor_preparation_protocol_id": "openbabel.receptor-preparation.v1", "ligand_preparation_protocol_id": "openbabel.ligand-preparation.v1", "docking_protocol_id": "autodock-vina.docking.v1"}, assessments={"engine_probe": engine_probe, "docking_reproducibility": reproducibility.to_dict()}, notes=("The RCSB 1PXX source is registered as a murine structure; no human or clinical inference is made.", "Evidence ceiling for docking is E2_COMPUTATIONAL.",))
@@ -225,15 +234,38 @@ class CampaignManager:
         root = self.campaign_root / campaign.campaign_id / "resolution" / resolution_id
         root.mkdir(parents=True, exist_ok=True)
         ligand_output, receptor_output = root / "ligand.pdbqt", root / "receptor.pdbqt"
-        ligand_run = LigandPreparationLab(obabel).run({"candidate_id": str(plan.get("candidate_id", "diclofenac-1pxx")), "input_path": str(ligand_path), "output_path": str(ligand_output)})
-        receptor_run = ReceptorPreparationLab(obabel).run({"target_id": "TARGET-COX2-1PXX", "species": "Mus musculus", "role": "COX-2 receptor", "structure_id": "1PXX", "source": "SRC-RCSB-1PXX", "input_path": str(receptor_path), "output_path": str(receptor_output)})
-        prep = {"ligand": [item.to_dict() for item in ligand_run.evidence], "receptor": [item.to_dict() for item in receptor_run.evidence], "ligand_status": ligand_run.status, "receptor_status": receptor_run.status}
+        ligand_run = LigandPreparationLab(obabel).run({"candidate_id": str(plan.get("candidate_id", "diclofenac-1pxx")), "input_path": str(ligand_path), "output_path": str(ligand_output), "options": tuple(plan.get("ligand_options") or ("-h", "--partialcharge", "gasteiger")), "protonation_assumptions": tuple(plan.get("protonation_assumptions") or ("co-crystallized DIF coordinates retained; no tautomer enumeration",)), "hydrogen_treatment": str(plan.get("ligand_hydrogen_treatment", "Open Babel -h; explicit hydrogens added by the preparation command")), "charge_method": str(plan.get("ligand_charge_method", "Gasteiger partial charges"))})
+        receptor_run = ReceptorPreparationLab(obabel).run({"target_id": "TARGET-COX2-1PXX", "species": "Mus musculus", "role": "COX-2 receptor", "structure_id": "1PXX", "source": "SRC-RCSB-1PXX", "input_path": str(receptor_path), "output_path": str(receptor_output), "options": tuple(plan.get("receptor_options") or ("-xr", "-h", "--partialcharge", "gasteiger")), "selected_chains": tuple(plan.get("selected_chains") or ("A",)), "retained_cofactors": tuple(plan.get("retained_cofactors") or ()), "removed_components": tuple(plan.get("removed_components") or ("DIF", "BOG", "NAG", "HOH", "HEM (excluded from prepared PDBQT; Open Babel Fe cofactor conversion was incompatible)")), "hydrogen_treatment": str(plan.get("receptor_hydrogen_treatment", "Open Babel -h; explicit hydrogens added by the preparation command")), "charge_method": str(plan.get("receptor_charge_method", "Gasteiger partial charges")), "raw_source_url": plan.get("raw_source_url", "https://www.rcsb.org/structure/1PXX"), "raw_source_sha256": plan.get("raw_source_sha256")})
+        prep = {"ligand": [_evidence_dict(item) for item in ligand_run.evidence], "receptor": [_evidence_dict(item) for item in receptor_run.evidence], "ligand_status": ligand_run.status, "receptor_status": receptor_run.status}
         if not (ligand_run.passed and receptor_run.passed):
             return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, campaign.dataset_ids, ("autodock-vina", "openbabel"), (), gap.current_evidence, gap.current_evidence, ResolutionStatus.BLOCKED, "Preparation did not produce two verified artifacts; docking was not executed.", campaign_id=campaign.campaign_id, plan={"reference_structure_id": "1PXX", "receptor_path": str(receptor_path), "ligand_path": str(ligand_path)}, assessments={"engine_probe": engine_probe, "preparation": prep, "docking_reproducibility": reproducibility.to_dict()})
-        request = {"receptor_path": str(receptor_output), "ligand_path": str(ligand_output), "target_id": "TARGET-COX2-1PXX", "species": "Mus musculus", "require_species": True, "require_preparation": True, "prepared_ligand_manifest": next((item.payload for item in ligand_run.evidence), {}), "prepared_receptor_manifest": next((item.payload for item in receptor_run.evidence), {}), "grid": dict(plan.get("grid") or {"center_x": 0, "center_y": 0, "center_z": 0, "size_x": 20, "size_y": 20, "size_z": 20})}
+        request = {"receptor_path": str(receptor_output), "ligand_path": str(ligand_output), "target_id": "TARGET-COX2-1PXX", "species": "Mus musculus", "role": "COX-2 receptor", "require_species": True, "require_preparation": True, "prepared_ligand_manifest": next((item.payload for item in ligand_run.evidence), {}), "prepared_receptor_manifest": next((item.payload for item in receptor_run.evidence), {}), "grid": dict(plan.get("grid") or {"center_x": 27.1155, "center_y": 24.09, "center_z": 14.936, "size_x": 21.427, "size_y": 22.664, "size_z": 22.533}), "exhaustiveness": int(plan.get("exhaustiveness", 4)), "cpu": int(plan.get("cpu", 2)), "num_modes": int(plan.get("num_modes", 9)), "protocol_id": str(plan.get("docking_protocol_id", "autodock-vina.docking.v1"))}
         docking = DockingCampaign(target_id="TARGET-COX2-1PXX", ligand_id=str(plan.get("candidate_id", "diclofenac-1pxx")), replicate_count=3).run(self.service.orchestrator.registry.get("DockingLab"), request)
-        reproducibility = DockingReproducibilityAssessment(campaign.campaign_id, docking.run_ids, docking.seeds, docking.scores_kcal_mol, True, "REPRODUCED" if docking.status == "SUPPORTED_AND_EXECUTED" else "NOT_REPRODUCED", docking.std_score_kcal_mol, ("Docking scores remain E2 computational evidence and are not measured affinity.",))
-        return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, campaign.dataset_ids, ("autodock-vina", "openbabel"), docking.run_ids, gap.current_evidence, ("E2_COMPUTATIONAL",), ResolutionStatus.RESOLVED if reproducibility.reproducible else ResolutionStatus.PARTIALLY_RESOLVED, "Docking remains computational and does not close a clinical or experimental binding-affinity gap." if reproducibility.reproducible else "Three replicates did not meet the reproducibility protocol.", campaign_id=campaign.campaign_id, plan=request, assessments={"engine_probe": engine_probe, "preparation": prep, "docking_reproducibility": reproducibility.to_dict()})
+        bundle_ids: list[str] = []
+        for run in docking.run_manifests:
+            bundle = self._persist_docking_run(campaign, run)
+            if bundle is not None:
+                bundle_ids.append(bundle.bundle_id)
+        if len(bundle_ids) != len(docking.run_ids):
+            return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, campaign.dataset_ids, ("autodock-vina", "openbabel"), docking.run_ids, gap.current_evidence, ("E2_COMPUTATIONAL",), ResolutionStatus.PARTIALLY_RESOLVED, "Vina executed, but not every run could be sealed into a verifiable Ledger bundle.", campaign_id=campaign.campaign_id, plan={**request, "bundle_ids": bundle_ids}, assessments={"engine_probe": engine_probe, "preparation": prep, "docking_reproducibility": {**docking.to_dict(), "status": "BUNDLE_PERSISTENCE_INCOMPLETE", "bundle_ids": bundle_ids}})
+        reproducibility = DockingReproducibilityAssessment(campaign.campaign_id, docking.run_ids, docking.seeds, docking.scores_kcal_mol, True, "REPRODUCED" if docking.status == "SUPPORTED_AND_EXECUTED" else "NOT_REPRODUCED", score_spread_kcal_mol=docking.std_score_kcal_mol, notes=("Docking scores remain E2 computational evidence and are not measured affinity.", "Score dispersion is reported; no stability threshold was tuned after observing the runs."))
+        return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, campaign.dataset_ids, ("autodock-vina", "openbabel"), docking.run_ids, gap.current_evidence, ("E2_COMPUTATIONAL",), ResolutionStatus.RESOLVED if reproducibility.reproducible else ResolutionStatus.PARTIALLY_RESOLVED, "Docking remains computational and does not close a clinical or experimental binding-affinity gap." if reproducibility.reproducible else "Three replicates did not meet the reproducibility protocol.", campaign_id=campaign.campaign_id, plan={**request, "bundle_ids": bundle_ids}, assessments={"engine_probe": engine_probe, "preparation": prep, "docking_reproducibility": {**reproducibility.to_dict(), "bundle_ids": bundle_ids}})
+
+    def _persist_docking_run(self, campaign: ResearchCampaign, run: RunManifest) -> ResearchBundle | None:
+        """Seal one real docking replicate and index it without packing executables."""
+        if run.lifecycle.value == "CREATED":
+            run.complete()
+        elif run.lifecycle.value == "RUNNING":
+            run.complete()
+        if not run.sealed:
+            run.seal()
+        output_path = next((item.payload.get("output_path") for item in reversed(run.evidence) if item.kind == "molecular_docking_result" and item.payload.get("output_path")), None)
+        artifacts = {"docking_output.pdbqt": str(output_path)} if output_path and Path(str(output_path)).is_file() else {}
+        environment = self.service.environment or capture_environment(repo_root=Path(__file__).resolve().parents[3])
+        bundle = ResearchBundle.create(run, self.campaign_root / campaign.campaign_id / "runs", environment=environment, artifacts=artifacts, pack_artifacts=True)
+        if self.service.ledger is not None:
+            self.service.ledger.register_run(bundle, tags=("v3.5", "campaign", "real-docking", "cox2-1pxx"))
+        return bundle
 
     def _resolve_aqsol_gap(self, campaign: ResearchCampaign, gap: ResearchGap, resolution_id: str, strategy: str) -> GapResolution:
         assessment = ExternalValidationAssessment("aqsoldb-g-real-sample", ("SRC-AQSOLDB-PAPER", "SRC-AQSOLDB-DATA"), campaign.models[0] if campaign.models else "MODEL_NOT_AVAILABLE", "real-data-golden.v1 scaffold split and frozen Morgan/Ridge protocol", None, None, None, None, "SAME_SOURCE_AS_TRAINING; NOT_REVIEWED_AS_EXTERNAL", "NOT_ELIGIBLE_AS_EXTERNAL_TEST", "NOT_PROMOTED", ("The available artifact is AqSolDB-G / same source lineage, not an independent external test.", "No overlap-free external artifact with compatible schema and attribution was available in this attempt."))
@@ -506,7 +538,8 @@ class CampaignManager:
         claim = ScientificClaim(f"The registered sources define a real {problem.domain} evidence gap for the campaign question.", run.run_id, (evidence.evidence_id,), EvidenceLevel.E0_HEURISTIC, ClaimStatus.INSUFFICIENT_EVIDENCE, limitations=("No condition-matched measurement or configured engine result was produced.",), conditions={"source_ids": list(problem.sources), "domain": problem.domain})
         run.add_claim(claim)
         run.seal()
-        bundle = ResearchBundle.create(run, self.campaign_root / campaign.campaign_id / "runs", environment=self.service.environment)
+        environment = self.service.environment or capture_environment(repo_root=Path(__file__).resolve().parents[3])
+        bundle = ResearchBundle.create(run, self.campaign_root / campaign.campaign_id / "runs", environment=environment)
         if self.service.ledger is not None:
             self.service.ledger.register_run(bundle, tags=("v3.3", "campaign", "source-synthesis"))
         gap = ResearchGap(f"GAP-{problem.problem_id}-CONDITIONS", claim.statement, ("E0_HEURISTIC",), problem.achievable_evidence_level, "condition-matched data or an available validated engine", problem.expected_blockers[0] if problem.expected_blockers else "Add a reviewed condition-matched source.", problem.sources)
@@ -530,7 +563,8 @@ class CampaignManager:
         run.gates.append(GateResult("GATE-TARGET-IDENTITY", "TARGET-IDENTITY-001", GateStatus.PASS, "RCSB target and species are recorded", (evidence.evidence_id,), {"species": target.species if target else "UNKNOWN"}))
         run.gates.append(GateResult("GATE-DOCKING-ENGINE", "DOCKING-ENGINE-001", GateStatus.INDETERMINATE, "docking executable and prepared receptor are not configured", (evidence.evidence_id,), {"engine": "vina", "preparation_status": target.preparation_status if target else "UNKNOWN"}))
         run.seal()
-        bundle = ResearchBundle.create(run, self.campaign_root / campaign.campaign_id / "runs", environment=self.service.environment)
+        environment = self.service.environment or capture_environment(repo_root=Path(__file__).resolve().parents[3])
+        bundle = ResearchBundle.create(run, self.campaign_root / campaign.campaign_id / "runs", environment=environment)
         if self.service.ledger is not None:
             self.service.ledger.register_run(bundle, tags=("v3.3", "campaign", "target-gate"))
         gap = ResearchGap("GAP-PHARMA-DOCKING", "The murine COX-2 structure can support a reproducible docking result", ("E4_CURATED_EXPERIMENTAL",), EvidenceLevel.E2_COMPUTATIONAL, "prepared receptor, ligand and configured docking engine", "Prepare the target under a reviewed protocol and run the allowlisted docking engine; do not infer human or clinical efficacy.", problem.sources)

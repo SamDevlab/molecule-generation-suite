@@ -68,7 +68,12 @@ def _all_provenance(run: Any) -> list[Any]:
 def _engine_manifests(value: Any, output: list[Any] | None = None) -> list[Any]:
     output = output if output is not None else []
     if isinstance(value, Mapping):
-        if "engine_id" in value and ("manifest_hash" in value or "configuration_hash" in value):
+        # Preparation manifests deliberately have their own hash schema and
+        # also carry ``engine_id``/``manifest_hash``.  Only the full engine
+        # manifest contract belongs in engines/manifests.json; the
+        # preparation manifests remain traceable in evidence payloads.
+        is_engine_manifest = all(key in value for key in ("engine_id", "kind", "availability", "status", "readiness", "configuration", "manifest_hash"))
+        if is_engine_manifest:
             output.append(dict(value))
         for item in value.values():
             _engine_manifests(item, output)

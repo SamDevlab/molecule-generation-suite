@@ -37,6 +37,7 @@ class DockingRequest:
     timeout: float = 300.0
     prepared_ligand_manifest: dict[str, Any] | None = None
     prepared_receptor_manifest: dict[str, Any] | None = None
+    num_modes: int = 9
 
 @dataclass(frozen=True)
 class DockingResult:

@@ -1,4 +1,5 @@
 from __future__ import annotations
+import os
 import re, shutil, subprocess
 import time
 import hashlib
@@ -11,7 +12,7 @@ class VinaUnavailableError(RuntimeError): pass
 class VinaEngine:
     """External AutoDock Vina adapter using argv execution without a shell."""
     def __init__(self, executable: str | None = None):
-        self.executable = executable or shutil.which("vina") or shutil.which("vina.exe")
+        self.executable = executable or os.environ.get("RESEARCH_OS_VINA_EXECUTABLE") or shutil.which("vina") or shutil.which("vina.exe")
     @property
     def available(self) -> bool:
         return bool(self.executable and Path(self.executable).exists())
@@ -28,7 +29,9 @@ class VinaEngine:
         if not Path(request.receptor_path).is_file(): raise FileNotFoundError(request.receptor_path)
         if not Path(request.ligand_path).is_file(): raise FileNotFoundError(request.ligand_path)
         out = request.output_path or str(Path(request.ligand_path).with_name(Path(request.ligand_path).stem + "_docked.pdbqt")); g = request.grid
-        cmd = [str(self.executable), "--receptor", request.receptor_path, "--ligand", request.ligand_path, "--center_x", str(g.center_x), "--center_y", str(g.center_y), "--center_z", str(g.center_z), "--size_x", str(g.size_x), "--size_y", str(g.size_y), "--size_z", str(g.size_z), "--exhaustiveness", str(request.exhaustiveness), "--cpu", str(request.cpu), "--seed", str(request.seed), "--out", out]
+        if request.num_modes < 1:
+            raise ValueError("num_modes must be positive")
+        cmd = [str(self.executable), "--receptor", request.receptor_path, "--ligand", request.ligand_path, "--center_x", str(g.center_x), "--center_y", str(g.center_y), "--center_z", str(g.center_z), "--size_x", str(g.size_x), "--size_y", str(g.size_y), "--size_z", str(g.size_z), "--exhaustiveness", str(request.exhaustiveness), "--cpu", str(request.cpu), "--seed", str(request.seed), "--num_modes", str(request.num_modes), "--out", out]
         started = time.monotonic()
         try:
             proc = subprocess.run(cmd, capture_output=True, text=True, check=False, timeout=timeout if timeout is not None else request.timeout, shell=False)

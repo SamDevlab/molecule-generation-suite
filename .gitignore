@@ -70,6 +70,8 @@ examples/golden_workflow/output/
 .research-os-live-3.2*/
 .research-os-live-3.3*/
 .research-os-live-3.4*/
+.research-os-live-3.5*/
 .tmp-package-check/
 .tmp-package-check-v34/
+.tmp-package-check-v35/
 build/

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
+from datetime import datetime, timezone
 from enum import Enum
 import uuid
 
+from research_os.core.hashing import sha256_json
 from research_os.core.types import EvidenceLevel, RunManifest
 
 
@@ -34,6 +36,8 @@ class ScientificClaim:
     claim_id: str = field(default_factory=lambda: f"CLM-{uuid.uuid4().hex[:12].upper()}")
     limitations: tuple[str, ...] = ()
     conditions: dict[str, object] = field(default_factory=dict)
+    supersedes: str | None = None
+    derived_from: tuple[str, ...] = ()
 
     def to_dict(self):
         data = asdict(self)
@@ -41,6 +45,51 @@ class ScientificClaim:
         data["status"] = self.status.value
         data["limitations"] = list(self.limitations)
         data["evidence_ids"] = list(self.evidence_ids)
+        data["derived_from"] = list(self.derived_from)
+        return data
+
+
+@dataclass(frozen=True)
+class ClaimRevision:
+    """Append-only claim history; a revision never overwrites its predecessor."""
+
+    revision_id: str
+    claim_id: str
+    version: int
+    statement: str
+    previous_status: ClaimStatus | str
+    current_status: ClaimStatus | str
+    previous_evidence_ids: tuple[str, ...]
+    evidence_ids: tuple[str, ...]
+    reason: str
+    limitations: tuple[str, ...] = ()
+    supersedes: str | None = None
+    derived_from: tuple[str, ...] = ()
+    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    digest: str | None = None
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "previous_status", self.previous_status if isinstance(self.previous_status, ClaimStatus) else ClaimStatus(str(self.previous_status)))
+        object.__setattr__(self, "current_status", self.current_status if isinstance(self.current_status, ClaimStatus) else ClaimStatus(str(self.current_status)))
+        object.__setattr__(self, "previous_evidence_ids", tuple(str(item) for item in self.previous_evidence_ids))
+        object.__setattr__(self, "evidence_ids", tuple(str(item) for item in self.evidence_ids))
+        object.__setattr__(self, "limitations", tuple(str(item) for item in self.limitations))
+        object.__setattr__(self, "derived_from", tuple(str(item) for item in self.derived_from))
+        if self.version < 2:
+            raise ValueError("claim revisions start at version 2")
+        if self.digest is None:
+            object.__setattr__(self, "digest", sha256_json(self._hash_payload()))
+
+    def _hash_payload(self) -> dict[str, object]:
+        return {"revision_id": self.revision_id, "claim_id": self.claim_id, "version": self.version, "statement": self.statement, "previous_status": self.previous_status.value, "current_status": self.current_status.value, "previous_evidence_ids": self.previous_evidence_ids, "evidence_ids": self.evidence_ids, "reason": self.reason, "limitations": self.limitations, "supersedes": self.supersedes, "derived_from": self.derived_from, "created_at": self.created_at}
+
+    @property
+    def valid(self) -> bool:
+        return self.digest == sha256_json(self._hash_payload())
+
+    def to_dict(self) -> dict[str, object]:
+        data = asdict(self)
+        data.update({"previous_status": self.previous_status.value, "current_status": self.current_status.value, "previous_evidence_ids": list(self.previous_evidence_ids), "evidence_ids": list(self.evidence_ids), "limitations": list(self.limitations), "derived_from": list(self.derived_from), "valid": self.valid})
         return data
 
 

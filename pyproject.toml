@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "research-os-core"
-version = "3.4.0"
+version = "3.5.0"
 description = "Research Core + Proof Engine for molecule-generation-suite"
 requires-python = ">=3.10"
 dependencies = []
@@ -14,7 +14,7 @@ dev = ["pytest>=8"]
 molecule = ["numpy>=1.26", "rdkit>=2024.3"]
 combustion = ["cantera>=3.2"]
 metals = ["pycalphad>=0.11", "matminer>=0.9"]
-docking = []
+docking = ["openbabel-wheel>=3.1.1.23"]
 materials = ["pymatgen>=2024.1", "matminer>=0.9"]
 science = ["cantera>=3.2", "pycalphad>=0.11", "pymatgen>=2024.1", "matminer>=0.9"]
 data = ["pyarrow>=15", "scipy>=1.11"]

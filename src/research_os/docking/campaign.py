@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from pathlib import Path
 from statistics import mean, median, pstdev
 from typing import Any
 import uuid
@@ -26,8 +27,10 @@ class DockingCampaignResult:
     aggregation_protocol: str
     status: str
     evidence_level: str = EvidenceLevel.E2_COMPUTATIONAL.value
+    run_manifests: tuple[Any, ...] = ()
 
-    def to_dict(self) -> dict[str, Any]: return {key: list(value) if isinstance(value, tuple) else value for key, value in self.__dict__.items()}
+    def to_dict(self) -> dict[str, Any]:
+        return {key: list(value) if isinstance(value, tuple) else value for key, value in self.__dict__.items() if key != "run_manifests"}
 
 
 @dataclass
@@ -47,6 +50,9 @@ class DockingCampaign:
         for seed in seeds:
             payload = dict(request)
             payload["seed"] = seed
+            if payload.get("output_path") is None and payload.get("ligand_path"):
+                ligand = Path(str(payload["ligand_path"]))
+                payload["output_path"] = str(ligand.with_name(f"{ligand.stem}_seed{seed}_docked.pdbqt"))
             if self.target_id is not None: payload["target_id"] = self.target_id
             run = lab.run(payload, experiment="vina_docking_campaign_replicate")
             runs.append(run)
@@ -54,4 +60,4 @@ class DockingCampaign:
             score = evidence.payload.get("best_affinity_kcal_mol") if evidence else None
             if isinstance(score, (int, float)): scores.append(float(score))
         passed = len(scores) == self.replicate_count and all(getattr(run, "passed", False) for run in runs)
-        return DockingCampaignResult(self.campaign_id, self.target_id or request.get("target_id"), self.ligand_id, self.replicate_count, seeds, tuple(run.run_id for run in runs), tuple(scores), min(scores) if scores else None, median(scores) if scores else None, mean(scores) if scores else None, pstdev(scores) if len(scores) > 1 else 0.0 if scores else None, self.aggregation_protocol, "SUPPORTED_AND_EXECUTED" if passed else "INDETERMINATE")
+        return DockingCampaignResult(self.campaign_id, self.target_id or request.get("target_id"), self.ligand_id, self.replicate_count, seeds, tuple(run.run_id for run in runs), tuple(scores), min(scores) if scores else None, median(scores) if scores else None, mean(scores) if scores else None, pstdev(scores) if len(scores) > 1 else 0.0 if scores else None, self.aggregation_protocol, "SUPPORTED_AND_EXECUTED" if passed else "INDETERMINATE", run_manifests=tuple(runs))

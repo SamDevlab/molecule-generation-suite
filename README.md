@@ -94,3 +94,18 @@ quando a execução é solicitada; o ZIP e seus scripts não são executados.
 - Contratos, gates e resolução real: [`RESEARCH_OS_V3_4.md`](RESEARCH_OS_V3_4.md)
 - Histórico de tentativas: [`REAL_GAP_RESOLUTION_V3_4.md`](REAL_GAP_RESOLUTION_V3_4.md)
 - Saúde e blockers: [`PROJECT_HEALTH_V3_4.md`](PROJECT_HEALTH_V3_4.md)
+
+## 🔬 5. Research OS 3.5: expansão e concordância de evidências
+
+O milestone 3.5 fecha o blocker operacional de docking de referência em COX-2
+murino `1PXX`: Open Babel e AutoDock Vina foram executados em ambiente isolado,
+com preparação explícita, três seeds, bundles verificáveis e registro no Ledger.
+O resultado permanece E2 computacional. `EvidenceAgreementAssessment` descreve
+consistência sem somar níveis de evidência, e `ClaimRevision` preserva o
+histórico append-only; dados independentes de solubilidade, observação de
+materiais, campos completos de bateria e corpus do usuário continuam gaps
+honestos.
+
+- Contratos e limites: [`RESEARCH_OS_V3_5.md`](RESEARCH_OS_V3_5.md)
+- Acceptance e expansão de evidência: [`EVIDENCE_EXPANSION_V3_5.md`](EVIDENCE_EXPANSION_V3_5.md)
+- Saúde, blockers e auditoria: [`PROJECT_HEALTH_V3_5.md`](PROJECT_HEALTH_V3_5.md)
