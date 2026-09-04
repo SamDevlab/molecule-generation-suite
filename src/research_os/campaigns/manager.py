@@ -23,7 +23,7 @@ from research_os.ml.real_golden import RealGoldenRunResult, run_real_data_golden
 from research_os.orchestration import PlanStep, WorkflowPlan
 
 
-FINAL_RESEARCHER_PROMPT = "Com as ferramentas, dados e fontes que temos agora, encontre um problema científico real que ainda não investigamos..."
+FINAL_RESEARCHER_PROMPT = "Com as ferramentas, dados e fontes que temos agora, encontre um problema científico real que ainda não investigamos e faça a melhor pesquisa possível sem ultrapassar os limites da evidência."
 _TERMINAL_CAMPAIGN_STATUSES = {
     CampaignStatus.SUPPORTED,
     CampaignStatus.PARTIALLY_SUPPORTED,

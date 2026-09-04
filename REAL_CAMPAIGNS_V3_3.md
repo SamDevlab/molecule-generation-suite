@@ -44,9 +44,9 @@ engine provenance, mechanism and Ledger comparison, including
 ```
 
 The script uses the local Codex CLI live boundary, not an external LLM API. Its
-final reasoning call uses the exact open-ended prompt:
+final reasoning call uses this exact open-ended prompt:
 
-> Com as ferramentas, dados e fontes que temos agora, encontre um problema científico real que ainda não investigamos...
+> Com as ferramentas, dados e fontes que temos agora, encontre um problema científico real que ainda não investigamos e faça a melhor pesquisa possível sem ultrapassar os limites da evidência.
 
 No problem ID is hardcoded into that final prompt. Invalid live output fails
 closed, and campaign execution is limited to registered protocols.
