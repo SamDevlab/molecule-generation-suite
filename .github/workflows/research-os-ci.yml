@@ -1,0 +1,23 @@
+name: research-os-ci
+
+on:
+  push:
+    branches: ["research-os-v1.3"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install Research OS core + molecular + data dependencies
+        run: python -m pip install -e ".[dev,molecule,data]"
+      - name: Run Research OS tests
+        run: pytest -q

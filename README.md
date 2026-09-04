@@ -71,3 +71,142 @@ Para manter este repositório limpo, leve e em conformidade com as diretrizes do
 - **Executáveis**: Binários de motores de docking e instaladores (ex. `vina.exe` e `install_babel.exe`).
 - **Ambientes Virtuais**: Pastas de dependências e ambientes virtuais Python (`env_biolab/`).
 - **Arquivos Temporários**: Arquivos intermediários de docking e arquivos temporários de sistema.
+
+## 🔬 3. Research OS 3.3: campanhas científicas reais
+
+O Research OS coordena campanhas source-backed com o Codex local como camada de
+descoberta, planejamento e narração. A execução científica continua limitada a
+Labs/engines registrados; fontes externas são tratadas como dados, e Evidence,
+Claims, bundles e histórico permanecem no Ledger.
+
+- Catálogo e problemas reais: [`REAL_RESEARCH_PROBLEMS_V3_3.md`](REAL_RESEARCH_PROBLEMS_V3_3.md)
+- Campanhas e aceitação live: [`REAL_CAMPAIGNS_V3_3.md`](REAL_CAMPAIGNS_V3_3.md)
+- Saúde científica: [`PROJECT_HEALTH_V3_3.md`](PROJECT_HEALTH_V3_3.md)
+- Auditoria de segurança: [`SECURITY_AUDIT_V3_3.md`](SECURITY_AUDIT_V3_3.md)
+
+## 🔬 4. Research OS 3.4: resolução de gaps com evidência real
+
+O milestone 3.4 registra tentativas append-only de fechar gaps, mantém o teto de
+evidência por domínio e interrompe quando faltam ferramentas, condições ou
+fontes independentes. O artefato NASA PCoE RW3 é recuperado e hashado somente
+quando a execução é solicitada; o ZIP e seus scripts não são executados.
+
+- Contratos, gates e resolução real: [`RESEARCH_OS_V3_4.md`](RESEARCH_OS_V3_4.md)
+- Histórico de tentativas: [`REAL_GAP_RESOLUTION_V3_4.md`](REAL_GAP_RESOLUTION_V3_4.md)
+- Saúde e blockers: [`PROJECT_HEALTH_V3_4.md`](PROJECT_HEALTH_V3_4.md)
+
+## 🔬 5. Research OS 3.5: expansão e concordância de evidências
+
+O milestone 3.5 fecha o blocker operacional de docking de referência em COX-2
+murino `1PXX`: Open Babel e AutoDock Vina foram executados em ambiente isolado,
+com preparação explícita, três seeds, bundles verificáveis e registro no Ledger.
+O resultado permanece E2 computacional. `EvidenceAgreementAssessment` descreve
+consistência sem somar níveis de evidência, e `ClaimRevision` preserva o
+histórico append-only; dados independentes de solubilidade, observação de
+materiais, campos completos de bateria e corpus do usuário continuam gaps
+honestos.
+
+- Contratos e limites: [`RESEARCH_OS_V3_5.md`](RESEARCH_OS_V3_5.md)
+- Acceptance e expansão de evidência: [`EVIDENCE_EXPANSION_V3_5.md`](EVIDENCE_EXPANSION_V3_5.md)
+- Saúde, blockers e auditoria: [`PROJECT_HEALTH_V3_5.md`](PROJECT_HEALTH_V3_5.md)
+
+## 🔬 6. Research OS 3.6: resolução científica cross-domain
+
+O milestone 3.6 introduz decisões científicas persistentes e fail-closed:
+critérios explícitos, evidência rastreável, incerteza, OOD e variabilidade de
+protocolo permanecem dimensões separadas. Uma decisão não contém score total,
+e o comparador não é eleito por seu melhor score isolado. A execução real de
+04/09/2026 produziu uma decisão cross-domain legítima de
+`NO_DECISION_OUT_OF_DOMAIN`, uma comparação E3 limitada em Cantera e recusas
+honestas para materiais e bateria por ausência de registros comparáveis.
+
+- Contratos e regras: [`RESEARCH_OS_V3_6.md`](RESEARCH_OS_V3_6.md)
+- Execução e resultados: [`CROSS_DOMAIN_SCIENTIFIC_RESOLUTION_V3_6.md`](CROSS_DOMAIN_SCIENTIFIC_RESOLUTION_V3_6.md)
+- Saúde e gates de avanço: [`PROJECT_HEALTH_V3_6.md`](PROJECT_HEALTH_V3_6.md)
+
+## 🔬 7. Research OS 3.7: benchmark sistemático de decisões
+
+O milestone 3.7 testa a fronteira decisória da v3.6 com 61 perguntas fixas,
+15 perguntas geradas pelo Codex Live, 8 grupos de paráfrase, 8 pares
+bilíngues e testes de ordem, contexto contaminado e pressão adversarial. A
+execução final teve 108 casos, zero falhas de invariantes, zero falsos
+suportes, zero falsas recusas, 45 `NO_DECISION`, bundles PASS e Ledger PASS.
+
+- Contratos e gate: [`RESEARCH_OS_V3_7.md`](RESEARCH_OS_V3_7.md)
+- Relatório completo: [`SCIENTIFIC_DECISION_BENCHMARK_V3_7.md`](SCIENTIFIC_DECISION_BENCHMARK_V3_7.md)
+- Saúde e blockers: [`PROJECT_HEALTH_V3_7.md`](PROJECT_HEALTH_V3_7.md)
+
+## 🔬 8. Research OS 3.8: reprodução e stress científico
+
+Após o PASS real da v3.7, a v3.8 reroda os alvos disponíveis e tenta quebrar
+selagem, bundles, Ledger, cache, versionamento, OOD, incerteza, unidades,
+proveniência, narração e loops autônomos. O resultado final tem 12
+reproduções, 30 stress tests aprovados, comparação Python 3.11/3.12 e CI
+verde.
+
+- Runner: [`tools/benchmark/reproduction_stress_v38.py`](tools/benchmark/reproduction_stress_v38.py)
+- Relatório: [`REPRODUCTION_STRESS_TEST_V3_8.md`](REPRODUCTION_STRESS_TEST_V3_8.md)
+
+## 🔬 9. Research OS 3.9: programas autônomos bounded
+
+O milestone 3.9 transforma campanhas isoladas em `ResearchProgram`s multi-step,
+com limites de recursos imutáveis, perguntas geradas a partir dos resultados
+anteriores, avaliação qualitativa de utilidade, memória cross-campaign e
+detecção anti-spin. Codex Live propõe apenas a estrutura de um programa; runs,
+Evidence, bundles, decisões e Ledger continuam sob controle do Research OS.
+
+- Contratos e gate: [`RESEARCH_OS_V3_9.md`](RESEARCH_OS_V3_9.md)
+- Execução autônoma: [`AUTONOMOUS_RESEARCH_PROGRAMS_V3_9.md`](AUTONOMOUS_RESEARCH_PROGRAMS_V3_9.md)
+- Saúde e blockers: [`PROJECT_HEALTH_V3_9.md`](PROJECT_HEALTH_V3_9.md)
+
+## 🔬 10. Research OS 3.10: memória científica longitudinal
+
+O v3.10 indexa snapshots históricos sobre Ledger, Knowledge, lineage, claims,
+runs, fontes, datasets, modelos e engines. Consultas temporais preservam o
+estado antigo, identificam versões stale e explicam mudanças de claims e
+decisões. Memória conversacional não é fonte científica e não pode sobrepor
+registros selados.
+
+- Contratos e gate: [`RESEARCH_OS_V3_10.md`](RESEARCH_OS_V3_10.md)
+- Execução temporal: [`LONGITUDINAL_SCIENTIFIC_MEMORY_V3_10.md`](LONGITUDINAL_SCIENTIFIC_MEMORY_V3_10.md)
+- Saúde e blockers: [`PROJECT_HEALTH_V3_10.md`](PROJECT_HEALTH_V3_10.md)
+
+## 🔬 11. Research OS 3.11: priorização científica
+
+O v3.11 cria `ResearchPriorityAssessment` e uma `ResearchPriorityQueue` dinâmica
+para decidir o próximo passo usando gaps, evidência atual/alvo, resolvabilidade,
+redundância, dependências externas, engines, datasets, segurança e escopo. A
+fila preserva avaliações antigas quando nova evidência muda a ordem; posição é
+apenas ordenação auditável, nunca um score científico universal.
+
+- Contratos e gate: [`RESEARCH_OS_V3_11.md`](RESEARCH_OS_V3_11.md)
+- Execução e resultados: [`RESEARCH_PRIORITIZATION_V3_11.md`](RESEARCH_PRIORITIZATION_V3_11.md)
+- Saúde e blockers: [`PROJECT_HEALTH_V3_11.md`](PROJECT_HEALTH_V3_11.md)
+
+## 🔬 12. Research OS 3.12: integração de evidência externa
+
+O v3.12 registra `ExternalEvidenceUpdate` e
+`EvidenceDependencyAssessment` para integrar fontes versionadas sem sobrescrever
+histórico ou contar cinco repetições de um estudo como cinco confirmações
+independentes. Cada atualização preserva compatibilidade, conflitos, lineage,
+claims, gaps, decisões e prioridades afetados.
+
+- Contratos e gate: [`RESEARCH_OS_V3_12.md`](RESEARCH_OS_V3_12.md)
+- Execução e resultados: [`EXTERNAL_EVIDENCE_INTEGRATION_V3_12.md`](EXTERNAL_EVIDENCE_INTEGRATION_V3_12.md)
+- Saúde e blockers: [`PROJECT_HEALTH_V3_12.md`](PROJECT_HEALTH_V3_12.md)
+
+## 🔬 13. Research OS 4.0: release de validação científica
+
+O v4.0 é uma validação sistêmica, não uma nova arquitetura. O gate executa
+100 casos sistemáticos e 30 perguntas novas do Codex Live, grupos repetidos,
+paráfrases e bilíngues, reprodução, stress, auditorias de segurança e
+invariantes. O exame autônomo final escolhe um caso respondível, um caso que
+deve permanecer `NO_DECISION` e um blocker externo, seguido pelas 20 perguntas
+obrigatórias fundamentadas no estado registrado.
+
+- Benchmark: [`tools/benchmark/master_validation_v40.py`](tools/benchmark/master_validation_v40.py)
+- Release e critérios: [`RESEARCH_OS_V4_0.md`](RESEARCH_OS_V4_0.md)
+- Relatório: [`RESEARCH_OS_V4_VALIDATION_REPORT.md`](RESEARCH_OS_V4_VALIDATION_REPORT.md)
+- Invariantes: [`SCIENTIFIC_INVARIANTS_V4_0.md`](SCIENTIFIC_INVARIANTS_V4_0.md)
+- Segurança: [`SECURITY_AUDIT_V4_0.md`](SECURITY_AUDIT_V4_0.md)
+- Saúde: [`PROJECT_HEALTH_V4_0.md`](PROJECT_HEALTH_V4_0.md)

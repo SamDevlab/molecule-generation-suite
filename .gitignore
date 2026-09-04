@@ -1,5 +1,6 @@
 # Python environment & cache
 __pycache__/
+*.egg-info/
 *.pyc
 *.pyo
 *.pyd
@@ -57,3 +58,37 @@ formolecular/backup/universo_utilidade_filtrada2.csv
 formolecular/csv/universo_utilidade_filtrada.csv
 formolecular/novo_horizonte/receptor_5W8K.pdbqt
 Biolab/repo_vina/
+
+# Generated golden-workflow artifacts (manifests and source fixture remain tracked)
+examples/golden_workflow/output/
+
+# Local operational Oracle state (Ledger, sessions, bundles and retrieval DB)
+.research-os/
+.tmp-web-check/
+.tmp-live-run/
+.tmp-live-run2/
+.research-os-live-3.2*/
+.research-os-live-3.3*/
+.research-os-live-3.4*/
+.research-os-live-3.5*/
+.research-os-live-3.6*/
+.research-os-live-3.7*/
+.research-os-live-3.8*/
+.research-os-live-3.9*/
+.research-os-live-3.10*/
+.research-os-live-3.11*/
+.research-os-live-3.12*/
+.research-os-live-4.0*/
+.tmp-v36-ml-probe/
+.tmp-package-check/
+.tmp-package-check-v34/
+.tmp-package-check-v35/
+.tmp-package-check-v36*/
+.tmp-package-check-v37*/
+.tmp-package-check-v38*/
+.tmp-package-check-v39*/
+.tmp-package-check-v310*/
+.tmp-package-check-v311*/
+.tmp-package-check-v312*/
+.tmp-package-check-v40*/
+build/

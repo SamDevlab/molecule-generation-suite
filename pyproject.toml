@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "research-os-core"
+version = "4.0.0"
+description = "Research Core + Proof Engine for molecule-generation-suite"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+molecule = ["numpy>=1.26", "rdkit>=2024.3"]
+combustion = ["cantera>=3.2"]
+metals = ["pycalphad>=0.11", "matminer>=0.9"]
+docking = ["openbabel-wheel>=3.1.1.23"]
+materials = ["pymatgen>=2024.1", "matminer>=0.9"]
+science = ["cantera>=3.2", "pycalphad>=0.11", "pymatgen>=2024.1", "matminer>=0.9"]
+data = ["pyarrow>=15", "scipy>=1.11"]
+query = ["duckdb>=1.0"]
+
+[project.scripts]
+research-os = "research_os.cli:main"
+research-os-web = "research_os.web:main"
+
+[tool.setuptools.package-data]
+research_os = ["oracle/live_output.schema.json"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+markers = [
+  "optional: tests that exercise optional scientific dependencies when installed",
+  "integration: cross-component Research OS tests",
+  "reference: real engine reference-case tests",
+]
