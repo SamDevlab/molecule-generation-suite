@@ -1,10 +1,17 @@
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
 from research_os.benchmark import ScientificDecisionBenchmark
 from research_os.core.types import EvidenceLevel
 from research_os.external_evidence import ExternalEvidenceIntegrator
 from research_os.oracle.provider import CodexLiveProvider
-from tools.benchmark.master_validation_v40 import (
+# Benchmark runners are operational scripts, not installed package modules;
+# add their repository directory explicitly so CI has the same import path.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools" / "benchmark"))
+
+from master_validation_v40 import (
     _fixed_specs,
     _materialize_case,
     _reproduction_matrix,
