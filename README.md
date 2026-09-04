@@ -182,3 +182,15 @@ apenas ordenação auditável, nunca um score científico universal.
 - Contratos e gate: [`RESEARCH_OS_V3_11.md`](RESEARCH_OS_V3_11.md)
 - Execução e resultados: [`RESEARCH_PRIORITIZATION_V3_11.md`](RESEARCH_PRIORITIZATION_V3_11.md)
 - Saúde e blockers: [`PROJECT_HEALTH_V3_11.md`](PROJECT_HEALTH_V3_11.md)
+
+## 🔬 12. Research OS 3.12: integração de evidência externa
+
+O v3.12 registra `ExternalEvidenceUpdate` e
+`EvidenceDependencyAssessment` para integrar fontes versionadas sem sobrescrever
+histórico ou contar cinco repetições de um estudo como cinco confirmações
+independentes. Cada atualização preserva compatibilidade, conflitos, lineage,
+claims, gaps, decisões e prioridades afetados.
+
+- Contratos e gate: [`RESEARCH_OS_V3_12.md`](RESEARCH_OS_V3_12.md)
+- Execução e resultados: [`EXTERNAL_EVIDENCE_INTEGRATION_V3_12.md`](EXTERNAL_EVIDENCE_INTEGRATION_V3_12.md)
+- Saúde e blockers: [`PROJECT_HEALTH_V3_12.md`](PROJECT_HEALTH_V3_12.md)

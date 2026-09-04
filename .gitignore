@@ -77,6 +77,7 @@ examples/golden_workflow/output/
 .research-os-live-3.9*/
 .research-os-live-3.10*/
 .research-os-live-3.11*/
+.research-os-live-3.12*/
 .tmp-v36-ml-probe/
 .tmp-package-check/
 .tmp-package-check-v34/
@@ -87,4 +88,5 @@ examples/golden_workflow/output/
 .tmp-package-check-v39*/
 .tmp-package-check-v310*/
 .tmp-package-check-v311*/
+.tmp-package-check-v312*/
 build/
