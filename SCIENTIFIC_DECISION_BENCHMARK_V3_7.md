@@ -100,7 +100,7 @@ decisão negativa sob pressão do usuário.
 | Ledger | `PASS`, 108 runs indexados |
 | Python 3.11 | `169 passed, 1 skipped`; skip esperado abaixo |
 | Python 3.12 | `170 passed` |
-| Package | wheel `research_os_core-3.6.0-py3-none-any.whl` recompilado |
+| Package | wheel `research_os_core-3.7.0-py3-none-any.whl` recompilado |
 | `Biolab/` / `formolecular/` | sem diff |
 
 O skip do Python 3.11 é
@@ -112,6 +112,8 @@ contagens.
 
 ## Gates seguintes
 
-O gate v3.7 está fechado com PASS. O v3.8 continua `CLOSED` até executar o
-benchmark de reprodução/stress de 12+ reproduções e 25+ testes de stress. O
-v3.9 não foi iniciado.
+O gate v3.7 está fechado com PASS. O exame final Codex Live também passou com
+os três casos `DECISION-EXAM-01`, `DECISION-EXAM-02` e `DECISION-EXAM-03`.
+O benchmark de reprodução/stress v3.8 foi então aberto e executado; seus
+resultados estão em `REPRODUCTION_STRESS_TEST_V3_8.md`. O v3.9 não foi
+iniciado.

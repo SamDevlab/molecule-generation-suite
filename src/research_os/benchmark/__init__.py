@@ -11,6 +11,12 @@ from research_os.benchmark.models import (
     ScientificDecisionBenchmark,
     SemanticDecisionConsistency,
 )
+from research_os.benchmark.reproduction import (
+    ReproductionCase,
+    ReproductionStressBenchmark,
+    StressStatus,
+    StressTestResult,
+)
 
 __all__ = [
     "DecisionBenchmarkCase",
@@ -18,6 +24,10 @@ __all__ = [
     "FalseSupportedDecision",
     "ScientificDecisionBenchmark",
     "SemanticDecisionConsistency",
+    "ReproductionCase",
+    "ReproductionStressBenchmark",
+    "StressStatus",
+    "StressTestResult",
     "audit_false_no_decision",
     "audit_false_supported_decision",
 ]

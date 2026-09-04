@@ -3,7 +3,8 @@
 ## Estado
 
 `PASS` no benchmark sistemático final em 04/09/2026, na branch
-`research-os-v1.3`, commit científico de referência `0b7bd33`.
+`research-os-v1.3`, commit científico de referência `26d999d`; o exame final
+Codex Live foi fechado no commit `9d74d2a`.
 
 | Gate | Estado | Evidência |
 |---|---|---|
@@ -35,5 +36,5 @@
 
 ## Próximo gate
 
-`v3.8`: fechado até execução real de reprodução e stress. `v3.9`: não aberto.
+`v3.8`: executado no relatório de reprodução/stress. `v3.9`: não aberto.
 Não há justificativa científica para avançar por roadmap.

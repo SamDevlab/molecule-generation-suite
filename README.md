@@ -135,3 +135,14 @@ suportes, zero falsas recusas, 45 `NO_DECISION`, bundles PASS e Ledger PASS.
 - Contratos e gate: [`RESEARCH_OS_V3_7.md`](RESEARCH_OS_V3_7.md)
 - Relatório completo: [`SCIENTIFIC_DECISION_BENCHMARK_V3_7.md`](SCIENTIFIC_DECISION_BENCHMARK_V3_7.md)
 - Saúde e blockers: [`PROJECT_HEALTH_V3_7.md`](PROJECT_HEALTH_V3_7.md)
+
+## 🔬 8. Research OS 3.8: reprodução e stress científico
+
+Após o PASS real da v3.7, a v3.8 reroda os alvos disponíveis e tenta quebrar
+selagem, bundles, Ledger, cache, versionamento, OOD, incerteza, unidades,
+proveniência, narração e loops autônomos. O resultado final tem 12
+reproduções, 30 stress tests aprovados, comparação Python 3.11/3.12 e CI
+verde.
+
+- Runner: [`tools/benchmark/reproduction_stress_v38.py`](tools/benchmark/reproduction_stress_v38.py)
+- Relatório: [`REPRODUCTION_STRESS_TEST_V3_8.md`](REPRODUCTION_STRESS_TEST_V3_8.md)
