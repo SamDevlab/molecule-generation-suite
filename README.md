@@ -210,3 +210,15 @@ obrigatórias fundamentadas no estado registrado.
 - Invariantes: [`SCIENTIFIC_INVARIANTS_V4_0.md`](SCIENTIFIC_INVARIANTS_V4_0.md)
 - Segurança: [`SECURITY_AUDIT_V4_0.md`](SECURITY_AUDIT_V4_0.md)
 - Saúde: [`PROJECT_HEALTH_V4_0.md`](PROJECT_HEALTH_V4_0.md)
+
+## 🔬 14. Research OS 4.1: real research deployment
+
+O v4.1 mede impacto científico entre o estado anterior e o posterior de cada
+programa, sem score universal e sem elevar EvidenceLevel. A implantação real
+executou seis programas, 57 perguntas, dez registros de impacto, análise de
+falhas da solubilidade, sensibilidade de protocolo Cantera e auditoria pública
+de materiais.
+
+- Release e gate: [`RESEARCH_OS_V4_1.md`](RESEARCH_OS_V4_1.md)
+- Execução real: [`REAL_RESEARCH_DEPLOYMENT_V4_1.md`](REAL_RESEARCH_DEPLOYMENT_V4_1.md)
+- Saúde: [`PROJECT_HEALTH_V4_1.md`](PROJECT_HEALTH_V4_1.md)
