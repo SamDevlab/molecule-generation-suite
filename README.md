@@ -109,3 +109,17 @@ honestos.
 - Contratos e limites: [`RESEARCH_OS_V3_5.md`](RESEARCH_OS_V3_5.md)
 - Acceptance e expansão de evidência: [`EVIDENCE_EXPANSION_V3_5.md`](EVIDENCE_EXPANSION_V3_5.md)
 - Saúde, blockers e auditoria: [`PROJECT_HEALTH_V3_5.md`](PROJECT_HEALTH_V3_5.md)
+
+## 🔬 6. Research OS 3.6: resolução científica cross-domain
+
+O milestone 3.6 introduz decisões científicas persistentes e fail-closed:
+critérios explícitos, evidência rastreável, incerteza, OOD e variabilidade de
+protocolo permanecem dimensões separadas. Uma decisão não contém score total,
+e o comparador não é eleito por seu melhor score isolado. A execução real de
+04/09/2026 produziu uma decisão cross-domain legítima de
+`NO_DECISION_OUT_OF_DOMAIN`, uma comparação E3 limitada em Cantera e recusas
+honestas para materiais e bateria por ausência de registros comparáveis.
+
+- Contratos e regras: [`RESEARCH_OS_V3_6.md`](RESEARCH_OS_V3_6.md)
+- Execução e resultados: [`CROSS_DOMAIN_SCIENTIFIC_RESOLUTION_V3_6.md`](CROSS_DOMAIN_SCIENTIFIC_RESOLUTION_V3_6.md)
+- Saúde e gates de avanço: [`PROJECT_HEALTH_V3_6.md`](PROJECT_HEALTH_V3_6.md)

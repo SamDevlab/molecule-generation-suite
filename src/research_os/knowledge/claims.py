@@ -67,6 +67,13 @@ class ClaimRevision:
     derived_from: tuple[str, ...] = ()
     created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     digest: str | None = None
+    # v3.6 aliases make revision events consumable by decision and timeline
+    # views while retaining the explicit v3.5 predecessor/current names.
+    previous_revision_id: str | None = None
+    new_status: ClaimStatus | str | None = None
+    new_evidence_ids: tuple[str, ...] = ()
+    conditions: dict[str, object] = field(default_factory=dict)
+    timestamp: str | None = None
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "previous_status", self.previous_status if isinstance(self.previous_status, ClaimStatus) else ClaimStatus(str(self.previous_status)))
@@ -75,13 +82,17 @@ class ClaimRevision:
         object.__setattr__(self, "evidence_ids", tuple(str(item) for item in self.evidence_ids))
         object.__setattr__(self, "limitations", tuple(str(item) for item in self.limitations))
         object.__setattr__(self, "derived_from", tuple(str(item) for item in self.derived_from))
+        object.__setattr__(self, "new_status", self.current_status if self.new_status is None else (self.new_status if isinstance(self.new_status, ClaimStatus) else ClaimStatus(str(self.new_status))))
+        object.__setattr__(self, "new_evidence_ids", tuple(str(item) for item in (self.new_evidence_ids or self.evidence_ids)))
+        object.__setattr__(self, "conditions", dict(self.conditions or {}))
+        object.__setattr__(self, "timestamp", self.timestamp or self.created_at)
         if self.version < 2:
             raise ValueError("claim revisions start at version 2")
         if self.digest is None:
             object.__setattr__(self, "digest", sha256_json(self._hash_payload()))
 
     def _hash_payload(self) -> dict[str, object]:
-        return {"revision_id": self.revision_id, "claim_id": self.claim_id, "version": self.version, "statement": self.statement, "previous_status": self.previous_status.value, "current_status": self.current_status.value, "previous_evidence_ids": self.previous_evidence_ids, "evidence_ids": self.evidence_ids, "reason": self.reason, "limitations": self.limitations, "supersedes": self.supersedes, "derived_from": self.derived_from, "created_at": self.created_at}
+        return {"revision_id": self.revision_id, "claim_id": self.claim_id, "version": self.version, "statement": self.statement, "previous_status": self.previous_status.value, "current_status": self.current_status.value, "previous_evidence_ids": self.previous_evidence_ids, "evidence_ids": self.evidence_ids, "reason": self.reason, "limitations": self.limitations, "supersedes": self.supersedes, "derived_from": self.derived_from, "created_at": self.created_at, "previous_revision_id": self.previous_revision_id, "new_status": self.new_status.value, "new_evidence_ids": self.new_evidence_ids, "conditions": self.conditions, "timestamp": self.timestamp}
 
     @property
     def valid(self) -> bool:
@@ -89,7 +100,7 @@ class ClaimRevision:
 
     def to_dict(self) -> dict[str, object]:
         data = asdict(self)
-        data.update({"previous_status": self.previous_status.value, "current_status": self.current_status.value, "previous_evidence_ids": list(self.previous_evidence_ids), "evidence_ids": list(self.evidence_ids), "limitations": list(self.limitations), "derived_from": list(self.derived_from), "valid": self.valid})
+        data.update({"previous_status": self.previous_status.value, "current_status": self.current_status.value, "previous_evidence_ids": list(self.previous_evidence_ids), "evidence_ids": list(self.evidence_ids), "limitations": list(self.limitations), "derived_from": list(self.derived_from), "new_status": self.new_status.value, "new_evidence_ids": list(self.new_evidence_ids), "conditions": dict(self.conditions), "valid": self.valid})
         return data
 
 

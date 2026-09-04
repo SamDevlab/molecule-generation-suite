@@ -15,9 +15,13 @@ from research_os.resolution.models import (
 )
 from research_os.resolution.store import ResolutionStore
 from research_os.resolution.battery import BatteryAnalysisResult, analyze_nasa_pcoe_rw3
+from research_os.decision.models import BatteryDatasetQualityAssessment, BatteryProtocolComparability, BatteryProtocolMatchStatus
 
 __all__ = [
     "BatteryDatasetAssessment",
+    "BatteryDatasetQualityAssessment",
+    "BatteryProtocolComparability",
+    "BatteryProtocolMatchStatus",
     "ConditionMatchResult",
     "ConditionMatchStatus",
     "ConditionMatcher",

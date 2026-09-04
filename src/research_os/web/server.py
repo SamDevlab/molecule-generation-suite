@@ -29,6 +29,7 @@ from research_os.oracle import CodexLiveProvider, CodexTestProvider, OraclePlann
 from research_os.service import OracleService, ResearchStore
 from research_os.ledger import RunRegistry
 from research_os.campaigns import CampaignManager, CampaignStore
+from research_os.decision import DecisionStore
 
 
 def _jsonable(value: Any) -> Any:
@@ -46,10 +47,11 @@ def _jsonable(value: Any) -> Any:
 class OracleWebApplication:
     """Dispatches web requests against one long-lived OracleService."""
 
-    def __init__(self, service: OracleService, *, data_root: str | Path, static_root: str | Path | None = None, campaigns: CampaignManager | None = None):
+    def __init__(self, service: OracleService, *, data_root: str | Path, static_root: str | Path | None = None, campaigns: CampaignManager | None = None, decisions: DecisionStore | None = None):
         self.service = service
         self.campaigns = campaigns
         self.data_root = Path(data_root).resolve()
+        self.decisions = decisions or DecisionStore(self.data_root / "decisions.sqlite")
         self.static_root = Path(static_root or Path(__file__).resolve().parents[3] / "web").resolve()
         self.knowledge_root = self.data_root / "knowledge"
         self.review_path = self.knowledge_root / "review-queue.json"
@@ -75,6 +77,8 @@ class OracleWebApplication:
         resolution_store = getattr(self.campaigns, "resolution_store", None)
         if resolution_store is not None and resolution_store is not campaign_store and hasattr(resolution_store, "close"):
             resolution_store.close()
+        if self.decisions is not None:
+            self.decisions.close()
 
     def dispatch(self, method: str, path: str, body: dict[str, Any] | None = None) -> tuple[int, dict[str, Any]]:
         """Return an HTTP-like `(status, JSON payload)` tuple for tests and handlers."""
@@ -85,7 +89,7 @@ class OracleWebApplication:
         try:
             if method == "GET" and route == "/api/health":
                 provider = self.service.planner.provider
-                return 200, {"status": "ok", "service": "Research OS 3.4", "provider": dict(getattr(provider, "audit_metadata", {}) or {}), "oracle": self.oracle_status(), "ledger_source_of_truth": True}
+                return 200, {"status": "ok", "service": "Research OS 3.6", "provider": dict(getattr(provider, "audit_metadata", {}) or {}), "oracle": self.oracle_status(), "ledger_source_of_truth": True}
             if method == "GET" and route == "/api/oracle/audit":
                 return 200, self.oracle_status()
             if method == "GET" and route == "/api/capabilities":
@@ -96,6 +100,15 @@ class OracleWebApplication:
                 if self.campaigns is None:
                     return 200, {"campaigns": []}
                 return 200, {"campaigns": self.campaigns.list()}
+            if method == "GET" and route == "/api/decisions":
+                return 200, self.decision_index(campaign_id=str(query.get("campaign_id", [""])[0]) or None, limit=int(query.get("limit", [100])[0]))
+            if method == "GET" and route.startswith("/api/decisions/"):
+                decision = self.decisions.get(route.rsplit("/", 1)[1])
+                return 200, {"decision": decision.to_dict(), "evidence_matrix": self.evidence_matrix((decision,)), "timeline": self.decision_timeline((decision,))}
+            if method == "GET" and route.startswith("/api/campaigns/") and route.endswith("/decisions"):
+                campaign_id = route.split("/")[3]
+                decisions = self.decisions.list(campaign_id=campaign_id)
+                return 200, {"decisions": [item.to_dict() for item in decisions], "evidence_matrix": self.evidence_matrix(decisions), "timeline": self.decision_timeline(decisions)}
             if method == "GET" and route == "/api/campaigns/memory":
                 if self.campaigns is None:
                     return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
@@ -275,6 +288,23 @@ class OracleWebApplication:
                     related_claims.extend(answer.get("claims") or [])
         return {"source": source.to_dict() if source is not None else {"source_id": source_id}, "related_jobs": list(dict.fromkeys(related_jobs)), "related_runs": list(dict.fromkeys(related_runs)), "claims": related_claims}
 
+    def decision_index(self, *, campaign_id: str | None = None, limit: int = 100) -> dict[str, Any]:
+        decisions = self.decisions.list(campaign_id=campaign_id, limit=max(1, min(limit, 500)))
+        return {"decisions": [item.to_dict() for item in decisions], "evidence_matrix": self.evidence_matrix(decisions), "timeline": self.decision_timeline(decisions)}
+
+    @staticmethod
+    def evidence_matrix(decisions: tuple[Any, ...] | list[Any]) -> list[dict[str, Any]]:
+        matrix: list[dict[str, Any]] = []
+        for decision in decisions:
+            evidence = set(decision.evidence_available)
+            for criterion in decision.criteria:
+                matrix.append({"decision_id": decision.decision_id, "question_id": decision.question_id, "criterion_id": criterion.criterion_id, "metric": criterion.metric, "required": criterion.required, "minimum_evidence_level": criterion.minimum_evidence_level, "OOD_policy": criterion.OOD_policy, "comparison_protocol": criterion.comparison_protocol, "evidence_ids": sorted(evidence & set(decision.required_evidence)) or sorted(evidence), "status": decision.decision_status})
+        return matrix
+
+    @staticmethod
+    def decision_timeline(decisions: tuple[Any, ...] | list[Any]) -> list[dict[str, Any]]:
+        return [{"timestamp": decision.created_at, "decision_id": decision.decision_id, "campaign_id": decision.campaign_id, "question_id": decision.question_id, "status": decision.decision_status, "selected_option": decision.selected_option} for decision in sorted(decisions, key=lambda item: item.created_at)]
+
     def engine_status(self) -> list[dict[str, Any]]:
         references = {str(item.get("engine_id")): item for item in self._reference_cases}
         result = []
@@ -417,7 +447,7 @@ class OracleWebApplication:
                 return
 
         server = ThreadingHTTPServer((host, port), Handler)
-        print(f"Research OS 3.3 listening at http://{host}:{port}")
+        print(f"Research OS 3.6 listening at http://{host}:{port}")
         try:
             server.serve_forever()
         except KeyboardInterrupt:
@@ -452,7 +482,7 @@ def build_default_application(data_root: str | Path | None = None, *, oracle_mod
     service = OracleService(OraclePlanner(provider, validator=PlanValidator(engine_registry=engine_registry)), ledger=ledger, store=store, bundle_root=root / "bundles", knowledge_retriever=retriever, source_registry=source_registry, engine_registry=engine_registry)
     campaign_store = CampaignStore(root / "campaigns.sqlite")
     campaigns = CampaignManager(service, campaign_store, source_registry=source_registry, retriever=retriever, data_root=root)
-    application = OracleWebApplication(service, data_root=root, campaigns=campaigns)
+    application = OracleWebApplication(service, data_root=root, campaigns=campaigns, decisions=DecisionStore(root / "decisions.sqlite"))
     if not application._reference_cases:
         application.run_cantera_reference()
     return application
@@ -469,7 +499,7 @@ def _bootstrap_knowledge(source_registry: SourceRegistry, retriever: KnowledgeRe
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Run the Research OS 3.3 operational Oracle web app")
+    parser = argparse.ArgumentParser(description="Run the Research OS 3.6 operational Oracle web app")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--data-root", default=None)

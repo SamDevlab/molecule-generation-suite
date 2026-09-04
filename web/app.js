@@ -31,6 +31,7 @@ function renderCurrent() {
 }
 
 function renderTab() {
+  if (state.tab === 'decisions') return renderDecisions();
   const response = state.response; if (!response) return renderCurrent();
   const {planning, answer, execution} = response; let html = '';
   if (state.tab === 'current') return renderCurrent();
@@ -44,6 +45,18 @@ function renderTab() {
   $('#inspector-content').innerHTML = html;
   if (state.tab === 'review') loadReview();
   if (state.tab === 'sources' && state.jobId) loadSources();
+}
+
+async function renderDecisions() {
+  $('#inspector-content').innerHTML = '<div class="trace-empty">Loading recorded scientific decisions…</div>';
+  try {
+    const data = await request('/api/decisions');
+    const decisions = data.decisions || [];
+    const cards = decisions.map(decision => `<div class="card"><strong>${esc(decision.decision_id)} · ${esc(decision.decision_status)}</strong><br>${esc(decision.decision_question)}<div class="kv"><label>Selected</label><span>${esc(decision.selected_option || 'NO DECISION')}</span></div><div class="kv"><label>OOD / uncertainty</label><span>${esc((decision.OOD_flags || []).join('; ') || 'none')} · ${esc((decision.uncertainties || []).join('; ') || 'not recorded')}</span></div><div class="kv"><label>Evidence</label><span>${esc((decision.evidence_available || []).join(', ') || 'none')}</span></div></div>`).join('') || '<div class="trace-empty">No persisted scientific decisions yet.</div>';
+    const matrix = (data.evidence_matrix || []).map(item => `<div class="card"><strong>${esc(item.criterion_id)} · ${esc(item.metric)}</strong><br><span class="muted">${item.required ? 'required' : 'optional'} · min ${esc(item.minimum_evidence_level || 'not set')} · OOD ${esc(item.OOD_policy)}</span><br>${esc((item.evidence_ids || []).join(', ') || 'no evidence')}</div>`).join('');
+    const timeline = (data.timeline || []).map(item => `<div class="progress-row done"><span class="progress-icon">◈</span><span>${esc(item.timestamp)} · ${esc(item.decision_id)} · ${esc(item.status)}</span></div>`).join('');
+    $('#inspector-content').innerHTML = `<div class="trace-section"><div class="trace-title">SCIENTIFIC DECISIONS</div><div class="trace-value">${decisions.length} recorded, append-only</div>${cards}</div><div class="trace-section"><div class="trace-title">EVIDENCE MATRIX</div>${matrix || '<div class="muted">No criterion matrix available.</div>'}</div><div class="trace-section"><div class="trace-title">SCIENTIFIC TIMELINE</div>${timeline || '<div class="muted">No decision events available.</div>'}</div>`;
+  } catch (error) { $('#inspector-content').innerHTML = `<div class="trace-empty">Decision view unavailable: ${esc(error.message)}</div>`; }
 }
 
 async function loadSources() { try { const data = await request(`/api/jobs/${state.jobId}/sources`); const target = $('#source-cards'); if (!target) return; target.innerHTML = data.sources.map(source => `<div class="card"><strong>${esc(source.source_id)}</strong><br>${esc(source.title || 'Citation record')}<div class="kv"><label>Authors</label><span>${esc((source.authors || []).join(', ') || '—')}</span></div><div class="kv"><label>Year / DOI</label><span>${esc(source.year || '—')} · ${esc(source.doi || '—')}</span></div><div class="kv"><label>Type / License</label><span>${esc(source.source_type || '—')} · ${esc(source.license || '—')}</span></div><a class="source-link" href="${safeUrl(source.url)}" target="_blank" rel="noreferrer">Open source ↗</a></div>`).join('') || '<div class="trace-empty">No reviewed source matched this question.</div>'; } catch (_) {} }
