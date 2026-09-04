@@ -22,7 +22,7 @@ boundary.
   material/condition-matched measurements are absent.
 - Battery and pharma reach first gates; target species is mandatory and absent
   species normalizes to `UNKNOWN`.
-- Final live acceptance (`.research-os-live-3.3-final6`) passed with five
+- Final live acceptance (`.research-os-live-3.3-final7`) passed with five
   campaigns: 1 `SUPPORTED`, 1 `PARTIALLY_SUPPORTED`, 2
   `INSUFFICIENT_EVIDENCE`, and 1 `INDETERMINATE`.
 

@@ -11,7 +11,7 @@ The live acceptance selects exactly three primary and two secondary problem IDs
 from the registered catalog. The deterministic `CodexTestProvider` fixture
 selects `P-MOL-01`, `P-COMB-01`, `P-MAT-01` as primary and `P-BATT-01`,
 `P-PHARMA-01` as secondary for CI. The verified live result is recorded in the
-ignored `.research-os-live-3.3-final6/real-campaign-acceptance.json` file. It
+ignored `.research-os-live-3.3-final7/real-campaign-acceptance.json` file. It
 used `gpt-5.6-luna`, selected the required five IDs, and completed five bounded
 campaigns.
 
