@@ -1,0 +1,27 @@
+{
+  "version": "4.2.0-readiness",
+  "protocol_version": "research-os.v4.2.private-corpus-readiness.v1",
+  "branch": "research-os-v1.3",
+  "created_at": "2026-09-04T23:45:53.601586+00:00",
+  "status": "INFRASTRUCTURE_READY_AWAITING_USER_CORPUS",
+  "corpus_root_provided": false,
+  "corpus_files_discovered": 0,
+  "corpus_files_ingested": 0,
+  "binary_files_awaiting_explicit_adapter": [],
+  "records": [],
+  "ingested": [],
+  "review_queue_items": 0,
+  "verified_corpus_claims": 0,
+  "corpus_grounded_programs": 0,
+  "conflicts": [],
+  "private_content_persisted": false,
+  "project_fixture_policy": "Existing repository documents validate infrastructure only; they are not user corpus and are not relabeled as private sources.",
+  "gates": {
+    "hashes_recorded": true,
+    "auto_extraction_never_verified": true,
+    "verified_requires_locator_and_context": true,
+    "private_public_separation": true,
+    "awaiting_user_corpus_is_honest": true
+  },
+  "errors": []
+}

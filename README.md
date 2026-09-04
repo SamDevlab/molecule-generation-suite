@@ -222,3 +222,12 @@ de materiais.
 - Release e gate: [`RESEARCH_OS_V4_1.md`](RESEARCH_OS_V4_1.md)
 - Execução real: [`REAL_RESEARCH_DEPLOYMENT_V4_1.md`](REAL_RESEARCH_DEPLOYMENT_V4_1.md)
 - Saúde: [`PROJECT_HEALTH_V4_1.md`](PROJECT_HEALTH_V4_1.md)
+
+## Research OS v4.2
+
+The v4.2 private-knowledge infrastructure is ready, but the current checkout
+has no user corpus: status is `INFRASTRUCTURE_READY_AWAITING_USER_CORPUS`.
+Explicit corpus files are hashed into `PrivateSourceRecord`, kept separate from
+public sources, extracted only as review-required candidates, and never
+automatically verified. See `RESEARCH_OS_V4_2.md` and
+`USER_CORPUS_KNOWLEDGE_V4_2.md`.
