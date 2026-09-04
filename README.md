@@ -123,3 +123,15 @@ honestas para materiais e bateria por ausência de registros comparáveis.
 - Contratos e regras: [`RESEARCH_OS_V3_6.md`](RESEARCH_OS_V3_6.md)
 - Execução e resultados: [`CROSS_DOMAIN_SCIENTIFIC_RESOLUTION_V3_6.md`](CROSS_DOMAIN_SCIENTIFIC_RESOLUTION_V3_6.md)
 - Saúde e gates de avanço: [`PROJECT_HEALTH_V3_6.md`](PROJECT_HEALTH_V3_6.md)
+
+## 🔬 7. Research OS 3.7: benchmark sistemático de decisões
+
+O milestone 3.7 testa a fronteira decisória da v3.6 com 61 perguntas fixas,
+15 perguntas geradas pelo Codex Live, 8 grupos de paráfrase, 8 pares
+bilíngues e testes de ordem, contexto contaminado e pressão adversarial. A
+execução final teve 108 casos, zero falhas de invariantes, zero falsos
+suportes, zero falsas recusas, 45 `NO_DECISION`, bundles PASS e Ledger PASS.
+
+- Contratos e gate: [`RESEARCH_OS_V3_7.md`](RESEARCH_OS_V3_7.md)
+- Relatório completo: [`SCIENTIFIC_DECISION_BENCHMARK_V3_7.md`](SCIENTIFIC_DECISION_BENCHMARK_V3_7.md)
+- Saúde e blockers: [`PROJECT_HEALTH_V3_7.md`](PROJECT_HEALTH_V3_7.md)

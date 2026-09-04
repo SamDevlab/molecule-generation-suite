@@ -71,6 +71,7 @@ class LLMProvider(Protocol):
     def researcher_answer(self, context: dict[str, Any]) -> dict[str, Any]: ...
     def resolution_challenge(self, context: dict[str, Any]) -> dict[str, Any]: ...
     def unresolvable_challenge(self, context: dict[str, Any]) -> dict[str, Any]: ...
+    def generate_benchmark_questions(self, context: dict[str, Any]) -> dict[str, Any]: ...
 
 
 class StructuredOutputError(ValueError):
@@ -207,6 +208,7 @@ class CodexCliTransport:
             "researcher_answer": '{"problem_statement":"...","why_new":"...","next_step":"...","source_ids":[],"reasoning_summary":"brief auditable rationale"}',
             "resolution_challenge": '{"campaign_id":"CAM-...","gap_id":"GAP-...","strategy":"...","resolution_plan":{},"reasoning_summary":"brief auditable rationale"}',
             "unresolvable_challenge": '{"campaign_id":"CAM-...","gap_id":"GAP-...","reasoning_summary":"brief auditable blocker"}',
+            "generate_benchmark_questions": '{"questions":[{"question":"...","source_ids":[],"domain":"...","why_new":"brief reason"}],"reasoning_summary":"brief auditable rationale"}',
         }.get(operation, "{}")
         narration_safety = ""
         if operation == "summarize_results":
@@ -429,6 +431,11 @@ class CodexLiveProvider:
     def unresolvable_challenge(self, context: dict[str, Any]) -> dict[str, Any]:
         raw = self._call("unresolvable_challenge", {"resolution_context": context})
         return dict(raw.get("resolution", raw))
+
+    def generate_benchmark_questions(self, context: dict[str, Any]) -> dict[str, Any]:
+        """Generate benchmark prompts only; Research OS remains the executor."""
+        raw = self._call("generate_benchmark_questions", {"benchmark_context": context})
+        return dict(raw.get("benchmark", raw))
 
 
 class RuleBasedLLMProvider:
