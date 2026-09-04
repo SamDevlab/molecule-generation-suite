@@ -170,3 +170,15 @@ registros selados.
 - Contratos e gate: [`RESEARCH_OS_V3_10.md`](RESEARCH_OS_V3_10.md)
 - Execução temporal: [`LONGITUDINAL_SCIENTIFIC_MEMORY_V3_10.md`](LONGITUDINAL_SCIENTIFIC_MEMORY_V3_10.md)
 - Saúde e blockers: [`PROJECT_HEALTH_V3_10.md`](PROJECT_HEALTH_V3_10.md)
+
+## 🔬 11. Research OS 3.11: priorização científica
+
+O v3.11 cria `ResearchPriorityAssessment` e uma `ResearchPriorityQueue` dinâmica
+para decidir o próximo passo usando gaps, evidência atual/alvo, resolvabilidade,
+redundância, dependências externas, engines, datasets, segurança e escopo. A
+fila preserva avaliações antigas quando nova evidência muda a ordem; posição é
+apenas ordenação auditável, nunca um score científico universal.
+
+- Contratos e gate: [`RESEARCH_OS_V3_11.md`](RESEARCH_OS_V3_11.md)
+- Execução e resultados: [`RESEARCH_PRIORITIZATION_V3_11.md`](RESEARCH_PRIORITIZATION_V3_11.md)
+- Saúde e blockers: [`PROJECT_HEALTH_V3_11.md`](PROJECT_HEALTH_V3_11.md)

@@ -73,6 +73,7 @@ class LLMProvider(Protocol):
     def unresolvable_challenge(self, context: dict[str, Any]) -> dict[str, Any]: ...
     def generate_benchmark_questions(self, context: dict[str, Any]) -> dict[str, Any]: ...
     def generate_research_program(self, context: dict[str, Any]) -> dict[str, Any]: ...
+    def prioritize_research(self, context: dict[str, Any]) -> dict[str, Any]: ...
 
 
 class StructuredOutputError(ValueError):
@@ -211,6 +212,7 @@ class CodexCliTransport:
             "unresolvable_challenge": '{"campaign_id":"CAM-...","gap_id":"GAP-...","reasoning_summary":"brief auditable blocker"}',
             "generate_benchmark_questions": '{"questions":[{"question":"...","source_ids":[],"domain":"...","why_new":"brief reason"}],"reasoning_summary":"brief auditable rationale"}',
             "generate_research_program": '{"title":"...","domain":"...","objective":"...","initial_problem":"...","questions":[{"question_id":"Q-...","question":"...","gap_it_attempts_to_resolve":"...","why_new":"..."}],"limits":{"max_campaigns":3,"max_iterations":5,"max_runs":5,"max_sources":5,"max_candidates":20,"max_failures":2},"stop_conditions":["..."],"reasoning_summary":"brief auditable rationale"}',
+            "prioritize_research": '{"selected_candidate_question_id":"...","assessments":[{"candidate_question_id":"...","candidate_gap_id":"...","recommendation":"PRIORITIZE_NOW","rationale":"..."}],"reasoning_summary":"brief auditable rationale"}',
         }.get(operation, "{}")
         narration_safety = ""
         if operation == "summarize_results":
@@ -444,6 +446,11 @@ class CodexLiveProvider:
         raw = self._call("generate_research_program", {"program_context": context})
         return dict(raw.get("research_program", raw))
 
+    def prioritize_research(self, context: dict[str, Any]) -> dict[str, Any]:
+        """Reassess supplied candidates; the Research OS owns the gate."""
+        raw = self._call("prioritize_research", {"priority_context": context})
+        return dict(raw.get("prioritization", raw))
+
 
 class RuleBasedLLMProvider:
     """Deterministic test provider implementing the same structured contract.
@@ -489,6 +496,11 @@ class RuleBasedLLMProvider:
 
     def generate_research_program(self, context: dict[str, Any]) -> dict[str, Any]:
         return {"title": "Deterministic molecular boundary audit", "domain": "molecule", "objective": "Locate deterministic properties that can be recalculated without overclaiming.", "initial_problem": "Existing molecular descriptors must remain computational only.", "questions": [{"question_id": "Q-RULE-01", "question": "Can CCO descriptors be reproduced under the registered protocol?", "gap_it_attempts_to_resolve": "deterministic descriptor reproducibility", "why_new": "uses the supplied registry context"}], "limits": {"max_campaigns": 1, "max_iterations": 2, "max_runs": 1, "max_sources": 1, "max_candidates": 3, "max_failures": 1}, "stop_conditions": ["no new evidence"], "reasoning_summary": "test provider proposal only"}
+
+    def prioritize_research(self, context: dict[str, Any]) -> dict[str, Any]:
+        candidates = list(context.get("candidates") or ())
+        selected = str(candidates[0].get("candidate_question_id")) if candidates else ""
+        return {"selected_candidate_question_id": selected, "assessments": [{"candidate_question_id": str(item.get("candidate_question_id")), "candidate_gap_id": str(item.get("candidate_gap_id")), "recommendation": "SECONDARY", "rationale": "deterministic provider returns structure only; Research OS decides"} for item in candidates], "reasoning_summary": "test provider proposal only"}
 
 
 class CodexTestProvider:
@@ -709,6 +721,10 @@ class CodexTestProvider:
 
     def generate_research_program(self, context: dict[str, Any]) -> dict[str, Any]:
         return {"title": "Deterministic molecular boundary audit", "domain": "molecule", "objective": "Locate deterministic properties that can be recalculated without overclaiming.", "initial_problem": "Existing molecular descriptors must remain computational only.", "questions": [{"question_id": "Q-TEST-01", "question": "Can CCO descriptors be reproduced under the registered protocol?", "gap_it_attempts_to_resolve": "deterministic descriptor reproducibility", "why_new": "uses the supplied registry context"}], "limits": {"max_campaigns": 1, "max_iterations": 2, "max_runs": 1, "max_sources": 1, "max_candidates": 3, "max_failures": 1}, "stop_conditions": ["no new evidence"], "reasoning_summary": "deterministic test provider proposal only"}
+
+    def prioritize_research(self, context: dict[str, Any]) -> dict[str, Any]:
+        candidates = list(context.get("candidates") or ())
+        return {"selected_candidate_question_id": str(candidates[0].get("candidate_question_id")) if candidates else "", "assessments": [{"candidate_question_id": str(item.get("candidate_question_id")), "candidate_gap_id": str(item.get("candidate_gap_id")), "recommendation": "SECONDARY", "rationale": "Codex test provider is not a scientific prioritizer"} for item in candidates], "reasoning_summary": "deterministic test provider proposal only"}
 
     def discover_problems(self, catalog: dict[str, Any]) -> dict[str, Any]:
         """Deterministic CI fixture: selection is still validated against catalog IDs."""
