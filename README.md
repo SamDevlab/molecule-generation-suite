@@ -146,3 +146,15 @@ verde.
 
 - Runner: [`tools/benchmark/reproduction_stress_v38.py`](tools/benchmark/reproduction_stress_v38.py)
 - Relatório: [`REPRODUCTION_STRESS_TEST_V3_8.md`](REPRODUCTION_STRESS_TEST_V3_8.md)
+
+## 🔬 9. Research OS 3.9: programas autônomos bounded
+
+O milestone 3.9 transforma campanhas isoladas em `ResearchProgram`s multi-step,
+com limites de recursos imutáveis, perguntas geradas a partir dos resultados
+anteriores, avaliação qualitativa de utilidade, memória cross-campaign e
+detecção anti-spin. Codex Live propõe apenas a estrutura de um programa; runs,
+Evidence, bundles, decisões e Ledger continuam sob controle do Research OS.
+
+- Contratos e gate: [`RESEARCH_OS_V3_9.md`](RESEARCH_OS_V3_9.md)
+- Execução autônoma: [`AUTONOMOUS_RESEARCH_PROGRAMS_V3_9.md`](AUTONOMOUS_RESEARCH_PROGRAMS_V3_9.md)
+- Saúde e blockers: [`PROJECT_HEALTH_V3_9.md`](PROJECT_HEALTH_V3_9.md)

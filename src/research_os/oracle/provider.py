@@ -72,6 +72,7 @@ class LLMProvider(Protocol):
     def resolution_challenge(self, context: dict[str, Any]) -> dict[str, Any]: ...
     def unresolvable_challenge(self, context: dict[str, Any]) -> dict[str, Any]: ...
     def generate_benchmark_questions(self, context: dict[str, Any]) -> dict[str, Any]: ...
+    def generate_research_program(self, context: dict[str, Any]) -> dict[str, Any]: ...
 
 
 class StructuredOutputError(ValueError):
@@ -209,6 +210,7 @@ class CodexCliTransport:
             "resolution_challenge": '{"campaign_id":"CAM-...","gap_id":"GAP-...","strategy":"...","resolution_plan":{},"reasoning_summary":"brief auditable rationale"}',
             "unresolvable_challenge": '{"campaign_id":"CAM-...","gap_id":"GAP-...","reasoning_summary":"brief auditable blocker"}',
             "generate_benchmark_questions": '{"questions":[{"question":"...","source_ids":[],"domain":"...","why_new":"brief reason"}],"reasoning_summary":"brief auditable rationale"}',
+            "generate_research_program": '{"title":"...","domain":"...","objective":"...","initial_problem":"...","questions":[{"question_id":"Q-...","question":"...","gap_it_attempts_to_resolve":"...","why_new":"..."}],"limits":{"max_campaigns":3,"max_iterations":5,"max_runs":5,"max_sources":5,"max_candidates":20,"max_failures":2},"stop_conditions":["..."],"reasoning_summary":"brief auditable rationale"}',
         }.get(operation, "{}")
         narration_safety = ""
         if operation == "summarize_results":
@@ -437,6 +439,11 @@ class CodexLiveProvider:
         raw = self._call("generate_benchmark_questions", {"benchmark_context": context})
         return dict(raw.get("benchmark", raw))
 
+    def generate_research_program(self, context: dict[str, Any]) -> dict[str, Any]:
+        """Propose program structure only; the Research OS executes it."""
+        raw = self._call("generate_research_program", {"program_context": context})
+        return dict(raw.get("research_program", raw))
+
 
 class RuleBasedLLMProvider:
     """Deterministic test provider implementing the same structured contract.
@@ -479,6 +486,9 @@ class RuleBasedLLMProvider:
 
     def propose_followup(self, gaps: list[dict[str, Any]]) -> dict[str, Any]:
         return {"gaps": gaps, "next_steps": [step for gap in gaps for step in gap.get("recommended_next_steps", [])]}
+
+    def generate_research_program(self, context: dict[str, Any]) -> dict[str, Any]:
+        return {"title": "Deterministic molecular boundary audit", "domain": "molecule", "objective": "Locate deterministic properties that can be recalculated without overclaiming.", "initial_problem": "Existing molecular descriptors must remain computational only.", "questions": [{"question_id": "Q-RULE-01", "question": "Can CCO descriptors be reproduced under the registered protocol?", "gap_it_attempts_to_resolve": "deterministic descriptor reproducibility", "why_new": "uses the supplied registry context"}], "limits": {"max_campaigns": 1, "max_iterations": 2, "max_runs": 1, "max_sources": 1, "max_candidates": 3, "max_failures": 1}, "stop_conditions": ["no new evidence"], "reasoning_summary": "test provider proposal only"}
 
 
 class CodexTestProvider:
@@ -696,6 +706,9 @@ class CodexTestProvider:
             "required_evidence_level": "E2_COMPUTATIONAL",
             "gaps": list(gaps),
         }
+
+    def generate_research_program(self, context: dict[str, Any]) -> dict[str, Any]:
+        return {"title": "Deterministic molecular boundary audit", "domain": "molecule", "objective": "Locate deterministic properties that can be recalculated without overclaiming.", "initial_problem": "Existing molecular descriptors must remain computational only.", "questions": [{"question_id": "Q-TEST-01", "question": "Can CCO descriptors be reproduced under the registered protocol?", "gap_it_attempts_to_resolve": "deterministic descriptor reproducibility", "why_new": "uses the supplied registry context"}], "limits": {"max_campaigns": 1, "max_iterations": 2, "max_runs": 1, "max_sources": 1, "max_candidates": 3, "max_failures": 1}, "stop_conditions": ["no new evidence"], "reasoning_summary": "deterministic test provider proposal only"}
 
     def discover_problems(self, catalog: dict[str, Any]) -> dict[str, Any]:
         """Deterministic CI fixture: selection is still validated against catalog IDs."""
