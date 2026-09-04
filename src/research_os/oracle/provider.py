@@ -74,6 +74,9 @@ class LLMProvider(Protocol):
     def generate_benchmark_questions(self, context: dict[str, Any]) -> dict[str, Any]: ...
     def generate_research_program(self, context: dict[str, Any]) -> dict[str, Any]: ...
     def prioritize_research(self, context: dict[str, Any]) -> dict[str, Any]: ...
+    def final_autonomous_exam(self, context: dict[str, Any]) -> dict[str, Any]: ...
+    def final_exam_followup(self, context: dict[str, Any]) -> dict[str, Any]: ...
+    def final_exam_followups(self, context: dict[str, Any]) -> dict[str, Any]: ...
 
 
 class StructuredOutputError(ValueError):
@@ -213,6 +216,9 @@ class CodexCliTransport:
             "generate_benchmark_questions": '{"questions":[{"question":"...","source_ids":[],"domain":"...","why_new":"brief reason"}],"reasoning_summary":"brief auditable rationale"}',
             "generate_research_program": '{"title":"...","domain":"...","objective":"...","initial_problem":"...","questions":[{"question_id":"Q-...","question":"...","gap_it_attempts_to_resolve":"...","why_new":"..."}],"limits":{"max_campaigns":3,"max_iterations":5,"max_runs":5,"max_sources":5,"max_candidates":20,"max_failures":2},"stop_conditions":["..."],"reasoning_summary":"brief auditable rationale"}',
             "prioritize_research": '{"selected_candidate_question_id":"...","assessments":[{"candidate_question_id":"...","candidate_gap_id":"...","recommendation":"PRIORITIZE_NOW","rationale":"..."}],"reasoning_summary":"brief auditable rationale"}',
+            "final_autonomous_exam": '{"answerable":{"question":"...","why":"..."},"no_decision":{"question":"...","why":"..."},"external_blocker":{"question":"...","why":"..."},"reasoning_summary":"brief auditable rationale"}',
+            "final_exam_followup": '{"answer":"brief artifact-grounded answer","grounded_record_ids":["RUN-...","GAP-..."],"limitations":["..."]}',
+            "final_exam_followups": '{"answers":[{"index":1,"answer":"brief artifact-grounded answer","grounded_record_ids":["RUN-...","GAP-..."],"limitations":["..."]}]}',
         }.get(operation, "{}")
         narration_safety = ""
         if operation == "summarize_results":
@@ -343,7 +349,15 @@ class CodexLiveProvider:
         raw = self.transport(operation, payload, self._request_context)
         parsed = parse_structured_output(raw)
         if set(parsed) == {"result"} and isinstance(parsed.get("result"), str):
-            parsed = parse_structured_output(parsed["result"])
+            try:
+                parsed = parse_structured_output(parsed["result"])
+            except StructuredOutputError:
+                # Some Codex CLI versions emit a literal control character
+                # inside the JSON string of the otherwise valid envelope.
+                # Accept only this transport-level repair; the scientific
+                # authority rejection below remains mandatory.
+                repaired = json.loads(parsed["result"], strict=False)
+                parsed = parse_structured_output(repaired)
         return _reject_scientific_authority(parsed, operation=operation)
 
     def interpret_question(self, text: str) -> dict[str, Any]:
@@ -451,6 +465,21 @@ class CodexLiveProvider:
         raw = self._call("prioritize_research", {"priority_context": context})
         return dict(raw.get("prioritization", raw))
 
+    def final_autonomous_exam(self, context: dict[str, Any]) -> dict[str, Any]:
+        """Select the three final-exam questions; Research OS executes them."""
+        raw = self._call("final_autonomous_exam", {"final_exam_context": context})
+        return dict(raw.get("final_exam", raw))
+
+    def final_exam_followup(self, context: dict[str, Any]) -> dict[str, Any]:
+        """Answer one final-exam follow-up from supplied registered records."""
+        raw = self._call("final_exam_followup", {"followup_context": context})
+        return dict(raw.get("followup", raw))
+
+    def final_exam_followups(self, context: dict[str, Any]) -> dict[str, Any]:
+        """Answer the complete fixed follow-up set in one bounded live call."""
+        raw = self._call("final_exam_followups", {"followups_context": context})
+        return dict(raw.get("followups", raw))
+
 
 class RuleBasedLLMProvider:
     """Deterministic test provider implementing the same structured contract.
@@ -501,6 +530,15 @@ class RuleBasedLLMProvider:
         candidates = list(context.get("candidates") or ())
         selected = str(candidates[0].get("candidate_question_id")) if candidates else ""
         return {"selected_candidate_question_id": selected, "assessments": [{"candidate_question_id": str(item.get("candidate_question_id")), "candidate_gap_id": str(item.get("candidate_gap_id")), "recommendation": "SECONDARY", "rationale": "deterministic provider returns structure only; Research OS decides"} for item in candidates], "reasoning_summary": "test provider proposal only"}
+
+    def final_autonomous_exam(self, context: dict[str, Any]) -> dict[str, Any]:
+        return {"answerable": {"question": "Can registered deterministic properties for CCO be recalculated?", "why": "MoleculeLab is registered"}, "no_decision": {"question": "Should an OOD prediction be ranked?", "why": "OOD policy forbids ranking"}, "external_blocker": {"question": "Can external validation be claimed without a registered experiment?", "why": "the required evidence is absent"}, "reasoning_summary": "test provider proposal only"}
+
+    def final_exam_followup(self, context: dict[str, Any]) -> dict[str, Any]:
+        return {"answer": "Only registered artifacts and unresolved gaps support this answer; conversational text is not authoritative.", "grounded_record_ids": list(context.get("known_record_ids") or ())[:2], "limitations": ["test provider is not scientific evidence"]}
+
+    def final_exam_followups(self, context: dict[str, Any]) -> dict[str, Any]:
+        return {"answers": [{"index": index, "answer": "Only registered artifacts and unresolved gaps support this answer.", "grounded_record_ids": list(context.get("known_record_ids") or ())[:2], "limitations": ["test provider is not scientific evidence"]} for index, _ in enumerate(context.get("questions") or (), 1)]}
 
 
 class CodexTestProvider:
@@ -725,6 +763,15 @@ class CodexTestProvider:
     def prioritize_research(self, context: dict[str, Any]) -> dict[str, Any]:
         candidates = list(context.get("candidates") or ())
         return {"selected_candidate_question_id": str(candidates[0].get("candidate_question_id")) if candidates else "", "assessments": [{"candidate_question_id": str(item.get("candidate_question_id")), "candidate_gap_id": str(item.get("candidate_gap_id")), "recommendation": "SECONDARY", "rationale": "Codex test provider is not a scientific prioritizer"} for item in candidates], "reasoning_summary": "deterministic test provider proposal only"}
+
+    def final_autonomous_exam(self, context: dict[str, Any]) -> dict[str, Any]:
+        return {"answerable": {"question": "Can CCO deterministic properties be recalculated?", "why": "registered MoleculeLab fixture"}, "no_decision": {"question": "Should an OOD candidate be ranked?", "why": "OOD must remain a no-decision"}, "external_blocker": {"question": "Can absent external validation be invented?", "why": "the required source is not registered"}, "reasoning_summary": "deterministic integration fixture"}
+
+    def final_exam_followup(self, context: dict[str, Any]) -> dict[str, Any]:
+        return {"answer": "The answer is limited to the registered Ledger, Knowledge and gap records.", "grounded_record_ids": list(context.get("known_record_ids") or ())[:2], "limitations": ["CodexTestProvider cannot create scientific evidence"]}
+
+    def final_exam_followups(self, context: dict[str, Any]) -> dict[str, Any]:
+        return {"answers": [{"index": index, "answer": "The answer is limited to the registered Ledger, Knowledge and gap records.", "grounded_record_ids": list(context.get("known_record_ids") or ())[:2], "limitations": ["CodexTestProvider cannot create scientific evidence"]} for index, _ in enumerate(context.get("questions") or (), 1)]}
 
     def discover_problems(self, catalog: dict[str, Any]) -> dict[str, Any]:
         """Deterministic CI fixture: selection is still validated against catalog IDs."""

@@ -194,3 +194,19 @@ claims, gaps, decisões e prioridades afetados.
 - Contratos e gate: [`RESEARCH_OS_V3_12.md`](RESEARCH_OS_V3_12.md)
 - Execução e resultados: [`EXTERNAL_EVIDENCE_INTEGRATION_V3_12.md`](EXTERNAL_EVIDENCE_INTEGRATION_V3_12.md)
 - Saúde e blockers: [`PROJECT_HEALTH_V3_12.md`](PROJECT_HEALTH_V3_12.md)
+
+## 🔬 13. Research OS 4.0: release de validação científica
+
+O v4.0 é uma validação sistêmica, não uma nova arquitetura. O gate executa
+100 casos sistemáticos e 30 perguntas novas do Codex Live, grupos repetidos,
+paráfrases e bilíngues, reprodução, stress, auditorias de segurança e
+invariantes. O exame autônomo final escolhe um caso respondível, um caso que
+deve permanecer `NO_DECISION` e um blocker externo, seguido pelas 20 perguntas
+obrigatórias fundamentadas no estado registrado.
+
+- Benchmark: [`tools/benchmark/master_validation_v40.py`](tools/benchmark/master_validation_v40.py)
+- Release e critérios: [`RESEARCH_OS_V4_0.md`](RESEARCH_OS_V4_0.md)
+- Relatório: [`RESEARCH_OS_V4_VALIDATION_REPORT.md`](RESEARCH_OS_V4_VALIDATION_REPORT.md)
+- Invariantes: [`SCIENTIFIC_INVARIANTS_V4_0.md`](SCIENTIFIC_INVARIANTS_V4_0.md)
+- Segurança: [`SECURITY_AUDIT_V4_0.md`](SECURITY_AUDIT_V4_0.md)
+- Saúde: [`PROJECT_HEALTH_V4_0.md`](PROJECT_HEALTH_V4_0.md)
