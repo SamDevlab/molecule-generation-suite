@@ -72,6 +72,9 @@ class OracleWebApplication:
         campaign_store = getattr(self.campaigns, "store", None)
         if campaign_store is not None:
             campaign_store.close()
+        resolution_store = getattr(self.campaigns, "resolution_store", None)
+        if resolution_store is not None and resolution_store is not campaign_store and hasattr(resolution_store, "close"):
+            resolution_store.close()
 
     def dispatch(self, method: str, path: str, body: dict[str, Any] | None = None) -> tuple[int, dict[str, Any]]:
         """Return an HTTP-like `(status, JSON payload)` tuple for tests and handlers."""
@@ -82,7 +85,7 @@ class OracleWebApplication:
         try:
             if method == "GET" and route == "/api/health":
                 provider = self.service.planner.provider
-                return 200, {"status": "ok", "service": "Research OS 3.3", "provider": dict(getattr(provider, "audit_metadata", {}) or {}), "oracle": self.oracle_status(), "ledger_source_of_truth": True}
+                return 200, {"status": "ok", "service": "Research OS 3.4", "provider": dict(getattr(provider, "audit_metadata", {}) or {}), "oracle": self.oracle_status(), "ledger_source_of_truth": True}
             if method == "GET" and route == "/api/oracle/audit":
                 return 200, self.oracle_status()
             if method == "GET" and route == "/api/capabilities":
@@ -97,6 +100,14 @@ class OracleWebApplication:
                 if self.campaigns is None:
                     return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
                 return 200, self.campaigns.cross_campaign_memory(str(query.get("q", [""])[0]) or None)
+            if method == "GET" and route.startswith("/api/resolutions/"):
+                if self.campaigns is None:
+                    return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
+                return 200, self.campaigns.get_resolution(route.rsplit("/", 1)[1])
+            if method == "GET" and route.startswith("/api/campaigns/") and route.endswith("/resolutions"):
+                if self.campaigns is None:
+                    return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
+                return 200, {"resolutions": self.campaigns.list_resolutions(campaign_id=route.split("/")[3])}
             if method == "GET" and route.startswith("/api/campaigns/") and route.count("/") == 3:
                 if self.campaigns is None:
                     return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
@@ -120,10 +131,26 @@ class OracleWebApplication:
                 if self.campaigns is None:
                     return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
                 return 200, self.campaigns.close(route.split("/")[3]).to_dict()
+            if method == "POST" and route.startswith("/api/campaigns/") and route.endswith("/resolve") and "/gaps/" in route:
+                if self.campaigns is None:
+                    return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
+                parts = route.split("/")
+                return 201, self.campaigns.resolve_gap(parts[3], parts[5], strategy=body.get("strategy"), provider_plan=dict(body.get("resolution_plan") or {})).to_dict()
             if method == "POST" and route == "/api/campaigns/researcher":
                 if self.campaigns is None:
                     return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
                 return 200, self.campaigns.final_researcher_prompt()
+            if method == "POST" and route == "/api/campaigns/resolution-challenge":
+                if self.campaigns is None:
+                    return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
+                challenge = self.campaigns.final_resolution_challenge()
+                if body.get("execute"):
+                    challenge["resolution"] = self.campaigns.resolve_from_challenge(challenge).to_dict()
+                return 200, challenge
+            if method == "POST" and route == "/api/campaigns/unresolvable-challenge":
+                if self.campaigns is None:
+                    return 404, {"error": {"code": "CAMPAIGNS_UNAVAILABLE", "message": "campaign manager is not configured"}}
+                return 200, self.campaigns.final_unresolvable_challenge()
             if method == "POST" and route == "/api/engines/reference":
                 return 200, {"reference": self.run_cantera_reference() , "engines": self.engine_status()}
             if method == "GET" and route == "/api/sessions":

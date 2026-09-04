@@ -83,3 +83,14 @@ Claims, bundles e histórico permanecem no Ledger.
 - Campanhas e aceitação live: [`REAL_CAMPAIGNS_V3_3.md`](REAL_CAMPAIGNS_V3_3.md)
 - Saúde científica: [`PROJECT_HEALTH_V3_3.md`](PROJECT_HEALTH_V3_3.md)
 - Auditoria de segurança: [`SECURITY_AUDIT_V3_3.md`](SECURITY_AUDIT_V3_3.md)
+
+## 🔬 4. Research OS 3.4: resolução de gaps com evidência real
+
+O milestone 3.4 registra tentativas append-only de fechar gaps, mantém o teto de
+evidência por domínio e interrompe quando faltam ferramentas, condições ou
+fontes independentes. O artefato NASA PCoE RW3 é recuperado e hashado somente
+quando a execução é solicitada; o ZIP e seus scripts não são executados.
+
+- Contratos, gates e resolução real: [`RESEARCH_OS_V3_4.md`](RESEARCH_OS_V3_4.md)
+- Histórico de tentativas: [`REAL_GAP_RESOLUTION_V3_4.md`](REAL_GAP_RESOLUTION_V3_4.md)
+- Saúde e blockers: [`PROJECT_HEALTH_V3_4.md`](PROJECT_HEALTH_V3_4.md)

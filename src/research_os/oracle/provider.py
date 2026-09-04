@@ -69,6 +69,8 @@ class LLMProvider(Protocol):
     def discover_problems(self, catalog: dict[str, Any]) -> dict[str, Any]: ...
     def select_campaigns(self, candidates: list[dict[str, Any]], criteria: dict[str, Any]) -> dict[str, Any]: ...
     def researcher_answer(self, context: dict[str, Any]) -> dict[str, Any]: ...
+    def resolution_challenge(self, context: dict[str, Any]) -> dict[str, Any]: ...
+    def unresolvable_challenge(self, context: dict[str, Any]) -> dict[str, Any]: ...
 
 
 class StructuredOutputError(ValueError):
@@ -203,6 +205,8 @@ class CodexCliTransport:
             "discover_problems": '{"candidates":[{"problem_id":"P-...","priority":1,"reason":"brief source-grounded reason"}],"primary_problem_ids":["P-..."],"secondary_problem_ids":["P-..."],"reasoning_summary":"brief auditable ranking rationale"}',
             "select_campaigns": '{"primary_problem_ids":["P-..."],"secondary_problem_ids":["P-..."],"reasoning_summary":"brief auditable selection rationale"}',
             "researcher_answer": '{"problem_statement":"...","why_new":"...","next_step":"...","source_ids":[],"reasoning_summary":"brief auditable rationale"}',
+            "resolution_challenge": '{"campaign_id":"CAM-...","gap_id":"GAP-...","strategy":"...","resolution_plan":{},"reasoning_summary":"brief auditable rationale"}',
+            "unresolvable_challenge": '{"campaign_id":"CAM-...","gap_id":"GAP-...","reasoning_summary":"brief auditable blocker"}',
         }.get(operation, "{}")
         narration_safety = ""
         if operation == "summarize_results":
@@ -418,6 +422,14 @@ class CodexLiveProvider:
         raw = self._call("researcher_answer", {"campaign_context": context})
         return dict(raw.get("answer", raw))
 
+    def resolution_challenge(self, context: dict[str, Any]) -> dict[str, Any]:
+        raw = self._call("resolution_challenge", {"resolution_context": context})
+        return dict(raw.get("resolution", raw))
+
+    def unresolvable_challenge(self, context: dict[str, Any]) -> dict[str, Any]:
+        raw = self._call("unresolvable_challenge", {"resolution_context": context})
+        return dict(raw.get("resolution", raw))
+
 
 class RuleBasedLLMProvider:
     """Deterministic test provider implementing the same structured contract.
@@ -568,6 +580,7 @@ class CodexTestProvider:
                     "experiment": "adiabatic_equilibrium_hp",
                     "inputs": {
                         "fuel": "CH4:1",
+                        "engine_id": "codex-test-unconfigured",
                         "mechanism": "gri30.yaml",
                         "temperature": {"value": 300, "unit": "K"},
                         "pressure": {"value": 1, "unit": "atm"},
@@ -690,6 +703,16 @@ class CodexTestProvider:
 
     def researcher_answer(self, context: dict[str, Any]) -> dict[str, Any]:
         return {"problem_statement": "The deterministic test provider cannot discover a new scientific problem.", "why_new": "This is an integration fixture, not a live researcher.", "next_step": "Use the live Codex provider for open-ended source-backed discovery.", "source_ids": [], "reasoning_summary": "No scientific authority is assigned to the test provider."}
+
+    def resolution_challenge(self, context: dict[str, Any]) -> dict[str, Any]:
+        gaps = [item for item in context.get("gaps") or () if isinstance(item, dict)]
+        chosen = next((item for item in gaps if item.get("resolution_ready")), None) or (gaps[0] if gaps else {})
+        return {"campaign_id": chosen.get("campaign_id"), "gap_id": chosen.get("gap_id"), "strategy": chosen.get("recommended_next_step", "bounded resolution attempt"), "resolution_plan": dict(chosen.get("suggested_plan") or {}), "reasoning_summary": "Deterministic fixture chooses the first gap whose registered capability is marked ready; execution remains in Research OS."}
+
+    def unresolvable_challenge(self, context: dict[str, Any]) -> dict[str, Any]:
+        gaps = [item for item in context.get("gaps") or () if isinstance(item, dict)]
+        chosen = next((item for item in gaps if not item.get("resolution_ready")), (gaps[0] if gaps else {}))
+        return {"campaign_id": chosen.get("campaign_id"), "gap_id": chosen.get("gap_id"), "reasoning_summary": "Deterministic fixture identifies a gap without a currently ready resolution capability; this challenge is not executed."}
 
 
 def parse_structured_output(value: Any) -> dict[str, Any]:

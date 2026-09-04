@@ -17,13 +17,22 @@ from research_os.campaigns.models import CampaignStatus, NegativeResult, Problem
 from research_os.campaigns.store import CampaignStore
 from research_os.core.provenance import ProvenanceRecord, SourceType
 from research_os.core.types import Evidence, EvidenceLevel, GateResult, GateStatus, RunManifest
+from research_os.environment import capture_environment
+from research_os.docking.campaign import DockingCampaign
+from research_os.docking.preparation import LigandPreparationLab, ReceptorPreparationLab
+from research_os.engines.openbabel import OpenBabelEngine
+from research_os.engines.vina import VinaEngine
 from research_os.datasets.real import AQSOLDB_G_SPEC
 from research_os.knowledge.claims import ClaimStatus, ScientificClaim
 from research_os.ml.real_golden import RealGoldenRunResult, run_real_data_golden
 from research_os.orchestration import PlanStep, WorkflowPlan
+from research_os.resolution import ConditionMatchStatus, ConditionMatcher, DockingReproducibilityAssessment, ElectrochemicalObservation, ExternalValidationAssessment, GapResolution, MaterialObservation, ResolutionStatus, ResolutionStore
+from research_os.resolution.battery import analyze_nasa_pcoe_rw3
 
 
 FINAL_RESEARCHER_PROMPT = "Com as ferramentas, dados e fontes que temos agora, encontre um problema científico real que ainda não investigamos e faça a melhor pesquisa possível sem ultrapassar os limites da evidência."
+FINAL_RESOLUTION_CHALLENGE_PROMPT = "Encontre entre as pesquisas existentes um gap científico real que pareça resolvível com as ferramentas e fontes atualmente disponíveis. Tente resolvê-lo de ponta a ponta. Se descobrir que não é resolvível, demonstre exatamente por quê e escolha no máximo mais um gap. Não altere os critérios para produzir um resultado positivo."
+FINAL_UNRESOLVABLE_CHALLENGE_PROMPT = "Encontre um segundo gap científico real entre as pesquisas existentes que seja claramente não resolvível com as ferramentas e fontes atuais. Demonstre exatamente o bloqueio e pare sem fabricar evidência, dados, condições ou resultados."
 _TERMINAL_CAMPAIGN_STATUSES = {
     CampaignStatus.SUPPORTED,
     CampaignStatus.PARTIALLY_SUPPORTED,
@@ -42,7 +51,7 @@ def _now() -> str:
 class CampaignManager:
     """Owns campaign state while delegating scientific execution to Labs/Ledger."""
 
-    def __init__(self, service: Any, store: CampaignStore, *, source_registry: Any, retriever: Any | None, data_root: str | Path):
+    def __init__(self, service: Any, store: CampaignStore, *, source_registry: Any, retriever: Any | None, data_root: str | Path, resolution_store: ResolutionStore | None = None):
         self.service = service
         self.store = store
         self.source_registry = source_registry
@@ -50,6 +59,7 @@ class CampaignManager:
         self.data_root = Path(data_root).resolve()
         self.campaign_root = self.data_root / "campaigns"
         self.campaign_root.mkdir(parents=True, exist_ok=True)
+        self.resolution_store = resolution_store or ResolutionStore(self.data_root / "resolutions.sqlite")
         self.sources = REAL_SOURCE_CATALOG
         self.problems = REAL_PROBLEM_CATALOG
         self._last_discovery: ProblemDiscoveryResult | None = None
@@ -102,6 +112,161 @@ class CampaignManager:
 
     def get(self, campaign_id: str) -> dict[str, Any]:
         return self.store.get(campaign_id).to_dict()
+
+    def list_resolutions(self, *, campaign_id: str | None = None, gap_id: str | None = None, limit: int = 100) -> list[dict[str, Any]]:
+        return [item.to_dict() for item in self.resolution_store.list(campaign_id=campaign_id, gap_id=gap_id, limit=limit)]
+
+    def get_resolution(self, resolution_id: str) -> dict[str, Any]:
+        return self.resolution_store.get(resolution_id).to_dict()
+
+    def final_resolution_challenge(self) -> dict[str, Any]:
+        """Ask the live reasoning boundary to select a real, registered gap.
+
+        The provider only chooses a gap and proposes a plan.  Resolution is
+        executed by ``resolve_gap`` and remains the authority for runs and
+        evidence.
+        """
+        gaps: list[dict[str, Any]] = []
+        for campaign in self.store.list(limit=100):
+            for gap in campaign.gaps:
+                gaps.append({"campaign_id": campaign.campaign_id, "problem_id": campaign.problem_id, **gap.to_dict(), "resolution_ready": self._resolution_ready(gap.gap_id), "suggested_plan": {"equivalence_ratios": [0.8, 1.0, 1.2]} if gap.gap_id == "GAP-COMB-VALIDATION" else {}})
+        context = {"prompt": FINAL_RESOLUTION_CHALLENGE_PROMPT, "gaps": gaps, "engine_status": self.service.get_engine_status(), "instruction": "Choose only one supplied gap ID. Propose planning fields only; Research OS will execute or block the plan and will record the result."}
+        provider = self.service.planner.provider
+        method = getattr(provider, "resolution_challenge", None)
+        raw = method(context) if method is not None else provider.researcher_answer(context)
+        selected_gap = str(raw.get("gap_id") or "").strip()
+        selected = next((item for item in gaps if item["gap_id"] == selected_gap), None)
+        if selected is None:
+            raise ValueError("live resolution challenge must select a gap from the registered campaign history")
+        selected_campaign = str(raw.get("campaign_id") or selected["campaign_id"])
+        if selected_campaign != selected["campaign_id"]:
+            raise ValueError("live resolution challenge campaign_id does not own the selected gap")
+        return {**raw, "prompt": FINAL_RESOLUTION_CHALLENGE_PROMPT, "provider": getattr(provider, "provider_id", type(provider).__name__), "selected_gap": selected, "scientific_evidence_created": False}
+
+    def final_unresolvable_challenge(self) -> dict[str, Any]:
+        """Record a second challenge that is explicitly not executed."""
+        gaps = [{"campaign_id": campaign.campaign_id, "problem_id": campaign.problem_id, **gap.to_dict(), "resolution_ready": self._resolution_ready(gap.gap_id)} for campaign in self.store.list(limit=100) for gap in campaign.gaps]
+        context = {"prompt": FINAL_UNRESOLVABLE_CHALLENGE_PROMPT, "gaps": gaps, "instruction": "Select only a supplied gap ID and explain why execution must stop; do not propose or create evidence."}
+        provider = self.service.planner.provider
+        method = getattr(provider, "unresolvable_challenge", None)
+        raw = method(context) if method is not None else provider.researcher_answer(context)
+        selected_gap = str(raw.get("gap_id") or "").strip()
+        if selected_gap and selected_gap not in {item["gap_id"] for item in gaps}:
+            raise ValueError("live unresolvable challenge selected an unknown gap")
+        return {**raw, "prompt": FINAL_UNRESOLVABLE_CHALLENGE_PROMPT, "provider": getattr(provider, "provider_id", type(provider).__name__), "execution": "NOT_ATTEMPTED_BY_DESIGN", "scientific_evidence_created": False}
+
+    def resolve_from_challenge(self, challenge: dict[str, Any]) -> GapResolution:
+        campaign_id = str(challenge.get("campaign_id") or (challenge.get("selected_gap") or {}).get("campaign_id") or "")
+        gap_id = str(challenge.get("gap_id") or (challenge.get("selected_gap") or {}).get("gap_id") or "")
+        if not campaign_id or not gap_id:
+            raise ValueError("resolution challenge must provide campaign_id and gap_id")
+        return self.resolve_gap(campaign_id, gap_id, strategy=str(challenge.get("strategy") or "live challenge strategy"), provider_plan=dict(challenge.get("resolution_plan") or {}))
+
+    def resolve_gap(self, campaign_id: str, gap_id: str, *, strategy: str | None = None, provider_plan: dict[str, Any] | None = None) -> GapResolution:
+        """Attempt one named gap while preserving every prior attempt."""
+        campaign = self.store.get(campaign_id)
+        gap = next((item for item in campaign.gaps if item.gap_id == gap_id), None)
+        if gap is None:
+            raise KeyError(gap_id)
+        plan = dict(provider_plan or {})
+        resolution_id = f"RES-{campaign_id}-{gap_id}-{uuid.uuid4().hex[:8].upper()}"
+        if gap_id == "GAP-PHARMA-DOCKING":
+            resolution = self._resolve_pharma_gap(campaign, gap, resolution_id, strategy or gap.recommended_next_step, plan)
+        elif gap_id == "GAP-COMB-VALIDATION":
+            resolution = self._resolve_combustion_gap(campaign, gap, resolution_id, strategy or gap.recommended_next_step, plan)
+        elif gap_id == "GAP-EXTERNAL-AQSOLDB":
+            resolution = self._resolve_aqsol_gap(campaign, gap, resolution_id, strategy or gap.recommended_next_step)
+        elif campaign.problem_id == "P-BATT-01" or gap_id.startswith("GAP-P-BATT-01"):
+            resolution = self._resolve_battery_gap(campaign, gap, resolution_id, strategy or gap.recommended_next_step, plan)
+        elif campaign.domain.startswith("materials/") or gap_id.startswith("GAP-P-MAT"):
+            resolution = self._resolve_material_gap(campaign, gap, resolution_id, strategy or gap.recommended_next_step)
+        else:
+            resolution = GapResolution(resolution_id, gap.gap_id, _now(), strategy or gap.recommended_next_step, gap.source_ids, campaign.dataset_ids, campaign.engine_requirements, (), gap.current_evidence, gap.current_evidence, ResolutionStatus.UNRESOLVED, "No registered resolution protocol exists for this gap.", campaign_id=campaign_id, plan=plan, notes=("The attempt was recorded without inventing an execution path.",))
+        self.resolution_store.save(resolution)
+        report = {**campaign.report, "gap_resolutions": [*campaign.report.get("gap_resolutions", []), resolution.to_dict()]}
+        self.store.save(replace(campaign, report=report, updated_at=_now(), notes=tuple(dict.fromkeys((*campaign.notes, f"Gap resolution {resolution.resolution_id} recorded append-only.")))))
+        return resolution
+
+    def _resolution_ready(self, gap_id: str) -> bool:
+        if gap_id == "GAP-COMB-VALIDATION":
+            return bool(getattr(self.service, "engine_registry", None) and self.service.engine_registry.get_engine("cantera").available)
+        if gap_id.startswith("GAP-P-BATT-01"):
+            return any(self.data_root.glob("**/*.zip"))
+        return False
+
+    def _resolve_combustion_gap(self, campaign: ResearchCampaign, gap: ResearchGap, resolution_id: str, strategy: str, plan: dict[str, Any]) -> GapResolution:
+        requested = tuple(float(item) for item in (plan.get("equivalence_ratios") or (0.8, 1.0, 1.2)))
+        if requested != (0.8, 1.0, 1.2):
+            requested = (0.8, 1.0, 1.2)
+        executions = [self._run_combustion(campaign, f"resolution-{resolution_id[-8:]}-phi-{str(phi).replace('.', '_')}", {"fuel": "H2:1", "equivalence_ratio": phi}) for phi in requested]
+        run_ids = tuple(run.run_id for execution, _bundle in executions for run in execution.runs.values())
+        bundle_ids = tuple(bundle.bundle_id for _execution, bundle in executions)
+        rows = []
+        for phi, (execution, _bundle) in zip(requested, executions):
+            for run in execution.runs.values():
+                evidence = next((item for item in reversed(run.evidence) if item.kind == "combustion_equilibrium_simulation"), None)
+                rows.append({"equivalence_ratio": phi, "run_id": run.run_id, "status": run.status, "adiabatic_temperature_k": evidence.payload.get("adiabatic_temperature_k") if evidence else None, "mechanism": evidence.payload.get("mechanism") if evidence else None, "engine_version": evidence.payload.get("engine_version") if evidence else None})
+        values = [float(row["adiabatic_temperature_k"]) for row in rows if isinstance(row.get("adiabatic_temperature_k"), (int, float))]
+        trend = "MONOTONIC_OVER_TESTED_PHI_SET" if len(values) == 3 and (values[0] <= values[1] <= values[2] or values[0] >= values[1] >= values[2]) else "NO_MONOTONIC_TREND_ESTABLISHED"
+        assessment = {"protocol_id": "cantera.equilibrium.hp.v1", "fuel": "H2:1", "equivalence_ratios": list(requested), "rows": rows, "trend": trend, "claim_boundary": "trend applies only to this tested H2/gri30/adiabatic-HP protocol; it is not experimental validation or universal fuel behavior", "bundle_ids": list(bundle_ids)}
+        status = ResolutionStatus.PARTIALLY_RESOLVED if len(values) == 3 else ResolutionStatus.BLOCKED
+        return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, campaign.dataset_ids, ("cantera", "gri30.yaml"), run_ids, gap.current_evidence, ("E3_PHYSICS",), status, "Matched experimental measurements under the same mixture, temperature, pressure and mechanism are still required for the original E4 validation gap.", campaign_id=campaign.campaign_id, plan={"protocol_id": "cantera.equilibrium.hp.v1", "temperature_k": 300.0, "pressure_pa": 101325.0, "oxidizer": "O2:0.21,N2:0.79", "mechanism": "gri30.yaml", "equivalence_ratios": list(requested)}, assessments={"cantera_trend": assessment}, notes=("Three real Cantera executions were requested and their recorded outputs were analyzed.", "No E3 result was silently promoted to E4.",))
+
+    def _resolve_pharma_gap(self, campaign: ResearchCampaign, gap: ResearchGap, resolution_id: str, strategy: str, plan: dict[str, Any]) -> GapResolution:
+        vina = VinaEngine(str(plan["vina_executable"])) if plan.get("vina_executable") else VinaEngine()
+        obabel = OpenBabelEngine(str(plan["openbabel_executable"])) if plan.get("openbabel_executable") else OpenBabelEngine()
+        engine_probe = {"autodock-vina": {"available": vina.available, "version": vina.version}, "openbabel": {"available": obabel.available, "version": obabel.version}}
+        reproducibility = DockingReproducibilityAssessment(campaign.campaign_id, (), (), (), False, "INDETERMINATE", notes=("No docking replicate was run because the current runtime lacks the required executables.",))
+        if not (vina.available and obabel.available):
+            return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, campaign.dataset_ids, ("autodock-vina", "openbabel"), (), gap.current_evidence, gap.current_evidence, ResolutionStatus.BLOCKED, "AutoDock Vina and Open Babel are not both configured in this runtime; receptor/ligand preparation and the 1PXX reference docking were not executed.", campaign_id=campaign.campaign_id, plan={"reference_structure_id": "1PXX", "receptor_preparation_protocol_id": "openbabel.receptor-preparation.v1", "ligand_preparation_protocol_id": "openbabel.ligand-preparation.v1", "docking_protocol_id": "autodock-vina.docking.v1"}, assessments={"engine_probe": engine_probe, "docking_reproducibility": reproducibility.to_dict()}, notes=("The RCSB 1PXX source is registered as a murine structure; no human or clinical inference is made.", "Evidence ceiling for docking is E2_COMPUTATIONAL.",))
+        receptor_path, ligand_path = plan.get("receptor_path"), plan.get("ligand_path")
+        if not receptor_path or not ligand_path:
+            return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, campaign.dataset_ids, ("autodock-vina", "openbabel"), (), gap.current_evidence, gap.current_evidence, ResolutionStatus.BLOCKED, "The executables are available, but explicit receptor and ligand input paths were not supplied; no reference case was guessed or downloaded implicitly.", campaign_id=campaign.campaign_id, plan={"reference_structure_id": "1PXX", "engine_probe": engine_probe}, assessments={"docking_reproducibility": reproducibility.to_dict()})
+        root = self.campaign_root / campaign.campaign_id / "resolution" / resolution_id
+        root.mkdir(parents=True, exist_ok=True)
+        ligand_output, receptor_output = root / "ligand.pdbqt", root / "receptor.pdbqt"
+        ligand_run = LigandPreparationLab(obabel).run({"candidate_id": str(plan.get("candidate_id", "diclofenac-1pxx")), "input_path": str(ligand_path), "output_path": str(ligand_output)})
+        receptor_run = ReceptorPreparationLab(obabel).run({"target_id": "TARGET-COX2-1PXX", "species": "Mus musculus", "role": "COX-2 receptor", "structure_id": "1PXX", "source": "SRC-RCSB-1PXX", "input_path": str(receptor_path), "output_path": str(receptor_output)})
+        prep = {"ligand": [item.to_dict() for item in ligand_run.evidence], "receptor": [item.to_dict() for item in receptor_run.evidence], "ligand_status": ligand_run.status, "receptor_status": receptor_run.status}
+        if not (ligand_run.passed and receptor_run.passed):
+            return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, campaign.dataset_ids, ("autodock-vina", "openbabel"), (), gap.current_evidence, gap.current_evidence, ResolutionStatus.BLOCKED, "Preparation did not produce two verified artifacts; docking was not executed.", campaign_id=campaign.campaign_id, plan={"reference_structure_id": "1PXX", "receptor_path": str(receptor_path), "ligand_path": str(ligand_path)}, assessments={"engine_probe": engine_probe, "preparation": prep, "docking_reproducibility": reproducibility.to_dict()})
+        request = {"receptor_path": str(receptor_output), "ligand_path": str(ligand_output), "target_id": "TARGET-COX2-1PXX", "species": "Mus musculus", "require_species": True, "require_preparation": True, "prepared_ligand_manifest": next((item.payload for item in ligand_run.evidence), {}), "prepared_receptor_manifest": next((item.payload for item in receptor_run.evidence), {}), "grid": dict(plan.get("grid") or {"center_x": 0, "center_y": 0, "center_z": 0, "size_x": 20, "size_y": 20, "size_z": 20})}
+        docking = DockingCampaign(target_id="TARGET-COX2-1PXX", ligand_id=str(plan.get("candidate_id", "diclofenac-1pxx")), replicate_count=3).run(self.service.orchestrator.registry.get("DockingLab"), request)
+        reproducibility = DockingReproducibilityAssessment(campaign.campaign_id, docking.run_ids, docking.seeds, docking.scores_kcal_mol, True, "REPRODUCED" if docking.status == "SUPPORTED_AND_EXECUTED" else "NOT_REPRODUCED", docking.std_score_kcal_mol, ("Docking scores remain E2 computational evidence and are not measured affinity.",))
+        return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, campaign.dataset_ids, ("autodock-vina", "openbabel"), docking.run_ids, gap.current_evidence, ("E2_COMPUTATIONAL",), ResolutionStatus.RESOLVED if reproducibility.reproducible else ResolutionStatus.PARTIALLY_RESOLVED, "Docking remains computational and does not close a clinical or experimental binding-affinity gap." if reproducibility.reproducible else "Three replicates did not meet the reproducibility protocol.", campaign_id=campaign.campaign_id, plan=request, assessments={"engine_probe": engine_probe, "preparation": prep, "docking_reproducibility": reproducibility.to_dict()})
+
+    def _resolve_aqsol_gap(self, campaign: ResearchCampaign, gap: ResearchGap, resolution_id: str, strategy: str) -> GapResolution:
+        assessment = ExternalValidationAssessment("aqsoldb-g-real-sample", ("SRC-AQSOLDB-PAPER", "SRC-AQSOLDB-DATA"), campaign.models[0] if campaign.models else "MODEL_NOT_AVAILABLE", "real-data-golden.v1 scaffold split and frozen Morgan/Ridge protocol", None, None, None, None, "SAME_SOURCE_AS_TRAINING; NOT_REVIEWED_AS_EXTERNAL", "NOT_ELIGIBLE_AS_EXTERNAL_TEST", "NOT_PROMOTED", ("The available artifact is AqSolDB-G / same source lineage, not an independent external test.", "No overlap-free external artifact with compatible schema and attribution was available in this attempt."))
+        return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, campaign.dataset_ids, campaign.engine_requirements, (), gap.current_evidence, gap.current_evidence, ResolutionStatus.UNRESOLVED, "Acquire an independent, overlap-audited and license-compatible solubility dataset before rerunning the exact frozen model protocol.", campaign_id=campaign.campaign_id, assessments={"external_validation": assessment.to_dict()}, notes=("The promotion decision remains negative; no fake external split was created.",))
+
+    def _resolve_material_gap(self, campaign: ResearchCampaign, gap: ResearchGap, resolution_id: str, strategy: str) -> GapResolution:
+        matcher = ConditionMatcher.match({}, {}, ("material", "composition", "processing", "microstructure", "environment", "temperature", "pressure", "stress", "method"))
+        observation_schema = MaterialObservation.from_mapping({"material": "UNKNOWN", "source_id": "UNKNOWN", "locator": "UNKNOWN"}, observation_id=f"{resolution_id}-SCHEMA")
+        return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, campaign.dataset_ids, campaign.engine_requirements, (), gap.current_evidence, gap.current_evidence, ResolutionStatus.UNRESOLVED, "The registered review/standard/database metadata did not yield a source-located, condition-complete alloy observation; no property or value was invented.", campaign_id=campaign.campaign_id, assessments={"condition_match": matcher.to_dict(), "required_observation_fields": list(observation_schema.condition_fields), "observation_count": 0, "observation_status": "NO_RECORD_LEVEL_OBSERVATION_AVAILABLE"}, notes=("MAPTIS or another reviewed record-level export is still required.", "The UNKNOWN schema object is a validation fixture, not a scientific observation.",))
+
+    def _resolve_battery_gap(self, campaign: ResearchCampaign, gap: ResearchGap, resolution_id: str, strategy: str, plan: dict[str, Any]) -> GapResolution:
+        artifact_path = plan.get("artifact_path")
+        if not artifact_path or not Path(str(artifact_path)).is_file():
+            return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, campaign.dataset_ids, campaign.engine_requirements, (), gap.current_evidence, gap.current_evidence, ResolutionStatus.BLOCKED, "The public artifact URL is registered, but this execution was not given a local downloaded artifact to hash and parse.", campaign_id=campaign.campaign_id, plan={"dataset_id": "battery-nasa-pcoe-rw3", "artifact_path": artifact_path, "parser": "scipy.io.loadmat"}, notes=("No battery value was invented and no degradation model was fitted.",))
+        analysis = analyze_nasa_pcoe_rw3(str(artifact_path))
+        run = RunManifest("ResearchOS-Battery", "nasa_pcoe_rw3_observation_summary", {"dataset_id": analysis.artifact.dataset_id, "artifact_sha256": analysis.artifact.artifact_sha256, "artifact_path": analysis.artifact.artifact_path}, {"protocol_id": "battery-artifact-summary.v1", "parser": "scipy.io.loadmat", "source_policy": "archive data only; scripts not executed"}, run_id=f"{resolution_id}-BATTERY")
+        run.start()
+        source = self._source("SRC-NASA-PCOE-RW3")
+        provenance = ProvenanceRecord(SourceType.DATASET, source.source_id, title=source.title, url=source.url, license=source.license, method="scipy.io.loadmat per MATLAB member; mean/final-time summaries", conditions=analysis.artifact.conditions, notes="The downloaded public archive was hashed before parsing; archive scripts were not executed.")
+        run.provenance.append(provenance)
+        payload = {"artifact": analysis.artifact.to_dict(), "summary": analysis.summary, "observation_sample": [item.to_dict() for item in analysis.observations], "analysis_limit": "capacity_ah, resistance_ohm and uncertainty remain UNKNOWN where absent from the step schema"}
+        evidence = Evidence(f"EVD-{uuid.uuid4().hex[:12].upper()}", "battery_electrochemical_observation_summary", EvidenceLevel.E4_CURATED_EXPERIMENTAL, source.url or source.source_id, payload, (provenance.provenance_id,))
+        run.evidence.append(evidence)
+        run.gates.append(GateResult("GATE-BATTERY-ARTIFACT", "BATT-ARTIFACT-001", GateStatus.PASS, "public battery archive was hashed and its MATLAB members were parsed", (evidence.evidence_id,), {"artifact_sha256": analysis.artifact.artifact_sha256, "observation_count": len(analysis.observations)}))
+        claim = ScientificClaim("The NASA PCoE RW3 artifact contains source-located voltage, current, temperature and time step measurements under a documented room-temperature random-walk procedure.", run.run_id, (evidence.evidence_id,), EvidenceLevel.E4_CURATED_EXPERIMENTAL, ClaimStatus.SUPPORTED, limitations=("This is a descriptive artifact/schema result; missing capacity and uncertainty fields prevent a complete degradation validation claim.",), conditions=analysis.artifact.conditions)
+        run.add_claim(claim)
+        environment = self.service.environment or capture_environment(repo_root=Path(__file__).resolve().parents[3])
+        run.attach_environment(environment)
+        run.complete(); run.seal()
+        bundle = ResearchBundle.create(run, self.campaign_root / campaign.campaign_id / "resolution", environment=environment, dataset_manifests=(analysis.artifact.to_dict(),))
+        if self.service.ledger is not None:
+            self.service.ledger.register_run(bundle, tags=("v3.4", "gap-resolution", "battery", "nasa-pcoe"))
+        return GapResolution(resolution_id, gap.gap_id, _now(), strategy, gap.source_ids, (analysis.artifact.dataset_id,), ("scipy.io.loadmat",), (run.run_id,), gap.current_evidence, ("E4_CURATED_EXPERIMENTAL",), ResolutionStatus.PARTIALLY_RESOLVED, "A public artifact and measured step fields were reproduced, but the condition-complete degradation question still lacks capacity/uncertainty fields in the parsed schema.", campaign_id=campaign.campaign_id, plan={"dataset_id": analysis.artifact.dataset_id, "artifact_path": analysis.artifact.artifact_path, "artifact_sha256": analysis.artifact.artifact_sha256, "parser": "scipy.io.loadmat"}, assessments={"battery": analysis.assessment.to_dict(), "run_id": run.run_id, "bundle_id": bundle.bundle_id}, notes=("The observation sample is derived from measured arrays; no missing value was imputed.",))
 
     def start(self, problem_id: str, *, campaign_id: str | None = None) -> ResearchCampaign:
         problem = next((item for item in self.problems if item.problem_id == problem_id), None)

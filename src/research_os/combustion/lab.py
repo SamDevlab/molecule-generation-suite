@@ -34,6 +34,10 @@ class CombustionLab(Lab):
     def run(self, raw: dict[str, Any], experiment: str = "adiabatic_equilibrium_hp") -> RunManifest:
         normalized = self.normalize(raw)
         manifest = RunManifest(lab=self.name, experiment=experiment, inputs=normalized, config={"engine": type(self.engine).__name__, "engine_version": self.engine.version, "engine_id": "cantera", "protocol_id": "cantera.equilibrium.hp.v1", "model": "adiabatic_chemical_equilibrium_HP"})
+        requested_engine = raw.get("engine_id")
+        if requested_engine and str(requested_engine) != "cantera":
+            manifest.gates.append(GateResult("GATE-PHYSICS-ENGINE", "COMB-ENGINE-001", GateStatus.INDETERMINATE, "combustion engine unavailable for the requested engine identifier; equilibrium was not executed", diagnostics={"requested_engine_id": str(requested_engine), "configured_engine_id": "cantera"}))
+            return manifest
         ProofEngine().evaluate(manifest, self.rules())
         if not manifest.passed: return manifest
         try:
