@@ -80,4 +80,5 @@ examples/golden_workflow/output/
 .tmp-package-check-v35/
 .tmp-package-check-v36*/
 .tmp-package-check-v37*/
+.tmp-package-check-v38*/
 build/
