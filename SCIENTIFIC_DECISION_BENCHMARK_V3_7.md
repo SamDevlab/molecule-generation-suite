@@ -2,7 +2,7 @@
 
 ## Resultado executivo
 
-`PASS`, branch `research-os-v1.3`, commit de referência `0da252e`.
+`PASS`, branch `research-os-v1.3`, commit de referência `0b7bd33`.
 
 Artefato: `.research-os-live-3.7/scientific-decision-benchmark.json`.
 

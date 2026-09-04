@@ -3,7 +3,7 @@
 ## Estado
 
 `PASS` no benchmark sistemático final em 04/09/2026, na branch
-`research-os-v1.3`, commit científico de referência `0da252e`.
+`research-os-v1.3`, commit científico de referência `0b7bd33`.
 
 | Gate | Estado | Evidência |
 |---|---|---|

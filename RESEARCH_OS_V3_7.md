@@ -39,7 +39,7 @@ com Ledger e bundles íntegros.
 
 ## Resultado
 
-O v3.7 foi aprovado na execução final. O relatório machine-readable é
+O v3.7 foi aprovado na execução final no commit `0b7bd33`. O relatório machine-readable é
 `.research-os-live-3.7/scientific-decision-benchmark.json`, e o relatório
 detalhado está em `SCIENTIFIC_DECISION_BENCHMARK_V3_7.md`.
 
