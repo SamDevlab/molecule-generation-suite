@@ -39,9 +39,13 @@ com Ledger e bundles íntegros.
 
 ## Resultado
 
-O v3.7 foi aprovado na execução final no commit `0b7bd33`. O relatório machine-readable é
+O v3.7 foi aprovado na execução final no commit `26d999d`. O exame final
+Codex Live passou no commit `9d74d2a`. O relatório machine-readable é
 `.research-os-live-3.7/scientific-decision-benchmark.json`, e o relatório
 detalhado está em `SCIENTIFIC_DECISION_BENCHMARK_V3_7.md`.
 
-O v3.8 permanece fechado até que um benchmark de reprodução e stress seja
-executado; não há avanço automático para v3.9.
+O benchmark de reprodução e stress da v3.8 passou após a implementação em
+`research-os-v1.3`; seus resultados estão em
+`REPRODUCTION_STRESS_TEST_V3_8.md` e no artefato
+`.research-os-live-3.8/reproduction-stress-benchmark.json`. Não há avanço
+automático para v3.9.
