@@ -158,3 +158,15 @@ Evidence, bundles, decisões e Ledger continuam sob controle do Research OS.
 - Contratos e gate: [`RESEARCH_OS_V3_9.md`](RESEARCH_OS_V3_9.md)
 - Execução autônoma: [`AUTONOMOUS_RESEARCH_PROGRAMS_V3_9.md`](AUTONOMOUS_RESEARCH_PROGRAMS_V3_9.md)
 - Saúde e blockers: [`PROJECT_HEALTH_V3_9.md`](PROJECT_HEALTH_V3_9.md)
+
+## 🔬 10. Research OS 3.10: memória científica longitudinal
+
+O v3.10 indexa snapshots históricos sobre Ledger, Knowledge, lineage, claims,
+runs, fontes, datasets, modelos e engines. Consultas temporais preservam o
+estado antigo, identificam versões stale e explicam mudanças de claims e
+decisões. Memória conversacional não é fonte científica e não pode sobrepor
+registros selados.
+
+- Contratos e gate: [`RESEARCH_OS_V3_10.md`](RESEARCH_OS_V3_10.md)
+- Execução temporal: [`LONGITUDINAL_SCIENTIFIC_MEMORY_V3_10.md`](LONGITUDINAL_SCIENTIFIC_MEMORY_V3_10.md)
+- Saúde e blockers: [`PROJECT_HEALTH_V3_10.md`](PROJECT_HEALTH_V3_10.md)

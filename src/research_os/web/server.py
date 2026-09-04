@@ -89,7 +89,7 @@ class OracleWebApplication:
         try:
             if method == "GET" and route == "/api/health":
                 provider = self.service.planner.provider
-                return 200, {"status": "ok", "service": "Research OS 3.9", "provider": dict(getattr(provider, "audit_metadata", {}) or {}), "oracle": self.oracle_status(), "ledger_source_of_truth": True}
+                return 200, {"status": "ok", "service": "Research OS 3.10", "provider": dict(getattr(provider, "audit_metadata", {}) or {}), "oracle": self.oracle_status(), "ledger_source_of_truth": True}
             if method == "GET" and route == "/api/oracle/audit":
                 return 200, self.oracle_status()
             if method == "GET" and route == "/api/capabilities":
@@ -447,7 +447,7 @@ class OracleWebApplication:
                 return
 
         server = ThreadingHTTPServer((host, port), Handler)
-        print(f"Research OS 3.9 listening at http://{host}:{port}")
+        print(f"Research OS 3.10 listening at http://{host}:{port}")
         try:
             server.serve_forever()
         except KeyboardInterrupt:
@@ -499,7 +499,7 @@ def _bootstrap_knowledge(source_registry: SourceRegistry, retriever: KnowledgeRe
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Run the Research OS 3.9 operational Oracle web app")
+    parser = argparse.ArgumentParser(description="Run the Research OS 3.10 operational Oracle web app")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--data-root", default=None)
