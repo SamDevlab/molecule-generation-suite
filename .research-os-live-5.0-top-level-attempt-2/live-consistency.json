@@ -1,0 +1,423 @@
+{
+  "pairs": [
+    {
+      "calls": [
+        {
+          "call_id": 30,
+          "diagnostic": {
+            "attempt": 1,
+            "command_contract": "codex exec --ephemeral --skip-git-repo-check --sandbox read-only --color never --output-schema <fixed-schema> -",
+            "completed_at": "2026-09-05T11:11:31.822898+00:00",
+            "depth": 0,
+            "elapsed": 19.479586,
+            "exit_status": "COMPLETED",
+            "failure_code": null,
+            "failure_stage": "NONE",
+            "invocation_id": "LIVE-3D5F2D5CF4DE4F3A",
+            "max_attempts": 1,
+            "model": "gpt-5.6-luna",
+            "operation": "final_exam_followup",
+            "parent_invocation_id": null,
+            "provider": "CODEX_LIVE",
+            "reentrancy_state": "COMPLETED",
+            "schema_status": "PASS",
+            "started_at": "2026-09-05T11:11:12.343312+00:00",
+            "stderr_bytes": 38668,
+            "stderr_truncated": false,
+            "stdout_bytes": 802,
+            "stdout_truncated": false,
+            "timeout_budget": 120.0
+          },
+          "elapsed": 19.48399999999674,
+          "error": null,
+          "label": "TL-CONSISTENCY-01-A",
+          "operation": "final_exam_followup",
+          "process_events": [
+            {
+              "call_id": 30,
+              "cleanup_status": "RUNNING",
+              "label": "TL-CONSISTENCY-01-A",
+              "parent_pid": 13996,
+              "pid": 8000,
+              "started_at": "2026-09-05T11:11:12.348489+00:00"
+            },
+            {
+              "call_id": 30,
+              "cleanup_status": "EXITED",
+              "completed_at": "2026-09-05T11:11:31.822898+00:00",
+              "exit_code": 0,
+              "label": "TL-CONSISTENCY-01-A",
+              "parent_pid": 13996,
+              "pid": 8000,
+              "started_at": "2026-09-05T11:11:12.348489+00:00",
+              "termination_reason": "NORMAL_EXIT"
+            }
+          ],
+          "response_hash": "a023bbce67ea2075d371288ffc31e0e5858eb767de7d247bc2f76b75f9713b54",
+          "status": "COMPLETED"
+        },
+        {
+          "call_id": 31,
+          "diagnostic": {
+            "attempt": 1,
+            "command_contract": "codex exec --ephemeral --skip-git-repo-check --sandbox read-only --color never --output-schema <fixed-schema> -",
+            "completed_at": "2026-09-05T11:11:48.026601+00:00",
+            "depth": 0,
+            "elapsed": 16.200133,
+            "exit_status": "COMPLETED",
+            "failure_code": null,
+            "failure_stage": "NONE",
+            "invocation_id": "LIVE-56B9FD5AF8CD4EC8",
+            "max_attempts": 1,
+            "model": "gpt-5.6-luna",
+            "operation": "final_exam_followup",
+            "parent_invocation_id": null,
+            "provider": "CODEX_LIVE",
+            "reentrancy_state": "COMPLETED",
+            "schema_status": "PASS",
+            "started_at": "2026-09-05T11:11:31.826468+00:00",
+            "stderr_bytes": 38856,
+            "stderr_truncated": false,
+            "stdout_bytes": 990,
+            "stdout_truncated": false,
+            "timeout_budget": 120.0
+          },
+          "elapsed": 16.203000000008615,
+          "error": null,
+          "label": "TL-CONSISTENCY-01-B",
+          "operation": "final_exam_followup",
+          "process_events": [
+            {
+              "call_id": 31,
+              "cleanup_status": "RUNNING",
+              "label": "TL-CONSISTENCY-01-B",
+              "parent_pid": 13996,
+              "pid": 17132,
+              "started_at": "2026-09-05T11:11:31.831075+00:00"
+            },
+            {
+              "call_id": 31,
+              "cleanup_status": "EXITED",
+              "completed_at": "2026-09-05T11:11:48.026601+00:00",
+              "exit_code": 0,
+              "label": "TL-CONSISTENCY-01-B",
+              "parent_pid": 13996,
+              "pid": 17132,
+              "started_at": "2026-09-05T11:11:31.831075+00:00",
+              "termination_reason": "NORMAL_EXIT"
+            }
+          ],
+          "response_hash": "f09d9b923b0503fc102272474d7674a2fc8f77cad6c81efaa09b50b712e8a547",
+          "status": "COMPLETED"
+        }
+      ],
+      "equivalent": false,
+      "failed_response_validations": [],
+      "grounding_validations": [
+        {
+          "failure_code": "NONE",
+          "forbidden_fields": [],
+          "grounding_status": "GROUNDED",
+          "known_ids_count": 67,
+          "missing_grounding_field": false,
+          "response_hash": "a023bbce67ea2075d371288ffc31e0e5858eb767de7d247bc2f76b75f9713b54",
+          "response_type": "dict",
+          "returned_ids": [
+            "RUN-V50-COMB-H2-PHI105",
+            "EVD-B4B5770122CD",
+            "DECISION-REVISION-V50-COMB-PHI105",
+            "IMP-V50-DYNAMIC-COMBUSTION"
+          ],
+          "unknown_ids": [],
+          "valid": true
+        },
+        {
+          "failure_code": "NONE",
+          "forbidden_fields": [],
+          "grounding_status": "GROUNDED",
+          "known_ids_count": 67,
+          "missing_grounding_field": false,
+          "response_hash": "f09d9b923b0503fc102272474d7674a2fc8f77cad6c81efaa09b50b712e8a547",
+          "response_type": "dict",
+          "returned_ids": [
+            "DECISION-REVISION-V50-COMB-PHI105",
+            "RUN-V50-COMB-H2-PHI105",
+            "EVD-B4B5770122CD",
+            "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+            "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+            "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+            "CLM-DOCKING-DECISION-BOUNDARY"
+          ],
+          "unknown_ids": [],
+          "valid": true
+        }
+      ],
+      "index": 1,
+      "question": "What new scientific knowledge was actually produced?",
+      "run_a": {
+        "answer": "The only new scientific knowledge was a bounded E3 computational observation: the predeclared Cantera H2 run at phi=1.05 produced an adiabatic equilibrium temperature of 2395.30 K under the registered conditions, extending the tested combustion condition map. It did not establish an experimental result; solubility remained externally unvalidated, while battery and materials conclusions remained blocked.",
+        "grounded_record_ids": [
+          "RUN-V50-COMB-H2-PHI105",
+          "EVD-B4B5770122CD",
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "IMP-V50-DYNAMIC-COMBUSTION"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible Cantera E3-E4 comparison was available, so the conclusion remains E3.",
+          "No new validated decision was produced for solubility, battery, or materials."
+        ]
+      },
+      "run_b": {
+        "answer": "The only new scientific knowledge was a bounded E3 computational extension: the predeclared Cantera H2 run at equivalence ratio 1.05 narrowed the tested combustion condition map. It remains a simulation result, not experimental evidence. No new generalizable solubility, battery, materials, or docking knowledge was established; those areas remained externally blocked or protocol-limited.",
+        "grounded_record_ids": [
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "RUN-V50-COMB-H2-PHI105",
+          "EVD-B4B5770122CD",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+          "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+          "CLM-DOCKING-DECISION-BOUNDARY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible Cantera E3-E4 comparison was available.",
+          "External validation remained unavailable or incompatible for solubility, battery, and materials.",
+          "Docking remained an E2 computational boundary, not measured affinity or efficacy."
+        ]
+      }
+    },
+    {
+      "calls": [
+        {
+          "call_id": 32,
+          "diagnostic": {
+            "attempt": 1,
+            "command_contract": "codex exec --ephemeral --skip-git-repo-check --sandbox read-only --color never --output-schema <fixed-schema> -",
+            "completed_at": "2026-09-05T11:12:04.177287+00:00",
+            "depth": 0,
+            "elapsed": 16.146074,
+            "exit_status": "COMPLETED",
+            "failure_code": null,
+            "failure_stage": "NONE",
+            "invocation_id": "LIVE-BF023BBAEFFD45AF",
+            "max_attempts": 1,
+            "model": "gpt-5.6-luna",
+            "operation": "final_exam_followup",
+            "parent_invocation_id": null,
+            "provider": "CODEX_LIVE",
+            "reentrancy_state": "COMPLETED",
+            "schema_status": "PASS",
+            "started_at": "2026-09-05T11:11:48.031213+00:00",
+            "stderr_bytes": 38241,
+            "stderr_truncated": false,
+            "stdout_bytes": 439,
+            "stdout_truncated": false,
+            "timeout_budget": 120.0
+          },
+          "elapsed": 16.14100000000326,
+          "error": null,
+          "label": "TL-CONSISTENCY-02-A",
+          "operation": "final_exam_followup",
+          "process_events": [
+            {
+              "call_id": 32,
+              "cleanup_status": "RUNNING",
+              "label": "TL-CONSISTENCY-02-A",
+              "parent_pid": 13996,
+              "pid": 19184,
+              "started_at": "2026-09-05T11:11:48.036346+00:00"
+            },
+            {
+              "call_id": 32,
+              "cleanup_status": "EXITED",
+              "completed_at": "2026-09-05T11:12:04.176777+00:00",
+              "exit_code": 0,
+              "label": "TL-CONSISTENCY-02-A",
+              "parent_pid": 13996,
+              "pid": 19184,
+              "started_at": "2026-09-05T11:11:48.036346+00:00",
+              "termination_reason": "NORMAL_EXIT"
+            }
+          ],
+          "response_hash": "050116daafb4b2fde73fb358aeebf305286c2e71bbffe2587edfe97d568b2fb1",
+          "status": "COMPLETED"
+        },
+        {
+          "call_id": 33,
+          "diagnostic": {
+            "attempt": 1,
+            "command_contract": "codex exec --ephemeral --skip-git-repo-check --sandbox read-only --color never --output-schema <fixed-schema> -",
+            "completed_at": "2026-09-05T11:12:23.893591+00:00",
+            "depth": 0,
+            "elapsed": 19.712723,
+            "exit_status": "COMPLETED",
+            "failure_code": null,
+            "failure_stage": "NONE",
+            "invocation_id": "LIVE-CCF0A3C9FEAB45F9",
+            "max_attempts": 1,
+            "model": "gpt-5.6-luna",
+            "operation": "final_exam_followup",
+            "parent_invocation_id": null,
+            "provider": "CODEX_LIVE",
+            "reentrancy_state": "COMPLETED",
+            "schema_status": "PASS",
+            "started_at": "2026-09-05T11:12:04.180868+00:00",
+            "stderr_bytes": 38574,
+            "stderr_truncated": false,
+            "stdout_bytes": 772,
+            "stdout_truncated": false,
+            "timeout_budget": 120.0
+          },
+          "elapsed": 19.71899999998277,
+          "error": null,
+          "label": "TL-CONSISTENCY-02-B",
+          "operation": "final_exam_followup",
+          "process_events": [
+            {
+              "call_id": 33,
+              "cleanup_status": "RUNNING",
+              "label": "TL-CONSISTENCY-02-B",
+              "parent_pid": 13996,
+              "pid": 19568,
+              "started_at": "2026-09-05T11:12:04.185485+00:00"
+            },
+            {
+              "call_id": 33,
+              "cleanup_status": "EXITED",
+              "completed_at": "2026-09-05T11:12:23.893079+00:00",
+              "exit_code": 0,
+              "label": "TL-CONSISTENCY-02-B",
+              "parent_pid": 13996,
+              "pid": 19568,
+              "started_at": "2026-09-05T11:12:04.185485+00:00",
+              "termination_reason": "NORMAL_EXIT"
+            }
+          ],
+          "response_hash": "594be2f5948929a70b89a8753601945c3e6810eff3a79c5478b2979222ab329b",
+          "status": "COMPLETED"
+        }
+      ],
+      "equivalent": false,
+      "failed_response_validations": [
+        {
+          "call_id": 33,
+          "failure_code": "UNKNOWN_GROUNDED_RECORD_ID",
+          "forbidden_field_validation": {
+            "fields": [],
+            "status": "PASS"
+          },
+          "grounding_status": "GROUNDED",
+          "grounding_validation": {
+            "failure_code": "UNKNOWN_GROUNDED_RECORD_ID",
+            "forbidden_fields": [],
+            "grounding_status": "GROUNDED",
+            "known_ids_count": 67,
+            "missing_grounding_field": false,
+            "response_hash": "594be2f5948929a70b89a8753601945c3e6810eff3a79c5478b2979222ab329b",
+            "response_type": "dict",
+            "returned_ids": [
+              "DECISION-REVISION-V50-COMB-PHI105",
+              "RUN-V50-COMB-H2-PHI105",
+              "EVD-B4B5770122CD",
+              "CLM-V41-COMBUSTION-BOUNDARY",
+              "CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY"
+            ],
+            "unknown_ids": [
+              "CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY"
+            ],
+            "valid": false
+          },
+          "label": "TL-CONSISTENCY-02-B",
+          "operation": "final_exam_followup",
+          "response_hash": "594be2f5948929a70b89a8753601945c3e6810eff3a79c5478b2979222ab329b",
+          "response_keys": [
+            "answer",
+            "grounded_record_ids",
+            "grounding_status",
+            "limitations"
+          ],
+          "returned_grounded_ids": [
+            "DECISION-REVISION-V50-COMB-PHI105",
+            "RUN-V50-COMB-H2-PHI105",
+            "EVD-B4B5770122CD",
+            "CLM-V41-COMBUSTION-BOUNDARY",
+            "CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY"
+          ],
+          "schema_status": "PASS",
+          "unknown_grounded_ids": [
+            "CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY"
+          ]
+        }
+      ],
+      "grounding_validations": [
+        {
+          "failure_code": "NONE",
+          "forbidden_fields": [],
+          "grounding_status": "GROUNDED",
+          "known_ids_count": 67,
+          "missing_grounding_field": false,
+          "response_hash": "050116daafb4b2fde73fb358aeebf305286c2e71bbffe2587edfe97d568b2fb1",
+          "response_type": "dict",
+          "returned_ids": [
+            "DECISION-REVISION-V50-COMB-PHI105",
+            "RUN-V50-COMB-H2-PHI105",
+            "EVD-B4B5770122CD"
+          ],
+          "unknown_ids": [],
+          "valid": true
+        },
+        {
+          "failure_code": "UNKNOWN_GROUNDED_RECORD_ID",
+          "forbidden_fields": [],
+          "grounding_status": "GROUNDED",
+          "known_ids_count": 67,
+          "missing_grounding_field": false,
+          "response_hash": "594be2f5948929a70b89a8753601945c3e6810eff3a79c5478b2979222ab329b",
+          "response_type": "dict",
+          "returned_ids": [
+            "DECISION-REVISION-V50-COMB-PHI105",
+            "RUN-V50-COMB-H2-PHI105",
+            "EVD-B4B5770122CD",
+            "CLM-V41-COMBUSTION-BOUNDARY",
+            "CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY"
+          ],
+          "unknown_ids": [
+            "CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY"
+          ],
+          "valid": false
+        }
+      ],
+      "index": 2,
+      "question": "Which claim changed?",
+      "run_a": {
+        "answer": "The combustion claim changed: the bounded E3 condition map was revised to include the predeclared H2 phi=1.05 Cantera result; it remains a computational result, not an experimental claim.",
+        "grounded_record_ids": [
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "RUN-V50-COMB-H2-PHI105",
+          "EVD-B4B5770122CD"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible Cantera E3-E4 comparison is available."
+        ]
+      },
+      "run_b": {
+        "answer": "The combustion claim changed: the bounded E3 conclusion was revised to include the predeclared H2, phi=1.05 Cantera condition map. It remains computational and does not support an experimental claim; the solubility statement was only weakened to a sample-specific conditional claim, not reversed.",
+        "grounded_record_ids": [
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "RUN-V50-COMB-H2-PHI105",
+          "EVD-B4B5770122CD",
+          "CLM-V41-COMBUSTION-BOUNDARY",
+          "CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible Cantera E3-E4 comparison is available, so the combustion claim remains E3.",
+          "No compatible non-OOD external solubility source is available, so solubility remains conditionally unvalidated."
+        ]
+      }
+    }
+  ],
+  "status": "BLOCKED_BEFORE_PASS"
+}

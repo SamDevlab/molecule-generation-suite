@@ -26,6 +26,10 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 from research_os.oracle import (  # noqa: E402
     CodexCliTransport,
     CodexLiveProvider,
+    CONSISTENCY_LIMITATION_CODES,
+    ConsistencyFailureCode,
+    ConsistencyGroundingAssessment,
+    ConsistencySignature,
     GroundingStatus,
     LiveExecutionBudget,
     LiveCodexProtocolError,
@@ -384,29 +388,213 @@ def _stress(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[str, A
     return {"status": "PASS", "answers": answers}
 
 
+def _consistency_response_parts(response: Any) -> tuple[str | None, tuple[str, ...], str | None, tuple[str, ...]]:
+    if not isinstance(response, dict):
+        return None, (), None, ()
+    status = response.get("grounding_status") if isinstance(response.get("grounding_status"), str) else None
+    raw_ids = response.get("grounded_record_ids")
+    ids = tuple(raw_ids) if isinstance(raw_ids, list) and all(isinstance(item, str) for item in raw_ids) else ()
+    primary = response.get("primary_record_id") if isinstance(response.get("primary_record_id"), str) else None
+    raw_codes = response.get("limitation_codes")
+    codes = tuple(raw_codes) if isinstance(raw_codes, list) and all(isinstance(item, str) for item in raw_codes) else ()
+    return status, ids, primary, codes
+
+
+def _consistency_signature(response: Any) -> ConsistencySignature | None:
+    status, ids, primary, codes = _consistency_response_parts(response)
+    if status not in {GroundingStatus.GROUNDED.value, GroundingStatus.NO_GROUNDED_ANSWER.value}:
+        return None
+    return ConsistencySignature(
+        grounding_status=status,
+        primary_record_id=primary,
+        grounded_record_ids=tuple(sorted(set(ids))),
+        limitation_codes=tuple(sorted(set(codes))),
+    )
+
+
+def _consistency_contract_valid(response: Any, grounding: Any, basis: set[str]) -> bool:
+    if not grounding.valid or not isinstance(response, dict):
+        return False
+    required = {"answer", "grounding_status", "grounded_record_ids", "primary_record_id", "limitation_codes", "limitations"}
+    if not required <= set(response) or not isinstance(response.get("answer"), str):
+        return False
+    status, ids, primary, codes = _consistency_response_parts(response)
+    if not isinstance(response.get("limitations"), list) or not all(isinstance(item, str) for item in response["limitations"]):
+        return False
+    raw_ids = response.get("grounded_record_ids")
+    raw_codes = response.get("limitation_codes")
+    if not isinstance(raw_ids, list) or not all(isinstance(item, str) for item in raw_ids):
+        return False
+    if not isinstance(raw_codes, list) or not all(isinstance(item, str) and item in CONSISTENCY_LIMITATION_CODES for item in raw_codes):
+        return False
+    if status == GroundingStatus.GROUNDED.value:
+        return isinstance(primary, str) and primary in ids and primary in basis
+    if status == GroundingStatus.NO_GROUNDED_ANSWER.value:
+        return primary is None and not ids
+    return False
+
+
+def _consistency_failure_code(
+    *,
+    run_a_valid: bool,
+    run_b_valid: bool,
+    status_a: str | None,
+    status_b: str | None,
+    new_ids: tuple[str, ...],
+    missing_ids: tuple[str, ...],
+    primary_equal: bool,
+    limitations_equal: bool,
+) -> str:
+    if not run_a_valid:
+        return ConsistencyFailureCode.RUN_A_GROUNDING_FAILURE.value
+    if status_a != status_b:
+        return ConsistencyFailureCode.GROUNDING_STATUS_DRIFT.value
+    if new_ids:
+        return ConsistencyFailureCode.CONSISTENCY_NEW_GROUNDED_RECORD_ID.value
+    if missing_ids:
+        return ConsistencyFailureCode.CONSISTENCY_MISSING_GROUNDED_RECORD_ID.value
+    if not primary_equal:
+        return ConsistencyFailureCode.PRIMARY_RECORD_DRIFT.value
+    if not limitations_equal:
+        return ConsistencyFailureCode.LIMITATION_DRIFT.value
+    if not run_b_valid:
+        return ConsistencyFailureCode.RUN_B_GROUNDING_FAILURE.value
+    return ConsistencyFailureCode.NONE.value
+
+
 def _consistency(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[str, Any]:
     pairs: list[dict[str, Any]] = []
     for index, question in enumerate(FOLLOWUP_QUESTIONS[:5], 1):
-        responses = []
-        calls = []
-        validations = []
-        validation_failures = []
-        validities = []
-        for repeat in ("A", "B"):
-            response, call = sequence.invoke(f"TL-CONSISTENCY-{index:02d}-{repeat}", "final_exam_followup", "final_exam_followup", sequence.state_context(question, extra={"question": question, "final_exam": exam.get("response")}))
-            responses.append(response)
-            calls.append(call)
-            grounded, validation, failure = sequence.validate_grounded_response(response, call)
-            validities.append(grounded)
-            validations.append(validation.to_dict())
-            if failure:
-                validation_failures.append(failure.to_dict())
-        valid = all(call["status"] == "COMPLETED" and isinstance(response, dict) and grounded and not _has_forbidden_output(response) for call, response, grounded in zip(calls, responses, validities))
-        equivalent = valid and all(_digest(responses[0].get(key)) == _digest(responses[1].get(key)) for key in ("grounded_record_ids", "limitations"))
-        pairs.append({"index": index, "question": question, "run_a": responses[0], "run_b": responses[1], "calls": calls, "grounding_validations": validations, "failed_response_validations": validation_failures, "equivalent": equivalent})
-        if not valid:
+        contract = {
+            "same_stored_scientific_state": True,
+            "same_question": question,
+            "allowed_limitation_codes": sorted(CONSISTENCY_LIMITATION_CODES),
+            "run_a_answer_is_not_supplied_to_run_b": True,
+        }
+        response_a, call_a = sequence.invoke(
+            f"TL-CONSISTENCY-{index:02d}-A",
+            "final_exam_followup",
+            "final_exam_followup",
+            sequence.state_context(question, extra={"question": question, "final_exam": exam.get("response"), "consistency_run": "A", "consistency_contract": contract}),
+        )
+        grounded_a, validation_a, failure_a = sequence.validate_grounded_response(response_a, call_a, require_grounded=False)
+        status_a, ids_a, primary_a, codes_a = _consistency_response_parts(response_a)
+        basis = set(ids_a) if grounded_a and isinstance(response_a, dict) else set()
+        normalized_a = tuple(sorted(basis))
+        run_a_valid = (
+            call_a["status"] == "COMPLETED"
+            and grounded_a
+            and not _has_forbidden_output(response_a)
+            and _consistency_contract_valid(response_a, validation_a, basis)
+        )
+        if not run_a_valid:
+            assessment = ConsistencyGroundingAssessment(
+                valid=False,
+                pair_index=index,
+                question=question,
+                run_a_call_id=call_a.get("call_id"),
+                run_b_call_id=None,
+                run_a_grounding_status=status_a,
+                run_b_grounding_status=None,
+                run_a_ids=ids_a,
+                run_b_ids=(),
+                normalized_run_a_ids=normalized_a,
+                normalized_run_b_ids=(),
+                new_ids_in_b=(),
+                missing_ids_in_b=normalized_a,
+                support_basis_equal=False,
+                limitation_codes_equal=False,
+                primary_record_equal=False,
+                failure_code=ConsistencyFailureCode.RUN_A_GROUNDING_FAILURE.value,
+            )
+            pairs.append({"index": index, "question": question, "run_a": response_a, "run_b": None, "calls": [call_a], "grounding_validations": [validation_a.to_dict()], "failed_response_validations": [failure_a.to_dict()] if failure_a else [], "consistency_grounding_basis": list(normalized_a), "consistency_signature_a": _consistency_signature(response_a).to_dict() if _consistency_signature(response_a) else None, "consistency_signature_b": None, "consistency_assessment": assessment.to_dict(), "equivalent": False})
             return {"status": "BLOCKED_BEFORE_PASS", "pairs": pairs}
-    return {"status": "PASS" if all(item["equivalent"] for item in pairs) else "REVIEW_REQUIRED", "pairs": pairs}
+
+        frozen_basis = list(normalized_a)
+        response_b, call_b = sequence.invoke(
+            f"TL-CONSISTENCY-{index:02d}-B",
+            "final_exam_followup",
+            "final_exam_followup",
+            sequence.state_context(
+                question,
+                extra={
+                    "question": question,
+                    "final_exam": exam.get("response"),
+                    "consistency_run": "B",
+                    "CONSISTENCY_GROUNDING_BASIS": frozen_basis,
+                    "ALLOWED_GROUNDED_RECORD_IDS": frozen_basis,
+                    "known_record_ids": frozen_basis,
+                    "consistency_contract": {
+                        **contract,
+                        "run": "B",
+                        "CONSISTENCY_GROUNDING_BASIS": frozen_basis,
+                        "frozen_grounding_basis": True,
+                    },
+                },
+            ),
+        )
+        grounded_b, validation_b, failure_b = sequence.validate_grounded_response(response_b, call_b, require_grounded=False)
+        status_b, ids_b, primary_b, codes_b = _consistency_response_parts(response_b)
+        normalized_b = tuple(sorted(set(ids_b)))
+        new_ids = tuple(sorted(set(ids_b) - basis))
+        missing_ids = tuple(sorted(basis - set(ids_b)))
+        run_b_valid = (
+            call_b["status"] == "COMPLETED"
+            and grounded_b
+            and not _has_forbidden_output(response_b)
+            and _consistency_contract_valid(response_b, validation_b, basis)
+        )
+        signatures = (_consistency_signature(response_a), _consistency_signature(response_b))
+        primary_equal = primary_a == primary_b
+        limitations_equal = set(codes_a) == set(codes_b)
+        failure_code = _consistency_failure_code(
+            run_a_valid=True,
+            run_b_valid=run_b_valid,
+            status_a=status_a,
+            status_b=status_b,
+            new_ids=new_ids,
+            missing_ids=missing_ids,
+            primary_equal=primary_equal,
+            limitations_equal=limitations_equal,
+        )
+        equivalent = failure_code == ConsistencyFailureCode.NONE.value and signatures[0] is not None and signatures[1] is not None and signatures[0].digest == signatures[1].digest
+        assessment = ConsistencyGroundingAssessment(
+            valid=equivalent,
+            pair_index=index,
+            question=question,
+            run_a_call_id=call_a.get("call_id"),
+            run_b_call_id=call_b.get("call_id"),
+            run_a_grounding_status=status_a,
+            run_b_grounding_status=status_b,
+            run_a_ids=ids_a,
+            run_b_ids=ids_b,
+            normalized_run_a_ids=normalized_a,
+            normalized_run_b_ids=normalized_b,
+            new_ids_in_b=new_ids,
+            missing_ids_in_b=missing_ids,
+            support_basis_equal=not new_ids and not missing_ids,
+            limitation_codes_equal=limitations_equal,
+            primary_record_equal=primary_equal,
+            failure_code=failure_code,
+        )
+        pair = {
+            "index": index,
+            "question": question,
+            "run_a": response_a,
+            "run_b": response_b,
+            "calls": [call_a, call_b],
+            "grounding_validations": [validation_a.to_dict(), validation_b.to_dict()],
+            "failed_response_validations": [item.to_dict() for item in (failure_a, failure_b) if item],
+            "consistency_grounding_basis": frozen_basis,
+            "consistency_signature_a": signatures[0].to_dict() if signatures[0] else None,
+            "consistency_signature_b": signatures[1].to_dict() if signatures[1] else None,
+            "consistency_assessment": assessment.to_dict(),
+            "equivalent": equivalent,
+        }
+        pairs.append(pair)
+        if not equivalent:
+            return {"status": "BLOCKED_BEFORE_PASS", "pairs": pairs}
+    return {"status": "PASS", "pairs": pairs}
 
 
 def _process_cleanup(sequence: TopLevelLiveSequence) -> dict[str, Any]:

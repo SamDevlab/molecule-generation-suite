@@ -46,6 +46,35 @@ class TopLevelPreflightStatus(str, Enum):
     GIT_INSPECTION_FAILED = "GIT_INSPECTION_FAILED"
 
 
+class ConsistencyFailureCode(str, Enum):
+    NONE = "NONE"
+    RUN_A_GROUNDING_FAILURE = "RUN_A_GROUNDING_FAILURE"
+    RUN_B_GROUNDING_FAILURE = "RUN_B_GROUNDING_FAILURE"
+    GROUNDING_STATUS_DRIFT = "GROUNDING_STATUS_DRIFT"
+    CONSISTENCY_NEW_GROUNDED_RECORD_ID = "CONSISTENCY_NEW_GROUNDED_RECORD_ID"
+    CONSISTENCY_MISSING_GROUNDED_RECORD_ID = "CONSISTENCY_MISSING_GROUNDED_RECORD_ID"
+    PRIMARY_RECORD_DRIFT = "PRIMARY_RECORD_DRIFT"
+    LIMITATION_DRIFT = "LIMITATION_DRIFT"
+    SCIENTIFIC_STATUS_DRIFT = "SCIENTIFIC_STATUS_DRIFT"
+    NO_GROUNDED_ANSWER_DRIFT = "NO_GROUNDED_ANSWER_DRIFT"
+
+
+CONSISTENCY_LIMITATION_CODES = frozenset({
+    "EXTERNAL_VALIDATION_MISSING",
+    "EXPERIMENTAL_VALIDATION_MISSING",
+    "PROTOCOL_SENSITIVITY",
+    "OUT_OF_DOMAIN",
+    "UNCERTAINTY_LIMITED",
+    "DEPENDENT_EVIDENCE",
+    "SINGLE_STRUCTURE_DEPENDENCE",
+    "MISSING_CONDITION_COMPLETE_DATA",
+    "COMPUTATIONAL_NOT_EXPERIMENTAL",
+    "NO_ELIGIBLE_EXTERNAL_DATA",
+    "RESOURCE_UNAVAILABLE",
+    "OTHER_REGISTERED_LIMITATION",
+})
+
+
 ACCEPTANCE_NAMESPACE_PATTERN = re.compile(r"^\.research-os-live-5\.0-top-level(?:-attempt-\d+)?$")
 RECOGNIZED_ACCEPTANCE_ARTIFACTS = frozenset({
     "top-level-owner-diagnostic.json",
@@ -145,6 +174,67 @@ class LiveResponseValidationFailure:
         value["returned_grounded_ids"] = list(self.returned_grounded_ids)
         value["unknown_grounded_ids"] = list(self.unknown_grounded_ids)
         value["response_keys"] = list(self.response_keys)
+        return value
+
+
+@dataclass(frozen=True)
+class ConsistencySignature:
+    grounding_status: str
+    primary_record_id: str | None
+    grounded_record_ids: tuple[str, ...]
+    limitation_codes: tuple[str, ...]
+    digest: str = ""
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "grounded_record_ids", tuple(sorted(set(self.grounded_record_ids))))
+        object.__setattr__(self, "limitation_codes", tuple(sorted(set(self.limitation_codes))))
+        if not self.digest:
+            body = {
+                "grounding_status": self.grounding_status,
+                "primary_record_id": self.primary_record_id,
+                "grounded_record_ids": list(self.grounded_record_ids),
+                "limitation_codes": list(self.limitation_codes),
+            }
+            object.__setattr__(self, "digest", hashlib.sha256(json.dumps(body, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest())
+
+    def to_dict(self) -> dict[str, Any]:
+        value = asdict(self)
+        value["grounded_record_ids"] = list(self.grounded_record_ids)
+        value["limitation_codes"] = list(self.limitation_codes)
+        return value
+
+
+@dataclass(frozen=True)
+class ConsistencyGroundingAssessment:
+    valid: bool
+    pair_index: int
+    question: str
+    run_a_call_id: int | None
+    run_b_call_id: int | None
+    run_a_grounding_status: str | None
+    run_b_grounding_status: str | None
+    run_a_ids: tuple[str, ...]
+    run_b_ids: tuple[str, ...]
+    normalized_run_a_ids: tuple[str, ...]
+    normalized_run_b_ids: tuple[str, ...]
+    new_ids_in_b: tuple[str, ...]
+    missing_ids_in_b: tuple[str, ...]
+    support_basis_equal: bool
+    limitation_codes_equal: bool
+    primary_record_equal: bool
+    failure_code: str
+
+    def to_dict(self) -> dict[str, Any]:
+        value = asdict(self)
+        for key in (
+            "run_a_ids",
+            "run_b_ids",
+            "normalized_run_a_ids",
+            "normalized_run_b_ids",
+            "new_ids_in_b",
+            "missing_ids_in_b",
+        ):
+            value[key] = list(getattr(self, key))
         return value
 
 

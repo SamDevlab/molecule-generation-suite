@@ -6,11 +6,11 @@
 
 ## Healthy properties
 
-The attempt retained the canonical evidence levels, sealed runs and bundles, append-only impact/challenge records, explicit OOD and uncertainty, declared units/conditions/species, and v4.2 private-corpus separation. Attempt 1 is preserved at `.research-os-live-5.0-top-level/`; `Biolab/` and `formolecular/` were not modified. The legacy components remain preserved and are not deprecated.
+The attempt retained the canonical evidence levels, sealed runs and bundles, append-only impact/challenge records, explicit OOD and uncertainty, declared units/conditions/species, and v4.2 private-corpus separation. Attempts 1 and 2 are preserved at `.research-os-live-5.0-top-level/` and `.research-os-live-5.0-top-level-attempt-2/`; `Biolab/` and `formolecular/` were not modified. The legacy components remain preserved and are not deprecated.
 
 ## Blocking property
 
-The repository-side `CodexLiveProvider` is available as a configured transport. Attempt 1 proved real ownership, CLI execution, three reviewers, the final exam, and process cleanup; its `V5-FOLLOWUP-13` response was rejected after schema validation because the prior grounding layer exposed only a boolean result. The new validator records the exact failure code, IDs, status, safe structured response fields, and response hash. It did not replace the Live provider with `CodexTestProvider` or reinterpret deterministic answers as Live review.
+The repository-side `CodexLiveProvider` is available as a configured transport. Attempt 2 proved 33 real calls and process cleanup; `TL-CONSISTENCY-02-B` returned the syntactically plausible but unregistered `CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY`, which was correctly rejected as `UNKNOWN_GROUNDED_RECORD_ID`. The consistency contract now freezes Run A's literal support basis for independent Run B and compares canonical scientific signatures. It did not replace the Live provider with `CodexTestProvider` or reinterpret deterministic answers as Live review.
 
 ## Next gate
 

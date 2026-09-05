@@ -1,0 +1,194 @@
+{
+  "answers": [
+    {
+      "call_id": 20,
+      "index": 1,
+      "question": "What is the strongest v5 conclusion?",
+      "response": {
+        "answer": "The strongest v5 conclusion is bounded and asymmetric: the predeclared H2 phi=1.05 Cantera run narrows the tested E3 combustion condition map but remains computational, not experimental. The external solubility result supports only a sample-specific conditional statement because validation was OOD; it does not show that every solubility model fails, so the no-decision remains. Battery and materials decisions remain externally blocked, while docking remains an E2, protocol-dependent result rather than measured affinity or efficacy.",
+        "grounded_record_ids": [
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "RUN-V50-COMB-H2-PHI105",
+          "EVD-B4B5770122CD",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+          "DECISION-V39-SOLUBILITY",
+          "CLM-SOLUBILITY-NO-DECISION",
+          "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+          "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+          "CH-V45-DOCKING-DECISION",
+          "CLM-DOCKING-DECISION-BOUNDARY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible non-OOD external solubility source is currently available.",
+          "No compatible Cantera E3-E4 comparison is available.",
+          "Battery and materials lack condition-complete external records.",
+          "Docking remains dependent on the declared receptor and protocol."
+        ]
+      }
+    },
+    {
+      "call_id": 21,
+      "index": 2,
+      "question": "What is the weakest conclusion?",
+      "response": {
+        "answer": "The weakest justified conclusion is that the tested external solubility validation, under its frozen OOD boundary, cannot support unrestricted generalization; it does not show that every solubility model fails. Retain the no-decision pending a compatible non-OOD source.",
+        "grounded_record_ids": [
+          "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+          "DECISION-V39-SOLUBILITY",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "A compatible non-OOD external solubility source is not currently available."
+        ]
+      }
+    },
+    {
+      "call_id": 22,
+      "index": 3,
+      "question": "Which result is most dataset-dependent?",
+      "response": {
+        "answer": "The external solubility result is most dataset-dependent: its unrestricted generalization rests on a sample-specific evaluation where all external records were OOD and condition semantics differed, so it was weakened to a conditional statement.",
+        "grounded_record_ids": [
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible non-OOD external source is currently available; this does not establish that every solubility model fails."
+        ]
+      }
+    },
+    {
+      "call_id": 23,
+      "index": 4,
+      "question": "Which result is most protocol-sensitive?",
+      "response": {
+        "answer": "The docking decision is most protocol-sensitive: its scores share one receptor structure and engine, while receptor/grid variation was not executed. It therefore remains an E2 docking boundary, not measured affinity or efficacy.",
+        "grounded_record_ids": [
+          "CH-V45-DOCKING-DECISION",
+          "CLM-DOCKING-DECISION-BOUNDARY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "The declared receptor and protocol limit interpretation; independent structural or protocol validation is unavailable."
+        ]
+      }
+    },
+    {
+      "call_id": 24,
+      "index": 5,
+      "question": "What is the strongest preserved negative result?",
+      "response": {
+        "answer": "The strongest preserved negative is the frozen DLS external-validation failure: all 56 external records were OOD, so no admissible in-domain validation or generalizable solubility decision was supported. This remains sample- and protocol-specific, not evidence that every solubility model fails.",
+        "grounded_record_ids": [
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "DECISION-V39-SOLUBILITY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "A compatible non-OOD external source is still unavailable, so the negative result cannot be generalized to all solubility models or populations."
+        ]
+      }
+    },
+    {
+      "call_id": 25,
+      "index": 6,
+      "question": "Which gap is highest-value and actionable?",
+      "response": {
+        "answer": "The highest-value actionable gap is GAP-SOLUBILITY-EXTERNAL-VALIDATION: obtain and register a compatible non-OOD external solubility record, audit identity, units, condition semantics, and in-domain coverage, then apply the frozen protocol once. It is currently blocked because no compatible source is available, so retain the solubility no-decision.",
+        "grounded_record_ids": [
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "V50-P-SOLUBILITY-COMPATIBLE",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "DECISION-V39-SOLUBILITY",
+          "CLM-SOLUBILITY-NO-DECISION"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "A compatible non-OOD external solubility source is not currently available.",
+          "The existing external population was exhausted without compatible validation; this does not establish that every solubility model fails."
+        ]
+      }
+    },
+    {
+      "call_id": 26,
+      "index": 7,
+      "question": "Which gap should not be pursued right now?",
+      "response": {
+        "answer": "Do not pursue GAP-SOLUBILITY-EXTERNAL-VALIDATION by repeating the locked DLS pass on the same exhausted all-OOD external population; that step is currently redundant.",
+        "grounded_record_ids": [
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "CH-V45-SOLUBILITY-EXTERNAL"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "The gap remains open and should be reconsidered only when a compatible non-OOD external source becomes available."
+        ]
+      }
+    },
+    {
+      "call_id": 27,
+      "index": 8,
+      "question": "Which NO_DECISION should be revisited first if new evidence arrives?",
+      "response": {
+        "answer": "Revisit the solubility NO_DECISION first, but only after obtaining a compatible non-OOD external source with matching molecule, units, conditions, and in-domain coverage. It has the clearest explicit reconsideration path and highest expected information gain; battery and materials remain blocked by missing condition-complete fields.",
+        "grounded_record_ids": [
+          "DECISION-V39-SOLUBILITY",
+          "CLM-SOLUBILITY-NO-DECISION",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "V50-P-SOLUBILITY-COMPATIBLE",
+          "CH-V45-NO-DECISION-SOLUBILITY",
+          "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+          "GAP-MATERIALS-CONDITION-COMPLETE-RECORD"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "The compatible non-OOD solubility source is not currently available."
+        ]
+      }
+    },
+    {
+      "call_id": 28,
+      "index": 9,
+      "question": "Which proposed computation is currently redundant?",
+      "response": {
+        "answer": "Repeating the locked DLS solubility pass on the same exhausted all-OOD external population is currently redundant; it would not add information without a compatible non-OOD validation source.",
+        "grounded_record_ids": [
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "DECISION-V39-SOLUBILITY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "This conclusion applies to repeating the same DLS protocol and population, not to testing a new compatible external source."
+        ]
+      }
+    },
+    {
+      "call_id": 29,
+      "index": 10,
+      "question": "What is the clearest remaining scientific limitation?",
+      "response": {
+        "answer": "The clearest remaining limitation is the absence of a compatible, non-OOD external solubility dataset with comparable target and condition semantics; therefore, unrestricted generalization remains unsupported, while the all-OOD failure does not show that every solubility model fails.",
+        "grounded_record_ids": [
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible non-OOD external solubility source is currently available."
+        ]
+      }
+    }
+  ],
+  "status": "PASS"
+}

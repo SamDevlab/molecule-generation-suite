@@ -18,6 +18,7 @@ This is an execution report for the v5.0 attempt, not a release declaration.
 | Boundary recovery smoke | 1 real attempt + 9 bounded cases | SAFE REJECTION in Codex-owned host; Live gate remains blocked |
 | Top-level owner launcher | implemented; 0 calls from this task | READY: requires genuinely external owner; configured for 39 sequential calls, ceiling 45 |
 | Top-level external Attempt 1 | 17 calls; 3 reviewers, final exam, 12 follow-ups accepted | BLOCKED after schema-valid `V5-FOLLOWUP-13` failed post-response grounding validation |
+| Top-level external Attempt 2 | 33 calls; 3 reviewers, final exam, 15 follow-ups, 10 stress, consistency through `TL-CONSISTENCY-02-B` | BLOCKED correctly on `UNKNOWN_GROUNDED_RECORD_ID`; `CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY` was not found in official artifacts |
 
 The fresh H2 run at `phi=1.05` returned `2395.300775369576 K` under the declared Cantera HP-equilibrium protocol. This is E3 physics output and is not an E4/E5 experiment. The associated material change is a narrow condition-map extension, not a universal combustion claim.
 
@@ -29,4 +30,4 @@ The recovery pass did not overwrite that prior attempt. Its diagnostic, smoke ma
 
 The official external execution contract is [TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md](TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md). The top-level launcher was not invoked from this Codex-owned task.
 
-Attempt 1 is preserved at `.research-os-live-5.0-top-level/`. The failure was operational rather than scientific: the prior boolean-only grounding check did not expose the rejected response’s exact mismatch. The next acceptance uses a fresh attempt namespace and the structured `GroundingValidationResult`/`LiveResponseValidationFailure` contracts.
+Attempt 1 is preserved at `.research-os-live-5.0-top-level/` and Attempt 2 at `.research-os-live-5.0-top-level-attempt-2/`. Attempt 2 is classified as `MODEL_REFERENCE_HALLUCINATION`, not a missing registered record. The consistency correction freezes Run A's literal support basis for independent Run B and compares canonical structured signatures; no scientific state is changed by either operational failure.

@@ -18,6 +18,12 @@ The first genuine external acceptance is preserved at `.research-os-live-5.0-top
 
 The post-response grounding gate then rejected that schema-valid answer. The prior launcher persisted only a boolean outcome, so it did not identify whether the rejection came from a missing field, an empty list, or an unknown ID. Attempt 1 therefore remains `BLOCKED_BEFORE_PASS` as an operational validation result, not a scientific failure. Its files are never overwritten by the next acceptance.
 
+## Top-level Attempt 2 — preserved
+
+The second genuine external acceptance is preserved at `.research-os-live-5.0-top-level-attempt-2/` with 33/39 calls: 3 reviewers, 1 final exam, 15/15 follow-ups, 10/10 stress answers, and the first two consistency calls (pair 1 A/B and pair 2 A). The process and schema gates passed for call 33, `TL-CONSISTENCY-02-B`, but grounding correctly failed closed with `UNKNOWN_GROUNDED_RECORD_ID`.
+
+The response declared `GROUNDED` and returned 67 candidate known IDs plus `CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY`. Deterministic searches of `.research-os-live-5.0` and `.research-os-live-4.5` found no official artifact containing that literal ID. It is therefore classified as `MODEL_REFERENCE_HALLUCINATION`, not as a missing registered record. The ID is not allowlisted, aliased, fuzzy-matched, autocorrected, or converted into another record. Attempt 2 remains an immutable operational finding and no scientific state was changed by it.
+
 ## Official external command
 
 Run from a separately owned terminal or Codex CLI process, after checking out `research-os-v1.3` at the expected commit:
@@ -26,7 +32,7 @@ Run from a separately owned terminal or Codex CLI process, after checking out `r
 .\.venv\Scripts\python.exe tools\benchmark\run_v50_live_top_level.py --run-all --expected-head (git rev-parse HEAD)
 ```
 
-The command performs preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. It then runs only the blocked Live stages sequentially. The next run selects a fresh namespace such as `.research-os-live-5.0-top-level-attempt-2/`; reruns select the next unused attempt number.
+The command performs preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. It then runs only the blocked Live stages sequentially. The next run selects a fresh namespace such as `.research-os-live-5.0-top-level-attempt-3/`; prior attempts are never overwritten and reruns select the next unused attempt number.
 
 | Stage | Calls |
 |---|---:|
@@ -50,6 +56,8 @@ Each attempt recognizes only these generated files: `top-level-owner-diagnostic.
 Follow-up, stress, consistency, and final-exam responses must declare `grounding_status`. `GROUNDED` requires at least one literal member of `ALLOWED_GROUNDED_RECORD_IDS`; `NO_GROUNDED_ANSWER` requires an empty ID list and an explicit limitation. The deterministic validator reports `NONE`, `INVALID_RESPONSE_TYPE`, `MISSING_GROUNDED_RECORD_IDS`, `INVALID_GROUNDED_RECORD_IDS_TYPE`, `EMPTY_GROUNDING_FOR_GROUNDED_ANSWER`, `UNKNOWN_GROUNDED_RECORD_ID`, `FORBIDDEN_SCIENTIFIC_FIELD`, or `INVALID_GROUNDING_STATUS` rather than returning an opaque boolean.
 
 When a schema-valid response is rejected after execution, `follow-up-answers.json` preserves the valid prior answers, the completed call metadata, a `LiveResponseValidationFailure`, and only safe final response fields (`answer`, `grounding_status`, `grounded_record_ids`, and `limitations`). It never persists hidden reasoning or raw process output.
+
+Consistency runs use a separate controlled contract. Run A is validated against the normal registered state, then its literal grounded IDs are frozen as `CONSISTENCY_GROUNDING_BASIS`. Independent Run B receives exactly that basis and no Run A prose. Consistency responses also require `primary_record_id` and bounded `limitation_codes`; comparison uses a canonical `ConsistencySignature` with sorted unique IDs and codes, so narrative wording and ID ordering do not create false divergence. Any new, missing, unknown, or invented ID remains a failure, including a globally known ID outside Run A's frozen basis. The separate `ConsistencyFailureCode` is stored alongside the underlying `GroundingFailureCode`.
 
 The final gate also records per-call process diagnostics and duration statistics (minimum, median, maximum, p95 when at least two calls exist, and timeout count), while `v5-live-acceptance-digest.json` remains content-addressed and records call/failure/timeout/evidence-mutation counts.
 

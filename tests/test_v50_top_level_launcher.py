@@ -12,6 +12,9 @@ import pytest
 from research_os.oracle import (
     CodexCliTransport,
     CodexLiveProvider,
+    ConsistencyFailureCode,
+    ConsistencyGroundingAssessment,
+    ConsistencySignature,
     GroundingFailureCode,
     GroundingStatus,
     GroundingValidationResult,
@@ -351,6 +354,20 @@ def test_grounding_prompt_exposes_literal_allowlist_and_status_contract():
     assert "Never invent identifiers" in prompt
 
 
+def test_consistency_prompt_freezes_basis_and_forbids_reference_composition():
+    prompt = CodexCliTransport._prompt({
+        "operation": "final_exam_followup",
+        "payload": {},
+        "context": {
+            "ALLOWED_GROUNDED_RECORD_IDS": ["A", "B"],
+            "consistency_contract": {"CONSISTENCY_GROUNDING_BASIS": ["A", "B"]},
+        },
+    })
+    assert "This is the second run of a controlled scientific consistency test" in prompt
+    assert "Do not invent, derive, compose, abbreviate, expand or rename record IDs" in prompt
+    assert '"A", "B"' in prompt
+
+
 def test_inner_grounding_schema_declares_both_status_contracts():
     schema_path = Path(__file__).resolve().parents[1] / "src" / "research_os" / "oracle" / "live_grounding.schema.json"
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
@@ -419,3 +436,154 @@ def test_next_attempt_namespace_never_reuses_nonempty_attempt(tmp_path: Path):
     attempt_2.mkdir()
     (attempt_2 / "v5-final-gate.json").write_text("{}", encoding="utf-8")
     assert launcher._next_output_root(tmp_path).name == ".research-os-live-5.0-top-level-attempt-3"
+
+
+class _ConsistencyFixtureSequence:
+    def __init__(self, responses, known_ids):
+        self.responses = iter(responses)
+        self.known_ids = set(known_ids)
+        self.contexts = []
+        self.calls = []
+
+    def state_context(self, instruction, *, extra=None):
+        context = {
+            "instruction": instruction,
+            "known_record_ids": sorted(self.known_ids),
+            "ALLOWED_GROUNDED_RECORD_IDS": sorted(self.known_ids),
+        }
+        if extra:
+            context.update(extra)
+        return context
+
+    def invoke(self, label, operation, method_name, context):
+        self.contexts.append(context)
+        call = {"call_id": len(self.calls) + 1, "label": label, "operation": operation, "status": "COMPLETED", "diagnostic": None}
+        self.calls.append(call)
+        return next(self.responses), call
+
+    def validate_grounded_response(self, response, call, *, require_grounded=True):
+        validation = validate_grounding(response, self.known_ids)
+        valid = validation.valid and (not require_grounded or validation.grounding_status == GroundingStatus.GROUNDED.value)
+        return valid, validation, None
+
+
+def _consistency_response(ids, *, primary=None, codes=None, status="GROUNDED", answer="answer", limitations=None):
+    return {
+        "answer": answer,
+        "grounding_status": status,
+        "grounded_record_ids": list(ids),
+        "primary_record_id": primary if status == "GROUNDED" else None,
+        "limitation_codes": list(codes or []),
+        "limitations": list(limitations or []),
+    }
+
+
+def _run_consistency_pair(response_a, response_b, *, known_ids=("A", "B", "C")):
+    sequence = _ConsistencyFixtureSequence(tuple(item for _ in range(5) for item in (response_a, response_b)), known_ids)
+    result = launcher._consistency(sequence, {"response": {}})
+    return result, sequence
+
+
+def test_cons_01_exact_frozen_basis_passes():
+    result, _ = _run_consistency_pair(_consistency_response(("A", "B", "C"), primary="A"), _consistency_response(("A", "B", "C"), primary="A"))
+    assert result["status"] == "PASS"
+    assert result["pairs"][0]["consistency_assessment"]["failure_code"] == ConsistencyFailureCode.NONE.value
+
+
+def test_cons_02_order_is_ignored():
+    result, _ = _run_consistency_pair(_consistency_response(("A", "B", "C"), primary="A"), _consistency_response(("C", "A", "B"), primary="A"))
+    assert result["status"] == "PASS"
+    assert result["pairs"][0]["consistency_assessment"]["support_basis_equal"] is True
+
+
+def test_cons_03_new_unknown_id_fails_with_consistency_code():
+    result, _ = _run_consistency_pair(_consistency_response(("A", "B", "C"), primary="A"), _consistency_response(("A", "B", "C", "FAKE"), primary="A"))
+    assessment = result["pairs"][0]["consistency_assessment"]
+    assert result["status"] == "BLOCKED_BEFORE_PASS"
+    assert assessment["failure_code"] == ConsistencyFailureCode.CONSISTENCY_NEW_GROUNDED_RECORD_ID.value
+    assert assessment["new_ids_in_b"] == ["FAKE"]
+
+
+def test_cons_04_unknown_id_preserves_underlying_grounding_failure():
+    result, sequence = _run_consistency_pair(_consistency_response(("A", "B", "C"), primary="A"), _consistency_response(("A", "B", "C", "FAKE"), primary="A"))
+    underlying = sequence.validate_grounded_response(result["pairs"][0]["run_b"], result["pairs"][0]["calls"][1], require_grounded=False)[1]
+    assert underlying.failure_code == GroundingFailureCode.UNKNOWN_GROUNDED_RECORD_ID.value
+    assert result["pairs"][0]["consistency_assessment"]["failure_code"] == ConsistencyFailureCode.CONSISTENCY_NEW_GROUNDED_RECORD_ID.value
+
+
+def test_cons_05_globally_known_id_outside_frozen_basis_still_fails():
+    result, _ = _run_consistency_pair(_consistency_response(("A", "B", "C"), primary="A"), _consistency_response(("A", "B", "C", "D"), primary="A"), known_ids=("A", "B", "C", "D"))
+    assert result["pairs"][0]["consistency_assessment"]["failure_code"] == ConsistencyFailureCode.CONSISTENCY_NEW_GROUNDED_RECORD_ID.value
+
+
+def test_cons_06_missing_frozen_id_fails():
+    result, _ = _run_consistency_pair(_consistency_response(("A", "B", "C"), primary="A"), _consistency_response(("A", "B"), primary="A"))
+    assert result["pairs"][0]["consistency_assessment"]["failure_code"] == ConsistencyFailureCode.CONSISTENCY_MISSING_GROUNDED_RECORD_ID.value
+
+
+def test_cons_07_same_ids_different_order_signature_matches():
+    result, _ = _run_consistency_pair(_consistency_response(("A", "B", "C"), primary="A"), _consistency_response(("B", "C", "A"), primary="A"))
+    pair = result["pairs"][0]
+    assert pair["consistency_signature_a"]["digest"] == pair["consistency_signature_b"]["digest"]
+
+
+def test_cons_08_prose_difference_does_not_fail():
+    result, _ = _run_consistency_pair(_consistency_response(("A",), primary="A", answer="first"), _consistency_response(("A",), primary="A", answer="second"))
+    assert result["status"] == "PASS"
+
+
+def test_cons_09_limitation_prose_difference_does_not_fail():
+    result, _ = _run_consistency_pair(_consistency_response(("A",), primary="A", codes=("PROTOCOL_SENSITIVITY",), limitations=("wording one",)), _consistency_response(("A",), primary="A", codes=("PROTOCOL_SENSITIVITY",), limitations=("wording two",)))
+    assert result["status"] == "PASS"
+
+
+def test_cons_10_limitation_code_drift_fails():
+    result, _ = _run_consistency_pair(_consistency_response(("A",), primary="A", codes=("PROTOCOL_SENSITIVITY",)), _consistency_response(("A",), primary="A", codes=("OUT_OF_DOMAIN",)))
+    assert result["pairs"][0]["consistency_assessment"]["failure_code"] == ConsistencyFailureCode.LIMITATION_DRIFT.value
+
+
+def test_cons_11_primary_record_drift_fails():
+    result, _ = _run_consistency_pair(_consistency_response(("A", "B"), primary="A"), _consistency_response(("A", "B"), primary="B"))
+    assert result["pairs"][0]["consistency_assessment"]["failure_code"] == ConsistencyFailureCode.PRIMARY_RECORD_DRIFT.value
+
+
+def test_cons_12_grounding_status_drift_fails():
+    result, _ = _run_consistency_pair(_consistency_response(("A",), primary="A"), _consistency_response((), status="NO_GROUNDED_ANSWER", limitations=("not supported",)))
+    assert result["pairs"][0]["consistency_assessment"]["failure_code"] == ConsistencyFailureCode.GROUNDING_STATUS_DRIFT.value
+
+
+def test_cons_13_no_grounded_answer_to_grounded_fails():
+    result, _ = _run_consistency_pair(_consistency_response((), status="NO_GROUNDED_ANSWER", limitations=("not supported",)), _consistency_response(("A",), primary="A"))
+    assert result["pairs"][0]["consistency_assessment"]["failure_code"] == ConsistencyFailureCode.GROUNDING_STATUS_DRIFT.value
+
+
+def test_cons_14_plausible_reference_is_not_corrected():
+    fake = "CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY"
+    result, _ = _run_consistency_pair(_consistency_response(("A", "B", "C"), primary="A"), _consistency_response(("A", "B", "C", fake), primary="A"))
+    assert result["pairs"][0]["consistency_assessment"]["new_ids_in_b"] == [fake]
+    assert fake not in result["pairs"][0]["consistency_grounding_basis"]
+
+
+def test_cons_15_run_b_receives_only_frozen_basis_and_not_run_a_prose():
+    result, sequence = _run_consistency_pair(_consistency_response(("A", "B", "C"), primary="A", answer="run A private prose"), _consistency_response(("A", "B", "C"), primary="A"))
+    assert result["status"] == "PASS"
+    context_b = sequence.contexts[1]
+    assert context_b["CONSISTENCY_GROUNDING_BASIS"] == ["A", "B", "C"]
+    assert context_b["ALLOWED_GROUNDED_RECORD_IDS"] == ["A", "B", "C"]
+    assert context_b["known_record_ids"] == ["A", "B", "C"]
+    assert "run A private prose" not in json.dumps(context_b)
+
+
+def test_consistency_signature_excludes_narrative_and_is_canonical():
+    first = ConsistencySignature("GROUNDED", "A", ("C", "A", "B"), ("OUT_OF_DOMAIN", "PROTOCOL_SENSITIVITY"))
+    second = ConsistencySignature("GROUNDED", "A", ("A", "B", "C"), ("PROTOCOL_SENSITIVITY", "OUT_OF_DOMAIN"))
+    assert first.digest == second.digest
+    assert first.to_dict()["grounded_record_ids"] == ["A", "B", "C"]
+
+
+def test_consistency_types_are_exported_with_required_assessment_fields():
+    assert {item.name for item in fields(ConsistencyGroundingAssessment)} == {
+        "valid", "pair_index", "question", "run_a_call_id", "run_b_call_id", "run_a_grounding_status", "run_b_grounding_status",
+        "run_a_ids", "run_b_ids", "normalized_run_a_ids", "normalized_run_b_ids", "new_ids_in_b", "missing_ids_in_b",
+        "support_basis_equal", "limitation_codes_equal", "primary_record_equal", "failure_code",
+    }
