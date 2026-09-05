@@ -523,20 +523,20 @@ class CodexCliTransport:
         request_context = request.get("context")
         if isinstance(request_context, dict) and isinstance(request_context.get("consistency_contract"), dict):
             contract = request_context["consistency_contract"]
+            run = str(request_context.get("consistency_run", "B"))
             basis = contract.get("CONSISTENCY_GROUNDING_BASIS", request_context.get("ALLOWED_GROUNDED_RECORD_IDS", []))
-            consistency_safety = (
-                "Controlled consistency contract: return the safe structured fields answer, grounding_status, "
-                "grounded_record_ids, primary_record_id, limitation_codes, and limitations. "
-                "This is the second run of a controlled scientific consistency test. No scientific Evidence, "
-                "Claims, Decisions, Runs or registered state changed between Run A and Run B. For this "
-                "controlled comparison, your citation basis is frozen. You MUST use exactly the record IDs "
-                "supplied in CONSISTENCY_GROUNDING_BASIS. Do not introduce additional record IDs, even if "
-                "another record appears scientifically relevant. Do not invent, derive, compose, abbreviate, "
-                "expand or rename record IDs. Copy identifiers literally. If you cannot answer the same "
-                "question using the frozen basis, return NO_GROUNDED_ANSWER rather than inventing or adding "
-                "another ID. The frozen basis for this invocation is "
-                f"{json.dumps(basis, ensure_ascii=False, sort_keys=True)}.\n"
-            )
+            consistency_safety = "Controlled consistency contract: return the safe structured fields answer, grounding_status, grounded_record_ids, primary_record_id, limitation_codes, and limitations. Do not invent, derive, compose, abbreviate, expand or rename record IDs. Copy identifiers literally.\n"
+            if run == "B":
+                consistency_safety += (
+                    "This is the second run of a controlled scientific consistency test. No scientific Evidence, "
+                    "Claims, Decisions, Runs or registered state changed between Run A and Run B. For this "
+                    "controlled comparison, your citation basis is frozen. You MUST use exactly the record IDs "
+                    "supplied in CONSISTENCY_GROUNDING_BASIS. Do not introduce additional record IDs, even if "
+                    "another record appears scientifically relevant. If you cannot answer the same question "
+                    "using the frozen basis, return NO_GROUNDED_ANSWER rather than inventing or adding another "
+                    "ID. The frozen basis for this invocation is "
+                    f"{json.dumps(basis, ensure_ascii=False, sort_keys=True)}.\n"
+                )
         return (
             "You are the live reasoning component of Research OS.\n"
             "You are already the Live Codex researcher/reviewer for this invocation. Do not call CodexLiveProvider. Do not invoke codex exec. Do not recursively create another LLM session.\n"

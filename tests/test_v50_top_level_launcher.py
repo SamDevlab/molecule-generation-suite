@@ -368,6 +368,20 @@ def test_consistency_prompt_freezes_basis_and_forbids_reference_composition():
     assert '"A", "B"' in prompt
 
 
+def test_consistency_run_a_prompt_is_not_mislabeled_as_run_b():
+    prompt = CodexCliTransport._prompt({
+        "operation": "final_exam_followup",
+        "payload": {},
+        "context": {
+            "consistency_run": "A",
+            "ALLOWED_GROUNDED_RECORD_IDS": ["A", "B"],
+            "consistency_contract": {},
+        },
+    })
+    assert "Controlled consistency contract" in prompt
+    assert "This is the second run" not in prompt
+
+
 def test_inner_grounding_schema_declares_both_status_contracts():
     schema_path = Path(__file__).resolve().parents[1] / "src" / "research_os" / "oracle" / "live_grounding.schema.json"
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
