@@ -458,6 +458,8 @@ class _ConsistencyFixtureSequence:
         self.known_ids = set(known_ids)
         self.contexts = []
         self.calls = []
+        self.invocations = []
+        self.response_validation_failures = []
 
     def state_context(self, instruction, *, extra=None):
         context = {
@@ -473,6 +475,7 @@ class _ConsistencyFixtureSequence:
         self.contexts.append(context)
         call = {"call_id": len(self.calls) + 1, "label": label, "operation": operation, "status": "COMPLETED", "diagnostic": None}
         self.calls.append(call)
+        self.invocations.append(call)
         return next(self.responses), call
 
     def validate_grounded_response(self, response, call, *, require_grounded=True):
@@ -601,3 +604,149 @@ def test_consistency_types_are_exported_with_required_assessment_fields():
         "run_a_ids", "run_b_ids", "normalized_run_a_ids", "normalized_run_b_ids", "new_ids_in_b", "missing_ids_in_b",
         "support_basis_equal", "limitation_codes_equal", "primary_record_equal", "failure_code",
     }
+
+
+def test_cons_shape_01_provider_declares_all_consistency_fields_for_both_runs():
+    base_context = {
+        "ALLOWED_GROUNDED_RECORD_IDS": ["RUN-1"],
+        "consistency_contract": {"allowed_limitation_codes": ["PROTOCOL_SENSITIVITY"]},
+    }
+    prompt_a = CodexCliTransport._prompt({"operation": "final_exam_followup", "payload": {}, "context": {**base_context, "consistency_run": "A"}})
+    prompt_b = CodexCliTransport._prompt({"operation": "final_exam_followup", "payload": {}, "context": {**base_context, "consistency_run": "B"}})
+    for prompt in (prompt_a, prompt_b):
+        assert '"primary_record_id"' in prompt
+        assert '"limitation_codes"' in prompt
+        assert "grounding_status, grounded_record_ids, primary_record_id, limitation_codes, and limitations" in prompt
+
+
+def test_cons_shape_02_schema_is_strict_and_matches_canonical_codes():
+    schema_path = Path(__file__).resolve().parents[1] / "src" / "research_os" / "oracle" / "live_consistency.schema.json"
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    assert schema["additionalProperties"] is False
+    assert schema["required"] == ["answer", "grounding_status", "grounded_record_ids", "primary_record_id", "limitation_codes", "limitations"]
+    assert schema["properties"]["limitation_codes"]["items"]["enum"] == sorted(launcher.CONSISTENCY_LIMITATION_CODES)
+
+
+def test_cons_shape_03_missing_primary_record_is_structural_failure():
+    response = _consistency_response(("A",))
+    response.pop("primary_record_id")
+    valid, reasons = launcher._consistency_contract_diagnostics(response, validate_grounding(response, {"A"}), {"A"})
+    assert valid is False
+    assert reasons == ("MISSING_PRIMARY_RECORD_ID",)
+
+
+def test_cons_shape_04_missing_limitation_codes_is_structural_failure():
+    response = _consistency_response(("A",), primary="A")
+    response.pop("limitation_codes")
+    valid, reasons = launcher._consistency_contract_diagnostics(response, validate_grounding(response, {"A"}), {"A"})
+    assert valid is False
+    assert reasons == ("MISSING_LIMITATION_CODES",)
+
+
+def test_cons_shape_05_invalid_primary_record_is_rejected_against_frozen_basis():
+    response = _consistency_response(("A",), primary="B")
+    valid, reasons = launcher._consistency_contract_diagnostics(response, validate_grounding(response, {"A", "B"}), {"A"})
+    assert valid is False
+    assert reasons == ("INVALID_PRIMARY_RECORD_ID",)
+
+
+def test_cons_shape_06_invalid_limitation_code_is_rejected_without_prose_parsing():
+    response = _consistency_response(("A",), primary="A", limitations=("OUT_OF_DOMAIN",))
+    response["limitation_codes"] = ["not-a-canonical-code"]
+    valid, reasons = launcher._consistency_contract_diagnostics(response, validate_grounding(response, {"A"}), {"A"})
+    assert valid is False
+    assert reasons == ("INVALID_LIMITATION_CODES",)
+
+
+def test_cons_shape_07_no_grounded_answer_requires_null_primary_and_empty_ids():
+    response = _consistency_response((), status="NO_GROUNDED_ANSWER", limitations=("external data unavailable",))
+    valid, reasons = launcher._consistency_contract_diagnostics(response, validate_grounding(response, {"A"}), set())
+    assert valid is True
+    assert reasons == ()
+
+
+def test_cons_shape_08_extra_field_is_rejected_by_strict_contract():
+    response = _consistency_response(("A",), primary="A")
+    response["limitation_code_text"] = "PROTOCOL_SENSITIVITY"
+    valid, reasons = launcher._consistency_contract_diagnostics(response, validate_grounding(response, {"A"}), {"A"})
+    assert valid is False
+    assert reasons == ("INVALID_CONSISTENCY_RESPONSE",)
+
+
+def test_cons_shape_09_attempt_three_shape_failure_stops_before_run_b():
+    response_a = _consistency_response(("A", "B", "C"), primary="A")
+    response_a.pop("primary_record_id")
+    response_a.pop("limitation_codes")
+    response_b = _consistency_response(("A", "B", "C"), primary="A")
+    result, sequence = _run_consistency_pair(response_a, response_b)
+    assessment = result["pairs"][0]["consistency_assessment"]
+    assert result["status"] == "BLOCKED_BEFORE_PASS"
+    assert assessment["failure_code"] == ConsistencyFailureCode.RUN_A_GROUNDING_FAILURE.value
+    assert result["pairs"][0]["contract_failure_reasons"] == ["MISSING_PRIMARY_RECORD_ID", "MISSING_LIMITATION_CODES"]
+    assert len(sequence.calls) == 1
+    assert validate_grounding(response_a, set(sequence.known_ids)).valid is True
+
+
+def test_cons_shape_10_final_gate_preserves_underlying_grounding_and_consistency_codes():
+    response_a = _consistency_response(("A",), primary="A")
+    response_b = _consistency_response(("A",), primary="A")
+    result, sequence = _run_consistency_pair(response_a, response_b)
+    assessment = result["pairs"][0]["consistency_assessment"]
+    assessment["valid"] = False
+    assessment["failure_code"] = ConsistencyFailureCode.RUN_A_GROUNDING_FAILURE.value
+    sequence.response_validation_failures.append(type("Failure", (), {
+        "failure_code": GroundingFailureCode.UNKNOWN_GROUNDED_RECORD_ID.value,
+        "call_id": 1,
+        "label": "TL-CONSISTENCY-01-A",
+        "operation": "final_exam_followup",
+    })())
+    fields = launcher._final_gate_failure_fields(sequence, result)
+    assert fields["failure_code"] == GroundingFailureCode.UNKNOWN_GROUNDED_RECORD_ID.value
+    assert fields["consistency_failure_code"] == ConsistencyFailureCode.RUN_A_GROUNDING_FAILURE.value
+    assert fields["failed_call_id"] == 1
+
+
+def test_cons_shape_11_b_contract_failure_is_not_misclassified_as_primary_drift():
+    response_a = _consistency_response(("A",), primary="A")
+    response_b = _consistency_response(("A",), primary="A")
+    response_b.pop("primary_record_id")
+    result, _ = _run_consistency_pair(response_a, response_b)
+    assert result["pairs"][0]["consistency_assessment"]["failure_code"] == ConsistencyFailureCode.RUN_B_GROUNDING_FAILURE.value
+    assert result["pairs"][0]["contract_failure_reasons"] == ["MISSING_PRIMARY_RECORD_ID"]
+
+
+def test_cons_shape_12_final_gate_prioritizes_process_over_grounding_and_consistency():
+    response_a = _consistency_response(("A",), primary="A")
+    response_b = _consistency_response(("A",), primary="A")
+    result, sequence = _run_consistency_pair(response_a, response_b)
+    assessment = result["pairs"][0]["consistency_assessment"]
+    assessment["valid"] = False
+    assessment["failure_code"] = ConsistencyFailureCode.RUN_A_GROUNDING_FAILURE.value
+    sequence.invocations[0]["status"] = "FAILED"
+    sequence.invocations[0]["diagnostic"] = {"failure_code": "PROCESS_START_ERROR"}
+    sequence.response_validation_failures.append(type("Failure", (), {
+        "failure_code": GroundingFailureCode.UNKNOWN_GROUNDED_RECORD_ID.value,
+        "call_id": 1,
+        "label": "TL-CONSISTENCY-01-A",
+        "operation": "final_exam_followup",
+    })())
+    fields = launcher._final_gate_failure_fields(sequence, result)
+    assert fields["failure_code"] == "PROCESS_START_ERROR"
+    assert fields["consistency_failure_code"] == ConsistencyFailureCode.RUN_A_GROUNDING_FAILURE.value
+
+
+def test_cons_shape_13_later_consistency_failure_is_preserved_after_earlier_grounding_failure():
+    response_a = _consistency_response(("A",), primary="A")
+    response_b = _consistency_response(("A",), primary="A")
+    result, sequence = _run_consistency_pair(response_a, response_b)
+    result["pairs"][0]["consistency_assessment"]["valid"] = False
+    result["pairs"][0]["consistency_assessment"]["failure_code"] = ConsistencyFailureCode.LIMITATION_DRIFT.value
+    sequence.response_validation_failures.append(type("Failure", (), {
+        "failure_code": GroundingFailureCode.UNKNOWN_GROUNDED_RECORD_ID.value,
+        "call_id": 12,
+        "label": "V5-FOLLOWUP-12",
+        "operation": "final_exam_followup",
+    })())
+    fields = launcher._final_gate_failure_fields(sequence, result)
+    assert fields["failure_code"] == GroundingFailureCode.UNKNOWN_GROUNDED_RECORD_ID.value
+    assert fields["consistency_failure_code"] == ConsistencyFailureCode.LIMITATION_DRIFT.value

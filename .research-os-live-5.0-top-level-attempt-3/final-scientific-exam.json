@@ -1,0 +1,121 @@
+{
+  "call": {
+    "call_id": 4,
+    "diagnostic": {
+      "attempt": 1,
+      "command_contract": "codex exec --ephemeral --skip-git-repo-check --sandbox read-only --color never --output-schema <fixed-schema> -",
+      "completed_at": "2026-09-05T12:38:36.415414+00:00",
+      "depth": 0,
+      "elapsed": 58.210129,
+      "exit_status": "COMPLETED",
+      "failure_code": null,
+      "failure_stage": "NONE",
+      "invocation_id": "LIVE-84CDD8A9306C4A8E",
+      "max_attempts": 1,
+      "model": "gpt-5.6-luna",
+      "operation": "final_scientific_exam",
+      "parent_invocation_id": null,
+      "provider": "CODEX_LIVE",
+      "reentrancy_state": "COMPLETED",
+      "schema_status": "PASS",
+      "started_at": "2026-09-05T12:37:38.205285+00:00",
+      "stderr_bytes": 38870,
+      "stderr_truncated": false,
+      "stdout_bytes": 2939,
+      "stdout_truncated": false,
+      "timeout_budget": 120.0
+    },
+    "elapsed": 58.203000000008615,
+    "error": null,
+    "label": "V5-FINAL-SCIENTIFIC-EXAM",
+    "operation": "final_scientific_exam",
+    "process_events": [
+      {
+        "call_id": 4,
+        "cleanup_status": "RUNNING",
+        "label": "V5-FINAL-SCIENTIFIC-EXAM",
+        "parent_pid": 11664,
+        "pid": 4744,
+        "started_at": "2026-09-05T12:37:38.215408+00:00"
+      },
+      {
+        "call_id": 4,
+        "cleanup_status": "EXITED",
+        "completed_at": "2026-09-05T12:38:36.414881+00:00",
+        "exit_code": 0,
+        "label": "V5-FINAL-SCIENTIFIC-EXAM",
+        "parent_pid": 11664,
+        "pid": 4744,
+        "started_at": "2026-09-05T12:37:38.215408+00:00",
+        "termination_reason": "NORMAL_EXIT"
+      }
+    ],
+    "response_hash": "63f5594d00a9258ca2cc762ec52def3102c0ba93bda0d6ba13ce19793e402274",
+    "status": "COMPLETED"
+  },
+  "criteria_declared_before_execution": true,
+  "evidence_level_changed_by_codex": false,
+  "failed_response": null,
+  "failed_response_validation": null,
+  "grounding_validation": {
+    "failure_code": "NONE",
+    "forbidden_fields": [],
+    "grounding_status": "GROUNDED",
+    "known_ids_count": 67,
+    "missing_grounding_field": false,
+    "response_hash": "63f5594d00a9258ca2cc762ec52def3102c0ba93bda0d6ba13ce19793e402274",
+    "response_type": "dict",
+    "returned_ids": [
+      "IMP-V50-DYNAMIC-COMBUSTION",
+      "RUN-V50-COMB-H2-PHI105",
+      "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+      "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+      "IMP-V50-DYNAMIC-SOLUBILITY",
+      "V50-P-SOLUBILITY-COMPATIBLE",
+      "CLM-SOLUBILITY-NO-DECISION",
+      "DECISION-V39-SOLUBILITY",
+      "CLM-DOCKING-DECISION-BOUNDARY",
+      "CH-V45-DOCKING-DECISION",
+      "GAP-E3-E4-COMPARISON",
+      "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+      "GAP-MATERIALS-CONDITION-COMPLETE-RECORD"
+    ],
+    "unknown_ids": [],
+    "valid": true
+  },
+  "response": {
+    "conclusion_kept": "The predeclared phi=1.05 H2 Cantera run legitimately narrows the bounded E3 combustion condition map, but remains a simulation result and does not support an experimental or performance claim.",
+    "conclusion_weakened": "The external solubility result should not be generalized to say that solubility modeling fails broadly: the available external population was entirely OOD, so the defensible statement is limited to this sample and protocol.",
+    "grounded_record_ids": [
+      "IMP-V50-DYNAMIC-COMBUSTION",
+      "RUN-V50-COMB-H2-PHI105",
+      "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+      "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+      "IMP-V50-DYNAMIC-SOLUBILITY",
+      "V50-P-SOLUBILITY-COMPATIBLE",
+      "CLM-SOLUBILITY-NO-DECISION",
+      "DECISION-V39-SOLUBILITY",
+      "CLM-DOCKING-DECISION-BOUNDARY",
+      "CH-V45-DOCKING-DECISION",
+      "GAP-E3-E4-COMPARISON",
+      "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+      "GAP-MATERIALS-CONDITION-COMPLETE-RECORD"
+    ],
+    "grounding_status": "GROUNDED",
+    "highest_value_external_evidence": "An independent, condition-compatible, non-OOD solubility dataset with record-level endpoint, units, and sufficient in-domain coverage for frozen-model validation.",
+    "limitations": [
+      "No compatible external solubility source is currently available, so the proposed validation cannot be executed.",
+      "No matched combustion experiment is available; Cantera output remains E3.",
+      "The final exam is recorded as not yet passed, so this response does not claim milestone completion."
+    ],
+    "no_decision_reconsideration": "DECISION-V39-SOLUBILITY is the best candidate for later reconsideration, but it should remain unchanged until a compatible non-OOD source exists; the battery and materials NO_DECISIONs remain externally blocked.",
+    "program_executed": false,
+    "proposed_research_program": "Acquire one independent compatible non-OOD solubility source, freeze the existing model and OOD rule, predeclare comparability checks and outcomes, and run validation only if those checks pass; do not retrain or tune thresholds beforehand.",
+    "protocol_sensitive_decision": "The docking decision is most vulnerable: it depends on the 1PXX receptor, declared grid and seeds, and one docking protocol; docking scores are not measured affinity or efficacy.",
+    "redundant_step": "Repeating the locked DLS pass, retraining, or tuning thresholds before obtaining a compatible external validation source is currently redundant and low-information.",
+    "scientific_state_change": "No new scientific state change was made in this exam. The stored state already records the phi=1.05 combustion condition extension as a bounded E3 decision revision; the E4 comparison and compatible solubility, battery, and materials validations remain unresolved.",
+    "unanswered_question": "Would the frozen solubility workflow validate on an independent, condition-compatible, non-OOD external population with comparable endpoint semantics and coverage?"
+  },
+  "scientific_evidence_created_by_codex": false,
+  "status": "PASS"
+}

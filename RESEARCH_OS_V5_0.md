@@ -1,6 +1,6 @@
 # Research OS v5.0 — operational validation status
 
-Status: **READY_FOR_TOP_LEVEL_LIVE_EXECUTION**; release gate remains **BLOCKED_BEFORE_PASS**. Genuine top-level Attempt 1 completed 17/39 Live calls and Attempt 2 completed 33/39 before schema-valid responses were rejected by grounding/consistency gates. Attempt 2 specifically exposed `MODEL_REFERENCE_HALLUCINATION` for the unregistered literal ID `CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY`; the fail-closed validator was correct. The repository now freezes Run A's support basis for Run B and selects a fresh namespace for Attempt 3. No Live launcher is executed from the current Codex-owned task and no test provider is substituted.
+Status: **READY_FOR_TOP_LEVEL_LIVE_EXECUTION**; release gate remains **BLOCKED_BEFORE_PASS**. Genuine top-level Attempt 1 completed 17/39 Live calls, Attempt 2 completed 33/39 before an unknown grounded ID was rejected, and Attempt 3 completed 30/39 before the consistency response contract rejected missing `primary_record_id` and `limitation_codes`. Attempt 2 specifically exposed `MODEL_REFERENCE_HALLUCINATION` for the unregistered literal ID `CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY`; the fail-closed validator was correct. The repository now enforces the six-field consistency response, freezes Run A's support basis for Run B, and selects a fresh namespace for Attempt 4. No Live launcher is executed from the current Codex-owned task and no test provider is substituted.
 
 The attempted cycle selected a high-information, locally executable question from the registered state: whether a predeclared H2 equilibrium condition at `phi=1.05`, `T0=300 K`, `P=101325 Pa`, `gri30.yaml`, and mole basis added information to the existing combustion boundary. The run produced a sealed E3 physics bundle. It did not produce experimental evidence or change an EvidenceLevel.
 
@@ -12,7 +12,7 @@ The machine-readable attempt is [master-real-research-validation.json](.research
 
 The recovery diagnostics are [live-boundary-diagnostics.json](.research-os-live-5.0-recovery/live-boundary-diagnostics.json), [live-smoke-matrix.json](.research-os-live-5.0-recovery/live-smoke-matrix.json), and the [provider boundary audit](CODEX_LIVE_PROVIDER_V5_AUDIT.md). Live reviewer, exam, and consistency artifacts remain explicitly blocked.
 
-The top-level acceptance contract, Attempts 1–2 records, grounding diagnostics, worktree policy, and official external command are documented in [TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md](TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md). Attempt 1 remains at `.research-os-live-5.0-top-level/`, Attempt 2 at `.research-os-live-5.0-top-level-attempt-2/`; the next run writes to `.research-os-live-5.0-top-level-attempt-3/` and does not overwrite prior attempts or recovery artifacts.
+The top-level acceptance contract, Attempts 1–3 records, grounding diagnostics, worktree policy, and official external command are documented in [TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md](TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md). Attempt 1 remains at `.research-os-live-5.0-top-level/`, Attempt 2 at `.research-os-live-5.0-top-level-attempt-2/`, and Attempt 3 at `.research-os-live-5.0-top-level-attempt-3/`; the next run writes to `.research-os-live-5.0-top-level-attempt-4/` and does not overwrite prior attempts or recovery artifacts.
 
 ## Gate result
 
@@ -26,4 +26,4 @@ The following completed before the Live bridge blocker:
 - impact traces for knowledge/decision change, no-material-change, and external blockers;
 - scientific and security audits with no failed check in the final attempt.
 
-The release remains 4.5.0 until the three sequential Live review roles, Live problem discovery, and Live final examination return grounded analysis from the same stored evidence.
+The release remains 4.5.0 until the three sequential Live review roles, Live problem discovery, and Live final examination return grounded analysis from the same stored evidence and the full consistency contract completes.

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Research OS controlled Live consistency response",
+  "description": "Strict inner response contract for Run A and Run B of a controlled consistency pair.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "answer",
+    "grounding_status",
+    "grounded_record_ids",
+    "primary_record_id",
+    "limitation_codes",
+    "limitations"
+  ],
+  "properties": {
+    "answer": {"type": "string"},
+    "grounding_status": {
+      "type": "string",
+      "enum": ["GROUNDED", "NO_GROUNDED_ANSWER"]
+    },
+    "grounded_record_ids": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "primary_record_id": {"type": ["string", "null"]},
+    "limitation_codes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "COMPUTATIONAL_NOT_EXPERIMENTAL",
+          "DEPENDENT_EVIDENCE",
+          "EXPERIMENTAL_VALIDATION_MISSING",
+          "EXTERNAL_VALIDATION_MISSING",
+          "MISSING_CONDITION_COMPLETE_DATA",
+          "NO_ELIGIBLE_EXTERNAL_DATA",
+          "OTHER_REGISTERED_LIMITATION",
+          "OUT_OF_DOMAIN",
+          "PROTOCOL_SENSITIVITY",
+          "RESOURCE_UNAVAILABLE",
+          "SINGLE_STRUCTURE_DEPENDENCE",
+          "UNCERTAINTY_LIMITED"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "limitations": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"grounding_status": {"const": "GROUNDED"}}},
+      "then": {
+        "properties": {
+          "grounded_record_ids": {"minItems": 1},
+          "primary_record_id": {"type": "string"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"grounding_status": {"const": "NO_GROUNDED_ANSWER"}}},
+      "then": {
+        "properties": {
+          "grounded_record_ids": {"maxItems": 0},
+          "primary_record_id": {"type": "null"}
+        }
+      }
+    }
+  ]
+}

@@ -485,6 +485,8 @@ class CodexCliTransport:
     @staticmethod
     def _prompt(request: dict[str, Any]) -> str:
         operation = request["operation"]
+        request_context = request.get("context")
+        consistency_context = isinstance(request_context, dict) and isinstance(request_context.get("consistency_contract"), dict)
         shape = {
             "interpret_question": '{"text":"...","domain":"...","objective":"...","constraints":{},"required_evidence_level":"E2_COMPUTATIONAL","allowed_tools":[],"forbidden_tools":[]}',
             "generate_plan": '{"question_id":"...","steps":[{"step_id":"...","lab":"registered Lab","experiment":"registered experiment","inputs":{},"requires":[],"produces":[],"minimum_evidence_level":"E2_COMPUTATIONAL"}],"assumptions":[],"required_sources":[],"expected_outputs":[],"risk_flags":[],"claim_targets":[]}',
@@ -506,6 +508,8 @@ class CodexCliTransport:
             "final_exam_followup": '{"answer":"brief artifact-grounded answer","grounding_status":"GROUNDED|NO_GROUNDED_ANSWER","grounded_record_ids":["RUN-...","GAP-..."],"limitations":["..."]}',
             "final_exam_followups": '{"answers":[{"index":1,"answer":"brief artifact-grounded answer","grounding_status":"GROUNDED|NO_GROUNDED_ANSWER","grounded_record_ids":["RUN-...","GAP-..."],"limitations":["..."]}]}',
         }.get(operation, "{}")
+        if consistency_context and operation in {"final_exam_followup", "final_exam_followups"}:
+            shape = '{"answer":"brief artifact-grounded answer","grounding_status":"GROUNDED|NO_GROUNDED_ANSWER","grounded_record_ids":["RUN-..."],"primary_record_id":"RUN-... or null","limitation_codes":["COMPUTATIONAL_NOT_EXPERIMENTAL"],"limitations":["brief narrative limitation"]}'
         narration_safety = ""
         if operation == "summarize_results":
             narration_safety = "For narration, do not repeat numeric scientific values, units, or derived comparisons from memory. Refer to recorded evidence IDs/runs and limitations only; the UI obtains values directly from the Lab payload.\n"
@@ -520,11 +524,11 @@ class CodexCliTransport:
                 "or guessed IDs unless literally present in ALLOWED_GROUNDED_RECORD_IDS.\n"
             )
         consistency_safety = ""
-        request_context = request.get("context")
-        if isinstance(request_context, dict) and isinstance(request_context.get("consistency_contract"), dict):
+        if consistency_context:
             contract = request_context["consistency_contract"]
             run = str(request_context.get("consistency_run", "B"))
             basis = contract.get("CONSISTENCY_GROUNDING_BASIS", request_context.get("ALLOWED_GROUNDED_RECORD_IDS", []))
+            limitation_codes = contract.get("allowed_limitation_codes", [])
             consistency_safety = "Controlled consistency contract: return the safe structured fields answer, grounding_status, grounded_record_ids, primary_record_id, limitation_codes, and limitations. Do not invent, derive, compose, abbreviate, expand or rename record IDs. Copy identifiers literally.\n"
             if run == "B":
                 consistency_safety += (
@@ -535,7 +539,18 @@ class CodexCliTransport:
                     "another record appears scientifically relevant. If you cannot answer the same question "
                     "using the frozen basis, return NO_GROUNDED_ANSWER rather than inventing or adding another "
                     "ID. The frozen basis for this invocation is "
-                    f"{json.dumps(basis, ensure_ascii=False, sort_keys=True)}.\n"
+                    f"{json.dumps(basis, ensure_ascii=False, sort_keys=True)}. The supplied allowed limitation-code list is "
+                    f"{json.dumps(limitation_codes, ensure_ascii=False, sort_keys=True)}.\n"
+                )
+            else:
+                consistency_safety += (
+                    "This is Run A of a controlled scientific consistency test. Return all required consistency "
+                    "fields: answer, grounding_status, grounded_record_ids, primary_record_id, limitation_codes, "
+                    "and limitations. If GROUNDED, choose exactly one primary_record_id from grounded_record_ids "
+                    "and use only literal IDs from ALLOWED_GROUNDED_RECORD_IDS. limitation_codes must come only "
+                    "from the supplied allowed limitation-code list. Do not embed limitation codes only in prose; "
+                    "return them in the limitation_codes array. The supplied allowed limitation-code list is "
+                    f"{json.dumps(limitation_codes, ensure_ascii=False, sort_keys=True)}.\n"
                 )
         return (
             "You are the live reasoning component of Research OS.\n"

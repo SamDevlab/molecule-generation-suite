@@ -53,6 +53,14 @@ FORBIDDEN_OUTPUT_KEYS = {
     "evidence", "evidence_level", "runs", "bundle", "bundle_id",
     "scientific_result", "experimental_result", "engine_result",
 }
+CONSISTENCY_RESPONSE_KEYS = frozenset({
+    "answer",
+    "grounding_status",
+    "grounded_record_ids",
+    "primary_record_id",
+    "limitation_codes",
+    "limitations",
+})
 SAFE_FAILED_RESPONSE_KEYS = {"answer", "grounding_status", "grounded_record_ids", "limitations"}
 
 FOLLOWUP_QUESTIONS = (
@@ -412,26 +420,44 @@ def _consistency_signature(response: Any) -> ConsistencySignature | None:
     )
 
 
-def _consistency_contract_valid(response: Any, grounding: Any, basis: set[str]) -> bool:
-    if not grounding.valid or not isinstance(response, dict):
-        return False
-    required = {"answer", "grounding_status", "grounded_record_ids", "primary_record_id", "limitation_codes", "limitations"}
-    if not required <= set(response) or not isinstance(response.get("answer"), str):
-        return False
+def _consistency_contract_diagnostics(response: Any, grounding: Any, basis: set[str]) -> tuple[bool, tuple[str, ...]]:
+    reasons: list[str] = []
+    if not isinstance(response, dict):
+        return False, ("INVALID_CONSISTENCY_RESPONSE",)
+    if set(response) - CONSISTENCY_RESPONSE_KEYS:
+        reasons.append("INVALID_CONSISTENCY_RESPONSE")
+    if not getattr(grounding, "valid", False):
+        reasons.append("INVALID_CONSISTENCY_RESPONSE")
+    if not isinstance(response.get("answer"), str):
+        reasons.append("INVALID_CONSISTENCY_RESPONSE")
     status, ids, primary, codes = _consistency_response_parts(response)
-    if not isinstance(response.get("limitations"), list) or not all(isinstance(item, str) for item in response["limitations"]):
-        return False
+    if status not in {GroundingStatus.GROUNDED.value, GroundingStatus.NO_GROUNDED_ANSWER.value}:
+        reasons.append("INVALID_CONSISTENCY_RESPONSE")
     raw_ids = response.get("grounded_record_ids")
-    raw_codes = response.get("limitation_codes")
-    if not isinstance(raw_ids, list) or not all(isinstance(item, str) for item in raw_ids):
-        return False
-    if not isinstance(raw_codes, list) or not all(isinstance(item, str) and item in CONSISTENCY_LIMITATION_CODES for item in raw_codes):
-        return False
-    if status == GroundingStatus.GROUNDED.value:
-        return isinstance(primary, str) and primary in ids and primary in basis
-    if status == GroundingStatus.NO_GROUNDED_ANSWER.value:
-        return primary is None and not ids
-    return False
+    if "grounded_record_ids" not in response or not isinstance(raw_ids, list) or not all(isinstance(item, str) for item in raw_ids):
+        reasons.append("INVALID_CONSISTENCY_RESPONSE")
+    elif len(raw_ids) != len(set(raw_ids)):
+        reasons.append("INVALID_CONSISTENCY_RESPONSE")
+    if "primary_record_id" not in response:
+        reasons.append("MISSING_PRIMARY_RECORD_ID")
+    elif status == GroundingStatus.GROUNDED.value and (not isinstance(primary, str) or primary not in ids or primary not in basis):
+        reasons.append("INVALID_PRIMARY_RECORD_ID")
+    elif status == GroundingStatus.NO_GROUNDED_ANSWER.value and response.get("primary_record_id") is not None:
+        reasons.append("INVALID_PRIMARY_RECORD_ID")
+    if "limitation_codes" not in response:
+        reasons.append("MISSING_LIMITATION_CODES")
+    elif not isinstance(response.get("limitation_codes"), list) or not all(isinstance(item, str) and item in CONSISTENCY_LIMITATION_CODES for item in response["limitation_codes"]):
+        reasons.append("INVALID_LIMITATION_CODES")
+    elif len(response["limitation_codes"]) != len(set(response["limitation_codes"])):
+        reasons.append("INVALID_LIMITATION_CODES")
+    if "limitations" not in response or not isinstance(response.get("limitations"), list) or not all(isinstance(item, str) for item in response["limitations"]):
+        reasons.append("INVALID_LIMITATIONS")
+    unique_reasons = tuple(dict.fromkeys(reasons))
+    return not unique_reasons, unique_reasons
+
+
+def _consistency_contract_valid(response: Any, grounding: Any, basis: set[str]) -> bool:
+    return _consistency_contract_diagnostics(response, grounding, basis)[0]
 
 
 def _consistency_failure_code(
@@ -453,12 +479,12 @@ def _consistency_failure_code(
         return ConsistencyFailureCode.CONSISTENCY_NEW_GROUNDED_RECORD_ID.value
     if missing_ids:
         return ConsistencyFailureCode.CONSISTENCY_MISSING_GROUNDED_RECORD_ID.value
+    if not run_b_valid:
+        return ConsistencyFailureCode.RUN_B_GROUNDING_FAILURE.value
     if not primary_equal:
         return ConsistencyFailureCode.PRIMARY_RECORD_DRIFT.value
     if not limitations_equal:
         return ConsistencyFailureCode.LIMITATION_DRIFT.value
-    if not run_b_valid:
-        return ConsistencyFailureCode.RUN_B_GROUNDING_FAILURE.value
     return ConsistencyFailureCode.NONE.value
 
 
@@ -481,11 +507,12 @@ def _consistency(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[s
         status_a, ids_a, primary_a, codes_a = _consistency_response_parts(response_a)
         basis = set(ids_a) if grounded_a and isinstance(response_a, dict) else set()
         normalized_a = tuple(sorted(basis))
+        contract_valid_a, contract_failure_reasons_a = _consistency_contract_diagnostics(response_a, validation_a, basis)
         run_a_valid = (
             call_a["status"] == "COMPLETED"
             and grounded_a
             and not _has_forbidden_output(response_a)
-            and _consistency_contract_valid(response_a, validation_a, basis)
+            and contract_valid_a
         )
         if not run_a_valid:
             assessment = ConsistencyGroundingAssessment(
@@ -507,7 +534,7 @@ def _consistency(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[s
                 primary_record_equal=False,
                 failure_code=ConsistencyFailureCode.RUN_A_GROUNDING_FAILURE.value,
             )
-            pairs.append({"index": index, "question": question, "run_a": response_a, "run_b": None, "calls": [call_a], "grounding_validations": [validation_a.to_dict()], "failed_response_validations": [failure_a.to_dict()] if failure_a else [], "consistency_grounding_basis": list(normalized_a), "consistency_signature_a": _consistency_signature(response_a).to_dict() if _consistency_signature(response_a) else None, "consistency_signature_b": None, "consistency_assessment": assessment.to_dict(), "equivalent": False})
+            pairs.append({"index": index, "question": question, "run_a": response_a, "run_b": None, "calls": [call_a], "grounding_validations": [validation_a.to_dict()], "failed_response_validations": [failure_a.to_dict()] if failure_a else [], "contract_failure_reasons": list(contract_failure_reasons_a), "consistency_grounding_basis": list(normalized_a), "consistency_signature_a": _consistency_signature(response_a).to_dict() if _consistency_signature(response_a) else None, "consistency_signature_b": None, "consistency_assessment": assessment.to_dict(), "equivalent": False})
             return {"status": "BLOCKED_BEFORE_PASS", "pairs": pairs}
 
         frozen_basis = list(normalized_a)
@@ -538,11 +565,12 @@ def _consistency(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[s
         normalized_b = tuple(sorted(set(ids_b)))
         new_ids = tuple(sorted(set(ids_b) - basis))
         missing_ids = tuple(sorted(basis - set(ids_b)))
+        contract_valid_b, contract_failure_reasons_b = _consistency_contract_diagnostics(response_b, validation_b, basis)
         run_b_valid = (
             call_b["status"] == "COMPLETED"
             and grounded_b
             and not _has_forbidden_output(response_b)
-            and _consistency_contract_valid(response_b, validation_b, basis)
+            and contract_valid_b
         )
         signatures = (_consistency_signature(response_a), _consistency_signature(response_b))
         primary_equal = primary_a == primary_b
@@ -585,6 +613,7 @@ def _consistency(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[s
             "calls": [call_a, call_b],
             "grounding_validations": [validation_a.to_dict(), validation_b.to_dict()],
             "failed_response_validations": [item.to_dict() for item in (failure_a, failure_b) if item],
+            "contract_failure_reasons": list(dict.fromkeys((*contract_failure_reasons_a, *contract_failure_reasons_b))),
             "consistency_grounding_basis": frozen_basis,
             "consistency_signature_a": signatures[0].to_dict() if signatures[0] else None,
             "consistency_signature_b": signatures[1].to_dict() if signatures[1] else None,
@@ -641,6 +670,102 @@ def _response_failure_gate_fields(sequence: TopLevelLiveSequence) -> dict[str, A
         "failed_call_id": failure.call_id,
         "failed_label": failure.label,
         "failed_operation": failure.operation,
+    }
+
+
+def _consistency_failure_for_call(consistency: Mapping[str, Any], call_id: int) -> str | None:
+    """Return the consistency diagnosis attached to a failed call, if any."""
+    for pair in consistency.get("pairs", ()) if isinstance(consistency, Mapping) else ():
+        if not isinstance(pair, Mapping):
+            continue
+        assessment = pair.get("consistency_assessment")
+        if not isinstance(assessment, Mapping) or assessment.get("valid") is True:
+            continue
+        call_ids = {
+            int(call.get("call_id"))
+            for call in pair.get("calls", ())
+            if isinstance(call, Mapping) and str(call.get("call_id", "")).isdigit()
+        }
+        if call_id in call_ids:
+            code = assessment.get("failure_code")
+            return str(code) if code else None
+    return None
+
+
+def _first_consistency_failure(consistency: Mapping[str, Any]) -> tuple[Mapping[str, Any] | None, Mapping[str, Any] | None]:
+    for pair in consistency.get("pairs", ()) if isinstance(consistency, Mapping) else ():
+        if not isinstance(pair, Mapping):
+            continue
+        assessment = pair.get("consistency_assessment")
+        if isinstance(assessment, Mapping) and assessment.get("valid") is not True:
+            return pair, assessment
+    return None, None
+
+
+def _consistency_failure_for_gate(consistency: Mapping[str, Any], call_id: int) -> str | None:
+    """Keep a consistency failure visible even when an earlier call failed."""
+    matched = _consistency_failure_for_call(consistency, call_id)
+    if matched:
+        return matched
+    _, assessment = _first_consistency_failure(consistency)
+    code = assessment.get("failure_code") if assessment else None
+    return str(code) if code else None
+
+
+def _live_process_failure_fields(sequence: TopLevelLiveSequence, consistency: Mapping[str, Any]) -> dict[str, Any]:
+    """Expose provider/process failures before scientific response failures."""
+    for call in sequence.invocations:
+        if call.get("status") == "COMPLETED":
+            continue
+        diagnostic = call.get("diagnostic") or {}
+        error = call.get("error") or {}
+        code = diagnostic.get("failure_code")
+        if not code:
+            error_type = str(error.get("type", ""))
+            code = {
+                "LiveCodexUnavailable": "PROVIDER_UNAVAILABLE",
+                "LiveCodexProtocolError": "SCHEMA_INVALID",
+            }.get(error_type, "PROCESS_ERROR")
+        call_id = int(call.get("call_id", 0))
+        fields = {
+            "failure_code": str(code),
+            "failed_call_id": call_id,
+            "failed_label": call.get("label"),
+            "failed_operation": call.get("operation"),
+        }
+        consistency_code = _consistency_failure_for_gate(consistency, call_id)
+        if consistency_code:
+            fields["consistency_failure_code"] = consistency_code
+        return fields
+    return {}
+
+
+def _final_gate_failure_fields(sequence: TopLevelLiveSequence, consistency: Mapping[str, Any]) -> dict[str, Any]:
+    """Apply the final-gate precedence: live, grounding, then consistency."""
+    process_fields = _live_process_failure_fields(sequence, consistency)
+    if process_fields:
+        return process_fields
+    if sequence.response_validation_failures:
+        fields = _response_failure_gate_fields(sequence)
+        consistency_code = _consistency_failure_for_gate(consistency, int(fields["failed_call_id"]))
+        if consistency_code:
+            fields["consistency_failure_code"] = consistency_code
+        return fields
+    _, assessment = _first_consistency_failure(consistency)
+    if assessment is None:
+        return {}
+    call_id = assessment.get("run_a_call_id") or assessment.get("run_b_call_id")
+    call = next(
+        (item for item in sequence.invocations if item.get("call_id") == call_id),
+        None,
+    )
+    code = str(assessment.get("failure_code") or ConsistencyFailureCode.RUN_A_GROUNDING_FAILURE.value)
+    return {
+        "failure_code": code,
+        "consistency_failure_code": code,
+        "failed_call_id": call_id,
+        "failed_label": call.get("label") if call else None,
+        "failed_operation": call.get("operation") if call else None,
     }
 
 
@@ -759,7 +884,7 @@ def run_live_acceptance(*, root: Path, expected_head: str | None, timeout_second
     digest = _make_acceptance_digest(preflight.to_dict(), sequence, panel=panel, synthesis=synthesis, exam=exam, followups=followups, stress=stress, consistency=consistency, cleanup=cleanup, scientific=scientific, security=security, pass_=gate_pass)
     _write("review-synthesis.json", synthesis)
     _write("v5-live-acceptance-digest.json", digest.to_dict())
-    _write("v5-final-gate.json", {"status": "PASS" if gate_pass else "BLOCKED_BEFORE_PASS", "live_call_count": len(sequence.invocations), "required_live_invocations": REQUIRED_LIVE_INVOCATIONS, "max_live_invocations": MAX_LIVE_INVOCATIONS, "duration_statistics": _duration_statistics(sequence), "scientific_audit": scientific, "security_audit": security, "acceptance_digest": digest.to_dict(), "response_validation_failures": [item.to_dict() for item in sequence.response_validation_failures], "invocations": sequence.invocations, **_response_failure_gate_fields(sequence)})
+    _write("v5-final-gate.json", {"status": "PASS" if gate_pass else "BLOCKED_BEFORE_PASS", "live_call_count": len(sequence.invocations), "required_live_invocations": REQUIRED_LIVE_INVOCATIONS, "max_live_invocations": MAX_LIVE_INVOCATIONS, "duration_statistics": _duration_statistics(sequence), "scientific_audit": scientific, "security_audit": security, "acceptance_digest": digest.to_dict(), "response_validation_failures": [item.to_dict() for item in sequence.response_validation_failures], "invocations": sequence.invocations, **_final_gate_failure_fields(sequence, consistency)})
     return 0 if gate_pass else 5
 
 

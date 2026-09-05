@@ -478,6 +478,7 @@ def preflight_repository(root: str | os.PathLike[str], *, expected_branch: str =
         "package": {"ok": False, "version": None},
         "schema": {"ok": False},
         "grounding_schema": {"ok": False},
+        "consistency_schema": {"ok": False},
         "provider": {"ok": False},
         "codex_cli": {"ok": bool(shutil.which("codex"))},
     }
@@ -508,6 +509,11 @@ def preflight_repository(root: str | os.PathLike[str], *, expected_branch: str =
         checks["schema"] = {"ok": schema.get("type") == "object" and schema.get("required") == ["result"] and schema.get("additionalProperties") is False}
         grounding_schema = json.loads((repo_root / "src" / "research_os" / "oracle" / "live_grounding.schema.json").read_text(encoding="utf-8"))
         checks["grounding_schema"] = {"ok": grounding_schema.get("required") == ["grounding_status", "grounded_record_ids"] and grounding_schema.get("properties", {}).get("grounding_status", {}).get("enum") == ["GROUNDED", "NO_GROUNDED_ANSWER"]}
+        consistency_schema = json.loads((repo_root / "src" / "research_os" / "oracle" / "live_consistency.schema.json").read_text(encoding="utf-8"))
+        checks["consistency_schema"] = {
+            "ok": consistency_schema.get("required") == ["answer", "grounding_status", "grounded_record_ids", "primary_record_id", "limitation_codes", "limitations"]
+            and consistency_schema.get("properties", {}).get("limitation_codes", {}).get("items", {}).get("enum") == sorted(CONSISTENCY_LIMITATION_CODES)
+        }
         transport = CodexCliTransport(environment={})
         checks["provider"] = {"ok": transport.schema_path.is_file() and transport._APPROVED_EXECUTABLE_NAMES == {"codex", "codex.exe"}, "type": type(transport).__name__}
     except Exception as exc:  # pragma: no cover - defensive preflight boundary
@@ -531,6 +537,8 @@ def preflight_repository(root: str | os.PathLike[str], *, expected_branch: str =
     elif not checks["schema"]["ok"]:
         status = TopLevelPreflightStatus.SCHEMA_INVALID.value
     elif not checks["grounding_schema"]["ok"]:
+        status = TopLevelPreflightStatus.SCHEMA_INVALID.value
+    elif not checks["consistency_schema"]["ok"]:
         status = TopLevelPreflightStatus.SCHEMA_INVALID.value
     elif not checks["provider"]["ok"]:
         status = TopLevelPreflightStatus.PROVIDER_INVALID.value

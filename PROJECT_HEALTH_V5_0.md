@@ -6,11 +6,11 @@
 
 ## Healthy properties
 
-The attempt retained the canonical evidence levels, sealed runs and bundles, append-only impact/challenge records, explicit OOD and uncertainty, declared units/conditions/species, and v4.2 private-corpus separation. Attempts 1 and 2 are preserved at `.research-os-live-5.0-top-level/` and `.research-os-live-5.0-top-level-attempt-2/`; `Biolab/` and `formolecular/` were not modified. The legacy components remain preserved and are not deprecated.
+The attempt retained the canonical evidence levels, sealed runs and bundles, append-only impact/challenge records, explicit OOD and uncertainty, declared units/conditions/species, and v4.2 private-corpus separation. Attempts 1, 2, and 3 are preserved at `.research-os-live-5.0-top-level/`, `.research-os-live-5.0-top-level-attempt-2/`, and `.research-os-live-5.0-top-level-attempt-3/`; `Biolab/` and `formolecular/` were not modified. The legacy components remain preserved and are not deprecated.
 
 ## Blocking property
 
-The repository-side `CodexLiveProvider` is available as a configured transport. Attempt 2 proved 33 real calls and process cleanup; `TL-CONSISTENCY-02-B` returned the syntactically plausible but unregistered `CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY`, which was correctly rejected as `UNKNOWN_GROUNDED_RECORD_ID`. The consistency contract now freezes Run A's literal support basis for independent Run B and compares canonical scientific signatures. It did not replace the Live provider with `CodexTestProvider` or reinterpret deterministic answers as Live review.
+The repository-side `CodexLiveProvider` is available as a configured transport. Attempt 3 proved 30 real calls and process cleanup; `TL-CONSISTENCY-01-A` passed general grounding but omitted `primary_record_id` and `limitation_codes`, so Run B was correctly withheld. The consistency contract now enforces the strict six-field shape, freezes Run A's literal support basis for independent Run B, and compares canonical scientific signatures. It did not replace the Live provider with `CodexTestProvider` or reinterpret deterministic answers as Live review.
 
 ## Next gate
 
