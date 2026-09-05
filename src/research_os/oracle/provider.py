@@ -11,7 +11,7 @@ import re
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Any, Mapping, Protocol
+from typing import Any, Callable, Mapping, Protocol
 
 from research_os.oracle.live_boundary import (
     CODEX_LIVE_REENTRANCY,
@@ -88,6 +88,8 @@ class LLMProvider(Protocol):
     def generate_research_program(self, context: dict[str, Any]) -> dict[str, Any]: ...
     def prioritize_research(self, context: dict[str, Any]) -> dict[str, Any]: ...
     def final_autonomous_exam(self, context: dict[str, Any]) -> dict[str, Any]: ...
+    def final_scientific_exam(self, context: dict[str, Any]) -> dict[str, Any]: ...
+    def scientific_review(self, context: dict[str, Any]) -> dict[str, Any]: ...
     def final_exam_followup(self, context: dict[str, Any]) -> dict[str, Any]: ...
     def final_exam_followups(self, context: dict[str, Any]) -> dict[str, Any]: ...
 
@@ -143,7 +145,21 @@ def _reject_scientific_authority(value: dict[str, Any], *, operation: str) -> di
         "evidence", "evidence_level", "runs", "bundle", "bundle_id",
         "scientific_result", "experimental_result", "engine_result",
     }
-    present = sorted(key for key in value if str(key).lower() in forbidden)
+    present: list[str] = []
+
+    def visit(item: Any, path: str = "") -> None:
+        if isinstance(item, dict):
+            for key, child in item.items():
+                key_text = str(key)
+                child_path = f"{path}.{key_text}" if path else key_text
+                if key_text.lower() in forbidden:
+                    present.append(child_path)
+                visit(child, child_path)
+        elif isinstance(item, list):
+            for index, child in enumerate(item):
+                visit(child, f"{path}[{index}]")
+
+    visit(value)
     if present:
         raise LiveCodexProtocolError(
             f"LLM_OUTPUT_CANNOT_CREATE_SCIENTIFIC_EVIDENCE: forbidden fields in {operation}: {present}"
@@ -179,6 +195,7 @@ class CodexCliTransport:
         diagnostic_sink: list[LiveInvocationDiagnostic] | None = None,
         max_output_bytes: int = _MAX_OUTPUT_BYTES,
         environment: Mapping[str, str] | None = None,
+        process_observer: Callable[[dict[str, Any]], None] | None = None,
     ):
         requested = str(executable) if executable else "codex"
         if Path(requested).name.lower() not in self._APPROVED_EXECUTABLE_NAMES:
@@ -203,6 +220,7 @@ class CodexCliTransport:
             output_validation_budget=min(5.0, float(self.timeout_seconds)),
         )
         self._environment = dict(environment if environment is not None else os.environ)
+        self.process_observer = process_observer
         self.controller = LiveInvocationController(
             self.budget,
             environment=self._environment,
@@ -276,18 +294,26 @@ class CodexCliTransport:
                     )
                     self.last_invocation_diagnostic = diagnostic
                     raise LiveCodexUnavailable("Codex CLI or live output schema is not available", diagnostic=diagnostic)
-                completed = subprocess.run(
-                    command,
-                    input=prompt,
-                    capture_output=True,
-                    text=True,
-                    encoding="utf-8",
-                    errors="replace",
-                    cwd=self.workdir,
-                    env=self._audited_environment(),
-                    timeout=min(self.timeout_seconds, self.budget.timeout_for(operation)),
-                    check=False,
-                    shell=False,
+                completed = (
+                    subprocess.run(
+                        command,
+                        input=prompt,
+                        capture_output=True,
+                        text=True,
+                        encoding="utf-8",
+                        errors="replace",
+                        cwd=self.workdir,
+                        env=self._audited_environment(),
+                        timeout=min(self.timeout_seconds, self.budget.timeout_for(operation)),
+                        check=False,
+                        shell=False,
+                    )
+                    if self.process_observer is None
+                    else self._run_observed_process(
+                        command,
+                        prompt,
+                        timeout=min(self.timeout_seconds, self.budget.timeout_for(operation)),
+                    )
                 )
             except subprocess.TimeoutExpired as exc:
                 stdout_bytes, stderr_bytes = self._output_sizes(exc.stdout, exc.stderr)
@@ -424,6 +450,55 @@ class CodexCliTransport:
             if key.upper() in self._SAFE_ENVIRONMENT_KEYS
         }
 
+    def _run_observed_process(self, command: list[str | None], prompt: str, *, timeout: float) -> subprocess.CompletedProcess[str]:
+        """Run the fixed command with explicit child PID and cleanup telemetry."""
+        process = subprocess.Popen(
+            command,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            cwd=self.workdir,
+            env=self._audited_environment(),
+            shell=False,
+        )
+        event = {
+            "pid": process.pid,
+            "parent_pid": os.getpid(),
+            "started_at": datetime.now(timezone.utc).isoformat(),
+            "cleanup_status": "RUNNING",
+        }
+        if self.process_observer is not None:
+            self.process_observer(dict(event))
+        try:
+            stdout, stderr = process.communicate(input=prompt, timeout=timeout)
+        except subprocess.TimeoutExpired as exc:
+            try:
+                process.kill()
+            except ProcessLookupError:
+                pass
+            stdout, stderr = process.communicate()
+            event.update({"completed_at": datetime.now(timezone.utc).isoformat(), "exit_code": process.returncode, "cleanup_status": "EXITED", "termination_reason": "TIMEOUT"})
+            if self.process_observer is not None:
+                self.process_observer(dict(event))
+            raise subprocess.TimeoutExpired(command, timeout, output=stdout or exc.stdout, stderr=stderr or exc.stderr) from exc
+        except BaseException:
+            try:
+                process.kill()
+            except ProcessLookupError:
+                pass
+            process.communicate()
+            event.update({"completed_at": datetime.now(timezone.utc).isoformat(), "exit_code": process.returncode, "cleanup_status": "EXITED", "termination_reason": "PROCESS_ERROR"})
+            if self.process_observer is not None:
+                self.process_observer(dict(event))
+            raise
+        event.update({"completed_at": datetime.now(timezone.utc).isoformat(), "exit_code": process.returncode, "cleanup_status": "EXITED", "termination_reason": "NORMAL_EXIT"})
+        if self.process_observer is not None:
+            self.process_observer(dict(event))
+        return subprocess.CompletedProcess(command, process.returncode, stdout=stdout, stderr=stderr)
+
     @staticmethod
     def _prompt(request: dict[str, Any]) -> str:
         operation = request["operation"]
@@ -443,6 +518,8 @@ class CodexCliTransport:
             "generate_research_program": '{"title":"...","domain":"...","objective":"...","initial_problem":"...","questions":[{"question_id":"Q-...","question":"...","gap_it_attempts_to_resolve":"...","why_new":"..."}],"limits":{"max_campaigns":3,"max_iterations":5,"max_runs":5,"max_sources":5,"max_candidates":20,"max_failures":2},"stop_conditions":["..."],"reasoning_summary":"brief auditable rationale"}',
             "prioritize_research": '{"selected_candidate_question_id":"...","assessments":[{"candidate_question_id":"...","candidate_gap_id":"...","recommendation":"PRIORITIZE_NOW","rationale":"..."}],"reasoning_summary":"brief auditable rationale"}',
             "final_autonomous_exam": '{"answerable":{"question":"...","why":"..."},"no_decision":{"question":"...","why":"..."},"external_blocker":{"question":"...","why":"..."},"reasoning_summary":"brief auditable rationale"}',
+            "final_scientific_exam": '{"conclusion_kept":"...","conclusion_weakened":"...","unanswered_question":"...","redundant_step":"...","highest_value_external_evidence":"...","no_decision_reconsideration":"...","protocol_sensitive_decision":"...","proposed_research_program":"...","program_executed":false,"scientific_state_change":"...","grounded_record_ids":[],"limitations":[]}',
+            "scientific_review": '{"role":"METHODOLOGY|EVIDENCE|REPRODUCIBILITY","concerns":[{"concern":"...","grounded_record_ids":[],"recommended_action":"ACCEPT|REJECT_WITH_EVIDENCE|CREATE_GAP|REVISE_CLAIM|REVISE_DECISION|DEFER_EXTERNAL"}],"summary":"brief analysis-only review","limitations":[]}',
             "final_exam_followup": '{"answer":"brief artifact-grounded answer","grounded_record_ids":["RUN-...","GAP-..."],"limitations":["..."]}',
             "final_exam_followups": '{"answers":[{"index":1,"answer":"brief artifact-grounded answer","grounded_record_ids":["RUN-...","GAP-..."],"limitations":["..."]}]}',
         }.get(operation, "{}")
@@ -451,6 +528,7 @@ class CodexCliTransport:
             narration_safety = "For narration, do not repeat numeric scientific values, units, or derived comparisons from memory. Refer to recorded evidence IDs/runs and limitations only; the UI obtains values directly from the Lab payload.\n"
         return (
             "You are the live reasoning component of Research OS.\n"
+            "You are already the Live Codex researcher/reviewer for this invocation. Do not call CodexLiveProvider. Do not invoke codex exec. Do not recursively create another LLM session.\n"
             "Return ONLY one JSON object matching the supplied output schema. The schema requires a string field named result; put the minified JSON object for the operation inside that string, with no markdown or prose.\n"
             f"For operation {operation}, the inner result must have this shape: {shape}\n"
             + narration_safety
@@ -721,6 +799,16 @@ class CodexLiveProvider:
         """Select the three final-exam questions; Research OS executes them."""
         raw = self._call("final_autonomous_exam", {"final_exam_context": context})
         return dict(raw.get("final_exam", raw))
+
+    def final_scientific_exam(self, context: dict[str, Any]) -> dict[str, Any]:
+        """Run the bounded final v5 scientific exam as analysis only."""
+        raw = self._call("final_scientific_exam", {"final_exam_context": context})
+        return _reject_scientific_authority(dict(raw.get("final_exam", raw)), operation="final_scientific_exam")
+
+    def scientific_review(self, context: dict[str, Any]) -> dict[str, Any]:
+        """Return one analysis-only methodology/evidence/reproducibility review."""
+        raw = self._call("scientific_review", {"review_context": context})
+        return _reject_scientific_authority(dict(raw.get("review", raw)), operation="scientific_review")
 
     def final_exam_followup(self, context: dict[str, Any]) -> dict[str, Any]:
         """Answer one final-exam follow-up from supplied registered records."""

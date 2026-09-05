@@ -37,6 +37,8 @@ The minimal real smoke and the ten-case boundary matrix are recorded in [live-bo
 
 The recovery artifacts [reviewer-panel-live.json](.research-os-live-5.0-recovery/reviewer-panel-live.json), [final-scientific-exam-live.json](.research-os-live-5.0-recovery/final-scientific-exam-live.json), and [live-consistency.json](.research-os-live-5.0-recovery/live-consistency.json) preserve the honest blocked state. The earlier `.research-os-live-5.0/` attempt remains unchanged.
 
+The repository now also provides a separate [top-level Live acceptance contract](TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md). It inspects process ancestry and environment before admission, fails closed in a Codex-owned task, and writes any future bounded acceptance outputs under `.research-os-live-5.0-top-level/`. This task did not execute that launcher.
+
 ## Release decision
 
 The boundary hardening is testable and regression-safe, but v5.0 is not released: a real top-level Live response, three Live review roles, the final Live exam, follow-ups, and consistency checks were not completed. The package remains `4.5.0`. The next valid action is to run the same bounded recovery script from a genuinely top-level Codex CLI owner, then rerun only the blocked Live gates.

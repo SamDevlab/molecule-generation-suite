@@ -88,6 +88,8 @@ examples/golden_workflow/output/
 .research-os-live-5.0*/
 !.research-os-live-5.0-recovery/
 !.research-os-live-5.0-recovery/*.json
+!.research-os-live-5.0-top-level/
+!.research-os-live-5.0-top-level/*.json
 .tmp-v36-ml-probe/
 .tmp-package-check/
 .tmp-package-check-v34/
@@ -106,3 +108,4 @@ examples/golden_workflow/output/
 .tmp-package-check-v45*/
 .tmp-package-check-v50*/
 build/
+dist/

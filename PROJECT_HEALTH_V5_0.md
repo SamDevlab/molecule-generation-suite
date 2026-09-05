@@ -2,7 +2,7 @@
 
 ## Status
 
-`BLOCKED_BEFORE_PASS`; published package remains `4.5.0`.
+`READY_FOR_TOP_LEVEL_LIVE_EXECUTION`; release remains `BLOCKED_BEFORE_PASS` and the published package remains `4.5.0`.
 
 ## Healthy properties
 
@@ -14,4 +14,4 @@ The repository-side `CodexLiveProvider` is available as a configured transport, 
 
 ## Next gate
 
-Repeat only the bounded v5.0 Live stages from a genuinely top-level Codex CLI owner when it can return structured, grounded responses. Do not rerun the stable scientific workflows merely to change the release label.
+The top-level launcher is implemented and ready. Run only the bounded v5.0 Live stages from a genuinely top-level Codex CLI owner when it can return structured, grounded responses. Do not rerun the stable scientific workflows merely to change the release label. See [TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md](TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md).
