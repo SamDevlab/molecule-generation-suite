@@ -1,0 +1,423 @@
+{
+  "acceptance": {
+    "claim_remains_robust": true,
+    "claim_weakened_or_reason_recorded": true,
+    "codex_created_zero_evidence": true,
+    "evidence_levels_unchanged": true,
+    "false_conservatism_audit_works": true,
+    "full_ci_green": true,
+    "no_decision_challenged": true,
+    "no_invented_contradictory_evidence": true,
+    "strong_counterargument_recorded": true,
+    "ten_or_more_targets": true
+  },
+  "branch": "research-os-v1.3",
+  "challenges": [
+    {
+      "assumptions": [
+        "murine PTGS2/COX-2",
+        "1PXX chain A",
+        "declared Vina grid and seeds"
+      ],
+      "challenge_id": "CH-V45-COX2",
+      "challenge_status": "ROBUST_UNDER_CHALLENGE",
+      "contradictory_evidence": [],
+      "created_at": "2026-09-05T00:13:34.706122+00:00",
+      "dependence_risk": [
+        "all supporting scores share 1PXX and the same protocol"
+      ],
+      "digest": "9998804ff112dc019a45390b617dc6f7db1098655d09cfd8e359bd76a3a04be2",
+      "missing_validation": [
+        "independent structure comparison with Vina available"
+      ],
+      "potential_failure_modes": [
+        "receptor-structure dependence",
+        "score aggregation dependence",
+        "docking is not measured affinity"
+      ],
+      "protocol_sensitivity": [
+        "three-seed spread is small but exhaustiveness was not varied"
+      ],
+      "recommended_test": "repeat only with a predeclared alternative receptor or protocol and retain E2 ceiling",
+      "strongest_supporting_evidence": [
+        "EVD-8C48EDB3BEC7",
+        "EVD-C78C348BB94C"
+      ],
+      "target_claim_id": "CLM-COX2-1PXX-V2",
+      "target_decision_id_optional": "DECISION-REAL-01-1DC0442BB0EA"
+    },
+    {
+      "assumptions": [
+        "SMILES identity and Morgan feature parity",
+        "DLS and AqSolDB target units are comparable"
+      ],
+      "challenge_id": "CH-V45-SOLUBILITY-EXTERNAL",
+      "challenge_status": "WEAKENED",
+      "contradictory_evidence": [],
+      "created_at": "2026-09-05T00:13:34.706641+00:00",
+      "dependence_risk": [
+        "no shared molecule overlap was found, but source-condition semantics differ"
+      ],
+      "digest": "2406f9772eecd39630a3252d49d90375e62743cc2e4e4f99a0a1b5708ae3e788",
+      "missing_validation": [
+        "an external source with compatible conditions and in-domain coverage"
+      ],
+      "potential_failure_modes": [
+        "all external records are OOD",
+        "intrinsic versus general aqueous semantics",
+        "small original training sample"
+      ],
+      "protocol_sensitivity": [
+        "OOD threshold 0.4 controls rankability",
+        "residual interval calibration is from the original validation split"
+      ],
+      "recommended_test": "keep the claim sample-specific and acquire a compatible in-domain external set",
+      "strongest_supporting_evidence": [
+        "EVD-V43-DLS-LOCKED-MODEL",
+        "EVD-V43-DLS-SOURCE"
+      ],
+      "target_claim_id": "CLM-863B37BB0E38",
+      "target_decision_id_optional": "DECISION-V39-SOLUBILITY"
+    },
+    {
+      "assumptions": [
+        "held-out scaffold split is used without tuning"
+      ],
+      "challenge_id": "CH-V45-SOLUBILITY-FAILURE",
+      "challenge_status": "ROBUST_UNDER_CHALLENGE",
+      "contradictory_evidence": [],
+      "created_at": "2026-09-05T00:13:34.706641+00:00",
+      "dependence_risk": [
+        "analysis derives from the same frozen sample model"
+      ],
+      "digest": "8ba9d47046acec4a8a240747feca059976ece874c4bae88779dc3740ac09cd59",
+      "missing_validation": [
+        "larger independent calibration population"
+      ],
+      "potential_failure_modes": [
+        "sample-specific failure cases may not calibrate future populations"
+      ],
+      "protocol_sensitivity": [
+        "failure threshold uses the held-out upper-quartile floor"
+      ],
+      "recommended_test": "reproduce on a new compatible source before generalizing failure rates",
+      "strongest_supporting_evidence": [
+        "EVD-V41-SOLUBILITY-FAILURE-ANALYSIS"
+      ],
+      "target_claim_id": "CLM-V41-SOLUBILITY-FAILURE-MODES",
+      "target_decision_id_optional": null
+    },
+    {
+      "assumptions": [
+        "gri30.yaml",
+        "adiabatic HP equilibrium",
+        "declared H2/CH4 reference conditions"
+      ],
+      "challenge_id": "CH-V45-COMBUSTION",
+      "challenge_status": "ROBUST_UNDER_CHALLENGE",
+      "contradictory_evidence": [],
+      "created_at": "2026-09-05T00:13:34.706641+00:00",
+      "dependence_risk": [
+        "all variants use the same mechanism and computational engine"
+      ],
+      "digest": "069f97f3b6b541f36963bab38c1a2de8ed09005689b8ade9bf905865cf0c7b61",
+      "missing_validation": [
+        "matched experimental observation"
+      ],
+      "potential_failure_modes": [
+        "mechanism dependence",
+        "equilibrium not transient ignition",
+        "condition dependence outside tested range"
+      ],
+      "protocol_sensitivity": [
+        "T0, pressure and phi changed absolute output but not tested reference ordering"
+      ],
+      "recommended_test": "retain only the bounded E3 statement and seek E4 comparison",
+      "strongest_supporting_evidence": [
+        "EVD-EDF9DEC92E87"
+      ],
+      "target_claim_id": "CLM-V41-COMBUSTION-BOUNDARY",
+      "target_decision_id_optional": "DECISION-V41-COMBUSTION-BOUNDARY"
+    },
+    {
+      "assumptions": [
+        "NASA RW3 parser faithfully exposes measured fields"
+      ],
+      "challenge_id": "CH-V45-BATTERY",
+      "challenge_status": "NEEDS_EXTERNAL_VALIDATION",
+      "contradictory_evidence": [],
+      "created_at": "2026-09-05T00:13:34.707161+00:00",
+      "dependence_risk": [
+        "single NASA archive lineage"
+      ],
+      "digest": "0c90c294ccc9d62d327d6965cb5477ec4df547599f064fc22d1ee4e431f80caf",
+      "missing_validation": [
+        "condition-complete external battery record"
+      ],
+      "potential_failure_modes": [
+        "missing capacity/resistance/uncertainty",
+        "protocol heterogeneity",
+        "room-temperature-only coverage"
+      ],
+      "protocol_sensitivity": [
+        "normalization cannot recover absent fields"
+      ],
+      "recommended_test": "ingest an independent capacity/resistance/uncertainty dataset",
+      "strongest_supporting_evidence": [
+        "EVD-V41-BATTERY-USEFULNESS"
+      ],
+      "target_claim_id": "CLM-V41-BATTERY-SCHEMA-BOUNDARY",
+      "target_decision_id_optional": "DECISION-V310-BATTERY-REVALUATED"
+    },
+    {
+      "assumptions": [
+        "material behavior is condition-specific"
+      ],
+      "challenge_id": "CH-V45-MATERIALS",
+      "challenge_status": "NOT_TESTABLE_CURRENTLY",
+      "contradictory_evidence": [],
+      "created_at": "2026-09-05T00:13:34.707161+00:00",
+      "dependence_risk": [
+        "available sources are discovery metadata only"
+      ],
+      "digest": "3c8ece45c0953cfaece1e26b55c76ce639f31582522086985ebabf2be200d0b1",
+      "missing_validation": [
+        "record-level composition, processing, microstructure, environment, loading, method, property, uncertainty and locator"
+      ],
+      "potential_failure_modes": [
+        "alloy/process/microstructure substitution",
+        "hydrogen environment mismatch",
+        "generic safety extrapolation"
+      ],
+      "protocol_sensitivity": [
+        "no matched record exists to vary"
+      ],
+      "recommended_test": "obtain one licensed condition-complete record before comparing alloys",
+      "strongest_supporting_evidence": [],
+      "target_claim_id": "CLM-MATERIALS-CONDITION-GAP",
+      "target_decision_id_optional": "DECISION-MATERIALS-NO-DECISION"
+    },
+    {
+      "assumptions": [
+        "Codex proposes structure only",
+        "MoleculeLab creates the deterministic result"
+      ],
+      "challenge_id": "CH-V45-CODEX",
+      "challenge_status": "ROBUST_UNDER_CHALLENGE",
+      "contradictory_evidence": [],
+      "created_at": "2026-09-05T00:13:34.707161+00:00",
+      "dependence_risk": [
+        "result depends on registered MoleculeLab implementation"
+      ],
+      "digest": "cbfd4908e37e36d88078335777ab4a9eec776715992f936b2bb067cd1bc33986",
+      "missing_validation": [
+        "none for the narrow reproducibility question; no efficacy conclusion is permitted"
+      ],
+      "potential_failure_modes": [
+        "descriptor implementation drift",
+        "mistaking descriptors for experimental evidence"
+      ],
+      "protocol_sensitivity": [
+        "same deterministic input is required"
+      ],
+      "recommended_test": "retain as an E0/E1 boundary result and skip identical repeats",
+      "strongest_supporting_evidence": [],
+      "target_claim_id": "CLM-CODEX-BOUNDARY",
+      "target_decision_id_optional": null
+    },
+    {
+      "assumptions": [
+        "mean separation exceeds observed replicate spread"
+      ],
+      "challenge_id": "CH-V45-DOCKING-DECISION",
+      "challenge_status": "NEEDS_EXTERNAL_VALIDATION",
+      "contradictory_evidence": [],
+      "created_at": "2026-09-05T00:13:34.707161+00:00",
+      "dependence_risk": [
+        "all scores share the same target structure and engine"
+      ],
+      "digest": "b13233566e59307eaa38bf2e2eedbe28661a0ccc5ffde541ecdd328ca18f2665",
+      "missing_validation": [
+        "measured binding or independent structural validation"
+      ],
+      "potential_failure_modes": [
+        "single receptor structure",
+        "docking score is not affinity or efficacy",
+        "ligand preparation choices"
+      ],
+      "protocol_sensitivity": [
+        "receptor and grid changes were not executable in this runtime"
+      ],
+      "recommended_test": "do not publish efficacy language; run a predeclared structural comparison only",
+      "strongest_supporting_evidence": [
+        "EVD-8C48EDB3BEC7",
+        "EVD-C78C348BB94C"
+      ],
+      "target_claim_id": "CLM-DOCKING-DECISION-BOUNDARY",
+      "target_decision_id_optional": "DECISION-REAL-01-1DC0442BB0EA"
+    },
+    {
+      "assumptions": [
+        "OOD is a valid refusal boundary"
+      ],
+      "challenge_id": "CH-V45-NO-DECISION-SOLUBILITY",
+      "challenge_status": "WEAKENED",
+      "contradictory_evidence": [],
+      "created_at": "2026-09-05T00:13:34.707161+00:00",
+      "dependence_risk": [
+        "DLS result is independent in molecule overlap but not identical target semantics"
+      ],
+      "digest": "0e3451422288db20a49c86d04433d04b6ea2a1c87a578786207e746e51f0c036",
+      "missing_validation": [
+        "external in-domain test set"
+      ],
+      "potential_failure_modes": [
+        "false conservatism could reject usable in-domain predictions",
+        "uncertainty interval is not certainty"
+      ],
+      "protocol_sensitivity": [
+        "all DLS records fell outside threshold"
+      ],
+      "recommended_test": "reconsider only after a compatible non-OOD validation source is available",
+      "strongest_supporting_evidence": [
+        "EVD-V43-DLS-LOCKED-MODEL",
+        "EVD-V43-DLS-SOURCE"
+      ],
+      "target_claim_id": "CLM-SOLUBILITY-NO-DECISION",
+      "target_decision_id_optional": "DECISION-V39-SOLUBILITY"
+    },
+    {
+      "assumptions": [
+        "missing fields cannot be imputed as observations"
+      ],
+      "challenge_id": "CH-V45-NO-DECISION-BATTERY",
+      "challenge_status": "NOT_TESTABLE_CURRENTLY",
+      "contradictory_evidence": [],
+      "created_at": "2026-09-05T00:13:34.707161+00:00",
+      "dependence_risk": [
+        "one NASA archive"
+      ],
+      "digest": "4b0722bca912275963e190119a5c8bf868beb903cccf8aeb03b64fd414439e21",
+      "missing_validation": [
+        "capacity/resistance/uncertainty and cross-cell metadata"
+      ],
+      "potential_failure_modes": [
+        "available voltage/current traces might support a narrower descriptive claim"
+      ],
+      "protocol_sensitivity": [
+        "schema completeness controls decision scope"
+      ],
+      "recommended_test": "retain no decision for degradation; allow only descriptive schema claims",
+      "strongest_supporting_evidence": [
+        "EVD-V41-BATTERY-USEFULNESS"
+      ],
+      "target_claim_id": "CLM-BATTERY-NO-DECISION",
+      "target_decision_id_optional": "DECISION-V310-BATTERY-REVALUATED"
+    },
+    {
+      "assumptions": [
+        "DLS unique subset is non-overlapping",
+        "one locked pass is not a retraining opportunity"
+      ],
+      "challenge_id": "CH-V45-EXTERNAL-FAILURE",
+      "challenge_status": "WEAKENED",
+      "contradictory_evidence": [],
+      "created_at": "2026-09-05T00:13:34.707676+00:00",
+      "dependence_risk": [
+        "source file is derived from the DLS-100 public record and must retain attribution"
+      ],
+      "digest": "c226fecc049ef566e0190f33cef7d94f3468540545f623cabad601ff9a7961d6",
+      "missing_validation": [
+        "second independent compatible external source"
+      ],
+      "potential_failure_modes": [
+        "56-record external population may be narrow",
+        "intrinsic target semantics differ"
+      ],
+      "protocol_sensitivity": [
+        "OOD policy excludes all records from ranking"
+      ],
+      "recommended_test": "seek another source before publishing a population-wide failure statement",
+      "strongest_supporting_evidence": [
+        "EVD-V43-DLS-LOCKED-MODEL",
+        "EVD-V43-DLS-SOURCE"
+      ],
+      "target_claim_id": "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+      "target_decision_id_optional": null
+    }
+  ],
+  "counts": {
+    "challenges": 11,
+    "false_conservatism_detected": 1,
+    "invalidated": 0,
+    "needs_external_validation": 2,
+    "not_testable_currently": 2,
+    "robust": 4,
+    "weakened": 3
+  },
+  "created_at": "2026-09-05T00:13:34.717414+00:00",
+  "evidence_level_changed": false,
+  "false_conservatism_audits": [
+    {
+      "audit_id": "FCA-V45-COMBUSTION",
+      "created_at": "2026-09-05T00:13:34.708196+00:00",
+      "digest": "0832cda460ef2d97b5c33cbae91d9cc87e11727ccd5200535790a5b32d34e2be",
+      "evidence_ids": [
+        "EVD-EDF9DEC92E87"
+      ],
+      "false_conservatism_detected": true,
+      "finding": "The deterministic Cantera evidence was sufficient for a bounded protocol decision even though it could not support E4 or universalization.",
+      "prior_status": "NO_DECISION_INSUFFICIENT_EVIDENCE",
+      "reason": "v4.1 converted the over-broad refusal into a scoped E3 decision while preserving the external validation gap.",
+      "recommended_action": "keep the bounded decision and challenge its scope at review",
+      "target_id": "DECISION-REAL-02-D8EBCAE1CCD0"
+    },
+    {
+      "audit_id": "FCA-V45-SOLUBILITY",
+      "created_at": "2026-09-05T00:13:34.708196+00:00",
+      "digest": "063a74a8a69f4f4780e7da40c9f166d9708c11bef0f131f95051db867f518a35",
+      "evidence_ids": [
+        "EVD-V43-DLS-LOCKED-MODEL",
+        "EVD-V43-DLS-SOURCE"
+      ],
+      "false_conservatism_detected": false,
+      "finding": "The OOD refusal was appropriate because all DLS records were outside the declared applicability threshold.",
+      "prior_status": "NO_DECISION_OUT_OF_DOMAIN",
+      "reason": "No compatible in-domain external record was available to permit a broader decision.",
+      "recommended_action": "retain the refusal and acquire a compatible validation source",
+      "target_id": "DECISION-V39-SOLUBILITY"
+    },
+    {
+      "audit_id": "FCA-V45-BATTERY",
+      "created_at": "2026-09-05T00:13:34.708196+00:00",
+      "digest": "5ea6ed3084e18313d7f5565a99fc9a295870eaa7a5e367d630de01bc6e896102",
+      "evidence_ids": [
+        "EVD-V41-BATTERY-USEFULNESS"
+      ],
+      "false_conservatism_detected": false,
+      "finding": "The archive supports descriptive measured-step claims but not the requested degradation decision.",
+      "prior_status": "NO_DECISION_INSUFFICIENT_EVIDENCE",
+      "reason": "Capacity, resistance and uncertainty are absent; filling them would invent evidence.",
+      "recommended_action": "allow only the narrower descriptive claim",
+      "target_id": "DECISION-V310-BATTERY-REVALUATED"
+    },
+    {
+      "audit_id": "FCA-V45-MATERIALS",
+      "created_at": "2026-09-05T00:13:34.708710+00:00",
+      "digest": "0cf68c11b901f68afd0f3211f4462cfd615e997e5518d573a8d36f9086d86d2d",
+      "evidence_ids": [],
+      "false_conservatism_detected": false,
+      "finding": "No decision remains justified without a condition-complete record.",
+      "prior_status": "NO_DECISION_INSUFFICIENT_EVIDENCE",
+      "reason": "Material substitution and generic hydrogen statements would exceed the available source fields.",
+      "recommended_action": "ingest a licensed record-level source",
+      "target_id": "DECISION-MATERIALS-NO-DECISION"
+    }
+  ],
+  "protocol_version": "research-os.v4.5.scientific-challenge.v1",
+  "provider": "CODEX_CURRENT_TURN",
+  "review_policy": "Challenges are REVIEW / ANALYSIS records, not Evidence; they may accept, reject, revise, open a gap or recommend a future test.",
+  "scientific_evidence_created": false,
+  "status": "PASS",
+  "version": "4.5.0"
+}

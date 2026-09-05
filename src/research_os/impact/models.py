@@ -263,6 +263,124 @@ class ResearchImpactReviewStore:
         return tuple(self._reviews)
 
 
+class ScientificChallengeStatus(str, Enum):
+    ROBUST_UNDER_CHALLENGE = "ROBUST_UNDER_CHALLENGE"
+    WEAKENED = "WEAKENED"
+    INVALIDATED = "INVALIDATED"
+    NEEDS_EXTERNAL_VALIDATION = "NEEDS_EXTERNAL_VALIDATION"
+    NOT_TESTABLE_CURRENTLY = "NOT_TESTABLE_CURRENTLY"
+
+
+@dataclass(frozen=True)
+class ScientificChallenge:
+    """Red-team challenge; it cannot create or promote scientific evidence."""
+
+    challenge_id: str
+    target_claim_id: str
+    target_decision_id_optional: str | None
+    strongest_supporting_evidence: tuple[str, ...]
+    assumptions: tuple[str, ...]
+    potential_failure_modes: tuple[str, ...]
+    contradictory_evidence: tuple[str, ...]
+    missing_validation: tuple[str, ...]
+    protocol_sensitivity: tuple[str, ...]
+    dependence_risk: tuple[str, ...]
+    challenge_status: ScientificChallengeStatus
+    recommended_test: str
+    created_at: str = field(default_factory=_now)
+    digest: str | None = None
+
+    def __post_init__(self) -> None:
+        for name in ("strongest_supporting_evidence", "assumptions", "potential_failure_modes", "contradictory_evidence", "missing_validation", "protocol_sensitivity", "dependence_risk"):
+            object.__setattr__(self, name, tuple(str(item) for item in getattr(self, name)))
+        object.__setattr__(self, "challenge_status", self.challenge_status if isinstance(self.challenge_status, ScientificChallengeStatus) else ScientificChallengeStatus(str(self.challenge_status)))
+        if not self.challenge_id.strip() or not self.target_claim_id.strip() or not self.recommended_test.strip():
+            raise ValueError("ScientificChallenge requires target claim and recommended test")
+        if self.digest is None:
+            object.__setattr__(self, "digest", sha256_json(self._payload()))
+
+    def _payload(self) -> dict[str, Any]:
+        data = asdict(self)
+        data.pop("digest", None)
+        for name in ("strongest_supporting_evidence", "assumptions", "potential_failure_modes", "contradictory_evidence", "missing_validation", "protocol_sensitivity", "dependence_risk"):
+            data[name] = list(getattr(self, name))
+        data["challenge_status"] = self.challenge_status.value
+        return data
+
+    @property
+    def valid(self) -> bool:
+        return self.digest == sha256_json(self._payload())
+
+    def to_dict(self) -> dict[str, Any]:
+        return {**self._payload(), "digest": self.digest}
+
+
+@dataclass(frozen=True)
+class FalseConservatismAudit:
+    """Audit whether a prior refusal exceeded the registered evidence boundary."""
+
+    audit_id: str
+    target_id: str
+    prior_status: str
+    evidence_ids: tuple[str, ...]
+    false_conservatism_detected: bool
+    finding: str
+    reason: str
+    recommended_action: str
+    created_at: str = field(default_factory=_now)
+    digest: str | None = None
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "evidence_ids", tuple(str(item) for item in self.evidence_ids))
+        if not self.audit_id.strip() or not self.target_id.strip() or not self.finding.strip() or not self.recommended_action.strip():
+            raise ValueError("FalseConservatismAudit requires target, finding and action")
+        if self.digest is None:
+            object.__setattr__(self, "digest", sha256_json(self._payload()))
+
+    def _payload(self) -> dict[str, Any]:
+        data = asdict(self)
+        data.pop("digest", None)
+        data["evidence_ids"] = list(self.evidence_ids)
+        return data
+
+    @property
+    def valid(self) -> bool:
+        return self.digest == sha256_json(self._payload())
+
+    def to_dict(self) -> dict[str, Any]:
+        return {**self._payload(), "digest": self.digest}
+
+
+class ScientificChallengeStore:
+    """Append-only store for challenges and false-conservatism audits."""
+
+    def __init__(self) -> None:
+        self._challenges: list[ScientificChallenge] = []
+        self._audits: list[FalseConservatismAudit] = []
+
+    def append(self, challenge: ScientificChallenge) -> ScientificChallenge:
+        if not challenge.valid:
+            raise ValueError("invalid ScientificChallenge digest")
+        if any(item.challenge_id == challenge.challenge_id for item in self._challenges):
+            raise ValueError(f"scientific challenge already registered: {challenge.challenge_id}")
+        self._challenges.append(challenge)
+        return challenge
+
+    def append_audit(self, audit: FalseConservatismAudit) -> FalseConservatismAudit:
+        if not audit.valid:
+            raise ValueError("invalid FalseConservatismAudit digest")
+        if any(item.audit_id == audit.audit_id for item in self._audits):
+            raise ValueError(f"false conservatism audit already registered: {audit.audit_id}")
+        self._audits.append(audit)
+        return audit
+
+    def list(self) -> tuple[ScientificChallenge, ...]:
+        return tuple(self._challenges)
+
+    def list_audits(self) -> tuple[FalseConservatismAudit, ...]:
+        return tuple(self._audits)
+
+
 @dataclass
 class ResearchOutcomeImpactStore:
     """Small append-only impact registry used by benchmarks and services."""
@@ -286,4 +404,4 @@ class ResearchOutcomeImpactStore:
         return [item.to_dict() for item in self._records]
 
 
-__all__ = ["ConfidenceFailureCase", "ConditionDependentDecision", "ImpactStatus", "ProtocolSensitivityAssessment", "ResearchImpactReview", "ResearchImpactReviewStore", "ResearchOutcomeImpact", "ResearchOutcomeImpactStore"]
+__all__ = ["ConfidenceFailureCase", "ConditionDependentDecision", "FalseConservatismAudit", "ImpactStatus", "ProtocolSensitivityAssessment", "ResearchImpactReview", "ResearchImpactReviewStore", "ResearchOutcomeImpact", "ResearchOutcomeImpactStore", "ScientificChallenge", "ScientificChallengeStatus", "ScientificChallengeStore"]

@@ -84,6 +84,7 @@ examples/golden_workflow/output/
 .research-os-live-4.3*/
 .research-os-live-4.3-external*/
 .research-os-live-4.4*/
+.research-os-live-4.5*/
 .tmp-v36-ml-probe/
 .tmp-package-check/
 .tmp-package-check-v34/
@@ -99,4 +100,5 @@ examples/golden_workflow/output/
 .tmp-package-check-v41*/
 .tmp-package-check-v43*/
 .tmp-package-check-v44*/
+.tmp-package-check-v45*/
 build/

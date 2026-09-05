@@ -9,12 +9,13 @@ from research_os.programs.models import (
     UtilityRecommendation,
 )
 from research_os.programs.runner import ResearchProgramController
-from research_os.impact import ConfidenceFailureCase, ConditionDependentDecision, ImpactStatus, ProtocolSensitivityAssessment, ResearchImpactReview, ResearchImpactReviewStore, ResearchOutcomeImpact, ResearchOutcomeImpactStore
+from research_os.impact import ConfidenceFailureCase, ConditionDependentDecision, FalseConservatismAudit, ImpactStatus, ProtocolSensitivityAssessment, ResearchImpactReview, ResearchImpactReviewStore, ResearchOutcomeImpact, ResearchOutcomeImpactStore, ScientificChallenge, ScientificChallengeStatus, ScientificChallengeStore
 
 __all__ = [
     "KnowledgeGainAssessment",
     "ConfidenceFailureCase",
     "ConditionDependentDecision",
+    "FalseConservatismAudit",
     "ImpactStatus",
     "ProgramExecutionStatus",
     "ResearchProgram",
@@ -24,6 +25,9 @@ __all__ = [
     "ResearchImpactReviewStore",
     "ResearchOutcomeImpact",
     "ResearchOutcomeImpactStore",
+    "ScientificChallenge",
+    "ScientificChallengeStatus",
+    "ScientificChallengeStore",
     "ResearchProgramStatus",
     "ResearchStepUtilityAssessment",
     "UtilityRecommendation",

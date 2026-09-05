@@ -252,3 +252,14 @@ a universal impact score.
 
 See `RESEARCH_OS_V4_4.md`, `RESEARCH_OUTCOME_IMPACT_V4_4.md`,
 `PROJECT_HEALTH_V4_4.md` and `.research-os-live-4.4/research-impact-review.json`.
+
+## Research OS v4.5
+
+The scientific challenge gate is PASS with 11 red-team targets. Four remain
+robust under their declared scope, three were weakened, two require external
+validation and two are not testable currently. A false-conservatism audit found
+that the bounded Cantera decision was supportable at E3 even though its former
+unbounded refusal was not; OOD and missing-condition refusals remain justified.
+
+See `RESEARCH_OS_V4_5.md`, `SCIENTIFIC_CHALLENGE_V4_5.md`,
+`PROJECT_HEALTH_V4_5.md` and `.research-os-live-4.5/scientific-challenge.json`.
