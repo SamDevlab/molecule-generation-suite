@@ -5,6 +5,8 @@ from .models import (
     ConditionDependentDecision,
     ImpactStatus,
     ProtocolSensitivityAssessment,
+    ResearchImpactReview,
+    ResearchImpactReviewStore,
     ResearchOutcomeImpact,
     ResearchOutcomeImpactStore,
 )
@@ -14,6 +16,8 @@ __all__ = [
     "ConditionDependentDecision",
     "ImpactStatus",
     "ProtocolSensitivityAssessment",
+    "ResearchImpactReview",
+    "ResearchImpactReviewStore",
     "ResearchOutcomeImpact",
     "ResearchOutcomeImpactStore",
 ]

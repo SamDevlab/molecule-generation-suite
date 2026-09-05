@@ -202,6 +202,67 @@ class ConditionDependentDecision:
         return asdict(self)
 
 
+@dataclass(frozen=True)
+class ResearchImpactReview:
+    """Before/after review of a major research program; no aggregate score."""
+
+    review_id: str
+    program_id: str
+    before_snapshot: dict[str, Any]
+    after_snapshot: dict[str, Any]
+    outcome_impact_ids: tuple[str, ...]
+    scientific_changes: tuple[str, ...]
+    unchanged_areas: tuple[str, ...]
+    cost_without_gain: tuple[str, ...]
+    blocked_paths: tuple[str, ...]
+    recommended_next_action: str
+    review_status: str = "COMPLETED"
+    created_at: str = field(default_factory=_now)
+    digest: str | None = None
+
+    def __post_init__(self) -> None:
+        for name in ("outcome_impact_ids", "scientific_changes", "unchanged_areas", "cost_without_gain", "blocked_paths"):
+            object.__setattr__(self, name, tuple(str(item) for item in getattr(self, name)))
+        object.__setattr__(self, "before_snapshot", dict(self.before_snapshot))
+        object.__setattr__(self, "after_snapshot", dict(self.after_snapshot))
+        if not self.review_id.strip() or not self.program_id.strip() or not self.recommended_next_action.strip():
+            raise ValueError("ResearchImpactReview requires identity and a next action")
+        if self.digest is None:
+            object.__setattr__(self, "digest", sha256_json(self._payload()))
+
+    def _payload(self) -> dict[str, Any]:
+        data = asdict(self)
+        data.pop("digest", None)
+        for name in ("outcome_impact_ids", "scientific_changes", "unchanged_areas", "cost_without_gain", "blocked_paths"):
+            data[name] = list(getattr(self, name))
+        return data
+
+    @property
+    def valid(self) -> bool:
+        return self.digest == sha256_json(self._payload())
+
+    def to_dict(self) -> dict[str, Any]:
+        return {**self._payload(), "digest": self.digest}
+
+
+class ResearchImpactReviewStore:
+    """Append-only store for program impact reviews."""
+
+    def __init__(self) -> None:
+        self._reviews: list[ResearchImpactReview] = []
+
+    def append(self, review: ResearchImpactReview) -> ResearchImpactReview:
+        if not review.valid:
+            raise ValueError("invalid ResearchImpactReview digest")
+        if any(item.review_id == review.review_id for item in self._reviews):
+            raise ValueError(f"impact review already registered: {review.review_id}")
+        self._reviews.append(review)
+        return review
+
+    def list(self) -> tuple[ResearchImpactReview, ...]:
+        return tuple(self._reviews)
+
+
 @dataclass
 class ResearchOutcomeImpactStore:
     """Small append-only impact registry used by benchmarks and services."""
@@ -225,4 +286,4 @@ class ResearchOutcomeImpactStore:
         return [item.to_dict() for item in self._records]
 
 
-__all__ = ["ConfidenceFailureCase", "ConditionDependentDecision", "ImpactStatus", "ProtocolSensitivityAssessment", "ResearchOutcomeImpact", "ResearchOutcomeImpactStore"]
+__all__ = ["ConfidenceFailureCase", "ConditionDependentDecision", "ImpactStatus", "ProtocolSensitivityAssessment", "ResearchImpactReview", "ResearchImpactReviewStore", "ResearchOutcomeImpact", "ResearchOutcomeImpactStore"]

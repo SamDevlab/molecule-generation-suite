@@ -242,3 +242,13 @@ materials paths remain explicitly ineligible or externally blocked.
 
 See `RESEARCH_OS_V4_3.md`, `EXTERNAL_VALIDATION_CAMPAIGNS_V4_3.md`,
 `PROJECT_HEALTH_V4_3.md` and `.research-os-live-4.3/external-validation-campaigns.json`.
+
+## Research OS v4.4
+
+The impact review gate is PASS with 13 program reviews from v3.9 onward. The
+review keeps knowledge change, decision change, gap refinement, uncertainty,
+blocked paths and redundant work as separate dimensions; it does not calculate
+a universal impact score.
+
+See `RESEARCH_OS_V4_4.md`, `RESEARCH_OUTCOME_IMPACT_V4_4.md`,
+`PROJECT_HEALTH_V4_4.md` and `.research-os-live-4.4/research-impact-review.json`.

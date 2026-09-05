@@ -1,0 +1,616 @@
+{
+  "acceptance": {
+    "append_only_review_records": true,
+    "blocked_external_identified": true,
+    "decision_changing_research_identified": true,
+    "full_ci_green": true,
+    "knowledge_changed_identified": true,
+    "next_step_value_grounded": true,
+    "no_magic_impact_score": true,
+    "no_material_change_identified": true,
+    "redundancy_identified": true,
+    "ten_or_more_program_reviews": true
+  },
+  "branch": "research-os-v1.3",
+  "counts": {
+    "blocked_external": 5,
+    "decision_changed": 1,
+    "gap_refined_or_resolved": 6,
+    "knowledge_changed": 4,
+    "no_material_change": 2,
+    "program_impact_reviews": 13,
+    "redundant_programs_identified": 2,
+    "uncertainty_refined": 2
+  },
+  "created_at": "2026-09-05T00:06:36.694351+00:00",
+  "impact_policy": "No universal score is calculated; dimensions remain separately reviewable.",
+  "protocol_version": "research-os.v4.4.research-impact-review.v1",
+  "reviewed_versions": [
+    "3.9",
+    "4.0",
+    "4.1",
+    "4.3"
+  ],
+  "reviews": [
+    {
+      "after_snapshot": {
+        "knowledge_gain": {
+          "new_dataset_ids": [
+            "aqsoldb-g-real-sample"
+          ],
+          "new_evidence_ids": [
+            "EVD-V39-SOLUBILITY-DATA",
+            "EVD-V39-SOLUBILITY-MODEL",
+            "EVD-V39-SOLUBILITY-PRED"
+          ],
+          "new_gap_ids": [],
+          "new_partial_claim_ids": [],
+          "new_rejected_claim_ids": [],
+          "new_source_ids": [],
+          "new_supported_claim_ids": [
+            "DECISION-V39-SOLUBILITY"
+          ],
+          "partially_resolved_gap_ids": [
+            "GAP-PROG-01-SOLUBILITY-BOUNDARY"
+          ],
+          "program_id": "PROG-01-SOLUBILITY",
+          "resolved_gap_ids": [],
+          "revised_claim_ids": [],
+          "summary": "New registered observations and explicit negative/blocked outcomes were retained; no universal gain score was computed.",
+          "unresolved_uncertainty": [
+            "independent external validation remains absent"
+          ]
+        },
+        "status": "COMPLETED",
+        "version": "v3.9"
+      },
+      "before_snapshot": {
+        "state": "v3.9 predecessor state; impact contract not yet present",
+        "version": "v3.8"
+      },
+      "blocked_paths": [],
+      "cost_without_gain": [],
+      "created_at": "2026-09-05T00:06:36.691254+00:00",
+      "digest": "6987c6a5c6766cdeb4b389acfe984f2a30d9dff3f7907b22b222f24a6f022ce8",
+      "outcome_impact_ids": [],
+      "program_id": "PROG-01-SOLUBILITY",
+      "recommended_next_action": "evaluate one independent compatible source with the frozen model",
+      "review_id": "IMPR-V44-PROG-01-SOLUBILITY",
+      "review_status": "COMPLETED",
+      "scientific_changes": [
+        "registered observations or a partial gap boundary were added"
+      ],
+      "unchanged_areas": [
+        "canonical EvidenceLevel vocabulary and append-only historical records"
+      ]
+    },
+    {
+      "after_snapshot": {
+        "knowledge_gain": {
+          "new_dataset_ids": [],
+          "new_evidence_ids": [],
+          "new_gap_ids": [],
+          "new_partial_claim_ids": [],
+          "new_rejected_claim_ids": [],
+          "new_source_ids": [],
+          "new_supported_claim_ids": [],
+          "partially_resolved_gap_ids": [],
+          "program_id": "PROG-02-COX2",
+          "resolved_gap_ids": [],
+          "revised_claim_ids": [],
+          "summary": "New registered observations and explicit negative/blocked outcomes were retained; no universal gain score was computed.",
+          "unresolved_uncertainty": []
+        },
+        "status": "COMPLETED",
+        "version": "v3.9"
+      },
+      "before_snapshot": {
+        "state": "v3.9 predecessor state; impact contract not yet present",
+        "version": "v3.8"
+      },
+      "blocked_paths": [],
+      "cost_without_gain": [
+        "two identical-repeat questions were correctly skipped as redundant"
+      ],
+      "created_at": "2026-09-05T00:06:36.691765+00:00",
+      "digest": "eb7e3f84a0233afc62715dead32e133ec6a0b176998be7ddbbd11175a26f35d5",
+      "outcome_impact_ids": [],
+      "program_id": "PROG-02-COX2",
+      "recommended_next_action": "use a new receptor or protocol only when Vina is available",
+      "review_id": "IMPR-V44-PROG-02-COX2",
+      "review_status": "COMPLETED",
+      "scientific_changes": [
+        "no material scientific state change was recorded in this program"
+      ],
+      "unchanged_areas": [
+        "canonical EvidenceLevel vocabulary and append-only historical records",
+        "the 1PXX E2 prioritization and species boundary"
+      ]
+    },
+    {
+      "after_snapshot": {
+        "knowledge_gain": {
+          "new_dataset_ids": [],
+          "new_evidence_ids": [
+            "EVD-DC044E58295A"
+          ],
+          "new_gap_ids": [],
+          "new_partial_claim_ids": [],
+          "new_rejected_claim_ids": [],
+          "new_source_ids": [],
+          "new_supported_claim_ids": [],
+          "partially_resolved_gap_ids": [
+            "GAP-PROG-03-COMBUSTION-BOUNDARY"
+          ],
+          "program_id": "PROG-03-COMBUSTION",
+          "resolved_gap_ids": [],
+          "revised_claim_ids": [],
+          "summary": "New registered observations and explicit negative/blocked outcomes were retained; no universal gain score was computed.",
+          "unresolved_uncertainty": []
+        },
+        "status": "COMPLETED",
+        "version": "v3.9"
+      },
+      "before_snapshot": {
+        "state": "v3.9 predecessor state; impact contract not yet present",
+        "version": "v3.8"
+      },
+      "blocked_paths": [],
+      "cost_without_gain": [],
+      "created_at": "2026-09-05T00:06:36.691765+00:00",
+      "digest": "44fc3df681dc0cbddeefb18adee520ffd26c2b308c909ef4bf0286ceca1fc455",
+      "outcome_impact_ids": [],
+      "program_id": "PROG-03-COMBUSTION",
+      "recommended_next_action": "seek a condition-matched experiment before generalization",
+      "review_id": "IMPR-V44-PROG-03-COMBUSTION",
+      "review_status": "COMPLETED",
+      "scientific_changes": [
+        "registered observations or a partial gap boundary were added"
+      ],
+      "unchanged_areas": [
+        "canonical EvidenceLevel vocabulary and append-only historical records"
+      ]
+    },
+    {
+      "after_snapshot": {
+        "knowledge_gain": {
+          "new_dataset_ids": [
+            "battery-nasa-pcoe-rw3"
+          ],
+          "new_evidence_ids": [
+            "EVD-V39-BATTERY"
+          ],
+          "new_gap_ids": [
+            "GAP-PROG-04-BATTERY-EXTERNAL"
+          ],
+          "new_partial_claim_ids": [],
+          "new_rejected_claim_ids": [],
+          "new_source_ids": [],
+          "new_supported_claim_ids": [],
+          "partially_resolved_gap_ids": [
+            "GAP-PROG-04-BATTERY-BOUNDARY"
+          ],
+          "program_id": "PROG-04-BATTERY",
+          "resolved_gap_ids": [],
+          "revised_claim_ids": [],
+          "summary": "New registered observations and explicit negative/blocked outcomes were retained; no universal gain score was computed.",
+          "unresolved_uncertainty": []
+        },
+        "status": "NO_PROGRESS",
+        "version": "v3.9"
+      },
+      "before_snapshot": {
+        "state": "v3.9 predecessor state; impact contract not yet present",
+        "version": "v3.8"
+      },
+      "blocked_paths": [
+        "the selected path did not produce new local evidence",
+        "external or unavailable data/engine dependency remained"
+      ],
+      "cost_without_gain": [],
+      "created_at": "2026-09-05T00:06:36.691765+00:00",
+      "digest": "e101350c7507dbecefb7b74c6c63c4d8104d1ce46c79dc0a318f06131292a6dc",
+      "outcome_impact_ids": [],
+      "program_id": "PROG-04-BATTERY",
+      "recommended_next_action": "acquire a schema-complete capacity/resistance/uncertainty source",
+      "review_id": "IMPR-V44-PROG-04-BATTERY",
+      "review_status": "COMPLETED",
+      "scientific_changes": [
+        "registered observations or a partial gap boundary were added",
+        "the next missing evidence was made explicit"
+      ],
+      "unchanged_areas": [
+        "canonical EvidenceLevel vocabulary and append-only historical records"
+      ]
+    },
+    {
+      "after_snapshot": {
+        "knowledge_gain": {
+          "new_dataset_ids": [],
+          "new_evidence_ids": [],
+          "new_gap_ids": [
+            "GAP-PROG-05-MATERIALS-EXTERNAL"
+          ],
+          "new_partial_claim_ids": [],
+          "new_rejected_claim_ids": [],
+          "new_source_ids": [],
+          "new_supported_claim_ids": [],
+          "partially_resolved_gap_ids": [],
+          "program_id": "PROG-05-MATERIALS",
+          "resolved_gap_ids": [],
+          "revised_claim_ids": [],
+          "summary": "New registered observations and explicit negative/blocked outcomes were retained; no universal gain score was computed.",
+          "unresolved_uncertainty": []
+        },
+        "status": "NO_PROGRESS",
+        "version": "v3.9"
+      },
+      "before_snapshot": {
+        "state": "v3.9 predecessor state; impact contract not yet present",
+        "version": "v3.8"
+      },
+      "blocked_paths": [
+        "the selected path did not produce new local evidence",
+        "external or unavailable data/engine dependency remained"
+      ],
+      "cost_without_gain": [],
+      "created_at": "2026-09-05T00:06:36.692278+00:00",
+      "digest": "b4426a4ec44840cf92d5c231fd4b7ba6f12a31e062171b6ea29be5897046b6fa",
+      "outcome_impact_ids": [],
+      "program_id": "PROG-05-MATERIALS",
+      "recommended_next_action": "ingest and condition-match a reviewed record-level material dataset",
+      "review_id": "IMPR-V44-PROG-05-MATERIALS",
+      "review_status": "COMPLETED",
+      "scientific_changes": [
+        "the next missing evidence was made explicit"
+      ],
+      "unchanged_areas": [
+        "canonical EvidenceLevel vocabulary and append-only historical records"
+      ]
+    },
+    {
+      "after_snapshot": {
+        "knowledge_gain": {
+          "new_dataset_ids": [],
+          "new_evidence_ids": [],
+          "new_gap_ids": [],
+          "new_partial_claim_ids": [],
+          "new_rejected_claim_ids": [],
+          "new_source_ids": [],
+          "new_supported_claim_ids": [],
+          "partially_resolved_gap_ids": [],
+          "program_id": "PROG-06-CODEX",
+          "resolved_gap_ids": [],
+          "revised_claim_ids": [],
+          "summary": "New registered observations and explicit negative/blocked outcomes were retained; no universal gain score was computed.",
+          "unresolved_uncertainty": []
+        },
+        "status": "NO_PROGRESS",
+        "version": "v3.9"
+      },
+      "before_snapshot": {
+        "state": "v3.9 predecessor state; impact contract not yet present",
+        "version": "v3.8"
+      },
+      "blocked_paths": [
+        "the selected path did not produce new local evidence",
+        "external or unavailable data/engine dependency remained"
+      ],
+      "cost_without_gain": [],
+      "created_at": "2026-09-05T00:06:36.692278+00:00",
+      "digest": "e6dd98accc638ffdc1f0de649c9c7db3396beacd756680a409d618d2e89be56d",
+      "outcome_impact_ids": [],
+      "program_id": "PROG-06-CODEX",
+      "recommended_next_action": "select an executable question with expected information gain",
+      "review_id": "IMPR-V44-PROG-06-CODEX",
+      "review_status": "COMPLETED",
+      "scientific_changes": [
+        "no material scientific state change was recorded in this program"
+      ],
+      "unchanged_areas": [
+        "canonical EvidenceLevel vocabulary and append-only historical records"
+      ]
+    },
+    {
+      "after_snapshot": {
+        "gap_changes": {
+          "new": [],
+          "partial": [
+            "GAP-DOCKING-E2-ONLY"
+          ],
+          "resolved": []
+        },
+        "impact_status": "NO_MATERIAL_CHANGE",
+        "new_runs": [
+          "RUN-C6DEB8775DA6",
+          "RUN-97C065D8D0A9",
+          "RUN-531F9C94635F",
+          "RUN-BB232EA3CA3A",
+          "RUN-529876CB973E",
+          "RUN-DDC3C51F782A"
+        ],
+        "revised_claims": [],
+        "revised_decisions": [],
+        "summary": "The existing three-seed ranking is stable within the recorded 1PXX protocol, but no materially new docking evidence was justified or executable.",
+        "version": "v4.1"
+      },
+      "before_snapshot": {
+        "state": "behavioral validation passed; impact dimensions were not yet recorded",
+        "version": "v4.0"
+      },
+      "blocked_paths": [],
+      "cost_without_gain": [
+        "new identical docking was skipped because the sealed protocol already answered the question"
+      ],
+      "created_at": "2026-09-05T00:06:36.692278+00:00",
+      "digest": "c7a460fe65973fa46688f7e10e3fc600ebebd1598792041317acf86c1089aa7f",
+      "outcome_impact_ids": [
+        "IMP-V41-PROG-V41-COX2"
+      ],
+      "program_id": "PROG-V41-COX2",
+      "recommended_next_action": "Only run a new receptor or exhaustiveness comparison when Vina is explicitly available and the protocol is predeclared.",
+      "review_id": "IMPR-V44-PROG-V41-COX2",
+      "review_status": "COMPLETED",
+      "scientific_changes": [
+        "The existing three-seed ranking is stable within the recorded 1PXX protocol, but no materially new docking evidence was justified or executable."
+      ],
+      "unchanged_areas": [
+        "EvidenceLevel ceiling, explicit conditions, OOD and uncertainty policy remain unchanged"
+      ]
+    },
+    {
+      "after_snapshot": {
+        "gap_changes": {
+          "new": [],
+          "partial": [
+            "GAP-SOLUBILITY-EXTERNAL-VALIDATION"
+          ],
+          "resolved": []
+        },
+        "impact_status": "KNOWLEDGE_CHANGED",
+        "new_runs": [
+          "RUN-V41-SOLUBILITY-FAILURE-ANALYSIS"
+        ],
+        "revised_claims": [
+          "CLM-863B37BB0E38"
+        ],
+        "revised_decisions": [],
+        "summary": "Segment errors, ranking policy and the high-confidence-failure rule add new knowledge about where the frozen E1 model can fail; the external validation gap remains.",
+        "version": "v4.1"
+      },
+      "before_snapshot": {
+        "state": "behavioral validation passed; impact dimensions were not yet recorded",
+        "version": "v4.0"
+      },
+      "blocked_paths": [],
+      "cost_without_gain": [],
+      "created_at": "2026-09-05T00:06:36.692278+00:00",
+      "digest": "d3496a3c4f0283fe3e8b42f9f9976313fd95a0dfba5b6537e97d5aae6debba2f",
+      "outcome_impact_ids": [
+        "IMP-V41-PROG-V41-SOLUBILITY"
+      ],
+      "program_id": "PROG-V41-SOLUBILITY",
+      "recommended_next_action": "Acquire one independent compatible solubility dataset and freeze this model before testing it.",
+      "review_id": "IMPR-V44-PROG-V41-SOLUBILITY",
+      "review_status": "COMPLETED",
+      "scientific_changes": [
+        "Segment errors, ranking policy and the high-confidence-failure rule add new knowledge about where the frozen E1 model can fail; the external validation gap remains."
+      ],
+      "unchanged_areas": [
+        "EvidenceLevel ceiling, explicit conditions, OOD and uncertainty policy remain unchanged"
+      ]
+    },
+    {
+      "after_snapshot": {
+        "gap_changes": {
+          "new": [],
+          "partial": [
+            "GAP-E3-E4-COMPARISON"
+          ],
+          "resolved": []
+        },
+        "impact_status": "DECISION_CHANGED",
+        "new_runs": [
+          "RUN-V41-COMB-REF",
+          "RUN-V41-COMB-T330",
+          "RUN-V41-COMB-P111",
+          "RUN-V41-COMB-PHI090",
+          "RUN-V41-COMB-PHI110",
+          "RUN-V41-COMB-CH4REF"
+        ],
+        "revised_claims": [],
+        "revised_decisions": [
+          "DECISION-REAL-02-D8EBCAE1CCD0"
+        ],
+        "summary": "The bounded decision was revisited: retain a protocol-limited conclusion, reject universalization, and preserve the unresolved E3-to-E4 gap.",
+        "version": "v4.1"
+      },
+      "before_snapshot": {
+        "state": "behavioral validation passed; impact dimensions were not yet recorded",
+        "version": "v4.0"
+      },
+      "blocked_paths": [],
+      "cost_without_gain": [],
+      "created_at": "2026-09-05T00:06:36.692800+00:00",
+      "digest": "f3d5e6a27f2e9a4dc8456979c602094bd1d5a6fedb41c6c998f23071516b9116",
+      "outcome_impact_ids": [
+        "IMP-V41-PROG-V41-COMBUSTION"
+      ],
+      "program_id": "PROG-V41-COMBUSTION",
+      "recommended_next_action": "Obtain a condition-matched experiment before any E3-to-E4 comparison or universal claim.",
+      "review_id": "IMPR-V44-PROG-V41-COMBUSTION",
+      "review_status": "COMPLETED",
+      "scientific_changes": [
+        "The bounded decision was revisited: retain a protocol-limited conclusion, reject universalization, and preserve the unresolved E3-to-E4 gap."
+      ],
+      "unchanged_areas": [
+        "EvidenceLevel ceiling, explicit conditions, OOD and uncertainty policy remain unchanged"
+      ]
+    },
+    {
+      "after_snapshot": {
+        "gap_changes": {
+          "new": [],
+          "partial": [
+            "GAP-BATTERY-METADATA"
+          ],
+          "resolved": []
+        },
+        "impact_status": "GAP_REFINED",
+        "new_runs": [
+          "RUN-V41-BATTERY-USEFULNESS"
+        ],
+        "revised_claims": [],
+        "revised_decisions": [],
+        "summary": "The real archive schema supports descriptive measured-step claims, while the missing fields refine rather than close the degradation gap.",
+        "version": "v4.1"
+      },
+      "before_snapshot": {
+        "state": "behavioral validation passed; impact dimensions were not yet recorded",
+        "version": "v4.0"
+      },
+      "blocked_paths": [],
+      "cost_without_gain": [],
+      "created_at": "2026-09-05T00:06:36.692800+00:00",
+      "digest": "bb33829088f41b1b31fae37eba0f0d1ed1fe068c6406cd56cd16f1e81a1fc4b0",
+      "outcome_impact_ids": [
+        "IMP-V41-PROG-V41-BATTERY"
+      ],
+      "program_id": "PROG-V41-BATTERY",
+      "recommended_next_action": "Acquire a public or user-provided dataset with capacity, resistance, uncertainty and matched protocol metadata.",
+      "review_id": "IMPR-V44-PROG-V41-BATTERY",
+      "review_status": "COMPLETED",
+      "scientific_changes": [
+        "The real archive schema supports descriptive measured-step claims, while the missing fields refine rather than close the degradation gap."
+      ],
+      "unchanged_areas": [
+        "EvidenceLevel ceiling, explicit conditions, OOD and uncertainty policy remain unchanged"
+      ]
+    },
+    {
+      "after_snapshot": {
+        "gap_changes": {
+          "new": [
+            "GAP-MATERIALS-FILE-INGESTION"
+          ],
+          "partial": [],
+          "resolved": []
+        },
+        "impact_status": "BLOCKED_EXTERNAL",
+        "new_runs": [],
+        "revised_claims": [],
+        "revised_decisions": [],
+        "summary": "Discovery pages identify promising public datasets, but no condition-complete record was downloaded, hashed, parsed and matched in this bounded v4.1 run; no material comparison claim is created.",
+        "version": "v4.1"
+      },
+      "before_snapshot": {
+        "state": "behavioral validation passed; impact dimensions were not yet recorded",
+        "version": "v4.0"
+      },
+      "blocked_paths": [
+        "condition-complete external source unavailable"
+      ],
+      "cost_without_gain": [],
+      "created_at": "2026-09-05T00:06:36.692800+00:00",
+      "digest": "811536cef5394678e181b64d4c488298aad151b8bd355179c4855836ccfd3b30",
+      "outcome_impact_ids": [
+        "IMP-V41-PROG-V41-MATERIALS"
+      ],
+      "program_id": "PROG-V41-MATERIALS",
+      "recommended_next_action": "Ingest one source after license review, hash the exact file, and apply a field-level condition matcher before any claim or decision.",
+      "review_id": "IMPR-V44-PROG-V41-MATERIALS",
+      "review_status": "COMPLETED",
+      "scientific_changes": [
+        "Discovery pages identify promising public datasets, but no condition-complete record was downloaded, hashed, parsed and matched in this bounded v4.1 run; no material comparison claim is created."
+      ],
+      "unchanged_areas": [
+        "EvidenceLevel ceiling, explicit conditions, OOD and uncertainty policy remain unchanged"
+      ]
+    },
+    {
+      "after_snapshot": {
+        "gap_changes": {
+          "new": [],
+          "partial": [],
+          "resolved": [
+            "GAP-MOLECULE-RECALCULATION"
+          ]
+        },
+        "impact_status": "KNOWLEDGE_CHANGED",
+        "new_runs": [
+          "RUN-V41-CODEX-MOLECULE"
+        ],
+        "revised_claims": [],
+        "revised_decisions": [],
+        "summary": "The Codex-selected bounded molecule step produced a registered deterministic calculation and closed only the narrow recalculation question.",
+        "version": "v4.1"
+      },
+      "before_snapshot": {
+        "state": "behavioral validation passed; impact dimensions were not yet recorded",
+        "version": "v4.0"
+      },
+      "blocked_paths": [],
+      "cost_without_gain": [],
+      "created_at": "2026-09-05T00:06:36.692800+00:00",
+      "digest": "a1266894dd098bca3b4c000714592708c62ab67360438db0bef5b538849aa20a",
+      "outcome_impact_ids": [
+        "IMP-V41-PROG-V41-CODEX"
+      ],
+      "program_id": "PROG-V41-CODEX",
+      "recommended_next_action": "Avoid identical descriptor reruns; use the result only as a deterministic computational boundary.",
+      "review_id": "IMPR-V44-PROG-V41-CODEX",
+      "review_status": "COMPLETED",
+      "scientific_changes": [
+        "The Codex-selected bounded molecule step produced a registered deterministic calculation and closed only the narrow recalculation question."
+      ],
+      "unchanged_areas": [
+        "EvidenceLevel ceiling, explicit conditions, OOD and uncertainty policy remain unchanged"
+      ]
+    },
+    {
+      "after_snapshot": {
+        "claim_revision": "REV-V43-SOLUBILITY-EXTERNAL-FAILURE",
+        "metrics": {
+          "MAE": 1.1679929908471445,
+          "R2": 0.2642411682723491,
+          "RMSE": 1.4232440240440678,
+          "bias": -0.03151556768784511,
+          "in_domain_count": 0,
+          "interval_coverage": 0.8928571428571429,
+          "mean_uncertainty": 2.2046852853438867,
+          "ood_fraction": 1.0,
+          "overlap_count": 0,
+          "record_count": 56
+        },
+        "validation_status": "FAILED_VALIDATION",
+        "version": "v4.3"
+      },
+      "before_snapshot": {
+        "claim": "external validity remained an open gap",
+        "version": "v4.1"
+      },
+      "blocked_paths": [
+        "unrestricted external generalization failed under this independent source"
+      ],
+      "cost_without_gain": [],
+      "created_at": "2026-09-05T00:06:36.692800+00:00",
+      "digest": "7238bf6e89c6ba6f8f2536ade6571026189e44fa97107d593cd5d2dd080fcfcb",
+      "outcome_impact_ids": [
+        "VAL-V43-SOLUBILITY-DLS100"
+      ],
+      "program_id": "PROG-V43-SOLUBILITY-EXTERNAL",
+      "recommended_next_action": "Acquire a compatible external source with in-domain overlap or explicitly retain the OOD boundary",
+      "review_id": "IMPR-V44-PROG-V43-SOLUBILITY-EXTERNAL",
+      "review_status": "COMPLETED",
+      "scientific_changes": [
+        "The external gap changed from untested to a measured negative boundary: the DLS-100 unique subset was entirely OOD under the locked model.",
+        "The claim was revised without EvidenceLevel promotion."
+      ],
+      "unchanged_areas": [
+        "The model remains frozen and no rankable OOD output is authorized"
+      ]
+    }
+  ],
+  "status": "PASS",
+  "version": "4.4.0"
+}

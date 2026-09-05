@@ -9,7 +9,7 @@ from research_os.programs.models import (
     UtilityRecommendation,
 )
 from research_os.programs.runner import ResearchProgramController
-from research_os.impact import ConfidenceFailureCase, ConditionDependentDecision, ImpactStatus, ProtocolSensitivityAssessment, ResearchOutcomeImpact, ResearchOutcomeImpactStore
+from research_os.impact import ConfidenceFailureCase, ConditionDependentDecision, ImpactStatus, ProtocolSensitivityAssessment, ResearchImpactReview, ResearchImpactReviewStore, ResearchOutcomeImpact, ResearchOutcomeImpactStore
 
 __all__ = [
     "KnowledgeGainAssessment",
@@ -20,6 +20,8 @@ __all__ = [
     "ResearchProgram",
     "ResearchProgramController",
     "ProtocolSensitivityAssessment",
+    "ResearchImpactReview",
+    "ResearchImpactReviewStore",
     "ResearchOutcomeImpact",
     "ResearchOutcomeImpactStore",
     "ResearchProgramStatus",
