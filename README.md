@@ -231,3 +231,14 @@ Explicit corpus files are hashed into `PrivateSourceRecord`, kept separate from
 public sources, extracted only as review-required candidates, and never
 automatically verified. See `RESEARCH_OS_V4_2.md` and
 `USER_CORPUS_KNOWLEDGE_V4_2.md`.
+
+## Research OS v4.3
+
+The external-validation gate is PASS. Five campaigns were attempted with an
+independence audit; the locked solubility model was tested once on the
+non-overlapping DLS-100 unique subset and failed unrestricted generalization
+while preserving the OOD boundary. Other structural, combustion, battery and
+materials paths remain explicitly ineligible or externally blocked.
+
+See `RESEARCH_OS_V4_3.md`, `EXTERNAL_VALIDATION_CAMPAIGNS_V4_3.md`,
+`PROJECT_HEALTH_V4_3.md` and `.research-os-live-4.3/external-validation-campaigns.json`.
