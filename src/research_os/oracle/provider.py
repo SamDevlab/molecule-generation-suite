@@ -11,7 +11,20 @@ import re
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Mapping, Protocol
+
+from research_os.oracle.live_boundary import (
+    CODEX_LIVE_REENTRANCY,
+    LiveExecutionBudget,
+    LiveFailureCode,
+    LiveFailureStage,
+    LiveInvocationController,
+    LiveInvocationDiagnostic,
+    LiveReentrancyState,
+    classify_timeout,
+    codex_host_context,
+    retryable_live_failure,
+)
 
 
 def _canonical(value: Any) -> str:
@@ -86,9 +99,17 @@ class StructuredOutputError(ValueError):
 class LiveCodexUnavailable(RuntimeError):
     """The local Codex bridge could not produce a structured response."""
 
+    def __init__(self, message: str, *, diagnostic: LiveInvocationDiagnostic | None = None):
+        super().__init__(message)
+        self.diagnostic = diagnostic
+
 
 class LiveCodexProtocolError(StructuredOutputError):
     """The live model returned a response outside the planning contract."""
+
+    def __init__(self, message: str, *, diagnostic: LiveInvocationDiagnostic | None = None):
+        super().__init__(message)
+        self.diagnostic = diagnostic
 
 
 def _canonical_evidence_level(value: Any) -> Any:
@@ -138,22 +159,64 @@ class CodexCliTransport:
     Oracle planner and PlanValidator before any Lab can run.
     """
 
-    def __init__(self, executable: str | os.PathLike[str] | None = None, *, workdir: str | os.PathLike[str] | None = None, timeout_seconds: int = 120, schema_path: str | os.PathLike[str] | None = None):
-        resolved = str(executable) if executable else shutil.which("codex")
+    _APPROVED_EXECUTABLE_NAMES = {"codex", "codex.exe"}
+    _MAX_OUTPUT_BYTES = 1_000_000
+    _SAFE_ENVIRONMENT_KEYS = {
+        "PATH", "PATHEXT", "SYSTEMROOT", "WINDIR", "TEMP", "TMP", "USERPROFILE",
+        "LOCALAPPDATA", "APPDATA", "PROGRAMFILES", "PROGRAMFILES(X86)", "COMSPEC",
+        "HOME", "LANG", "LC_ALL", "TERM",
+    }
+
+    def __init__(
+        self,
+        executable: str | os.PathLike[str] | None = None,
+        *,
+        workdir: str | os.PathLike[str] | None = None,
+        timeout_seconds: int = 120,
+        schema_path: str | os.PathLike[str] | None = None,
+        budget: LiveExecutionBudget | None = None,
+        allow_codex_host_context: bool = False,
+        diagnostic_sink: list[LiveInvocationDiagnostic] | None = None,
+        max_output_bytes: int = _MAX_OUTPUT_BYTES,
+        environment: Mapping[str, str] | None = None,
+    ):
+        requested = str(executable) if executable else "codex"
+        if Path(requested).name.lower() not in self._APPROVED_EXECUTABLE_NAMES:
+            raise ValueError("Codex live transport accepts only the fixed codex executable")
+        resolved = shutil.which(requested) if executable else shutil.which("codex")
         self.executable = resolved
         self.workdir = str(workdir) if workdir else None
         self.timeout_seconds = int(timeout_seconds)
-        self.schema_path = Path(schema_path) if schema_path else Path(__file__).with_name("live_output.schema.json")
+        fixed_schema = Path(__file__).with_name("live_output.schema.json").resolve()
+        requested_schema = Path(schema_path).resolve() if schema_path else fixed_schema
+        if requested_schema != fixed_schema:
+            raise ValueError("Codex live transport accepts only the fixed live output schema")
+        self.schema_path = fixed_schema
         self.last_runtime_model = "MODEL_ID_UNVERIFIED_FROM_RUNTIME"
         self.last_cli_version: str | None = None
+        self.max_output_bytes = max(1024, int(max_output_bytes))
+        self.budget = budget or LiveExecutionBudget(
+            total_timeout=self.timeout_seconds,
+            planning_budget=self.timeout_seconds,
+            execution_budget=self.timeout_seconds,
+            review_budget=self.timeout_seconds,
+            output_validation_budget=min(5.0, float(self.timeout_seconds)),
+        )
+        self._environment = dict(environment if environment is not None else os.environ)
+        self.controller = LiveInvocationController(
+            self.budget,
+            environment=self._environment,
+            allow_codex_host_context=allow_codex_host_context,
+            diagnostic_sink=diagnostic_sink,
+        )
+        self.invocation_diagnostics = self.controller.diagnostics
+        self.last_invocation_diagnostic: LiveInvocationDiagnostic | None = None
 
     @property
     def available(self) -> bool:
         return bool(self.executable and self.schema_path.is_file())
 
     def __call__(self, operation: str, payload: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
-        if not self.available:
-            raise LiveCodexUnavailable("Codex CLI or live output schema is not available")
         request = {
             "operation": operation,
             "contract": "Research OS live Oracle planning boundary v1",
@@ -174,29 +237,192 @@ class CodexCliTransport:
             str(self.schema_path),
             "-",
         ]
-        try:
-            completed = subprocess.run(
-                command,
-                input=prompt,
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-                cwd=self.workdir,
-                timeout=self.timeout_seconds,
-                check=False,
-                shell=False,
+        attempts = min(self.budget.max_retries + 1, self.budget.max_live_turns)
+        for attempt in range(1, attempts + 1):
+            handle = self.controller.begin(
+                provider="CODEX_LIVE",
+                model=self.last_runtime_model,
+                operation=operation,
+                timeout_budget=min(float(self.timeout_seconds), self.budget.timeout_for(operation)),
             )
-        except (OSError, subprocess.SubprocessError) as exc:
-            raise LiveCodexUnavailable(f"Codex CLI invocation failed: {type(exc).__name__}") from exc
-        combined = f"{completed.stdout}\n{completed.stderr}"
-        self._capture_runtime(combined)
-        if completed.returncode != 0:
-            raise LiveCodexUnavailable(f"Codex CLI returned exit code {completed.returncode}")
-        result = self._extract_json(completed.stdout)
-        if not isinstance(result, dict):
-            raise LiveCodexProtocolError("Codex CLI did not return a JSON object")
-        return result
+            if not handle.admitted:
+                diagnostic = handle.finish(
+                    exit_status="REJECTED_REENTRANT" if handle.diagnostic.parent_invocation_id else "BUDGET_EXHAUSTED",
+                    failure_code=(
+                        LiveFailureCode.REENTRANT_INVOCATION_REJECTED.value
+                        if handle.diagnostic.parent_invocation_id
+                        else LiveFailureCode.LIVE_TURN_BUDGET_EXCEEDED.value
+                    ),
+                    failure_stage=LiveFailureStage.ADMISSION.value,
+                    schema_status="NOT_CHECKED",
+                    reentrancy_state=LiveReentrancyState.REJECTED_REENTRANT.value,
+                    attempt=attempt,
+                    max_attempts=attempts,
+                )
+                self.last_invocation_diagnostic = diagnostic
+                raise LiveCodexUnavailable(
+                    f"{CODEX_LIVE_REENTRANCY}={LiveReentrancyState.REJECTED_REENTRANT.value}",
+                    diagnostic=diagnostic,
+                )
+            try:
+                if not self.available:
+                    diagnostic = handle.finish(
+                        exit_status="PROCESS_ERROR",
+                        failure_code=LiveFailureCode.PROVIDER_UNAVAILABLE.value,
+                        failure_stage=LiveFailureStage.PROVIDER_START.value,
+                        schema_status="NOT_CHECKED",
+                        attempt=attempt,
+                        max_attempts=attempts,
+                    )
+                    self.last_invocation_diagnostic = diagnostic
+                    raise LiveCodexUnavailable("Codex CLI or live output schema is not available", diagnostic=diagnostic)
+                completed = subprocess.run(
+                    command,
+                    input=prompt,
+                    capture_output=True,
+                    text=True,
+                    encoding="utf-8",
+                    errors="replace",
+                    cwd=self.workdir,
+                    env=self._audited_environment(),
+                    timeout=min(self.timeout_seconds, self.budget.timeout_for(operation)),
+                    check=False,
+                    shell=False,
+                )
+            except subprocess.TimeoutExpired as exc:
+                stdout_bytes, stderr_bytes = self._output_sizes(exc.stdout, exc.stderr)
+                nested = codex_host_context(self._environment) or handle.diagnostic.parent_invocation_id is not None
+                code = classify_timeout(nested=nested, stage=LiveFailureStage.MODEL_EXECUTION)
+                diagnostic = handle.finish(
+                    exit_status="TIMEOUT",
+                    stdout_bytes=stdout_bytes,
+                    stderr_bytes=stderr_bytes,
+                    schema_status="NOT_CHECKED",
+                    failure_code=code.value,
+                    failure_stage=LiveFailureStage.MODEL_EXECUTION.value,
+                    reentrancy_state=LiveReentrancyState.TIMED_OUT.value,
+                    attempt=attempt,
+                    max_attempts=attempts,
+                )
+                self.last_invocation_diagnostic = diagnostic
+                error = LiveCodexUnavailable(f"Codex CLI invocation failed: {code.value}", diagnostic=diagnostic)
+                if retryable_live_failure(code) and attempt < attempts:
+                    continue
+                raise error from exc
+            except OSError as exc:
+                diagnostic = handle.finish(
+                    exit_status="PROCESS_ERROR",
+                    failure_code=LiveFailureCode.PROCESS_START_ERROR.value,
+                    failure_stage=LiveFailureStage.PROVIDER_START.value,
+                    schema_status="NOT_CHECKED",
+                    attempt=attempt,
+                    max_attempts=attempts,
+                )
+                self.last_invocation_diagnostic = diagnostic
+                error = LiveCodexUnavailable(f"Codex CLI invocation failed: {type(exc).__name__}", diagnostic=diagnostic)
+                if retryable_live_failure(LiveFailureCode.PROCESS_START_ERROR) and attempt < attempts:
+                    continue
+                raise error from exc
+            except subprocess.SubprocessError as exc:
+                diagnostic = handle.finish(
+                    exit_status="PROCESS_ERROR",
+                    failure_code=LiveFailureCode.PIPE_IO_ERROR.value,
+                    failure_stage=LiveFailureStage.PIPE_IO.value,
+                    schema_status="NOT_CHECKED",
+                    attempt=attempt,
+                    max_attempts=attempts,
+                )
+                self.last_invocation_diagnostic = diagnostic
+                error = LiveCodexUnavailable(f"Codex CLI invocation failed: {type(exc).__name__}", diagnostic=diagnostic)
+                if retryable_live_failure(LiveFailureCode.PIPE_IO_ERROR) and attempt < attempts:
+                    continue
+                raise error from exc
+
+            stdout_bytes, stderr_bytes = self._output_sizes(completed.stdout, completed.stderr)
+            combined = f"{completed.stdout}\n{completed.stderr}"
+            self._capture_runtime(combined)
+            if stdout_bytes > self.max_output_bytes or stderr_bytes > self.max_output_bytes:
+                diagnostic = handle.finish(
+                    exit_status="SCHEMA_ERROR",
+                    stdout_bytes=min(stdout_bytes, self.max_output_bytes),
+                    stderr_bytes=min(stderr_bytes, self.max_output_bytes),
+                    schema_status="FAIL",
+                    failure_code=LiveFailureCode.OUTPUT_TOO_LARGE.value,
+                    failure_stage=LiveFailureStage.OUTPUT_VALIDATION.value,
+                    attempt=attempt,
+                    max_attempts=attempts,
+                    stdout_truncated=stdout_bytes > self.max_output_bytes,
+                    stderr_truncated=stderr_bytes > self.max_output_bytes,
+                )
+                self.last_invocation_diagnostic = diagnostic
+                raise LiveCodexProtocolError("Codex CLI output exceeded the bounded capture limit", diagnostic=diagnostic)
+            if completed.returncode != 0:
+                diagnostic = handle.finish(
+                    exit_status="PROCESS_ERROR",
+                    stdout_bytes=stdout_bytes,
+                    stderr_bytes=stderr_bytes,
+                    schema_status="NOT_CHECKED",
+                    failure_code=LiveFailureCode.PROCESS_ERROR.value,
+                    failure_stage=LiveFailureStage.COMPLETION.value,
+                    attempt=attempt,
+                    max_attempts=attempts,
+                )
+                self.last_invocation_diagnostic = diagnostic
+                raise LiveCodexUnavailable(f"Codex CLI returned exit code {completed.returncode}", diagnostic=diagnostic)
+            try:
+                result = self._extract_json(completed.stdout)
+                self._validate_transport_envelope(result)
+            except (StructuredOutputError, LiveCodexProtocolError) as exc:
+                diagnostic = handle.finish(
+                    exit_status="SCHEMA_ERROR",
+                    stdout_bytes=stdout_bytes,
+                    stderr_bytes=stderr_bytes,
+                    schema_status="FAIL",
+                    failure_code=LiveFailureCode.SCHEMA_INVALID.value,
+                    failure_stage=LiveFailureStage.OUTPUT_VALIDATION.value,
+                    attempt=attempt,
+                    max_attempts=attempts,
+                )
+                self.last_invocation_diagnostic = diagnostic
+                raise LiveCodexProtocolError(str(exc), diagnostic=diagnostic) from exc
+            diagnostic = handle.finish(
+                exit_status="COMPLETED",
+                stdout_bytes=stdout_bytes,
+                stderr_bytes=stderr_bytes,
+                schema_status="PASS",
+                failure_code=None,
+                failure_stage=LiveFailureStage.NONE.value,
+                reentrancy_state=LiveReentrancyState.COMPLETED.value,
+                attempt=attempt,
+                max_attempts=attempts,
+            )
+            self.last_invocation_diagnostic = diagnostic
+            return result
+
+        raise LiveCodexUnavailable("Codex CLI invocation exhausted its bounded retry budget")
+
+    @staticmethod
+    def _output_sizes(stdout: Any, stderr: Any) -> tuple[int, int]:
+        def size(value: Any) -> int:
+            if value is None:
+                return 0
+            if isinstance(value, bytes):
+                return len(value)
+            return len(str(value).encode("utf-8", errors="replace"))
+
+        return size(stdout), size(stderr)
+
+    @staticmethod
+    def _validate_transport_envelope(value: Any) -> None:
+        if not isinstance(value, dict) or set(value) != {"result"} or not isinstance(value.get("result"), str) or len(value["result"]) < 2:
+            raise LiveCodexProtocolError("Codex CLI response failed the fixed live output schema")
+
+    def _audited_environment(self) -> dict[str, str]:
+        return {
+            key: value
+            for key, value in self._environment.items()
+            if key.upper() in self._SAFE_ENVIRONMENT_KEYS
+        }
 
     @staticmethod
     def _prompt(request: dict[str, Any]) -> str:
@@ -304,8 +530,25 @@ class CodexLiveProvider:
     scientific_evidence_provider = False
     standalone_web = False
 
-    def __init__(self, *, transport: Any | None = None, executable: str | os.PathLike[str] | None = None, workdir: str | os.PathLike[str] | None = None, timeout_seconds: int = 120):
-        self.transport = transport or CodexCliTransport(executable, workdir=workdir, timeout_seconds=timeout_seconds)
+    def __init__(
+        self,
+        *,
+        transport: Any | None = None,
+        executable: str | os.PathLike[str] | None = None,
+        workdir: str | os.PathLike[str] | None = None,
+        timeout_seconds: int = 120,
+        budget: LiveExecutionBudget | None = None,
+        allow_codex_host_context: bool = False,
+        diagnostic_sink: list[LiveInvocationDiagnostic] | None = None,
+    ):
+        self.transport = transport or CodexCliTransport(
+            executable,
+            workdir=workdir,
+            timeout_seconds=timeout_seconds,
+            budget=budget,
+            allow_codex_host_context=allow_codex_host_context,
+            diagnostic_sink=diagnostic_sink,
+        )
         self._request_context: dict[str, Any] = {}
 
     @property
@@ -329,6 +572,9 @@ class CodexLiveProvider:
             "transport": type(self.transport).__name__,
             "model_identity": self.model,
             "model_identity_source": "codex_runtime_header" if self.model != "MODEL_ID_UNVERIFIED_FROM_RUNTIME" else "MODEL_ID_UNVERIFIED_FROM_RUNTIME",
+            "codex_live_reentrancy": CODEX_LIVE_REENTRANCY,
+            "live_execution_budget": getattr(getattr(self.transport, "budget", None), "to_dict", lambda: {})(),
+            "live_boundary_diagnostics": len(getattr(self.transport, "invocation_diagnostics", ())),
         }
 
     def set_request_context(self, context: dict[str, Any] | None) -> None:
@@ -338,9 +584,15 @@ class CodexLiveProvider:
         return bool(getattr(self.transport, "available", True))
 
     def audit(self) -> dict[str, Any]:
+        controller = getattr(self.transport, "controller", None)
+        host_blocked = bool(
+            controller is not None
+            and codex_host_context(getattr(controller, "environment", {}))
+            and not getattr(controller, "allow_codex_host_context", False)
+        )
         return {
             **self.audit_metadata,
-            "status": "LIVE_CODEX_VALIDATED" if self.available() else "LIVE_CODEX_UNAVAILABLE",
+            "status": "LIVE_CODEX_REENTRANT_CONTEXT_BLOCKED" if host_blocked else ("LIVE_CODEX_VALIDATED" if self.available() else "LIVE_CODEX_UNAVAILABLE"),
             "standalone_status": "STANDALONE_LLM_BRIDGE_NOT_IMPLEMENTED",
             "external_status": "NOT_REQUIRED_FOR_THIS_MILESTONE",
         }

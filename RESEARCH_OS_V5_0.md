@@ -4,9 +4,13 @@ Status: **BLOCKED_BEFORE_PASS**. The v5.0 runner completed the bounded scientifi
 
 The attempted cycle selected a high-information, locally executable question from the registered state: whether a predeclared H2 equilibrium condition at `phi=1.05`, `T0=300 K`, `P=101325 Pa`, `gri30.yaml`, and mole basis added information to the existing combustion boundary. The run produced a sealed E3 physics bundle. It did not produce experimental evidence or change an EvidenceLevel.
 
+The recovery pass first reproduced the minimal Live timeout, then added an explicit `CODEX_LIVE_REENTRANCY` admission guard, `LiveInvocationDiagnostic`, `LiveExecutionBudget`, fixed-process environment/argv controls, timeout classifications, and bounded retry policy. In the current Codex-owned host the corrected boundary now rejects recursive launch before process creation. This is a safe boundary result, not a completed Live response.
+
 The runner also preserved the two paths that should stop: solubility work after the locked DLS external failure and battery/materials work without the missing condition-complete external records. Identical 1PXX docking was recorded as low information gain.
 
 The machine-readable attempt is [master-real-research-validation.json](.research-os-live-5.0/master-real-research-validation.json). The companion files are [final-scientific-exam.json](.research-os-live-5.0/final-scientific-exam.json), [reviewer-panel.json](.research-os-live-5.0/reviewer-panel.json), and [reproduction-matrix.json](.research-os-live-5.0/reproduction-matrix.json).
+
+The recovery diagnostics are [live-boundary-diagnostics.json](.research-os-live-5.0-recovery/live-boundary-diagnostics.json), [live-smoke-matrix.json](.research-os-live-5.0-recovery/live-smoke-matrix.json), and the [provider boundary audit](CODEX_LIVE_PROVIDER_V5_AUDIT.md). Live reviewer, exam, and consistency artifacts remain explicitly blocked.
 
 ## Gate result
 
