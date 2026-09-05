@@ -1,0 +1,9 @@
+# Security audit — v5.0 attempt
+
+The final runner report records `security_audit.status = PASS`. The audit covered the v5.0 execution surface and the new impact, private-corpus, and external-validation contracts.
+
+Checked properties include shell execution with `shell=False`, absence of unsafe deserialization and dynamic SQL, path confinement, private-source review gating, no arbitrary download execution, no environment mutation, PlanValidator presence, bounded iteration, no file leakage, and safe temporary tamper probes.
+
+Scientific safety checks also passed: Codex created zero Evidence, no EvidenceLevel changed, no E1/E2/E3 inflation occurred, OOD/uncertainty remained visible, missing battery fields were not imputed, Cantera remained E3 rather than experiment, and blocked/no-progress paths stopped.
+
+This PASS is a security/scientific-integrity result for the attempted runner. It does not override the separate `CODEX_LIVE` operational blocker and does not authorize a 5.0 release.
