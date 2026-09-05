@@ -39,6 +39,8 @@ The recovery artifacts [reviewer-panel-live.json](.research-os-live-5.0-recovery
 
 The repository now also provides a separate [top-level Live acceptance contract](TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md). It inspects process ancestry and environment before admission, fails closed in a Codex-owned task, and writes any future bounded acceptance outputs under `.research-os-live-5.0-top-level/`. This task did not execute that launcher.
 
+The first genuine top-level attempt is preserved at `.research-os-live-5.0-top-level/`: calls 1–16 completed under the Live boundary, and call 17 (`V5-FOLLOWUP-13`) completed with process/schema/cleanup `PASS` but was rejected by the previous boolean-only grounding gate. The hardened acceptance now reports `GroundingValidationResult` and `LiveResponseValidationFailure` details, requires explicit `grounding_status`, and persists only safe final structured fields from a rejected response.
+
 ## Release decision
 
 The boundary hardening is testable and regression-safe, but v5.0 is not released: a real top-level Live response, three Live review roles, the final Live exam, follow-ups, and consistency checks were not completed. The package remains `4.5.0`. The next valid action is to run the same bounded recovery script from a genuinely top-level Codex CLI owner, then rerun only the blocked Live gates.

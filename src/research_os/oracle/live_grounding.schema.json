@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Research OS Live grounding result",
+  "description": "Inner response contract for final examination follow-ups and bounded consistency questions.",
+  "type": "object",
+  "required": ["grounding_status", "grounded_record_ids"],
+  "properties": {
+    "grounding_status": {
+      "type": "string",
+      "enum": ["GROUNDED", "NO_GROUNDED_ANSWER"]
+    },
+    "grounded_record_ids": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "grounding_status": {"const": "GROUNDED"},
+        "grounded_record_ids": {"minItems": 1}
+      }
+    },
+    {
+      "properties": {
+        "grounding_status": {"const": "NO_GROUNDED_ANSWER"},
+        "grounded_record_ids": {"maxItems": 0}
+      }
+    }
+  ]
+}

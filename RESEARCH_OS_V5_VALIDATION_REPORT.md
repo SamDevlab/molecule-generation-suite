@@ -17,6 +17,7 @@ This is an execution report for the v5.0 attempt, not a release declaration.
 | Final Live exam | 0 completed | BLOCKED: nested CODEX_LIVE timeout |
 | Boundary recovery smoke | 1 real attempt + 9 bounded cases | SAFE REJECTION in Codex-owned host; Live gate remains blocked |
 | Top-level owner launcher | implemented; 0 calls from this task | READY: requires genuinely external owner; configured for 39 sequential calls, ceiling 45 |
+| Top-level external Attempt 1 | 17 calls; 3 reviewers, final exam, 12 follow-ups accepted | BLOCKED after schema-valid `V5-FOLLOWUP-13` failed post-response grounding validation |
 
 The fresh H2 run at `phi=1.05` returned `2395.300775369576 K` under the declared Cantera HP-equilibrium protocol. This is E3 physics output and is not an E4/E5 experiment. The associated material change is a narrow condition-map extension, not a universal combustion claim.
 
@@ -27,3 +28,5 @@ The authoritative status is in `.research-os-live-5.0/master-real-research-valid
 The recovery pass did not overwrite that prior attempt. Its diagnostic, smoke matrix, and blocked Live-stage artifacts are under `.research-os-live-5.0-recovery/`. The corrected provider records `REJECTED_REENTRANT` at admission in this host, so no reviewer/exam answer is counted as Live.
 
 The official external execution contract is [TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md](TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md). The top-level launcher was not invoked from this Codex-owned task.
+
+Attempt 1 is preserved at `.research-os-live-5.0-top-level/`. The failure was operational rather than scientific: the prior boolean-only grounding check did not expose the rejected response’s exact mismatch. The next acceptance uses a fresh attempt namespace and the structured `GroundingValidationResult`/`LiveResponseValidationFailure` contracts.

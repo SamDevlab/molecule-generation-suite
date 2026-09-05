@@ -6,11 +6,11 @@
 
 ## Healthy properties
 
-The attempt retained the canonical evidence levels, sealed runs and bundles, append-only impact/challenge records, explicit OOD and uncertainty, declared units/conditions/species, and v4.2 private-corpus separation. `Biolab/` and `formolecular/` were not modified. The legacy components remain preserved and are not deprecated.
+The attempt retained the canonical evidence levels, sealed runs and bundles, append-only impact/challenge records, explicit OOD and uncertainty, declared units/conditions/species, and v4.2 private-corpus separation. Attempt 1 is preserved at `.research-os-live-5.0-top-level/`; `Biolab/` and `formolecular/` were not modified. The legacy components remain preserved and are not deprecated.
 
 ## Blocking property
 
-The repository-side `CodexLiveProvider` is available as a configured transport, but nested `codex exec` calls timed out during discovery, three reviewer roles, and the final exam. The recovery hardening now records the parent Codex context and rejects recursive launch as `REJECTED_REENTRANT` before waiting. It did not replace the Live provider with `CodexTestProvider` or reinterpret deterministic answers as Live review.
+The repository-side `CodexLiveProvider` is available as a configured transport. Attempt 1 proved real ownership, CLI execution, three reviewers, the final exam, and process cleanup; its `V5-FOLLOWUP-13` response was rejected after schema validation because the prior grounding layer exposed only a boolean result. The new validator records the exact failure code, IDs, status, safe structured response fields, and response hash. It did not replace the Live provider with `CodexTestProvider` or reinterpret deterministic answers as Live review.
 
 ## Next gate
 

@@ -46,6 +46,22 @@ class TopLevelPreflightStatus(str, Enum):
     GIT_INSPECTION_FAILED = "GIT_INSPECTION_FAILED"
 
 
+ACCEPTANCE_NAMESPACE_PATTERN = re.compile(r"^\.research-os-live-5\.0-top-level(?:-attempt-\d+)?$")
+RECOGNIZED_ACCEPTANCE_ARTIFACTS = frozenset({
+    "top-level-owner-diagnostic.json",
+    "top-level-preflight.json",
+    "reviewer-panel.json",
+    "review-synthesis.json",
+    "final-scientific-exam.json",
+    "follow-up-answers.json",
+    "live-stress.json",
+    "live-consistency.json",
+    "process-cleanup.json",
+    "v5-live-acceptance-digest.json",
+    "v5-final-gate.json",
+})
+
+
 def _utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -96,17 +112,60 @@ class TopLevelPreflight:
 
 
 @dataclass(frozen=True)
+class WorktreeAcceptanceResult:
+    valid: bool
+    raw_status: str
+    allowed_paths: tuple[str, ...]
+    unexpected_paths: tuple[str, ...]
+
+    def to_dict(self) -> dict[str, Any]:
+        value = asdict(self)
+        value["allowed_paths"] = list(self.allowed_paths)
+        value["unexpected_paths"] = list(self.unexpected_paths)
+        return value
+
+
+@dataclass(frozen=True)
+class LiveResponseValidationFailure:
+    call_id: int
+    label: str
+    operation: str
+    response_hash: str
+    schema_status: str
+    grounding_validation: dict[str, Any]
+    forbidden_field_validation: dict[str, Any]
+    returned_grounded_ids: tuple[str, ...]
+    unknown_grounded_ids: tuple[str, ...]
+    response_keys: tuple[str, ...]
+    grounding_status: str | None
+    failure_code: str
+
+    def to_dict(self) -> dict[str, Any]:
+        value = asdict(self)
+        value["returned_grounded_ids"] = list(self.returned_grounded_ids)
+        value["unknown_grounded_ids"] = list(self.unknown_grounded_ids)
+        value["response_keys"] = list(self.response_keys)
+        return value
+
+
+@dataclass(frozen=True)
 class V5LiveAcceptanceDigest:
-    repository_commit: str
-    reviewer_artifact_hash: str
-    final_exam_artifact_hash: str
-    followup_artifact_hash: str
-    stress_artifact_hash: str
-    consistency_artifact_hash: str
-    process_cleanup_hash: str
+    starting_commit: str
+    live_execution_commit: str
+    reviewer_panel_hash: str
+    synthesis_hash: str
+    final_exam_hash: str
+    followup_hash: str
+    stress_hash: str
+    consistency_hash: str
+    cleanup_hash: str
     scientific_audit_hash: str
     security_audit_hash: str
     live_call_count: int
+    live_failures: int
+    timeouts: int
+    evidence_created_by_codex: int
+    evidence_levels_mutated_by_codex: int
     pass_: bool
     digest: str = ""
 
@@ -183,6 +242,44 @@ def _posix_process_table() -> dict[int, tuple[int, str]]:
     if not table:
         raise OSError("/proc process table unavailable")
     return table
+
+
+def evaluate_worktree_acceptance(repo_root: str | os.PathLike[str], status_output: str) -> WorktreeAcceptanceResult:
+    """Allow only known JSON outputs in a top-level acceptance namespace.
+
+    Git's ignored entries are inspected by the caller as well, so an unknown
+    file cannot hide inside an otherwise allowed generated-artifact directory.
+    All source, test, tool, documentation, configuration, and arbitrary
+    untracked changes remain dirty.
+    """
+    del repo_root  # status paths are deliberately repository-relative.
+    allowed: list[str] = []
+    unexpected: list[str] = []
+    for line in status_output.splitlines():
+        if len(line) < 3:
+            continue
+        status_code = line[:2]
+        raw_path = line[3:].strip()
+        paths = raw_path.split(" -> ") if " -> " in raw_path else [raw_path]
+        for path in paths:
+            path = path.strip().strip('"').replace("\\", "/")
+            if path.startswith("./"):
+                path = path[2:]
+            parts = path.split("/") if path else []
+            namespace = parts[0] if parts else ""
+            inside_namespace = bool(ACCEPTANCE_NAMESPACE_PATTERN.fullmatch(namespace))
+            recognized = inside_namespace and len(parts) == 2 and parts[1] in RECOGNIZED_ACCEPTANCE_ARTIFACTS
+            if status_code == "!!" and not inside_namespace:
+                # Existing ignored Research OS state outside the top-level
+                # acceptance namespace is intentionally left untouched.
+                continue
+            if recognized:
+                allowed.append(path)
+            else:
+                unexpected.append(path or "<empty-status-path>")
+    allowed_unique = tuple(sorted(set(allowed)))
+    unexpected_unique = tuple(sorted(set(unexpected)))
+    return WorktreeAcceptanceResult(not unexpected_unique, status_output, allowed_unique, unexpected_unique)
 
 
 def _process_table() -> dict[int, tuple[int, str]]:
@@ -279,16 +376,18 @@ def preflight_repository(root: str | os.PathLike[str], *, expected_branch: str =
     owner = inspect_top_level_owner(environment=environment, process_table=process_table)
     branch_ok, branch_value = _fixed_git(repo_root, "branch", "--show-current")
     head_ok, head_value = _fixed_git(repo_root, "rev-parse", "HEAD")
-    clean_ok, clean_value = _fixed_git(repo_root, "status", "--porcelain=v1")
+    clean_ok, clean_value = _fixed_git(repo_root, "status", "--porcelain=v1", "--untracked-files=all", "--ignored=matching")
+    worktree = evaluate_worktree_acceptance(repo_root, clean_value) if clean_ok else WorktreeAcceptanceResult(False, clean_value, (), ("GIT_STATUS_UNAVAILABLE",))
     checks: dict[str, Any] = {
         "branch": {"ok": branch_ok and branch_value == expected_branch, "value": branch_value},
         "head": {"ok": head_ok and (expected_head is None or head_value == expected_head), "value": head_value, "expected": expected_head},
-        "worktree": {"ok": clean_ok and not clean_value, "value": clean_value},
+        "worktree": {"ok": clean_ok and worktree.valid, **worktree.to_dict()},
         "owner": owner.to_dict(),
         "required_artifacts": [],
         "ledger": {"ok": False, "status": "NOT_CHECKED"},
         "package": {"ok": False, "version": None},
         "schema": {"ok": False},
+        "grounding_schema": {"ok": False},
         "provider": {"ok": False},
         "codex_cli": {"ok": bool(shutil.which("codex"))},
     }
@@ -317,6 +416,8 @@ def preflight_repository(root: str | os.PathLike[str], *, expected_branch: str =
         checks["package"] = {"ok": package_version == "4.5.0" and research_os is not None, "version": package_version}
         schema = json.loads((repo_root / "src" / "research_os" / "oracle" / "live_output.schema.json").read_text(encoding="utf-8"))
         checks["schema"] = {"ok": schema.get("type") == "object" and schema.get("required") == ["result"] and schema.get("additionalProperties") is False}
+        grounding_schema = json.loads((repo_root / "src" / "research_os" / "oracle" / "live_grounding.schema.json").read_text(encoding="utf-8"))
+        checks["grounding_schema"] = {"ok": grounding_schema.get("required") == ["grounding_status", "grounded_record_ids"] and grounding_schema.get("properties", {}).get("grounding_status", {}).get("enum") == ["GROUNDED", "NO_GROUNDED_ANSWER"]}
         transport = CodexCliTransport(environment={})
         checks["provider"] = {"ok": transport.schema_path.is_file() and transport._APPROVED_EXECUTABLE_NAMES == {"codex", "codex.exe"}, "type": type(transport).__name__}
     except Exception as exc:  # pragma: no cover - defensive preflight boundary
@@ -338,6 +439,8 @@ def preflight_repository(root: str | os.PathLike[str], *, expected_branch: str =
     elif not checks["package"]["ok"]:
         status = TopLevelPreflightStatus.PACKAGE_INVALID.value
     elif not checks["schema"]["ok"]:
+        status = TopLevelPreflightStatus.SCHEMA_INVALID.value
+    elif not checks["grounding_schema"]["ok"]:
         status = TopLevelPreflightStatus.SCHEMA_INVALID.value
     elif not checks["provider"]["ok"]:
         status = TopLevelPreflightStatus.PROVIDER_INVALID.value

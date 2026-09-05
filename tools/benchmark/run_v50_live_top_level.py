@@ -12,8 +12,10 @@ import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 from pathlib import Path
 import sys
+from statistics import median
 import time
 from typing import Any, Mapping
 
@@ -24,16 +26,22 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 from research_os.oracle import (  # noqa: E402
     CodexCliTransport,
     CodexLiveProvider,
+    GroundingStatus,
     LiveExecutionBudget,
     LiveCodexProtocolError,
     LiveCodexUnavailable,
+    LiveResponseValidationFailure,
     TopLevelPreflightStatus,
     V5LiveAcceptanceDigest,
+    evaluate_worktree_acceptance,
+    find_forbidden_scientific_fields,
     preflight_repository,
+    validate_grounding,
 )
 
 
-OUTPUT_ROOT = REPO_ROOT / ".research-os-live-5.0-top-level"
+FIRST_ATTEMPT_ROOT = REPO_ROOT / ".research-os-live-5.0-top-level"
+OUTPUT_ROOT = REPO_ROOT / ".research-os-live-5.0-top-level-attempt-2"
 EXPECTED_BRANCH = "research-os-v1.3"
 MAX_LIVE_INVOCATIONS = 45
 REQUIRED_LIVE_INVOCATIONS = 39
@@ -41,6 +49,7 @@ FORBIDDEN_OUTPUT_KEYS = {
     "evidence", "evidence_level", "runs", "bundle", "bundle_id",
     "scientific_result", "experimental_result", "engine_result",
 }
+SAFE_FAILED_RESPONSE_KEYS = {"answer", "grounding_status", "grounded_record_ids", "limitations"}
 
 FOLLOWUP_QUESTIONS = (
     "What new scientific knowledge was actually produced?",
@@ -115,6 +124,15 @@ def _load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _next_output_root(root: Path) -> Path:
+    """Select a fresh attempt namespace without touching the first attempt."""
+    for attempt in range(2, 1000):
+        candidate = root / f".research-os-live-5.0-top-level-attempt-{attempt}"
+        if not candidate.exists() or (candidate.is_dir() and not any(candidate.iterdir())):
+            return candidate
+    raise RuntimeError("no unused top-level acceptance attempt namespace available")
+
+
 def _compact_state(root: Path) -> dict[str, Any]:
     master = _load_json(root / ".research-os-live-5.0" / "master-real-research-validation.json")
     keys = (
@@ -167,10 +185,29 @@ def _has_forbidden_output(value: Any) -> bool:
 
 
 def _valid_grounding(value: Any, known_ids: set[str]) -> bool:
+    """Compatibility wrapper; acceptance uses the rich result below."""
+    validation = validate_grounding(value, known_ids)
+    return validation.valid and validation.grounding_status == GroundingStatus.GROUNDED.value
+
+
+def _safe_failed_response(value: Any) -> dict[str, Any] | None:
+    """Keep only final structured answer fields in a failed-response artifact."""
     if not isinstance(value, dict):
-        return False
-    ids = value.get("grounded_record_ids")
-    return isinstance(ids, list) and all(isinstance(item, str) and item in known_ids for item in ids)
+        return None
+    safe: dict[str, Any] = {}
+    for key in SAFE_FAILED_RESPONSE_KEYS:
+        if key not in value:
+            continue
+        item = value[key]
+        if key == "answer" and isinstance(item, str):
+            safe[key] = item
+        elif key == "grounding_status" and isinstance(item, str):
+            safe[key] = item
+        elif key == "grounded_record_ids" and isinstance(item, list) and all(isinstance(entry, str) for entry in item):
+            safe[key] = list(item)
+        elif key == "limitations" and isinstance(item, list) and all(isinstance(entry, str) for entry in item):
+            safe[key] = list(item)
+    return safe or None
 
 
 class TopLevelLiveSequence:
@@ -180,6 +217,7 @@ class TopLevelLiveSequence:
         self.owner_id = owner_id
         self.process_events: list[dict[str, Any]] = []
         self.invocations: list[dict[str, Any]] = []
+        self.response_validation_failures: list[LiveResponseValidationFailure] = []
         self._current_label = ""
         self._current_call = 0
         self.budget = LiveExecutionBudget(
@@ -242,8 +280,47 @@ class TopLevelLiveSequence:
         self._current_label = ""
         return response, record
 
+    def validate_grounded_response(self, response: Any, call: Mapping[str, Any], *, require_grounded: bool = True) -> tuple[bool, Any, LiveResponseValidationFailure | None]:
+        validation = validate_grounding(response, self.known_ids)
+        forbidden = find_forbidden_scientific_fields(response)
+        failure_code = validation.failure_code
+        valid = validation.valid
+        if valid and require_grounded and validation.grounding_status != GroundingStatus.GROUNDED.value:
+            valid = False
+            failure_code = "INVALID_GROUNDING_STATUS"
+        failure: LiveResponseValidationFailure | None = None
+        if not valid and (call.get("status") == "COMPLETED" or response is not None):
+            diagnostic = call.get("diagnostic") or {}
+            failure = LiveResponseValidationFailure(
+                call_id=int(call.get("call_id", 0)),
+                label=str(call.get("label", "")),
+                operation=str(call.get("operation", "")),
+                response_hash=validation.response_hash,
+                schema_status=str(diagnostic.get("schema_status", "NOT_CHECKED")),
+                grounding_validation=validation.to_dict(),
+                forbidden_field_validation={"status": "FAIL" if forbidden else "PASS", "fields": list(forbidden)},
+                returned_grounded_ids=validation.returned_ids,
+                unknown_grounded_ids=validation.unknown_ids,
+                response_keys=tuple(sorted(str(key) for key in response)) if isinstance(response, dict) else (),
+                grounding_status=validation.grounding_status,
+                failure_code=failure_code,
+            )
+            self.response_validation_failures.append(failure)
+        return valid, validation, failure
+
     def state_context(self, instruction: str, *, extra: dict[str, Any] | None = None) -> dict[str, Any]:
-        context = {"instruction": instruction, "registered_state": self.state, "known_record_ids": sorted(self.known_ids)}
+        allowed_ids = sorted(self.known_ids)
+        context = {
+            "instruction": instruction,
+            "registered_state": self.state,
+            "known_record_ids": allowed_ids,
+            "ALLOWED_GROUNDED_RECORD_IDS": allowed_ids,
+            "grounding_contract": {
+                "grounding_status": ["GROUNDED", "NO_GROUNDED_ANSWER"],
+                "grounded_record_ids_must_be_literal_members": True,
+                "empty_ids_allowed_only_for": "NO_GROUNDED_ANSWER",
+            },
+        }
         if extra:
             context.update(extra)
         return context
@@ -267,7 +344,11 @@ def _review_panel(sequence: TopLevelLiveSequence) -> dict[str, Any]:
             if not isinstance(concern, dict):
                 continue
             action = str(concern.get("recommended_action", "DEFER_EXTERNAL"))
-            if action not in {"ACCEPT", "REJECT_WITH_EVIDENCE", "CREATE_GAP", "REVISE_CLAIM", "REVISE_DECISION", "DEFER_EXTERNAL"}:
+            if action == "REJECT_WITH_EVIDENCE":
+                action = "REJECT_WITH_GROUNDED_REASON"
+            elif action == "CREATE_GAP":
+                action = "CREATE_RESEARCH_GAP"
+            if action not in {"ACCEPT", "REJECT_WITH_GROUNDED_REASON", "CREATE_RESEARCH_GAP", "REVISE_CLAIM", "REVISE_DECISION", "DEFER_EXTERNAL"}:
                 action = "DEFER_EXTERNAL"
             synthesis.append({"role": reviewer["role"], "concern": concern.get("concern"), "action": action, "grounded_record_ids": concern.get("grounded_record_ids", [])})
     return {"status": "PASS", "reviewers": reviewers, "synthesis": synthesis, "same_stored_evidence": True, "scientific_evidence_created": False, "evidence_level_changed": False}
@@ -275,17 +356,19 @@ def _review_panel(sequence: TopLevelLiveSequence) -> dict[str, Any]:
 
 def _final_exam(sequence: TopLevelLiveSequence) -> dict[str, Any]:
     response, call = sequence.invoke("V5-FINAL-SCIENTIFIC-EXAM", "final_scientific_exam", "final_scientific_exam", sequence.state_context(FINAL_EXAM_INSTRUCTION))
-    required = {"conclusion_kept", "conclusion_weakened", "unanswered_question", "redundant_step", "highest_value_external_evidence", "no_decision_reconsideration", "protocol_sensitive_decision", "proposed_research_program", "program_executed", "scientific_state_change", "grounded_record_ids", "limitations"}
-    valid = call["status"] == "COMPLETED" and isinstance(response, dict) and required <= set(response) and _valid_grounding(response, sequence.known_ids) and not _has_forbidden_output(response)
-    return {"status": "PASS" if valid else "BLOCKED_BEFORE_PASS", "response": response if valid else None, "call": call, "criteria_declared_before_execution": True, "scientific_evidence_created_by_codex": False, "evidence_level_changed_by_codex": False}
+    required = {"conclusion_kept", "conclusion_weakened", "unanswered_question", "redundant_step", "highest_value_external_evidence", "no_decision_reconsideration", "protocol_sensitive_decision", "proposed_research_program", "program_executed", "scientific_state_change", "grounding_status", "grounded_record_ids", "limitations"}
+    grounded, validation, failure = sequence.validate_grounded_response(response, call)
+    valid = call["status"] == "COMPLETED" and isinstance(response, dict) and required <= set(response) and grounded and not _has_forbidden_output(response)
+    return {"status": "PASS" if valid else "BLOCKED_BEFORE_PASS", "response": response if valid else None, "call": call, "grounding_validation": validation.to_dict(), "failed_response_validation": failure.to_dict() if failure else None, "failed_response": _safe_failed_response(response) if failure else None, "criteria_declared_before_execution": True, "scientific_evidence_created_by_codex": False, "evidence_level_changed_by_codex": False}
 
 
 def _followups(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[str, Any]:
     answers: list[dict[str, Any]] = []
     for index, question in enumerate(FOLLOWUP_QUESTIONS, 1):
         response, call = sequence.invoke(f"V5-FOLLOWUP-{index:02d}", "final_exam_followup", "final_exam_followup", sequence.state_context(question, extra={"question": question, "final_exam": exam.get("response")}))
-        if call["status"] != "COMPLETED" or not isinstance(response, dict) or not _valid_grounding(response, sequence.known_ids) or _has_forbidden_output(response):
-            return {"status": "BLOCKED_BEFORE_PASS", "answers": answers, "failed_call": call}
+        grounded, validation, failure = sequence.validate_grounded_response(response, call)
+        if call["status"] != "COMPLETED" or not isinstance(response, dict) or not grounded or _has_forbidden_output(response):
+            return {"status": "BLOCKED_BEFORE_PASS", "answers": answers, "failed_call": call, "failed_response_validation": failure.to_dict() if failure else None, "failed_response": _safe_failed_response(response) if failure else None, "grounding_validation": validation.to_dict()}
         answers.append({"index": index, "question": question, "response": response, "call_id": call["call_id"]})
     return {"status": "PASS", "answers": answers}
 
@@ -294,8 +377,9 @@ def _stress(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[str, A
     answers: list[dict[str, Any]] = []
     for index, question in enumerate(STRESS_QUESTIONS, 1):
         response, call = sequence.invoke(f"TL-LIVE-{index:02d}", "final_exam_followup", "final_exam_followup", sequence.state_context(question, extra={"question": question, "final_exam": exam.get("response")}))
-        if call["status"] != "COMPLETED" or not isinstance(response, dict) or not _valid_grounding(response, sequence.known_ids) or _has_forbidden_output(response):
-            return {"status": "BLOCKED_BEFORE_PASS", "answers": answers, "failed_call": call}
+        grounded, validation, failure = sequence.validate_grounded_response(response, call)
+        if call["status"] != "COMPLETED" or not isinstance(response, dict) or not grounded or _has_forbidden_output(response):
+            return {"status": "BLOCKED_BEFORE_PASS", "answers": answers, "failed_call": call, "failed_response_validation": failure.to_dict() if failure else None, "failed_response": _safe_failed_response(response) if failure else None, "grounding_validation": validation.to_dict()}
         answers.append({"index": index, "question": question, "response": response, "call_id": call["call_id"]})
     return {"status": "PASS", "answers": answers}
 
@@ -305,13 +389,21 @@ def _consistency(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[s
     for index, question in enumerate(FOLLOWUP_QUESTIONS[:5], 1):
         responses = []
         calls = []
+        validations = []
+        validation_failures = []
+        validities = []
         for repeat in ("A", "B"):
             response, call = sequence.invoke(f"TL-CONSISTENCY-{index:02d}-{repeat}", "final_exam_followup", "final_exam_followup", sequence.state_context(question, extra={"question": question, "final_exam": exam.get("response")}))
             responses.append(response)
             calls.append(call)
-        valid = all(call["status"] == "COMPLETED" and isinstance(response, dict) and _valid_grounding(response, sequence.known_ids) and not _has_forbidden_output(response) for call, response in zip(calls, responses))
+            grounded, validation, failure = sequence.validate_grounded_response(response, call)
+            validities.append(grounded)
+            validations.append(validation.to_dict())
+            if failure:
+                validation_failures.append(failure.to_dict())
+        valid = all(call["status"] == "COMPLETED" and isinstance(response, dict) and grounded and not _has_forbidden_output(response) for call, response, grounded in zip(calls, responses, validities))
         equivalent = valid and all(_digest(responses[0].get(key)) == _digest(responses[1].get(key)) for key in ("grounded_record_ids", "limitations"))
-        pairs.append({"index": index, "question": question, "run_a": responses[0], "run_b": responses[1], "calls": calls, "equivalent": equivalent})
+        pairs.append({"index": index, "question": question, "run_a": responses[0], "run_b": responses[1], "calls": calls, "grounding_validations": validations, "failed_response_validations": validation_failures, "equivalent": equivalent})
         if not valid:
             return {"status": "BLOCKED_BEFORE_PASS", "pairs": pairs}
     return {"status": "PASS" if all(item["equivalent"] for item in pairs) else "REVIEW_REQUIRED", "pairs": pairs}
@@ -327,6 +419,56 @@ def _process_cleanup(sequence: TopLevelLiveSequence) -> dict[str, Any]:
         last = events[-1]
         records.append({"pid": pid, "parent_pid": last.get("parent_pid"), "events": events, "cleanup_status": last.get("cleanup_status", "NOT_STARTED"), "exit_code": last.get("exit_code"), "termination_reason": last.get("termination_reason")})
     return {"status": "PASS" if records and all(item["cleanup_status"] == "EXITED" for item in records) else "FAIL", "children": records, "owned_child_processes_remaining": False}
+
+
+def _make_acceptance_digest(preflight: Mapping[str, Any], sequence: TopLevelLiveSequence, *, panel: Mapping[str, Any] | None = None, synthesis: Mapping[str, Any] | None = None, exam: Mapping[str, Any] | None = None, followups: Mapping[str, Any] | None = None, stress: Mapping[str, Any] | None = None, consistency: Mapping[str, Any] | None = None, cleanup: Mapping[str, Any] | None = None, scientific: Mapping[str, Any] | None = None, security: Mapping[str, Any] | None = None, pass_: bool = False) -> V5LiveAcceptanceDigest:
+    diagnostics = [item.get("diagnostic") or {} for item in sequence.invocations]
+    return V5LiveAcceptanceDigest(
+        starting_commit=str(preflight.get("head") or "UNKNOWN"),
+        live_execution_commit=str(preflight.get("head") or "UNKNOWN"),
+        reviewer_panel_hash=_digest(panel or {}),
+        synthesis_hash=_digest(synthesis or {}),
+        final_exam_hash=_digest(exam or {}),
+        followup_hash=_digest(followups or {}),
+        stress_hash=_digest(stress or {}),
+        consistency_hash=_digest(consistency or {}),
+        cleanup_hash=_digest(cleanup or {}),
+        scientific_audit_hash=_digest(scientific or {}),
+        security_audit_hash=_digest(security or {}),
+        live_call_count=len(sequence.invocations),
+        live_failures=sum(1 for item in sequence.invocations if item.get("status") != "COMPLETED"),
+        timeouts=sum(1 for item in diagnostics if item.get("exit_status") == "TIMEOUT"),
+        evidence_created_by_codex=0,
+        evidence_levels_mutated_by_codex=0,
+        pass_=pass_,
+    )
+
+
+def _response_failure_gate_fields(sequence: TopLevelLiveSequence) -> dict[str, Any]:
+    if not sequence.response_validation_failures:
+        return {}
+    failure = sequence.response_validation_failures[0]
+    return {
+        "failure_code": failure.failure_code,
+        "failed_call_id": failure.call_id,
+        "failed_label": failure.label,
+        "failed_operation": failure.operation,
+    }
+
+
+def _duration_statistics(sequence: TopLevelLiveSequence) -> dict[str, Any]:
+    durations = sorted(float(item.get("elapsed", 0.0)) for item in sequence.invocations)
+    if not durations:
+        return {"count": 0, "minimum_seconds": None, "median_seconds": None, "maximum_seconds": None, "p95_seconds": None, "timeout_count": 0}
+    p95_index = min(len(durations) - 1, max(0, math.ceil(len(durations) * 0.95) - 1))
+    return {
+        "count": len(durations),
+        "minimum_seconds": durations[0],
+        "median_seconds": median(durations),
+        "maximum_seconds": durations[-1],
+        "p95_seconds": durations[p95_index] if len(durations) >= 2 else None,
+        "timeout_count": sum(1 for item in sequence.invocations if (item.get("diagnostic") or {}).get("exit_status") == "TIMEOUT"),
+    }
 
 
 def _scientific_audit(panel: dict[str, Any], exam: dict[str, Any], followups: dict[str, Any], stress: dict[str, Any], consistency: dict[str, Any]) -> dict[str, Any]:
@@ -361,15 +503,19 @@ def _blocked_artifacts(reason: str, *, owner: Mapping[str, Any], preflight: Mapp
     _write("top-level-owner-diagnostic.json", owner)
     _write("top-level-preflight.json", preflight)
     _write("reviewer-panel.json", {"status": "NOT_RUN", "reason": reason, "reviewers": []})
+    _write("review-synthesis.json", {"status": "NOT_RUN", "reason": reason, "concerns": []})
     _write("final-scientific-exam.json", {"status": "NOT_RUN", "reason": reason, "response": None})
     _write("follow-up-answers.json", {"status": "NOT_RUN", "reason": reason, "answers": []})
     _write("live-stress.json", {"status": "NOT_RUN", "reason": reason, "answers": []})
     _write("live-consistency.json", {"status": "NOT_RUN", "reason": reason, "pairs": []})
     _write("process-cleanup.json", {"status": "NOT_RUN", "children": [], "owned_child_processes_remaining": False})
+    _write("v5-live-acceptance-digest.json", {"status": "NOT_RUN", "starting_commit": preflight.get("head"), "live_execution_commit": preflight.get("head"), "live_call_count": 0, "live_failures": 0, "timeouts": 0, "evidence_created_by_codex": 0, "evidence_levels_mutated_by_codex": 0, "digest": None})
     _write("v5-final-gate.json", {"status": "TOP_LEVEL_OWNER_REQUIRED", "reason": reason, "live_call_count": 0, "acceptance_digest": None})
 
 
 def run_live_acceptance(*, root: Path, expected_head: str | None, timeout_seconds: int) -> int:
+    global OUTPUT_ROOT
+    OUTPUT_ROOT = _next_output_root(root)
     preflight = preflight_repository(root, expected_branch=EXPECTED_BRANCH, expected_head=expected_head)
     _write("top-level-owner-diagnostic.json", preflight.owner.to_dict())
     _write("top-level-preflight.json", preflight.to_dict())
@@ -381,24 +527,32 @@ def run_live_acceptance(*, root: Path, expected_head: str | None, timeout_second
     panel = _review_panel(sequence)
     if panel["status"] != "PASS":
         cleanup = _process_cleanup(sequence)
+        synthesis = {"status": "NOT_RUN", "concerns": panel.get("synthesis", [])}
+        digest = _make_acceptance_digest(preflight.to_dict(), sequence, panel=panel, synthesis=synthesis, cleanup=cleanup)
         _write("reviewer-panel.json", panel)
+        _write("review-synthesis.json", synthesis)
         _write("final-scientific-exam.json", {"status": "NOT_RUN", "reason": "review panel did not pass"})
         _write("follow-up-answers.json", {"status": "NOT_RUN", "answers": []})
         _write("live-stress.json", {"status": "NOT_RUN", "answers": []})
         _write("live-consistency.json", {"status": "NOT_RUN", "pairs": []})
         _write("process-cleanup.json", cleanup)
-        _write("v5-final-gate.json", {"status": "BLOCKED_BEFORE_PASS", "reason": "review panel failed", "live_call_count": len(sequence.invocations), "acceptance_digest": None})
+        _write("v5-live-acceptance-digest.json", digest.to_dict())
+        _write("v5-final-gate.json", {"status": "BLOCKED_BEFORE_PASS", "reason": "review panel failed", "live_call_count": len(sequence.invocations), "duration_statistics": _duration_statistics(sequence), "acceptance_digest": digest.to_dict(), "response_validation_failures": [item.to_dict() for item in sequence.response_validation_failures], **_response_failure_gate_fields(sequence)})
         return 3
     exam = _final_exam(sequence)
     if exam["status"] != "PASS":
         cleanup = _process_cleanup(sequence)
+        synthesis = {"status": "PASS", "concerns": panel.get("synthesis", [])}
+        digest = _make_acceptance_digest(preflight.to_dict(), sequence, panel=panel, synthesis=synthesis, exam=exam, cleanup=cleanup)
         _write("reviewer-panel.json", panel)
+        _write("review-synthesis.json", synthesis)
         _write("final-scientific-exam.json", exam)
         _write("follow-up-answers.json", {"status": "NOT_RUN", "answers": []})
         _write("live-stress.json", {"status": "NOT_RUN", "answers": []})
         _write("live-consistency.json", {"status": "NOT_RUN", "pairs": []})
         _write("process-cleanup.json", cleanup)
-        _write("v5-final-gate.json", {"status": "BLOCKED_BEFORE_PASS", "reason": "final exam failed", "live_call_count": len(sequence.invocations), "acceptance_digest": None})
+        _write("v5-live-acceptance-digest.json", digest.to_dict())
+        _write("v5-final-gate.json", {"status": "BLOCKED_BEFORE_PASS", "reason": "final exam failed", "live_call_count": len(sequence.invocations), "duration_statistics": _duration_statistics(sequence), "acceptance_digest": digest.to_dict(), "response_validation_failures": [item.to_dict() for item in sequence.response_validation_failures], **_response_failure_gate_fields(sequence)})
         return 4
     followups = _followups(sequence, exam)
     stress = _stress(sequence, exam) if followups["status"] == "PASS" else {"status": "NOT_RUN", "answers": []}
@@ -406,27 +560,18 @@ def run_live_acceptance(*, root: Path, expected_head: str | None, timeout_second
     cleanup = _process_cleanup(sequence)
     scientific = _scientific_audit(panel, exam, followups, stress, consistency)
     security = _security_audit(sequence, preflight.owner.to_dict(), cleanup)
+    synthesis = {"status": "PASS", "concerns": panel.get("synthesis", [])}
     _write("reviewer-panel.json", panel)
     _write("final-scientific-exam.json", exam)
     _write("follow-up-answers.json", followups)
     _write("live-stress.json", stress)
     _write("live-consistency.json", consistency)
     _write("process-cleanup.json", cleanup)
-    gate_pass = len(sequence.invocations) == REQUIRED_LIVE_INVOCATIONS and followups["status"] == "PASS" and stress["status"] == "PASS" and consistency["status"] == "PASS" and cleanup["status"] == "PASS" and scientific["status"] == "PASS" and security["status"] == "PASS"
-    digest = V5LiveAcceptanceDigest(
-        repository_commit=preflight.head or "UNKNOWN",
-        reviewer_artifact_hash=_digest(panel),
-        final_exam_artifact_hash=_digest(exam),
-        followup_artifact_hash=_digest(followups),
-        stress_artifact_hash=_digest(stress),
-        consistency_artifact_hash=_digest(consistency),
-        process_cleanup_hash=_digest(cleanup),
-        scientific_audit_hash=_digest(scientific),
-        security_audit_hash=_digest(security),
-        live_call_count=len(sequence.invocations),
-        pass_=gate_pass,
-    )
-    _write("v5-final-gate.json", {"status": "PASS" if gate_pass else "BLOCKED_BEFORE_PASS", "live_call_count": len(sequence.invocations), "required_live_invocations": REQUIRED_LIVE_INVOCATIONS, "max_live_invocations": MAX_LIVE_INVOCATIONS, "scientific_audit": scientific, "security_audit": security, "acceptance_digest": digest.to_dict(), "invocations": sequence.invocations})
+    gate_pass = len(sequence.invocations) == REQUIRED_LIVE_INVOCATIONS and followups["status"] == "PASS" and stress["status"] == "PASS" and consistency["status"] == "PASS" and cleanup["status"] == "PASS" and scientific["status"] == "PASS" and security["status"] == "PASS" and not sequence.response_validation_failures
+    digest = _make_acceptance_digest(preflight.to_dict(), sequence, panel=panel, synthesis=synthesis, exam=exam, followups=followups, stress=stress, consistency=consistency, cleanup=cleanup, scientific=scientific, security=security, pass_=gate_pass)
+    _write("review-synthesis.json", synthesis)
+    _write("v5-live-acceptance-digest.json", digest.to_dict())
+    _write("v5-final-gate.json", {"status": "PASS" if gate_pass else "BLOCKED_BEFORE_PASS", "live_call_count": len(sequence.invocations), "required_live_invocations": REQUIRED_LIVE_INVOCATIONS, "max_live_invocations": MAX_LIVE_INVOCATIONS, "duration_statistics": _duration_statistics(sequence), "scientific_audit": scientific, "security_audit": security, "acceptance_digest": digest.to_dict(), "response_validation_failures": [item.to_dict() for item in sequence.response_validation_failures], "invocations": sequence.invocations, **_response_failure_gate_fields(sequence)})
     return 0 if gate_pass else 5
 
 

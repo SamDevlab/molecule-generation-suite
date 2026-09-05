@@ -25,6 +25,7 @@ from research_os.oracle.live_boundary import (
     codex_host_context,
     retryable_live_failure,
 )
+from research_os.oracle.grounding import find_forbidden_scientific_fields
 
 
 def _canonical(value: Any) -> str:
@@ -141,25 +142,7 @@ def _canonical_evidence_level(value: Any) -> Any:
 
 def _reject_scientific_authority(value: dict[str, Any], *, operation: str) -> dict[str, Any]:
     """Enforce the invariant that LLM output cannot create scientific evidence."""
-    forbidden = {
-        "evidence", "evidence_level", "runs", "bundle", "bundle_id",
-        "scientific_result", "experimental_result", "engine_result",
-    }
-    present: list[str] = []
-
-    def visit(item: Any, path: str = "") -> None:
-        if isinstance(item, dict):
-            for key, child in item.items():
-                key_text = str(key)
-                child_path = f"{path}.{key_text}" if path else key_text
-                if key_text.lower() in forbidden:
-                    present.append(child_path)
-                visit(child, child_path)
-        elif isinstance(item, list):
-            for index, child in enumerate(item):
-                visit(child, f"{path}[{index}]")
-
-    visit(value)
+    present = find_forbidden_scientific_fields(value)
     if present:
         raise LiveCodexProtocolError(
             f"LLM_OUTPUT_CANNOT_CREATE_SCIENTIFIC_EVIDENCE: forbidden fields in {operation}: {present}"
@@ -518,20 +501,31 @@ class CodexCliTransport:
             "generate_research_program": '{"title":"...","domain":"...","objective":"...","initial_problem":"...","questions":[{"question_id":"Q-...","question":"...","gap_it_attempts_to_resolve":"...","why_new":"..."}],"limits":{"max_campaigns":3,"max_iterations":5,"max_runs":5,"max_sources":5,"max_candidates":20,"max_failures":2},"stop_conditions":["..."],"reasoning_summary":"brief auditable rationale"}',
             "prioritize_research": '{"selected_candidate_question_id":"...","assessments":[{"candidate_question_id":"...","candidate_gap_id":"...","recommendation":"PRIORITIZE_NOW","rationale":"..."}],"reasoning_summary":"brief auditable rationale"}',
             "final_autonomous_exam": '{"answerable":{"question":"...","why":"..."},"no_decision":{"question":"...","why":"..."},"external_blocker":{"question":"...","why":"..."},"reasoning_summary":"brief auditable rationale"}',
-            "final_scientific_exam": '{"conclusion_kept":"...","conclusion_weakened":"...","unanswered_question":"...","redundant_step":"...","highest_value_external_evidence":"...","no_decision_reconsideration":"...","protocol_sensitive_decision":"...","proposed_research_program":"...","program_executed":false,"scientific_state_change":"...","grounded_record_ids":[],"limitations":[]}',
-            "scientific_review": '{"role":"METHODOLOGY|EVIDENCE|REPRODUCIBILITY","concerns":[{"concern":"...","grounded_record_ids":[],"recommended_action":"ACCEPT|REJECT_WITH_EVIDENCE|CREATE_GAP|REVISE_CLAIM|REVISE_DECISION|DEFER_EXTERNAL"}],"summary":"brief analysis-only review","limitations":[]}',
-            "final_exam_followup": '{"answer":"brief artifact-grounded answer","grounded_record_ids":["RUN-...","GAP-..."],"limitations":["..."]}',
-            "final_exam_followups": '{"answers":[{"index":1,"answer":"brief artifact-grounded answer","grounded_record_ids":["RUN-...","GAP-..."],"limitations":["..."]}]}',
+            "final_scientific_exam": '{"conclusion_kept":"...","conclusion_weakened":"...","unanswered_question":"...","redundant_step":"...","highest_value_external_evidence":"...","no_decision_reconsideration":"...","protocol_sensitive_decision":"...","proposed_research_program":"...","program_executed":false,"scientific_state_change":"...","grounding_status":"GROUNDED|NO_GROUNDED_ANSWER","grounded_record_ids":[],"limitations":[]}',
+            "scientific_review": '{"role":"METHODOLOGY|EVIDENCE|REPRODUCIBILITY","concerns":[{"concern":"...","grounded_record_ids":[],"recommended_action":"ACCEPT|REJECT_WITH_GROUNDED_REASON|CREATE_RESEARCH_GAP|REVISE_CLAIM|REVISE_DECISION|DEFER_EXTERNAL"}],"summary":"brief analysis-only review","limitations":[]}',
+            "final_exam_followup": '{"answer":"brief artifact-grounded answer","grounding_status":"GROUNDED|NO_GROUNDED_ANSWER","grounded_record_ids":["RUN-...","GAP-..."],"limitations":["..."]}',
+            "final_exam_followups": '{"answers":[{"index":1,"answer":"brief artifact-grounded answer","grounding_status":"GROUNDED|NO_GROUNDED_ANSWER","grounded_record_ids":["RUN-...","GAP-..."],"limitations":["..."]}]}',
         }.get(operation, "{}")
         narration_safety = ""
         if operation == "summarize_results":
             narration_safety = "For narration, do not repeat numeric scientific values, units, or derived comparisons from memory. Refer to recorded evidence IDs/runs and limitations only; the UI obtains values directly from the Lab payload.\n"
+        grounding_safety = ""
+        if operation in {"final_exam_followup", "final_exam_followups", "final_scientific_exam"}:
+            grounding_safety = (
+                "Grounding contract: return grounding_status=GROUNDED only when at least one supplied "
+                "ALLOWED_GROUNDED_RECORD_IDS literally supports the answer, and include one or more of "
+                "those IDs in grounded_record_ids. If no registered record supports the answer, return "
+                "grounding_status=NO_GROUNDED_ANSWER, grounded_record_ids=[], and explain the limitation. "
+                "Never invent identifiers. Do not use filenames, URLs, labels, titles, approximate IDs, "
+                "or guessed IDs unless literally present in ALLOWED_GROUNDED_RECORD_IDS.\n"
+            )
         return (
             "You are the live reasoning component of Research OS.\n"
             "You are already the Live Codex researcher/reviewer for this invocation. Do not call CodexLiveProvider. Do not invoke codex exec. Do not recursively create another LLM session.\n"
             "Return ONLY one JSON object matching the supplied output schema. The schema requires a string field named result; put the minified JSON object for the operation inside that string, with no markdown or prose.\n"
             f"For operation {operation}, the inner result must have this shape: {shape}\n"
             + narration_safety
+            + grounding_safety
             + "You may interpret the question, select registered Labs, propose a typed plan, "
             "summarize recorded results, or propose a bounded next step.\n"
             "Research OS is the executor and source of truth. Never create or alter Evidence, "

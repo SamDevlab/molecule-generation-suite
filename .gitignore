@@ -90,6 +90,8 @@ examples/golden_workflow/output/
 !.research-os-live-5.0-recovery/*.json
 !.research-os-live-5.0-top-level/
 !.research-os-live-5.0-top-level/*.json
+!.research-os-live-5.0-top-level-attempt-*/
+!.research-os-live-5.0-top-level-attempt-*/*.json
 .tmp-v36-ml-probe/
 .tmp-package-check/
 .tmp-package-check-v34/

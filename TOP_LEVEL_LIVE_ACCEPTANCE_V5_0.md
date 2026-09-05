@@ -12,6 +12,12 @@ and the environment exposes `CODEX_THREAD_ID`, `CODEX_SESSION_ID`, and `CODEX_IN
 
 The launcher fails closed when it detects Codex markers, a Codex ancestor, an unresolved process parent, or an inspection failure. It never converts a nested timeout into a scientific result and never substitutes a test provider for Live.
 
+## Top-level attempt 1 — preserved
+
+The first genuine external acceptance is preserved at `.research-os-live-5.0-top-level/` and is treated as the immutable historical Attempt 1. Its owner diagnostic and Codex CLI preflight passed; all three reviewers completed; the final exam completed; follow-ups 1–12 were accepted; and the run reached 17/39 Live calls. `V5-FOLLOWUP-13` also completed as a real `CODEX_LIVE` process with schema `PASS`, exit code `0`, reentrancy `COMPLETED`, and child cleanup `EXITED`.
+
+The post-response grounding gate then rejected that schema-valid answer. The prior launcher persisted only a boolean outcome, so it did not identify whether the rejection came from a missing field, an empty list, or an unknown ID. Attempt 1 therefore remains `BLOCKED_BEFORE_PASS` as an operational validation result, not a scientific failure. Its files are never overwritten by the next acceptance.
+
 ## Official external command
 
 Run from a separately owned terminal or Codex CLI process, after checking out `research-os-v1.3` at the expected commit:
@@ -20,7 +26,7 @@ Run from a separately owned terminal or Codex CLI process, after checking out `r
 .\.venv\Scripts\python.exe tools\benchmark\run_v50_live_top_level.py --run-all --expected-head (git rev-parse HEAD)
 ```
 
-The command performs preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. It then runs only the blocked Live stages sequentially:
+The command performs preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. It then runs only the blocked Live stages sequentially. The next run selects a fresh namespace such as `.research-os-live-5.0-top-level-attempt-2/`; reruns select the next unused attempt number.
 
 | Stage | Calls |
 |---|---:|
@@ -35,6 +41,16 @@ The hard ceiling is 45 Live invocations. Retries are disabled for this acceptanc
 
 ## Output and promotion rules
 
-New machine-readable results are written only under `.research-os-live-5.0-top-level/`. The recovery artifacts under `.research-os-live-5.0-recovery/` and the earlier `.research-os-live-5.0/` attempt are preserved. The launcher records process identity, cleanup, bounded diagnostics, response hashes, grounding checks, and stage outcomes without persisting raw model output in transport diagnostics.
+New machine-readable results are written only under a fresh `.research-os-live-5.0-top-level-attempt-N/` namespace. The Attempt 1 artifacts under `.research-os-live-5.0-top-level/`, the recovery artifacts under `.research-os-live-5.0-recovery/`, and the earlier `.research-os-live-5.0/` attempt are preserved. The launcher records process identity, cleanup, bounded diagnostics, response hashes, structured grounding failures, and stage outcomes without persisting raw model output or hidden reasoning.
+
+Each attempt recognizes only these generated files: `top-level-owner-diagnostic.json`, `top-level-preflight.json`, `reviewer-panel.json`, `review-synthesis.json`, `final-scientific-exam.json`, `follow-up-answers.json`, `live-stress.json`, `live-consistency.json`, `process-cleanup.json`, `v5-live-acceptance-digest.json`, and `v5-final-gate.json`. Any other changed or untracked path, including an unknown file inside an acceptance namespace, keeps preflight at `DIRTY_WORKTREE`.
+
+## Grounding recovery contract
+
+Follow-up, stress, consistency, and final-exam responses must declare `grounding_status`. `GROUNDED` requires at least one literal member of `ALLOWED_GROUNDED_RECORD_IDS`; `NO_GROUNDED_ANSWER` requires an empty ID list and an explicit limitation. The deterministic validator reports `NONE`, `INVALID_RESPONSE_TYPE`, `MISSING_GROUNDED_RECORD_IDS`, `INVALID_GROUNDED_RECORD_IDS_TYPE`, `EMPTY_GROUNDING_FOR_GROUNDED_ANSWER`, `UNKNOWN_GROUNDED_RECORD_ID`, `FORBIDDEN_SCIENTIFIC_FIELD`, or `INVALID_GROUNDING_STATUS` rather than returning an opaque boolean.
+
+When a schema-valid response is rejected after execution, `follow-up-answers.json` preserves the valid prior answers, the completed call metadata, a `LiveResponseValidationFailure`, and only safe final response fields (`answer`, `grounding_status`, `grounded_record_ids`, and `limitations`). It never persists hidden reasoning or raw process output.
+
+The final gate also records per-call process diagnostics and duration statistics (minimum, median, maximum, p95 when at least two calls exist, and timeout count), while `v5-live-acceptance-digest.json` remains content-addressed and records call/failure/timeout/evidence-mutation counts.
 
 This implementation milestone does not promote the package, alter `main`, merge branches, force-push, change Evidence or EvidenceLevel, or modify `Biolab/` or `formolecular/`. Promotion to `5.0.0` is valid only after the external Live results satisfy the scientific, security, reproducibility, Ledger, wheel, and CI gates.

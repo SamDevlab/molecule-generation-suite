@@ -12,11 +12,16 @@ import pytest
 from research_os.oracle import (
     CodexCliTransport,
     CodexLiveProvider,
+    GroundingFailureCode,
+    GroundingStatus,
+    GroundingValidationResult,
     LiveCodexProtocolError,
     LiveExecutionBudget,
     LiveFailureCode,
     LiveInvocationController,
     LiveReentrancyState,
+    LiveResponseValidationFailure,
+    validate_grounding,
     TopLevelLiveOwnerDiagnostic,
     TopLevelOwnerResult,
     TopLevelPreflightStatus,
@@ -220,7 +225,7 @@ def test_consistency_pairs_are_five_questions_twice():
 
 
 def test_artifact_paths_are_new_top_level_namespace():
-    assert launcher.OUTPUT_ROOT.name == ".research-os-live-5.0-top-level"
+    assert launcher.OUTPUT_ROOT.name == ".research-os-live-5.0-top-level-attempt-2"
     assert launcher.OUTPUT_ROOT.name != ".research-os-live-5.0-recovery"
 
 
@@ -231,11 +236,25 @@ def test_previous_blocked_recovery_artifact_is_not_overwritten():
 
 
 def test_acceptance_digest_has_content_addressed_fields():
-    digest = V5LiveAcceptanceDigest("abc", "r", "e", "f", "s", "c", "p", "sa", "se", 39, True)
+    digest = V5LiveAcceptanceDigest("start", "live", "r", "s", "e", "f", "st", "c", "p", "sa", "se", 39, 0, 0, 0, 0, True)
     value = digest.to_dict()
     assert value["pass"] is True
     assert len(value["digest"]) == 64
     assert value["live_call_count"] == 39
+    assert value["starting_commit"] == "start"
+    assert value["live_execution_commit"] == "live"
+    assert value["reviewer_panel_hash"] == "r"
+    assert value["cleanup_hash"] == "p"
+
+
+def test_grounding_result_has_explicit_diagnostic_contract():
+    names = {item.name for item in fields(GroundingValidationResult)}
+    assert names == {"valid", "failure_code", "returned_ids", "unknown_ids", "known_ids_count", "missing_grounding_field", "grounding_status", "forbidden_fields", "response_type", "response_hash"}
+
+
+def test_failed_response_diagnostic_has_explicit_safe_contract():
+    names = {item.name for item in fields(LiveResponseValidationFailure)}
+    assert names == {"call_id", "label", "operation", "response_hash", "schema_status", "grounding_validation", "forbidden_field_validation", "returned_grounded_ids", "unknown_grounded_ids", "response_keys", "grounding_status", "failure_code"}
 
 
 def test_package_gate_remains_pre_5_before_live_pass():
@@ -267,3 +286,136 @@ def test_forbidden_output_scan_is_recursive():
 
 def test_owner_result_enum_is_closed():
     assert {item.value for item in TopLevelOwnerResult} == {"TOP_LEVEL_CONFIRMED", "TOP_LEVEL_OWNER_REQUIRED", "ENVIRONMENT_AMBIGUOUS", "PROCESS_INSPECTION_FAILED"}
+
+
+def test_ground_01_valid_known_id_passes():
+    result = validate_grounding({"answer": "recorded", "grounding_status": "GROUNDED", "grounded_record_ids": ["RUN-1"]}, {"RUN-1"})
+    assert result.valid and result.failure_code == GroundingFailureCode.NONE.value
+
+
+def test_ground_02_unknown_id_fails_with_code():
+    result = validate_grounding({"grounding_status": "GROUNDED", "grounded_record_ids": ["RUN-X"]}, {"RUN-1"})
+    assert result.failure_code == GroundingFailureCode.UNKNOWN_GROUNDED_RECORD_ID.value
+    assert result.unknown_ids == ("RUN-X",)
+
+
+def test_ground_03_missing_ids_fails_with_code():
+    result = validate_grounding({"grounding_status": "GROUNDED"}, {"RUN-1"})
+    assert result.failure_code == GroundingFailureCode.MISSING_GROUNDED_RECORD_IDS.value
+
+
+def test_ground_04_ids_string_fails_with_code():
+    result = validate_grounding({"grounding_status": "GROUNDED", "grounded_record_ids": "RUN-1"}, {"RUN-1"})
+    assert result.failure_code == GroundingFailureCode.INVALID_GROUNDED_RECORD_IDS_TYPE.value
+
+
+def test_ground_05_grounded_empty_ids_fails_with_code():
+    result = validate_grounding({"grounding_status": "GROUNDED", "grounded_record_ids": []}, {"RUN-1"})
+    assert result.failure_code == GroundingFailureCode.EMPTY_GROUNDING_FOR_GROUNDED_ANSWER.value
+
+
+def test_ground_06_no_grounded_answer_empty_ids_passes():
+    result = validate_grounding({"answer": "not supported", "grounding_status": "NO_GROUNDED_ANSWER", "grounded_record_ids": [], "limitations": ["missing record"]}, {"RUN-1"})
+    assert result.valid and result.failure_code == GroundingFailureCode.NONE.value
+
+
+def test_ground_07_no_grounded_answer_with_id_fails():
+    result = validate_grounding({"grounding_status": "NO_GROUNDED_ANSWER", "grounded_record_ids": ["RUN-X"]}, {"RUN-1"})
+    assert not result.valid and result.failure_code == GroundingFailureCode.INVALID_GROUNDING_STATUS.value
+
+
+def test_ground_08_evidence_field_fails_with_code():
+    result = validate_grounding({"evidence": [], "grounding_status": "GROUNDED", "grounded_record_ids": ["RUN-1"]}, {"RUN-1"})
+    assert result.failure_code == GroundingFailureCode.FORBIDDEN_SCIENTIFIC_FIELD.value
+    assert result.forbidden_fields == ("evidence",)
+
+
+def test_ground_09_evidence_level_field_fails_with_code():
+    result = validate_grounding({"evidence_level": "E5_VALIDATED_EXPERIMENTAL", "grounding_status": "GROUNDED", "grounded_record_ids": ["RUN-1"]}, {"RUN-1"})
+    assert result.failure_code == GroundingFailureCode.FORBIDDEN_SCIENTIFIC_FIELD.value
+
+
+def test_ground_10_multiple_known_ids_passes():
+    result = validate_grounding({"grounding_status": GroundingStatus.GROUNDED.value, "grounded_record_ids": ["RUN-1", "GAP-1"]}, {"RUN-1", "GAP-1"})
+    assert result.valid and result.unknown_ids == ()
+
+
+def test_empty_grounding_compatibility_wrapper_is_not_truthy():
+    assert launcher._valid_grounding({"grounding_status": "GROUNDED", "grounded_record_ids": []}, {"RUN-1"}) is False
+
+
+def test_grounding_prompt_exposes_literal_allowlist_and_status_contract():
+    prompt = CodexCliTransport._prompt({"operation": "final_exam_followup", "payload": {}, "context": {"ALLOWED_GROUNDED_RECORD_IDS": ["RUN-1"]}})
+    assert "ALLOWED_GROUNDED_RECORD_IDS" in prompt
+    assert "NO_GROUNDED_ANSWER" in prompt
+    assert "Never invent identifiers" in prompt
+
+
+def test_inner_grounding_schema_declares_both_status_contracts():
+    schema_path = Path(__file__).resolve().parents[1] / "src" / "research_os" / "oracle" / "live_grounding.schema.json"
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    assert schema["required"] == ["grounding_status", "grounded_record_ids"]
+    assert schema["properties"]["grounding_status"]["enum"] == ["GROUNDED", "NO_GROUNDED_ANSWER"]
+    assert schema["oneOf"][0]["properties"]["grounded_record_ids"]["minItems"] == 1
+    assert schema["oneOf"][1]["properties"]["grounded_record_ids"]["maxItems"] == 0
+
+
+def test_followup_failure_persists_structured_unknown_id_without_raw_trace():
+    sequence = launcher.TopLevelLiveSequence(Path(__file__).resolve().parents[1], {"state_digest": "fixture"}, "OWNER-1", 1)
+    sequence.known_ids = {"RUN-1", "GAP-1"}
+    calls = {"count": 0}
+
+    def response(_context):
+        calls["count"] += 1
+        if calls["count"] == 13:
+            return {"answer": "unsupported", "grounding_status": "GROUNDED", "grounded_record_ids": ["INVENTED-13"], "limitations": ["test failure"]}
+        return {"answer": "supported", "grounding_status": "GROUNDED", "grounded_record_ids": ["RUN-1"], "limitations": []}
+
+    sequence.provider.final_exam_followup = response
+    result = launcher._followups(sequence, {"response": {}})
+    assert result["status"] == "BLOCKED_BEFORE_PASS"
+    assert len(result["answers"]) == 12
+    assert result["failed_call"]["status"] == "COMPLETED"
+    assert result["failed_call"]["diagnostic"] is None
+    assert result["failed_response_validation"]["failure_code"] == "UNKNOWN_GROUNDED_RECORD_ID"
+    assert result["failed_response_validation"]["unknown_grounded_ids"] == ["INVENTED-13"]
+    assert result["failed_response"] == {"answer": "unsupported", "grounding_status": "GROUNDED", "grounded_record_ids": ["INVENTED-13"], "limitations": ["test failure"]}
+    assert "evidence" not in json.dumps(result["failed_response"])
+    assert len(sequence.response_validation_failures) == 1
+
+
+def test_worktree_policy_allows_only_recognized_acceptance_json():
+    allowed = launcher.evaluate_worktree_acceptance(Path("."), "?? .research-os-live-5.0-top-level-attempt-2/follow-up-answers.json\n")
+    assert allowed.valid and allowed.allowed_paths == (".research-os-live-5.0-top-level-attempt-2/follow-up-answers.json",)
+
+
+def test_worktree_policy_rejects_unknown_acceptance_file():
+    result = launcher.evaluate_worktree_acceptance(Path("."), "!! .research-os-live-5.0-top-level-attempt-2/unknown.txt\n")
+    assert not result.valid and result.unexpected_paths == (".research-os-live-5.0-top-level-attempt-2/unknown.txt",)
+
+
+def test_worktree_policy_rejects_source_change():
+    result = launcher.evaluate_worktree_acceptance(Path("."), " M src/research_os/oracle/grounding.py\n")
+    assert not result.valid
+
+
+def test_worktree_policy_rejects_arbitrary_untracked_file():
+    result = launcher.evaluate_worktree_acceptance(Path("."), "?? notes.txt\n")
+    assert not result.valid
+
+
+def test_worktree_policy_accepts_clean_status():
+    result = launcher.evaluate_worktree_acceptance(Path("."), "")
+    assert result.valid and result.unexpected_paths == ()
+
+
+def test_worktree_policy_rejects_unknown_changed_file_outside_namespace():
+    result = launcher.evaluate_worktree_acceptance(Path("."), " M README.md\n")
+    assert not result.valid and result.unexpected_paths == ("README.md",)
+
+
+def test_next_attempt_namespace_never_reuses_nonempty_attempt(tmp_path: Path):
+    attempt_2 = tmp_path / ".research-os-live-5.0-top-level-attempt-2"
+    attempt_2.mkdir()
+    (attempt_2 / "v5-final-gate.json").write_text("{}", encoding="utf-8")
+    assert launcher._next_output_root(tmp_path).name == ".research-os-live-5.0-top-level-attempt-3"

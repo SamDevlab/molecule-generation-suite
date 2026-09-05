@@ -25,7 +25,7 @@ research-os = "research_os.cli:main"
 research-os-web = "research_os.web:main"
 
 [tool.setuptools.package-data]
-research_os = ["oracle/live_output.schema.json"]
+research_os = ["oracle/live_output.schema.json", "oracle/live_grounding.schema.json"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
