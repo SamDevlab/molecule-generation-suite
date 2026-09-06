@@ -3,7 +3,8 @@ from .combustion import CombustionEngine, EquilibriumRequest, EquilibriumResult
 from .propulsion import IdealIsentropicNozzleEngine, IdealNozzleRequest, IdealNozzleResult
 from .openbabel import OpenBabelEngine, OpenBabelResult, OpenBabelUnavailableError
 from .manifest import EngineAvailability, EngineKind, EngineManifest, EngineReadiness, EngineReferenceCase, EngineStatus
-from .registry import EngineRegistry
+from .registry import EngineAdapterRegistration, EngineRegistry
+from .preflight import EnginePreflight, EnginePreflightResult, EnginePreflightStatus, register_external_research_adapters
 from .reference import EngineReferenceRegistry, run_cantera_reference_case
 from .calphad import CalphadDatabaseManifest, CalphadDatabaseUnavailableError, CalphadEngine, CalphadRequest, CalphadResult, DatabaseManifest, PyCalphadEngine, UnavailableCalphadEngine
 
@@ -21,6 +22,6 @@ __all__ = [
     "EquilibriumRequest", "EquilibriumResult", "IdealIsentropicNozzleEngine",
     "IdealNozzleRequest", "IdealNozzleResult",
     "OpenBabelEngine", "OpenBabelResult", "OpenBabelUnavailableError",
-    "EngineAvailability", "EngineKind", "EngineManifest", "EngineReadiness", "EngineReferenceCase", "EngineStatus", "EngineRegistry", "EngineReferenceRegistry", "run_cantera_reference_case",
+    "EngineAvailability", "EngineKind", "EngineManifest", "EngineReadiness", "EngineReferenceCase", "EngineStatus", "EngineAdapterRegistration", "EngineRegistry", "EnginePreflight", "EnginePreflightResult", "EnginePreflightStatus", "register_external_research_adapters", "EngineReferenceRegistry", "run_cantera_reference_case",
     "VinaEngine", "VinaUnavailableError", "CalphadEngine", "CalphadRequest", "CalphadResult", "CalphadDatabaseManifest", "DatabaseManifest", "PyCalphadEngine", "UnavailableCalphadEngine", "CalphadDatabaseUnavailableError",
 ]

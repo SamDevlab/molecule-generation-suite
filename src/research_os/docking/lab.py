@@ -6,6 +6,7 @@ from research_os.core.hashing import sha256_file
 from research_os.core.types import Evidence, EvidenceLevel, GateResult, GateStatus, RunManifest
 from research_os.docking.rules import docking_rules
 from research_os.docking.schema import DockingRequest, GridBox
+from research_os.docking.contract import DockingExecutionContract
 from research_os.engines.vina import VinaEngine
 from research_os.engines.manifest import EngineAvailability, EngineKind, EngineManifest, EngineReadiness, EngineStatus
 from research_os.labs.base import Lab
@@ -19,10 +20,21 @@ class DockingLab(Lab):
         return {"receptor_path": str(raw.get("receptor_path")) if raw.get("receptor_path") is not None else None, "ligand_path": str(raw.get("ligand_path")) if raw.get("ligand_path") is not None else None, "grid": {"center_x": float(grid.get("center_x", 0)), "center_y": float(grid.get("center_y", 0)), "center_z": float(grid.get("center_z", 0)), "size_x": float(grid.get("size_x", 0)), "size_y": float(grid.get("size_y", 0)), "size_z": float(grid.get("size_z", 0))}, "exhaustiveness": int(raw.get("exhaustiveness", 8)), "cpu": int(raw.get("cpu", 1)), "seed": int(raw.get("seed", 42)), "output_path": str(raw.get("output_path")) if raw.get("output_path") is not None else None, "target_id": raw.get("target_id"), "species": raw.get("species"), "role": raw.get("role"), "require_species": bool(raw.get("require_species", False)), "require_preparation": bool(raw.get("require_preparation", False)), "receptor_metadata": dict(raw.get("receptor_metadata") or {}), "protocol_id": str(raw.get("protocol_id", "autodock-vina.docking.v1")), "timeout": float(raw.get("timeout", 300.0)), "prepared_ligand_manifest": raw.get("prepared_ligand_manifest"), "prepared_receptor_manifest": raw.get("prepared_receptor_manifest"), "num_modes": int(raw.get("num_modes", 9))}
     def rules(self): return docking_rules(self.engine)
     def run(self, raw: dict[str, Any], experiment: str = "vina_docking") -> RunManifest:
-        n = self.normalize(raw); m = RunManifest(lab=self.name, experiment=experiment, inputs=n, config={"engine": type(self.engine).__name__, "engine_id": "autodock-vina", "engine_version": self.engine.version, "protocol_id": n["protocol_id"], "target_id": n.get("target_id"), "grid_hash": GridBox(**n["grid"]).grid_hash}); ProofEngine().evaluate(m, self.rules())
+        n = self.normalize(raw)
+        try:
+            contract = DockingExecutionContract.from_mapping(n)
+            # Keep the existing proof-rule ordering: the canonical grid gate
+            # owns its diagnostic, while the contract validates all other
+            # execution identity and limit fields before engine invocation.
+            contract.validate(validate_grid=False)
+        except (TypeError, ValueError) as exc:
+            m = RunManifest(lab=self.name, experiment=experiment, inputs=n, config={"engine": type(self.engine).__name__, "engine_id": "autodock-vina"})
+            m.gates.append(GateResult("GATE-CONTRACT", "DOCK-CONTRACT-001", GateStatus.FAIL, "docking execution contract is invalid", diagnostics={"error_type": type(exc).__name__, "error": str(exc)}))
+            return m
+        m = RunManifest(lab=self.name, experiment=experiment, inputs=n, config={"engine": type(self.engine).__name__, "engine_id": "autodock-vina", "engine_version": self.engine.version, "protocol_id": n["protocol_id"], "target_id": n.get("target_id"), "grid_hash": GridBox(**n["grid"]).grid_hash, "docking_contract": contract.to_dict()}); ProofEngine().evaluate(m, self.rules())
         if not m.passed: return m
         receptor_hash, ligand_hash = sha256_file(n["receptor_path"]), sha256_file(n["ligand_path"])
-        m.evidence.append(Evidence(evidence_id=f"EVD-{uuid.uuid4().hex[:12].upper()}", kind="docking_input_artifacts", level=EvidenceLevel.E2_COMPUTATIONAL, source="DockingLab artifact integrity", payload={"receptor": {"path": n["receptor_path"], "sha256": receptor_hash}, "ligand": {"path": n["ligand_path"], "sha256": ligand_hash}, "grid": n["grid"], "grid_hash": GridBox(**n["grid"]).grid_hash, "seed": n["seed"], "exhaustiveness": n["exhaustiveness"], "num_modes": n["num_modes"], "target_id": n.get("target_id"), "species": n.get("species"), "prepared_ligand_manifest": n.get("prepared_ligand_manifest"), "prepared_receptor_manifest": n.get("prepared_receptor_manifest")}))
+        m.evidence.append(Evidence(evidence_id=f"EVD-{uuid.uuid4().hex[:12].upper()}", kind="docking_input_artifacts", level=EvidenceLevel.E2_COMPUTATIONAL, source="DockingLab artifact integrity", payload={"receptor": {"path": n["receptor_path"], "sha256": receptor_hash}, "ligand": {"path": n["ligand_path"], "sha256": ligand_hash}, "grid": n["grid"], "grid_hash": GridBox(**n["grid"]).grid_hash, "seed": n["seed"], "exhaustiveness": n["exhaustiveness"], "num_modes": n["num_modes"], "target_id": n.get("target_id"), "species": n.get("species"), "prepared_ligand_manifest": n.get("prepared_ligand_manifest"), "prepared_receptor_manifest": n.get("prepared_receptor_manifest"), "evidence_ceiling": contract.evidence_ceiling, "contract_hash": contract.contract_hash}))
         req = DockingRequest(receptor_path=n["receptor_path"], ligand_path=n["ligand_path"], grid=GridBox(**n["grid"]), exhaustiveness=n["exhaustiveness"], cpu=n["cpu"], seed=n["seed"], output_path=n["output_path"], target_id=n.get("target_id"), species=n.get("species"), role=n.get("role"), receptor_metadata=n.get("receptor_metadata"), protocol_id=n["protocol_id"], timeout=n["timeout"], prepared_ligand_manifest=n.get("prepared_ligand_manifest"), prepared_receptor_manifest=n.get("prepared_receptor_manifest"), num_modes=n["num_modes"])
         try: result = self.engine.run(req)
         except (FileNotFoundError, ValueError) as exc:

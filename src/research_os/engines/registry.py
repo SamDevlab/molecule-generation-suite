@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 import shutil
 import subprocess
-from typing import Any, Mapping
+from typing import Any, Callable, Mapping
 
 from research_os.engines.manifest import (
     EngineAvailability,
@@ -28,6 +28,14 @@ class EngineSpec:
     module: str | None = None
     executable_names: tuple[str, ...] = ()
     version_args: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class EngineAdapterRegistration:
+    engine_id: str
+    adapter_name: str
+    capabilities: tuple[str, ...]
+    factory: Callable[[EngineManifest], Any]
 
 
 DEFAULT_ENGINE_SPECS = (
@@ -60,6 +68,26 @@ class EngineRegistry:
         self.specs = tuple(specs)
         self.configuration = {str(key): dict(value) for key, value in (configuration or {}).items()}
         self._manifests: dict[str, EngineManifest] = {}
+        self._adapters: dict[str, EngineAdapterRegistration] = {}
+
+    def register_adapter(self, engine_id: str, *, adapter_name: str, capabilities: tuple[str, ...], factory: Callable[[EngineManifest], Any]) -> EngineAdapterRegistration:
+        key = self._alias(engine_id)
+        if not any(spec.engine_id == key for spec in self.specs):
+            raise KeyError(f"unknown engine: {engine_id}")
+        registration = EngineAdapterRegistration(key, str(adapter_name), tuple(str(item) for item in capabilities), factory)
+        self._adapters[key] = registration
+        return registration
+
+    def adapter_registration(self, engine_id: str) -> EngineAdapterRegistration:
+        key = self._alias(engine_id)
+        try:
+            return self._adapters[key]
+        except KeyError as exc:
+            raise KeyError(f"engine adapter not registered: {engine_id}") from exc
+
+    def create_adapter(self, engine_id: str) -> Any:
+        manifest = self.get_engine(engine_id)
+        return self.adapter_registration(engine_id).factory(manifest)
 
     def register_engine(self, manifest: EngineManifest | Mapping[str, Any]) -> EngineManifest:
         item = manifest if isinstance(manifest, EngineManifest) else EngineManifest.from_mapping(manifest)
