@@ -166,3 +166,155 @@ def test_route_15_normal_operation_rejects_direct_consistency_object(monkeypatch
     transport = _transport(monkeypatch, _direct(_consistency_response()))
     with pytest.raises(LiveCodexProtocolError):
         transport("scientific_review", {}, {})
+
+
+class _RecordingProviderTransport:
+    """Provider integration double that exposes the context it receives."""
+
+    def __init__(self):
+        self.calls = []
+        self.last_output_contract = None
+        self.last_output_schema_name = None
+
+    def __call__(self, operation, payload, context):
+        self.calls.append((operation, payload, dict(context)))
+        if isinstance(context.get("consistency_contract"), dict):
+            self.last_output_contract = LiveOutputContract.CONSISTENCY.value
+            self.last_output_schema_name = "live_consistency.schema.json"
+            return _consistency_response()
+        self.last_output_contract = LiveOutputContract.ENVELOPE.value
+        self.last_output_schema_name = "live_output.schema.json"
+        return {"result": json.dumps({"answer": "ordinary"})}
+
+
+def _provider_consistency_context(run="A"):
+    return {
+        "consistency_run": run,
+        "consistency_contract": {
+            "CONSISTENCY_GROUNDING_BASIS": ["RUN-1"],
+            "allowed_limitation_codes": ["PROTOCOL_SENSITIVITY"],
+        },
+        "ALLOWED_GROUNDED_RECORD_IDS": ["RUN-1"],
+        "known_record_ids": ["RUN-1"],
+    }
+
+
+def test_integration_01_ordinary_followup_uses_global_context_only():
+    transport = _RecordingProviderTransport()
+    provider = CodexLiveProvider(transport=transport)
+
+    assert provider.final_exam_followup({"question": "ordinary"}) == {"answer": "ordinary"}
+    assert transport.last_output_contract == "ENVELOPE"
+    assert transport.last_output_schema_name == "live_output.schema.json"
+    assert "consistency_contract" not in transport.calls[-1][2]
+
+
+@pytest.mark.parametrize("run", ["A", "B"])
+def test_integration_02_and_03_consistency_followups_propagate_per_call_context(run):
+    transport = _RecordingProviderTransport()
+    provider = CodexLiveProvider(transport=transport)
+    context = _provider_consistency_context(run)
+
+    result = provider.final_exam_followup(context)
+
+    assert result == _consistency_response()
+    assert transport.last_output_contract == "CONSISTENCY"
+    assert transport.last_output_schema_name == "live_consistency.schema.json"
+    assert transport.calls[-1][2]["consistency_run"] == run
+
+
+def test_integration_04_security_global_context_cannot_be_overwritten_per_call():
+    transport = _RecordingProviderTransport()
+    provider = CodexLiveProvider(transport=transport)
+    provider.set_request_context({
+        "top_level_owner_id": "OWNER-REAL",
+        "stored_state_digest": "DIGEST-REAL",
+    })
+    context = {
+        **_provider_consistency_context("A"),
+        "top_level_owner_id": "OWNER-FAKE",
+        "stored_state_digest": "DIGEST-FAKE",
+    }
+
+    provider.final_exam_followup(context)
+    observed = transport.calls[-1][2]
+    assert observed["top_level_owner_id"] == "OWNER-REAL"
+    assert observed["stored_state_digest"] == "DIGEST-REAL"
+    assert observed["consistency_run"] == "A"
+
+
+def test_integration_05_normal_per_call_context_remains_envelope():
+    transport = _RecordingProviderTransport()
+    provider = CodexLiveProvider(transport=transport)
+
+    provider.final_exam_followup({"question": "ordinary", "known_record_ids": ["RUN-1"]})
+
+    assert transport.last_output_contract == "ENVELOPE"
+    assert transport.last_output_schema_name == "live_output.schema.json"
+
+
+def test_integration_06_payload_context_alone_cannot_select_consistency_schema():
+    transport = _RecordingProviderTransport()
+    provider = CodexLiveProvider(transport=transport)
+    payload_context = _provider_consistency_context("A")
+
+    result = provider._call(
+        "final_exam_followup",
+        {"followup_context": payload_context},
+    )
+
+    assert result == {"answer": "ordinary"}
+    assert transport.last_output_contract == "ENVELOPE"
+    assert "consistency_contract" not in transport.calls[-1][2]
+
+
+def test_integration_07_explicit_invocation_context_controls_schema_without_payload():
+    transport = _RecordingProviderTransport()
+    provider = CodexLiveProvider(transport=transport)
+    invocation_context = _provider_consistency_context("A")
+
+    result = provider._call(
+        "final_exam_followup",
+        {"followup_context": {"scientific_payload_only": True}},
+        invocation_context=invocation_context,
+    )
+
+    assert result == _consistency_response()
+    assert transport.last_output_contract == "CONSISTENCY"
+    assert transport.calls[-1][1]["followup_context"] == {"scientific_payload_only": True}
+
+
+def test_integration_08_09_per_call_context_does_not_contaminate_later_calls():
+    transport = _RecordingProviderTransport()
+    provider = CodexLiveProvider(transport=transport)
+    provider.set_request_context({
+        "top_level_owner_id": "OWNER-REAL",
+        "stored_state_digest": "DIGEST-REAL",
+    })
+
+    provider.final_exam_followup(_provider_consistency_context("A"))
+    provider.final_exam_followup({"question": "ordinary"})
+
+    assert transport.calls[-2][2]["consistency_run"] == "A"
+    assert transport.calls[-1][2]["top_level_owner_id"] == "OWNER-REAL"
+    assert "consistency_contract" not in transport.calls[-1][2]
+    assert transport.last_output_contract == "ENVELOPE"
+
+
+@pytest.mark.parametrize("run", ["A", "B"])
+def test_integration_10_and_11_consistency_prompt_uses_direct_framing(run):
+    context = _provider_consistency_context(run)
+    prompt = CodexCliTransport._prompt({"operation": "final_exam_followup", "payload": {}, "context": context})
+
+    assert "Do not wrap the response in a result string" in prompt
+    assert "schema requires a string field named result" not in prompt
+
+
+def test_integration_12_13_final_exam_followups_use_same_per_call_route():
+    transport = _RecordingProviderTransport()
+    provider = CodexLiveProvider(transport=transport)
+
+    provider.final_exam_followups(_provider_consistency_context("B"))
+
+    assert transport.last_output_contract == "CONSISTENCY"
+    assert transport.last_output_schema_name == "live_consistency.schema.json"

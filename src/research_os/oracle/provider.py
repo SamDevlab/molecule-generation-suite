@@ -124,6 +124,19 @@ class LiveOutputContract(str, Enum):
     CONSISTENCY = "CONSISTENCY"
 
 
+_PER_CALL_TRANSPORT_CONTEXT_KEYS = frozenset({
+    "consistency_run",
+    "consistency_contract",
+    "CONSISTENCY_GROUNDING_BASIS",
+    "ALLOWED_GROUNDED_RECORD_IDS",
+    "known_record_ids",
+})
+_SECURITY_SENSITIVE_TRANSPORT_CONTEXT_KEYS = frozenset({
+    "top_level_owner_id",
+    "stored_state_digest",
+})
+
+
 def _output_contract_for_request(operation: str, context: Mapping[str, Any] | None) -> LiveOutputContract:
     """Select a contract from typed request semantics, never from model output."""
     request_context = context if isinstance(context, Mapping) else {}
@@ -756,6 +769,23 @@ class CodexLiveProvider:
     def set_request_context(self, context: dict[str, Any] | None) -> None:
         self._request_context = dict(context or {})
 
+    def _transport_context(self, invocation_context: Mapping[str, Any] | None = None) -> dict[str, Any]:
+        """Build immutable-global plus allowlisted per-call transport metadata."""
+        effective = dict(self._request_context)
+        if isinstance(invocation_context, Mapping):
+            for key in _PER_CALL_TRANSPORT_CONTEXT_KEYS:
+                if key in invocation_context:
+                    effective[key] = invocation_context[key]
+        # Security-sensitive ownership/state fields are never supplied by a
+        # transient invocation context.  The assignments are explicit so a
+        # future allowlist change cannot accidentally make them per-call.
+        for key in _SECURITY_SENSITIVE_TRANSPORT_CONTEXT_KEYS:
+            if key in self._request_context:
+                effective[key] = self._request_context[key]
+            else:
+                effective.pop(key, None)
+        return effective
+
     def available(self) -> bool:
         return bool(getattr(self.transport, "available", True))
 
@@ -773,9 +803,16 @@ class CodexLiveProvider:
             "external_status": "NOT_REQUIRED_FOR_THIS_MILESTONE",
         }
 
-    def _call(self, operation: str, payload: dict[str, Any]) -> dict[str, Any]:
-        output_contract = _output_contract_for_request(operation, self._request_context)
-        raw = self.transport(operation, payload, self._request_context)
+    def _call(
+        self,
+        operation: str,
+        payload: dict[str, Any],
+        *,
+        invocation_context: Mapping[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        transport_context = self._transport_context(invocation_context)
+        output_contract = _output_contract_for_request(operation, transport_context)
+        raw = self.transport(operation, payload, transport_context)
         parsed = parse_structured_output(raw)
         transport_contract = getattr(self.transport, "last_output_contract", None)
         if transport_contract is not None and transport_contract != output_contract.value:
@@ -918,12 +955,20 @@ class CodexLiveProvider:
 
     def final_exam_followup(self, context: dict[str, Any]) -> dict[str, Any]:
         """Answer one final-exam follow-up from supplied registered records."""
-        raw = self._call("final_exam_followup", {"followup_context": context})
+        raw = self._call(
+            "final_exam_followup",
+            {"followup_context": context},
+            invocation_context=context,
+        )
         return dict(raw.get("followup", raw))
 
     def final_exam_followups(self, context: dict[str, Any]) -> dict[str, Any]:
         """Answer the complete fixed follow-up set in one bounded live call."""
-        raw = self._call("final_exam_followups", {"followups_context": context})
+        raw = self._call(
+            "final_exam_followups",
+            {"followups_context": context},
+            invocation_context=context,
+        )
         return dict(raw.get("followups", raw))
 
 

@@ -1,0 +1,21 @@
+{
+  "ancestry_summary": [
+    "20156:python.exe<-19264",
+    "19264:python.exe<-24396",
+    "24396:powershell.exe<-6812",
+    "6812:explorer.exe<-6700"
+  ],
+  "codex_session_detected": false,
+  "cwd": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite",
+  "detection_signals": [],
+  "environment_digest": "25ef30fcdcee33d7b3449bcc70fab966360eeef31a5f30d26b09b7e2f9d050c3",
+  "executable": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.venv\\Scripts\\python.exe",
+  "invocation_id": "TOPLEVEL-AF7852EE8F1E4B37",
+  "parent_pid": 19264,
+  "parent_process_name": "python.exe",
+  "pid": 20156,
+  "process_name": "python.exe",
+  "result": "TOP_LEVEL_CONFIRMED",
+  "started_at": "2026-09-06T02:11:39.019956+00:00",
+  "top_level_eligible": true
+}
