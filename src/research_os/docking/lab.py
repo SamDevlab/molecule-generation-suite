@@ -1,5 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
+from dataclasses import replace
 from typing import Any
 import uuid
 from research_os.core.hashing import sha256_file
@@ -45,6 +46,8 @@ class DockingLab(Lab):
             m.gates.append(GateResult("GATE-DOCKING", "DOCK-RUN-001", GateStatus.FAIL, "docking engine returned non-zero status", diagnostics={"returncode": result.returncode, "stderr": result.stderr[-2000:]})); return m
         payload = result.to_dict()
         if result.output_path and Path(result.output_path).is_file(): payload["output_sha256"] = sha256_file(result.output_path)
+        completed_contract = replace(contract, engine_version=result.engine_version, command=result.command, execution_seconds=None, exit_code=result.returncode, output_sha256=payload.get("output_sha256"), output_validation_status="VALID" if result.returncode == 0 and result.output_path and Path(result.output_path).is_file() else "INVALID")
+        m.config["docking_contract"] = completed_contract.to_dict()
         engine_manifest = EngineManifest(
             "autodock-vina", "AutoDock Vina", EngineKind.COMPUTATIONAL_ENGINE, result.engine_version,
             EngineAvailability.AVAILABLE, EngineStatus.SUPPORTED_AND_EXECUTED if result.returncode == 0 else EngineStatus.EXECUTION_FAILED,

@@ -168,7 +168,7 @@ def _category_rows(block: Any, prefix: str) -> list[dict[str, Any]]:
     return [{key: category[key][index] if index < len(category[key]) else None for key in keys} for index in range(length)]
 
 
-def parse_mmcif(path: str | Path, *, source_id: str | None = None, source_registry: Any | None = None, require_registered_source: bool = False, require_single_model: bool = False) -> MmcifParseResult:
+def parse_mmcif(path: str | Path, *, source_id: str | None = None, source_registry: Any | None = None, require_registered_source: bool = True, require_single_model: bool = False) -> MmcifParseResult:
     """Parse one immutable local mmCIF artifact without network access."""
 
     target = Path(path)

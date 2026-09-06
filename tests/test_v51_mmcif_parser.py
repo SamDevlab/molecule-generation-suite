@@ -41,12 +41,14 @@ def test_mmcif_parser_reads_5ikr_and_rejects_unregistered_source(tmp_path):
     assert result.require_valid().entry_id == "5IKR"
     blocked = parse_mmcif(path, source_id="SRC-UNKNOWN", source_registry=intake.source_registry, require_registered_source=True)
     assert blocked.status == MmcifParseStatus.SOURCE_NOT_REGISTERED
+    default_blocked = parse_mmcif(path)
+    assert default_blocked.status == MmcifParseStatus.SOURCE_NOT_REGISTERED
 
 
 def test_mmcif_parser_rejects_malformed_and_hash_changed_artifact(tmp_path):
     malformed = tmp_path / "bad.cif"
     malformed.write_text("data_bad\nloop_\n_atom_site.id\n", encoding="utf-8")
-    result = parse_mmcif(malformed)
+    result = parse_mmcif(malformed, require_registered_source=False)
     assert result.status == MmcifParseStatus.INVALID
     source, intake = _registered(tmp_path, "5KIR.cif", "SRC-RCSB-5KIR")
     changed = tmp_path / "changed.cif"

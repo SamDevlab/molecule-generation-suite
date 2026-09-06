@@ -11,7 +11,7 @@ dependencies = []
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
-molecule = ["numpy>=1.26", "rdkit>=2024.3", "gemmi>=0.7.5,<0.8"]
+molecule = ["numpy>=1.26", "rdkit>=2024.3", "gemmi==0.7.5"]
 combustion = ["cantera>=3.2"]
 metals = ["pycalphad>=0.11", "matminer>=0.9"]
 docking = ["openbabel-wheel>=3.1.1.23"]

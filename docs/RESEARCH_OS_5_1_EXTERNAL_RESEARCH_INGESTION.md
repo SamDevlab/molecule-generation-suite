@@ -29,7 +29,8 @@ not-comparable conditions.
 ## Structure parser and ligand identity
 
 The parser uses the Gemmi scientific mmCIF implementation, constrained to
-`gemmi>=0.7.5,<0.8`, and emits a normalized representation containing:
+`gemmi==0.7.5` (MPL-2.0; fixed for reproducible Windows/Python 3.11/3.12
+installation), and emits a normalized representation containing:
 
 - entry ID and parser version;
 - source path and source SHA-256;
@@ -46,9 +47,10 @@ stored as deterministic test fixtures with their original SHA-256 values:
 | 5KIR | `927fb3eb69423db63849eb15842dc475172964f1bbdb63ac97eacf4867c54243` |
 | 5IKR | `a4a20672b28f87d32a4cdff8ae7dbdbe4c94af40bc86d4b7caf0122d860cf472` |
 
-No network access is performed by the parser. A registered source can be
-required at the call boundary, and a changed local artifact fails with an
-explicit hash mismatch.
+No network access is performed by the parser. Registered-source verification
+is the default boundary for scientific use; fixture-only parser tests must
+opt out explicitly. A changed local artifact fails with an explicit hash
+mismatch.
 
 ## Pose recovery and RMSD
 

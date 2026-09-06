@@ -11,6 +11,8 @@ import shutil
 import subprocess
 from typing import Any, Callable, Mapping
 
+from research_os.core.hashing import sha256_file
+
 from research_os.engines.manifest import (
     EngineAvailability,
     EngineKind,
@@ -187,7 +189,7 @@ class EngineRegistry:
             configuration=config,
             environment_id=self.environment_id,
             limitations=(limitation,),
-            metadata={"probe": "import_or_version_argv", "version_probe": list(spec.version_args), "configured": bool(config), "platform": __import__("platform").platform(), "invocation_method": "argv; shell=False", "supported_inputs": list(spec.supported_inputs), "supported_outputs": list(spec.supported_outputs), "capabilities": list(spec.capabilities), "timeout_seconds": 10, "resource_limits": {"version_probe_timeout_seconds": 10}},
+            metadata={"probe": "import_or_version_argv", "version_probe": list(spec.version_args), "configured": bool(config), "platform": __import__("platform").platform(), "invocation_method": "argv; shell=False", "supported_inputs": list(spec.supported_inputs), "supported_outputs": list(spec.supported_outputs), "capabilities": list(spec.capabilities), "executable_sha256": sha256_file(executable) if executable and Path(executable).is_file() else None, "timeout_seconds": 10, "resource_limits": {"version_probe_timeout_seconds": 10}},
         )
         self._manifests[key] = manifest
         return manifest

@@ -20,7 +20,7 @@ class VinaEngine:
     def version(self) -> str | None:
         if not self.available: return None
         try:
-            proc = subprocess.run([self.executable, "--version"], capture_output=True, text=True, timeout=10, check=False)
+            proc = subprocess.run([self.executable, "--version"], capture_output=True, text=True, timeout=10, check=False, shell=False)
             text = (proc.stdout or proc.stderr).strip(); return text.splitlines()[0] if text else None
         except Exception: return None
     def run(self, request: DockingRequest, *, timeout: float | None = None) -> DockingResult:

@@ -48,7 +48,7 @@ class OpenBabelEngine:
         if not self.available:
             return None
         try:
-            result = subprocess.run([self.executable, "-V"], capture_output=True, text=True, timeout=10, check=False)
+            result = subprocess.run([self.executable, "-V"], capture_output=True, text=True, timeout=10, check=False, shell=False)
         except (OSError, subprocess.SubprocessError):
             return None
         line = (result.stdout or result.stderr).strip().splitlines()
