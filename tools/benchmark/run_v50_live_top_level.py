@@ -626,16 +626,38 @@ def _consistency(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[s
     return {"status": "PASS", "pairs": pairs}
 
 
-def _process_cleanup(sequence: TopLevelLiveSequence) -> dict[str, Any]:
-    children: dict[str, list[dict[str, Any]]] = {}
-    for event in sequence.process_events:
-        pid = str(event.get("pid", "NOT_STARTED"))
-        children.setdefault(pid, []).append(event)
+def _aggregate_process_cleanup(events: list[dict[str, Any]]) -> dict[str, Any]:
+    """Aggregate owned process events by each PID's final observed state."""
+    events_by_pid: dict[int, list[dict[str, Any]]] = {}
+    for event in events:
+        pid = event.get("pid")
+        if pid is None:
+            continue
+        events_by_pid.setdefault(int(pid), []).append(event)
+
     records = []
-    for pid, events in children.items():
-        last = events[-1]
-        records.append({"pid": pid, "parent_pid": last.get("parent_pid"), "events": events, "cleanup_status": last.get("cleanup_status", "NOT_STARTED"), "exit_code": last.get("exit_code"), "termination_reason": last.get("termination_reason")})
-    return {"status": "PASS" if records and all(item["cleanup_status"] == "EXITED" for item in records) else "FAIL", "children": records, "owned_child_processes_remaining": False}
+    for pid, pid_events in events_by_pid.items():
+        last = pid_events[-1]
+        records.append({
+            "pid": str(pid),
+            "parent_pid": last.get("parent_pid"),
+            "events": pid_events,
+            "cleanup_status": last.get("cleanup_status", "NOT_STARTED"),
+            "exit_code": last.get("exit_code"),
+            "termination_reason": last.get("termination_reason"),
+        })
+
+    remaining = any(item["cleanup_status"] != "EXITED" for item in records)
+    return {
+        "status": "PASS" if not remaining else "FAIL",
+        "children": records,
+        "owned_child_processes_remaining": remaining,
+        "owned_processes_observed": len(events_by_pid),
+    }
+
+
+def _process_cleanup(sequence: TopLevelLiveSequence) -> dict[str, Any]:
+    return _aggregate_process_cleanup(sequence.process_events)
 
 
 def _make_acceptance_digest(preflight: Mapping[str, Any], sequence: TopLevelLiveSequence, *, panel: Mapping[str, Any] | None = None, synthesis: Mapping[str, Any] | None = None, exam: Mapping[str, Any] | None = None, followups: Mapping[str, Any] | None = None, stress: Mapping[str, Any] | None = None, consistency: Mapping[str, Any] | None = None, cleanup: Mapping[str, Any] | None = None, scientific: Mapping[str, Any] | None = None, security: Mapping[str, Any] | None = None, pass_: bool = False) -> V5LiveAcceptanceDigest:

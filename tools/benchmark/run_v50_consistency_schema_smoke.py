@@ -66,12 +66,12 @@ def _write(root: Path, name: str, value: Mapping[str, Any]) -> None:
 
 
 def _cleanup(events: list[dict[str, Any]]) -> dict[str, Any]:
-    owned = [event for event in events if event.get("pid") is not None]
-    remaining = any(event.get("cleanup_status") != "EXITED" for event in owned)
+    aggregate = top_level._aggregate_process_cleanup(events)
     return {
-        "status": "PASS" if not remaining else "FAIL",
-        "owned_child_processes_remaining": remaining,
+        "status": aggregate["status"],
+        "owned_child_processes_remaining": aggregate["owned_child_processes_remaining"],
         "events_observed": len(events),
+        "owned_processes_observed": aggregate["owned_processes_observed"],
     }
 
 

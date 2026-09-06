@@ -50,6 +50,14 @@ Attempt 6 then stopped before a response was accepted because the provider proce
 
 The next external action is a one-call fresh-namespace schema smoke. It must pass before the 39-call Attempt 7 launcher is permitted. This current Codex-owned task does not execute either Live action.
 
+## Consistency-schema Smoke 1 — preserved
+
+The first real external consistency-schema smoke is preserved immutably at `.research-os-live-5.0-consistency-schema-smoke/`. The Live invocation, provider route, `CONSISTENCY` contract, `live_consistency.schema.json`, schema validation, grounding validation, consistency validation, and forbidden-field check all passed. It returned one completed call with `failure_code=null`, `failure_stage=NONE`, and `schema_status=PASS`.
+
+The overall smoke gate was `BLOCKED_BEFORE_PASS` only because `process-cleanup.json` aggregated both historical observer events for one PID instead of the final state: `RUNNING` followed by `EXITED` was incorrectly reported as `owned_child_processes_remaining=true`. This is classified as `PROCESS_EVENT_FINAL_STATE_AGGREGATION_BUG`, not a provider, schema, grounding, consistency, or scientific failure. Smoke 1 remains unchanged; no artifact is rewritten to make it pass.
+
+The cleanup implementation now aggregates the final observed event for each owned PID, and the next smoke automatically selects `.research-os-live-5.0-consistency-schema-smoke-attempt-2/`.
+
 ## Official external command
 
 Run from a separately owned terminal or Codex CLI process, after checking out `research-os-v1.3` at the expected commit:
@@ -58,7 +66,7 @@ Run from a separately owned terminal or Codex CLI process, after checking out `r
 .\.venv\Scripts\python.exe tools\benchmark\run_v50_live_top_level.py --run-all --expected-head (git rev-parse HEAD)
 ```
 
-The command performs preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. The Attempt 7 wrapper first runs the one-call consistency-schema smoke in a fresh namespace; only a smoke `PASS` permits the 39 blocked Live stages. The next run selects `.research-os-live-5.0-consistency-schema-smoke/` and then `.research-os-live-5.0-top-level-attempt-7/`; prior attempts are never overwritten and reruns select the next unused namespace.
+The command performs preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. The Attempt 7 wrapper first runs the one-call consistency-schema smoke in a fresh namespace; only a smoke `PASS` permits the 39 blocked Live stages. The next run selects `.research-os-live-5.0-consistency-schema-smoke-attempt-2/` and, after smoke `PASS`, `.research-os-live-5.0-top-level-attempt-7/`; prior attempts are never overwritten and reruns select the next unused namespace.
 
 | Stage | Calls |
 |---|---:|

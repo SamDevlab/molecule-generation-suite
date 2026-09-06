@@ -35,6 +35,7 @@ from research_os.oracle import (
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools" / "benchmark"))
 import run_v50_live_top_level as launcher  # noqa: E402
+import run_v50_consistency_schema_smoke as smoke  # noqa: E402
 
 
 def _table(pid: int, parent: int, parent_name: str = "pwsh.exe"):
@@ -180,6 +181,66 @@ def test_observed_process_records_pid_and_cleanup(monkeypatch):
     assert transport("interpret_question", {"user_message": "x"}, {})["result"]
     assert events[0]["pid"] == 1234
     assert events[-1]["cleanup_status"] == "EXITED"
+
+
+@pytest.mark.parametrize(
+    ("events", "status", "remaining", "owned_processes"),
+    [
+        (
+            [{"pid": 100, "cleanup_status": "RUNNING"}, {"pid": 100, "cleanup_status": "EXITED"}],
+            "PASS", False, 1,
+        ),
+        ([{"pid": 100, "cleanup_status": "RUNNING"}], "FAIL", True, 1),
+        (
+            [
+                {"pid": 100, "cleanup_status": "RUNNING"},
+                {"pid": 200, "cleanup_status": "RUNNING"},
+                {"pid": 100, "cleanup_status": "EXITED"},
+                {"pid": 200, "cleanup_status": "EXITED"},
+            ],
+            "PASS", False, 2,
+        ),
+        (
+            [
+                {"pid": 100, "cleanup_status": "RUNNING"},
+                {"pid": 200, "cleanup_status": "RUNNING"},
+                {"pid": 100, "cleanup_status": "EXITED"},
+            ],
+            "FAIL", True, 2,
+        ),
+        ([{"cleanup_status": "RUNNING"}, {"cleanup_status": "EXITED"}], "PASS", False, 0),
+        ([], "PASS", False, 0),
+    ],
+    ids=("CLEANUP-01", "CLEANUP-02", "CLEANUP-03", "CLEANUP-04", "CLEANUP-05", "CLEANUP-06"),
+)
+def test_cleanup_aggregates_final_state_by_owned_pid(events, status, remaining, owned_processes):
+    result = launcher._aggregate_process_cleanup(events)
+    assert result["status"] == status
+    assert result["owned_child_processes_remaining"] is remaining
+    assert result["owned_processes_observed"] == owned_processes
+
+
+def test_cleanup_07_reproduces_first_smoke_event_log():
+    result = launcher._aggregate_process_cleanup([
+        {"pid": 100, "cleanup_status": "RUNNING"},
+        {"pid": 100, "cleanup_status": "EXITED"},
+    ])
+    assert result["status"] == "PASS"
+    assert result["owned_child_processes_remaining"] is False
+    assert result["owned_processes_observed"] == 1
+
+
+def test_smoke_cleanup_reuses_canonical_final_state_aggregation():
+    result = smoke._cleanup([
+        {"pid": 100, "cleanup_status": "RUNNING"},
+        {"pid": 100, "cleanup_status": "EXITED"},
+    ])
+    assert result == {
+        "status": "PASS",
+        "owned_child_processes_remaining": False,
+        "events_observed": 2,
+        "owned_processes_observed": 1,
+    }
 
 
 def test_schema_failure_is_fail_closed_at_top_level_transport(monkeypatch):
