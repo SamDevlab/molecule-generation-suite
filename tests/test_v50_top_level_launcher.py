@@ -425,6 +425,13 @@ def test_worktree_policy_rejects_unknown_acceptance_file():
     assert not result.valid and result.unexpected_paths == (".research-os-live-5.0-top-level-attempt-2/unknown.txt",)
 
 
+def test_worktree_policy_accepts_consistency_schema_smoke_artifact():
+    status = "?? .research-os-live-5.0-consistency-schema-smoke/live-consistency.json\n"
+    result = launcher.evaluate_worktree_acceptance(Path("."), status)
+    assert result.valid
+    assert result.allowed_paths == (".research-os-live-5.0-consistency-schema-smoke/live-consistency.json",)
+
+
 def test_worktree_policy_rejects_source_change():
     result = launcher.evaluate_worktree_acceptance(Path("."), " M src/research_os/oracle/grounding.py\n")
     assert not result.valid
@@ -750,3 +757,46 @@ def test_cons_shape_13_later_consistency_failure_is_preserved_after_earlier_grou
     fields = launcher._final_gate_failure_fields(sequence, result)
     assert fields["failure_code"] == GroundingFailureCode.UNKNOWN_GROUNDED_RECORD_ID.value
     assert fields["consistency_failure_code"] == ConsistencyFailureCode.LIMITATION_DRIFT.value
+
+
+def test_semantic_01_grounded_empty_ids_fail_outside_provider_schema():
+    response = _consistency_response((), primary=None)
+    valid, reasons = launcher._consistency_contract_diagnostics(response, validate_grounding(response, {"A"}), set())
+    assert not valid
+    assert "INVALID_CONSISTENCY_RESPONSE" in reasons
+
+
+def test_semantic_02_grounded_null_primary_fails():
+    response = _consistency_response(("A",), primary=None)
+    valid, reasons = launcher._consistency_contract_diagnostics(response, validate_grounding(response, {"A"}), {"A"})
+    assert not valid
+    assert reasons == ("INVALID_PRIMARY_RECORD_ID",)
+
+
+def test_semantic_04_no_grounded_answer_with_ids_fails():
+    response = _consistency_response(("A",), status="NO_GROUNDED_ANSWER")
+    valid, reasons = launcher._consistency_contract_diagnostics(response, validate_grounding(response, {"A"}), set())
+    assert not valid
+    assert "INVALID_CONSISTENCY_RESPONSE" in reasons
+
+
+def test_semantic_05_no_grounded_answer_with_primary_fails():
+    response = _consistency_response((), status="NO_GROUNDED_ANSWER")
+    response["primary_record_id"] = "A"
+    valid, reasons = launcher._consistency_contract_diagnostics(response, validate_grounding(response, {"A"}), set())
+    assert not valid
+    assert "INVALID_PRIMARY_RECORD_ID" in reasons
+
+
+def test_semantic_06_duplicate_grounded_ids_fail():
+    response = _consistency_response(("A", "A"), primary="A")
+    valid, reasons = launcher._consistency_contract_diagnostics(response, validate_grounding(response, {"A"}), {"A"})
+    assert not valid
+    assert reasons == ("INVALID_CONSISTENCY_RESPONSE",)
+
+
+def test_semantic_07_duplicate_limitation_codes_fail():
+    response = _consistency_response(("A",), primary="A", codes=("PROTOCOL_SENSITIVITY", "PROTOCOL_SENSITIVITY"))
+    valid, reasons = launcher._consistency_contract_diagnostics(response, validate_grounding(response, {"A"}), {"A"})
+    assert not valid
+    assert reasons == ("INVALID_LIMITATION_CODES",)

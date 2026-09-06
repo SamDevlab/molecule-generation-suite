@@ -1,0 +1,113 @@
+{
+  "pairs": [
+    {
+      "calls": [
+        {
+          "call_id": 30,
+          "diagnostic": {
+            "attempt": 1,
+            "command_contract": "codex exec --ephemeral --skip-git-repo-check --sandbox read-only --color never --output-schema <fixed-schema> -",
+            "completed_at": "2026-09-06T10:00:15.252404+00:00",
+            "depth": 0,
+            "elapsed": 3.649457,
+            "exit_status": "PROCESS_ERROR",
+            "failure_code": "PROCESS_ERROR",
+            "failure_stage": "COMPLETION",
+            "invocation_id": "LIVE-AED4870CB2AC4464",
+            "max_attempts": 1,
+            "model": "gpt-5.6-luna",
+            "operation": "final_exam_followup",
+            "output_contract": "CONSISTENCY",
+            "output_schema_name": "live_consistency.schema.json",
+            "parent_invocation_id": null,
+            "provider": "CODEX_LIVE",
+            "reentrancy_state": "ALLOWED_TOP_LEVEL",
+            "schema_status": "NOT_CHECKED",
+            "started_at": "2026-09-06T10:00:11.602947+00:00",
+            "stderr_bytes": 44506,
+            "stderr_truncated": false,
+            "stdout_bytes": 0,
+            "stdout_truncated": false,
+            "timeout_budget": 120.0
+          },
+          "elapsed": 3.6559999999954016,
+          "error": {
+            "message": "Codex CLI returned exit code 1",
+            "type": "LiveCodexUnavailable"
+          },
+          "label": "TL-CONSISTENCY-01-A",
+          "operation": "final_exam_followup",
+          "process_events": [
+            {
+              "call_id": 30,
+              "cleanup_status": "RUNNING",
+              "label": "TL-CONSISTENCY-01-A",
+              "parent_pid": 24016,
+              "pid": 13548,
+              "started_at": "2026-09-06T10:00:11.615307+00:00"
+            },
+            {
+              "call_id": 30,
+              "cleanup_status": "EXITED",
+              "completed_at": "2026-09-06T10:00:15.251895+00:00",
+              "exit_code": 1,
+              "label": "TL-CONSISTENCY-01-A",
+              "parent_pid": 24016,
+              "pid": 13548,
+              "started_at": "2026-09-06T10:00:11.615307+00:00",
+              "termination_reason": "NORMAL_EXIT"
+            }
+          ],
+          "response_hash": null,
+          "status": "FAILED"
+        }
+      ],
+      "consistency_assessment": {
+        "failure_code": "RUN_A_GROUNDING_FAILURE",
+        "limitation_codes_equal": false,
+        "missing_ids_in_b": [],
+        "new_ids_in_b": [],
+        "normalized_run_a_ids": [],
+        "normalized_run_b_ids": [],
+        "pair_index": 1,
+        "primary_record_equal": false,
+        "question": "What new scientific knowledge was actually produced?",
+        "run_a_call_id": 30,
+        "run_a_grounding_status": null,
+        "run_a_ids": [],
+        "run_b_call_id": null,
+        "run_b_grounding_status": null,
+        "run_b_ids": [],
+        "support_basis_equal": false,
+        "valid": false
+      },
+      "consistency_grounding_basis": [],
+      "consistency_signature_a": null,
+      "consistency_signature_b": null,
+      "contract_failure_reasons": [
+        "INVALID_CONSISTENCY_RESPONSE"
+      ],
+      "equivalent": false,
+      "failed_response_validations": [],
+      "grounding_validations": [
+        {
+          "failure_code": "INVALID_RESPONSE_TYPE",
+          "forbidden_fields": [],
+          "grounding_status": null,
+          "known_ids_count": 67,
+          "missing_grounding_field": true,
+          "response_hash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "response_type": "NoneType",
+          "returned_ids": [],
+          "unknown_ids": [],
+          "valid": false
+        }
+      ],
+      "index": 1,
+      "question": "What new scientific knowledge was actually produced?",
+      "run_a": null,
+      "run_b": null
+    }
+  ],
+  "status": "BLOCKED_BEFORE_PASS"
+}

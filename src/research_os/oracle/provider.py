@@ -414,18 +414,31 @@ class CodexCliTransport:
                 self.last_invocation_diagnostic = diagnostic
                 raise LiveCodexProtocolError("Codex CLI output exceeded the bounded capture limit", diagnostic=diagnostic)
             if completed.returncode != 0:
+                provider_error_code = self._provider_error_code(completed.stderr)
+                failure_code = (
+                    LiveFailureCode.OUTPUT_SCHEMA_ADMISSION_ERROR.value
+                    if provider_error_code
+                    else LiveFailureCode.PROCESS_ERROR.value
+                )
+                failure_stage = (
+                    LiveFailureStage.OUTPUT_SCHEMA_ADMISSION.value
+                    if provider_error_code
+                    else LiveFailureStage.COMPLETION.value
+                )
                 diagnostic = handle.finish(
                     exit_status="PROCESS_ERROR",
                     stdout_bytes=stdout_bytes,
                     stderr_bytes=stderr_bytes,
                     schema_status="NOT_CHECKED",
-                    failure_code=LiveFailureCode.PROCESS_ERROR.value,
-                    failure_stage=LiveFailureStage.COMPLETION.value,
+                    failure_code=failure_code,
+                    failure_stage=failure_stage,
+                    provider_error_code=provider_error_code,
                     attempt=attempt,
                     max_attempts=attempts,
                 )
                 self.last_invocation_diagnostic = diagnostic
-                raise LiveCodexUnavailable(f"Codex CLI returned exit code {completed.returncode}", diagnostic=diagnostic)
+                detail = f"; provider_error_code={provider_error_code}" if provider_error_code else ""
+                raise LiveCodexUnavailable(f"Codex CLI returned exit code {completed.returncode}{detail}", diagnostic=diagnostic)
             try:
                 result = self._extract_json(completed.stdout)
                 self._validate_transport_output(result, contract=output_contract)
@@ -468,6 +481,24 @@ class CodexCliTransport:
             return len(str(value).encode("utf-8", errors="replace"))
 
         return size(stdout), size(stderr)
+
+    @staticmethod
+    def _provider_error_code(stderr: Any) -> str | None:
+        """Extract only a bounded, known provider error code from stderr."""
+        if stderr is None:
+            return None
+        text = str(stderr)[:4096].lower()
+        known_patterns = (
+            ("invalid_json_schema", r"\binvalid[ _-]json[ _-]schema\b"),
+            ("unsupported_json_schema", r"\bunsupported[ _-](?:json[ _-])?schema\b"),
+            ("invalid_schema", r"\binvalid(?:[ _-]+(?:json[ _-]+)?)?schema\b"),
+            ("unsupported_schema", r"\bunsupported(?:[ _-]+(?:json[ _-]+)?)?schema\b"),
+            ("output_schema_rejected", r"\b(?:output|response)[ _-]?schema\b.{0,80}\b(?:reject|invalid|unsupported)\w*\b"),
+        )
+        for code, pattern in known_patterns:
+            if re.search(pattern, text, flags=re.DOTALL):
+                return code
+        return None
 
     @staticmethod
     def _validate_transport_output(value: Any, *, contract: LiveOutputContract) -> None:

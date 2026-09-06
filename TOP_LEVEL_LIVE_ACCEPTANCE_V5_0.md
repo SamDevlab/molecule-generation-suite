@@ -1,6 +1,6 @@
 # Top-level Live acceptance — Research OS v5.0
 
-Status: **READY_FOR_TOP_LEVEL_LIVE_EXECUTION**. The release gate remains **BLOCKED_BEFORE_PASS** until an external, genuinely top-level Codex owner completes the bounded Live stages and the resulting artifacts pass the final regression and audit gates.
+Status: **READY_FOR_TOP_LEVEL_SCHEMA_SMOKE**. The release gate remains **BLOCKED_BEFORE_PASS** until the provider-compatible schema smoke and then an external, genuinely top-level Codex owner completes the bounded Live stages and the resulting artifacts pass the final regression and audit gates.
 
 ## Why this boundary exists
 
@@ -42,6 +42,14 @@ The fifth genuine external acceptance is preserved at `.research-os-live-5.0-top
 
 Attempt 5 isolated the remaining integration defect as `PER_CALL_CONTEXT_PROPAGATION_BUG`: `consistency_run` and `consistency_contract` were present in `payload.followup_context`, but `CodexLiveProvider` forwarded only its persistent global request context to the transport. The strict transport routing was correct for the context it received. This implementation milestone fixes the provider boundary; Attempt 5 remains immutable and is not a scientific result.
 
+## Top-level Attempt 6 — preserved
+
+The sixth genuine external acceptance is preserved at `.research-os-live-5.0-top-level-attempt-6/`. It completed 30/39 calls with all three reviewers, the final exam, 15/15 follow-ups, 10/10 stress answers, and Run A of consistency pair 1. The corrected per-call propagation reached the intended route: call 30 (`TL-CONSISTENCY-01-A`) reported `output_contract=CONSISTENCY` and `output_schema_name=live_consistency.schema.json`.
+
+Attempt 6 then stopped before a response was accepted because the provider process returned `PROCESS_ERROR` during completion; `schema_status=NOT_CHECKED`, `failure_code=PROCESS_ERROR`, and the final gate preserved the secondary `consistency_failure_code=RUN_A_GROUNDING_FAILURE`. Cleanup passed with no owned child processes remaining and no child acceptance stages were started. This is an operational provider-admission finding, not scientific evidence. The provider-facing schema was subsequently reduced to the six required structural fields and deterministic validators retain the cross-field semantics. A bounded typed `OUTPUT_SCHEMA_ADMISSION_ERROR` diagnostic is now available for recognized provider schema rejection messages without persisting raw stderr.
+
+The next external action is a one-call fresh-namespace schema smoke. It must pass before the 39-call Attempt 7 launcher is permitted. This current Codex-owned task does not execute either Live action.
+
 ## Official external command
 
 Run from a separately owned terminal or Codex CLI process, after checking out `research-os-v1.3` at the expected commit:
@@ -50,7 +58,7 @@ Run from a separately owned terminal or Codex CLI process, after checking out `r
 .\.venv\Scripts\python.exe tools\benchmark\run_v50_live_top_level.py --run-all --expected-head (git rev-parse HEAD)
 ```
 
-The command performs preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. It then runs only the blocked Live stages sequentially. The next run selects a fresh namespace such as `.research-os-live-5.0-top-level-attempt-6/`; prior attempts are never overwritten and reruns select the next unused attempt number.
+The command performs preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. The Attempt 7 wrapper first runs the one-call consistency-schema smoke in a fresh namespace; only a smoke `PASS` permits the 39 blocked Live stages. The next run selects `.research-os-live-5.0-consistency-schema-smoke/` and then `.research-os-live-5.0-top-level-attempt-7/`; prior attempts are never overwritten and reruns select the next unused namespace.
 
 | Stage | Calls |
 |---|---:|
@@ -65,7 +73,7 @@ The hard ceiling is 45 Live invocations. Retries are disabled for this acceptanc
 
 ## Output and promotion rules
 
-New machine-readable results are written only under a fresh `.research-os-live-5.0-top-level-attempt-N/` namespace. The Attempt 1 artifacts under `.research-os-live-5.0-top-level/`, Attempts 2–5 under their numbered namespaces, the recovery artifacts under `.research-os-live-5.0-recovery/`, and the earlier `.research-os-live-5.0/` attempt are preserved. The launcher records process identity, cleanup, bounded diagnostics, response hashes, structured grounding failures, output contract/schema metadata, and stage outcomes without persisting raw model output or hidden reasoning.
+New machine-readable results are written only under a fresh `.research-os-live-5.0-top-level-attempt-N/` namespace or the fresh `.research-os-live-5.0-consistency-schema-smoke[-attempt-N]/` namespace. The Attempt 1 artifacts under `.research-os-live-5.0-top-level/`, Attempts 2–6 under their numbered namespaces, the recovery artifacts under `.research-os-live-5.0-recovery/`, and the earlier `.research-os-live-5.0/` attempt are preserved. The launcher records process identity, cleanup, bounded diagnostics, response hashes, structured grounding failures, output contract/schema metadata, and stage outcomes without persisting raw model output or hidden reasoning.
 
 Each attempt recognizes only these generated files: `top-level-owner-diagnostic.json`, `top-level-preflight.json`, `reviewer-panel.json`, `review-synthesis.json`, `final-scientific-exam.json`, `follow-up-answers.json`, `live-stress.json`, `live-consistency.json`, `process-cleanup.json`, `v5-live-acceptance-digest.json`, and `v5-final-gate.json`. Any other changed or untracked path, including an unknown file inside an acceptance namespace, keeps preflight at `DIRTY_WORKTREE`.
 
@@ -78,6 +86,8 @@ When a schema-valid response is rejected after execution, `follow-up-answers.jso
 Consistency runs use a separate controlled contract. Run A is validated against the normal registered state, then its literal grounded IDs are frozen as `CONSISTENCY_GROUNDING_BASIS`. Independent Run B receives exactly that basis and no Run A prose. Both A and B must return the strict six-field response from `live_consistency.schema.json`: `answer`, `grounding_status`, `grounded_record_ids`, `primary_record_id`, `limitation_codes`, and `limitations`. `primary_record_id` must be one literal member of the frozen basis for a grounded answer; `limitation_codes` must be drawn from `CONSISTENCY_LIMITATION_CODES`, and limitation prose is never parsed. Comparison uses a canonical `ConsistencySignature` with sorted unique IDs and codes, so narrative wording and ID ordering do not create false divergence. Any new, missing, unknown, or invented ID remains a failure, including a globally known ID outside Run A's frozen basis. Contract diagnostics distinguish `MISSING_PRIMARY_RECORD_ID`, `INVALID_PRIMARY_RECORD_ID`, `MISSING_LIMITATION_CODES`, `INVALID_LIMITATION_CODES`, `INVALID_LIMITATIONS`, and `INVALID_CONSISTENCY_RESPONSE`. The separate `ConsistencyFailureCode` is stored alongside the underlying `GroundingFailureCode`.
 
 The transport now selects one internal `LiveOutputContract` before `codex exec`: ordinary operations use the fixed `ENVELOPE` contract and `live_output.schema.json`; a `final_exam_followup`/`final_exam_followups` request with `context.consistency_contract` uses the fixed `CONSISTENCY` contract and `live_consistency.schema.json`. The schema registry is closed, the model cannot select it, arbitrary constructor paths are rejected, consistency JSON is direct rather than wrapped in `result`, and the provider parses according to the already-selected contract. `CodexLiveProvider` now merges only an explicit per-call allowlist into the transport context; security-sensitive global owner/state fields cannot be overwritten, and per-call consistency metadata cannot contaminate later calls. The envelope and consistency forms are each rejected when supplied to the other mode.
+
+The provider-facing consistency schema intentionally contains only portable structural keywords: the six required fields, primitive/object/array types, enums, array item types, and `additionalProperties=false`. Cross-field rules, uniqueness, and minimum/maximum cardinality remain deterministic Research OS validators in the transport and top-level launcher. This avoids depending on provider-specific support for `allOf`, `if/then`, `uniqueItems`, or `minItems`/`maxItems`. Recognized provider schema-admission failures are surfaced as the bounded typed code `OUTPUT_SCHEMA_ADMISSION_ERROR`; raw stderr, hidden reasoning, and secrets are never persisted.
 
 The final gate exposes failure precedence explicitly: provider/process failures first, the underlying `GroundingFailureCode` second, and the `ConsistencyFailureCode` third. When a consistency response is structurally invalid but the general grounding contract passed, the top-level fields are `failure_code=RUN_A_GROUNDING_FAILURE`, `consistency_failure_code=RUN_A_GROUNDING_FAILURE`, and the failed call identity. If a lower-level grounding failure also exists, its code remains the primary `failure_code` and the consistency code is preserved separately.
 

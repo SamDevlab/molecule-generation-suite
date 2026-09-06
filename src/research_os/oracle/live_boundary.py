@@ -46,6 +46,7 @@ class LiveFailureCode(str, Enum):
     PROCESS_ERROR = "PROCESS_ERROR"
     PIPE_IO_ERROR = "PIPE_IO_ERROR"
     OUTPUT_TOO_LARGE = "OUTPUT_TOO_LARGE"
+    OUTPUT_SCHEMA_ADMISSION_ERROR = "OUTPUT_SCHEMA_ADMISSION_ERROR"
     SCHEMA_INVALID = "SCHEMA_INVALID"
     SCIENTIFIC_VALIDATION_FAILURE = "SCIENTIFIC_VALIDATION_FAILURE"
 
@@ -55,6 +56,7 @@ class LiveFailureStage(str, Enum):
     PROVIDER_START = "PROVIDER_START"
     MODEL_EXECUTION = "MODEL_EXECUTION"
     PIPE_IO = "PIPE_IO"
+    OUTPUT_SCHEMA_ADMISSION = "OUTPUT_SCHEMA_ADMISSION"
     OUTPUT_VALIDATION = "OUTPUT_VALIDATION"
     TOOL_EXECUTION = "TOOL_EXECUTION"
     COMPLETION = "COMPLETION"
@@ -146,6 +148,7 @@ class LiveInvocationDiagnostic:
     stderr_truncated: bool = False
     output_contract: str = "ENVELOPE"
     output_schema_name: str = "live_output.schema.json"
+    provider_error_code: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {key: _enum_value(value) for key, value in asdict(self).items()}

@@ -1,0 +1,484 @@
+{
+  "evidence_level_changed": false,
+  "reviewers": [
+    {
+      "call_id": 1,
+      "record_type": "REVIEW / ANALYSIS",
+      "response": {
+        "concerns": [
+          {
+            "concern": "The combustion extension is a bounded E3 equilibrium simulation, not an experimental or transient-ignition result; shared gri30 and protocol dependence leave mechanism and condition extrapolation unvalidated.",
+            "grounded_record_ids": [
+              "CH-V45-COMBUSTION",
+              "IMP-V50-DYNAMIC-COMBUSTION",
+              "GAP-E3-E4-COMPARISON",
+              "CLM-V41-COMBUSTION-BOUNDARY",
+              "RUN-V50-COMB-H2-PHI105",
+              "EVD-B4B5770122CD"
+            ],
+            "recommended_action": "REVISE_CLAIM"
+          },
+          {
+            "concern": "The solubility external evaluation is entirely OOD, while target-condition semantics and uncertainty calibration are not shown to transfer; it cannot support population-wide model failure or generalization claims.",
+            "grounded_record_ids": [
+              "CH-V45-SOLUBILITY-EXTERNAL",
+              "CH-V45-EXTERNAL-FAILURE",
+              "CH-V45-NO-DECISION-SOLUBILITY",
+              "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+              "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+              "DECISION-V39-SOLUBILITY"
+            ],
+            "recommended_action": "DEFER_EXTERNAL"
+          },
+          {
+            "concern": "The battery archive lacks capacity, resistance, uncertainty, and condition-complete cross-cell metadata, so degradation decisions cannot be inferred from available voltage/current traces.",
+            "grounded_record_ids": [
+              "CH-V45-BATTERY",
+              "CH-V45-NO-DECISION-BATTERY",
+              "GAP-BATTERY-METADATA",
+              "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+              "CLM-V41-BATTERY-SCHEMA-BOUNDARY",
+              "DECISION-V310-BATTERY-REVALUATED"
+            ],
+            "recommended_action": "REVISE_DECISION"
+          },
+          {
+            "concern": "Materials records remain discovery metadata without matched composition, processing, microstructure, hydrogen environment, loading, property, method, uncertainty, and locator fields; comparative embrittlement conclusions are therefore not testable.",
+            "grounded_record_ids": [
+              "CH-V45-MATERIALS",
+              "GAP-MATERIALS-CONDITION-COMPLETE",
+              "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+              "CLM-MATERIALS-CONDITION-GAP",
+              "DECISION-MATERIALS-NO-DECISION",
+              "IMP-V50-DYNAMIC-MATERIALS"
+            ],
+            "recommended_action": "DEFER_EXTERNAL"
+          },
+          {
+            "concern": "Docking support shares one receptor structure and protocol, with limited protocol variation and no measured affinity or efficacy validation; score separation should not be treated as biological effectiveness.",
+            "grounded_record_ids": [
+              "CH-V45-COX2",
+              "CH-V45-DOCKING-DECISION",
+              "CLM-COX2-1PXX-V2",
+              "CLM-DOCKING-DECISION-BOUNDARY"
+            ],
+            "recommended_action": "REVISE_CLAIM"
+          },
+          {
+            "concern": "Passing bundle replay and ledger checks establish provenance and integrity, but do not establish independent fresh engine replication; this distinction limits reproducibility claims based on replayed artifacts.",
+            "grounded_record_ids": [
+              "BND-09953FC5B30E",
+              "BND-47B581A8964E",
+              "BND-A0AD79098BC8",
+              "LEDGER-BUNDLE-001",
+              "LEDGER-RUN-001"
+            ],
+            "recommended_action": "REVISE_CLAIM"
+          }
+        ],
+        "limitations": [
+          "Review used only the supplied Research OS records and did not add sources or execute experiments.",
+          "External validation remains blocked or deferred where compatible condition-complete records are unavailable.",
+          "The stored acceptance state still reports final-exam and live-review-panel gates as incomplete."
+        ],
+        "role": "METHODOLOGY",
+        "summary": "The state is strongest as provenance-preserving, bounded computational evidence. The main methodological limits are absent matched E4 validation, OOD or incomplete external data, condition-dependent missing fields, shared model/protocol dependence, and the difference between artifact replay and fresh replication."
+      },
+      "role": "METHODOLOGY"
+    },
+    {
+      "call_id": 2,
+      "record_type": "REVIEW / ANALYSIS",
+      "response": {
+        "concerns": [
+          {
+            "concern": "The combustion result supports only a bounded E3 condition-map extension; it does not provide an E4 experimental comparison or justify broader physical-performance claims.",
+            "grounded_record_ids": [
+              "RUN-V50-COMB-H2-PHI105",
+              "RUN-V50-COMB-CH4-REFERENCE",
+              "EVD-B4B5770122CD",
+              "EVD-2BF265653567",
+              "CLM-V41-COMBUSTION-BOUNDARY",
+              "DECISION-REVISION-V50-COMB-PHI105",
+              "GAP-E3-E4-COMPARISON"
+            ],
+            "recommended_action": "REVISE_CLAIM"
+          },
+          {
+            "concern": "The solubility external set was entirely OOD, so it cannot support population-wide failure or unrestricted generalization; the conclusion must remain sample- and applicability-bound.",
+            "grounded_record_ids": [
+              "CH-V45-SOLUBILITY-EXTERNAL",
+              "CH-V45-NO-DECISION-SOLUBILITY",
+              "CH-V45-EXTERNAL-FAILURE",
+              "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+              "CLM-SOLUBILITY-NO-DECISION",
+              "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+              "DECISION-V39-SOLUBILITY"
+            ],
+            "recommended_action": "REVISE_CLAIM"
+          },
+          {
+            "concern": "Battery and materials evidence remains insufficient for degradation or embrittlement decisions because required condition, outcome, and uncertainty fields are absent; missing data must not be interpreted as a negative result.",
+            "grounded_record_ids": [
+              "CH-V45-BATTERY",
+              "CH-V45-NO-DECISION-BATTERY",
+              "CH-V45-MATERIALS",
+              "CH-V45-NO-DECISION-BATTERY",
+              "CLM-V41-BATTERY-SCHEMA-BOUNDARY",
+              "CLM-BATTERY-NO-DECISION",
+              "CLM-MATERIALS-CONDITION-GAP",
+              "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+              "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+              "DECISION-V310-BATTERY-REVALUATED",
+              "DECISION-MATERIALS-NO-DECISION"
+            ],
+            "recommended_action": "ACCEPT"
+          },
+          {
+            "concern": "Docking support is strongly dependent on one receptor structure and one computational protocol; score separation cannot be promoted to measured affinity, efficacy, or general biological activity.",
+            "grounded_record_ids": [
+              "CH-V45-COX2",
+              "CH-V45-DOCKING-DECISION",
+              "CLM-COX2-1PXX-V2",
+              "CLM-DOCKING-DECISION-BOUNDARY",
+              "CH-V45-EXTERNAL-FAILURE"
+            ],
+            "recommended_action": "REVISE_CLAIM"
+          },
+          {
+            "concern": "Bundle integrity, ledger validation, and replay establish provenance and reproducibility of recorded artifacts but do not constitute independent fresh engine executions or elevate computational evidence levels.",
+            "grounded_record_ids": [
+              "LEDGER-BUNDLE-001",
+              "LEDGER-RUN-001",
+              "LEDGER-CLAIM-001",
+              "BND-09953FC5B30E",
+              "BND-47B581A8964E",
+              "BND-A0AD79098BC8",
+              "RUN-V50-MOLECULE-CCO",
+              "RUN-V50-COMB-CH4-REFERENCE",
+              "RUN-V50-COMB-H2-PHI105"
+            ],
+            "recommended_action": "REVISE_CLAIM"
+          }
+        ],
+        "limitations": [
+          "The review is limited to the supplied Research OS records and summaries.",
+          "No compatible independent E4 comparison or condition-complete external battery/materials record is available.",
+          "The live discovery provider was unavailable, so no new source or validation record can be assessed."
+        ],
+        "role": "EVIDENCE",
+        "summary": "The stored state is strongest when read as bounded computational evidence with explicit no-decision and external-validation boundaries. Broad claims about experimental validity, generalization, efficacy, degradation, or embrittlement remain unsupported and should be narrowed or deferred."
+      },
+      "role": "EVIDENCE"
+    },
+    {
+      "call_id": 3,
+      "record_type": "REVIEW / ANALYSIS",
+      "response": {
+        "concerns": [
+          {
+            "concern": "The three fresh v5 computational runs have registered run IDs, input/run/bundle hashes, explicit conditions, combustion mechanisms, evidence levels, passing bundles, and successful ledger integrity checks. This supports bounded computational replay, not experimental validation.",
+            "grounded_record_ids": [
+              "RUN-V50-COMB-CH4-REFERENCE",
+              "RUN-V50-COMB-H2-PHI105",
+              "RUN-V50-MOLECULE-CCO",
+              "BND-47B581A8964E",
+              "BND-A0AD79098BC8",
+              "BND-09953FC5B30E",
+              "EVD-2BF265653567",
+              "EVD-B4B5770122CD",
+              "EVD-AC44495B12BA",
+              "LEDGER-BUNDLE-001",
+              "LEDGER-LINEAGE-001",
+              "LEDGER-ARTIFACT-001"
+            ],
+            "recommended_action": "ACCEPT"
+          },
+          {
+            "concern": "Exact environment-level reproduction is not established because the supplied state does not expose engine/package versions, complete environment manifests, full execution configurations, or applicable dataset/model hashes. Bundle PASS verifies provenance and integrity, not fresh engine re-execution.",
+            "grounded_record_ids": [
+              "BND-47B581A8964E",
+              "BND-A0AD79098BC8",
+              "BND-09953FC5B30E",
+              "LEDGER-BUNDLE-001",
+              "LEDGER-ARTIFACT-001"
+            ],
+            "recommended_action": "CREATE_RESEARCH_GAP"
+          },
+          {
+            "concern": "The phi=1.05 combustion extension is reproducible only as a bounded E3 Cantera equilibrium result under declared conditions. No compatible E3-to-E4 comparison or matched experimental observation is recorded.",
+            "grounded_record_ids": [
+              "RUN-V50-COMB-H2-PHI105",
+              "BND-A0AD79098BC8",
+              "EVD-B4B5770122CD",
+              "GAP-E3-E4-COMPARISON",
+              "CH-V45-COMBUSTION",
+              "DECISION-REVISION-V50-COMB-PHI105"
+            ],
+            "recommended_action": "REVISE_CLAIM"
+          },
+          {
+            "concern": "Docking reproducibility and interpretation remain dependent on the single 1PXX receptor/protocol configuration, with no independent structure or measured binding validation. The E2 ceiling and non-efficacy boundary should remain in force.",
+            "grounded_record_ids": [
+              "CH-V45-COX2",
+              "CH-V45-DOCKING-DECISION",
+              "CLM-COX2-1PXX-V2",
+              "CLM-DOCKING-DECISION-BOUNDARY"
+            ],
+            "recommended_action": "DEFER_EXTERNAL"
+          },
+          {
+            "concern": "Condition-complete external reproducibility remains blocked: the solubility records are OOD, battery records lack required capacity/resistance/uncertainty fields, and materials records lack matched condition-complete observations. Existing no-decision boundaries should be preserved.",
+            "grounded_record_ids": [
+              "CH-V45-SOLUBILITY-EXTERNAL",
+              "CH-V45-SOLUBILITY-FAILURE",
+              "CH-V45-BATTERY",
+              "CH-V45-MATERIALS",
+              "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+              "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+              "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+              "CLM-SOLUBILITY-NO-DECISION",
+              "CLM-BATTERY-NO-DECISION",
+              "CLM-MATERIALS-CONDITION-GAP"
+            ],
+            "recommended_action": "DEFER_EXTERNAL"
+          }
+        ],
+        "limitations": [
+          "Review is limited to the registered state supplied in REQUEST_JSON; artifact contents not exposed there are not assumed present.",
+          "Bundle verification demonstrates provenance and integrity, not independent fresh execution.",
+          "No compatible E4 or condition-complete external validation record is available for the remaining decision boundaries."
+        ],
+        "role": "REPRODUCIBILITY",
+        "summary": "Reproducibility is partial: bounded v5 molecule and combustion computational outputs have strong provenance and replay identifiers, but exact environment reproduction and external scientific validation remain incomplete."
+      },
+      "role": "REPRODUCIBILITY"
+    }
+  ],
+  "same_stored_evidence": true,
+  "scientific_evidence_created": false,
+  "status": "PASS",
+  "synthesis": [
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "The combustion extension is a bounded E3 equilibrium simulation, not an experimental or transient-ignition result; shared gri30 and protocol dependence leave mechanism and condition extrapolation unvalidated.",
+      "grounded_record_ids": [
+        "CH-V45-COMBUSTION",
+        "IMP-V50-DYNAMIC-COMBUSTION",
+        "GAP-E3-E4-COMPARISON",
+        "CLM-V41-COMBUSTION-BOUNDARY",
+        "RUN-V50-COMB-H2-PHI105",
+        "EVD-B4B5770122CD"
+      ],
+      "role": "METHODOLOGY"
+    },
+    {
+      "action": "DEFER_EXTERNAL",
+      "concern": "The solubility external evaluation is entirely OOD, while target-condition semantics and uncertainty calibration are not shown to transfer; it cannot support population-wide model failure or generalization claims.",
+      "grounded_record_ids": [
+        "CH-V45-SOLUBILITY-EXTERNAL",
+        "CH-V45-EXTERNAL-FAILURE",
+        "CH-V45-NO-DECISION-SOLUBILITY",
+        "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+        "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+        "DECISION-V39-SOLUBILITY"
+      ],
+      "role": "METHODOLOGY"
+    },
+    {
+      "action": "REVISE_DECISION",
+      "concern": "The battery archive lacks capacity, resistance, uncertainty, and condition-complete cross-cell metadata, so degradation decisions cannot be inferred from available voltage/current traces.",
+      "grounded_record_ids": [
+        "CH-V45-BATTERY",
+        "CH-V45-NO-DECISION-BATTERY",
+        "GAP-BATTERY-METADATA",
+        "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+        "CLM-V41-BATTERY-SCHEMA-BOUNDARY",
+        "DECISION-V310-BATTERY-REVALUATED"
+      ],
+      "role": "METHODOLOGY"
+    },
+    {
+      "action": "DEFER_EXTERNAL",
+      "concern": "Materials records remain discovery metadata without matched composition, processing, microstructure, hydrogen environment, loading, property, method, uncertainty, and locator fields; comparative embrittlement conclusions are therefore not testable.",
+      "grounded_record_ids": [
+        "CH-V45-MATERIALS",
+        "GAP-MATERIALS-CONDITION-COMPLETE",
+        "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+        "CLM-MATERIALS-CONDITION-GAP",
+        "DECISION-MATERIALS-NO-DECISION",
+        "IMP-V50-DYNAMIC-MATERIALS"
+      ],
+      "role": "METHODOLOGY"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "Docking support shares one receptor structure and protocol, with limited protocol variation and no measured affinity or efficacy validation; score separation should not be treated as biological effectiveness.",
+      "grounded_record_ids": [
+        "CH-V45-COX2",
+        "CH-V45-DOCKING-DECISION",
+        "CLM-COX2-1PXX-V2",
+        "CLM-DOCKING-DECISION-BOUNDARY"
+      ],
+      "role": "METHODOLOGY"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "Passing bundle replay and ledger checks establish provenance and integrity, but do not establish independent fresh engine replication; this distinction limits reproducibility claims based on replayed artifacts.",
+      "grounded_record_ids": [
+        "BND-09953FC5B30E",
+        "BND-47B581A8964E",
+        "BND-A0AD79098BC8",
+        "LEDGER-BUNDLE-001",
+        "LEDGER-RUN-001"
+      ],
+      "role": "METHODOLOGY"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "The combustion result supports only a bounded E3 condition-map extension; it does not provide an E4 experimental comparison or justify broader physical-performance claims.",
+      "grounded_record_ids": [
+        "RUN-V50-COMB-H2-PHI105",
+        "RUN-V50-COMB-CH4-REFERENCE",
+        "EVD-B4B5770122CD",
+        "EVD-2BF265653567",
+        "CLM-V41-COMBUSTION-BOUNDARY",
+        "DECISION-REVISION-V50-COMB-PHI105",
+        "GAP-E3-E4-COMPARISON"
+      ],
+      "role": "EVIDENCE"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "The solubility external set was entirely OOD, so it cannot support population-wide failure or unrestricted generalization; the conclusion must remain sample- and applicability-bound.",
+      "grounded_record_ids": [
+        "CH-V45-SOLUBILITY-EXTERNAL",
+        "CH-V45-NO-DECISION-SOLUBILITY",
+        "CH-V45-EXTERNAL-FAILURE",
+        "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+        "CLM-SOLUBILITY-NO-DECISION",
+        "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+        "DECISION-V39-SOLUBILITY"
+      ],
+      "role": "EVIDENCE"
+    },
+    {
+      "action": "ACCEPT",
+      "concern": "Battery and materials evidence remains insufficient for degradation or embrittlement decisions because required condition, outcome, and uncertainty fields are absent; missing data must not be interpreted as a negative result.",
+      "grounded_record_ids": [
+        "CH-V45-BATTERY",
+        "CH-V45-NO-DECISION-BATTERY",
+        "CH-V45-MATERIALS",
+        "CH-V45-NO-DECISION-BATTERY",
+        "CLM-V41-BATTERY-SCHEMA-BOUNDARY",
+        "CLM-BATTERY-NO-DECISION",
+        "CLM-MATERIALS-CONDITION-GAP",
+        "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+        "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+        "DECISION-V310-BATTERY-REVALUATED",
+        "DECISION-MATERIALS-NO-DECISION"
+      ],
+      "role": "EVIDENCE"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "Docking support is strongly dependent on one receptor structure and one computational protocol; score separation cannot be promoted to measured affinity, efficacy, or general biological activity.",
+      "grounded_record_ids": [
+        "CH-V45-COX2",
+        "CH-V45-DOCKING-DECISION",
+        "CLM-COX2-1PXX-V2",
+        "CLM-DOCKING-DECISION-BOUNDARY",
+        "CH-V45-EXTERNAL-FAILURE"
+      ],
+      "role": "EVIDENCE"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "Bundle integrity, ledger validation, and replay establish provenance and reproducibility of recorded artifacts but do not constitute independent fresh engine executions or elevate computational evidence levels.",
+      "grounded_record_ids": [
+        "LEDGER-BUNDLE-001",
+        "LEDGER-RUN-001",
+        "LEDGER-CLAIM-001",
+        "BND-09953FC5B30E",
+        "BND-47B581A8964E",
+        "BND-A0AD79098BC8",
+        "RUN-V50-MOLECULE-CCO",
+        "RUN-V50-COMB-CH4-REFERENCE",
+        "RUN-V50-COMB-H2-PHI105"
+      ],
+      "role": "EVIDENCE"
+    },
+    {
+      "action": "ACCEPT",
+      "concern": "The three fresh v5 computational runs have registered run IDs, input/run/bundle hashes, explicit conditions, combustion mechanisms, evidence levels, passing bundles, and successful ledger integrity checks. This supports bounded computational replay, not experimental validation.",
+      "grounded_record_ids": [
+        "RUN-V50-COMB-CH4-REFERENCE",
+        "RUN-V50-COMB-H2-PHI105",
+        "RUN-V50-MOLECULE-CCO",
+        "BND-47B581A8964E",
+        "BND-A0AD79098BC8",
+        "BND-09953FC5B30E",
+        "EVD-2BF265653567",
+        "EVD-B4B5770122CD",
+        "EVD-AC44495B12BA",
+        "LEDGER-BUNDLE-001",
+        "LEDGER-LINEAGE-001",
+        "LEDGER-ARTIFACT-001"
+      ],
+      "role": "REPRODUCIBILITY"
+    },
+    {
+      "action": "CREATE_RESEARCH_GAP",
+      "concern": "Exact environment-level reproduction is not established because the supplied state does not expose engine/package versions, complete environment manifests, full execution configurations, or applicable dataset/model hashes. Bundle PASS verifies provenance and integrity, not fresh engine re-execution.",
+      "grounded_record_ids": [
+        "BND-47B581A8964E",
+        "BND-A0AD79098BC8",
+        "BND-09953FC5B30E",
+        "LEDGER-BUNDLE-001",
+        "LEDGER-ARTIFACT-001"
+      ],
+      "role": "REPRODUCIBILITY"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "The phi=1.05 combustion extension is reproducible only as a bounded E3 Cantera equilibrium result under declared conditions. No compatible E3-to-E4 comparison or matched experimental observation is recorded.",
+      "grounded_record_ids": [
+        "RUN-V50-COMB-H2-PHI105",
+        "BND-A0AD79098BC8",
+        "EVD-B4B5770122CD",
+        "GAP-E3-E4-COMPARISON",
+        "CH-V45-COMBUSTION",
+        "DECISION-REVISION-V50-COMB-PHI105"
+      ],
+      "role": "REPRODUCIBILITY"
+    },
+    {
+      "action": "DEFER_EXTERNAL",
+      "concern": "Docking reproducibility and interpretation remain dependent on the single 1PXX receptor/protocol configuration, with no independent structure or measured binding validation. The E2 ceiling and non-efficacy boundary should remain in force.",
+      "grounded_record_ids": [
+        "CH-V45-COX2",
+        "CH-V45-DOCKING-DECISION",
+        "CLM-COX2-1PXX-V2",
+        "CLM-DOCKING-DECISION-BOUNDARY"
+      ],
+      "role": "REPRODUCIBILITY"
+    },
+    {
+      "action": "DEFER_EXTERNAL",
+      "concern": "Condition-complete external reproducibility remains blocked: the solubility records are OOD, battery records lack required capacity/resistance/uncertainty fields, and materials records lack matched condition-complete observations. Existing no-decision boundaries should be preserved.",
+      "grounded_record_ids": [
+        "CH-V45-SOLUBILITY-EXTERNAL",
+        "CH-V45-SOLUBILITY-FAILURE",
+        "CH-V45-BATTERY",
+        "CH-V45-MATERIALS",
+        "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+        "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+        "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+        "CLM-SOLUBILITY-NO-DECISION",
+        "CLM-BATTERY-NO-DECISION",
+        "CLM-MATERIALS-CONDITION-GAP"
+      ],
+      "role": "REPRODUCIBILITY"
+    }
+  ]
+}

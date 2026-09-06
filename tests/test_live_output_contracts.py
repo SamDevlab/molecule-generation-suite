@@ -6,7 +6,7 @@ import subprocess
 
 import pytest
 
-from research_os.oracle import CodexCliTransport, CodexLiveProvider, LiveCodexProtocolError, LiveOutputContract
+from research_os.oracle import CodexCliTransport, CodexLiveProvider, LiveCodexProtocolError, LiveCodexUnavailable, LiveFailureCode, LiveFailureStage, LiveOutputContract
 
 
 CONSISTENCY_CONTEXT = {"consistency_contract": {"allowed_limitation_codes": ["PROTOCOL_SENSITIVITY"]}}
@@ -166,6 +166,52 @@ def test_route_15_normal_operation_rejects_direct_consistency_object(monkeypatch
     transport = _transport(monkeypatch, _direct(_consistency_response()))
     with pytest.raises(LiveCodexProtocolError):
         transport("scientific_review", {}, {})
+
+
+def test_schema_compat_01_provider_schema_keeps_exact_structural_contract():
+    schema_path = Path(__file__).resolve().parents[1] / "src" / "research_os" / "oracle" / "live_consistency.schema.json"
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    assert schema["required"] == [
+        "answer", "grounding_status", "grounded_record_ids",
+        "primary_record_id", "limitation_codes", "limitations",
+    ]
+    assert schema["additionalProperties"] is False
+    assert not {"allOf", "if", "then", "uniqueItems", "minItems", "maxItems"}.intersection(schema)
+    CodexCliTransport._validate_transport_output(_consistency_response(), contract=LiveOutputContract.CONSISTENCY)
+
+
+@pytest.mark.parametrize(
+    "mutator",
+    [
+        lambda response: response.pop("primary_record_id"),
+        lambda response: response.pop("limitation_codes"),
+        lambda response: response.__setitem__("extra", True),
+        lambda response: response.__setitem__("grounding_status", "INVALID"),
+        lambda response: response.__setitem__("limitation_codes", ["NOT_CANONICAL"]),
+    ],
+)
+def test_schema_compat_02_to_06_invalid_structures_fail_closed(monkeypatch, mutator):
+    response = _consistency_response()
+    mutator(response)
+    transport = _transport(monkeypatch, _direct(response))
+    with pytest.raises(LiveCodexProtocolError):
+        transport("final_exam_followup", {}, CONSISTENCY_CONTEXT)
+
+
+def test_route_16_provider_schema_admission_error_is_typed_and_bounded(monkeypatch):
+    def fake_run(command, **kwargs):
+        return subprocess.CompletedProcess(command, 2, stdout="", stderr="invalid_json_schema: unsupported keyword allOf; secret=redacted")
+
+    monkeypatch.setattr("research_os.oracle.provider.subprocess.run", fake_run)
+    transport = CodexCliTransport(executable="codex", environment={})
+    transport.executable = "codex"
+    with pytest.raises(LiveCodexUnavailable, match="provider_error_code=invalid_json_schema"):
+        transport("final_exam_followup", {}, CONSISTENCY_CONTEXT)
+    diagnostic = transport.last_invocation_diagnostic
+    assert diagnostic.failure_code == LiveFailureCode.OUTPUT_SCHEMA_ADMISSION_ERROR.value
+    assert diagnostic.failure_stage == LiveFailureStage.OUTPUT_SCHEMA_ADMISSION.value
+    assert diagnostic.schema_status == "NOT_CHECKED"
+    assert diagnostic.provider_error_code == "invalid_json_schema"
 
 
 class _RecordingProviderTransport:

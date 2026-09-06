@@ -75,7 +75,7 @@ CONSISTENCY_LIMITATION_CODES = frozenset({
 })
 
 
-ACCEPTANCE_NAMESPACE_PATTERN = re.compile(r"^\.research-os-live-5\.0-top-level(?:-attempt-\d+)?$")
+ACCEPTANCE_NAMESPACE_PATTERN = re.compile(r"^\.research-os-live-5\.0-(?:top-level(?:-attempt-\d+)?|consistency-schema-smoke(?:-attempt-\d+)?)$")
 RECOGNIZED_ACCEPTANCE_ARTIFACTS = frozenset({
     "top-level-owner-diagnostic.json",
     "top-level-preflight.json",

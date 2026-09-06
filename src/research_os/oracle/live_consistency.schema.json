@@ -20,8 +20,7 @@
     },
     "grounded_record_ids": {
       "type": "array",
-      "items": {"type": "string"},
-      "uniqueItems": true
+      "items": {"type": "string"}
     },
     "primary_record_id": {"type": ["string", "null"]},
     "limitation_codes": {
@@ -42,32 +41,11 @@
           "SINGLE_STRUCTURE_DEPENDENCE",
           "UNCERTAINTY_LIMITED"
         ]
-      },
-      "uniqueItems": true
+      }
     },
     "limitations": {
       "type": "array",
       "items": {"type": "string"}
     }
-  },
-  "allOf": [
-    {
-      "if": {"properties": {"grounding_status": {"const": "GROUNDED"}}},
-      "then": {
-        "properties": {
-          "grounded_record_ids": {"minItems": 1},
-          "primary_record_id": {"type": "string"}
-        }
-      }
-    },
-    {
-      "if": {"properties": {"grounding_status": {"const": "NO_GROUNDED_ANSWER"}}},
-      "then": {
-        "properties": {
-          "grounded_record_ids": {"maxItems": 0},
-          "primary_record_id": {"type": "null"}
-        }
-      }
-    }
-  ]
+  }
 }
