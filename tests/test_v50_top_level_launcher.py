@@ -549,9 +549,10 @@ def test_next_attempt_namespace_never_reuses_nonempty_attempt(tmp_path: Path):
 
 
 class _ConsistencyFixtureSequence:
-    def __init__(self, responses, known_ids):
+    def __init__(self, responses, known_ids, context_seed=None):
         self.responses = iter(responses)
         self.known_ids = set(known_ids)
+        self.context_seed = dict(context_seed or {})
         self.contexts = []
         self.calls = []
         self.invocations = []
@@ -563,6 +564,7 @@ class _ConsistencyFixtureSequence:
             "known_record_ids": sorted(self.known_ids),
             "ALLOWED_GROUNDED_RECORD_IDS": sorted(self.known_ids),
         }
+        context.update(self.context_seed)
         if extra:
             context.update(extra)
         return context
@@ -682,9 +684,167 @@ def test_cons_15_run_b_receives_only_frozen_basis_and_not_run_a_prose():
     assert result["status"] == "PASS"
     context_b = sequence.contexts[1]
     assert context_b["CONSISTENCY_GROUNDING_BASIS"] == ["A", "B", "C"]
+    assert context_b["CONSISTENCY_SIGNATURE_BASIS"] == {
+        "grounding_status": "GROUNDED",
+        "grounded_record_ids": ["A", "B", "C"],
+        "primary_record_id": "A",
+        "limitation_codes": [],
+    }
     assert context_b["ALLOWED_GROUNDED_RECORD_IDS"] == ["A", "B", "C"]
     assert context_b["known_record_ids"] == ["A", "B", "C"]
     assert "run A private prose" not in json.dumps(context_b)
+
+
+def test_sig_01_launcher_freezes_the_complete_signature_before_run_b():
+    result, sequence = _run_consistency_pair(
+        _consistency_response(("B", "A"), primary="B", codes=("OUT_OF_DOMAIN",)),
+        _consistency_response(("A", "B"), primary="B", codes=("OUT_OF_DOMAIN",)),
+    )
+    assert result["status"] == "PASS"
+    assert sequence.contexts[1]["CONSISTENCY_SIGNATURE_BASIS"] == {
+        "grounding_status": "GROUNDED",
+        "grounded_record_ids": ["A", "B"],
+        "primary_record_id": "B",
+        "limitation_codes": ["OUT_OF_DOMAIN"],
+    }
+
+
+def test_sig_02_run_b_context_has_no_run_a_response_or_narrative():
+    _, sequence = _run_consistency_pair(
+        _consistency_response(("A",), primary="A", answer="RUN_A_SECRET", limitations=("Run A wording",)),
+        _consistency_response(("A",), primary="A", answer="Run B wording", limitations=("Run B wording",)),
+    )
+    context_b = sequence.contexts[1]
+    assert "RUN_A_SECRET" not in json.dumps(context_b)
+    assert "Run A wording" not in json.dumps(context_b)
+    assert set(context_b["CONSISTENCY_SIGNATURE_BASIS"]) == {"grounding_status", "grounded_record_ids", "primary_record_id", "limitation_codes"}
+
+
+def test_sig_03_primary_drift_is_cross_run_failure_attributed_to_run_b():
+    result, sequence = _run_consistency_pair(
+        _consistency_response(("A", "B"), primary="A"),
+        _consistency_response(("A", "B"), primary="B"),
+    )
+    assert result["failed_pair_index"] == 1
+    assert result["run_a_call_id"] == 1
+    assert result["run_b_call_id"] == 2
+    assert result["failed_call_id"] == 2
+    assert result["failure_attribution"] == "CROSS_RUN_RUN_B"
+    assert launcher._final_gate_failure_fields(sequence, result)["failed_call_id"] == 2
+
+
+def test_sig_04_limitation_code_drift_is_cross_run_failure_attributed_to_run_b():
+    result, _ = _run_consistency_pair(
+        _consistency_response(("A",), primary="A", codes=("OUT_OF_DOMAIN",)),
+        _consistency_response(("A",), primary="A", codes=("PROTOCOL_SENSITIVITY",)),
+    )
+    assert result["failure_attribution"] == "CROSS_RUN_RUN_B"
+    assert result["consistency_failure_code"] == ConsistencyFailureCode.LIMITATION_DRIFT.value
+
+
+def test_sig_05_grounding_status_drift_is_cross_run_failure_attributed_to_run_b():
+    result, _ = _run_consistency_pair(
+        _consistency_response(("A",), primary="A"),
+        _consistency_response((), status="NO_GROUNDED_ANSWER"),
+    )
+    assert result["failure_attribution"] == "CROSS_RUN_RUN_B"
+    assert result["consistency_failure_code"] == ConsistencyFailureCode.GROUNDING_STATUS_DRIFT.value
+
+
+def test_sig_06_same_signature_with_different_answer_and_limitations_passes():
+    result, _ = _run_consistency_pair(
+        _consistency_response(("A",), primary="A", answer="one", limitations=("narrative one",)),
+        _consistency_response(("A",), primary="A", answer="two", limitations=("narrative two",)),
+    )
+    assert result["status"] == "PASS"
+
+
+def test_sig_07_signature_ordering_is_normalized_before_digest_and_comparison():
+    result, _ = _run_consistency_pair(
+        _consistency_response(("C", "A", "B"), primary="B", codes=("OUT_OF_DOMAIN", "PROTOCOL_SENSITIVITY")),
+        _consistency_response(("B", "C", "A"), primary="B", codes=("PROTOCOL_SENSITIVITY", "OUT_OF_DOMAIN")),
+    )
+    assert result["status"] == "PASS"
+    assert result["pairs"][0]["consistency_signature_a"]["digest"] == result["pairs"][0]["consistency_signature_b"]["digest"]
+
+
+def test_sig_08_run_a_failure_is_attributed_to_run_a_and_b_is_not_started():
+    response_a = _consistency_response(("A",), primary="A")
+    response_a.pop("primary_record_id")
+    result, sequence = _run_consistency_pair(response_a, _consistency_response(("A",), primary="A"))
+    assert result["failure_attribution"] == "RUN_A"
+    assert result["failed_call_id"] == 1
+    assert len(sequence.calls) == 1
+
+
+def test_sig_09_arbitrary_context_signature_cannot_override_launcher_basis():
+    responses = tuple(item for _ in range(5) for item in (_consistency_response(("A",), primary="A"), _consistency_response(("A",), primary="A")))
+    sequence = _ConsistencyFixtureSequence(
+        responses,
+        ("A", "B"),
+        context_seed={"CONSISTENCY_SIGNATURE_BASIS": {"grounding_status": "NO_GROUNDED_ANSWER", "grounded_record_ids": [], "primary_record_id": None, "limitation_codes": []}},
+    )
+    result = launcher._consistency(sequence, {"response": {}})
+    assert result["status"] == "PASS"
+    assert sequence.contexts[1]["CONSISTENCY_SIGNATURE_BASIS"]["grounded_record_ids"] == ["A"]
+
+
+def test_sig_10_only_launcher_constructs_basis_from_validated_run_a_fields():
+    _, sequence = _run_consistency_pair(_consistency_response(("A",), primary="A", codes=("OUT_OF_DOMAIN",)), _consistency_response(("A",), primary="A", codes=("OUT_OF_DOMAIN",)))
+    contract = sequence.contexts[1]["consistency_contract"]
+    assert contract["CONSISTENCY_SIGNATURE_BASIS"] == sequence.contexts[1]["CONSISTENCY_SIGNATURE_BASIS"]
+    assert "answer" not in contract["CONSISTENCY_SIGNATURE_BASIS"]
+    assert "limitations" not in contract["CONSISTENCY_SIGNATURE_BASIS"]
+
+
+def test_sig_11_run_b_contract_failure_is_attributed_to_run_b():
+    response_b = _consistency_response(("A",), primary="A")
+    response_b.pop("primary_record_id")
+    result, sequence = _run_consistency_pair(_consistency_response(("A",), primary="A"), response_b)
+    assert result["consistency_failure_code"] == ConsistencyFailureCode.RUN_B_GROUNDING_FAILURE.value
+    assert result["failed_call_id"] == 2
+    assert launcher._final_gate_failure_fields(sequence, result)["failed_call_id"] == 2
+
+
+def test_sig_12_cross_run_gate_keeps_pair_and_b_call_metadata_with_grounding_failure_elsewhere():
+    result, sequence = _run_consistency_pair(_consistency_response(("A", "B"), primary="A"), _consistency_response(("A", "B"), primary="B"))
+    sequence.response_validation_failures.append(type("Failure", (), {
+        "failure_code": GroundingFailureCode.UNKNOWN_GROUNDED_RECORD_ID.value,
+        "call_id": 99,
+        "label": "V5-FOLLOWUP-99",
+        "operation": "final_exam_followup",
+    })())
+    fields = launcher._final_gate_failure_fields(sequence, result)
+    assert fields["failed_call_id"] == 99
+    assert fields["failed_pair_index"] == 1
+    assert fields["run_a_call_id"] == 1
+    assert fields["run_b_call_id"] == 2
+
+
+def test_sig_13_provider_prompt_requires_full_signature_and_excludes_run_a_prose():
+    context = {
+        "consistency_run": "B",
+        "consistency_contract": {
+            "CONSISTENCY_SIGNATURE_BASIS": {
+                "grounding_status": "GROUNDED",
+                "grounded_record_ids": ["RUN-1"],
+                "primary_record_id": "RUN-1",
+                "limitation_codes": ["PROTOCOL_SENSITIVITY"],
+            },
+            "allowed_limitation_codes": ["PROTOCOL_SENSITIVITY"],
+        },
+        "CONSISTENCY_SIGNATURE_BASIS": {
+            "grounding_status": "GROUNDED",
+            "grounded_record_ids": ["RUN-1"],
+            "primary_record_id": "RUN-1",
+            "limitation_codes": ["PROTOCOL_SENSITIVITY"],
+        },
+        "ALLOWED_GROUNDED_RECORD_IDS": ["RUN-1"],
+    }
+    prompt = CodexCliTransport._prompt({"operation": "final_exam_followup", "payload": {}, "context": context})
+    assert "CONSISTENCY_SIGNATURE_BASIS" in prompt
+    assert "grounding_status" in prompt and "primary_record_id" in prompt and "limitation_codes" in prompt
+    assert "Do not use Run A answer or limitations prose" in prompt
 
 
 def test_consistency_signature_excludes_narrative_and_is_canonical():

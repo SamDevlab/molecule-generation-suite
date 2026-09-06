@@ -128,6 +128,7 @@ _PER_CALL_TRANSPORT_CONTEXT_KEYS = frozenset({
     "consistency_run",
     "consistency_contract",
     "CONSISTENCY_GROUNDING_BASIS",
+    "CONSISTENCY_SIGNATURE_BASIS",
     "ALLOWED_GROUNDED_RECORD_IDS",
     "known_record_ids",
 })
@@ -636,19 +637,29 @@ class CodexCliTransport:
         if consistency_context:
             contract = request_context["consistency_contract"]
             run = str(request_context.get("consistency_run", "B"))
-            basis = contract.get("CONSISTENCY_GROUNDING_BASIS", request_context.get("ALLOWED_GROUNDED_RECORD_IDS", []))
+            signature_basis = contract.get("CONSISTENCY_SIGNATURE_BASIS")
+            basis = (
+                signature_basis.get("grounded_record_ids", [])
+                if isinstance(signature_basis, Mapping)
+                else contract.get("CONSISTENCY_GROUNDING_BASIS", request_context.get("ALLOWED_GROUNDED_RECORD_IDS", []))
+            )
             limitation_codes = contract.get("allowed_limitation_codes", [])
             consistency_safety = "Controlled consistency contract: return the safe structured fields answer, grounding_status, grounded_record_ids, primary_record_id, limitation_codes, and limitations. Do not invent, derive, compose, abbreviate, expand or rename record IDs. Copy identifiers literally.\n"
             if run == "B":
+                frozen_signature_text = json.dumps(signature_basis, ensure_ascii=False, sort_keys=True) if isinstance(signature_basis, Mapping) else "MISSING"
                 consistency_safety += (
                     "This is the second run of a controlled scientific consistency test. No scientific Evidence, "
                     "Claims, Decisions, Runs or registered state changed between Run A and Run B. For this "
-                    "controlled comparison, your citation basis is frozen. You MUST use exactly the record IDs "
-                    "supplied in CONSISTENCY_GROUNDING_BASIS. Do not introduce additional record IDs, even if "
+                    "controlled comparison, the full consistency signature is frozen. You MUST reproduce exactly "
+                    "the grounding_status, grounded_record_ids, primary_record_id, and limitation_codes from "
+                    "CONSISTENCY_SIGNATURE_BASIS; normalize identifier and code ordering only. The narrative "
+                    "answer and limitations prose are not part of the signature and may be independently worded. "
+                    "Do not use Run A answer or limitations prose. You MUST use exactly the record IDs "
+                    "supplied in CONSISTENCY_SIGNATURE_BASIS.grounded_record_ids. Do not introduce additional record IDs, even if "
                     "another record appears scientifically relevant. If you cannot answer the same question "
                     "using the frozen basis, return NO_GROUNDED_ANSWER rather than inventing or adding another "
-                    "ID. The frozen basis for this invocation is "
-                    f"{json.dumps(basis, ensure_ascii=False, sort_keys=True)}. The supplied allowed limitation-code list is "
+                    "ID. The frozen full signature for this invocation is "
+                    f"{frozen_signature_text}. The supplied allowed limitation-code list is "
                     f"{json.dumps(limitation_codes, ensure_ascii=False, sort_keys=True)}.\n"
                 )
             else:

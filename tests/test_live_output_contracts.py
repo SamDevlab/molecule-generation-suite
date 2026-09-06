@@ -234,7 +234,7 @@ class _RecordingProviderTransport:
 
 
 def _provider_consistency_context(run="A"):
-    return {
+    context = {
         "consistency_run": run,
         "consistency_contract": {
             "CONSISTENCY_GROUNDING_BASIS": ["RUN-1"],
@@ -243,6 +243,16 @@ def _provider_consistency_context(run="A"):
         "ALLOWED_GROUNDED_RECORD_IDS": ["RUN-1"],
         "known_record_ids": ["RUN-1"],
     }
+    if run == "B":
+        signature = {
+            "grounding_status": "GROUNDED",
+            "grounded_record_ids": ["RUN-1"],
+            "primary_record_id": "RUN-1",
+            "limitation_codes": ["PROTOCOL_SENSITIVITY"],
+        }
+        context["CONSISTENCY_SIGNATURE_BASIS"] = signature
+        context["consistency_contract"]["CONSISTENCY_SIGNATURE_BASIS"] = signature
+    return context
 
 
 def test_integration_01_ordinary_followup_uses_global_context_only():
@@ -267,6 +277,8 @@ def test_integration_02_and_03_consistency_followups_propagate_per_call_context(
     assert transport.last_output_contract == "CONSISTENCY"
     assert transport.last_output_schema_name == "live_consistency.schema.json"
     assert transport.calls[-1][2]["consistency_run"] == run
+    if run == "B":
+        assert transport.calls[-1][2]["CONSISTENCY_SIGNATURE_BASIS"]["primary_record_id"] == "RUN-1"
 
 
 def test_integration_04_security_global_context_cannot_be_overwritten_per_call():

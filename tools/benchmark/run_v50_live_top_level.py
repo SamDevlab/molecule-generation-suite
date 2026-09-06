@@ -420,6 +420,19 @@ def _consistency_signature(response: Any) -> ConsistencySignature | None:
     )
 
 
+def _frozen_consistency_signature_basis(response: Any) -> dict[str, Any] | None:
+    """Return only the launcher-owned, prose-independent Run A signature."""
+    signature = _consistency_signature(response)
+    if signature is None:
+        return None
+    return {
+        "grounding_status": signature.grounding_status,
+        "grounded_record_ids": list(signature.grounded_record_ids),
+        "primary_record_id": signature.primary_record_id,
+        "limitation_codes": list(signature.limitation_codes),
+    }
+
+
 def _consistency_contract_diagnostics(response: Any, grounding: Any, basis: set[str]) -> tuple[bool, tuple[str, ...]]:
     reasons: list[str] = []
     if not isinstance(response, dict):
@@ -488,6 +501,53 @@ def _consistency_failure_code(
     return ConsistencyFailureCode.NONE.value
 
 
+_CROSS_RUN_CONSISTENCY_FAILURES = frozenset({
+    ConsistencyFailureCode.GROUNDING_STATUS_DRIFT.value,
+    ConsistencyFailureCode.CONSISTENCY_NEW_GROUNDED_RECORD_ID.value,
+    ConsistencyFailureCode.CONSISTENCY_MISSING_GROUNDED_RECORD_ID.value,
+    ConsistencyFailureCode.PRIMARY_RECORD_DRIFT.value,
+    ConsistencyFailureCode.LIMITATION_DRIFT.value,
+})
+
+
+def _consistency_failure_metadata(pair: Mapping[str, Any]) -> dict[str, Any]:
+    """Attribute pair failures to A, B, or the cross-run comparison."""
+    assessment = pair.get("consistency_assessment")
+    if not isinstance(assessment, Mapping) or assessment.get("valid") is True:
+        return {}
+    code = str(assessment.get("failure_code") or ConsistencyFailureCode.RUN_A_GROUNDING_FAILURE.value)
+    run_a_call_id = assessment.get("run_a_call_id")
+    run_b_call_id = assessment.get("run_b_call_id")
+    if code == ConsistencyFailureCode.RUN_A_GROUNDING_FAILURE.value:
+        failed_call_id = run_a_call_id
+        attribution = "RUN_A"
+    elif code == ConsistencyFailureCode.RUN_B_GROUNDING_FAILURE.value:
+        failed_call_id = run_b_call_id
+        attribution = "RUN_B"
+    elif code in _CROSS_RUN_CONSISTENCY_FAILURES:
+        # A cross-run diagnosis is established only after B has responded.
+        failed_call_id = run_b_call_id
+        attribution = "CROSS_RUN_RUN_B"
+    else:
+        failed_call_id = run_b_call_id or run_a_call_id
+        attribution = "CROSS_RUN_RUN_B" if run_b_call_id is not None else "RUN_A"
+    return {
+        "failed_pair_index": assessment.get("pair_index", pair.get("index")),
+        "run_a_call_id": run_a_call_id,
+        "run_b_call_id": run_b_call_id,
+        "failed_call_id": failed_call_id,
+        "failure_attribution": attribution,
+        "consistency_failure_code": code,
+    }
+
+
+def _blocked_consistency_result(pairs: list[dict[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {"status": "BLOCKED_BEFORE_PASS", "pairs": pairs}
+    if pairs:
+        result.update(_consistency_failure_metadata(pairs[-1]))
+    return result
+
+
 def _consistency(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[str, Any]:
     pairs: list[dict[str, Any]] = []
     for index, question in enumerate(FOLLOWUP_QUESTIONS[:5], 1):
@@ -535,9 +595,14 @@ def _consistency(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[s
                 failure_code=ConsistencyFailureCode.RUN_A_GROUNDING_FAILURE.value,
             )
             pairs.append({"index": index, "question": question, "run_a": response_a, "run_b": None, "calls": [call_a], "grounding_validations": [validation_a.to_dict()], "failed_response_validations": [failure_a.to_dict()] if failure_a else [], "contract_failure_reasons": list(contract_failure_reasons_a), "consistency_grounding_basis": list(normalized_a), "consistency_signature_a": _consistency_signature(response_a).to_dict() if _consistency_signature(response_a) else None, "consistency_signature_b": None, "consistency_assessment": assessment.to_dict(), "equivalent": False})
-            return {"status": "BLOCKED_BEFORE_PASS", "pairs": pairs}
+            return _blocked_consistency_result(pairs)
 
-        frozen_basis = list(normalized_a)
+        frozen_signature_basis = _frozen_consistency_signature_basis(response_a)
+        if frozen_signature_basis is None:
+            # This is defensive: a valid Run A contract must always produce a
+            # complete canonical signature, and B must never run without it.
+            return _blocked_consistency_result(pairs)
+        frozen_basis = list(frozen_signature_basis["grounded_record_ids"])
         response_b, call_b = sequence.invoke(
             f"TL-CONSISTENCY-{index:02d}-B",
             "final_exam_followup",
@@ -549,12 +614,14 @@ def _consistency(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[s
                     "final_exam": exam.get("response"),
                     "consistency_run": "B",
                     "CONSISTENCY_GROUNDING_BASIS": frozen_basis,
+                    "CONSISTENCY_SIGNATURE_BASIS": frozen_signature_basis,
                     "ALLOWED_GROUNDED_RECORD_IDS": frozen_basis,
                     "known_record_ids": frozen_basis,
                     "consistency_contract": {
                         **contract,
                         "run": "B",
                         "CONSISTENCY_GROUNDING_BASIS": frozen_basis,
+                        "CONSISTENCY_SIGNATURE_BASIS": frozen_signature_basis,
                         "frozen_grounding_basis": True,
                     },
                 },
@@ -622,7 +689,7 @@ def _consistency(sequence: TopLevelLiveSequence, exam: dict[str, Any]) -> dict[s
         }
         pairs.append(pair)
         if not equivalent:
-            return {"status": "BLOCKED_BEFORE_PASS", "pairs": pairs}
+            return _blocked_consistency_result(pairs)
     return {"status": "PASS", "pairs": pairs}
 
 
@@ -734,6 +801,22 @@ def _consistency_failure_for_gate(consistency: Mapping[str, Any], call_id: int) 
     return str(code) if code else None
 
 
+def _consistency_gate_metadata(consistency: Mapping[str, Any]) -> dict[str, Any]:
+    """Expose pair/call attribution in the final gate without changing precedence."""
+    pair, assessment = _first_consistency_failure(consistency)
+    if pair is None or assessment is None:
+        return {}
+    metadata = _consistency_failure_metadata(pair)
+    if not metadata:
+        return {}
+    return {
+        "failed_pair_index": metadata.get("failed_pair_index"),
+        "run_a_call_id": metadata.get("run_a_call_id"),
+        "run_b_call_id": metadata.get("run_b_call_id"),
+        "failure_attribution": metadata.get("failure_attribution"),
+    }
+
+
 def _live_process_failure_fields(sequence: TopLevelLiveSequence, consistency: Mapping[str, Any]) -> dict[str, Any]:
     """Expose provider/process failures before scientific response failures."""
     for call in sequence.invocations:
@@ -766,17 +849,20 @@ def _final_gate_failure_fields(sequence: TopLevelLiveSequence, consistency: Mapp
     """Apply the final-gate precedence: live, grounding, then consistency."""
     process_fields = _live_process_failure_fields(sequence, consistency)
     if process_fields:
+        process_fields.update(_consistency_gate_metadata(consistency))
         return process_fields
     if sequence.response_validation_failures:
         fields = _response_failure_gate_fields(sequence)
         consistency_code = _consistency_failure_for_gate(consistency, int(fields["failed_call_id"]))
         if consistency_code:
             fields["consistency_failure_code"] = consistency_code
+        fields.update(_consistency_gate_metadata(consistency))
         return fields
     _, assessment = _first_consistency_failure(consistency)
     if assessment is None:
         return {}
-    call_id = assessment.get("run_a_call_id") or assessment.get("run_b_call_id")
+    metadata = _consistency_failure_metadata({"index": assessment.get("pair_index"), "consistency_assessment": assessment})
+    call_id = metadata.get("failed_call_id")
     call = next(
         (item for item in sequence.invocations if item.get("call_id") == call_id),
         None,
@@ -788,6 +874,7 @@ def _final_gate_failure_fields(sequence: TopLevelLiveSequence, consistency: Mapp
         "failed_call_id": call_id,
         "failed_label": call.get("label") if call else None,
         "failed_operation": call.get("operation") if call else None,
+        **_consistency_gate_metadata(consistency),
     }
 
 

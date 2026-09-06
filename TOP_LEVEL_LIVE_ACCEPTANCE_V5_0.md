@@ -1,6 +1,6 @@
 # Top-level Live acceptance — Research OS v5.0
 
-Status: **READY_FOR_TOP_LEVEL_SCHEMA_SMOKE**. The release gate remains **BLOCKED_BEFORE_PASS** until the provider-compatible schema smoke and then an external, genuinely top-level Codex owner completes the bounded Live stages and the resulting artifacts pass the final regression and audit gates.
+Status: **READY_FOR_TOP_LEVEL_LIVE_EXECUTION**. The release gate remains **BLOCKED_BEFORE_PASS** until a fresh external, genuinely top-level Codex owner completes all 39 bounded Live calls and the resulting artifacts pass the final regression and audit gates.
 
 ## Why this boundary exists
 
@@ -48,7 +48,7 @@ The sixth genuine external acceptance is preserved at `.research-os-live-5.0-top
 
 Attempt 6 then stopped before a response was accepted because the provider process returned `PROCESS_ERROR` during completion; `schema_status=NOT_CHECKED`, `failure_code=PROCESS_ERROR`, and the final gate preserved the secondary `consistency_failure_code=RUN_A_GROUNDING_FAILURE`. Cleanup passed with no owned child processes remaining and no child acceptance stages were started. This is an operational provider-admission finding, not scientific evidence. The provider-facing schema was subsequently reduced to the six required structural fields and deterministic validators retain the cross-field semantics. A bounded typed `OUTPUT_SCHEMA_ADMISSION_ERROR` diagnostic is now available for recognized provider schema rejection messages without persisting raw stderr.
 
-The next external action is a one-call fresh-namespace schema smoke. It must pass before the 39-call Attempt 7 launcher is permitted. This current Codex-owned task does not execute either Live action.
+The provider-compatible schema smoke completed in the fresh Attempt 2 namespace. Attempt 7 was then executed externally and is preserved below. This current Codex-owned task does not execute Live; the next external action is a fresh Attempt 8 after the implementation commit is pushed.
 
 ## Consistency-schema Smoke 1 — preserved
 
@@ -56,7 +56,15 @@ The first real external consistency-schema smoke is preserved immutably at `.res
 
 The overall smoke gate was `BLOCKED_BEFORE_PASS` only because `process-cleanup.json` aggregated both historical observer events for one PID instead of the final state: `RUNNING` followed by `EXITED` was incorrectly reported as `owned_child_processes_remaining=true`. This is classified as `PROCESS_EVENT_FINAL_STATE_AGGREGATION_BUG`, not a provider, schema, grounding, consistency, or scientific failure. Smoke 1 remains unchanged; no artifact is rewritten to make it pass.
 
-The cleanup implementation now aggregates the final observed event for each owned PID, and the next smoke automatically selects `.research-os-live-5.0-consistency-schema-smoke-attempt-2/`.
+The cleanup implementation now aggregates the final observed event for each owned PID, and the fresh Attempt 2 smoke passed.
+
+## Top-level Attempt 7 — preserved and classified
+
+Attempt 7 is preserved immutably at `.research-os-live-5.0-top-level-attempt-7/`. Its external run completed 37/39 calls: reviewers, final exam, all follow-ups, all stress cases, and four consistency pairs through Run B. Process cleanup passed, all completed calls had zero provider failures, Codex created zero Evidence, and no EvidenceLevel changed. Consistency pairs 1–3 passed; pair 4 passed process/schema/grounding checks for both runs but failed the scientific consistency comparison with `PRIMARY_RECORD_DRIFT`.
+
+The failure was an implementation contract gap: Run B received only Run A's frozen grounded-record-ID set, while `grounding_status`, `primary_record_id`, and canonical `limitation_codes` remained free to vary. The historical artifact is not rewritten and remains `BLOCKED_BEFORE_PASS` with `failed_pair_index=4`, `run_a_call_id=36`, and `run_b_call_id=37`. The final gate's old `failed_call_id=36` is part of that historical record; the corrected launcher attributes cross-run comparison failures to Run B.
+
+The implementation now freezes `CONSISTENCY_SIGNATURE_BASIS` as exactly `grounding_status`, sorted unique `grounded_record_ids`, `primary_record_id`, and sorted unique `limitation_codes`. Run B receives that basis without Run A answer/limitations prose; prose may vary independently. Individual Run A/Run B provider, schema, and grounding failures retain their own call attribution. A fresh Attempt 8 must execute all 39 calls; it must not resume Attempt 7 at calls 38–39.
 
 ## Official external command
 
@@ -66,7 +74,7 @@ Run from a separately owned terminal or Codex CLI process, after checking out `r
 .\.venv\Scripts\python.exe tools\benchmark\run_v50_live_top_level.py --run-all --expected-head (git rev-parse HEAD)
 ```
 
-The command performs preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. The Attempt 7 wrapper first runs the one-call consistency-schema smoke in a fresh namespace; only a smoke `PASS` permits the 39 blocked Live stages. The next run selects `.research-os-live-5.0-consistency-schema-smoke-attempt-2/` and, after smoke `PASS`, `.research-os-live-5.0-top-level-attempt-7/`; prior attempts are never overwritten and reruns select the next unused namespace.
+The command performs preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. The fresh schema smoke already passed in `.research-os-live-5.0-consistency-schema-smoke-attempt-2/`. The next external run must select `.research-os-live-5.0-top-level-attempt-8/`; prior attempts are never overwritten and a failed Attempt 7 is never resumed.
 
 | Stage | Calls |
 |---|---:|
@@ -91,7 +99,7 @@ Follow-up, stress, consistency, and final-exam responses must declare `grounding
 
 When a schema-valid response is rejected after execution, `follow-up-answers.json` preserves the valid prior answers, the completed call metadata, a `LiveResponseValidationFailure`, and only safe final response fields (`answer`, `grounding_status`, `grounded_record_ids`, and `limitations`). It never persists hidden reasoning or raw process output.
 
-Consistency runs use a separate controlled contract. Run A is validated against the normal registered state, then its literal grounded IDs are frozen as `CONSISTENCY_GROUNDING_BASIS`. Independent Run B receives exactly that basis and no Run A prose. Both A and B must return the strict six-field response from `live_consistency.schema.json`: `answer`, `grounding_status`, `grounded_record_ids`, `primary_record_id`, `limitation_codes`, and `limitations`. `primary_record_id` must be one literal member of the frozen basis for a grounded answer; `limitation_codes` must be drawn from `CONSISTENCY_LIMITATION_CODES`, and limitation prose is never parsed. Comparison uses a canonical `ConsistencySignature` with sorted unique IDs and codes, so narrative wording and ID ordering do not create false divergence. Any new, missing, unknown, or invented ID remains a failure, including a globally known ID outside Run A's frozen basis. Contract diagnostics distinguish `MISSING_PRIMARY_RECORD_ID`, `INVALID_PRIMARY_RECORD_ID`, `MISSING_LIMITATION_CODES`, `INVALID_LIMITATION_CODES`, `INVALID_LIMITATIONS`, and `INVALID_CONSISTENCY_RESPONSE`. The separate `ConsistencyFailureCode` is stored alongside the underlying `GroundingFailureCode`.
+Consistency runs use a separate controlled contract. Run A is validated against the normal registered state, then the launcher freezes `CONSISTENCY_SIGNATURE_BASIS` with exactly `grounding_status`, sorted unique `grounded_record_ids`, `primary_record_id`, and sorted unique `limitation_codes`. `CONSISTENCY_GROUNDING_BASIS` remains a compatibility projection of the frozen IDs. Independent Run B receives the full signature basis and no Run A answer or limitations prose. Both A and B must return the strict six-field response from `live_consistency.schema.json`: `answer`, `grounding_status`, `grounded_record_ids`, `primary_record_id`, `limitation_codes`, and `limitations`. `primary_record_id` must be one literal member of the frozen basis for a grounded answer; `limitation_codes` must be drawn from `CONSISTENCY_LIMITATION_CODES`, and limitation prose is never parsed. Comparison uses a canonical `ConsistencySignature` with sorted unique IDs and codes, so narrative wording and ID ordering do not create false divergence. Any new, missing, unknown, or invented ID remains a failure, including a globally known ID outside Run A's frozen basis. Contract diagnostics distinguish `MISSING_PRIMARY_RECORD_ID`, `INVALID_PRIMARY_RECORD_ID`, `MISSING_LIMITATION_CODES`, `INVALID_LIMITATION_CODES`, `INVALID_LIMITATIONS`, and `INVALID_CONSISTENCY_RESPONSE`. The separate `ConsistencyFailureCode` is stored alongside the underlying `GroundingFailureCode`; cross-run diagnoses record the pair index and both call IDs and attribute the failed call to Run B.
 
 The transport now selects one internal `LiveOutputContract` before `codex exec`: ordinary operations use the fixed `ENVELOPE` contract and `live_output.schema.json`; a `final_exam_followup`/`final_exam_followups` request with `context.consistency_contract` uses the fixed `CONSISTENCY` contract and `live_consistency.schema.json`. The schema registry is closed, the model cannot select it, arbitrary constructor paths are rejected, consistency JSON is direct rather than wrapped in `result`, and the provider parses according to the already-selected contract. `CodexLiveProvider` now merges only an explicit per-call allowlist into the transport context; security-sensitive global owner/state fields cannot be overwritten, and per-call consistency metadata cannot contaminate later calls. The envelope and consistency forms are each rejected when supplied to the other mode.
 
