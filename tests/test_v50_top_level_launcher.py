@@ -321,10 +321,10 @@ def test_failed_response_diagnostic_has_explicit_safe_contract():
     assert names == {"call_id", "label", "operation", "response_hash", "schema_status", "grounding_validation", "forbidden_field_validation", "returned_grounded_ids", "unknown_grounded_ids", "response_keys", "grounding_status", "failure_code"}
 
 
-def test_package_gate_remains_pre_5_before_live_pass():
+def test_package_gate_reports_released_v5():
     import importlib.metadata
 
-    assert importlib.metadata.version("research-os-core") != "5.0.0"
+    assert importlib.metadata.version("research-os-core") == "5.0.0"
 
 
 def test_final_gate_requires_exact_required_call_count():
