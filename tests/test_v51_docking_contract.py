@@ -10,6 +10,11 @@ def raw_request(tmp_path):
         "seed": 42, "exhaustiveness": 8, "cpu": 1, "num_modes": 9, "timeout": 30,
         "target_id": "TARGET-COX2", "species": "Homo sapiens",
         "receptor_metadata": {"structure_id": "5KIR", "source_id": "SRC-RCSB-5KIR", "sha256": "a" * 64},
+        "preparation_method": "openbabel.receptor-ligand-preparation.v1",
+        "scoring_function": "vina_default",
+        "protonation_assumptions": ("declared protonation retained",),
+        "charge_method": "gasteiger",
+        "engine_version": "vina-test",
     }
 
 

@@ -49,6 +49,20 @@ class PoseRecoveryResult:
     symmetry_permutations_tested: int
     reason_code: str | None = None
     diagnostics: Mapping[str, Any] = field(default_factory=dict)
+    metric_name: str = "pose_rmsd"
+    value_angstrom: float | None = None
+    unit: str = "angstrom"
+    atom_selection: str = "ALL_ATOM"
+    coverage: float = 0.0
+    heavy_atom_count: int = 0
+    excluded_atom_names: tuple[str, ...] = ()
+    symmetry_handling: str = "NONE"
+    algorithm_version: str = "research-os.pose-recovery.kabsch.v1"
+    reference_pose: str | None = None
+    candidate_pose: str | None = None
+    source_ids: tuple[str, ...] = ()
+    source_hashes: tuple[str, ...] = ()
+    limitations: tuple[str, ...] = ("computational pose metric; not experimental validation",)
 
     @property
     def valid(self) -> bool:
@@ -59,6 +73,10 @@ class PoseRecoveryResult:
         data["status"] = self.status.value
         data["mapping"] = [list(item) for item in self.mapping]
         data["diagnostics"] = dict(self.diagnostics)
+        data["excluded_atom_names"] = list(self.excluded_atom_names)
+        data["source_ids"] = list(self.source_ids)
+        data["source_hashes"] = list(self.source_hashes)
+        data["limitations"] = list(self.limitations)
         return data
 
 
@@ -83,7 +101,7 @@ def _kabsch(reference: np.ndarray, candidate: np.ndarray) -> tuple[float, float]
     return raw, aligned_rmsd
 
 
-def recover_pose(reference: Iterable[PoseAtom], candidate: Iterable[PoseAtom], *, ligand_identity: str, symmetric_atom_groups: Iterable[Iterable[str]] = (), max_symmetry_permutations: int = 4096) -> PoseRecoveryResult:
+def recover_pose(reference: Iterable[PoseAtom], candidate: Iterable[PoseAtom], *, ligand_identity: str, candidate_ligand_identity: str | None = None, symmetric_atom_groups: Iterable[Iterable[str]] = (), atom_selection: str = "ALL_ATOM", reference_pose: str | None = None, candidate_pose: str | None = None, source_ids: Iterable[str] = (), source_hashes: Iterable[str] = (), max_symmetry_permutations: int = 4096) -> PoseRecoveryResult:
     """Recover a chemically declared atom map and calculate aligned RMSD.
 
     ``symmetric_atom_groups`` must come from a chemical identity/topology
@@ -93,11 +111,20 @@ def recover_pose(reference: Iterable[PoseAtom], candidate: Iterable[PoseAtom], *
 
     if not ligand_identity.strip():
         return _invalid(PoseRecoveryStatus.REJECTED, ligand_identity, "LIGAND_IDENTITY_MISSING", "ligand identity is required")
+    if candidate_ligand_identity is not None and candidate_ligand_identity != ligand_identity:
+        return _invalid(PoseRecoveryStatus.REJECTED, ligand_identity, "LIGAND_IDENTITY_MISMATCH", "reference and candidate ligand identities differ")
     reference_atoms, candidate_atoms = tuple(reference), tuple(candidate)
     if not reference_atoms or not candidate_atoms:
         return _invalid(PoseRecoveryStatus.REJECTED, ligand_identity, "EMPTY_POSE", "reference and candidate poses must contain atoms")
+    original_reference_count = len(reference_atoms)
+    if atom_selection not in {"ALL_ATOM", "HEAVY_ATOM"}:
+        return _invalid(PoseRecoveryStatus.REJECTED, ligand_identity, "ATOM_SELECTION_UNSUPPORTED", f"unsupported atom selection: {atom_selection}")
+    excluded = tuple(atom.atom_name for atom in reference_atoms if atom_selection == "HEAVY_ATOM" and atom.element.strip().upper() == "H")
+    if atom_selection == "HEAVY_ATOM":
+        reference_atoms = tuple(atom for atom in reference_atoms if atom.element.strip().upper() != "H")
+        candidate_atoms = tuple(atom for atom in candidate_atoms if atom.element.strip().upper() != "H")
     if len(reference_atoms) != len(candidate_atoms):
-        return _invalid(PoseRecoveryStatus.REJECTED, ligand_identity, "ATOM_COUNT_MISMATCH", "reference and candidate atom counts differ", atom_count=min(len(reference_atoms), len(candidate_atoms)))
+        return _invalid(PoseRecoveryStatus.INDETERMINATE, ligand_identity, "ATOM_COUNT_MISMATCH", "reference and candidate atom counts differ", atom_count=min(len(reference_atoms), len(candidate_atoms)))
     if any(atom.element.strip().upper() == "" for atom in (*reference_atoms, *candidate_atoms)):
         return _invalid(PoseRecoveryStatus.REJECTED, ligand_identity, "ELEMENT_MISSING", "every atom must have an element", atom_count=len(reference_atoms))
     candidate_by_name: dict[str, list[int]] = {}
@@ -155,5 +182,17 @@ def recover_pose(reference: Iterable[PoseAtom], candidate: Iterable[PoseAtom], *
             best = candidate_key
     if best is None:
         return _invalid(PoseRecoveryStatus.REJECTED, ligand_identity, "CHEMICAL_MAPPING_MISMATCH", "no declared atom map preserves element identity", atom_count=len(reference_atoms))
-    aligned, raw, _indices, mapping_names = best
-    return PoseRecoveryResult(PoseRecoveryStatus.VALID, ligand_identity, len(reference_atoms), "SYMMETRY_PERMUTATION" if groups else "ATOM_NAME", mapping_names, raw, aligned, permutation_count, diagnostics={"algorithm": "kabsch", "symmetry_groups": [list(group) for group in groups], "evidence_ceiling": "E2_COMPUTATIONAL"})
+    aligned, raw, mapping_indices, mapping_names = best
+    reference_lookup = {atom.atom_name: atom for atom in reference_atoms}
+    candidate_lookup = {atom.atom_name: atom for atom in candidate_atoms}
+    for ref_index, candidate_index in enumerate(mapping_indices):
+        ref_atom = reference_atoms[ref_index]
+        candidate_atom = candidate_atoms[candidate_index]
+        if ref_atom.neighbors or candidate_atom.neighbors:
+            ref_neighbor_elements = sorted(reference_lookup[name].element.upper() for name in ref_atom.neighbors if name in reference_lookup)
+            candidate_neighbor_elements = sorted(candidate_lookup[name].element.upper() for name in candidate_atom.neighbors if name in candidate_lookup)
+            if ref_neighbor_elements != candidate_neighbor_elements:
+                return _invalid(PoseRecoveryStatus.INDETERMINATE, ligand_identity, "CONNECTIVITY_MISMATCH", "mapped atoms do not preserve declared neighbor element signatures", atom_count=len(reference_atoms))
+    coverage = len(reference_atoms) / original_reference_count if original_reference_count else 0.0
+    diagnostics = {"algorithm": "kabsch", "symmetry_groups": [list(group) for group in groups], "evidence_ceiling": "E2_COMPUTATIONAL", "metrics": {"raw_rmsd": {"value": raw, "unit": "angstrom"}, "aligned_rmsd": {"value": aligned, "unit": "angstrom"}}}
+    return PoseRecoveryResult(PoseRecoveryStatus.VALID, ligand_identity, len(reference_atoms), "SYMMETRY_PERMUTATION" if groups else "ATOM_NAME", mapping_names, raw, aligned, permutation_count, diagnostics=diagnostics, metric_name="pose_rmsd_aligned", value_angstrom=aligned, atom_selection=atom_selection, coverage=coverage, heavy_atom_count=sum(atom.element.strip().upper() != "H" for atom in reference_atoms), excluded_atom_names=excluded, symmetry_handling="DECLARED_GROUPS" if groups else "NONE", reference_pose=reference_pose, candidate_pose=candidate_pose, source_ids=tuple(source_ids), source_hashes=tuple(source_hashes))

@@ -14,6 +14,9 @@ boundary for externally supplied research artifacts. It records:
 - local content SHA-256 when an artifact is available;
 - deterministic source fingerprint;
 - append-only integration with the existing `SourceRegistry`;
+- campaign ID, primary/secondary questions, declared protocol, expected
+  capability, parser/normalizer version and reproducibility metadata through
+  `ExternalResearchCampaign`;
 - idempotent re-registration of the same source identity;
 - `SOURCE_CHANGED` when an existing identity conflicts, without overwriting
   the canonical registry record.
@@ -50,10 +53,13 @@ explicit hash mismatch.
 ## Pose recovery and RMSD
 
 `research_os.docking.pose_recovery` requires ligand identity, element
-identity, and a deterministic atom map. Unique atom names map directly.
+identity, connectivity signatures when supplied, and a deterministic atom
+map. It supports explicit `ALL_ATOM` versus `HEAVY_ATOM` selection and atom
+reordering. Unique atom names map directly.
 Symmetry alternatives are enumerated only when a chemical caller declares the
 symmetry group; no favorable RMSD is allowed to invent a map. Search limits,
-mapping method, raw RMSD, aligned RMSD, and diagnostics are returned together.
+mapping method, raw RMSD, aligned RMSD, metric units, coverage, exclusions,
+source IDs/hashes, algorithm version and diagnostics are returned together.
 Ambiguous mappings are `INDETERMINATE`, not silently selected.
 
 The result is a computational diagnostic. It cannot create Evidence and its
@@ -64,8 +70,12 @@ declared evidence ceiling is `E2_COMPUTATIONAL`.
 The existing argv-based `VinaEngine` and `OpenBabelEngine` remain the only
 external adapters. The new registry records adapter names and capabilities;
 `EnginePreflight` verifies the signed manifest, adapter registration, declared
-capability, and runtime availability before execution. A missing executable
-returns a typed non-ready result and cannot be treated as an executed run.
+capability, supported input, expected version and runtime availability before
+execution. It distinguishes `ENGINE_AVAILABLE`, `ENGINE_UNAVAILABLE`,
+`ENGINE_VERSION_MISMATCH`, `ENGINE_INPUT_UNSUPPORTED`,
+`ENGINE_EXECUTION_FAILED`, `ENGINE_TIMEOUT` and `ENGINE_OUTPUT_INVALID`. A
+missing executable returns a typed non-ready result and cannot be treated as
+an executed run.
 
 `DockingExecutionContract` now binds protocol ID, engine ID, paths, grid,
 seed, exhaustiveness, CPU, modes, timeout, target identity, source/hash

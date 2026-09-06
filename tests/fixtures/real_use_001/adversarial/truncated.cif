@@ -1,0 +1,9 @@
+data_TRUNCATED
+_entry.id TRUNCATED
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_comp_id
+HETATM 1 C C1 LIG

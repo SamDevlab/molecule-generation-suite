@@ -45,6 +45,8 @@ This cycle preserves the canonical evidence ceiling and authority model:
   structure identity;
 - RMSD is a typed computational diagnostic and remains E2;
 - engine preflight can stop execution when Vina or Open Babel is unavailable;
+- engine preflight distinguishes version mismatch, unsupported input, timeout,
+  execution failure and invalid output;
 - source HTTP failures and local artifact hash failures remain distinct states;
 - no source is replaced silently and no historical record is overwritten.
 

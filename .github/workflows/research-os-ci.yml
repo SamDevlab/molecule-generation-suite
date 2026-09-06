@@ -2,7 +2,7 @@ name: research-os-ci
 
 on:
   push:
-    branches: ["research-os-v1.3"]
+    branches: ["research-os-v1.3", "research-os-5.1-external-research-ingestion"]
   pull_request:
 
 jobs:

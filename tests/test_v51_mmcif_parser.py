@@ -11,7 +11,7 @@ FIXTURE_DIR = Path(__file__).parent / "fixtures" / "real_use_001" / "cox2"
 def _registered(tmp_path, filename, source_id):
     path = FIXTURE_DIR / filename
     intake = ExternalResearchIntake(tmp_path / "intake")
-    intake.register(source_id=source_id, title=filename, uri=f"https://files.rcsb.org/download/{filename}", local_path=path, expected_sha256=sha256_file(path), provenance={"database": "RCSB PDB", "entry": path.stem})
+    intake.register(source_id=source_id, title=filename, uri=f"https://files.rcsb.org/download/{filename}", local_path=path, expected_sha256=sha256_file(path), provenance={"database": "RCSB PDB", "locator": path.stem})
     return path, intake
 
 
@@ -23,6 +23,8 @@ def test_mmcif_parser_normalizes_5kir_and_fails_closed_on_ambiguous_ligand(tmp_p
     assert structure.entry_id == "5KIR"
     assert structure.source_sha256 == sha256_file(path)
     assert "RCX" in structure.ligand_components
+    assert structure.chemical_components and structure.entity_info
+    assert structure.select_ligand("RCX", chain_id="A").atoms[0].b_factor is not None
     assert structure.select_ligand("RCX", chain_id="A").atom_count == 22
     try:
         structure.select_ligand("RCX")

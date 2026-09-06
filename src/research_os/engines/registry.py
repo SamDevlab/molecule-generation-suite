@@ -28,6 +28,9 @@ class EngineSpec:
     module: str | None = None
     executable_names: tuple[str, ...] = ()
     version_args: tuple[str, ...] = ()
+    supported_inputs: tuple[str, ...] = ()
+    supported_outputs: tuple[str, ...] = ()
+    capabilities: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -36,13 +39,15 @@ class EngineAdapterRegistration:
     adapter_name: str
     capabilities: tuple[str, ...]
     factory: Callable[[EngineManifest], Any]
+    supported_inputs: tuple[str, ...] = ()
+    supported_outputs: tuple[str, ...] = ()
 
 
 DEFAULT_ENGINE_SPECS = (
     EngineSpec("rdkit", "RDKit", EngineKind.DETERMINISTIC_LIBRARY, "rdkit"),
     EngineSpec("cantera", "Cantera", EngineKind.PHYSICS_ENGINE, "cantera"),
-    EngineSpec("openbabel", "Open Babel", EngineKind.PREPARATION_ENGINE, None, ("obabel", "obabel.exe"), ("-V",)),
-    EngineSpec("autodock-vina", "AutoDock Vina", EngineKind.COMPUTATIONAL_ENGINE, None, ("vina", "vina.exe"), ("--version",)),
+    EngineSpec("openbabel", "Open Babel", EngineKind.PREPARATION_ENGINE, None, ("obabel", "obabel.exe"), ("-V",), ("pdb", "sdf", "mol", "smi"), ("pdbqt", "pdb", "sdf"), ("structure_preparation", "conversion")),
+    EngineSpec("autodock-vina", "AutoDock Vina", EngineKind.COMPUTATIONAL_ENGINE, None, ("vina", "vina.exe"), ("--version",), ("pdbqt",), ("pdbqt", "log"), ("docking",)),
     EngineSpec("pymatgen", "pymatgen", EngineKind.MATERIALS_ENGINE, "pymatgen"),
     EngineSpec("matminer", "matminer", EngineKind.MATERIALS_ENGINE, "matminer"),
     EngineSpec("pycalphad", "pycalphad", EngineKind.PHYSICS_ENGINE, "pycalphad"),
@@ -70,11 +75,11 @@ class EngineRegistry:
         self._manifests: dict[str, EngineManifest] = {}
         self._adapters: dict[str, EngineAdapterRegistration] = {}
 
-    def register_adapter(self, engine_id: str, *, adapter_name: str, capabilities: tuple[str, ...], factory: Callable[[EngineManifest], Any]) -> EngineAdapterRegistration:
+    def register_adapter(self, engine_id: str, *, adapter_name: str, capabilities: tuple[str, ...], factory: Callable[[EngineManifest], Any], supported_inputs: tuple[str, ...] = (), supported_outputs: tuple[str, ...] = ()) -> EngineAdapterRegistration:
         key = self._alias(engine_id)
         if not any(spec.engine_id == key for spec in self.specs):
             raise KeyError(f"unknown engine: {engine_id}")
-        registration = EngineAdapterRegistration(key, str(adapter_name), tuple(str(item) for item in capabilities), factory)
+        registration = EngineAdapterRegistration(key, str(adapter_name), tuple(str(item) for item in capabilities), factory, tuple(str(item) for item in supported_inputs), tuple(str(item) for item in supported_outputs))
         self._adapters[key] = registration
         return registration
 
@@ -182,7 +187,7 @@ class EngineRegistry:
             configuration=config,
             environment_id=self.environment_id,
             limitations=(limitation,),
-            metadata={"probe": "import_or_version_argv", "configured": bool(config)},
+            metadata={"probe": "import_or_version_argv", "version_probe": list(spec.version_args), "configured": bool(config), "platform": __import__("platform").platform(), "invocation_method": "argv; shell=False", "supported_inputs": list(spec.supported_inputs), "supported_outputs": list(spec.supported_outputs), "capabilities": list(spec.capabilities), "timeout_seconds": 10, "resource_limits": {"version_probe_timeout_seconds": 10}},
         )
         self._manifests[key] = manifest
         return manifest

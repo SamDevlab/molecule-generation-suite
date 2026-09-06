@@ -46,6 +46,33 @@ class SourceAvailabilityCode(str, Enum):
     UNKNOWN_FAILURE = "UNKNOWN_FAILURE"
 
 
+class InputValidationState(str, Enum):
+    UNVALIDATED = "UNVALIDATED"
+    VALID = "VALID"
+    INVALID = "INVALID"
+
+
+class DomainState(str, Enum):
+    UNCHECKED = "UNCHECKED"
+    IN_DOMAIN = "IN_DOMAIN"
+    OUT_OF_DOMAIN = "OUT_OF_DOMAIN"
+    INDETERMINATE = "INDETERMINATE"
+
+
+class ExecutionState(str, Enum):
+    NOT_STARTED = "NOT_STARTED"
+    READY = "READY"
+    EXECUTED = "EXECUTED"
+    BLOCKED = "BLOCKED"
+
+
+class ReproducibilityState(str, Enum):
+    UNASSESSED = "UNASSESSED"
+    READY = "READY"
+    REPRODUCED = "REPRODUCED"
+    DIVERGED = "DIVERGED"
+
+
 @dataclass(frozen=True)
 class SourceAvailability:
     state: SourceState
@@ -74,6 +101,7 @@ class ExternalResearchSource:
     source_type: SourceType | str = SourceType.WEB
     local_path: str | None = None
     expected_sha256: str | None = None
+    source_revision: str | None = None
     state: SourceState | str = SourceState.SOURCE_REGISTERED
     availability: SourceAvailability | None = None
     document_sha256: str | None = None
@@ -111,6 +139,7 @@ class ExternalResearchSource:
             "title": self.title,
             "uri": self.uri,
             "source_type": self.source_type.value,
+            "source_revision": self.source_revision,
             "document_sha256": self.document_sha256,
             "provenance": self.provenance,
         }
@@ -168,12 +197,13 @@ class ExternalResearchIntake:
         self.root.mkdir(parents=True, exist_ok=True)
         self.source_registry = source_registry or SourceRegistry(self.root / "source-registry")
         self._records: dict[str, ExternalResearchSource] = {}
+        self._campaigns: dict[str, ExternalResearchCampaign] = {}
         for path in sorted(self.root.glob("*.external-source.json")):
             raw = json.loads(path.read_text(encoding="utf-8"))
             availability = raw.get("availability")
             item = ExternalResearchSource(
                 source_id=raw["source_id"], title=raw["title"], uri=raw["uri"], source_type=raw["source_type"],
-                local_path=raw.get("local_path"), expected_sha256=raw.get("expected_sha256"), state=raw["state"],
+                local_path=raw.get("local_path"), expected_sha256=raw.get("expected_sha256"), source_revision=raw.get("source_revision"), state=raw["state"],
                 availability=SourceAvailability(**availability) if availability else None,
                 document_sha256=raw.get("document_sha256"), source_fingerprint=raw.get("source_fingerprint"),
                 provenance=raw.get("provenance") or {}, registered_at=raw.get("registered_at") or datetime.now(timezone.utc).isoformat(),
@@ -181,6 +211,12 @@ class ExternalResearchIntake:
             if raw.get("digest") and raw["digest"] != item.digest:
                 raise ValueError(f"external source manifest digest mismatch: {path.name}")
             self._records[item.source_id] = item
+        for path in sorted(self.root.glob("*.external-campaign.json")):
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            item = ExternalResearchCampaign(**{key: value for key, value in raw.items() if key != "digest"})
+            if raw.get("digest") and raw["digest"] != item.digest:
+                raise ValueError(f"external campaign manifest digest mismatch: {path.name}")
+            self._campaigns[item.campaign_id] = item
 
     def get(self, source_id: str) -> ExternalResearchSource:
         try:
@@ -191,7 +227,19 @@ class ExternalResearchIntake:
     def list(self) -> tuple[ExternalResearchSource, ...]:
         return tuple(self._records.values())
 
-    def register(self, *, source_id: str, title: str, uri: str, source_type: SourceType | str = SourceType.WEB, local_path: str | Path | None = None, expected_sha256: str | None = None, provenance: Mapping[str, Any] | None = None) -> ExternalResearchSource:
+    def get_campaign(self, campaign_id: str) -> "ExternalResearchCampaign":
+        try:
+            return self._campaigns[campaign_id]
+        except KeyError as exc:
+            raise KeyError(f"external campaign not registered: {campaign_id}") from exc
+
+    def list_campaigns(self) -> tuple["ExternalResearchCampaign", ...]:
+        return tuple(self._campaigns.values())
+
+    def register(self, *, source_id: str, title: str, uri: str, source_type: SourceType | str = SourceType.WEB, local_path: str | Path | None = None, expected_sha256: str | None = None, source_revision: str | None = None, provenance: Mapping[str, Any] | None = None) -> ExternalResearchSource:
+        provenance = dict(provenance or {})
+        if not provenance.get("locator") or not provenance.get("database"):
+            raise ValueError("external source provenance requires database and locator")
         path = Path(local_path) if local_path is not None else None
         document_hash = sha256_file(path) if path is not None and path.is_file() else None
         if path is not None and not path.is_file():
@@ -206,7 +254,7 @@ class ExternalResearchIntake:
         else:
             availability = None
             state = SourceState.SOURCE_REGISTERED
-        item = ExternalResearchSource(source_id, title, uri, source_type, str(path) if path is not None else None, expected_sha256, state, availability, document_hash, None, provenance or {})
+        item = ExternalResearchSource(source_id, title, uri, source_type, str(path) if path is not None else None, expected_sha256, source_revision, state, availability, document_hash, None, provenance)
         existing = self._records.get(source_id)
         if existing is not None:
             if existing.source_fingerprint == item.source_fingerprint and existing.document_sha256 == item.document_sha256:
@@ -215,7 +263,7 @@ class ExternalResearchIntake:
             self._persist(changed)
             self._records[source_id] = changed
             return changed
-        record = SourceRecord(source_id=source_id, title=title, url=uri, document_hash=document_hash, source_type=source_type, metadata={"external_research": True, "local_path": str(path) if path else None, "source_fingerprint": item.source_fingerprint, "provenance": dict(provenance or {})})
+        record = SourceRecord(source_id=source_id, title=title, url=uri, document_hash=document_hash, source_type=source_type, edition=source_revision, metadata={"external_research": True, "local_path": str(path) if path else None, "source_fingerprint": item.source_fingerprint, "provenance": dict(provenance)})
         try:
             self.source_registry.register(record)
         except ValueError:
@@ -229,9 +277,29 @@ class ExternalResearchIntake:
         self._records[source_id] = item
         return item
 
+    def register_campaign(self, *, campaign_id: str, research_question: str, primary_question: str, secondary_questions: tuple[str, ...] = (), declared_protocol: Mapping[str, Any] | str, source_ids: tuple[str, ...], parser_normalizer_version: str, expected_capability: tuple[str, ...] = (), reproducibility_metadata: Mapping[str, Any] | None = None) -> "ExternalResearchCampaign":
+        campaign = ExternalResearchCampaign(campaign_id, research_question, primary_question, secondary_questions, declared_protocol, source_ids, parser_normalizer_version, expected_capability, reproducibility_metadata or {})
+        unknown = [source_id for source_id in campaign.source_ids if source_id not in self._records]
+        if unknown:
+            raise ValueError(f"unknown source IDs: {unknown}")
+        invalid = [source_id for source_id in campaign.source_ids if self._records[source_id].state != SourceState.SOURCE_VALID or not self._records[source_id].document_sha256]
+        if invalid:
+            raise ValueError(f"campaign inputs are not hash-validated: {invalid}")
+        existing = self._campaigns.get(campaign_id)
+        if existing is not None:
+            if existing.digest == campaign.digest:
+                return existing
+            raise ValueError(f"external campaign already registered with a different fingerprint: {campaign_id}")
+        self._persist_campaign(campaign)
+        self._campaigns[campaign_id] = campaign
+        return campaign
+
     def assess_remote(self, source_id: str, *, http_status: int | None = None, error: str | None = None, comparable: bool = True) -> ExternalResearchSource:
         current = self.get(source_id)
         availability = classify_remote_outcome(http_status=http_status, error=error, comparable=comparable)
+        local_intact = bool(current.local_path and current.document_sha256 and Path(current.local_path).is_file() and sha256_file(current.local_path) == current.document_sha256)
+        if local_intact and availability.state == SourceState.SOURCE_UNAVAILABLE:
+            availability = SourceAvailability(SourceState.SOURCE_VALID, availability.code, f"local artifact remains hash-valid; remote status: {availability.detail}", availability.http_status)
         item = ExternalResearchSource(**{**current.to_dict(include_digest=False), "state": availability.state, "availability": availability})
         self._persist(item)
         self._records[source_id] = item
@@ -258,3 +326,62 @@ class ExternalResearchIntake:
     def _persist(self, item: ExternalResearchSource) -> None:
         target = self.root / f"{item.source_id}.external-source.json"
         target.write_text(json.dumps(item.to_dict(), indent=2, sort_keys=True, ensure_ascii=False), encoding="utf-8")
+
+    def _persist_campaign(self, item: "ExternalResearchCampaign") -> None:
+        target = self.root / f"{item.campaign_id}.external-campaign.json"
+        target.write_text(json.dumps(item.to_dict(), indent=2, sort_keys=True, ensure_ascii=False), encoding="utf-8")
+
+
+@dataclass(frozen=True)
+class ExternalResearchCampaign:
+    campaign_id: str
+    research_question: str
+    primary_question: str
+    secondary_questions: tuple[str, ...]
+    declared_protocol: Mapping[str, Any] | str
+    source_ids: tuple[str, ...]
+    parser_normalizer_version: str
+    expected_capability: tuple[str, ...]
+    reproducibility_metadata: Mapping[str, Any]
+    input_validation_state: InputValidationState = InputValidationState.UNVALIDATED
+    domain_state: DomainState = DomainState.UNCHECKED
+    execution_state: ExecutionState = ExecutionState.NOT_STARTED
+    reproducibility_state: ReproducibilityState = ReproducibilityState.UNASSESSED
+    digest: str | None = None
+
+    def __post_init__(self) -> None:
+        if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}", self.campaign_id):
+            raise ValueError("campaign_id must be a stable path-safe identifier")
+        for name in ("research_question", "primary_question", "parser_normalizer_version"):
+            if not str(getattr(self, name)).strip():
+                raise ValueError(f"{name} is required")
+        if not self.source_ids:
+            raise ValueError("campaign requires at least one registered source")
+        if not self.declared_protocol:
+            raise ValueError("declared_protocol is required")
+        object.__setattr__(self, "secondary_questions", tuple(str(item) for item in self.secondary_questions))
+        object.__setattr__(self, "source_ids", tuple(str(item) for item in self.source_ids))
+        object.__setattr__(self, "expected_capability", tuple(str(item) for item in self.expected_capability))
+        object.__setattr__(self, "reproducibility_metadata", dict(self.reproducibility_metadata))
+        for name, enum_type in (("input_validation_state", InputValidationState), ("domain_state", DomainState), ("execution_state", ExecutionState), ("reproducibility_state", ReproducibilityState)):
+            value = getattr(self, name)
+            if not isinstance(value, enum_type):
+                object.__setattr__(self, name, enum_type(str(value)))
+        if self.digest is None:
+            object.__setattr__(self, "digest", sha256_json(self._hash_payload()))
+
+    def _hash_payload(self) -> dict[str, Any]:
+        data = asdict(self)
+        data.pop("digest", None)
+        for name in ("input_validation_state", "domain_state", "execution_state", "reproducibility_state"):
+            data[name] = getattr(self, name).value
+        if isinstance(self.declared_protocol, Mapping):
+            data["declared_protocol"] = dict(self.declared_protocol)
+        return data
+
+    @property
+    def valid(self) -> bool:
+        return self.digest == sha256_json(self._hash_payload())
+
+    def to_dict(self) -> dict[str, Any]:
+        return {**self._hash_payload(), "digest": self.digest}

@@ -32,3 +32,20 @@ def test_pose_recovery_does_not_guess_ambiguous_mapping():
     result = recover_pose(reference, candidate, ligand_identity="LIG-3")
     assert result.status == PoseRecoveryStatus.INDETERMINATE
     assert result.reason_code == "AMBIGUOUS_ATOM_MAPPING"
+
+
+def test_pose_recovery_handles_reordering_identity_mismatch_missing_atom_and_heavy_atom_metric():
+    reference = (atom("C1", "C", 0, 0, 0), atom("H1", "H", 0, 0, 1), atom("O1", "O", 1, 0, 0))
+    reordered = (atom("O1", "O", 1, 0, 0), atom("C1", "C", 0, 0, 0), atom("H1", "H", 0, 0, 1))
+    result = recover_pose(reference, reordered, ligand_identity="LIG-4", candidate_ligand_identity="LIG-4", atom_selection="HEAVY_ATOM", reference_pose="ref", candidate_pose="cand", source_ids=("SRC-A",), source_hashes=("a" * 64,))
+    assert result.valid
+    assert result.atom_selection == "HEAVY_ATOM"
+    assert result.atom_count == 2
+    assert result.heavy_atom_count == 2
+    assert result.coverage == 2 / 3
+    assert result.excluded_atom_names == ("H1",)
+    assert result.source_hashes == ("a" * 64,)
+    mismatch = recover_pose(reference, reordered, ligand_identity="LIG-4", candidate_ligand_identity="OTHER")
+    assert mismatch.status == PoseRecoveryStatus.REJECTED
+    missing = recover_pose(reference, reordered[:2], ligand_identity="LIG-4")
+    assert missing.status == PoseRecoveryStatus.INDETERMINATE
