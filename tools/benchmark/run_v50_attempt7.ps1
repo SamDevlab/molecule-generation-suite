@@ -7,8 +7,8 @@ $ErrorActionPreference = "Stop"
 $Repo = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Set-Location $Repo
 
-$branch = (git branch --show-current).Trim()
-$head = (git rev-parse HEAD).Trim()
+$branch = (@(git branch --show-current) -join "`n").Trim()
+$head = (@(git rev-parse HEAD) -join "`n").Trim()
 if ([string]::IsNullOrWhiteSpace($ExpectedHead)) {
     $ExpectedHead = $head
 }
@@ -27,8 +27,8 @@ if ($head -ne $ExpectedHead) {
     Write-Error "WRONG_HEAD: expected $ExpectedHead"
     exit 2
 }
-$dirty = (git status --porcelain).Trim()
-if (-not [string]::IsNullOrWhiteSpace($dirty)) {
+$dirty = @(git status --porcelain)
+if ($dirty.Count -gt 0) {
     Write-Error "DIRTY_WORKTREE: resolve changes before Live execution"
     exit 2
 }

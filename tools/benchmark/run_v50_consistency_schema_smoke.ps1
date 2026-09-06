@@ -8,7 +8,7 @@ $Repo = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Set-Location $Repo
 
 if ([string]::IsNullOrWhiteSpace($ExpectedHead)) {
-    $ExpectedHead = (git rev-parse HEAD).Trim()
+    $ExpectedHead = (@(git rev-parse HEAD) -join "`n").Trim()
 }
 
 Write-Host "=== Research OS v5 Consistency Schema Smoke ==="
