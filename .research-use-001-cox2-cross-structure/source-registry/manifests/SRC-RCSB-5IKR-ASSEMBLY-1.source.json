@@ -1,0 +1,24 @@
+{
+  "source_id": "SRC-RCSB-5IKR-ASSEMBLY-1",
+  "title": "RCSB PDB 5IKR official supplemental metadata",
+  "authors": [],
+  "organization": "RCSB Protein Data Bank",
+  "year": null,
+  "edition": null,
+  "doi": null,
+  "isbn": null,
+  "url": "https://data.rcsb.org/rest/v1/core/assembly/5IKR/1",
+  "license": null,
+  "retrieved_at": "2026-09-06T18:02:03.581118+00:00",
+  "document_hash": "2cd9aa994cfcd4e9714dbecc624a71340e7b7cf92852ccac28d84e39cb32209a",
+  "source_type": "database",
+  "metadata": {
+    "accession": "5IKR",
+    "artifact_role": "official assembly metadata",
+    "file_sha256": "2cd9aa994cfcd4e9714dbecc624a71340e7b7cf92852ccac28d84e39cb32209a",
+    "local_path": ".research-use-001-cox2-cross-structure\\sources\\5IKR.assembly-5IKR-1.json",
+    "source_policy": "DATA_ONLY; no downloaded content executed",
+    "path": ".research-use-001-cox2-cross-structure\\sources\\5IKR.assembly-5IKR-1.json"
+  },
+  "digest": "c699f8f7f0f31f6af4e502510e187d10451ca0a4a02c5e1d06d2a4e85fedd291"
+}

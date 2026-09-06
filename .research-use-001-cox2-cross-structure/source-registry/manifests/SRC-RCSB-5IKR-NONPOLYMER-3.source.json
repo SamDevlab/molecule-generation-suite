@@ -1,0 +1,24 @@
+{
+  "source_id": "SRC-RCSB-5IKR-NONPOLYMER-3",
+  "title": "RCSB PDB 5IKR official supplemental metadata",
+  "authors": [],
+  "organization": "RCSB Protein Data Bank",
+  "year": null,
+  "edition": null,
+  "doi": null,
+  "isbn": null,
+  "url": "https://data.rcsb.org/rest/v1/core/nonpolymer_entity/5IKR/3",
+  "license": null,
+  "retrieved_at": "2026-09-06T18:02:26.559312+00:00",
+  "document_hash": "204403055173d584da45388ce39c049327ae92bf56523c0ffb92326b3d0556e0",
+  "source_type": "database",
+  "metadata": {
+    "accession": "5IKR",
+    "artifact_role": "official non-polymer-entity metadata",
+    "file_sha256": "204403055173d584da45388ce39c049327ae92bf56523c0ffb92326b3d0556e0",
+    "local_path": ".research-use-001-cox2-cross-structure\\sources\\5IKR.nonpolymer-3.json",
+    "source_policy": "DATA_ONLY; no downloaded content executed",
+    "path": ".research-use-001-cox2-cross-structure\\sources\\5IKR.nonpolymer-3.json"
+  },
+  "digest": "96c14b9bfa4934b749c3c3859ad896464bcf78ec5742896d1cd412ac3a5a97ad"
+}

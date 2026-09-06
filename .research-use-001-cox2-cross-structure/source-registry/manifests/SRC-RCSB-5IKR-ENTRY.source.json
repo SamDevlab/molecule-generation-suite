@@ -1,0 +1,39 @@
+{
+  "source_id": "SRC-RCSB-5IKR-ENTRY",
+  "title": "RCSB PDB 5IKR official entry record",
+  "authors": [],
+  "organization": "RCSB Protein Data Bank",
+  "year": null,
+  "edition": null,
+  "doi": null,
+  "isbn": null,
+  "url": "https://data.rcsb.org/rest/v1/core/entry/5IKR",
+  "license": null,
+  "retrieved_at": "2026-09-06T18:01:29.231515+00:00",
+  "document_hash": "0fd101e7f08bc808fb839acf0124a9115633058ec4f978bfcfbc3ee5ce921a99",
+  "source_type": "database",
+  "metadata": {
+    "accession": "5IKR",
+    "artifact_role": "entry metadata",
+    "official_api_url": "https://data.rcsb.org/rest/v1/core/entry/5IKR",
+    "retrieval_timestamp_utc": "2026-09-06T18:01:29.231515+00:00",
+    "pdb_revision": "2.2",
+    "revision_date": "2026-08-12T00:00:00.000+00:00",
+    "organism": "Homo sapiens",
+    "mutation_count": 0,
+    "experimental_method": "X-RAY DIFFRACTION",
+    "resolution_angstrom": 2.342,
+    "ligand_id": "ID8",
+    "ligand_name": "2-[(2,3-DIMETHYLPHENYL)AMINO]BENZOIC ACID",
+    "polymer_auth_chains": [
+      "A",
+      "B"
+    ],
+    "validation_report": "NOT_RETRIEVED",
+    "source_policy": "DATA_ONLY; no downloaded content executed",
+    "file_sha256": "0fd101e7f08bc808fb839acf0124a9115633058ec4f978bfcfbc3ee5ce921a99",
+    "local_path": ".research-use-001-cox2-cross-structure\\sources\\5IKR.entry.json",
+    "path": ".research-use-001-cox2-cross-structure\\sources\\5IKR.entry.json"
+  },
+  "digest": "1043f2429e23efddc1b9b0efb47f6622272111e52a32bffacbc2e9c1ea577120"
+}

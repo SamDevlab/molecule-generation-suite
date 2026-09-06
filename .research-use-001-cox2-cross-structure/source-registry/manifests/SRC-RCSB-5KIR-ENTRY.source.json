@@ -1,0 +1,39 @@
+{
+  "source_id": "SRC-RCSB-5KIR-ENTRY",
+  "title": "RCSB PDB 5KIR official entry record",
+  "authors": [],
+  "organization": "RCSB Protein Data Bank",
+  "year": null,
+  "edition": null,
+  "doi": null,
+  "isbn": null,
+  "url": "https://data.rcsb.org/rest/v1/core/entry/5KIR",
+  "license": null,
+  "retrieved_at": "2026-09-06T18:01:27.607142+00:00",
+  "document_hash": "77f886173d2c06f76f9299799cc0c50ecd8ada8ef6068e58c97ac2072c261513",
+  "source_type": "database",
+  "metadata": {
+    "accession": "5KIR",
+    "artifact_role": "entry metadata",
+    "official_api_url": "https://data.rcsb.org/rest/v1/core/entry/5KIR",
+    "retrieval_timestamp_utc": "2026-09-06T18:01:27.607142+00:00",
+    "pdb_revision": "2.3",
+    "revision_date": "2026-08-12T00:00:00.000+00:00",
+    "organism": "Homo sapiens",
+    "mutation_count": 0,
+    "experimental_method": "X-RAY DIFFRACTION",
+    "resolution_angstrom": 2.697,
+    "ligand_id": "RCX",
+    "ligand_name": "Rofecoxib",
+    "polymer_auth_chains": [
+      "A",
+      "B"
+    ],
+    "validation_report": "NOT_RETRIEVED",
+    "source_policy": "DATA_ONLY; no downloaded content executed",
+    "file_sha256": "77f886173d2c06f76f9299799cc0c50ecd8ada8ef6068e58c97ac2072c261513",
+    "local_path": ".research-use-001-cox2-cross-structure\\sources\\5KIR.entry.json",
+    "path": ".research-use-001-cox2-cross-structure\\sources\\5KIR.entry.json"
+  },
+  "digest": "22c2be45005a3acee10a06e1c5c5bd67364d56c718c6e15a3d63fbfcab5b1586"
+}
