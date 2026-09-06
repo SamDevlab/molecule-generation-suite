@@ -342,7 +342,7 @@ def evaluate_worktree_acceptance(repo_root: str | os.PathLike[str], status_outpu
     All source, test, tool, documentation, configuration, and arbitrary
     untracked changes remain dirty.
     """
-    del repo_root  # status paths are deliberately repository-relative.
+    repo_root = Path(repo_root).resolve()
     allowed: list[str] = []
     unexpected: list[str] = []
     for line in status_output.splitlines():
@@ -362,6 +362,22 @@ def evaluate_worktree_acceptance(repo_root: str | os.PathLike[str], status_outpu
             if status_code == "!!" and not inside_namespace:
                 # Existing ignored Research OS state outside the top-level
                 # acceptance namespace is intentionally left untouched.
+                continue
+            if status_code == "!!" and inside_namespace and len(parts) == 2 and not parts[1]:
+                # Git may collapse an ignored, preserved acceptance namespace
+                # into one directory entry. Inspect its contents explicitly so
+                # recognized historical smoke/attempt artifacts remain allowed
+                # while an unknown file cannot hide inside the directory.
+                namespace_root = repo_root / namespace
+                for child in namespace_root.rglob("*") if namespace_root.is_dir() else ():
+                    if not child.is_file():
+                        continue
+                    relative = child.relative_to(repo_root).as_posix()
+                    relative_parts = relative.split("/")
+                    if len(relative_parts) == 2 and relative_parts[1] in RECOGNIZED_ACCEPTANCE_ARTIFACTS:
+                        allowed.append(relative)
+                    else:
+                        unexpected.append(relative)
                 continue
             if recognized:
                 allowed.append(path)

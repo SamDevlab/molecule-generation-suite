@@ -493,6 +493,34 @@ def test_worktree_policy_accepts_consistency_schema_smoke_artifact():
     assert result.allowed_paths == (".research-os-live-5.0-consistency-schema-smoke/live-consistency.json",)
 
 
+def test_worktree_policy_accepts_ignored_known_namespace_when_contents_are_recognized(tmp_path: Path):
+    namespace = tmp_path / ".research-os-live-5.0-consistency-schema-smoke"
+    namespace.mkdir()
+    (namespace / "live-consistency.json").write_text("{}", encoding="utf-8")
+    (namespace / "process-cleanup.json").write_text("{}", encoding="utf-8")
+    result = launcher.evaluate_worktree_acceptance(
+        tmp_path,
+        "!! .research-os-live-5.0-consistency-schema-smoke/\n",
+    )
+    assert result.valid
+    assert result.allowed_paths == (
+        ".research-os-live-5.0-consistency-schema-smoke/live-consistency.json",
+        ".research-os-live-5.0-consistency-schema-smoke/process-cleanup.json",
+    )
+
+
+def test_worktree_policy_rejects_unknown_file_hidden_in_ignored_namespace(tmp_path: Path):
+    namespace = tmp_path / ".research-os-live-5.0-consistency-schema-smoke"
+    namespace.mkdir()
+    (namespace / "unknown.txt").write_text("unexpected", encoding="utf-8")
+    result = launcher.evaluate_worktree_acceptance(
+        tmp_path,
+        "!! .research-os-live-5.0-consistency-schema-smoke/\n",
+    )
+    assert not result.valid
+    assert result.unexpected_paths == (".research-os-live-5.0-consistency-schema-smoke/unknown.txt",)
+
+
 def test_worktree_policy_rejects_source_change():
     result = launcher.evaluate_worktree_acceptance(Path("."), " M src/research_os/oracle/grounding.py\n")
     assert not result.valid
