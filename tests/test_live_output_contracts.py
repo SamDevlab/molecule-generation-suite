@@ -1,0 +1,168 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+import subprocess
+
+import pytest
+
+from research_os.oracle import CodexCliTransport, CodexLiveProvider, LiveCodexProtocolError, LiveOutputContract
+
+
+CONSISTENCY_CONTEXT = {"consistency_contract": {"allowed_limitation_codes": ["PROTOCOL_SENSITIVITY"]}}
+
+
+def _consistency_response(**overrides):
+    response = {
+        "answer": "bounded E3 result",
+        "grounding_status": "GROUNDED",
+        "grounded_record_ids": ["RUN-1"],
+        "primary_record_id": "RUN-1",
+        "limitation_codes": ["PROTOCOL_SENSITIVITY"],
+        "limitations": [],
+    }
+    response.update(overrides)
+    return response
+
+
+def _transport(monkeypatch, stdout: str):
+    def fake_run(command, **kwargs):
+        return subprocess.CompletedProcess(command, 0, stdout=stdout, stderr="")
+
+    monkeypatch.setattr("research_os.oracle.provider.subprocess.run", fake_run)
+    transport = CodexCliTransport(executable="codex", environment={})
+    transport.executable = "codex"
+    return transport
+
+
+def _envelope(inner: dict) -> str:
+    return json.dumps({"result": json.dumps(inner, separators=(",", ":"))})
+
+
+def _direct(value: dict) -> str:
+    return json.dumps(value, separators=(",", ":"))
+
+
+def test_route_01_ordinary_followup_uses_envelope_contract(monkeypatch):
+    transport = _transport(monkeypatch, _envelope({"answer": "ordinary"}))
+    result = transport("final_exam_followup", {}, {})
+    assert result["result"]
+    assert transport.last_output_contract == LiveOutputContract.ENVELOPE.value
+    assert transport.last_output_schema_name == "live_output.schema.json"
+    assert transport.last_invocation_diagnostic.output_contract == "ENVELOPE"
+    assert "schema requires a string field named result" in transport._prompt({"operation": "final_exam_followup", "payload": {}, "context": {}})
+
+
+def test_route_02_consistency_run_a_uses_consistency_schema(monkeypatch):
+    transport = _transport(monkeypatch, _direct(_consistency_response()))
+    result = transport("final_exam_followup", {}, {**CONSISTENCY_CONTEXT, "consistency_run": "A"})
+    assert result == _consistency_response()
+    assert transport.last_output_contract == LiveOutputContract.CONSISTENCY.value
+    assert transport.last_output_schema_name == "live_consistency.schema.json"
+    assert transport.last_invocation_diagnostic.output_schema_name == "live_consistency.schema.json"
+    prompt = transport._prompt({"operation": "final_exam_followup", "payload": {}, "context": CONSISTENCY_CONTEXT})
+    assert "Do not wrap the response in a result string" in prompt
+    assert "schema requires a string field named result" not in prompt
+
+
+def test_route_03_consistency_run_b_uses_same_fixed_schema(monkeypatch):
+    transport = _transport(monkeypatch, _direct(_consistency_response()))
+    result = transport("final_exam_followup", {}, {**CONSISTENCY_CONTEXT, "consistency_run": "B"})
+    assert result["primary_record_id"] == "RUN-1"
+    assert transport.last_invocation_diagnostic.output_contract == "CONSISTENCY"
+    assert transport.last_invocation_diagnostic.output_schema_name == "live_consistency.schema.json"
+
+
+def test_route_04_arbitrary_schema_path_is_rejected():
+    with pytest.raises(ValueError):
+        CodexCliTransport(executable="codex", schema_path=str(Path(__file__).resolve()), environment={})
+
+
+@pytest.mark.parametrize(
+    "mutator",
+    [
+        lambda response: response.pop("primary_record_id"),
+        lambda response: response.pop("limitation_codes"),
+    ],
+)
+def test_route_05_and_06_missing_consistency_fields_fail_at_transport(monkeypatch, mutator):
+    response = _consistency_response()
+    mutator(response)
+    transport = _transport(monkeypatch, _direct(response))
+    with pytest.raises(LiveCodexProtocolError):
+        transport("final_exam_followup", {}, CONSISTENCY_CONTEXT)
+    assert transport.last_invocation_diagnostic.schema_status == "FAIL"
+    assert transport.last_invocation_diagnostic.failure_code == "SCHEMA_INVALID"
+
+
+def test_route_07_invalid_limitation_code_fails_at_transport(monkeypatch):
+    transport = _transport(monkeypatch, _direct(_consistency_response(limitation_codes=["NOT_CANONICAL"])))
+    with pytest.raises(LiveCodexProtocolError):
+        transport("final_exam_followup", {}, CONSISTENCY_CONTEXT)
+
+
+def test_route_08_grounded_empty_ids_fail_at_transport(monkeypatch):
+    transport = _transport(monkeypatch, _direct(_consistency_response(grounded_record_ids=[], primary_record_id=None)))
+    with pytest.raises(LiveCodexProtocolError):
+        transport("final_exam_followup", {}, CONSISTENCY_CONTEXT)
+
+
+def test_route_09_no_grounded_answer_with_null_primary_passes(monkeypatch):
+    transport = _transport(monkeypatch, _direct(_consistency_response(
+        grounding_status="NO_GROUNDED_ANSWER",
+        grounded_record_ids=[],
+        primary_record_id=None,
+        limitation_codes=["NO_ELIGIBLE_EXTERNAL_DATA"],
+        limitations=["external record unavailable"],
+    )))
+    result = transport("final_exam_followup", {}, CONSISTENCY_CONTEXT)
+    assert result["grounding_status"] == "NO_GROUNDED_ANSWER"
+
+
+def test_route_10_extra_consistency_field_fails_at_transport(monkeypatch):
+    response = _consistency_response()
+    response["extra"] = "reject"
+    transport = _transport(monkeypatch, _direct(response))
+    with pytest.raises(LiveCodexProtocolError):
+        transport("final_exam_followup", {}, CONSISTENCY_CONTEXT)
+
+
+def test_route_11_ordinary_scientific_review_still_returns_result_string(monkeypatch):
+    transport = _transport(monkeypatch, _envelope({"summary": "review"}))
+    result = transport("scientific_review", {}, {})
+    assert set(result) == {"result"}
+    assert transport.last_output_schema_name == "live_output.schema.json"
+
+
+def test_route_12_followup_without_consistency_context_is_not_forced_direct(monkeypatch):
+    transport = _transport(monkeypatch, _envelope({"answer": "ordinary"}))
+    result = transport("final_exam_followup", {}, {"consistency_run": "A"})
+    assert set(result) == {"result"}
+    assert transport.last_output_contract == "ENVELOPE"
+
+
+def test_route_13_provider_does_not_unwrap_direct_consistency_json():
+    direct = _consistency_response()
+
+    class DirectConsistencyTransport:
+        last_output_contract = "CONSISTENCY"
+        last_output_schema_name = "live_consistency.schema.json"
+
+        def __call__(self, operation, payload, context):
+            return direct
+
+    provider = CodexLiveProvider(transport=DirectConsistencyTransport())
+    provider.set_request_context(CONSISTENCY_CONTEXT)
+    assert provider.final_exam_followup({}) == direct
+
+
+def test_route_14_consistency_contract_rejects_normal_envelope(monkeypatch):
+    transport = _transport(monkeypatch, _envelope(_consistency_response()))
+    with pytest.raises(LiveCodexProtocolError):
+        transport("final_exam_followup", {}, CONSISTENCY_CONTEXT)
+
+
+def test_route_15_normal_operation_rejects_direct_consistency_object(monkeypatch):
+    transport = _transport(monkeypatch, _direct(_consistency_response()))
+    with pytest.raises(LiveCodexProtocolError):
+        transport("scientific_review", {}, {})

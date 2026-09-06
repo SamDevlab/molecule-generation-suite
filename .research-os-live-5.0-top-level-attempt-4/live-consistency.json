@@ -1,0 +1,188 @@
+{
+  "pairs": [
+    {
+      "calls": [
+        {
+          "call_id": 30,
+          "diagnostic": {
+            "attempt": 1,
+            "command_contract": "codex exec --ephemeral --skip-git-repo-check --sandbox read-only --color never --output-schema <fixed-schema> -",
+            "completed_at": "2026-09-05T23:11:40.935867+00:00",
+            "depth": 0,
+            "elapsed": 23.67742,
+            "exit_status": "COMPLETED",
+            "failure_code": null,
+            "failure_stage": "NONE",
+            "invocation_id": "LIVE-D5D43D1CB2864DD5",
+            "max_attempts": 1,
+            "model": "gpt-5.6-luna",
+            "operation": "final_exam_followup",
+            "parent_invocation_id": null,
+            "provider": "CODEX_LIVE",
+            "reentrancy_state": "COMPLETED",
+            "schema_status": "PASS",
+            "started_at": "2026-09-05T23:11:17.258447+00:00",
+            "stderr_bytes": 39254,
+            "stderr_truncated": false,
+            "stdout_bytes": 937,
+            "stdout_truncated": false,
+            "timeout_budget": 120.0
+          },
+          "elapsed": 23.67199999999866,
+          "error": null,
+          "label": "TL-CONSISTENCY-01-A",
+          "operation": "final_exam_followup",
+          "process_events": [
+            {
+              "call_id": 30,
+              "cleanup_status": "RUNNING",
+              "label": "TL-CONSISTENCY-01-A",
+              "parent_pid": 23056,
+              "pid": 16672,
+              "started_at": "2026-09-05T23:11:17.262584+00:00"
+            },
+            {
+              "call_id": 30,
+              "cleanup_status": "EXITED",
+              "completed_at": "2026-09-05T23:11:40.934857+00:00",
+              "exit_code": 0,
+              "label": "TL-CONSISTENCY-01-A",
+              "parent_pid": 23056,
+              "pid": 16672,
+              "started_at": "2026-09-05T23:11:17.262584+00:00",
+              "termination_reason": "NORMAL_EXIT"
+            }
+          ],
+          "response_hash": "5471f9712a10a5e55e37899c198de9b53e4c0eb6795b8453b37e1ee2a7b46959",
+          "status": "COMPLETED"
+        }
+      ],
+      "consistency_assessment": {
+        "failure_code": "RUN_A_GROUNDING_FAILURE",
+        "limitation_codes_equal": false,
+        "missing_ids_in_b": [
+          "BND-A0AD79098BC8",
+          "CH-V45-DOCKING-DECISION",
+          "CH-V45-EXTERNAL-FAILURE",
+          "IMP-V50-DYNAMIC-BATTERY",
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "IMP-V50-DYNAMIC-MATERIALS",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "RUN-V50-COMB-H2-PHI105"
+        ],
+        "new_ids_in_b": [],
+        "normalized_run_a_ids": [
+          "BND-A0AD79098BC8",
+          "CH-V45-DOCKING-DECISION",
+          "CH-V45-EXTERNAL-FAILURE",
+          "IMP-V50-DYNAMIC-BATTERY",
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "IMP-V50-DYNAMIC-MATERIALS",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "RUN-V50-COMB-H2-PHI105"
+        ],
+        "normalized_run_b_ids": [],
+        "pair_index": 1,
+        "primary_record_equal": false,
+        "question": "What new scientific knowledge was actually produced?",
+        "run_a_call_id": 30,
+        "run_a_grounding_status": "GROUNDED",
+        "run_a_ids": [
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "RUN-V50-COMB-H2-PHI105",
+          "BND-A0AD79098BC8",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "CH-V45-EXTERNAL-FAILURE",
+          "IMP-V50-DYNAMIC-BATTERY",
+          "IMP-V50-DYNAMIC-MATERIALS",
+          "CH-V45-DOCKING-DECISION"
+        ],
+        "run_b_call_id": null,
+        "run_b_grounding_status": null,
+        "run_b_ids": [],
+        "support_basis_equal": false,
+        "valid": false
+      },
+      "consistency_grounding_basis": [
+        "BND-A0AD79098BC8",
+        "CH-V45-DOCKING-DECISION",
+        "CH-V45-EXTERNAL-FAILURE",
+        "IMP-V50-DYNAMIC-BATTERY",
+        "IMP-V50-DYNAMIC-COMBUSTION",
+        "IMP-V50-DYNAMIC-MATERIALS",
+        "IMP-V50-DYNAMIC-SOLUBILITY",
+        "RUN-V50-COMB-H2-PHI105"
+      ],
+      "consistency_signature_a": {
+        "digest": "41758caf73f25f9d6de7c2917792765509955a90072dd90be1f88f00ee02391e",
+        "grounded_record_ids": [
+          "BND-A0AD79098BC8",
+          "CH-V45-DOCKING-DECISION",
+          "CH-V45-EXTERNAL-FAILURE",
+          "IMP-V50-DYNAMIC-BATTERY",
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "IMP-V50-DYNAMIC-MATERIALS",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "RUN-V50-COMB-H2-PHI105"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitation_codes": [],
+        "primary_record_id": null
+      },
+      "consistency_signature_b": null,
+      "contract_failure_reasons": [
+        "MISSING_PRIMARY_RECORD_ID",
+        "MISSING_LIMITATION_CODES"
+      ],
+      "equivalent": false,
+      "failed_response_validations": [],
+      "grounding_validations": [
+        {
+          "failure_code": "NONE",
+          "forbidden_fields": [],
+          "grounding_status": "GROUNDED",
+          "known_ids_count": 67,
+          "missing_grounding_field": false,
+          "response_hash": "5471f9712a10a5e55e37899c198de9b53e4c0eb6795b8453b37e1ee2a7b46959",
+          "response_type": "dict",
+          "returned_ids": [
+            "IMP-V50-DYNAMIC-COMBUSTION",
+            "RUN-V50-COMB-H2-PHI105",
+            "BND-A0AD79098BC8",
+            "IMP-V50-DYNAMIC-SOLUBILITY",
+            "CH-V45-EXTERNAL-FAILURE",
+            "IMP-V50-DYNAMIC-BATTERY",
+            "IMP-V50-DYNAMIC-MATERIALS",
+            "CH-V45-DOCKING-DECISION"
+          ],
+          "unknown_ids": [],
+          "valid": true
+        }
+      ],
+      "index": 1,
+      "question": "What new scientific knowledge was actually produced?",
+      "run_a": {
+        "answer": "One material scientific update was produced: a predeclared Cantera/gri30 H2 equilibrium run at phi=1.05 added a bounded E3 combustion condition-map point (2395.30 K), narrowing the map while remaining computational rather than experimental. Solubility produced no material change because all 56 external records were OOD; battery and materials remained externally blocked, and docking remained E2 computational evidence. The exam itself created no new scientific state.",
+        "grounded_record_ids": [
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "RUN-V50-COMB-H2-PHI105",
+          "BND-A0AD79098BC8",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "CH-V45-EXTERNAL-FAILURE",
+          "IMP-V50-DYNAMIC-BATTERY",
+          "IMP-V50-DYNAMIC-MATERIALS",
+          "CH-V45-DOCKING-DECISION"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "COMPUTATIONAL_NOT_EXPERIMENTAL",
+          "EXTERNAL_VALIDATION_MISSING",
+          "MISSING_CONDITION_COMPLETE_DATA",
+          "SINGLE_STRUCTURE_DEPENDENCE"
+        ]
+      },
+      "run_b": null
+    }
+  ],
+  "status": "BLOCKED_BEFORE_PASS"
+}

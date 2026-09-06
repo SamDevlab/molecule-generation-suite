@@ -30,6 +30,12 @@ The third genuine external acceptance is preserved at `.research-os-live-5.0-top
 
 The run stopped at call 30, `TL-CONSISTENCY-01-A`. Its structured response omitted the required `primary_record_id` and `limitation_codes` fields. The limitation text contained prose prefixes, but prose is not parsed into canonical limitation codes. Run B was therefore not executed, and the consistency assessment correctly recorded `RUN_A_GROUNDING_FAILURE`. The original artifact predates the structured contract diagnostics and consequently has no top-level failure fields; it remains unchanged. Cleanup passed, Codex created zero Evidence, no EvidenceLevel changed, and no scientific state changed. This is a provider-shape contract failure, not a scientific failure.
 
+## Top-level Attempt 4 — preserved
+
+The fourth genuine external acceptance is preserved at `.research-os-live-5.0-top-level-attempt-4/`. It again completed 30/39 calls: 3 reviewers, the final exam, 15/15 follow-ups, 10/10 stress answers, and Run A of consistency pair 1. The final gate correctly propagated `failure_code=RUN_A_GROUNDING_FAILURE`, `consistency_failure_code=RUN_A_GROUNDING_FAILURE`, `failed_call_id=30`, and `failed_label=TL-CONSISTENCY-01-A`; cleanup passed with zero owned child processes remaining.
+
+Attempt 4 made the architectural gap explicit. Its outer `live_output.schema.json` envelope passed, but the inner consistency object still omitted `primary_record_id` and `limitation_codes`. The existing `live_consistency.schema.json` was not selected for `codex exec`, so the launcher discovered the omission only after transport acceptance. Attempt 4 is preserved without modification and remains an operational contract failure, not a scientific result.
+
 ## Official external command
 
 Run from a separately owned terminal or Codex CLI process, after checking out `research-os-v1.3` at the expected commit:
@@ -38,7 +44,7 @@ Run from a separately owned terminal or Codex CLI process, after checking out `r
 .\.venv\Scripts\python.exe tools\benchmark\run_v50_live_top_level.py --run-all --expected-head (git rev-parse HEAD)
 ```
 
-The command performs preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. It then runs only the blocked Live stages sequentially. The next run selects a fresh namespace such as `.research-os-live-5.0-top-level-attempt-4/`; prior attempts are never overwritten and reruns select the next unused attempt number.
+The command performs preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. It then runs only the blocked Live stages sequentially. The next run selects a fresh namespace such as `.research-os-live-5.0-top-level-attempt-5/`; prior attempts are never overwritten and reruns select the next unused attempt number.
 
 | Stage | Calls |
 |---|---:|
@@ -53,7 +59,7 @@ The hard ceiling is 45 Live invocations. Retries are disabled for this acceptanc
 
 ## Output and promotion rules
 
-New machine-readable results are written only under a fresh `.research-os-live-5.0-top-level-attempt-N/` namespace. The Attempt 1 artifacts under `.research-os-live-5.0-top-level/`, Attempts 2 and 3 under their numbered namespaces, the recovery artifacts under `.research-os-live-5.0-recovery/`, and the earlier `.research-os-live-5.0/` attempt are preserved. The launcher records process identity, cleanup, bounded diagnostics, response hashes, structured grounding failures, and stage outcomes without persisting raw model output or hidden reasoning.
+New machine-readable results are written only under a fresh `.research-os-live-5.0-top-level-attempt-N/` namespace. The Attempt 1 artifacts under `.research-os-live-5.0-top-level/`, Attempts 2–4 under their numbered namespaces, the recovery artifacts under `.research-os-live-5.0-recovery/`, and the earlier `.research-os-live-5.0/` attempt are preserved. The launcher records process identity, cleanup, bounded diagnostics, response hashes, structured grounding failures, output contract/schema metadata, and stage outcomes without persisting raw model output or hidden reasoning.
 
 Each attempt recognizes only these generated files: `top-level-owner-diagnostic.json`, `top-level-preflight.json`, `reviewer-panel.json`, `review-synthesis.json`, `final-scientific-exam.json`, `follow-up-answers.json`, `live-stress.json`, `live-consistency.json`, `process-cleanup.json`, `v5-live-acceptance-digest.json`, and `v5-final-gate.json`. Any other changed or untracked path, including an unknown file inside an acceptance namespace, keeps preflight at `DIRTY_WORKTREE`.
 
@@ -64,6 +70,8 @@ Follow-up, stress, consistency, and final-exam responses must declare `grounding
 When a schema-valid response is rejected after execution, `follow-up-answers.json` preserves the valid prior answers, the completed call metadata, a `LiveResponseValidationFailure`, and only safe final response fields (`answer`, `grounding_status`, `grounded_record_ids`, and `limitations`). It never persists hidden reasoning or raw process output.
 
 Consistency runs use a separate controlled contract. Run A is validated against the normal registered state, then its literal grounded IDs are frozen as `CONSISTENCY_GROUNDING_BASIS`. Independent Run B receives exactly that basis and no Run A prose. Both A and B must return the strict six-field response from `live_consistency.schema.json`: `answer`, `grounding_status`, `grounded_record_ids`, `primary_record_id`, `limitation_codes`, and `limitations`. `primary_record_id` must be one literal member of the frozen basis for a grounded answer; `limitation_codes` must be drawn from `CONSISTENCY_LIMITATION_CODES`, and limitation prose is never parsed. Comparison uses a canonical `ConsistencySignature` with sorted unique IDs and codes, so narrative wording and ID ordering do not create false divergence. Any new, missing, unknown, or invented ID remains a failure, including a globally known ID outside Run A's frozen basis. Contract diagnostics distinguish `MISSING_PRIMARY_RECORD_ID`, `INVALID_PRIMARY_RECORD_ID`, `MISSING_LIMITATION_CODES`, `INVALID_LIMITATION_CODES`, `INVALID_LIMITATIONS`, and `INVALID_CONSISTENCY_RESPONSE`. The separate `ConsistencyFailureCode` is stored alongside the underlying `GroundingFailureCode`.
+
+The transport now selects one internal `LiveOutputContract` before `codex exec`: ordinary operations use the fixed `ENVELOPE` contract and `live_output.schema.json`; a `final_exam_followup`/`final_exam_followups` request with `context.consistency_contract` uses the fixed `CONSISTENCY` contract and `live_consistency.schema.json`. The schema registry is closed, the model cannot select it, arbitrary constructor paths are rejected, consistency JSON is direct rather than wrapped in `result`, and the provider parses according to the already-selected contract. The envelope and consistency forms are each rejected when supplied to the other mode.
 
 The final gate exposes failure precedence explicitly: provider/process failures first, the underlying `GroundingFailureCode` second, and the `ConsistencyFailureCode` third. When a consistency response is structurally invalid but the general grounding contract passed, the top-level fields are `failure_code=RUN_A_GROUNDING_FAILURE`, `consistency_failure_code=RUN_A_GROUNDING_FAILURE`, and the failed call identity. If a lower-level grounding failure also exists, its code remains the primary `failure_code` and the consistency code is preserved separately.
 

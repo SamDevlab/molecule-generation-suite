@@ -6,11 +6,11 @@
 
 ## Healthy properties
 
-The attempt retained the canonical evidence levels, sealed runs and bundles, append-only impact/challenge records, explicit OOD and uncertainty, declared units/conditions/species, and v4.2 private-corpus separation. Attempts 1, 2, and 3 are preserved at `.research-os-live-5.0-top-level/`, `.research-os-live-5.0-top-level-attempt-2/`, and `.research-os-live-5.0-top-level-attempt-3/`; `Biolab/` and `formolecular/` were not modified. The legacy components remain preserved and are not deprecated.
+The attempt retained the canonical evidence levels, sealed runs and bundles, append-only impact/challenge records, explicit OOD and uncertainty, declared units/conditions/species, and v4.2 private-corpus separation. Attempts 1–4 are preserved at `.research-os-live-5.0-top-level/` and the three numbered namespaces; `Biolab/` and `formolecular/` were not modified. The legacy components remain preserved and are not deprecated.
 
 ## Blocking property
 
-The repository-side `CodexLiveProvider` is available as a configured transport. Attempt 3 proved 30 real calls and process cleanup; `TL-CONSISTENCY-01-A` passed general grounding but omitted `primary_record_id` and `limitation_codes`, so Run B was correctly withheld. The consistency contract now enforces the strict six-field shape, freezes Run A's literal support basis for independent Run B, and compares canonical scientific signatures. It did not replace the Live provider with `CodexTestProvider` or reinterpret deterministic answers as Live review.
+The repository-side `CodexLiveProvider` is available as a configured transport. Attempt 4 proved 30 real calls and process cleanup; its outer envelope passed while the inner consistency object omitted `primary_record_id` and `limitation_codes`, so Run B was correctly withheld. The transport boundary now selects the strict consistency schema before `codex exec`, records `output_contract` and `output_schema_name`, freezes Run A's literal support basis for independent Run B, and compares canonical scientific signatures. It did not replace the Live provider with `CodexTestProvider` or reinterpret deterministic answers as Live review.
 
 ## Next gate
 

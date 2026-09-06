@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field, replace
 from datetime import datetime, timezone
+from enum import Enum
 import hashlib
 import json
 import os
@@ -26,6 +27,7 @@ from research_os.oracle.live_boundary import (
     retryable_live_failure,
 )
 from research_os.oracle.grounding import find_forbidden_scientific_fields
+from research_os.oracle.top_level import CONSISTENCY_LIMITATION_CODES
 
 
 def _canonical(value: Any) -> str:
@@ -115,6 +117,21 @@ class LiveCodexProtocolError(StructuredOutputError):
         self.diagnostic = diagnostic
 
 
+class LiveOutputContract(str, Enum):
+    """Fixed output contracts selectable by Research OS request type."""
+
+    ENVELOPE = "ENVELOPE"
+    CONSISTENCY = "CONSISTENCY"
+
+
+def _output_contract_for_request(operation: str, context: Mapping[str, Any] | None) -> LiveOutputContract:
+    """Select a contract from typed request semantics, never from model output."""
+    request_context = context if isinstance(context, Mapping) else {}
+    if operation in {"final_exam_followup", "final_exam_followups"} and isinstance(request_context.get("consistency_contract"), Mapping):
+        return LiveOutputContract.CONSISTENCY
+    return LiveOutputContract.ENVELOPE
+
+
 def _canonical_evidence_level(value: Any) -> Any:
     if not isinstance(value, str):
         return value
@@ -159,6 +176,10 @@ class CodexCliTransport:
     """
 
     _APPROVED_EXECUTABLE_NAMES = {"codex", "codex.exe"}
+    _FIXED_SCHEMA_BY_CONTRACT = {
+        LiveOutputContract.ENVELOPE: Path(__file__).with_name("live_output.schema.json").resolve(),
+        LiveOutputContract.CONSISTENCY: Path(__file__).with_name("live_consistency.schema.json").resolve(),
+    }
     _MAX_OUTPUT_BYTES = 1_000_000
     _SAFE_ENVIRONMENT_KEYS = {
         "PATH", "PATHEXT", "SYSTEMROOT", "WINDIR", "TEMP", "TMP", "USERPROFILE",
@@ -187,11 +208,13 @@ class CodexCliTransport:
         self.executable = resolved
         self.workdir = str(workdir) if workdir else None
         self.timeout_seconds = int(timeout_seconds)
-        fixed_schema = Path(__file__).with_name("live_output.schema.json").resolve()
+        fixed_schema = self._FIXED_SCHEMA_BY_CONTRACT[LiveOutputContract.ENVELOPE]
         requested_schema = Path(schema_path).resolve() if schema_path else fixed_schema
         if requested_schema != fixed_schema:
-            raise ValueError("Codex live transport accepts only the fixed live output schema")
+            raise ValueError("Codex live transport accepts only the fixed live output schema registry; constructor schema paths are envelope-only")
         self.schema_path = fixed_schema
+        self.last_output_contract: str | None = None
+        self.last_output_schema_name: str | None = None
         self.last_runtime_model = "MODEL_ID_UNVERIFIED_FROM_RUNTIME"
         self.last_cli_version: str | None = None
         self.max_output_bytes = max(1024, int(max_output_bytes))
@@ -215,16 +238,26 @@ class CodexCliTransport:
 
     @property
     def available(self) -> bool:
-        return bool(self.executable and self.schema_path.is_file())
+        return bool(self.executable and all(path.is_file() for path in self._FIXED_SCHEMA_BY_CONTRACT.values()))
+
+    @classmethod
+    def _schema_for_contract(cls, contract: LiveOutputContract) -> Path:
+        if not isinstance(contract, LiveOutputContract):
+            raise ValueError("Codex live transport accepts only a fixed output contract")
+        return cls._FIXED_SCHEMA_BY_CONTRACT[contract]
 
     def __call__(self, operation: str, payload: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
+        output_contract = _output_contract_for_request(operation, context)
+        output_schema = self._schema_for_contract(output_contract)
+        self.last_output_contract = output_contract.value
+        self.last_output_schema_name = output_schema.name
         request = {
             "operation": operation,
             "contract": "Research OS live Oracle planning boundary v1",
             "payload": redact_secrets(payload),
             "context": redact_secrets(context),
         }
-        prompt = self._prompt(request)
+        prompt = self._prompt(request, contract=output_contract)
         command = [
             self.executable,
             "exec",
@@ -235,7 +268,7 @@ class CodexCliTransport:
             "--color",
             "never",
             "--output-schema",
-            str(self.schema_path),
+            str(output_schema),
             "-",
         ]
         attempts = min(self.budget.max_retries + 1, self.budget.max_live_turns)
@@ -245,6 +278,8 @@ class CodexCliTransport:
                 model=self.last_runtime_model,
                 operation=operation,
                 timeout_budget=min(float(self.timeout_seconds), self.budget.timeout_for(operation)),
+                output_contract=output_contract.value,
+                output_schema_name=output_schema.name,
             )
             if not handle.admitted:
                 diagnostic = handle.finish(
@@ -380,7 +415,7 @@ class CodexCliTransport:
                 raise LiveCodexUnavailable(f"Codex CLI returned exit code {completed.returncode}", diagnostic=diagnostic)
             try:
                 result = self._extract_json(completed.stdout)
-                self._validate_transport_envelope(result)
+                self._validate_transport_output(result, contract=output_contract)
             except (StructuredOutputError, LiveCodexProtocolError) as exc:
                 diagnostic = handle.finish(
                     exit_status="SCHEMA_ERROR",
@@ -422,9 +457,38 @@ class CodexCliTransport:
         return size(stdout), size(stderr)
 
     @staticmethod
-    def _validate_transport_envelope(value: Any) -> None:
+    def _validate_transport_output(value: Any, *, contract: LiveOutputContract) -> None:
+        if contract == LiveOutputContract.CONSISTENCY:
+            if not isinstance(value, dict) or set(value) != {
+                "answer", "grounding_status", "grounded_record_ids",
+                "primary_record_id", "limitation_codes", "limitations",
+            }:
+                raise LiveCodexProtocolError("Codex CLI response failed the fixed consistency schema")
+            if not isinstance(value["answer"], str):
+                raise LiveCodexProtocolError("consistency answer must be a string")
+            if value["grounding_status"] not in {"GROUNDED", "NO_GROUNDED_ANSWER"}:
+                raise LiveCodexProtocolError("consistency grounding_status is invalid")
+            grounded_ids = value["grounded_record_ids"]
+            if not isinstance(grounded_ids, list) or not all(isinstance(item, str) for item in grounded_ids) or len(grounded_ids) != len(set(grounded_ids)):
+                raise LiveCodexProtocolError("consistency grounded_record_ids is invalid")
+            primary = value["primary_record_id"]
+            if value["grounding_status"] == "GROUNDED" and (not grounded_ids or not isinstance(primary, str)):
+                raise LiveCodexProtocolError("grounded consistency responses require a primary_record_id")
+            if value["grounding_status"] == "NO_GROUNDED_ANSWER" and (grounded_ids or primary is not None):
+                raise LiveCodexProtocolError("NO_GROUNDED_ANSWER consistency responses require empty IDs and null primary_record_id")
+            limitation_codes = value["limitation_codes"]
+            if not isinstance(limitation_codes, list) or not all(isinstance(item, str) and item in CONSISTENCY_LIMITATION_CODES for item in limitation_codes) or len(limitation_codes) != len(set(limitation_codes)):
+                raise LiveCodexProtocolError("consistency limitation_codes is invalid")
+            if not isinstance(value["limitations"], list) or not all(isinstance(item, str) for item in value["limitations"]):
+                raise LiveCodexProtocolError("consistency limitations is invalid")
+            return
         if not isinstance(value, dict) or set(value) != {"result"} or not isinstance(value.get("result"), str) or len(value["result"]) < 2:
             raise LiveCodexProtocolError("Codex CLI response failed the fixed live output schema")
+
+    @staticmethod
+    def _validate_transport_envelope(value: Any) -> None:
+        """Compatibility alias for callers of the historical envelope guard."""
+        CodexCliTransport._validate_transport_output(value, contract=LiveOutputContract.ENVELOPE)
 
     def _audited_environment(self) -> dict[str, str]:
         return {
@@ -483,10 +547,11 @@ class CodexCliTransport:
         return subprocess.CompletedProcess(command, process.returncode, stdout=stdout, stderr=stderr)
 
     @staticmethod
-    def _prompt(request: dict[str, Any]) -> str:
+    def _prompt(request: dict[str, Any], *, contract: LiveOutputContract | None = None) -> str:
         operation = request["operation"]
         request_context = request.get("context")
-        consistency_context = isinstance(request_context, dict) and isinstance(request_context.get("consistency_contract"), dict)
+        output_contract = contract or _output_contract_for_request(operation, request_context if isinstance(request_context, Mapping) else {})
+        consistency_context = output_contract == LiveOutputContract.CONSISTENCY
         shape = {
             "interpret_question": '{"text":"...","domain":"...","objective":"...","constraints":{},"required_evidence_level":"E2_COMPUTATIONAL","allowed_tools":[],"forbidden_tools":[]}',
             "generate_plan": '{"question_id":"...","steps":[{"step_id":"...","lab":"registered Lab","experiment":"registered experiment","inputs":{},"requires":[],"produces":[],"minimum_evidence_level":"E2_COMPUTATIONAL"}],"assumptions":[],"required_sources":[],"expected_outputs":[],"risk_flags":[],"claim_targets":[]}',
@@ -508,7 +573,7 @@ class CodexCliTransport:
             "final_exam_followup": '{"answer":"brief artifact-grounded answer","grounding_status":"GROUNDED|NO_GROUNDED_ANSWER","grounded_record_ids":["RUN-...","GAP-..."],"limitations":["..."]}',
             "final_exam_followups": '{"answers":[{"index":1,"answer":"brief artifact-grounded answer","grounding_status":"GROUNDED|NO_GROUNDED_ANSWER","grounded_record_ids":["RUN-...","GAP-..."],"limitations":["..."]}]}',
         }.get(operation, "{}")
-        if consistency_context and operation in {"final_exam_followup", "final_exam_followups"}:
+        if output_contract == LiveOutputContract.CONSISTENCY:
             shape = '{"answer":"brief artifact-grounded answer","grounding_status":"GROUNDED|NO_GROUNDED_ANSWER","grounded_record_ids":["RUN-..."],"primary_record_id":"RUN-... or null","limitation_codes":["COMPUTATIONAL_NOT_EXPERIMENTAL"],"limitations":["brief narrative limitation"]}'
         narration_safety = ""
         if operation == "summarize_results":
@@ -552,11 +617,16 @@ class CodexCliTransport:
                     "return them in the limitation_codes array. The supplied allowed limitation-code list is "
                     f"{json.dumps(limitation_codes, ensure_ascii=False, sort_keys=True)}.\n"
                 )
+        framing = (
+            "Return ONLY one JSON object matching the supplied output schema. The schema requires a string field named result; put the minified JSON object for the operation inside that string, with no markdown or prose.\n"
+            if output_contract == LiveOutputContract.ENVELOPE
+            else "Return ONLY the controlled consistency JSON object matching the supplied output schema. Do not wrap the response in a result string. Return these required top-level fields directly: answer, grounding_status, grounded_record_ids, primary_record_id, limitation_codes, and limitations.\n"
+        )
         return (
             "You are the live reasoning component of Research OS.\n"
             "You are already the Live Codex researcher/reviewer for this invocation. Do not call CodexLiveProvider. Do not invoke codex exec. Do not recursively create another LLM session.\n"
-            "Return ONLY one JSON object matching the supplied output schema. The schema requires a string field named result; put the minified JSON object for the operation inside that string, with no markdown or prose.\n"
-            f"For operation {operation}, the inner result must have this shape: {shape}\n"
+            + framing
+            + f"For operation {operation}, the output must have this shape: {shape}\n"
             + narration_safety
             + grounding_safety
             + consistency_safety
@@ -704,9 +774,17 @@ class CodexLiveProvider:
         }
 
     def _call(self, operation: str, payload: dict[str, Any]) -> dict[str, Any]:
+        output_contract = _output_contract_for_request(operation, self._request_context)
         raw = self.transport(operation, payload, self._request_context)
         parsed = parse_structured_output(raw)
-        if set(parsed) == {"result"} and isinstance(parsed.get("result"), str):
+        transport_contract = getattr(self.transport, "last_output_contract", None)
+        if transport_contract is not None and transport_contract != output_contract.value:
+            raise LiveCodexProtocolError(
+                f"transport output contract mismatch: expected {output_contract.value}, got {transport_contract}"
+            )
+        if output_contract == LiveOutputContract.CONSISTENCY:
+            CodexCliTransport._validate_transport_output(parsed, contract=output_contract)
+        elif set(parsed) == {"result"} and isinstance(parsed.get("result"), str):
             try:
                 parsed = parse_structured_output(parsed["result"])
             except StructuredOutputError:

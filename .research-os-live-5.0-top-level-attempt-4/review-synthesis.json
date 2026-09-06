@@ -1,0 +1,219 @@
+{
+  "concerns": [
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "The new combustion observation is a bounded E3 equilibrium calculation under gri30.yaml and fixed reference conditions. It adds one phi point but has no matched E4 experiment, transient validation, or mechanism-independence test; broader performance or real-world combustion claims would overreach.",
+      "grounded_record_ids": [
+        "IMP-V50-DYNAMIC-COMBUSTION",
+        "CH-V45-COMBUSTION",
+        "GAP-E3-E4-COMPARISON",
+        "RUN-V50-COMB-H2-PHI105",
+        "EVD-B4B5770122CD"
+      ],
+      "role": "METHODOLOGY"
+    },
+    {
+      "action": "DEFER_EXTERNAL",
+      "concern": "The solubility external set is entirely OOD for the frozen model, and target-condition semantics may differ. This supports refusal to rank that set, but it cannot establish universal model failure or population-wide failure rates; a compatible non-OOD external source remains necessary.",
+      "grounded_record_ids": [
+        "CH-V45-SOLUBILITY-EXTERNAL",
+        "CH-V45-EXTERNAL-FAILURE",
+        "CH-V45-NO-DECISION-SOLUBILITY",
+        "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+        "IMP-V50-DYNAMIC-SOLUBILITY",
+        "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY"
+      ],
+      "role": "METHODOLOGY"
+    },
+    {
+      "action": "DEFER_EXTERNAL",
+      "concern": "The battery archive lacks capacity, resistance, uncertainty, and complete cross-cell condition metadata. Voltage/current traces cannot be converted into a condition-complete degradation decision without inventing measurements, so any degradation or comparative health claim must remain blocked.",
+      "grounded_record_ids": [
+        "CH-V45-BATTERY",
+        "CH-V45-NO-DECISION-BATTERY",
+        "GAP-BATTERY-METADATA",
+        "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+        "IMP-V50-DYNAMIC-BATTERY",
+        "CLM-BATTERY-NO-DECISION"
+      ],
+      "role": "METHODOLOGY"
+    },
+    {
+      "action": "DEFER_EXTERNAL",
+      "concern": "The materials evidence remains discovery metadata rather than a matched record containing alloy, processing, microstructure, hydrogen environment, loading, method, property, uncertainty, and locator. Alloy comparisons or safety/generalization claims would therefore be confounded and unsupported.",
+      "grounded_record_ids": [
+        "CH-V45-MATERIALS",
+        "GAP-MATERIALS-CONDITION-COMPLETE",
+        "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+        "IMP-V50-DYNAMIC-MATERIALS",
+        "DECISION-MATERIALS-NO-DECISION",
+        "CLM-MATERIALS-CONDITION-GAP"
+      ],
+      "role": "METHODOLOGY"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "The docking decision depends on one receptor structure (1PXX chain A), one engine/grid, and limited seed variation; exhaustiveness and independent structural comparisons were not varied. Score separation is not measured affinity, binding, or efficacy, so efficacy language and strong biological ranking claims are methodologically invalid.",
+      "grounded_record_ids": [
+        "CH-V45-COX2",
+        "CH-V45-DOCKING-DECISION",
+        "CLM-COX2-1PXX-V2",
+        "CLM-DOCKING-DECISION-BOUNDARY"
+      ],
+      "role": "METHODOLOGY"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "The registered molecule result is E2 computational evidence and the Codex role is explicitly planning/review only. Deterministic descriptors and provenance do not establish experimental molecular properties, biological activity, safety, or efficacy.",
+      "grounded_record_ids": [
+        "RUN-V50-MOLECULE-CCO",
+        "BND-09953FC5B30E",
+        "EVD-AC44495B12BA",
+        "CH-V45-CODEX",
+        "CLM-CODEX-BOUNDARY"
+      ],
+      "role": "METHODOLOGY"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "The combustion extension is a registered, condition-specific Cantera E3 computation, but remains mechanism- and equilibrium-model-dependent; without a matched E4 observation it cannot support experimental performance, ignition, emissions, or deployment claims.",
+      "grounded_record_ids": [
+        "RUN-V50-COMB-H2-PHI105",
+        "BND-A0AD79098BC8",
+        "EVD-B4B5770122CD",
+        "GAP-E3-E4-COMPARISON",
+        "CLM-V41-COMBUSTION-BOUNDARY"
+      ],
+      "role": "EVIDENCE"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "All 56 external solubility records were OOD and their condition semantics were not fully comparable; this supports a sample-specific validation boundary, not a population-wide claim that solubility models fail or that all future predictions are unusable.",
+      "grounded_record_ids": [
+        "CH-V45-SOLUBILITY-EXTERNAL",
+        "CH-V45-NO-DECISION-SOLUBILITY",
+        "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+        "CLM-SOLUBILITY-NO-DECISION",
+        "GAP-SOLUBILITY-EXTERNAL-VALIDATION"
+      ],
+      "role": "EVIDENCE"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "The docking decision relies on E2 scores sharing one receptor structure and protocol; no measured affinity or independent receptor/protocol comparison is available, so efficacy language and score-aggregation claims exceed support.",
+      "grounded_record_ids": [
+        "CH-V45-DOCKING-DECISION",
+        "CH-V45-COX2",
+        "CLM-DOCKING-DECISION-BOUNDARY",
+        "CLM-COX2-1PXX-V2"
+      ],
+      "role": "EVIDENCE"
+    },
+    {
+      "action": "DEFER_EXTERNAL",
+      "concern": "The battery archive lacks capacity, resistance, uncertainty, and cross-cell condition metadata; degradation cannot be inferred from available voltage/current traces alone.",
+      "grounded_record_ids": [
+        "CH-V45-BATTERY",
+        "CH-V45-NO-DECISION-BATTERY",
+        "CLM-V41-BATTERY-SCHEMA-BOUNDARY",
+        "CLM-BATTERY-NO-DECISION",
+        "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL"
+      ],
+      "role": "EVIDENCE"
+    },
+    {
+      "action": "DEFER_EXTERNAL",
+      "concern": "No condition-complete matched materials record exists; discovery metadata cannot support alloy, processing, microstructure, hydrogen-environment, or generic safety comparisons.",
+      "grounded_record_ids": [
+        "CH-V45-MATERIALS",
+        "CLM-MATERIALS-CONDITION-GAP",
+        "DECISION-MATERIALS-NO-DECISION",
+        "GAP-MATERIALS-CONDITION-COMPLETE-RECORD"
+      ],
+      "role": "EVIDENCE"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "Bundle and ledger passes establish provenance and integrity, not independent fresh engine executions; replay-derived reproduction must not be presented as 30 fresh validations.",
+      "grounded_record_ids": [
+        "LEDGER-BUNDLE-001",
+        "LEDGER-RUN-001",
+        "BND-09953FC5B30E",
+        "BND-47B581A8964E",
+        "BND-A0AD79098BC8"
+      ],
+      "role": "EVIDENCE"
+    },
+    {
+      "action": "CREATE_RESEARCH_GAP",
+      "concern": "The fresh Cantera runs are well anchored by explicit conditions, mechanism names, run IDs, input hashes, bundle hashes, and passing ledger verification, but the supplied state does not expose complete engine-version and environment-manifest details needed for independent byte-for-byte replay.",
+      "grounded_record_ids": [
+        "RUN-V50-COMB-CH4-REFERENCE",
+        "RUN-V50-COMB-H2-PHI105",
+        "BND-47B581A8964E",
+        "BND-A0AD79098BC8",
+        "LEDGER-BUNDLE-001"
+      ],
+      "role": "REPRODUCIBILITY"
+    },
+    {
+      "action": "CREATE_RESEARCH_GAP",
+      "concern": "The molecule result has a registered passing bundle and hashes, but the review context does not provide the underlying descriptor/configuration, model or dataset hash, engine version, or environment manifest; input hashing alone is insufficient for an independent researcher to reproduce the computation.",
+      "grounded_record_ids": [
+        "RUN-V50-MOLECULE-CCO",
+        "BND-09953FC5B30E",
+        "CLM-CODEX-BOUNDARY"
+      ],
+      "role": "REPRODUCIBILITY"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "The combustion extension is reproducible as a bounded E3 computational result under the declared Cantera protocol, but it lacks a compatible experimental comparison and must not support an E4 or experimental claim.",
+      "grounded_record_ids": [
+        "RUN-V50-COMB-H2-PHI105",
+        "RUN-V50-COMB-CH4-REFERENCE",
+        "DECISION-REVISION-V50-COMB-PHI105",
+        "CH-V45-COMBUSTION",
+        "GAP-E3-E4-COMPARISON"
+      ],
+      "role": "REPRODUCIBILITY"
+    },
+    {
+      "action": "REVISE_CLAIM",
+      "concern": "The docking conclusions remain protocol- and receptor-specific: supporting scores share the 1PXX receptor and engine, exhaustiveness was not varied, and docking does not establish measured affinity or efficacy.",
+      "grounded_record_ids": [
+        "CH-V45-COX2",
+        "CH-V45-DOCKING-DECISION",
+        "CLM-COX2-1PXX-V2",
+        "CLM-DOCKING-DECISION-BOUNDARY"
+      ],
+      "role": "REPRODUCIBILITY"
+    },
+    {
+      "action": "DEFER_EXTERNAL",
+      "concern": "The solubility external evaluation is not suitable for general reproducibility or population-level validation because all available records were OOD and a compatible in-domain source with comparable conditions is still absent.",
+      "grounded_record_ids": [
+        "CH-V45-SOLUBILITY-EXTERNAL",
+        "CH-V45-EXTERNAL-FAILURE",
+        "DECISION-V39-SOLUBILITY",
+        "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+        "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY"
+      ],
+      "role": "REPRODUCIBILITY"
+    },
+    {
+      "action": "DEFER_EXTERNAL",
+      "concern": "Battery degradation and materials comparisons remain non-reproducible as outcome decisions because required condition-complete fields are absent from the available records; no local transformation can recover those measurements.",
+      "grounded_record_ids": [
+        "CH-V45-BATTERY",
+        "CH-V45-NO-DECISION-BATTERY",
+        "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+        "CH-V45-MATERIALS",
+        "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+        "DECISION-MATERIALS-NO-DECISION"
+      ],
+      "role": "REPRODUCIBILITY"
+    }
+  ],
+  "status": "PASS"
+}

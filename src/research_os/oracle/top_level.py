@@ -515,7 +515,16 @@ def preflight_repository(root: str | os.PathLike[str], *, expected_branch: str =
             and consistency_schema.get("properties", {}).get("limitation_codes", {}).get("items", {}).get("enum") == sorted(CONSISTENCY_LIMITATION_CODES)
         }
         transport = CodexCliTransport(environment={})
-        checks["provider"] = {"ok": transport.schema_path.is_file() and transport._APPROVED_EXECUTABLE_NAMES == {"codex", "codex.exe"}, "type": type(transport).__name__}
+        fixed_schemas = getattr(transport, "_FIXED_SCHEMA_BY_CONTRACT", {})
+        checks["provider"] = {
+            "ok": transport.schema_path.is_file()
+            and bool(set(fixed_schemas))
+            and all(path.is_file() for path in fixed_schemas.values())
+            and transport._APPROVED_EXECUTABLE_NAMES == {"codex", "codex.exe"},
+            "type": type(transport).__name__,
+            "fixed_output_contracts": sorted(contract.value for contract in fixed_schemas),
+            "fixed_schema_names": sorted(path.name for path in fixed_schemas.values()),
+        }
     except Exception as exc:  # pragma: no cover - defensive preflight boundary
         checks["package"]["error"] = f"{type(exc).__name__}: {exc}"
     if not branch_ok or not head_ok or not clean_ok:

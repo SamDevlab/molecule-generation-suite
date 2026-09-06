@@ -144,6 +144,8 @@ class LiveInvocationDiagnostic:
     max_attempts: int = 1
     stdout_truncated: bool = False
     stderr_truncated: bool = False
+    output_contract: str = "ENVELOPE"
+    output_schema_name: str = "live_output.schema.json"
 
     def to_dict(self) -> dict[str, Any]:
         return {key: _enum_value(value) for key, value in asdict(self).items()}
@@ -224,7 +226,16 @@ class LiveInvocationController:
             return f"CODEX_CONTEXT:{identity}", 1
         return None, 0
 
-    def begin(self, *, provider: str, model: str, operation: str, timeout_budget: float | None = None) -> LiveInvocationHandle:
+    def begin(
+        self,
+        *,
+        provider: str,
+        model: str,
+        operation: str,
+        timeout_budget: float | None = None,
+        output_contract: str = "ENVELOPE",
+        output_schema_name: str = "live_output.schema.json",
+    ) -> LiveInvocationHandle:
         parent_id, depth = self._host_parent()
         invocation_id = f"LIVE-{uuid.uuid4().hex[:16].upper()}"
         timeout = float(timeout_budget if timeout_budget is not None else self.budget.total_timeout)
@@ -252,6 +263,8 @@ class LiveInvocationController:
             ),
             operation=str(operation),
             max_attempts=self.budget.max_retries + 1,
+            output_contract=str(output_contract),
+            output_schema_name=str(output_schema_name),
         )
         if parent_id is not None and not self.allow_codex_host_context:
             return LiveInvocationHandle(base, False, self)
