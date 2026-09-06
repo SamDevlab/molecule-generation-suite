@@ -520,7 +520,7 @@ def preflight_repository(root: str | os.PathLike[str], *, expected_branch: str =
         from research_os.oracle import CodexCliTransport
 
         package_version = version("research-os-core")
-        checks["package"] = {"ok": package_version == "4.5.0" and research_os is not None, "version": package_version}
+        checks["package"] = {"ok": package_version == "5.0.0" and research_os is not None, "version": package_version}
         schema = json.loads((repo_root / "src" / "research_os" / "oracle" / "live_output.schema.json").read_text(encoding="utf-8"))
         checks["schema"] = {"ok": schema.get("type") == "object" and schema.get("required") == ["result"] and schema.get("additionalProperties") is False}
         grounding_schema = json.loads((repo_root / "src" / "research_os" / "oracle" / "live_grounding.schema.json").read_text(encoding="utf-8"))

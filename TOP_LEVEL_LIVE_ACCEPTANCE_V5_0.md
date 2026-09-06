@@ -1,6 +1,6 @@
 # Top-level Live acceptance — Research OS v5.0
 
-Status: **READY_FOR_TOP_LEVEL_LIVE_EXECUTION**. The release gate remains **BLOCKED_BEFORE_PASS** until a fresh external, genuinely top-level Codex owner completes all 39 bounded Live calls and the resulting artifacts pass the final regression and audit gates.
+Status: **RESEARCH OS 5.0.0 — PASS**. The external, genuinely top-level Attempt 8 completed all 39 bounded Live calls and passed the resulting scientific, security, consistency, cleanup, regression, package, and CI gates.
 
 ## Why this boundary exists
 
@@ -48,7 +48,7 @@ The sixth genuine external acceptance is preserved at `.research-os-live-5.0-top
 
 Attempt 6 then stopped before a response was accepted because the provider process returned `PROCESS_ERROR` during completion; `schema_status=NOT_CHECKED`, `failure_code=PROCESS_ERROR`, and the final gate preserved the secondary `consistency_failure_code=RUN_A_GROUNDING_FAILURE`. Cleanup passed with no owned child processes remaining and no child acceptance stages were started. This is an operational provider-admission finding, not scientific evidence. The provider-facing schema was subsequently reduced to the six required structural fields and deterministic validators retain the cross-field semantics. A bounded typed `OUTPUT_SCHEMA_ADMISSION_ERROR` diagnostic is now available for recognized provider schema rejection messages without persisting raw stderr.
 
-The provider-compatible schema smoke completed in the fresh Attempt 2 namespace. Attempt 7 was then executed externally and is preserved below. This current Codex-owned task does not execute Live; the next external action is a fresh Attempt 8 after the implementation commit is pushed.
+The provider-compatible schema smoke completed in the fresh Attempt 2 namespace. Attempt 7 was then executed externally and is preserved below as a blocked historical result. Attempt 8 subsequently completed the release acceptance. This current Codex-owned task did not execute Live and does not authorize another acceptance run.
 
 ## Consistency-schema Smoke 1 — preserved
 
@@ -64,7 +64,11 @@ Attempt 7 is preserved immutably at `.research-os-live-5.0-top-level-attempt-7/`
 
 The failure was an implementation contract gap: Run B received only Run A's frozen grounded-record-ID set, while `grounding_status`, `primary_record_id`, and canonical `limitation_codes` remained free to vary. The historical artifact is not rewritten and remains `BLOCKED_BEFORE_PASS` with `failed_pair_index=4`, `run_a_call_id=36`, and `run_b_call_id=37`. The final gate's old `failed_call_id=36` is part of that historical record; the corrected launcher attributes cross-run comparison failures to Run B.
 
-The implementation now freezes `CONSISTENCY_SIGNATURE_BASIS` as exactly `grounding_status`, sorted unique `grounded_record_ids`, `primary_record_id`, and sorted unique `limitation_codes`. Run B receives that basis without Run A answer/limitations prose; prose may vary independently. Individual Run A/Run B provider, schema, and grounding failures retain their own call attribution. A fresh Attempt 8 must execute all 39 calls; it must not resume Attempt 7 at calls 38–39.
+The implementation now freezes `CONSISTENCY_SIGNATURE_BASIS` as exactly `grounding_status`, sorted unique `grounded_record_ids`, `primary_record_id`, and sorted unique `limitation_codes`. Run B receives that basis without Run A answer/limitations prose; prose may vary independently. Individual Run A/Run B provider, schema, and grounding failures retain their own call attribution. Attempt 8 completed all 39 calls without resuming Attempt 7.
+
+## Top-level Attempt 8 — release acceptance
+
+Attempt 8 is preserved immutably at `.research-os-live-5.0-top-level-attempt-8/` with `39/39 PASS`. The reviewer panel, final scientific exam, 15 follow-ups, 10 stress cases, and five consistency pairs all passed. Calls 30–39 were all `COMPLETED` with `output_contract=CONSISTENCY`, `output_schema_name=live_consistency.schema.json`, `schema_status=PASS`, and `failure_code=NONE`; every pair was `equivalent=true`. Cleanup passed with `owned_child_processes_remaining=false`, timeouts were zero, and Codex created zero Evidence or changed zero EvidenceLevels. This artifact is the release acceptance record; no Attempt 9 is permitted.
 
 ## Official external command
 
@@ -74,7 +78,7 @@ Run from a separately owned terminal or Codex CLI process, after checking out `r
 .\.venv\Scripts\python.exe tools\benchmark\run_v50_live_top_level.py --run-all --expected-head (git rev-parse HEAD)
 ```
 
-The command performs preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. The fresh schema smoke already passed in `.research-os-live-5.0-consistency-schema-smoke-attempt-2/`. The next external run must select `.research-os-live-5.0-top-level-attempt-8/`; prior attempts are never overwritten and a failed Attempt 7 is never resumed.
+The historical command performed preflight checks for branch, expected HEAD, clean worktree, package identity, Ledger, required artifacts, fixed provider/schema contracts, and Codex CLI availability. The fresh schema smoke passed in `.research-os-live-5.0-consistency-schema-smoke-attempt-2/`, Attempt 8 completed, and no further Live command is required for release closure. Prior attempts are never overwritten and the failed Attempt 7 was not resumed.
 
 | Stage | Calls |
 |---|---:|
