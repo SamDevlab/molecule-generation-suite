@@ -35,6 +35,12 @@ metadata for `research-os-core==1.4.0`. The source tree was not changed for
 that failure. Installing the frozen source package as 5.0.0 corrected the
 environment, after which the complete suite passed with 374 tests.
 
+The single Python 3.11 baseline skip was the intentional
+`test_missing_cantera_is_indeterminate` skip: that baseline interpreter had
+the optional Cantera package installed, so the test did not exercise the
+missing-engine branch. In the final local environments Cantera is absent and
+the full suite reports `395 passed` on both Python 3.11 and Python 3.12.
+
 ## Development contract
 
 This cycle preserves the canonical evidence ceiling and authority model:
