@@ -1,265 +1,313 @@
-# Suite de Geração e Triagem Molecular (Molecule Generation & Virtual Screening Suite)
+# Research OS 5.0
 
-Esta é uma suite consolidada de projetos voltados para a **Descoberta Computacional de Fármacos (Drug Discovery)**, **Triagem Virtual (Virtual Screening)**, **Acoplamento Molecular (Molecular Docking)** e **Predição de Propriedades por Machine Learning (QED/ADMET)**.
+**Reproducible scientific execution with explicit evidence, provenance, fail-closed gates, and auditable research workflows.**
 
-O repositório reúne e organiza dois fluxos de trabalho principais desenvolvidos localmente:
-1. **Biolab**: Esteira HPC para triagem virtual de sinergia molecular e acoplamento molecular automatizado.
-2. **formolecular (Oráculo)**: Modelos de IA baseados em XGBoost para predição rápida de propriedades moleculares e simulações evolucionárias de novos ligantes.
+Research OS is a Python research infrastructure for running computational studies without silently turning heuristics, ML predictions, simulations, or model-generated text into stronger scientific evidence than they actually are.
 
----
+This repository started as `molecule-generation-suite`, combining molecular docking and ML experiments. Those legacy trees are still preserved for audit and migration, but the primary project is now **Research OS 5.0**.
 
-## Estrutura do Repositório
+> Research OS does not claim clinical validation, experimental validation, universal generalization, or scientific truth. Computational outputs remain computational; physics simulations remain distinct from experiments; ML and language-model output do not automatically become Evidence.
+
+## Why Research OS exists
+
+Scientific software often fails in a subtle way: a pipeline continues after a missing dependency, an ML score is presented as confidence, a docking score is described as efficacy, or an unavailable physical model is replaced by a convenient heuristic.
+
+Research OS is designed around the opposite behavior:
+
+- **fail closed** when the required evidence or engine is unavailable;
+- record the **first loss** (`FIRST_LOSS`) instead of hiding downstream uncertainty;
+- distinguish deterministic calculations, ML, simulations, curated observations, and validated experiments;
+- preserve provenance, conditions, hashes, versions, lineage, limitations, and decision history;
+- allow an Oracle/LLM to plan or explain work without letting it fabricate scientific Evidence;
+- keep runs reproducible and auditable through manifests, bundles, registries, and an immutable Ledger.
+
+## Architecture
+
+Research OS is split into four major layers:
 
 ```text
-molecule-generation-suite/
-├── Biolab/                     # Triagem virtual & Docking Molecular
-│   ├── fabrica_g2.py           # Esteira principal de acoplamento molecular (AutoDock Vina)
-│   ├── coletor_admet.py        # Coleta de propriedades de toxicidade e ADMET
-│   ├── analiseFinal.py         # Script de consolidação e classificação de acoplamento
-│   ├── TOP_10_HITS_REFINADOS.csv
-│   └── *.pdb / *.pdbqt         # Estruturas 3D de proteínas e ligantes filtrados
-│
-└── formolecular/               # Predição Neural & IA Farmacêutica/Aeroespacial
-    ├── g_oraculo_farma.py      # Motor de treinamento e predição ADMET/QED usando XGBoost
-    ├── g_oraculo_aeroespacial.py# Motor de predição para propelentes/materiais aeroespaciais
-    ├── treinar_oraculo.py      # Script utilitário para retreinamento de modelos de IA
-    ├── modelos_ia/             # Modelos preditivos serializados (.pkl)
-    └── novo_horizonte/         # Simulação evolucionária e laboratório evolutivo de mutantes
+┌──────────────────────────────────────────────────────────────┐
+│  Oracle / Knowledge / Campaigns / Research Programs         │
+│  planning, retrieval, prioritization, explanation           │
+└───────────────────────────────┬──────────────────────────────┘
+                                │ typed requests
+┌───────────────────────────────▼──────────────────────────────┐
+│  Scientific Labs                                             │
+│  Molecule · Pharma · Docking · Fuel · Combustion            │
+│  Propulsion · Metal · Thermal · Degradation                 │
+└───────────────────────────────┬──────────────────────────────┘
+                                │ engine contracts
+┌───────────────────────────────▼──────────────────────────────┐
+│  Scientific / computational engines                         │
+│  RDKit · AutoDock Vina · Open Babel · Cantera              │
+│  pycalphad · pymatgen · matminer · reference engines        │
+└───────────────────────────────┬──────────────────────────────┘
+                                │ evidence + provenance
+┌───────────────────────────────▼──────────────────────────────┐
+│  Proof / Evidence / Bundles / Ledger                         │
+│  gates · FIRST_LOSS · hashes · lineage · sealed runs        │
+└──────────────────────────────────────────────────────────────┘
 ```
 
----
+See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the detailed boundary model.
 
-## 🧪 1. Biolab: Esteira de Triagem Virtual e Sinergia
-O projeto `Biolab` realiza a avaliação termodinâmica de compostos contra alvos biológicos (como COX-2 e COX-1) para identificar potencial de sinergismo e seletividade farmacológica.
+## Evidence model
 
-### Recursos Principais:
-- **Integração Científica**: Uso do **AutoDock Vina** para simulação física de acoplamento tridimensional receptor-ligante.
-- **Preparação Química**: Automatização via **OpenBabel** (`obabel`) para conversão de formatos tridimensionais (PDB ➡️ PDBQT).
-- **Processamento Concorrente**: Execução paralela em múltiplos cores (via `ProcessPoolExecutor`) para acelerar a triagem de bibliotecas.
-- **Relatório Automático**: Geração de gráficos de sinergismo térmico (mapas de calor com `Seaborn`) e compilação de relatórios regulatórios formais em formato PDF (`FPDF`).
+Research OS uses explicit evidence levels:
 
----
+| Level | Meaning |
+|---|---|
+| `E0_HEURISTIC` | heuristic, assumption, or unvalidated estimate |
+| `E1_ML` | machine-learning output under a declared model/data protocol |
+| `E2_COMPUTATIONAL` | deterministic or computational result |
+| `E3_PHYSICS` | result from an attributable physical/scientific simulation protocol |
+| `E4_CURATED_EXPERIMENTAL` | curated experimental observation with provenance |
+| `E5_VALIDATED_EXPERIMENTAL` | independently validated experimental evidence |
 
-## 🧠 2. formolecular: Inteligência Artificial e Modelos Preditivos
-O projeto `formolecular` utiliza Inteligência Artificial para estimar propriedades moleculares críticas instantaneamente, evitando o custo computacional de simulações físicas tradicionais para triagens iniciais.
+The levels are **not additive**. Multiple E2 results do not become E3, and repeated simulations do not become experimental evidence.
 
-### Recursos Principais:
-- **Featurização Química**: Conversão de strings SMILES em **Morgan Fingerprints** de 2048 bits de alta densidade usando a biblioteca **RDKit**.
-- **Modelos Preditivos**: Regressores baseados em **XGBoost** treinados em super-bancos de dados moleculares para predição de:
-  - **Score QED** (Quantitative Estimate of Drug-likeness / Potencial de Fármaco).
-  - Propriedades físicas (LogP, TPSA, Peso Molar).
-  - Parâmetros ADMET (Aromatic Rings, H-Donors/Acceptors, Rotatable Bonds).
-- **Algoritmo Evolucionário (`novo_horizonte`)**: Laboratório molecular que gera mutações químicas em estruturas ligantes, selecionando e cruzando as gerações com melhores scores preditos pela IA para gerar novas moléculas candidatas.
+Gate outcomes are also explicit:
 
----
+```text
+PASS
+FAIL
+INDETERMINATE
+OUT_OF_DOMAIN
+INSUFFICIENT_EVIDENCE
+SKIPPED
+```
 
-## 🛠️ Tecnologias Utilizadas
-Os projetos foram desenvolvidos utilizando as seguintes bibliotecas do ecossistema científico do Python:
-- **RDKit** (Manipulação e featurização de dados químicos)
-- **XGBoost** & **Scikit-learn** (Modelagem estatística e Machine Learning)
-- **Pandas** & **NumPy** (Processamento analítico de matrizes)
-- **Matplotlib** & **Seaborn** (Visualização de dados químicos e heatmaps)
-- **FPDF** (Geração automatizada de relatórios em PDF)
+A run stops or becomes non-passing at the first non-`PASS` result instead of continuing with a fabricated fallback.
 
-*Nota: Para rodar as simulações físicas do Biolab, é necessário ter o executável do [AutoDock Vina](https://vina.scripps.edu/) configurado no caminho local.*
+## Run lifecycle
 
----
+Evidence-producing Labs follow a staged lifecycle:
 
-## 📦 Notas sobre o Repositório
-Para manter este repositório limpo, leve e em conformidade com as diretrizes do GitHub (limite de 100MB por arquivo), os seguintes itens foram propositalmente excluídos através do `.gitignore`:
-- **Datasets Gigantes**: Bases CSV de treino bruto de mais de 500MB (ex. `BASE_ORACULO_FARMACIA_ADMET.csv`).
-- **Executáveis**: Binários de motores de docking e instaladores (ex. `vina.exe` e `install_babel.exe`).
-- **Ambientes Virtuais**: Pastas de dependências e ambientes virtuais Python (`env_biolab/`).
-- **Arquivos Temporários**: Arquivos intermediários de docking e arquivos temporários de sistema.
+```text
+CREATED
+   ↓
+RUNNING
+   ↓
+preflight gates
+   ↓
+scientific calculation / engine execution
+   ↓
+Evidence + provenance + result gates
+   ↓
+COMPLETED
+   ↓
+SEALED (when persisted as immutable research state)
+```
 
-## 🔬 3. Research OS 3.3: campanhas científicas reais
+A successful preflight is therefore not enough to mark a scientific run complete. If the engine or calculation fails after validation, the run records `FAIL` or `INDETERMINATE` instead of preserving a false PASS.
 
-O Research OS coordena campanhas source-backed com o Codex local como camada de
-descoberta, planejamento e narração. A execução científica continua limitada a
-Labs/engines registrados; fontes externas são tratadas como dados, e Evidence,
-Claims, bundles e histórico permanecem no Ledger.
+## Scientific Labs
 
-- Catálogo e problemas reais: [`REAL_RESEARCH_PROBLEMS_V3_3.md`](REAL_RESEARCH_PROBLEMS_V3_3.md)
-- Campanhas e aceitação live: [`REAL_CAMPAIGNS_V3_3.md`](REAL_CAMPAIGNS_V3_3.md)
-- Saúde científica: [`PROJECT_HEALTH_V3_3.md`](PROJECT_HEALTH_V3_3.md)
-- Auditoria de segurança: [`SECURITY_AUDIT_V3_3.md`](SECURITY_AUDIT_V3_3.md)
+### MoleculeLab
 
-## 🔬 4. Research OS 3.4: resolução de gaps com evidência real
+- deterministic RDKit molecular characterization;
+- canonical molecular representation;
+- molecular descriptors and QED;
+- Morgan fingerprints kept separate as ML representation rather than physical evidence.
 
-O milestone 3.4 registra tentativas append-only de fechar gaps, mantém o teto de
-evidência por domínio e interrompe quando faltam ferramentas, condições ou
-fontes independentes. O artefato NASA PCoE RW3 é recuperado e hashado somente
-quando a execução é solicitada; o ZIP e seus scripts não são executados.
+### DockingLab
 
-- Contratos, gates e resolução real: [`RESEARCH_OS_V3_4.md`](RESEARCH_OS_V3_4.md)
-- Histórico de tentativas: [`REAL_GAP_RESOLUTION_V3_4.md`](REAL_GAP_RESOLUTION_V3_4.md)
-- Saúde e blockers: [`PROJECT_HEALTH_V3_4.md`](PROJECT_HEALTH_V3_4.md)
+- AutoDock Vina execution through an explicit engine contract;
+- receptor/ligand hashes;
+- grid, seed, exhaustiveness, target and protocol metadata;
+- docking remains `E2_COMPUTATIONAL` and is never treated as measured binding affinity or clinical efficacy.
 
-## 🔬 5. Research OS 3.5: expansão e concordância de evidências
+### PharmaLab
 
-O milestone 3.5 fecha o blocker operacional de docking de referência em COX-2
-murino `1PXX`: Open Babel e AutoDock Vina foram executados em ambiente isolado,
-com preparação explícita, três seeds, bundles verificáveis e registro no Ledger.
-O resultado permanece E2 computacional. `EvidenceAgreementAssessment` descreve
-consistência sem somar níveis de evidência, e `ClaimRevision` preserva o
-histórico append-only; dados independentes de solubilidade, observação de
-materiais, campos completos de bateria e corpus do usuário continuam gaps
-honestos.
+- molecular characterization through `MoleculeLab`;
+- optional docking through `DockingLab`;
+- explicit claim boundaries for efficacy, safety, ADMET, and clinical interpretation.
 
-- Contratos e limites: [`RESEARCH_OS_V3_5.md`](RESEARCH_OS_V3_5.md)
-- Acceptance e expansão de evidência: [`EVIDENCE_EXPANSION_V3_5.md`](EVIDENCE_EXPANSION_V3_5.md)
-- Saúde, blockers e auditoria: [`PROJECT_HEALTH_V3_5.md`](PROJECT_HEALTH_V3_5.md)
+### FuelLab
 
-## 🔬 6. Research OS 3.6: resolução científica cross-domain
+- explicit composition, fraction basis, conditions, and provenance;
+- molecular delegation without treating fuel performance as an intrinsic molecular property.
 
-O milestone 3.6 introduz decisões científicas persistentes e fail-closed:
-critérios explícitos, evidência rastreável, incerteza, OOD e variabilidade de
-protocolo permanecem dimensões separadas. Uma decisão não contém score total,
-e o comparador não é eleito por seu melhor score isolado. A execução real de
-04/09/2026 produziu uma decisão cross-domain legítima de
-`NO_DECISION_OUT_OF_DOMAIN`, uma comparação E3 limitada em Cantera e recusas
-honestas para materiais e bateria por ausência de registros comparáveis.
+### CombustionLab
 
-- Contratos e regras: [`RESEARCH_OS_V3_6.md`](RESEARCH_OS_V3_6.md)
-- Execução e resultados: [`CROSS_DOMAIN_SCIENTIFIC_RESOLUTION_V3_6.md`](CROSS_DOMAIN_SCIENTIFIC_RESOLUTION_V3_6.md)
-- Saúde e gates de avanço: [`PROJECT_HEALTH_V3_6.md`](PROJECT_HEALTH_V3_6.md)
+- Cantera-backed equilibrium protocol;
+- physics evidence only when the configured physical engine actually executes;
+- missing mechanism or engine produces an explicit non-pass state rather than a substitute estimate.
 
-## 🔬 7. Research OS 3.7: benchmark sistemático de decisões
+### PropulsionLab
 
-O milestone 3.7 testa a fronteira decisória da v3.6 com 61 perguntas fixas,
-15 perguntas geradas pelo Codex Live, 8 grupos de paráfrase, 8 pares
-bilíngues e testes de ordem, contexto contaminado e pressão adversarial. A
-execução final teve 108 casos, zero falhas de invariantes, zero falsos
-suportes, zero falsas recusas, 45 `NO_DECISION`, bundles PASS e Ledger PASS.
+- consumes combustion Evidence;
+- bounded ideal isentropic nozzle model;
+- no fallback to historical `sqrt(energy / mass)` heuristics;
+- preserves model limitations such as geometry, pressure thrust, heat loss, boundary layers, and hardware effects.
 
-- Contratos e gate: [`RESEARCH_OS_V3_7.md`](RESEARCH_OS_V3_7.md)
-- Relatório completo: [`SCIENTIFIC_DECISION_BENCHMARK_V3_7.md`](SCIENTIFIC_DECISION_BENCHMARK_V3_7.md)
-- Saúde e blockers: [`PROJECT_HEALTH_V3_7.md`](PROJECT_HEALTH_V3_7.md)
+### MetalLab
 
-## 🔬 8. Research OS 3.8: reprodução e stress científico
+- explicit alloy composition and fraction basis;
+- deterministic composition descriptors;
+- optional material feature engines;
+- CALPHAD remains fail-closed when a thermodynamic engine/database is unavailable.
 
-Após o PASS real da v3.7, a v3.8 reroda os alvos disponíveis e tenta quebrar
-selagem, bundles, Ledger, cache, versionamento, OOD, incerteza, unidades,
-proveniência, narração e loops autônomos. O resultado final tem 12
-reproduções, 30 stress tests aprovados, comparação Python 3.11/3.12 e CI
-verde.
+### ThermalLab
 
-- Runner: [`tools/benchmark/reproduction_stress_v38.py`](tools/benchmark/reproduction_stress_v38.py)
-- Relatório: [`REPRODUCTION_STRESS_TEST_V3_8.md`](REPRODUCTION_STRESS_TEST_V3_8.md)
+- bounded steady 1-D Fourier conduction model;
+- assumptions and omitted heat-transfer modes are preserved with the result.
 
-## 🔬 9. Research OS 3.9: programas autônomos bounded
+### DegradationLab
 
-O milestone 3.9 transforma campanhas isoladas em `ResearchProgram`s multi-step,
-com limites de recursos imutáveis, perguntas geradas a partir dos resultados
-anteriores, avaliação qualitativa de utilidade, memória cross-campaign e
-detecção anti-spin. Codex Live propõe apenas a estrutura de um programa; runs,
-Evidence, bundles, decisões e Ledger continuam sob controle do Research OS.
+- evidence-first degradation/corrosion records;
+- does not invent corrosion rate, embrittlement, oxidation life, creep, or fatigue from material names alone;
+- experimental levels require attributable experimental/publication/dataset/database provenance.
 
-- Contratos e gate: [`RESEARCH_OS_V3_9.md`](RESEARCH_OS_V3_9.md)
-- Execução autônoma: [`AUTONOMOUS_RESEARCH_PROGRAMS_V3_9.md`](AUTONOMOUS_RESEARCH_PROGRAMS_V3_9.md)
-- Saúde e blockers: [`PROJECT_HEALTH_V3_9.md`](PROJECT_HEALTH_V3_9.md)
+### KnowledgeLab
 
-## 🔬 10. Research OS 3.10: memória científica longitudinal
+- source-located Zettelkasten records;
+- review status remains separate from EvidenceLevel;
+- verified training/RAG records require traceable source locators.
 
-O v3.10 indexa snapshots históricos sobre Ledger, Knowledge, lineage, claims,
-runs, fontes, datasets, modelos e engines. Consultas temporais preservam o
-estado antigo, identificam versões stale e explicam mudanças de claims e
-decisões. Memória conversacional não é fonte científica e não pode sobrepor
-registros selados.
+See [`LAB_REGISTRY.md`](LAB_REGISTRY.md) and [`ENGINE_REGISTRY.md`](ENGINE_REGISTRY.md) for the current capability registries.
 
-- Contratos e gate: [`RESEARCH_OS_V3_10.md`](RESEARCH_OS_V3_10.md)
-- Execução temporal: [`LONGITUDINAL_SCIENTIFIC_MEMORY_V3_10.md`](LONGITUDINAL_SCIENTIFIC_MEMORY_V3_10.md)
-- Saúde e blockers: [`PROJECT_HEALTH_V3_10.md`](PROJECT_HEALTH_V3_10.md)
+## ML validation
 
-## 🔬 11. Research OS 3.11: priorização científica
+Research OS separates model validation from scientific evidence promotion.
 
-O v3.11 cria `ResearchPriorityAssessment` e uma `ResearchPriorityQueue` dinâmica
-para decidir o próximo passo usando gaps, evidência atual/alvo, resolvabilidade,
-redundância, dependências externas, engines, datasets, segurança e escopo. A
-fila preserva avaliações antigas quando nova evidência muda a ordem; posição é
-apenas ordenação auditável, nunca um score científico universal.
+Supported split strategies include:
 
-- Contratos e gate: [`RESEARCH_OS_V3_11.md`](RESEARCH_OS_V3_11.md)
-- Execução e resultados: [`RESEARCH_PRIORITIZATION_V3_11.md`](RESEARCH_PRIORITIZATION_V3_11.md)
-- Saúde e blockers: [`PROJECT_HEALTH_V3_11.md`](PROJECT_HEALTH_V3_11.md)
+- random;
+- Murcko scaffold;
+- cluster;
+- source;
+- group;
+- temporal;
+- explicit external test sets.
 
-## 🔬 12. Research OS 3.12: integração de evidência externa
+Model artifacts can retain dataset, schema, metric, split, environment, and training-run lineage. A high R² is a model metric; it is not described as clinical confidence or experimental validation.
 
-O v3.12 registra `ExternalEvidenceUpdate` e
-`EvidenceDependencyAssessment` para integrar fontes versionadas sem sobrescrever
-histórico ou contar cinco repetições de um estudo como cinco confirmações
-independentes. Cada atualização preserva compatibilidade, conflitos, lineage,
-claims, gaps, decisões e prioridades afetados.
+See [`MODEL_REGISTRY.md`](MODEL_REGISTRY.md) and [`DATASET_REGISTRY.md`](DATASET_REGISTRY.md).
 
-- Contratos e gate: [`RESEARCH_OS_V3_12.md`](RESEARCH_OS_V3_12.md)
-- Execução e resultados: [`EXTERNAL_EVIDENCE_INTEGRATION_V3_12.md`](EXTERNAL_EVIDENCE_INTEGRATION_V3_12.md)
-- Saúde e blockers: [`PROJECT_HEALTH_V3_12.md`](PROJECT_HEALTH_V3_12.md)
+## Installation
 
-## 🔬 13. Research OS 4.0: release de validação científica
+Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.
 
-O v4.0 é uma validação sistêmica, não uma nova arquitetura. O gate executa
-100 casos sistemáticos e 30 perguntas novas do Codex Live, grupos repetidos,
-paráfrases e bilíngues, reprodução, stress, auditorias de segurança e
-invariantes. O exame autônomo final escolhe um caso respondível, um caso que
-deve permanecer `NO_DECISION` e um blocker externo, seguido pelas 20 perguntas
-obrigatórias fundamentadas no estado registrado.
+Install the core development + molecular/data environment:
 
-- Benchmark: [`tools/benchmark/master_validation_v40.py`](tools/benchmark/master_validation_v40.py)
-- Release e critérios: [`RESEARCH_OS_V4_0.md`](RESEARCH_OS_V4_0.md)
-- Relatório: [`RESEARCH_OS_V4_VALIDATION_REPORT.md`](RESEARCH_OS_V4_VALIDATION_REPORT.md)
-- Invariantes: [`SCIENTIFIC_INVARIANTS_V4_0.md`](SCIENTIFIC_INVARIANTS_V4_0.md)
-- Segurança: [`SECURITY_AUDIT_V4_0.md`](SECURITY_AUDIT_V4_0.md)
-- Saúde: [`PROJECT_HEALTH_V4_0.md`](PROJECT_HEALTH_V4_0.md)
+```bash
+python -m pip install -e ".[dev,molecule,data]"
+```
 
-## 🔬 14. Research OS 4.1: real research deployment
+Optional scientific capabilities are separated by extras:
 
-O v4.1 mede impacto científico entre o estado anterior e o posterior de cada
-programa, sem score universal e sem elevar EvidenceLevel. A implantação real
-executou seis programas, 57 perguntas, dez registros de impacto, análise de
-falhas da solubilidade, sensibilidade de protocolo Cantera e auditoria pública
-de materiais.
+```bash
+python -m pip install -e ".[combustion]"
+python -m pip install -e ".[docking]"
+python -m pip install -e ".[metals]"
+python -m pip install -e ".[materials]"
+python -m pip install -e ".[science]"
+```
 
-- Release e gate: [`RESEARCH_OS_V4_1.md`](RESEARCH_OS_V4_1.md)
-- Execução real: [`REAL_RESEARCH_DEPLOYMENT_V4_1.md`](REAL_RESEARCH_DEPLOYMENT_V4_1.md)
-- Saúde: [`PROJECT_HEALTH_V4_1.md`](PROJECT_HEALTH_V4_1.md)
+Some workflows also require external engines, databases, mechanisms, or binaries. Research OS treats those dependencies as explicit capabilities; absence should produce an attributable non-pass result instead of a silent approximation.
 
-## Research OS v4.2
+## Run the tests
 
-The v4.2 private-knowledge infrastructure is ready, but the current checkout
-has no user corpus: status is `INFRASTRUCTURE_READY_AWAITING_USER_CORPUS`.
-Explicit corpus files are hashed into `PrivateSourceRecord`, kept separate from
-public sources, extracted only as review-required candidates, and never
-automatically verified. See `RESEARCH_OS_V4_2.md` and
-`USER_CORPUS_KNOWLEDGE_V4_2.md`.
+```bash
+python -m pip check
+python -m compileall -q src tests
+pytest -q
+```
 
-## Research OS v4.3
+GitHub Actions runs the test suite on Python 3.11 and 3.12.
 
-The external-validation gate is PASS. Five campaigns were attempted with an
-independence audit; the locked solubility model was tested once on the
-non-overlapping DLS-100 unique subset and failed unrestricted generalization
-while preserving the OOD boundary. Other structural, combustion, battery and
-materials paths remain explicitly ineligible or externally blocked.
+## Minimal example
 
-See `RESEARCH_OS_V4_3.md`, `EXTERNAL_VALIDATION_CAMPAIGNS_V4_3.md`,
-`PROJECT_HEALTH_V4_3.md` and `.research-os-live-4.3/external-validation-campaigns.json`.
+```python
+from research_os.molecule.lab import MoleculeLab
 
-## Research OS v4.4
+run = MoleculeLab().run({"smiles": "CCO"})
 
-The impact review gate is PASS with 13 program reviews from v3.9 onward. The
-review keeps knowledge change, decision change, gap refinement, uncertainty,
-blocked paths and redundant work as separate dimensions; it does not calculate
-a universal impact score.
+print(run.status)
+print(run.first_loss)
 
-See `RESEARCH_OS_V4_4.md`, `RESEARCH_OUTCOME_IMPACT_V4_4.md`,
-`PROJECT_HEALTH_V4_4.md` and `.research-os-live-4.4/research-impact-review.json`.
+if run.passed:
+    print(run.evidence[0].payload)
+```
 
-## Research OS v4.5
+The important output is not only the property value. The run also carries the protocol state, gates, EvidenceLevel, engine identity/version, provenance, and reproducibility metadata required by the workflow.
 
-The scientific challenge gate is PASS with 11 red-team targets. Four remain
-robust under their declared scope, three were weakened, two require external
-validation and two are not testable currently. A false-conservatism audit found
-that the bounded Cantera decision was supportable at E3 even though its former
-unbounded refusal was not; OOD and missing-condition refusals remain justified.
+## Oracle boundary
 
-See `RESEARCH_OS_V4_5.md`, `SCIENTIFIC_CHALLENGE_V4_5.md`,
-`PROJECT_HEALTH_V4_5.md` and `.research-os-live-4.5/scientific-challenge.json`.
+Research OS can use a structured Oracle/Codex layer for discovery, planning, ranking registered information, and explaining results.
+
+The Oracle cannot silently:
+
+- create scientific Evidence;
+- raise an EvidenceLevel;
+- invent a source, dataset, engine execution, run, condition, or claim;
+- bypass fail-closed scientific gates.
+
+Scientific truth remains owned by registered data, Labs, engines, Evidence, bundles, and the Ledger.
+
+## Reproducibility and research state
+
+The project includes infrastructure for:
+
+- run manifests;
+- input/output hashes;
+- environment capture;
+- dataset/model/engine registries;
+- immutable/sealed runs;
+- lineage and rerun relationships;
+- research bundles;
+- longitudinal scientific memory;
+- external evidence updates;
+- reproduction/stress tests;
+- bounded research campaigns and programs.
+
+Generated local state is intentionally separated from source code. Only selected canonical validation artifacts are versioned when they are part of the reproducibility or acceptance record.
+
+## Legacy migration
+
+The historical directories remain available as audit inputs:
+
+```text
+Biolab/
+formolecular/
+```
+
+Their original scripts are not the architectural source of truth for new Research OS flows.
+
+Examples of corrected legacy assumptions include:
+
+- QED, TPSA, molecular weight, LogP, and directly calculable descriptors belong on deterministic computational paths rather than being presented as discovered biological truth;
+- docking score does not establish efficacy or measured affinity;
+- R² is not "clinical confidence";
+- specific impulse is not treated as an intrinsic molecular property;
+- missing engines or experimental observations do not become PASS through heuristic replacement.
+
+## Current release
+
+The package version is **5.0.0**.
+
+Release acceptance, scientific scope, and the preserved live-validation record are documented in:
+
+- [`RELEASE_NOTES_V5_0.md`](RELEASE_NOTES_V5_0.md)
+- [`RESEARCH_OS_V5_0.md`](RESEARCH_OS_V5_0.md)
+- [`RESEARCH_OS_V5_VALIDATION_REPORT.md`](RESEARCH_OS_V5_VALIDATION_REPORT.md)
+- [`SCIENTIFIC_EVIDENCE_MODEL.md`](SCIENTIFIC_EVIDENCE_MODEL.md)
+- [`SECURITY_AUDIT_V5_0.md`](SECURITY_AUDIT_V5_0.md)
+
+Historical milestone documents remain in the repository for auditability; they are no longer the primary README narrative.
+
+## Scientific limits
+
+Research OS is research infrastructure, not a substitute for domain validation.
+
+In particular:
+
+- docking is protocol-dependent computational evidence;
+- ML inherits the coverage, bias, leakage risk, and uncertainty of its datasets and validation design;
+- physical simulation depends on its equations, mechanism/database, conditions, boundary assumptions, and engine implementation;
+- generated molecules require chemical and experimental validation;
+- computational prioritization does not establish safety, efficacy, manufacturability, stability, or regulatory suitability;
+- language-model output is not promoted to scientific Evidence by narration alone.
+
+The desired behavior when the system cannot support a claim is a traceable **`INDETERMINATE`**, **`OUT_OF_DOMAIN`**, or **`INSUFFICIENT_EVIDENCE`** result—not an impressive-looking guess.
