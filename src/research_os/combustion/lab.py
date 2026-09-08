@@ -38,8 +38,10 @@ class CombustionLab(Lab):
         if requested_engine and str(requested_engine) != "cantera":
             manifest.gates.append(GateResult("GATE-PHYSICS-ENGINE", "COMB-ENGINE-001", GateStatus.INDETERMINATE, "combustion engine unavailable for the requested engine identifier; equilibrium was not executed", diagnostics={"requested_engine_id": str(requested_engine), "configured_engine_id": "cantera"}))
             return manifest
-        ProofEngine().evaluate(manifest, self.rules())
-        if not manifest.passed: return manifest
+        proof = ProofEngine()
+        proof.evaluate(manifest, self.rules(), finalize=False)
+        if manifest.first_loss is not None:
+            return manifest
         try:
             result = self.engine.simulate_equilibrium(EquilibriumRequest(**normalized))
         except (CanteraMechanismUnavailableError, FileNotFoundError) as exc:
@@ -61,4 +63,4 @@ class CombustionLab(Lab):
         evidence = Evidence(evidence_id=f"EVD-{uuid.uuid4().hex[:12].upper()}", kind="combustion_equilibrium_simulation", level=EvidenceLevel.E3_PHYSICS, source=f"{result.engine} {result.engine_version or 'unknown'} / {result.mechanism}", payload=engine_payload)
         manifest.evidence.append(evidence)
         manifest.gates.append(GateResult("GATE-PHYSICS-SIMULATION", "COMB-SIM-001", GateStatus.PASS, "adiabatic HP equilibrium calculation completed", evidence_ids=(evidence.evidence_id,), diagnostics={"model": result.model}))
-        return manifest
+        return proof.finalize(manifest)

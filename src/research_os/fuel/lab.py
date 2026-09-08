@@ -32,8 +32,9 @@ class FuelLab(Lab):
     def run(self, raw: dict[str, Any], experiment: str = "fuel_catalog") -> RunManifest:
         normalized = self.normalize(raw)
         manifest = RunManifest(lab=self.name, experiment=experiment, inputs=normalized)
-        ProofEngine().evaluate(manifest, self.rules())
-        if not manifest.passed:
+        proof = ProofEngine()
+        proof.evaluate(manifest, self.rules(), finalize=False)
+        if manifest.first_loss is not None:
             return manifest
         manifest.evidence.append(Evidence(evidence_id=f"EVD-{uuid.uuid4().hex[:12].upper()}", kind="fuel_composition", level=EvidenceLevel.E2_COMPUTATIONAL, source="FuelLab composition normalizer v0", payload={"fraction_basis": normalized["fraction_basis"], "components": normalized["components"], "conditions": normalized["conditions"]}))
         molecular_components = []
@@ -44,4 +45,4 @@ class FuelLab(Lab):
             molecular_components.append({"component_index": index, "run_id": component_run.run_id, "passed": component_run.passed, "first_loss": component_run.first_loss.rule_id if component_run.first_loss else None, "evidence": [e.payload for e in component_run.evidence]})
         if molecular_components:
             manifest.evidence.append(Evidence(evidence_id=f"EVD-{uuid.uuid4().hex[:12].upper()}", kind="fuel_component_molecular_properties", level=EvidenceLevel.E2_COMPUTATIONAL, source="MoleculeLab/RDKit delegation", payload={"components": molecular_components}))
-        return manifest
+        return proof.finalize(manifest)

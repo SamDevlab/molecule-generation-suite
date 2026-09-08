@@ -39,8 +39,10 @@ class PropulsionLab(Lab):
         manifest = RunManifest(lab=self.name, experiment=experiment, inputs=normalized, config={"nozzle_model": type(self.nozzle_engine).__name__, "nozzle_model_version": self.nozzle_engine.version})
         provenance = provenance_from_mapping(normalized.get("provenance"), default_source_id="propulsion-input")
         manifest.provenance.append(provenance)
-        ProofEngine().evaluate(manifest, self.rules())
-        if not manifest.passed: return manifest
+        proof = ProofEngine()
+        proof.evaluate(manifest, self.rules(), finalize=False)
+        if manifest.first_loss is not None:
+            return manifest
 
         combustion_run = self.combustion_lab.run(normalized["combustion"], experiment="propulsion_chamber_equilibrium")
         if not combustion_run.passed:
@@ -82,7 +84,7 @@ class PropulsionLab(Lab):
             GateResult("GATE-PROP-THERMO", "PROP-THERMO-001", GateStatus.PASS, "required thermodynamic properties available", evidence_ids=(comb_ev.evidence_id,)),
             GateResult("GATE-PROP-MODEL", "PROP-MODEL-001", GateStatus.PASS, "ideal nozzle calculation completed", evidence_ids=(evidence.evidence_id,)),
         ])
-        return manifest
+        return proof.finalize(manifest)
 
     def ideal_performance_claim(self, run: RunManifest) -> ScientificClaim:
         return claim_from_run(run, "Ideal kinetic nozzle performance was calculated from physics-backed combustion evidence under the recorded assumptions.", minimum_evidence_level=EvidenceLevel.E3_PHYSICS, limitations=("This is not a full engine design, thrust measurement, or experimental validation.",))
