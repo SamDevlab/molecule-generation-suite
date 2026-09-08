@@ -19,5 +19,9 @@ jobs:
           cache: pip
       - name: Install Research OS core + molecular + data dependencies
         run: python -m pip install -e ".[dev,molecule,data]"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Compile source and tests
+        run: python -m compileall -q src tests
       - name: Run Research OS tests
         run: pytest -q

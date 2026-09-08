@@ -2,7 +2,8 @@ import json
 
 import pytest
 
-from research_os.core.types import EvidenceLevel, GateStatus
+from research_os.core.types import EvidenceLevel, GateStatus, RunLifecycle
+from research_os.molecule.calculator import RDKitCalculator, RDKitUnavailableError
 from research_os.molecule.features import MorganFeaturizer
 from research_os.molecule.lab import MoleculeLab
 from research_os.proof.engine import ProofEngine
@@ -11,6 +12,7 @@ from research_os.proof.engine import ProofEngine
 def test_ethanol_gets_deterministic_rdkit_evidence():
     run = MoleculeLab().run({"SMILES": "CCO"})
     assert run.passed
+    assert run.lifecycle == RunLifecycle.COMPLETED
     assert len(run.gates) == 2
     assert run.gates[-1].status == GateStatus.PASS
     assert len(run.evidence) == 1
@@ -25,6 +27,30 @@ def test_invalid_smiles_fails_at_structure_gate():
     run = MoleculeLab().run({"smiles": "C1(CC"})
     assert not run.passed
     assert run.first_loss.rule_id == "MOL-STRUCT-002"
+
+
+def test_calculation_failure_after_preflight_does_not_leave_a_false_pass():
+    class FailsAfterStructureGate:
+        engine_name = "rdkit-test-double"
+        version = "test"
+
+        def __init__(self):
+            self.delegate = RDKitCalculator()
+            self.calls = 0
+
+        def calculate(self, smiles):
+            self.calls += 1
+            if self.calls == 1:
+                return self.delegate.calculate(smiles)
+            raise RDKitUnavailableError("backend disappeared after structural validation")
+
+    run = MoleculeLab(calculator=FailsAfterStructureGate()).run({"smiles": "CCO"})
+
+    assert not run.passed
+    assert run.lifecycle == RunLifecycle.INDETERMINATE
+    assert run.first_loss.rule_id == "MOL-CALC-001"
+    assert run.first_loss.status == GateStatus.INDETERMINATE
+    assert run.evidence == []
 
 
 def test_morgan_features_are_ml_representation_not_property_calculation():
