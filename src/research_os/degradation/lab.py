@@ -43,8 +43,9 @@ class DegradationLab(Lab):
         manifest = RunManifest(lab=self.name, experiment=experiment, inputs=normalized, config={"protocol": "evidence_only_v1"})
         provenance = provenance_from_mapping(normalized.get("provenance"), default_source_id="degradation-input")
         manifest.provenance.append(provenance)
-        ProofEngine().evaluate(manifest, self.rules())
-        if not manifest.passed:
+        proof = ProofEngine()
+        proof.evaluate(manifest, self.rules(), finalize=False)
+        if manifest.first_loss is not None:
             return manifest
 
         exposure_ev = Evidence(
@@ -91,4 +92,4 @@ class DegradationLab(Lab):
             GateResult("GATE-DEG-EVIDENCE", "DEG-EVIDENCE-001", GateStatus.PASS, "attributable degradation observation recorded", evidence_ids=(obs_ev.evidence_id,)),
             GateResult("GATE-DEG-EVIDENCE", "DEG-EVIDENCE-002", GateStatus.PASS, "evidence/provenance compatibility check passed", evidence_ids=(obs_ev.evidence_id,)),
         ])
-        return manifest
+        return proof.finalize(manifest)

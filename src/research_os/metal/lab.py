@@ -70,8 +70,9 @@ class MetalLab(Lab):
         manifest = RunManifest(lab=self.name, experiment=experiment, inputs=normalized)
         provenance = provenance_from_mapping(normalized.get("provenance"), default_source_id="metal-input")
         manifest.provenance.append(provenance)
-        ProofEngine().evaluate(manifest, self.rules())
-        if not manifest.passed:
+        proof = ProofEngine()
+        proof.evaluate(manifest, self.rules(), finalize=False)
+        if manifest.first_loss is not None:
             return manifest
 
         fractions = {component["element"]: component["fraction"] for component in normalized["components"]}
@@ -132,4 +133,4 @@ class MetalLab(Lab):
             evidence = Evidence(evidence_id=f"EVD-{uuid.uuid4().hex[:12].upper()}", kind="calphad_equilibrium", level=EvidenceLevel.E3_PHYSICS, source=f"{result.engine} {result.engine_version or 'unknown'} / {result.database}", provenance_ids=(provenance.provenance_id,), payload=result.to_dict())
             manifest.evidence.append(evidence)
             manifest.gates.append(GateResult("GATE-MET-THERMO", "MET-CALPHAD-003", GateStatus.PASS, "CALPHAD calculation completed", evidence_ids=(evidence.evidence_id,)))
-        return manifest
+        return proof.finalize(manifest)

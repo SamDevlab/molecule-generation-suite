@@ -36,8 +36,9 @@ class ThermalLab(Lab):
         manifest = RunManifest(lab=self.name, experiment=experiment, inputs=normalized, config={"model": "fourier_1d_steady_planar_constant_k", "model_version": "1"})
         provenance = provenance_from_mapping(normalized.get("provenance"), default_source_id="thermal-input")
         manifest.provenance.append(provenance)
-        ProofEngine().evaluate(manifest, self.rules())
-        if not manifest.passed:
+        proof = ProofEngine()
+        proof.evaluate(manifest, self.rules(), finalize=False)
+        if manifest.first_loss is not None:
             return manifest
         try:
             result = planar_conduction(PlanarConductionRequest(
@@ -60,7 +61,7 @@ class ThermalLab(Lab):
         )
         manifest.evidence.append(ev)
         manifest.gates.append(GateResult("GATE-THERM-MODEL", "THERM-MODEL-001", GateStatus.PASS, "Fourier conduction calculation completed", evidence_ids=(ev.evidence_id,)))
-        return manifest
+        return proof.finalize(manifest)
 
     def conduction_claim(self, run: RunManifest) -> ScientificClaim:
         return claim_from_run(
