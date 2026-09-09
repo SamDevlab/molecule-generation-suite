@@ -57,6 +57,8 @@ jobs:
       - name: Check dependency consistency
         run: python -m pip check
       - name: Run focused solubility tests
-        run: pytest -q tests/test_solubility_benchmark.py
+        run: pytest -q tests/test_solubility_benchmark.py tests/test_solubility_replication.py
       - name: Execute ONLINE-EXP-001 against the recorded public dataset
         run: python scripts/run_solubility_benchmark.py --output /tmp/online-exp-001.json
+      - name: Replicate ONLINE-EXP-001 across fixed seeds
+        run: python scripts/run_solubility_replication.py --output /tmp/online-exp-001-replication.json
