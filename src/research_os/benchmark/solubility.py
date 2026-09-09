@@ -1,24 +1,27 @@
 """ONLINE-EXP-001: auditable aqueous-solubility benchmark.
 
 The benchmark deliberately separates easy random-split performance from
-scaffold-held-out performance.  It does not claim experimental validation,
+scaffold-held-out performance. It does not claim experimental validation,
 chemical equivalence, or reliability percentages from regression scores.
 """
 
 from __future__ import annotations
 
+from collections import defaultdict
 from dataclasses import dataclass
 import csv
 import io
 import json
 import math
 from pathlib import Path
+import random
 from typing import Any, Iterable, Mapping, Sequence
 from urllib.request import Request, urlopen
 
 from research_os.core.hashing import sha256_json
 from research_os.ml.metrics import RegressionMetrics, compute_regression_metrics
-from research_os.ml.splitters import DataSplit, random_split, scaffold_split
+from research_os.ml.schema import DataSplit, SplitStrategy
+from research_os.ml.splitters import random_split
 
 
 EXPERIMENT_ID = "ONLINE-EXP-001"
@@ -297,6 +300,63 @@ def _murcko(smiles: str) -> str:
     return MurckoScaffold.MurckoScaffoldSmiles(mol=molecule) or "ACYCLIC"
 
 
+def balanced_scaffold_split(
+    records: Sequence[SolubilityRecord],
+    *,
+    validation_size: float = 0.1,
+    test_size: float = 0.1,
+    seed: int = 42,
+) -> DataSplit[SolubilityRecord]:
+    """Greedy size-balanced Murcko split with strict scaffold isolation.
+
+    Large scaffold groups are assigned first. This avoids allowing a single
+    large group (notably the acyclic bucket) to consume the test partition and
+    makes random/scaffold comparisons use materially comparable sample counts.
+    """
+    if not 0 <= validation_size < 1 or not 0 <= test_size < 1 or validation_size + test_size >= 1:
+        raise SolubilityBenchmarkError("validation_size and test_size must be non-negative and sum below one")
+    values = tuple(records)
+    groups: dict[str, list[SolubilityRecord]] = defaultdict(list)
+    for record in values:
+        groups[_murcko(record.smiles)].append(record)
+
+    buckets = list(groups.values())
+    random.Random(seed).shuffle(buckets)
+    buckets.sort(key=len, reverse=True)  # stable sort preserves seeded tie order
+
+    train_cutoff = (1.0 - validation_size - test_size) * len(values)
+    validation_cutoff = (1.0 - test_size) * len(values)
+    train: list[SolubilityRecord] = []
+    validation: list[SolubilityRecord] = []
+    test: list[SolubilityRecord] = []
+    for bucket in buckets:
+        if len(train) + len(bucket) <= train_cutoff:
+            train.extend(bucket)
+        elif len(train) + len(validation) + len(bucket) <= validation_cutoff:
+            validation.extend(bucket)
+        else:
+            test.extend(bucket)
+
+    if not train or not test:
+        raise SolubilityBenchmarkError("balanced scaffold split produced an empty train or test partition")
+    return DataSplit(
+        SplitStrategy.SCAFFOLD,
+        tuple(train),
+        tuple(validation),
+        tuple(test),
+        seed=seed,
+        metadata={
+            "group_count": len(groups),
+            "allocation": "descending_group_size_greedy",
+            "target_fractions": {
+                "train": 1.0 - validation_size - test_size,
+                "validation": validation_size,
+                "test": test_size,
+            },
+        },
+    )
+
+
 def scaffold_overlap_count(split: DataSplit[SolubilityRecord]) -> int:
     groups = [
         {_murcko(record.smiles) for record in split.train},
@@ -311,16 +371,16 @@ def run_solubility_benchmark(
     *,
     seed: int = 42,
     validation_size: float = 0.1,
-    test_size: float = 0.2,
+    test_size: float = 0.1,
 ) -> SolubilityBenchmarkReport:
-    """Run fixed, non-tuned baselines on random and scaffold-held-out splits."""
+    """Run fixed, non-tuned baselines on comparable random/scaffold splits."""
     values = tuple(records)
     if len(values) < 20:
         raise SolubilityBenchmarkError("ONLINE-EXP-001 requires at least 20 records")
 
     split_pairs = (
         ("random", random_split(values, validation_size=validation_size, test_size=test_size, seed=seed)),
-        ("scaffold", scaffold_split(values, validation_size=validation_size, test_size=test_size, seed=seed)),
+        ("scaffold", balanced_scaffold_split(values, validation_size=validation_size, test_size=test_size, seed=seed)),
     )
     evaluations: list[SplitEvaluation] = []
     for strategy, split in split_pairs:
@@ -353,6 +413,8 @@ def run_solubility_benchmark(
         notes=(
             "Measured logS is the target; no ESOL-predicted target column is used.",
             "Hyperparameters are fixed before evaluation; validation is reported but not used for tuning.",
+            "Random and scaffold protocols target the same 80/10/10 train/validation/test fractions.",
+            "Scaffold groups are allocated largest-first and never split across partitions.",
             "R2 is a regression score, not a reliability or confidence percentage.",
             "A larger scaffold-vs-random RMSE gap is evidence of weaker cross-scaffold generalization, not proof of causality.",
         ),

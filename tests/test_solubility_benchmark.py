@@ -6,10 +6,12 @@ from research_os.benchmark.solubility import (
     DESCRIPTOR_NAMES,
     SolubilityBenchmarkError,
     SolubilityRecord,
+    balanced_scaffold_split,
     dataset_hash,
     descriptor_vector,
     parse_delaney_csv,
     run_solubility_benchmark,
+    scaffold_overlap_count,
 )
 
 
@@ -55,9 +57,16 @@ def _records() -> tuple[SolubilityRecord, ...]:
     )
 
 
+def test_balanced_scaffold_split_is_disjoint_and_keeps_large_group_out_of_test_when_possible():
+    split = balanced_scaffold_split(_records(), seed=7, validation_size=0.1, test_size=0.1)
+    assert scaffold_overlap_count(split) == 0
+    assert len(split.train) > len(split.test)
+    assert split.metadata["allocation"] == "descending_group_size_greedy"
+
+
 def test_online_exp_001_runs_fixed_models_and_keeps_scaffolds_disjoint():
     pytest.importorskip("sklearn")
-    report = run_solubility_benchmark(_records(), seed=7, validation_size=0.15, test_size=0.2)
+    report = run_solubility_benchmark(_records(), seed=7)
     assert report.experiment_id == "ONLINE-EXP-001"
     assert report.record_count == len(_records())
     assert report.report_hash

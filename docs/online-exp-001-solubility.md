@@ -41,12 +41,14 @@ Validation metrics are reported but are not used to tune these hyperparameters i
 
 ## Splits
 
-The same dataset is evaluated under:
+Both comparisons target the same 80/10/10 train/validation/test fractions:
 
 - deterministic seeded random split;
 - Murcko scaffold-group split.
 
-Research OS audits the scaffold split and fails closed if a scaffold occurs in more than one partition.
+For the scaffold split, groups are ordered from largest to smallest before greedy allocation; the seeded shuffle only breaks equal-size ties. This prevents a large scaffold group such as the acyclic bucket from accidentally consuming the held-out partition merely because it was encountered first.
+
+Research OS then audits the scaffold split and fails closed if a scaffold occurs in more than one partition.
 
 The main diagnostic is the test-RMSE generalization gap:
 
@@ -84,4 +86,4 @@ python scripts/run_solubility_benchmark.py --csv path/to/delaney-processed.csv -
 
 ## Interpretation boundary
 
-This benchmark evaluates predictive generalization on an existing measured dataset. It does not demonstrate experimental efficacy, safety, synthesizability, or performance of newly generated molecules. Results should be interpreted together with split strategy, dataset provenance, chemical-domain coverage, and measurement limitations.
+This benchmark evaluates predictive generalization on an existing measured dataset. It does not demonstrate experimental efficacy, safety, synthesizability, or performance of newly generated molecules. Results should be interpreted together with split strategy, dataset provenance, chemical-domain coverage, measurement limitations, and the exact partitioning protocol.
