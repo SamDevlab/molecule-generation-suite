@@ -44,7 +44,7 @@ jobs:
         run: pytest -q tests/test_cantera_reference.py
 
   solubility-benchmark:
-    name: capability (ONLINE-EXP-001/002/003 solubility)
+    name: capability (ONLINE-EXP-001/002/003/004 solubility)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -57,7 +57,7 @@ jobs:
       - name: Check dependency consistency
         run: python -m pip check
       - name: Run focused solubility tests
-        run: pytest -q tests/test_solubility_benchmark.py tests/test_solubility_replication.py tests/test_solubility_benchmark_v2.py tests/test_solubility_v2_closure.py tests/test_benchmark_reproducibility.py tests/test_solubility_external.py tests/test_solubility_external_reliability.py
+        run: pytest -q tests/test_solubility_benchmark.py tests/test_solubility_replication.py tests/test_solubility_benchmark_v2.py tests/test_solubility_v2_closure.py tests/test_benchmark_reproducibility.py tests/test_solubility_external.py tests/test_solubility_external_reliability.py tests/test_solubility_external_controlled.py
       - name: Execute ONLINE-EXP-001 v1 against the recorded public dataset
         run: python scripts/run_solubility_benchmark.py --output /tmp/online-exp-001.json
       - name: Replicate ONLINE-EXP-001 v1 across fixed seeds
@@ -70,3 +70,5 @@ jobs:
         run: python scripts/run_solubility_external_validation.py --output /tmp/online-exp-002-aqsoldb.json
       - name: Execute frozen ONLINE-EXP-003 AqSolDB reliability stratification
         run: python scripts/run_solubility_external_reliability.py --output /tmp/online-exp-003-aqsoldb-reliability.json
+      - name: Execute frozen ONLINE-EXP-004 controlled confounder analysis
+        run: python scripts/run_solubility_external_controlled.py --output /tmp/online-exp-004-controlled.json
