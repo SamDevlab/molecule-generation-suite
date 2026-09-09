@@ -16,9 +16,11 @@ Primary paper: Sorkun, Khetan & Er (2019), *AqSolDB, a curated reference set of 
 
 DOI: `10.1038/s41597-019-0151-1`
 
-Recorded source file:
+Recorded immutable source file:
 
-`https://raw.githubusercontent.com/mcsorkun/AqSolDB/master/results/data_curated.csv`
+`https://raw.githubusercontent.com/mcsorkun/AqSolDB/98cdd10a372058743e4f3fb950a1c9974ec9603a/results/data_curated.csv`
+
+Source commit: `98cdd10a372058743e4f3fb950a1c9974ec9603a`
 
 Recorded GitHub blob SHA for the source file at protocol declaration:
 
@@ -118,7 +120,7 @@ AqSolDB targets are not used to construct the domain threshold.
 The report must include:
 
 - AqSolDB source URL and DOI;
-- recorded source blob SHA;
+- recorded source commit and blob SHA;
 - parsed source hash;
 - parent ESOL dataset hash;
 - parent training-partition hash;
