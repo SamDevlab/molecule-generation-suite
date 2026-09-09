@@ -42,3 +42,21 @@ jobs:
         run: python -m pip check
       - name: Execute real Cantera reference gate
         run: pytest -q tests/test_cantera_reference.py
+
+  solubility-benchmark:
+    name: capability (ONLINE-EXP-001 solubility)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install molecular ML capability
+        run: python -m pip install -e ".[dev,molecule,ml]"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Run focused solubility tests
+        run: pytest -q tests/test_solubility_benchmark.py
+      - name: Execute ONLINE-EXP-001 against the recorded public dataset
+        run: python scripts/run_solubility_benchmark.py --output /tmp/online-exp-001.json
