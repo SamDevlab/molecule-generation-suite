@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
+from research_os.benchmark.reproducibility import reproducibility_metadata
 from research_os.benchmark.solubility import download_delaney, parse_delaney_csv
 from research_os.benchmark.solubility_v2_closure import (
     DEFAULT_SEEDS,
@@ -25,6 +26,7 @@ def main() -> int:
         "robustness": run_v2_robustness(records, seeds=tuple(args.seeds)),
         "dataset_sensitivity": run_v2_dataset_sensitivity(records, seed=args.sensitivity_seed),
     }
+    payload["reproducibility"] = reproducibility_metadata(payload)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps(payload, indent=2, ensure_ascii=False))
