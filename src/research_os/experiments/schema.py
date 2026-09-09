@@ -3,16 +3,51 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import json
 from pathlib import Path
+import re
 from typing import Any, Mapping
 
 import yaml
 
 
 PROTOCOL_ID = "research-os.declarative-experiment.v1"
+_EXPERIMENT_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 
 
 class ProtocolError(ValueError):
     """Raised when a declarative experiment protocol is invalid."""
+
+
+class _StrictSafeLoader(yaml.SafeLoader):
+    """Safe YAML loader that fails closed on duplicate mapping keys."""
+
+
+def _construct_unique_mapping(loader: _StrictSafeLoader, node: yaml.nodes.MappingNode, deep: bool = False) -> dict[Any, Any]:
+    mapping: dict[Any, Any] = {}
+    for key_node, value_node in node.value:
+        key = loader.construct_object(key_node, deep=deep)
+        try:
+            duplicate = key in mapping
+        except TypeError as exc:
+            raise ProtocolError("protocol mapping keys must be hashable") from exc
+        if duplicate:
+            raise ProtocolError(f"duplicate protocol key: {key}")
+        mapping[key] = loader.construct_object(value_node, deep=deep)
+    return mapping
+
+
+_StrictSafeLoader.add_constructor(
+    yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+    _construct_unique_mapping,
+)
+
+
+def _json_object_pairs_no_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    mapping: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in mapping:
+            raise ProtocolError(f"duplicate protocol key: {key}")
+        mapping[key] = value
+    return mapping
 
 
 def _mapping(value: Any, *, field_name: str) -> Mapping[str, Any]:
@@ -52,6 +87,10 @@ class ExperimentSpec:
     def from_mapping(cls, raw: Mapping[str, Any]) -> "ExperimentSpec":
         _strict_keys(raw, allowed={"id", "task", "seed"}, required={"id", "task", "seed"}, field_name="experiment")
         experiment_id = _nonempty_string(raw["id"], field_name="experiment.id")
+        if not _EXPERIMENT_ID.fullmatch(experiment_id):
+            raise ProtocolError(
+                "experiment.id must be a single safe identifier using only letters, numbers, '.', '_' or '-'"
+            )
         task = _nonempty_string(raw["task"], field_name="experiment.task")
         if task != "regression":
             raise ProtocolError("experiment.task must be 'regression' in protocol v1")
@@ -214,9 +253,9 @@ def load_protocol(path: str | Path) -> ExperimentProtocol:
     text = source.read_text(encoding="utf-8")
     try:
         if source.suffix.lower() == ".json":
-            raw = json.loads(text)
+            raw = json.loads(text, object_pairs_hook=_json_object_pairs_no_duplicates)
         elif source.suffix.lower() in {".yaml", ".yml"}:
-            raw = yaml.safe_load(text)
+            raw = yaml.load(text, Loader=_StrictSafeLoader)
         else:
             raise ProtocolError("protocol file must use .yaml, .yml or .json")
     except (json.JSONDecodeError, yaml.YAMLError) as exc:
