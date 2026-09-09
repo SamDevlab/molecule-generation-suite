@@ -246,6 +246,14 @@ class ExperimentProtocol:
         }
 
 
+def _load_yaml_strict(text: str) -> Any:
+    loader = _StrictSafeLoader(text)
+    try:
+        return loader.get_single_data()
+    finally:
+        loader.dispose()
+
+
 def load_protocol(path: str | Path) -> ExperimentProtocol:
     source = Path(path)
     if not source.is_file():
@@ -255,7 +263,7 @@ def load_protocol(path: str | Path) -> ExperimentProtocol:
         if source.suffix.lower() == ".json":
             raw = json.loads(text, object_pairs_hook=_json_object_pairs_no_duplicates)
         elif source.suffix.lower() in {".yaml", ".yml"}:
-            raw = yaml.load(text, Loader=_StrictSafeLoader)
+            raw = _load_yaml_strict(text)
         else:
             raise ProtocolError("protocol file must use .yaml, .yml or .json")
     except (json.JSONDecodeError, yaml.YAMLError) as exc:
