@@ -13,7 +13,6 @@ from urllib.request import Request, urlopen
 from research_os.core.hashing import sha256_json
 from research_os.ml.metrics import RegressionMetrics, compute_regression_metrics
 from research_os.benchmark.solubility import (
-    DATASET_HASH if False else DATASET_ID,  # type: ignore[attr-defined]
     SolubilityBenchmarkError,
     SolubilityRecord,
     dataset_hash,
@@ -275,7 +274,10 @@ def curate_external_records(
     duplicate_groups = redundant_duplicates = 0
 
     for canonical in sorted(groups):
-        members = sorted(groups[canonical], key=lambda pair: (pair[0].source_id, pair[0].smiles, pair[0].measured_log_s_mol_l))
+        members = sorted(
+            groups[canonical],
+            key=lambda pair: (pair[0].source_id, pair[0].smiles, pair[0].measured_log_s_mol_l),
+        )
         overlap = canonical in esol_canonical or any(inchikey in esol_inchikeys for _, inchikey in members)
         if overlap:
             overlap_groups += 1
@@ -306,7 +308,16 @@ def curate_external_records(
     if not retained_records:
         raise SolubilityBenchmarkError("AqSolDB decontamination removed every usable external record")
 
-    lineage_hash = sha256_json(sorted(decisions, key=lambda item: (str(item.get("canonical", "")), str(item.get("source_id", "")), str(item["decision"]))))
+    lineage_hash = sha256_json(
+        sorted(
+            decisions,
+            key=lambda item: (
+                str(item.get("canonical", "")),
+                str(item.get("source_id", "")),
+                str(item["decision"]),
+            ),
+        )
+    )
     audit = ExternalCurationAudit(
         parsed_record_count=len(external_records),
         invalid_structure_records=invalid_structure,
@@ -324,6 +335,8 @@ def curate_external_records(
 
 
 def _combined_features(records: Sequence[SolubilityRecord]):
+    if not records:
+        raise SolubilityBenchmarkError("feature generation requires at least one record")
     try:
         import numpy as np
     except ImportError as exc:
@@ -331,12 +344,16 @@ def _combined_features(records: Sequence[SolubilityRecord]):
     width = len(descriptor_vector(records[0].smiles)) + MORGAN_BITS
     matrix = np.empty((len(records), width), dtype=float)
     for index, record in enumerate(records):
-        row = descriptor_vector(record.smiles) + morgan_vector(record.smiles)
-        matrix[index, :] = row
+        matrix[index, :] = descriptor_vector(record.smiles) + morgan_vector(record.smiles)
     return matrix
 
 
-def _subset_metrics(truth: Sequence[float], prediction: Sequence[float], mask: Sequence[bool], wanted: bool) -> RegressionMetrics | None:
+def _subset_metrics(
+    truth: Sequence[float],
+    prediction: Sequence[float],
+    mask: Sequence[bool],
+    wanted: bool,
+) -> RegressionMetrics | None:
     selected_truth = [value for value, flag in zip(truth, mask) if flag is wanted]
     selected_prediction = [value for value, flag in zip(prediction, mask) if flag is wanted]
     return compute_regression_metrics(selected_truth, selected_prediction) if selected_truth else None
@@ -350,7 +367,10 @@ def _external_domain(
 ) -> ExternalDomainReport:
     train_fingerprints = [_fingerprint(record.smiles) for record in train]
     threshold = _percentile(_training_loo_similarities(train), AD_TRAIN_QUANTILE)
-    similarities = tuple(_max_train_similarity(train_fingerprints, _fingerprint(record.smiles)) for record in external)
+    similarities = tuple(
+        _max_train_similarity(train_fingerprints, _fingerprint(record.smiles))
+        for record in external
+    )
     in_domain = tuple(value >= threshold for value in similarities)
 
     bins: list[ExternalSimilarityBin] = []
@@ -369,7 +389,10 @@ def _external_domain(
 
     return ExternalDomainReport(
         similarity_metric=f"Morgan radius={MORGAN_RADIUS} bits={MORGAN_BITS} Tanimoto",
-        threshold_source=f"parent ESOL training leave-one-out nearest-neighbor similarity percentile {AD_TRAIN_QUANTILE}",
+        threshold_source=(
+            "parent ESOL training leave-one-out nearest-neighbor similarity "
+            f"percentile {AD_TRAIN_QUANTILE}"
+        ),
         threshold=threshold,
         in_domain_count=sum(in_domain),
         out_of_domain_count=len(in_domain) - sum(in_domain),
