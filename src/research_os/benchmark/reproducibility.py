@@ -17,6 +17,7 @@ SCIENTIFIC_FLOAT_DIGITS = 12
 HASH_POLICY = f"round-finite-floats-{SCIENTIFIC_FLOAT_DIGITS}-decimal-digits-drop-volatile-hashes-v1"
 VOLATILE_HASH_KEYS = frozenset({
     "report_hash",
+    "run_report_hashes",
     "scientific_result_hash",
     "scientific_hash_policy",
     "execution_environment",
