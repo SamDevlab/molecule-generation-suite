@@ -1,8 +1,8 @@
 """Reproducibility helpers for online scientific benchmarks.
 
 Scientific-result hashes intentionally normalize insignificant floating-point
-noise. Execution hashes additionally bind the result to the runtime/software
-environment. Legacy raw report hashes can remain available for compatibility.
+noise and exclude legacy/raw execution hash fields. Execution hashes
+additionally bind the normalized result to the runtime/software environment.
 """
 from __future__ import annotations
 
@@ -14,7 +14,14 @@ from typing import Any, Mapping
 from research_os.core.hashing import sha256_json
 
 SCIENTIFIC_FLOAT_DIGITS = 12
-HASH_POLICY = f"round-finite-floats-{SCIENTIFIC_FLOAT_DIGITS}-decimal-digits-v1"
+HASH_POLICY = f"round-finite-floats-{SCIENTIFIC_FLOAT_DIGITS}-decimal-digits-drop-volatile-hashes-v1"
+VOLATILE_HASH_KEYS = frozenset({
+    "report_hash",
+    "scientific_result_hash",
+    "scientific_hash_policy",
+    "execution_environment",
+    "execution_hash",
+})
 
 
 def normalize_scientific_payload(value: Any, *, float_digits: int = SCIENTIFIC_FLOAT_DIGITS) -> Any:
@@ -29,6 +36,7 @@ def normalize_scientific_payload(value: Any, *, float_digits: int = SCIENTIFIC_F
         return {
             str(key): normalize_scientific_payload(item, float_digits=float_digits)
             for key, item in value.items()
+            if str(key) not in VOLATILE_HASH_KEYS
         }
     if isinstance(value, (list, tuple)):
         return [normalize_scientific_payload(item, float_digits=float_digits) for item in value]
