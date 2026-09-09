@@ -7,7 +7,7 @@ name = "research-os-core"
 version = "5.0.0"
 description = "Research Core + Proof Engine for molecule-generation-suite"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = ["PyYAML>=6.0"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
