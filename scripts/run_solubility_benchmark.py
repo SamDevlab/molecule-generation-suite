@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
+from research_os.benchmark.reproducibility import reproducibility_metadata
 from research_os.benchmark.solubility import download_delaney, parse_delaney_csv, run_solubility_benchmark
 
 
@@ -19,9 +20,12 @@ def main() -> int:
     else:
         records = download_delaney()
     report = run_solubility_benchmark(records, seed=args.seed)
+    payload = report.to_dict()
+    payload["reproducibility"] = reproducibility_metadata(payload)
     if args.output:
-        report.write(args.output)
-    print(json.dumps(report.to_dict(), indent=2, ensure_ascii=False))
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(json.dumps(payload, indent=2, ensure_ascii=False))
     return 0
 
 
