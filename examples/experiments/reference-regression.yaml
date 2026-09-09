@@ -1,0 +1,26 @@
+protocol: research-os.declarative-experiment.v1
+experiment:
+  id: REFERENCE-REGRESSION-001
+  task: regression
+  seed: 42
+
+dataset:
+  adapter: csv
+  path: ../data/reference-regression.csv
+  target: y
+  features: [x1, x2]
+
+split:
+  strategy: random
+  train_fraction: 0.8
+
+models:
+  - id: ordinary_least_squares
+    adapter: linear_regression
+
+metrics: [mae, rmse, r2]
+
+evidence:
+  require_dataset_hash: true
+  require_protocol_hash: true
+  fail_closed: true
