@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
 
 import pytest
@@ -100,5 +99,6 @@ def test_legacy_directories_declare_audit_only_boundary():
     formolecular = (ROOT / "formolecular" / "README.md").read_text(encoding="utf-8")
     assert "legacy exploratory workflows" in biolab
     assert "legacy exploratory workflows" in formolecular
-    assert "not the canonical" in biolab.lower()
+    assert "canonical execution layer" in biolab.lower()
+    assert "exploratory/audit-only code" in biolab.lower()
     assert "not as the current scientific source of truth" in formolecular
