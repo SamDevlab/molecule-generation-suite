@@ -13,7 +13,7 @@ import yaml
 
 from research_os.core.hashing import sha256_file, sha256_json
 from research_os.experiments.registry import ExperimentExecutionError, ExperimentRegistry
-from research_os.experiments.schema import ExperimentProtocol, load_protocol
+from research_os.experiments.schema import PROTOCOL_ID, ExperimentProtocol, load_protocol
 
 
 REQUIRED_ARTIFACTS = (
@@ -26,6 +26,7 @@ REQUIRED_ARTIFACTS = (
     "hashes.json",
     "report.md",
 )
+_IMPLEMENTATION_FILES = ("__init__.py", "engine.py", "registry.py", "schema.py")
 
 
 @dataclass(frozen=True)
@@ -77,7 +78,19 @@ def _read_json(path: Path) -> Any:
         raise ExperimentExecutionError(f"cannot read JSON artifact {path.name}: {exc}") from exc
 
 
+def _implementation_identity() -> dict[str, Any]:
+    package = Path(__file__).resolve().parent
+    files = {name: sha256_file(package / name) for name in _IMPLEMENTATION_FILES}
+    return {
+        "name": "research_os.experiments",
+        "protocol": PROTOCOL_ID,
+        "files": files,
+        "sha256": sha256_json(files),
+    }
+
+
 def _environment() -> dict[str, Any]:
+    implementation = _implementation_identity()
     return {
         "python": {
             "version": platform.python_version(),
@@ -89,17 +102,18 @@ def _environment() -> dict[str, Any]:
             "machine": platform.machine(),
         },
         "engine": {
-            "protocol": "research-os.declarative-experiment.v1",
-            "implementation": "research_os.experiments",
+            **implementation,
             "python_cache_tag": getattr(sys.implementation, "cache_tag", None),
         },
     }
 
 
-def _compatibility_payload(protocol: ExperimentProtocol) -> dict[str, Any]:
+def _scientific_protocol_payload(protocol: ExperimentProtocol) -> dict[str, Any]:
+    """Return only declared scientific choices, excluding labels and file locations."""
     return {
         "protocol": protocol.protocol,
         "task": protocol.experiment.task,
+        "seed": protocol.experiment.seed,
         "dataset": {
             "adapter": protocol.dataset.adapter,
             "target": protocol.dataset.target,
@@ -111,9 +125,19 @@ def _compatibility_payload(protocol: ExperimentProtocol) -> dict[str, Any]:
     }
 
 
+def _compatibility_payload(protocol: ExperimentProtocol) -> dict[str, Any]:
+    """Return methodological choices that must match before metric comparison.
+
+    Seed is intentionally excluded so fixed-method replication runs can be compared.
+    """
+    payload = _scientific_protocol_payload(protocol)
+    payload.pop("seed")
+    return payload
+
+
 def _scientific_payload(
     *,
-    protocol_hash: str,
+    scientific_protocol_hash: str,
     dataset_hash: str,
     schema_hash: str,
     split_hash: str,
@@ -121,7 +145,7 @@ def _scientific_payload(
     metrics: Mapping[str, Mapping[str, float]],
 ) -> dict[str, Any]:
     return {
-        "protocol_hash": protocol_hash,
+        "scientific_protocol_hash": scientific_protocol_hash,
         "dataset_hash": dataset_hash,
         "dataset_schema_hash": schema_hash,
         "split_membership_hash": split_hash,
@@ -139,6 +163,7 @@ def _report(manifest: Mapping[str, Any], metrics: Mapping[str, Mapping[str, floa
         f"- Dataset rows: {manifest['dataset']['row_count']}",
         f"- Dataset SHA-256: `{manifest['dataset']['sha256']}`",
         f"- Split membership SHA-256: `{manifest['split']['membership_hash']}`",
+        f"- Scientific protocol SHA-256: `{manifest['scientific_protocol_hash']}`",
         f"- Scientific result SHA-256: `{manifest['scientific_result_hash']}`",
         f"- Execution SHA-256: `{manifest['execution_hash']}`",
         "",
@@ -195,10 +220,11 @@ class ExperimentEngine:
 
         protocol_payload = protocol.to_dict()
         protocol_hash = sha256_json(protocol_payload)
+        scientific_protocol_hash = sha256_json(_scientific_protocol_payload(protocol))
         compatibility_payload = _compatibility_payload(protocol)
         compatibility_hash = sha256_json(compatibility_payload)
         scientific_payload = _scientific_payload(
-            protocol_hash=protocol_hash,
+            scientific_protocol_hash=scientific_protocol_hash,
             dataset_hash=table.dataset_hash,
             schema_hash=table.schema_hash,
             split_hash=split.membership_hash,
@@ -245,9 +271,11 @@ class ExperimentEngine:
                 for model in protocol.models
             },
             "protocol_hash": protocol_hash,
+            "scientific_protocol_hash": scientific_protocol_hash,
             "compatibility_hash": compatibility_hash,
             "scientific_result_hash": scientific_result_hash,
             "execution_hash": execution_hash,
+            "implementation_hash": environment["engine"]["sha256"],
         }
         provenance = {
             "dataset": {
@@ -263,6 +291,7 @@ class ExperimentEngine:
                 "membership_hash": split.membership_hash,
             },
             "compatibility": compatibility_payload,
+            "implementation": environment["engine"],
         }
         evidence = {
             "status": "PASS",
@@ -271,6 +300,7 @@ class ExperimentEngine:
                 {"rule_id": "DECL-DATASET-HASH", "status": "PASS", "reason": "dataset content hash recorded"},
                 {"rule_id": "DECL-SPLIT-DETERMINISTIC", "status": "PASS", "reason": "seeded split membership hash recorded"},
                 {"rule_id": "DECL-FINITE-METRICS", "status": "PASS", "reason": "all declared metrics are finite"},
+                {"rule_id": "DECL-IMPLEMENTATION-ID", "status": "PASS", "reason": "engine source identity recorded"},
             ],
         }
 
@@ -295,12 +325,14 @@ class ExperimentEngine:
         _write_json(target / "hashes.json", {
             "artifacts": artifact_hashes,
             "protocol_hash": protocol_hash,
+            "scientific_protocol_hash": scientific_protocol_hash,
             "dataset_hash": table.dataset_hash,
             "dataset_schema_hash": table.schema_hash,
             "split_membership_hash": split.membership_hash,
             "compatibility_hash": compatibility_hash,
             "scientific_result_hash": scientific_result_hash,
             "execution_hash": execution_hash,
+            "implementation_hash": environment["engine"]["sha256"],
             "package_hash": package_hash,
         })
         return ExperimentRunResult(str(target), protocol.experiment.id, scientific_result_hash, execution_hash, compatibility_hash, metrics)
@@ -331,6 +363,10 @@ def verify_experiment_run(root: str | Path) -> VerificationResult:
     protocol_hash = sha256_json(protocol.to_dict())
     if protocol_hash != hashes.get("protocol_hash"):
         raise ExperimentExecutionError("protocol hash mismatch")
+    scientific_protocol_hash = sha256_json(_scientific_protocol_payload(protocol))
+    if scientific_protocol_hash != hashes.get("scientific_protocol_hash"):
+        raise ExperimentExecutionError("scientific protocol hash mismatch")
+
     manifest = _read_json(target / "manifest.json")
     metrics = _read_json(target / "metrics.json")
     provenance = _read_json(target / "provenance.json")
@@ -342,12 +378,15 @@ def verify_experiment_run(root: str | Path) -> VerificationResult:
     compatibility_hash = sha256_json(_compatibility_payload(protocol))
     if compatibility_hash != hashes.get("compatibility_hash") or compatibility_hash != manifest.get("compatibility_hash"):
         raise ExperimentExecutionError("compatibility hash mismatch")
+    if scientific_protocol_hash != manifest.get("scientific_protocol_hash"):
+        raise ExperimentExecutionError("manifest scientific protocol hash mismatch")
+
     dataset = manifest.get("dataset", {})
     split = manifest.get("split", {})
     models = manifest.get("models", {})
     model_identities = {model_id: model.get("identity") for model_id, model in models.items()}
     scientific_payload = _scientific_payload(
-        protocol_hash=protocol_hash,
+        scientific_protocol_hash=scientific_protocol_hash,
         dataset_hash=dataset.get("sha256"),
         schema_hash=dataset.get("schema_hash"),
         split_hash=split.get("membership_hash"),
@@ -359,6 +398,15 @@ def verify_experiment_run(root: str | Path) -> VerificationResult:
         raise ExperimentExecutionError("scientific result hash mismatch")
     if provenance.get("dataset", {}).get("sha256") != dataset.get("sha256") or provenance.get("split", {}).get("membership_hash") != split.get("membership_hash"):
         raise ExperimentExecutionError("provenance does not match manifest identities")
+
+    recorded_implementation = environment.get("engine", {}).get("sha256")
+    if not isinstance(recorded_implementation, str) or len(recorded_implementation) != 64:
+        raise ExperimentExecutionError("environment is missing a valid implementation identity")
+    if recorded_implementation != manifest.get("implementation_hash") or recorded_implementation != hashes.get("implementation_hash"):
+        raise ExperimentExecutionError("implementation identity mismatch")
+    if provenance.get("implementation", {}).get("sha256") != recorded_implementation:
+        raise ExperimentExecutionError("provenance implementation identity mismatch")
+
     execution_hash = sha256_json({"scientific_result_hash": scientific_result_hash, "environment": environment})
     if execution_hash != hashes.get("execution_hash") or execution_hash != manifest.get("execution_hash"):
         raise ExperimentExecutionError("execution hash mismatch")
@@ -372,6 +420,7 @@ def verify_experiment_run(root: str | Path) -> VerificationResult:
     gates.extend([
         {"rule_id": "DECL-PROTOCOL-IDENTITY", "status": "PASS", "reason": "protocol and compatibility identities reproduce"},
         {"rule_id": "DECL-SCIENTIFIC-IDENTITY", "status": "PASS", "reason": "scientific result identity reproduces"},
+        {"rule_id": "DECL-IMPLEMENTATION-IDENTITY", "status": "PASS", "reason": "recorded implementation identity is internally consistent"},
         {"rule_id": "DECL-EXECUTION-IDENTITY", "status": "PASS", "reason": "execution identity reproduces"},
     ])
     return VerificationResult("PASS", str(target), scientific_result_hash, execution_hash, tuple(gates))
@@ -390,8 +439,10 @@ def inspect_experiment_run(root: str | Path) -> dict[str, Any]:
         "split": manifest["split"],
         "models": {key: {"adapter": value["adapter"], "identity": value["identity"]} for key, value in manifest["models"].items()},
         "metrics": metrics,
+        "scientific_protocol_hash": manifest["scientific_protocol_hash"],
         "scientific_result_hash": manifest["scientific_result_hash"],
         "execution_hash": manifest["execution_hash"],
+        "implementation_hash": manifest["implementation_hash"],
     }
 
 
@@ -416,6 +467,7 @@ def compare_experiment_runs(left: str | Path, right: str | Path) -> dict[str, An
         "compatible": True,
         "compatibility_hash": left_manifest["compatibility_hash"],
         "same_dataset_content": left_manifest["dataset"]["sha256"] == right_manifest["dataset"]["sha256"],
+        "same_implementation": left_manifest.get("implementation_hash") == right_manifest.get("implementation_hash"),
         "same_scientific_result": left_manifest["scientific_result_hash"] == right_manifest["scientific_result_hash"],
         "metric_deltas_right_minus_left": deltas,
     }
