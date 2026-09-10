@@ -95,3 +95,70 @@ jobs:
           name: redock-001-v1.2
           path: /tmp/redock-001-v12
           if-no-files-found: warn
+
+  redock-002-preflight:
+    name: capability (REDOCK-002 structural preflight)
+    if: github.event_name == 'pull_request' && github.head_ref == 'benchmark/redock-002-astex-holdout'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install molecular capability
+        run: python -m pip install -e ".[molecule]"
+      - name: Validate frozen RCSB chains and ligand instances without docking
+        run: |
+          python scripts/preflight_redocking_holdout.py \
+            --workdir /tmp/redock-002-preflight \
+            --output /tmp/redock-002-preflight/preflight-redock-002.json
+      - name: Upload REDOCK-002 preflight evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redock-002-preflight
+          path: /tmp/redock-002-preflight
+          if-no-files-found: warn
+
+  redock-002-holdout:
+    name: capability (REDOCK-002 Astex holdout)
+    if: github.event_name == 'push' || github.head_ref == 'benchmark/redock-002-astex-holdout'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install Research OS molecular capability
+        run: python -m pip install -e ".[dev,molecule]"
+      - name: Install Open Babel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+      - name: Install official AutoDock Vina 1.2.7 binary
+        run: |
+          curl --fail --location --retry 3 \
+            https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 \
+            --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          /tmp/vina_1.2.7 --version
+          sha256sum /tmp/vina_1.2.7
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Execute frozen REDOCK-002 Astex holdout v1.0
+        run: |
+          python scripts/run_redocking_holdout.py \
+            --workdir /tmp/redock-002-astex \
+            --output /tmp/redock-002-astex/redocking-holdout-result-v1.0.json
+      - name: Upload REDOCK-002 evidence bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redock-002-astex-holdout-v1.0
+          path: /tmp/redock-002-astex
+          if-no-files-found: warn
