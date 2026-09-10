@@ -22,12 +22,12 @@ def test_executable_resolution_prefers_explicit_environment(tmp_path: Path):
     executable = _make_executable(tmp_path / "vina")
     result = resolve_executable(
         "vina",
-        env_var="RESEARCH_OS_VINA",
+        env_var="RESEARCH_OS_VINA_EXECUTABLE",
         path_candidates=("vina",),
-        environment={"RESEARCH_OS_VINA": str(executable)},
+        environment={"RESEARCH_OS_VINA_EXECUTABLE": str(executable)},
     )
     assert result.available is True
-    assert result.source == "env:RESEARCH_OS_VINA"
+    assert result.source == "env:RESEARCH_OS_VINA_EXECUTABLE"
     assert result.path == str(executable.resolve())
 
 
@@ -36,12 +36,12 @@ def test_invalid_explicit_override_fails_closed_without_path_fallback(monkeypatc
     monkeypatch.setattr("research_os.legacy_runtime.shutil.which", lambda _: str(fallback))
     result = resolve_executable(
         "vina",
-        env_var="RESEARCH_OS_VINA",
+        env_var="RESEARCH_OS_VINA_EXECUTABLE",
         path_candidates=("vina",),
-        environment={"RESEARCH_OS_VINA": str(tmp_path / "missing-vina")},
+        environment={"RESEARCH_OS_VINA_EXECUTABLE": str(tmp_path / "missing-vina")},
     )
     assert result.available is False
-    assert result.source == "env:RESEARCH_OS_VINA"
+    assert result.source == "env:RESEARCH_OS_VINA_EXECUTABLE"
     with pytest.raises(FileNotFoundError):
         require_executable(result)
 
@@ -60,8 +60,8 @@ def test_biolab_preflight_passes_with_explicit_engines(tmp_path: Path):
     result = biolab_preflight(
         tmp_path,
         environment={
-            "RESEARCH_OS_VINA": str(vina),
-            "RESEARCH_OS_OBABEL": str(obabel),
+            "RESEARCH_OS_VINA_EXECUTABLE": str(vina),
+            "RESEARCH_OS_OPENBABEL_EXECUTABLE": str(obabel),
         },
     )
     assert result["status"] == "PASS"
@@ -70,8 +70,8 @@ def test_biolab_preflight_passes_with_explicit_engines(tmp_path: Path):
 
 def test_cli_legacy_preflight_is_fail_closed(monkeypatch, tmp_path: Path, capsys):
     monkeypatch.setattr("research_os.legacy_runtime.shutil.which", lambda _: None)
-    monkeypatch.delenv("RESEARCH_OS_VINA", raising=False)
-    monkeypatch.delenv("RESEARCH_OS_OBABEL", raising=False)
+    monkeypatch.delenv("RESEARCH_OS_VINA_EXECUTABLE", raising=False)
+    monkeypatch.delenv("RESEARCH_OS_OPENBABEL_EXECUTABLE", raising=False)
     assert main(["legacy-preflight", str(tmp_path)]) == 1
     payload = json.loads(capsys.readouterr().out)
     assert payload["status"] == "INDETERMINATE"
