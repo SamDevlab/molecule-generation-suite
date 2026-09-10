@@ -26,6 +26,16 @@ jobs:
         run: python -m compileall -q src tests
       - name: Run Research OS tests
         run: pytest -q
+      - name: Execute declarative reference protocol twice
+        run: |
+          research-os run experiment examples/experiments/reference-regression.yaml --output /tmp/research-os-declarative-a
+          research-os run experiment examples/experiments/reference-regression.yaml --output /tmp/research-os-declarative-b
+      - name: Verify declarative reference package
+        run: research-os run experiment-verify /tmp/research-os-declarative-a/REFERENCE-REGRESSION-001
+      - name: Inspect declarative reference package
+        run: research-os run experiment-inspect /tmp/research-os-declarative-a/REFERENCE-REGRESSION-001
+      - name: Compare deterministic declarative reruns
+        run: research-os run experiment-compare /tmp/research-os-declarative-a/REFERENCE-REGRESSION-001 /tmp/research-os-declarative-b/REFERENCE-REGRESSION-001
 
   cantera-reference:
     name: capability (Cantera reference)
