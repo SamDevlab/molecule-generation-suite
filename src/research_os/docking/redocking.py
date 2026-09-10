@@ -4,7 +4,7 @@ from dataclasses import asdict, dataclass
 import math
 from pathlib import Path
 import statistics
-from typing import Iterable, Sequence
+from typing import Sequence
 
 from rdkit import Chem
 from rdkit.Chem import rdMolAlign
@@ -12,7 +12,7 @@ from rdkit.Chem import rdMolAlign
 from research_os.core.hashing import sha256_file, sha256_json
 
 
-PROTOCOL_ID = "research-os.redocking.v1"
+PROTOCOL_ID = "research-os.redocking.v1.1"
 POSE_SUCCESS_THRESHOLD_ANGSTROM = 2.0
 BOX_PADDING_ANGSTROM = 6.0
 BOX_MIN_SIDE_ANGSTROM = 20.0
@@ -24,7 +24,8 @@ class RedockingCase:
     case_id: str
     pdb_id: str
     ligand_id: str
-    author_chain: str
+    ligand_author_chain: str
+    receptor_author_chains: tuple[str, ...]
     target: str
     resolution_angstrom: float
     source_url: str
@@ -34,11 +35,11 @@ class RedockingCase:
 
 
 FROZEN_REDOCKING_CASES: tuple[RedockingCase, ...] = (
-    RedockingCase("RDK-001", "1STP", "BTN", "A", "streptavidin", 2.60, "https://www.rcsb.org/structure/1STP"),
-    RedockingCase("RDK-002", "3PTB", "BEN", "A", "beta-trypsin", 1.70, "https://www.rcsb.org/structure/3PTB"),
-    RedockingCase("RDK-003", "1HVR", "XK2", "A", "HIV-1 protease", 1.80, "https://www.rcsb.org/structure/1HVR"),
-    RedockingCase("RDK-004", "1M17", "AQ4", "A", "EGFR kinase domain", 2.60, "https://www.rcsb.org/structure/1M17"),
-    RedockingCase("RDK-005", "1IEP", "STI", "A", "c-Abl kinase domain", 2.10, "https://www.rcsb.org/structure/1IEP"),
+    RedockingCase("RDK-001", "1STP", "BTN", "A", ("A",), "streptavidin", 2.60, "https://www.rcsb.org/structure/1STP"),
+    RedockingCase("RDK-002", "3PTB", "BEN", "A", ("A",), "beta-trypsin", 1.70, "https://www.rcsb.org/structure/3PTB"),
+    RedockingCase("RDK-003", "1HVR", "XK2", "A", ("A", "B"), "HIV-1 protease", 1.80, "https://www.rcsb.org/structure/1HVR"),
+    RedockingCase("RDK-004", "1M17", "AQ4", "A", ("A",), "EGFR kinase domain", 2.60, "https://www.rcsb.org/structure/1M17"),
+    RedockingCase("RDK-005", "1IEP", "STI", "A", ("A",), "c-Abl kinase domain", 2.10, "https://www.rcsb.org/structure/1IEP"),
 )
 
 
@@ -142,11 +143,6 @@ def _heavy_atom_copy(mol: Chem.Mol) -> Chem.Mol:
     if heavy.GetNumConformers() != 1:
         raise ValueError("exactly one conformer is required per pose")
     return heavy
-
-
-def _graph_identity(mol: Chem.Mol) -> str:
-    heavy = _heavy_atom_copy(mol)
-    return Chem.MolToSmiles(heavy, canonical=True, isomericSmiles=True)
 
 
 def symmetry_aware_heavy_atom_rmsd(reference: Chem.Mol, predicted: Chem.Mol) -> PoseRmsdResult:
