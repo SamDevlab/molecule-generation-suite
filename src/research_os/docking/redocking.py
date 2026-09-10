@@ -151,12 +151,24 @@ class PdbExtraction:
 
 
 def _heavy_atom_copy(mol: Chem.Mol) -> Chem.Mol:
+    """Return a coordinate-preserving molecule with every hydrogen atom removed.
+
+    RDKit ``RemoveHs`` intentionally keeps some unusual/valence-sensitive H atoms.
+    PDBQT -> SDF round-tripping can create exactly those cases, so the redocking
+    endpoint removes atomic-number-1 nodes explicitly. This is an evaluator
+    normalization only; it does not alter docking coordinates or ranks.
+    """
+
     if mol is None:
         raise ValueError("molecule is required")
     try:
-        heavy = Chem.RemoveHs(Chem.Mol(mol), sanitize=True)
+        rw = Chem.RWMol(Chem.Mol(mol))
+        for index in reversed(range(rw.GetNumAtoms())):
+            if rw.GetAtomWithIdx(index).GetAtomicNum() == 1:
+                rw.RemoveAtom(index)
+        heavy = rw.GetMol()
     except Exception as exc:
-        raise ValueError("molecule could not be sanitized for RMSD evaluation") from exc
+        raise ValueError("molecule could not be normalized for RMSD evaluation") from exc
     if heavy.GetNumAtoms() == 0:
         raise ValueError("molecule contains no heavy atoms")
     if heavy.GetNumConformers() != 1:
@@ -165,11 +177,23 @@ def _heavy_atom_copy(mol: Chem.Mol) -> Chem.Mol:
 
 
 def _connectivity_graph(mol: Chem.Mol) -> Chem.Mol:
+    """Normalize to an element-labeled heavy-atom connectivity graph.
+
+    Vina PDBQT does not preserve SDF bond orders/protonation annotations. The RMSD
+    correspondence therefore uses elemental connectivity, while still requiring an
+    exact graph match. Formal charge, aromatic flags, radicals, stereochemistry,
+    explicit hydrogen counts and bond orders are deliberately excluded from the
+    correspondence identity; atomic elements and adjacency remain mandatory.
+    """
+
     heavy = _heavy_atom_copy(mol)
     rw = Chem.RWMol(heavy)
     for atom in rw.GetAtoms():
         atom.SetIsAromatic(False)
         atom.SetChiralTag(Chem.ChiralType.CHI_UNSPECIFIED)
+        atom.SetFormalCharge(0)
+        atom.SetNumExplicitHs(0)
+        atom.SetNumRadicalElectrons(0)
         atom.SetNoImplicit(True)
     for bond in rw.GetBonds():
         bond.SetIsAromatic(False)
@@ -183,10 +207,10 @@ def _connectivity_graph(mol: Chem.Mol) -> Chem.Mol:
 def symmetry_aware_heavy_atom_rmsd(reference: Chem.Mol, predicted: Chem.Mol) -> PoseRmsdResult:
     """Return connectivity-validated, symmetry-aware heavy-atom pose RMSD.
 
-    Atom-index correspondence is never assumed. Bond-order/aromatic notation is
-    normalized for mapping because PDBQT/SDF round-tripping can alter those
-    annotations while retaining the same elemental connectivity. Elemental graph
-    identity remains mandatory; coordinate-only fallback is forbidden.
+    Atom-index correspondence is never assumed. Bond-order/aromatic/protonation
+    annotations are normalized because PDBQT cannot preserve them faithfully.
+    Element-labeled heavy-atom connectivity remains mandatory; coordinate-only
+    fallback is forbidden.
     """
 
     try:
@@ -199,7 +223,7 @@ def symmetry_aware_heavy_atom_rmsd(reference: Chem.Mol, predicted: Chem.Mol) -> 
 
     if ref.GetNumAtoms() != pred.GetNumAtoms():
         return PoseRmsdResult("INDETERMINATE", None, ref.GetNumAtoms(), pred.GetNumAtoms(), ref_identity, pred_identity, reason="heavy-atom counts differ")
-    if ref_identity != pred_identity:
+    if ref.GetNumBonds() != pred.GetNumBonds() or ref_identity != pred_identity:
         return PoseRmsdResult("INDETERMINATE", None, ref.GetNumAtoms(), pred.GetNumAtoms(), ref_identity, pred_identity, reason="reference and predicted heavy-atom graphs differ")
 
     try:
