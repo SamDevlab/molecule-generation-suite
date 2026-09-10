@@ -34,11 +34,8 @@ def _pose_identity(pose: dict[str, Any]) -> dict[str, Any]:
         "predicted_heavy_atoms",
         "reference_identity",
         "predicted_identity",
-        "reference_sha256",
-        "predicted_sha256",
         "rmsd_le_2_angstrom",
         "pdbqt_sha256",
-        "sdf_sha256",
     )
 
 
@@ -46,8 +43,12 @@ def scientific_payload(report: dict[str, Any]) -> dict[str, Any]:
     """Build the REDOCK-001 v1.2 scientific identity payload.
 
     Runtime duration, local paths, stdout/stderr, free-form exception text, log
-    hashes and host metadata are excluded. Content identities, frozen scientific
-    choices, engine versions, statuses, Vina scores and same-frame RMSDs remain.
+    hashes, host metadata and representation-only SDF byte hashes are excluded.
+    The latter are intentionally omitted because RCSB/Open Babel may embed
+    request IDs, timestamps or writer metadata without changing molecular
+    coordinates or the docking result. Stable source/prepared PDB/PDBQT
+    identities, frozen scientific choices, engine versions, statuses, Vina
+    scores and same-frame RMSDs remain in the scientific identity.
     """
 
     records: list[dict[str, Any]] = []
@@ -71,7 +72,6 @@ def scientific_payload(report: dict[str, Any]) -> dict[str, Any]:
                 "engine",
                 "engine_version",
                 "status",
-                "input_sha256",
                 "output_sha256",
                 "timed_out",
                 "protocol_id",
@@ -109,11 +109,10 @@ def scientific_payload(report: dict[str, Any]) -> dict[str, Any]:
                         "receptor_sha256",
                         "native_ligand_pdb_sha256",
                     ),
-                    "reference": _selected(reference, "sha256", "heavy_atoms", "pdb_heavy_atoms"),
+                    "reference": _selected(reference, "heavy_atoms", "pdb_heavy_atoms"),
                     "grid": grid,
                     "starting_conformer": _selected(
                         starting,
-                        "sha256",
                         "uff_optimized",
                         "random_seed",
                         "heavy_atoms",
