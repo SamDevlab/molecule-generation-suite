@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "research-os-core"
-version = "5.0.0"
+version = "5.1.0"
 description = "Research Core + Proof Engine for molecule-generation-suite"
 requires-python = ">=3.10"
 dependencies = ["PyYAML>=6.0"]

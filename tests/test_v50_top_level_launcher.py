@@ -324,7 +324,7 @@ def test_failed_response_diagnostic_has_explicit_safe_contract():
 def test_package_gate_reports_released_v5():
     import importlib.metadata
 
-    assert importlib.metadata.version("research-os-core") == "5.0.0"
+    assert importlib.metadata.version("research-os-core") == "5.1.0"
 
 
 def test_final_gate_requires_exact_required_call_count():
