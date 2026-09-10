@@ -90,8 +90,14 @@ def classify_posebusters(binary_results: Mapping[str, bool | None]) -> dict[str,
     }
 
 
+def _sanitized_heavy_copy(mol: Chem.Mol) -> Chem.Mol:
+    """Remove hydrogens while preserving normal implicit-H chemistry."""
+
+    return Chem.RemoveHs(Chem.Mol(mol), sanitize=True)
+
+
 def _heavy_isomeric_smiles(mol: Chem.Mol) -> str:
-    heavy = redocking_v11._heavy_atom_copy(mol)
+    heavy = _sanitized_heavy_copy(mol)
     return Chem.MolToSmiles(heavy, canonical=True, isomericSmiles=True)
 
 
@@ -115,7 +121,7 @@ def restore_docked_pose_chemistry(
     coordinates so the template cannot force a stereochemical PASS.
     """
 
-    template_heavy = redocking_v11._heavy_atom_copy(template)
+    template_heavy = _sanitized_heavy_copy(template)
     predicted_heavy = redocking_v11._heavy_atom_copy(predicted)
     template_graph = redocking_v11._connectivity_graph(template)
     predicted_graph = redocking_v11._connectivity_graph(predicted)
@@ -178,7 +184,7 @@ def restore_docked_pose_chemistry(
         "predicted_connectivity_identity": predicted_identity,
         "template_isomeric_smiles": _heavy_isomeric_smiles(template),
         "restored_isomeric_smiles": _heavy_isomeric_smiles(restored),
-        "template_formula": rdMolDescriptors.CalcMolFormula(template_heavy),
+        "template_formula": rdMolDescriptors.CalcMolFormula(template),
         "restored_formula": rdMolDescriptors.CalcMolFormula(restored),
     }
     return restored, metadata
