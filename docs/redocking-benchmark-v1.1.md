@@ -1,6 +1,6 @@
 # REDOCK-001 — frozen redocking benchmark v1.1
 
-**Status:** frozen before the first real docking execution.
+**Status:** executed and closed; first real docking execution recorded from GitHub Actions run 239.
 
 **Protocol ID:** `research-os.redocking.v1.1`
 
@@ -159,13 +159,50 @@ Each case records:
 
 The aggregate report has a deterministic scientific-result hash over protocol identity, frozen case identities, case statuses, source/content hashes, grid definitions, and observed pose metrics. Runtime metadata is recorded separately.
 
+## First real execution — run 239
+
+The first eligible v1.1 execution was performed in GitHub Actions on branch `benchmark/redocking-v1`, head `d038b922c58ab6136a596b9fea7bd80ca0f7a0ac`, with the frozen protocol unchanged after outcomes were available.
+
+Execution environment:
+
+- Python `3.12.14`;
+- AutoDock Vina `v1.2.7`;
+- Vina Linux x86_64 binary SHA-256: `f31f774f723bba7bbe6e9d1c47577020eea9a8da16424284c043d22593570644`;
+- Open Babel `3.1.1`;
+- platform: `Linux-6.17.0-1022-azure-x86_64-with-glibc2.39`.
+
+### Per-case results
+
+| Case | PDB / ligand | Pose-1 RMSD (Å) | Minimum RMSD (Å) | Pose count | Vina pose-1 score (kcal/mol) | Status |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| RDK-001 | `1STP / BTN` | **0.5225** | 0.5225 | 20 | -7.411 | PASS |
+| RDK-002 | `3PTB / BEN` | **0.1616** | 0.0767 | 20 | -5.929 | PASS |
+| RDK-003 | `1HVR / XK2` | **1.3516** | 1.2187 | 13 | -12.764 | PASS |
+| RDK-004 | `1M17 / AQ4` | **1.2456** | 1.2019 | 20 | -7.138 | PASS |
+| RDK-005 | `1IEP / STI` | **0.6298** | 0.6298 | 4 | -13.615 | PASS |
+
+Primary aggregate result:
+
+- pose-1 RMSD `<= 2.0 Å`: **5/5 (100%)** frozen cases;
+- mean pose-1 RMSD: **0.7822 Å**;
+- median pose-1 RMSD: **0.6298 Å**;
+- status counts: `PASS = 5`, with no FAIL, INDETERMINATE, or OUT_OF_DOMAIN cases;
+- scientific result hash: `5e56ddfc88ff1d1441539b3207b0a3aed70fb3bcc13cd4a2e8c996be5e308173`;
+- execution hash: `ee2625f2d374cf4dbbeef5bfdd2e54ea4ae47c2ec0e7d22740c1ef8195594a1c`.
+
+The CI evidence bundle was uploaded as artifact `redock-001-v1.1` (artifact ID `10134340358`), ZIP SHA-256 `ee36de9023625fa0e74ae3023f5c24dd2a48b2f979c5e347374b5fdec4ab8a8e`, containing the raw/downloaded, prepared, docking and evaluation artifacts retained by the runner.
+
+These results are deliberately recorded without changing the frozen list, box rule, starting-conformer seed, preparation policy, Vina version, exhaustiveness, mode count, primary endpoint, or five-case denominator.
+
 ## Interpretation boundary
 
-REDOCK-001 v1.1 can support only pose-reproduction statements for this fixed protocol and benchmark set. It cannot establish measured binding affinity, potency, biological activity, selectivity, toxicity, safety, clinical efficacy, or universal docking accuracy.
+The result supports the statement that, **for these five predeclared crystallographic complexes under REDOCK-001 v1.1, the frozen protocol reproduced the native binding pose with pose-1 heavy-atom RMSD at or below 2 Å in all five cases**.
+
+It does **not** establish measured binding affinity, potency, biological activity, selectivity, toxicity, safety, clinical efficacy, or universal docking accuracy. The five-case benchmark is intentionally small; its value is methodological reproducibility and objective pose recovery, not a claim of broad docking superiority.
 
 ## Change control after first execution
 
-Once the first real v1.1 Vina execution starts, none of the following may change in response to outcomes:
+The v1.1 protocol is now closed. None of the following may be changed retrospectively while retaining the v1.1 identity:
 
 - case list;
 - native ligand identities;
@@ -179,4 +216,4 @@ Once the first real v1.1 Vina execution starts, none of the following may change
 - 2 Å descriptive threshold;
 - five-case denominator policy.
 
-Any change requires a new protocol version while preserving v1.1.
+Any further methodological change requires a new protocol version while preserving v1.1 and this first execution record.
