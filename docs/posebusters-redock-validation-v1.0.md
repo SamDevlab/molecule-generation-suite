@@ -1,99 +1,42 @@
 # PoseBusters redock validation v1.0
 
-Status: **protocol frozen before PoseBusters outcome interpretation**.
+Status: **INVALIDATED for physical/chemical plausibility interpretation**.
 
-## Purpose
+## Audit outcome
 
-This benchmark adds an orthogonal validation axis to REDOCK-001 and REDOCK-002. The existing redocking benchmarks answer primarily whether the Vina rank-1 pose is localized near the crystallographic ligand. PoseBusters is used here to assess whether those already-generated rank-1 poses are also physically and chemically plausible.
-
-No docking is repeated for this benchmark. No pose is repaired, minimized, reranked or otherwise modified before validation.
-
-## Frozen input cohort
-
-Exactly ten rank-1 poses are evaluated:
-
-- five `RDK-*` poses from REDOCK-001 v1.2;
-- five `HLD-*` poses from REDOCK-002 Astex holdout v1.0.
-
-Source scientific identities:
+The first execution was GitHub Actions run `263` (`34541851196`) on the prospectively frozen 10-pose cohort. It produced:
 
 ```text
-REDOCK-001 = 4c24876d0a744f28b3ff4d2792102b708d9447bfd7dd35bdfa5aaf11be1bf16b
-REDOCK-002 = 8540d1acf507047af402013f9d9d5d6ad93c5ac63123b95ab2876a46ecabb00c
+source same-frame RMSD <= 2 Å = 7/10
+PB-plausible                    = 0/10
+PB-valid                        = 0/10
+scientific_result_hash          = 432a9ac17bc06a0709ecd897ae6c4955eedb3b37b8528803d5fff7a578564087
 ```
 
-The CI source artifacts are frozen to GitHub Actions run 261:
+The zero-PB result is retained as audit history but is not interpreted as evidence that every docked heavy-atom geometry is physically invalid.
+
+## Methodological defect discovered after execution
+
+v1.0 passed the direct `pose_01.sdf` files produced by the REDOCK Open Babel PDBQT-to-SDF round trip to PoseBusters. PDBQT does not preserve the full ligand chemical representation and the round trip had dropped most non-polar hydrogens / chemical valence information.
+
+Concrete examples from the frozen run-261 evidence:
 
 ```text
-run_id = 34540186017
-REDOCK-001 artifact_id = 10177251400
-REDOCK-002 artifact_id = 10177125237
+RDK-001 ligand chemistry: C10H16N2O3S
+RDK-001 pose_01.sdf:      C10H3N2O3S
+
+HLD-001 ligand chemistry: C20H25ClN6O3
+HLD-001 pose_01.sdf:      C20H4ClN6O3
 ```
 
-Each case uses only files already present in the frozen redocking evidence bundle:
+Consequently every case failed PoseBusters molecular-formula and radical/identity-related checks even though all ten passed the internal bond-length, bond-angle, internal-clash, internal-energy and protein-overlap/distance checks. Several cases also became indeterminate for InChI-based identity.
 
-- predicted pose: `pose_01.sdf`;
-- crystallographic ligand: `native_reference.sdf`;
-- receptor used by the docking benchmark: `receptor_extracted.pdb`.
+This is a representation-layer mismatch: the redocking RMSD evaluator intentionally normalizes bond-order/protonation annotations because PDBQT cannot preserve them, whereas PoseBusters expects a chemically meaningful molecular representation.
 
-## PoseBusters identity
+## Why v1.0 is not silently repaired
 
-```text
-PoseBusters = 0.6.5
-config = redock
-redock config Git blob SHA-1 = 8bcceebd7901e06759176d3a2b6b35965033464a
-max_workers = 0
-full_report = false
-```
+The run and hash above remain recorded. The correction is explicitly versioned as PoseBusters redock validation **v1.1** rather than rewriting v1.0 after observing its outcome.
 
-The official `redock` binary report covers loading, molecular chemistry/identity, internal geometry, ring/double-bond geometry, internal energy, protein/cofactor/water distances and overlaps, plus an RMSD binary.
+v1.1 keeps the exact same ten frozen Vina rank-1 heavy-atom poses and source benchmark identities. It restores only the known pre-docking ligand chemistry from `starting_conformer.sdf`, copies the docked heavy-atom coordinates exactly, performs no rigid fit or minimization, and reassigns stereochemistry from the docked 3D coordinates rather than forcing stereochemical labels from the template.
 
-## Endpoints
-
-### 1. Source localization
-
-The canonical localization endpoint remains the Research OS REDOCK v1.2 same-frame, symmetry-aware heavy-atom RMSD. No post-docking rigid-body alignment is allowed.
-
-The frozen ten-pose cohort contains **7/10** rank-1 poses with source same-frame RMSD <= 2 Å: 5/5 from REDOCK-001 and 2/5 from REDOCK-002.
-
-### 2. PB-valid
-
-`PB-valid` is the literal all-tests PoseBusters endpoint: every binary output in the official `redock` configuration must pass, including PoseBusters' own RMSD binary.
-
-### 3. PB-plausible
-
-`PB-plausible` is the primary plausibility endpoint for this benchmark. Every official PoseBusters `redock` binary output must pass **except the RMSD binary**.
-
-This separation is deliberate: physical/chemical plausibility must not be conflated with localization, which is already measured independently by the corrected Research OS same-frame RMSD endpoint.
-
-Missing or indeterminate binary outputs fail closed for both `PB-valid` and `PB-plausible` when applicable.
-
-### 4. Combined endpoint
-
-A pose passes the combined endpoint only when:
-
-```text
-Research OS same-frame pose-1 RMSD <= 2 Å
-AND
-PB-plausible = true
-```
-
-## Scientific identity
-
-The scientific result hash contains:
-
-- this protocol identity;
-- PoseBusters version and frozen config identity;
-- source benchmark scientific hashes;
-- source same-frame pose-1 RMSDs;
-- normalized PoseBusters binary results;
-- `PB-valid`, `PB-plausible` and combined endpoint outcomes;
-- aggregate counts.
-
-It excludes local paths, runtime, stdout/stderr, artifact transport metadata, host details and dataframe formatting.
-
-## Interpretation boundary
-
-This benchmark can support statements about geometric/chemical plausibility of these ten already-generated docking poses under PoseBusters 0.6.5. It does not establish measured affinity, potency, selectivity, biological activity, toxicity, safety, efficacy, clinical performance or universal docking correctness.
-
-Any methodological defect discovered after the first valid PoseBusters execution must be corrected through an explicitly versioned protocol rather than by changing the frozen inputs in response to results.
+No REDOCK pose, ranking, score or source RMSD is changed by this correction.
