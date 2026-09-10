@@ -225,7 +225,7 @@ jobs:
       - name: Install molecular test capability only
         run: python -m pip install -e ".[dev,molecule]"
       - name: Test frozen Astex-20 selection logic
-        run: pytest -q tests/test_astex20_selection.py
+        run: pytest -q tests/test_astex20_selection.py tests/test_astex20_frozen_cohort.py
       - name: Select and structurally preflight prospective Astex extension without docking
         run: |
           python scripts/preflight_astex20.py \
@@ -237,4 +237,48 @@ jobs:
         with:
           name: redock-003-astex20-preflight-v1.0
           path: /tmp/astex20-preflight
+          if-no-files-found: warn
+
+  astex20-redocking:
+    name: capability (REDOCK-003 Astex-20 prospective redocking)
+    if: github.event_name == 'pull_request' && github.head_ref == 'benchmark/astex20-v1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install Research OS molecular capability
+        run: python -m pip install -e ".[dev,molecule]"
+      - name: Test frozen Astex-20 cohort before docking
+        run: pytest -q tests/test_astex20_selection.py tests/test_astex20_frozen_cohort.py tests/test_redocking_v12.py tests/test_redocking_v12_identity.py
+      - name: Install Open Babel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+      - name: Install official AutoDock Vina 1.2.7 binary
+        run: |
+          curl --fail --location --retry 3 \
+            https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 \
+            --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          /tmp/vina_1.2.7 --version
+          sha256sum /tmp/vina_1.2.7
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Execute frozen 15-case prospective Astex extension
+        run: |
+          python scripts/run_astex20_redocking.py \
+            --workdir /tmp/redock-003-astex20 \
+            --output /tmp/redock-003-astex20/redocking-astex20-result-v1.0.json
+      - name: Upload REDOCK-003 Astex-20 evidence bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redock-003-astex20-v1.0
+          path: /tmp/redock-003-astex20
           if-no-files-found: warn
