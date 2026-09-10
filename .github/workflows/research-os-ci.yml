@@ -211,3 +211,30 @@ jobs:
           name: posebusters-redock-v1.1
           path: /tmp/posebusters-redock-v1.1
           if-no-files-found: warn
+
+  astex20-preflight:
+    name: capability (REDOCK-003 Astex-20 structural preflight)
+    if: github.event_name == 'pull_request' && github.head_ref == 'benchmark/astex20-v1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install molecular test capability only
+        run: python -m pip install -e ".[dev,molecule]"
+      - name: Test frozen Astex-20 selection logic
+        run: pytest -q tests/test_astex20_selection.py
+      - name: Select and structurally preflight prospective Astex extension without docking
+        run: |
+          python scripts/preflight_astex20.py \
+            --workdir /tmp/astex20-preflight \
+            --output /tmp/astex20-preflight/astex20-preflight-v1.0.json
+      - name: Upload Astex-20 structural preflight evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redock-003-astex20-preflight-v1.0
+          path: /tmp/astex20-preflight
+          if-no-files-found: warn
