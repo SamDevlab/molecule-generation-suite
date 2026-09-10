@@ -99,16 +99,19 @@ def _write_restored_pose(mol: Chem.Mol, destination: Path) -> None:
 
 
 def _verify_template_matches_reference(template: Chem.Mol, reference: Chem.Mol) -> dict[str, Any]:
-    template_heavy = redocking_v11._heavy_atom_copy(template)
-    reference_heavy = redocking_v11._heavy_atom_copy(reference)
     template_graph = redocking_v11._connectivity_graph(template)
     reference_graph = redocking_v11._connectivity_graph(reference)
     template_identity = Chem.MolToSmiles(template_graph, canonical=True, isomericSmiles=False)
     reference_identity = Chem.MolToSmiles(reference_graph, canonical=True, isomericSmiles=False)
     if template_identity != reference_identity:
         raise RuntimeError("starting conformer chemistry does not match the frozen reference connectivity")
-    template_formula = rdMolDescriptors.CalcMolFormula(template_heavy)
-    reference_formula = rdMolDescriptors.CalcMolFormula(reference_heavy)
+
+    # Both molecules were already parsed and sanitized by load_single_sdf. Formula
+    # comparison must use that chemically meaningful state directly: manually
+    # deleting explicit H atoms without restoring implicit-H state creates an
+    # artificial hydrogen deficit and was the implementation defect in run 269.
+    template_formula = rdMolDescriptors.CalcMolFormula(template)
+    reference_formula = rdMolDescriptors.CalcMolFormula(reference)
     if template_formula != reference_formula:
         raise RuntimeError("starting conformer formula does not match the frozen reference ligand")
     return {
