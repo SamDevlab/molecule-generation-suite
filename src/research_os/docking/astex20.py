@@ -17,6 +17,11 @@ SELECTION_SALT = "research-os.astex20.v1.0"
 TARGET_PROSPECTIVE_COUNT = 15
 CONTACT_CUTOFF_ANGSTROM = 8.0
 
+PREFLIGHT_RUN_ID = 34544166868
+PREFLIGHT_ARTIFACT_ID = 10178395083
+PREFLIGHT_ARTIFACT_SHA256 = "56240b2eb1493190e7902ac26a026183a906d0e4a5b0f1068cdd43f185b62314"
+PREFLIGHT_SELECTION_MANIFEST_HASH = "8119f2ece8bd1be2612e74520871cbeddb5fa9be7951d23c88db478e122a1690"
+
 ASTEX_DIVERSE_85: tuple[str, ...] = (
     "1G9V_RQ3", "1GKC_NFH", "1GM8_SOX", "1GPK_HUP", "1HNN_SKF", "1HP0_AD3",
     "1HQ2_PH2", "1HVY_D16", "1HWI_115", "1HWW_SWA", "1IA1_TQ3", "1IG3_VIB",
@@ -47,6 +52,88 @@ INITIAL_HASH_RANKED_15: tuple[str, ...] = (
     "1R1H_BIR", "1SJ0_E4D", "1MEH_MOA", "1Q41_IXM", "1T9B_1CS",
     "1MMV_3AR", "1JJE_BYS", "1V4S_MRK", "1T40_ID5", "1PMN_984",
     "1KZK_JE2", "1W2G_THM", "1HQ2_PH2", "1S3V_TQD", "1HVY_D16",
+)
+
+PREFLIGHT_REJECTED_BEFORE_COHORT_FILLED: tuple[tuple[int, str, str], ...] = (
+    (4, "1Q41_IXM", "multiple ligand instances"),
+    (5, "1T9B_1CS", "multiple ligand instances"),
+    (6, "1MMV_3AR", "multiple ligand instances"),
+    (7, "1JJE_BYS", "multiple ligand instances"),
+    (12, "1W2G_THM", "multiple ligand instances"),
+    (15, "1HVY_D16", "multiple ligand instances"),
+    (16, "1JD0_AZM", "multiple ligand instances"),
+    (17, "1XM6_5RM", "multiple ligand instances"),
+    (23, "1L2S_STC", "multiple ligand instances"),
+)
+
+# Frozen from the successful no-docking structural preflight in Actions run 275
+# (workflow run id PREFLIGHT_RUN_ID). These values must not be changed in
+# response to any later Vina score, pose or RMSD without a new protocol version.
+FROZEN_PROSPECTIVE_CASES: tuple[base.RedockingCase, ...] = (
+    base.RedockingCase(
+        "ATX-001", "1R1H", "BIR", "A", ("A",), "NEPRILYSIN", 1.95,
+        "https://www.rcsb.org/structure/1R1H",
+    ),
+    base.RedockingCase(
+        "ATX-002", "1SJ0", "E4D", "A", ("A",), "ESTROGEN RECEPTOR", 1.90,
+        "https://www.rcsb.org/structure/1SJ0",
+    ),
+    base.RedockingCase(
+        "ATX-003", "1MEH", "MOA", "A", ("A",),
+        "INOSINE-5'-MONOPHOSPHATE DEHYDROGENASE", 1.95,
+        "https://www.rcsb.org/structure/1MEH",
+    ),
+    base.RedockingCase(
+        "ATX-004", "1V4S", "MRK", "A", ("A",), "GLUCOKINASE ISOFORM 2", 2.30,
+        "https://www.rcsb.org/structure/1V4S",
+    ),
+    base.RedockingCase(
+        "ATX-005", "1T40", "ID5", "A", ("A",), "ALDOSE REDUCTASE", 1.80,
+        "https://www.rcsb.org/structure/1T40",
+    ),
+    base.RedockingCase(
+        "ATX-006", "1PMN", "984", "A", ("A",),
+        "MITOGEN-ACTIVATED PROTEIN KINASE 10", 2.20,
+        "https://www.rcsb.org/structure/1PMN",
+    ),
+    base.RedockingCase(
+        "ATX-007", "1KZK", "JE2", "A", ("A", "B"), "PROTEASE", 1.09,
+        "https://www.rcsb.org/structure/1KZK",
+    ),
+    base.RedockingCase(
+        "ATX-008", "1HQ2", "PH2", "A", ("A",),
+        "6-HYDROXYMETHYL-7,8-DIHYDROPTERIN PYROPHOSPHOKINASE", 1.25,
+        "https://www.rcsb.org/structure/1HQ2",
+    ),
+    base.RedockingCase(
+        "ATX-009", "1S3V", "TQD", "A", ("A",), "DIHYDROFOLATE REDUCTASE", 1.80,
+        "https://www.rcsb.org/structure/1S3V",
+    ),
+    base.RedockingCase(
+        "ATX-010", "1Z95", "198", "A", ("A",), "ANDROGEN RECEPTOR", 1.80,
+        "https://www.rcsb.org/structure/1Z95",
+    ),
+    base.RedockingCase(
+        "ATX-011", "1UNL", "RRC", "A", ("A",), "CYCLIN-DEPENDENT KINASE 5", 2.20,
+        "https://www.rcsb.org/structure/1UNL",
+    ),
+    base.RedockingCase(
+        "ATX-012", "1TOW", "CRZ", "A", ("A",),
+        "FATTY ACID-BINDING PROTEIN, ADIPOCYTE", 2.00,
+        "https://www.rcsb.org/structure/1TOW",
+    ),
+    base.RedockingCase(
+        "ATX-013", "1UOU", "CMU", "A", ("A",), "THYMIDINE PHOSPHORYLASE", 2.11,
+        "https://www.rcsb.org/structure/1UOU",
+    ),
+    base.RedockingCase(
+        "ATX-014", "1P2Y", "NCT", "A", ("A",), "CYTOCHROME P450-CAM", 2.30,
+        "https://www.rcsb.org/structure/1P2Y",
+    ),
+    base.RedockingCase(
+        "ATX-015", "1L7F", "BCZ", "A", ("A",), "NEURAMINIDASE", 1.80,
+        "https://www.rcsb.org/structure/1L7F",
+    ),
 )
 
 
