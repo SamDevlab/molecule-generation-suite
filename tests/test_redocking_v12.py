@@ -94,7 +94,7 @@ def test_graph_mismatch_is_indeterminate():
 
 
 def test_diagonal_translation_matches_euclidean_displacement():
-    reference = _embedded("CC")
+    reference = _embedded("CCO")
     translated = _translate(reference, 3.0, 4.0, 12.0)
     result = symmetry_aware_pose_rmsd(reference, translated)
     assert result.status == "PASS"
