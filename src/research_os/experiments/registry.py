@@ -79,14 +79,11 @@ class NumericCSVAdapter:
 
     def load(self, spec: DatasetSpec, protocol_path: Path) -> DatasetTable:
         declared = Path(spec.path)
-        if declared.is_absolute():
-            source = declared
-        else:
-            relative_to_protocol = (protocol_path.parent / declared).resolve()
-            relative_to_cwd = declared.resolve()
-            source = relative_to_protocol if relative_to_protocol.is_file() else relative_to_cwd
+        source = declared.resolve() if declared.is_absolute() else (protocol_path.parent / declared).resolve()
         if not source.is_file():
-            raise ExperimentExecutionError(f"dataset file does not exist: {spec.path}")
+            raise ExperimentExecutionError(
+                f"dataset file does not exist relative to protocol: {spec.path}"
+            )
 
         with source.open("r", encoding="utf-8-sig", newline="") as handle:
             reader = csv.reader(handle)
