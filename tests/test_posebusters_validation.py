@@ -6,6 +6,7 @@ import math
 from rdkit import Chem
 from rdkit.Chem import AllChem, rdMolDescriptors
 
+from research_os.docking import redocking as redocking_v11
 from research_os.docking.posebusters_validation import (
     build_case_record,
     classify_posebusters,
@@ -64,12 +65,16 @@ def test_build_case_record_normalizes_nan_and_combined_endpoint() -> None:
     assert record["localized_and_pb_plausible"] is False
 
 
-def test_restore_docked_pose_chemistry_restores_formula_without_moving_heavy_atoms() -> None:
+def _embedded_ethanol() -> Chem.Mol:
     template = Chem.AddHs(Chem.MolFromSmiles("CCO"))
     params = AllChem.ETKDGv3()
     params.randomSeed = 42
     assert AllChem.EmbedMolecule(template, params) == 0
+    return template
 
+
+def test_restore_docked_pose_chemistry_restores_formula_without_moving_heavy_atoms() -> None:
+    template = _embedded_ethanol()
     predicted = Chem.RemoveHs(Chem.Mol(template))
     predicted = Chem.RenumberAtoms(predicted, [2, 1, 0])
     predicted_conf = predicted.GetConformer()
@@ -92,9 +97,30 @@ def test_restore_docked_pose_chemistry_restores_formula_without_moving_heavy_ato
     assert metadata["crystal_coordinates_used_for_mapping"] is False
     assert metadata["rigid_fit_performed"] is False
     assert metadata["minimization_performed"] is False
-    assert rdMolDescriptors.CalcMolFormula(restored) == rdMolDescriptors.CalcMolFormula(
-        Chem.RemoveHs(template)
-    )
+    assert rdMolDescriptors.CalcMolFormula(restored) == rdMolDescriptors.CalcMolFormula(template)
+
+
+def test_sanitized_sdf_roundtrip_preserves_formula_for_restoration(tmp_path) -> None:
+    template = _embedded_ethanol()
+    template_path = tmp_path / "starting_conformer.sdf"
+    writer = Chem.SDWriter(str(template_path))
+    writer.write(template)
+    writer.close()
+
+    loaded = redocking_v11.load_single_sdf(template_path)
+    expected_formula = rdMolDescriptors.CalcMolFormula(template)
+    assert rdMolDescriptors.CalcMolFormula(loaded) == expected_formula
+
+    predicted = Chem.RemoveHs(Chem.Mol(loaded))
+    predicted_conf = predicted.GetConformer()
+    for index in range(predicted.GetNumAtoms()):
+        position = predicted_conf.GetAtomPosition(index)
+        predicted_conf.SetAtomPosition(index, (position.x + 3.0, position.y, position.z))
+
+    restored, metadata = restore_docked_pose_chemistry(loaded, predicted)
+    assert metadata["template_formula"] == expected_formula
+    assert metadata["restored_formula"] == expected_formula
+    assert metadata["max_heavy_atom_coordinate_delta_angstrom"] == 0.0
 
 
 def test_summary_keeps_source_localization_separate_from_plausibility() -> None:
