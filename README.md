@@ -1,10 +1,10 @@
-# Research OS 5.0
+# Research OS 5.1
 
 **Reproducible scientific execution with explicit evidence, provenance, fail-closed gates, and auditable research workflows.**
 
 Research OS is a Python research infrastructure for running computational studies without silently turning heuristics, ML predictions, simulations, or model-generated text into stronger scientific evidence than they actually are.
 
-This repository started as `molecule-generation-suite`, combining molecular docking and ML experiments. Those legacy trees are still preserved for audit and migration, but the primary project is now **Research OS 5.0**.
+This repository started as `molecule-generation-suite`, combining molecular docking and ML experiments. Those legacy trees are still preserved for audit and migration, but the primary project is now **Research OS 5.1**.
 
 > Research OS does not claim clinical validation, experimental validation, universal generalization, or scientific truth. Computational outputs remain computational; physics simulations remain distinct from experiments; ML and language-model output do not automatically become Evidence.
 
@@ -185,6 +185,23 @@ Model artifacts can retain dataset, schema, metric, split, environment, and trai
 
 See [`MODEL_REGISTRY.md`](MODEL_REGISTRY.md) and [`DATASET_REGISTRY.md`](DATASET_REGISTRY.md).
 
+## Declarative Experiment Engine
+
+Research OS 5.1 adds the first domain-neutral declarative experiment path. A strict YAML/JSON protocol can select registered dataset, split, model and metric adapters without embedding arbitrary executable hooks in the protocol.
+
+The reference CLI surface is:
+
+```bash
+research-os run experiment protocol.yaml --output runs
+research-os run experiment-verify runs/EXPERIMENT-ID
+research-os run experiment-inspect runs/EXPERIMENT-ID
+research-os run experiment-compare runs/A runs/B
+```
+
+Successful runs emit an auditable package with the protocol, metrics, provenance, evidence, environment, hashes and report. Scientific identity is kept separate from document labels/locations and from execution identity, while implementation provenance is explicitly hashed and verified.
+
+The v1 declarative protocol intentionally exposes a small generic regression route rather than pretending to support arbitrary scientific domains. See [`docs/research-os-5.1-declarative-experiment-engine.md`](docs/research-os-5.1-declarative-experiment-engine.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.
@@ -285,17 +302,19 @@ Examples of corrected legacy assumptions include:
 
 ## Current release
 
-The package version is **5.0.0**.
+The package version is **5.1.0**.
 
-Release acceptance, scientific scope, and the preserved live-validation record are documented in:
+Research OS 5.1 promotes the Declarative Experiment Engine into the integrated release while preserving the Research OS 5.0 evidence/proof architecture and fail-closed scientific boundaries.
 
-- [`RELEASE_NOTES_V5_0.md`](RELEASE_NOTES_V5_0.md)
-- [`RESEARCH_OS_V5_0.md`](RESEARCH_OS_V5_0.md)
+Release acceptance and the preserved validation record are documented in:
+
+- [`RELEASE_NOTES_V5_1.md`](RELEASE_NOTES_V5_1.md)
+- [`docs/research-os-5.1-declarative-experiment-engine.md`](docs/research-os-5.1-declarative-experiment-engine.md)
 - [`RESEARCH_OS_V5_VALIDATION_REPORT.md`](RESEARCH_OS_V5_VALIDATION_REPORT.md)
 - [`SCIENTIFIC_EVIDENCE_MODEL.md`](SCIENTIFIC_EVIDENCE_MODEL.md)
 - [`SECURITY_AUDIT_V5_0.md`](SECURITY_AUDIT_V5_0.md)
 
-Historical milestone documents remain in the repository for auditability; they are no longer the primary README narrative.
+The 5.0 release notes and milestone documents remain in the repository for auditability; they are no longer the current release narrative.
 
 ## Scientific limits
 
