@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-import shutil
 
 import pytest
 import yaml
@@ -93,6 +92,10 @@ def test_reference_run_emits_required_artifacts_and_verifies(tmp_path: Path) -> 
     assert verification.status == "PASS"
     assert verification.scientific_result_hash == result.scientific_result_hash
     assert set(result.metrics["ordinary_least_squares"]) == {"mae", "rmse", "r2"}
+    environment = json.loads((root / "environment.json").read_text(encoding="utf-8"))
+    implementation_hash = environment["engine"]["sha256"]
+    assert len(implementation_hash) == 64
+    assert environment["engine"]["files"]
 
 
 def test_identical_runs_reproduce_scientific_and_split_hashes(tmp_path: Path) -> None:
@@ -105,8 +108,38 @@ def test_identical_runs_reproduce_scientific_and_split_hashes(tmp_path: Path) ->
     comparison = compare_experiment_runs(left.root, right.root)
     assert comparison["compatible"] is True
     assert comparison["same_dataset_content"] is True
+    assert comparison["same_implementation"] is True
     assert comparison["same_scientific_result"] is True
     assert all(value == pytest.approx(0.0) for values in comparison["metric_deltas_right_minus_left"].values() for value in values.values())
+
+
+def test_scientific_identity_ignores_experiment_label_and_dataset_location(tmp_path: Path) -> None:
+    left_dir = tmp_path / "left-input"
+    right_dir = tmp_path / "right-input"
+    left_dir.mkdir()
+    right_dir.mkdir()
+    _write_dataset(left_dir / "data.csv")
+    _write_dataset(right_dir / "relocated.csv")
+
+    left_payload = _protocol_payload(left_dir, experiment_id="PORTABLE-A", dataset_name="data.csv")
+    right_payload = _protocol_payload(right_dir, experiment_id="PORTABLE-B", dataset_name="relocated.csv")
+    left_protocol = left_dir / "protocol.yaml"
+    right_protocol = right_dir / "renamed-protocol.yaml"
+    _write_protocol(left_protocol, left_payload)
+    _write_protocol(right_protocol, right_payload)
+
+    left = ExperimentEngine().run(left_protocol, tmp_path / "left-run")
+    right = ExperimentEngine().run(right_protocol, tmp_path / "right-run")
+    left_hashes = json.loads((Path(left.root) / "hashes.json").read_text(encoding="utf-8"))
+    right_hashes = json.loads((Path(right.root) / "hashes.json").read_text(encoding="utf-8"))
+
+    assert left_hashes["protocol_hash"] != right_hashes["protocol_hash"]
+    assert left_hashes["scientific_protocol_hash"] == right_hashes["scientific_protocol_hash"]
+    assert left.scientific_result_hash == right.scientific_result_hash
+    comparison = compare_experiment_runs(left.root, right.root)
+    assert comparison["compatible"] is True
+    assert comparison["same_dataset_content"] is True
+    assert comparison["same_scientific_result"] is True
 
 
 def test_tampering_with_hashed_artifact_fails_closed(tmp_path: Path) -> None:
@@ -178,3 +211,4 @@ def test_inspect_verifies_before_returning_summary(tmp_path: Path) -> None:
     assert summary["verification"]["status"] == "PASS"
     assert summary["experiment_id"] == "REFERENCE-REGRESSION-001"
     assert summary["scientific_result_hash"] == result.scientific_result_hash
+    assert len(summary["implementation_hash"]) == 64
