@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from research_os.docking.redocking_v12 import FROZEN_REDOCKING_CASES, run_frozen_redocking_benchmark
+from research_os.docking.redocking_v12_identity import execution_hash, scientific_result_hash
 
 
 def main() -> int:
@@ -14,6 +15,13 @@ def main() -> int:
     args = parser.parse_args()
 
     report = run_frozen_redocking_benchmark(args.workdir)
+    # The scientific identity excludes runtime timing, local paths and host-only
+    # diagnostics. The raw implementation hash is retained for audit only.
+    report["raw_runtime_coupled_hash"] = report.get("scientific_result_hash")
+    stable_scientific_hash = scientific_result_hash(report)
+    report["scientific_result_hash"] = stable_scientific_hash
+    report["execution_hash"] = execution_hash(report, stable_scientific_hash)
+
     output = Path(args.output) if args.output else Path(args.workdir) / "redocking-result-v1.2.json"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2, ensure_ascii=False, sort_keys=True), encoding="utf-8")
