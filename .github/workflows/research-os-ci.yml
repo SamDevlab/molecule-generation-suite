@@ -54,3 +54,44 @@ jobs:
         run: python -m pip check
       - name: Execute real Cantera reference gate
         run: pytest -q tests/test_cantera_reference.py
+
+  redocking-reference:
+    name: capability (REDOCK-001 v1.1)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install Research OS molecular capability
+        run: python -m pip install -e ".[dev,molecule]"
+      - name: Install Open Babel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+      - name: Install official AutoDock Vina 1.2.7 binary
+        run: |
+          curl --fail --location --retry 3 \
+            https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 \
+            --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          /tmp/vina_1.2.7 --version
+          sha256sum /tmp/vina_1.2.7
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Execute REDOCK-001 v1.1
+        run: |
+          python scripts/run_redocking_benchmark.py \
+            --workdir /tmp/redock-001 \
+            --output /tmp/redock-001/redocking-result.json
+      - name: Upload REDOCK-001 evidence bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redock-001-v1.1
+          path: /tmp/redock-001
+          if-no-files-found: warn
