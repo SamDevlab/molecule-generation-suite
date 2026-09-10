@@ -69,7 +69,7 @@ research-os legacy-preflight Biolab
 
 Resolution order is:
 
-1. explicit `RESEARCH_OS_VINA` / `RESEARCH_OS_OBABEL` path;
+1. explicit `RESEARCH_OS_VINA_EXECUTABLE` / `RESEARCH_OS_OPENBABEL_EXECUTABLE` path, matching the canonical engine adapters;
 2. explicitly supported bundled Vina candidate in `Biolab/`;
 3. executable found on `PATH`.
 
