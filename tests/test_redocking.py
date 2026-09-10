@@ -9,9 +9,13 @@ from rdkit.Chem import AllChem
 from research_os.docking.redocking import (
     FROZEN_REDOCKING_CASES,
     POSE_SUCCESS_THRESHOLD_ANGSTROM,
+    PROTOCOL_ID,
     RedockingCaseResult,
     derive_redocking_grid,
     evaluate_pose_files,
+    extract_case_from_pdb,
+    parse_vina_pose_scores,
+    split_vina_pdbqt_models,
     summarize_redocking_results,
     symmetry_aware_heavy_atom_rmsd,
 )
@@ -29,7 +33,6 @@ def _rigid_transform(mol: Chem.Mol) -> Chem.Mol:
     conf = copy.GetConformer()
     for index in range(copy.GetNumAtoms()):
         point = conf.GetAtomPosition(index)
-        # 90-degree rotation around z followed by translation.
         conf.SetAtomPosition(index, (-point.y + 7.0, point.x - 3.0, point.z + 4.0))
     return copy
 
@@ -41,16 +44,59 @@ def _write_sdf(path: Path, molecules: list[Chem.Mol]) -> None:
     writer.close()
 
 
-def test_frozen_case_set_is_exact_and_unique():
-    identity = [(case.pdb_id, case.ligand_id, case.author_chain) for case in FROZEN_REDOCKING_CASES]
+def _pdb_line(record: str, serial: int, atom: str, residue: str, chain: str, seq: int, x: float, element: str) -> str:
+    return f"{record:<6}{serial:>5} {atom:<4} {residue:>3} {chain:1}{seq:>4}    {x:>8.3f}{0.0:>8.3f}{0.0:>8.3f}{1.00:>6.2f}{20.00:>6.2f}          {element:>2}"
+
+
+def test_frozen_v11_case_set_is_exact_and_unique():
+    identity = [
+        (case.pdb_id, case.ligand_id, case.ligand_author_chain, case.receptor_author_chains)
+        for case in FROZEN_REDOCKING_CASES
+    ]
+    assert PROTOCOL_ID == "research-os.redocking.v1.1"
     assert identity == [
-        ("1STP", "BTN", "A"),
-        ("3PTB", "BEN", "A"),
-        ("1HVR", "XK2", "A"),
-        ("1M17", "AQ4", "A"),
-        ("1IEP", "STI", "A"),
+        ("1STP", "BTN", "A", ("A",)),
+        ("3PTB", "BEN", "A", ("A",)),
+        ("1HVR", "XK2", "A", ("A", "B")),
+        ("1M17", "AQ4", "A", ("A",)),
+        ("1IEP", "STI", "A", ("A",)),
     ]
     assert len({case.case_id for case in FROZEN_REDOCKING_CASES}) == 5
+
+
+def test_pdb_extraction_keeps_only_frozen_receptor_chains_and_unique_ligand():
+    case = FROZEN_REDOCKING_CASES[2]
+    pdb = "\n".join(
+        [
+            _pdb_line("ATOM", 1, "CA", "ALA", "A", 1, 0.0, "C"),
+            _pdb_line("ATOM", 2, "CA", "ALA", "B", 1, 1.0, "C"),
+            _pdb_line("ATOM", 3, "CA", "ALA", "C", 1, 2.0, "C"),
+            _pdb_line("HETATM", 4, "C1", "XK2", "A", 200, 3.0, "C"),
+            _pdb_line("HETATM", 5, "N1", "XK2", "A", 200, 4.0, "N"),
+            _pdb_line("HETATM", 6, "O", "HOH", "A", 900, 5.0, "O"),
+        ]
+    )
+    extraction = extract_case_from_pdb(pdb, case)
+    assert extraction.ligand_auth_seq_id == 200
+    assert extraction.ligand_heavy_atoms == 2
+    assert extraction.receptor_atom_count == 2
+    assert " A   1" in extraction.receptor_pdb
+    assert " B   1" in extraction.receptor_pdb
+    assert " C   1" not in extraction.receptor_pdb
+    assert "HOH" not in extraction.receptor_pdb
+
+
+def test_pdb_extraction_fails_closed_on_ambiguous_native_ligand():
+    case = FROZEN_REDOCKING_CASES[0]
+    pdb = "\n".join(
+        [
+            _pdb_line("ATOM", 1, "CA", "ALA", "A", 1, 0.0, "C"),
+            _pdb_line("HETATM", 2, "C1", "BTN", "A", 100, 1.0, "C"),
+            _pdb_line("HETATM", 3, "C1", "BTN", "A", 101, 2.0, "C"),
+        ]
+    )
+    with pytest.raises(ValueError, match="exactly one"):
+        extract_case_from_pdb(pdb, case)
 
 
 def test_identical_pose_has_near_zero_rmsd():
@@ -78,6 +124,19 @@ def test_symmetry_equivalent_atom_order_is_not_raw_index_rmsd():
     result = symmetry_aware_heavy_atom_rmsd(heavy, predicted)
     assert result.status == "PASS"
     assert result.rmsd_angstrom == pytest.approx(0.0, abs=1e-5)
+
+
+def test_bond_order_roundtrip_difference_does_not_force_coordinate_only_mapping():
+    reference = Chem.RemoveHs(_embedded("c1ccccc1"))
+    predicted = Chem.Mol(reference)
+    for bond in predicted.GetBonds():
+        bond.SetIsAromatic(False)
+        bond.SetBondType(Chem.BondType.SINGLE)
+    for atom in predicted.GetAtoms():
+        atom.SetIsAromatic(False)
+    result = symmetry_aware_heavy_atom_rmsd(reference, predicted)
+    assert result.status == "PASS"
+    assert result.rmsd_angstrom == pytest.approx(0.0, abs=1e-6)
 
 
 def test_graph_mismatch_fails_closed_without_rmsd():
@@ -127,6 +186,26 @@ def test_grid_fails_out_of_domain_instead_of_silently_enlarging_box():
     assert grid.unclamped_size_x == pytest.approx(32.0)
     assert grid.size_x == pytest.approx(30.0)
     assert "larger than 30" in grid.reason
+
+
+def test_vina_model_split_and_score_parser_are_rank_preserving():
+    text = "\n".join(
+        [
+            "MODEL 1",
+            "REMARK VINA RESULT: -7.5 0.000 0.000",
+            "ATOM      1  C   LIG A   1       0.000   0.000   0.000  0.00  0.00    0.000 C",
+            "ENDMDL",
+            "MODEL 2",
+            "REMARK VINA RESULT: -7.1 1.000 2.000",
+            "ATOM      1  C   LIG A   1       1.000   0.000   0.000  0.00  0.00    0.000 C",
+            "ENDMDL",
+        ]
+    )
+    models = split_vina_pdbqt_models(text)
+    assert len(models) == 2
+    assert models[0].startswith("MODEL 1")
+    assert models[1].startswith("MODEL 2")
+    assert parse_vina_pose_scores(text) == [-7.5, -7.1]
 
 
 def test_file_evaluator_records_content_hashes_and_all_poses(tmp_path: Path):
