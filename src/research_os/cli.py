@@ -1,13 +1,12 @@
-"""CLI dispatcher for Research OS 5.1 declarative experiments.
+"""CLI dispatcher for Research OS declarative experiments and hardening utilities.
 
-All pre-5.1 commands are delegated to the preserved legacy CLI implementation.
+Pre-5.1 commands are delegated to the preserved legacy CLI implementation.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
-from pathlib import Path
 from typing import Sequence
 
 from research_os.experiments import (
@@ -16,6 +15,7 @@ from research_os.experiments import (
     inspect_experiment_run,
     verify_experiment_run,
 )
+from research_os.legacy_runtime import biolab_preflight
 
 
 def _json(value: object) -> None:
@@ -42,6 +42,15 @@ def _experiment_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _legacy_preflight_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="research-os legacy-preflight",
+        description="Resolve external executables required by preserved Biolab workflows",
+    )
+    parser.add_argument("base_dir", nargs="?", default="Biolab")
+    return parser
+
+
 def _is_experiment_command(argv: Sequence[str]) -> bool:
     return len(argv) >= 2 and argv[0] == "run" and argv[1] in {
         "experiment",
@@ -55,6 +64,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     import sys
 
     values = list(sys.argv[1:] if argv is None else argv)
+
+    if values and values[0] == "legacy-preflight":
+        args = _legacy_preflight_parser().parse_args(values[1:])
+        result = biolab_preflight(args.base_dir)
+        _json(result)
+        return 0 if result["status"] == "PASS" else 1
+
     if not _is_experiment_command(values):
         from research_os.cli_legacy import main as legacy_main
 

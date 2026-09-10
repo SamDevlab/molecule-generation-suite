@@ -19,6 +19,17 @@ materials = ["pymatgen>=2024.1", "matminer>=0.9"]
 science = ["cantera>=3.2", "pycalphad>=0.11", "pymatgen>=2024.1", "matminer>=0.9"]
 data = ["pyarrow>=15", "scipy>=1.11"]
 query = ["duckdb>=1.0"]
+legacy = [
+  "numpy>=1.26",
+  "pandas>=2.2",
+  "rdkit>=2024.3",
+  "scikit-learn>=1.5",
+  "xgboost>=2.1",
+  "joblib>=1.4",
+  "matplotlib>=3.8",
+  "seaborn>=0.13",
+  "fpdf2>=2.7",
+]
 
 [project.scripts]
 research-os = "research_os.cli:main"
