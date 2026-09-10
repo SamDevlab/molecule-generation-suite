@@ -92,14 +92,14 @@ def biolab_preflight(
     base = Path(base_dir).expanduser().resolve()
     vina = resolve_executable(
         "vina",
-        env_var="RESEARCH_OS_VINA",
+        env_var="RESEARCH_OS_VINA_EXECUTABLE",
         bundled_candidates=(base / "vina", base / "vina.exe"),
         path_candidates=("vina", "vina.exe"),
         environment=environment,
     )
     obabel = resolve_executable(
         "obabel",
-        env_var="RESEARCH_OS_OBABEL",
+        env_var="RESEARCH_OS_OPENBABEL_EXECUTABLE",
         path_candidates=("obabel", "obabel.exe"),
         environment=environment,
     )
