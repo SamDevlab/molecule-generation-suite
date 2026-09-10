@@ -7,9 +7,14 @@ import platform
 from typing import Any
 
 import rdkit
+from rdkit import Chem
+from rdkit.Chem import rdMolDescriptors
 from posebusters import PoseBusters, __version__ as posebusters_version
 
+from research_os.docking import redocking as redocking_v11
 from research_os.docking.posebusters_validation import (
+    INVALIDATED_V10_RUN_ID,
+    INVALIDATED_V10_SCIENTIFIC_RESULT_HASH,
     POSEBUSTERS_CONFIG,
     POSEBUSTERS_REDOCK_CONFIG_GIT_BLOB_SHA1,
     POSEBUSTERS_VERSION,
@@ -19,6 +24,7 @@ from research_os.docking.posebusters_validation import (
     REDOCK_002_PROTOCOL_ID,
     REDOCK_002_SCIENTIFIC_RESULT_HASH,
     build_case_record,
+    restore_docked_pose_chemistry,
     scientific_result_hash,
     summarize_case_records,
 )
@@ -68,17 +74,56 @@ def _source_pose_1_rmsd(record: dict[str, Any]) -> float | None:
     return float(value) if value is not None else None
 
 
-def _validate_pose_files(case_dir: Path) -> tuple[Path, Path, Path]:
+def _validate_pose_files(case_dir: Path) -> tuple[Path, Path, Path, Path]:
     predicted = case_dir / "pose_01.sdf"
+    template = case_dir / "starting_conformer.sdf"
     reference = case_dir / "native_reference.sdf"
     receptor = case_dir / "receptor_extracted.pdb"
-    missing = [str(path) for path in (predicted, reference, receptor) if not path.is_file()]
+    missing = [
+        str(path)
+        for path in (predicted, template, reference, receptor)
+        if not path.is_file()
+    ]
     if missing:
         raise FileNotFoundError(f"missing frozen PoseBusters inputs: {missing}")
-    return predicted, reference, receptor
+    return predicted, template, reference, receptor
 
 
-def run_validation(redock_001_dir: Path, redock_002_dir: Path) -> dict[str, Any]:
+def _write_restored_pose(mol: Chem.Mol, destination: Path) -> None:
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    writer = Chem.SDWriter(str(destination))
+    writer.write(mol)
+    writer.close()
+    if not destination.is_file() or destination.stat().st_size == 0:
+        raise RuntimeError(f"failed to write chemistry-restored audit pose: {destination}")
+
+
+def _verify_template_matches_reference(template: Chem.Mol, reference: Chem.Mol) -> dict[str, Any]:
+    template_heavy = redocking_v11._heavy_atom_copy(template)
+    reference_heavy = redocking_v11._heavy_atom_copy(reference)
+    template_graph = redocking_v11._connectivity_graph(template)
+    reference_graph = redocking_v11._connectivity_graph(reference)
+    template_identity = Chem.MolToSmiles(template_graph, canonical=True, isomericSmiles=False)
+    reference_identity = Chem.MolToSmiles(reference_graph, canonical=True, isomericSmiles=False)
+    if template_identity != reference_identity:
+        raise RuntimeError("starting conformer chemistry does not match the frozen reference connectivity")
+    template_formula = rdMolDescriptors.CalcMolFormula(template_heavy)
+    reference_formula = rdMolDescriptors.CalcMolFormula(reference_heavy)
+    if template_formula != reference_formula:
+        raise RuntimeError("starting conformer formula does not match the frozen reference ligand")
+    return {
+        "template_reference_connectivity_match": True,
+        "template_reference_formula_match": True,
+        "reference_formula": reference_formula,
+    }
+
+
+def run_validation(
+    redock_001_dir: Path,
+    redock_002_dir: Path,
+    *,
+    audit_output_dir: Path | None = None,
+) -> dict[str, Any]:
     if posebusters_version != POSEBUSTERS_VERSION:
         raise RuntimeError(
             f"PoseBusters version mismatch: expected {POSEBUSTERS_VERSION}, got {posebusters_version}"
@@ -109,11 +154,26 @@ def run_validation(redock_001_dir: Path, redock_002_dir: Path) -> dict[str, Any]
             case_id = str(result.get("case_id", ""))
             if not case_id.startswith(spec["case_prefix"]):
                 raise RuntimeError(f"unexpected case id in {benchmark_id}: {case_id!r}")
-            predicted, reference, receptor = _validate_pose_files(root / case_id)
+            predicted_path, template_path, reference_path, receptor_path = _validate_pose_files(
+                root / case_id
+            )
+            predicted = redocking_v11.load_single_sdf(predicted_path)
+            template = redocking_v11.load_single_sdf(template_path)
+            reference = redocking_v11.load_single_sdf(reference_path)
+            template_check = _verify_template_matches_reference(template, reference)
+            restored, restoration = restore_docked_pose_chemistry(template, predicted)
+            restoration = {**restoration, **template_check}
+
+            if audit_output_dir is not None:
+                _write_restored_pose(
+                    restored,
+                    audit_output_dir / "chemistry-restored" / f"{case_id}-pose-01.sdf",
+                )
+
             dataframe = buster.bust(
-                predicted,
-                mol_true=reference,
-                mol_cond=receptor,
+                restored,
+                mol_true=reference_path,
+                mol_cond=receptor_path,
                 full_report=False,
             )
             if len(dataframe.index) != 1:
@@ -127,6 +187,7 @@ def run_validation(redock_001_dir: Path, redock_002_dir: Path) -> dict[str, Any]
                     case_id=case_id,
                     source_rmsd_angstrom=_source_pose_1_rmsd(source_record),
                     binary_results=row,
+                    representation_normalization=restoration,
                 )
             )
 
@@ -154,10 +215,16 @@ def run_validation(redock_001_dir: Path, redock_002_dir: Path) -> dict[str, Any]
             "pb_valid": "all official PoseBusters redock binary outputs pass, including its RMSD binary",
             "pb_plausible": "all official PoseBusters redock binary outputs except the RMSD binary pass",
             "combined": "source localization passes AND pb_plausible passes",
-            "pose_selection": "as-generated Vina rank-1 pose; no repair, minimization or reranking",
+            "pose_selection": "as-generated Vina rank-1 heavy-atom coordinates; no repair, minimization, fitting or reranking",
+            "representation_normalization": "restore known pre-docking ligand chemistry from starting_conformer.sdf while copying docked heavy-atom coordinates exactly; stereochemistry reassigned from docked 3D coordinates",
         },
         "records": case_records,
         "summary": summary,
+        "audit_history": {
+            "invalidated_v1.0_run_id": INVALIDATED_V10_RUN_ID,
+            "invalidated_v1.0_scientific_result_hash": INVALIDATED_V10_SCIENTIFIC_RESULT_HASH,
+            "invalidation_reason": "direct PDBQT-to-SDF poses lost non-polar hydrogens/chemical representation, causing PoseBusters identity/radical failures unrelated to docked heavy-atom geometry",
+        },
         "environment": {
             "python": platform.python_version(),
             "rdkit": rdkit.__version__,
@@ -172,20 +239,32 @@ def run_validation(redock_001_dir: Path, redock_002_dir: Path) -> dict[str, Any]
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Validate frozen REDOCK-001/002 pose-1 outputs with PoseBusters 0.6.5."
+        description="Validate frozen REDOCK-001/002 pose-1 coordinates with PoseBusters 0.6.5."
     )
     parser.add_argument("--redock-001-dir", required=True, type=Path)
     parser.add_argument("--redock-002-dir", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
 
-    report = run_validation(args.redock_001_dir, args.redock_002_dir)
+    report = run_validation(
+        args.redock_001_dir,
+        args.redock_002_dir,
+        audit_output_dir=args.output.parent,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
         json.dumps(report, indent=2, ensure_ascii=False, sort_keys=True),
         encoding="utf-8",
     )
-    print(json.dumps({"summary": report["summary"], "scientific_result_hash": report["scientific_result_hash"]}, indent=2))
+    print(
+        json.dumps(
+            {
+                "summary": report["summary"],
+                "scientific_result_hash": report["scientific_result_hash"],
+            },
+            indent=2,
+        )
+    )
     return 0
 
 
