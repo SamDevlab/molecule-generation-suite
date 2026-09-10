@@ -23,12 +23,31 @@ def _selected(mapping: dict[str, Any] | None, *keys: str) -> dict[str, Any]:
     return {key: source.get(key) for key in keys}
 
 
+def _pose_identity(pose: dict[str, Any]) -> dict[str, Any]:
+    return _selected(
+        pose,
+        "rank",
+        "score_kcal_mol",
+        "status",
+        "rmsd_angstrom",
+        "reference_heavy_atoms",
+        "predicted_heavy_atoms",
+        "reference_identity",
+        "predicted_identity",
+        "reference_sha256",
+        "predicted_sha256",
+        "rmsd_le_2_angstrom",
+        "pdbqt_sha256",
+        "sdf_sha256",
+    )
+
+
 def scientific_payload(report: dict[str, Any]) -> dict[str, Any]:
     """Build the REDOCK-001 v1.2 scientific identity payload.
 
-    Runtime duration, local paths, stdout/stderr and host metadata are deliberately
-    excluded. Content hashes, frozen scientific choices, engine versions, observed
-    scores/RMSDs and case statuses remain included.
+    Runtime duration, local paths, stdout/stderr, free-form exception text, log
+    hashes and host metadata are excluded. Content identities, frozen scientific
+    choices, engine versions, statuses, Vina scores and same-frame RMSDs remain.
     """
 
     records: list[dict[str, Any]] = []
@@ -68,7 +87,6 @@ def scientific_payload(report: dict[str, Any]) -> dict[str, Any]:
             "receptor_sha256",
             "ligand_sha256",
             "output_sha256",
-            "log_sha256",
             "grid_hash",
             "target_id",
             "protocol_id",
@@ -106,9 +124,8 @@ def scientific_payload(report: dict[str, Any]) -> dict[str, Any]:
                     },
                     "preparation": prep_identity,
                     "docking": docking_identity,
-                    "error": provenance.get("error"),
                 },
-                "poses": record.get("poses") or [],
+                "poses": [_pose_identity(pose) for pose in (record.get("poses") or [])],
             }
         )
 
