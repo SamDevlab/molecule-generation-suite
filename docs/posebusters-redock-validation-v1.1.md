@@ -1,6 +1,6 @@
 # PoseBusters redock validation v1.1
 
-Status: **frozen before v1.1 PoseBusters outcome interpretation**.
+Status: **validated on the frozen 10-pose cohort**.
 
 ## Purpose
 
@@ -18,7 +18,7 @@ REDOCK-001 artifact_id = 10177251400
 REDOCK-002 artifact_id = 10177125237
 ```
 
-The independent source-localization endpoint is already fixed at **7/10** rank-1 poses with Research OS same-frame RMSD <= 2 Å.
+The independent source-localization endpoint is fixed at **7/10** rank-1 poses with Research OS same-frame RMSD <= 2 Å.
 
 ## Frozen chemistry-restoration rule
 
@@ -80,6 +80,49 @@ AND
 PB-plausible = true
 ```
 
+## Validated result — run 272
+
+The first successfully completed v1.1 scientific execution after the final implementation guard fix was GitHub Actions run **272** (`34542598641`) on frozen head `34c20c2ac70cbab70bba095bba7c0e1e8f246d90`.
+
+```text
+source same-frame RMSD <= 2 Å = 7/10
+PB-plausible                    = 10/10
+PB-valid                        = 7/10
+localized AND PB-plausible      = 7/10
+scientific_result_hash          = 6d2a165eca8104e3700d7be3963274afec7795eca95d05d58eafb2475723ce01
+artifact_id                     = 10177834738
+artifact_sha256                 = 13e44f76c43c424d97995b4568e13b31c50b3ac8e6deaa74a53e244386b3cf08
+```
+
+Per-case outcome:
+
+| Case | Source pose-1 RMSD (Å) | PB-plausible | PB-valid | Non-passing PoseBusters binaries |
+| --- | ---: | --- | --- | --- |
+| RDK-001 | 0.556594 | PASS | PASS | none |
+| RDK-002 | 0.313450 | PASS | PASS | none |
+| RDK-003 | 1.514788 | PASS | PASS | none |
+| RDK-004 | 1.360666 | PASS | PASS | none |
+| RDK-005 | 0.854407 | PASS | PASS | none |
+| HLD-001 | 0.617957 | PASS | PASS | none |
+| HLD-002 | 9.786177 | PASS | FAIL | PoseBusters RMSD only |
+| HLD-003 | 9.163211 | PASS | FAIL | PoseBusters RMSD only |
+| HLD-004 | 1.249656 | PASS | PASS | none |
+| HLD-005 | 3.233724 | PASS | FAIL | PoseBusters RMSD only |
+
+All ten cases satisfy every non-RMSD binary in the official PoseBusters `redock` configuration, including molecule loading/sanitization, formula/bond identity, radical checks, stereochemical checks, bond lengths/angles, ring/double-bond geometry, internal clashes/energy, and protein/cofactor/water distance and overlap checks.
+
+The three PB-valid failures are exactly the three source cases whose rank-1 same-frame localization exceeds 2 Å. No additional physical/chemical failure was observed after representation normalization.
+
+### Coordinate-preservation audit
+
+All ten chemistry-restoration records report:
+
+```text
+max_heavy_atom_coordinate_delta_angstrom = 0.0
+```
+
+For every case, restored formula equals both the starting-conformer formula and frozen native-reference formula. Crystallographic coordinates were not used for the restoration mapping, and no rigid fit or minimization was performed.
+
 ## Scientific identity
 
 The v1.1 hash includes:
@@ -98,6 +141,14 @@ It excludes runtime, machine/path metadata, logs/stdout, artifact transport meta
 ## Audit history
 
 PoseBusters v1.0 run 263 and hash `432a9ac17bc06a0709ecd897ae6c4955eedb3b37b8528803d5fff7a578564087` are preserved as invalidated history. v1.1 is a protocol version change made because of the representation defect, not because any specific pose was selected for a more favorable outcome.
+
+Run 269 is preserved as a pre-result implementation failure: a formula guard removed explicit hydrogens without restoring implicit-H state and terminated before any v1.1 PoseBusters scientific report was produced. The corrected guard was frozen before run 272 interpretation.
+
+## Interpretation
+
+The result supports a clear separation between pose plausibility and pose localization for this cohort. All ten frozen rank-1 poses are physically/chemically plausible under PoseBusters 0.6.5 after lossless heavy-coordinate chemistry restoration, while only seven of ten are correctly localized within the independent 2 Å same-frame endpoint.
+
+Thus the dominant observed limitation in this 10-pose cohort is **pose localization/ranking**, not a detectable PoseBusters physical/chemical plausibility failure.
 
 ## Interpretation boundary
 
