@@ -164,7 +164,7 @@ jobs:
           if-no-files-found: warn
 
   posebusters-redock-validation:
-    name: capability (PoseBusters redock validation)
+    name: capability (PoseBusters redock v1.1)
     if: github.event_name == 'pull_request' && github.head_ref == 'benchmark/posebusters-redock-validation'
     permissions:
       actions: read
@@ -198,16 +198,16 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           repository: SamDevlab/molecule-generation-suite
           run-id: 34540186017
-      - name: Validate ten frozen Vina rank-1 poses with PoseBusters 0.6.5
+      - name: Validate ten frozen Vina rank-1 poses with PoseBusters 0.6.5 v1.1 protocol
         run: |
           python scripts/run_posebusters_redock_validation.py \
             --redock-001-dir /tmp/pb-sources/redock-001 \
             --redock-002-dir /tmp/pb-sources/redock-002 \
-            --output /tmp/posebusters-redock-v1.0/posebusters-redock-v1.0.json
-      - name: Upload PoseBusters validation evidence
+            --output /tmp/posebusters-redock-v1.1/posebusters-redock-v1.1.json
+      - name: Upload PoseBusters v1.1 validation evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: posebusters-redock-v1.0
-          path: /tmp/posebusters-redock-v1.0
+          name: posebusters-redock-v1.1
+          path: /tmp/posebusters-redock-v1.1
           if-no-files-found: warn
