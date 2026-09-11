@@ -4,6 +4,7 @@ from copy import deepcopy
 
 import pytest
 
+import research_os.docking.posebusters_astex20 as pb002
 from research_os.docking.posebusters_astex20 import (
     EXPECTED_CASE_IDS,
     EXPECTED_SOURCE_LOCALIZED,
@@ -35,6 +36,15 @@ def _source_report() -> dict[str, object]:
     }
 
 
+@pytest.fixture(autouse=True)
+def _mock_recomputed_hash_for_metadata_tests(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        pb002,
+        "redock_scientific_result_hash",
+        lambda report: SOURCE_SCIENTIFIC_RESULT_HASH,
+    )
+
+
 def test_sealed_redock003_source_is_accepted() -> None:
     records = verify_source_report(_source_report())
     assert len(records) == 15
@@ -45,6 +55,15 @@ def test_wrong_scientific_hash_is_rejected() -> None:
     report = _source_report()
     report["scientific_result_hash"] = "0" * 64
     with pytest.raises(RuntimeError, match="scientific identity mismatch"):
+        verify_source_report(report)
+
+
+def test_recomputed_scientific_content_hash_must_match(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    report = _source_report()
+    monkeypatch.setattr(pb002, "redock_scientific_result_hash", lambda report: "0" * 64)
+    with pytest.raises(RuntimeError, match="scientific content hash mismatch"):
         verify_source_report(report)
 
 
