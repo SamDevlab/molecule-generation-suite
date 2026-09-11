@@ -1,0 +1,48 @@
+name: knowledge-ci
+
+on:
+  pull_request:
+    paths:
+      - "knowledge/**"
+      - "docs/knowledge/**"
+      - "src/research_os/knowledge.py"
+      - "scripts/verify_knowledge.py"
+      - "tests/test_knowledge.py"
+      - ".github/workflows/knowledge-ci.yml"
+  push:
+    branches:
+      - research-os-v1.3
+    paths:
+      - "knowledge/**"
+      - "docs/knowledge/**"
+      - "src/research_os/knowledge.py"
+      - "scripts/verify_knowledge.py"
+      - "tests/test_knowledge.py"
+      - ".github/workflows/knowledge-ci.yml"
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install core test dependencies
+        run: python -m pip install -e ".[dev]"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Compile knowledge layer
+        run: python -m py_compile src/research_os/knowledge.py scripts/verify_knowledge.py tests/test_knowledge.py
+      - name: Run knowledge tests
+        run: python -m pytest -q tests/test_knowledge.py
+      - name: Verify committed knowledge bundles
+        shell: bash
+        run: |
+          mapfile -t bundles < <(find knowledge -type f -name '*.json' -print | sort)
+          if [ "${#bundles[@]}" -eq 0 ]; then
+            echo "No knowledge bundles found" >&2
+            exit 1
+          fi
+          python scripts/verify_knowledge.py "${bundles[@]}"
