@@ -12,7 +12,7 @@ PROTOCOL_ID = "research-os.apodocking.rigid-known-site.v1.0"
 SOURCE_NAME = "Seeliger & de Groot 2010 apo/holo large-motion benchmark"
 SOURCE_URL = "https://doi.org/10.1371/journal.pcbi.1000634"
 SOURCE_LIST_SHA256 = "3eaa3c45732efa05c1e5f4f468275e8f23e7b82ea9632f5c91dac1a30d62ebfc"
-CASE_METADATA_SHA256 = "3993dc903927a38e63ca87544a38fa060c10d01e62f99b3616c22ddfe35e7a56"
+CASE_METADATA_SHA256 = "5bd7d26535417c10d124bf6aac1f5355b6c9e8c90bdb01d670b18d0ccff3ab6b"
 PUBLISHED_CASE_COUNT = 10
 MIN_GLOBAL_ALIGNMENT_CA_PAIRS = 50
 LIGAND_GRID_PADDING_ANGSTROM = 6.0
@@ -50,8 +50,9 @@ class ApoHoloCase:
 
 
 # Exact ten apo/holo pairs are taken from Table 1 of Seeliger & de Groot (2010).
-# Ligand component IDs and author-chain mappings are frozen before any APODOCK-001
-# Vina execution. The final case is a covalently linked two-component glycan.
+# Ligand component IDs and current PDB author-chain mappings are frozen before
+# any APODOCK-001 Vina execution. 1Y3N underwent carbohydrate remediation in
+# 2020; its oligosaccharide is now a distinct chain B while the protein remains A.
 FROZEN_PUBLISHED_CASES: tuple[ApoHoloCase, ...] = (
     ApoHoloCase(
         "APD-001", "GluR2 ligand binding core", "GLUR2", "1FTO", "1FTM", 257,
@@ -91,7 +92,7 @@ FROZEN_PUBLISHED_CASES: tuple[ApoHoloCase, ...] = (
     ),
     ApoHoloCase(
         "APD-010", "Alginate binding protein", "ALGI", "1Y3Q", "1Y3N", 490,
-        "Alginate Disaccharide", 4.8, 3.6, "A", "A", ("BEM", "MAV"), "A",
+        "Alginate Disaccharide", 4.8, 3.6, "A", "A", ("BEM", "MAV"), "B",
         "branched_glycan",
     ),
 )

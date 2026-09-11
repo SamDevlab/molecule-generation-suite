@@ -37,26 +37,30 @@ The ten pairs are frozen in table order before any APODOCK-001 Vina execution:
 | APD-007 | OSMO | 1SW5 | 1SW2 | BET, auth A | 5.0 | 4.4 |
 | APD-008 | GUA | 1EX6 | 1EX7 | 5GP, auth A | 3.6 | 3.9 |
 | APD-009 | HEXO | 2E2N | 2E2O | BGC, auth A | 3.0 | 1.9 |
-| APD-010 | ALGI | 1Y3Q | 1Y3N | BEM + MAV branched glycan, auth A | 4.8 | 3.6 |
+| APD-010 | ALGI | 1Y3Q | 1Y3N | BEM + MAV oligosaccharide, chain B | 4.8 | 3.6 |
 
 Source-list SHA-256:
 `3eaa3c45732efa05c1e5f4f468275e8f23e7b82ea9632f5c91dac1a30d62ebfc`
 
-Frozen case-metadata SHA-256:
-`3993dc903927a38e63ca87544a38fa060c10d01e62f99b3616c22ddfe35e7a56`
+Frozen case-metadata SHA-256 after current-PDB carbohydrate mapping correction:
+`5bd7d26535417c10d124bf6aac1f5355b6c9e8c90bdb01d670b18d0ccff3ab6b`
 
 RCSB confirms the single-component mappings used above. 1Y3N is different:
-the published alginate disaccharide is a branched/oligosaccharide entity composed
-of BEM and MAV. It is therefore represented explicitly as a two-component
-covalent ligand rather than silently reduced to one CCD.
+the published alginate disaccharide is an oligosaccharide entity composed of BEM
+and MAV. PDB carbohydrate remediation (entry major version 2.0, 2020-07-29)
+represents that oligosaccharide as its own chain B while the protein remains chain
+A. The initial no-Vina run used chain A for the sugar, failed closed with zero BEM
+instances, and no docking was executed. This mapping was corrected before any
+APODOCK-001 Vina job existed.
 
 ## No-Vina preflight
 
 For each published case the preflight:
 
 1. downloads the apo and holo PDB entries;
-2. parses frozen author chain A in both structures;
-3. verifies the frozen holo ligand component mapping;
+2. parses frozen receptor author chain A in both structures;
+3. verifies the frozen holo ligand component mapping, including chain B for the
+   remediated 1Y3N oligosaccharide;
 4. globally sequence-aligns the receptor chains and retains identical matched Cα atoms;
 5. computes one Kabsch transform from **holo receptor → apo receptor** using all
    matched identical Cα pairs;

@@ -42,11 +42,12 @@ def test_case_ids_and_structures_are_unique() -> None:
 
 def test_ligand_mapping_is_explicit_and_branched_case_is_not_hidden() -> None:
     cases = apodock001.FROZEN_PUBLISHED_CASES
-    assert all(case.holo_ligand_author_chain == "A" for case in cases)
+    assert all(case.holo_ligand_author_chain == "A" for case in cases[:9])
     assert all(case.ligand_representation == "single_ccd" for case in cases[:9])
     assert cases[-1].case_id == "APD-010"
     assert cases[-1].ligand_representation == "branched_glycan"
     assert cases[-1].holo_ligand_components == ("BEM", "MAV")
+    assert cases[-1].holo_ligand_author_chain == "B"
 
 
 def test_protocol_is_known_site_rigid_apo_not_blind_docking() -> None:
