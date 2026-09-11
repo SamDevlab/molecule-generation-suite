@@ -48,28 +48,30 @@ For each directed case:
 
 The preflight records source/target PDB hashes, alignment transform, alignment RMSD, reference coordinate identities, grid identity, and a selection-manifest hash. It explicitly reports `docking_executed=false` and `vina_imported_or_invoked=false`.
 
-### Successful prospective freeze
+### Portable prospective freeze
 
-The no-docking preflight ran successfully **before any CROSSDOCK-001 Vina outcome existed**:
+The first successful no-docking run (`34605661949`) established the same 10 structural cases, but its manifest hashed raw SVD/Kabsch floating-point values. A later no-Vina reproduction showed machine-epsilon differences (~1e-14) across runners despite unchanged PDB hashes, ligand coordinate identities, matched residues and physical grids. That first manifest (`9631023f89b2971a503cab193989e0ac8d3eb53642d27fdcbf5572e5e04e4a26`) is retained only as audit provenance and is **not** the v1.0 structural identity.
+
+Before any CROSSDOCK-001 Vina execution, v1.0 was corrected to canonicalize floating structural values to 9 decimal places for identity hashing. The portable freeze is:
 
 ```text
-freeze head SHA                  = 34780d629b800578becd72ad1280b36c1b90f252
-workflow run                     = 34605661949
-artifact id                      = 10266555733
-artifact ZIP SHA-256             = de539ce3c3f08d892ae967bb09f7aaac0fd4cec6fadfe5407ad3ff0cd650eff4
+freeze/capture head SHA          = 4192379f4a88262a20e2e64a46b486cd2047aa18
+workflow run                     = 34607126629
+artifact id                      = 10266663459
+artifact ZIP SHA-256             = 1c2a1f62e4290b3c21cfc918579c6f34e362c82c63a943bc2d8d4e1ee9cdcb5d
 eligible directed cases          = 10 / 10
-selection manifest hash          = 9631023f89b2971a503cab193989e0ac8d3eb53642d27fdcbf5572e5e04e4a26
+portable selection manifest hash = 852f027bdc55ba8c2def9d3fde0a80e70cf6a4ffc375b4eb8a696e436b681215
 docking executed                 = false
 Vina binary present              = false
 ```
 
 All ten directions exceeded the minimum eight matched pocket Cα pairs. Observed receptor-pocket alignment RMSDs ranged from approximately **0.239 Å to 1.070 Å** and all prospective grids remained inside the frozen 20–30 Å domain. Alignment RMSD was descriptive only and did not remove any case.
 
-The preflight identities are sealed in `crossdock001_freeze.py`; a later docking runner must reproduce these structural identities before Vina is allowed to execute.
+The portable preflight identities are sealed in `crossdock001_freeze.py`; a later docking runner must reproduce them before Vina is allowed to execute.
 
 ## Docking protocol after the freeze
 
-Only after all 10 directed cases pass the no-docking preflight and the exact preflight identity is frozen may a later commit enable docking.
+Only after all 10 directed cases pass the no-docking preflight and the exact portable preflight identity is independently reproduced may a later commit enable docking.
 
 The intended docking parameters are inherited from the validated redocking workflow:
 
