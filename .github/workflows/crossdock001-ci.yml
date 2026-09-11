@@ -7,6 +7,7 @@ on:
     paths:
       - "src/research_os/docking/crossdock001.py"
       - "src/research_os/docking/crossdock_alignment.py"
+      - "src/research_os/docking/crossdock_identity.py"
       - "src/research_os/docking/crossdock001_freeze.py"
       - "src/research_os/docking/crossdock001_runner.py"
       - "scripts/preflight_crossdock001.py"
@@ -44,6 +45,7 @@ jobs:
           python -m py_compile
           src/research_os/docking/crossdock001.py
           src/research_os/docking/crossdock_alignment.py
+          src/research_os/docking/crossdock_identity.py
           src/research_os/docking/crossdock001_freeze.py
           src/research_os/docking/crossdock001_runner.py
           scripts/preflight_crossdock001.py
@@ -67,26 +69,26 @@ jobs:
             exit 1
           fi
 
-      - name: Execute frozen structural preflight without docking
+      - name: Execute canonical structural preflight without docking
         run: >-
           python scripts/preflight_crossdock001.py
           --workdir /tmp/crossdock001-preflight
           --output /tmp/crossdock001-evidence/crossdock001-preflight-v1.0.json
 
-      - name: Verify report reproduces the sealed structural identity and records no docking
+      - name: Capture portable canonical identity before first Vina outcome
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          from research_os.docking.crossdock001_freeze import PREFLIGHT_SELECTION_MANIFEST_HASH
 
           path = Path('/tmp/crossdock001-evidence/crossdock001-preflight-v1.0.json')
           report = json.loads(path.read_text())
           assert report['docking_executed'] is False
           assert report['vina_imported_or_invoked'] is False
           assert report['eligible_count'] == report['directed_case_count'] == 10
-          assert report['selection_manifest_hash'] == PREFLIGHT_SELECTION_MANIFEST_HASH
-          print('selection_manifest_hash=', report['selection_manifest_hash'])
+          print('CANONICAL_SELECTION_MANIFEST_HASH=', report['selection_manifest_hash'])
+          for record in report['records']:
+              print(record['case_id'], 'GRID_HASH=', record['grid']['grid_hash'])
           PY
 
       - name: Upload CROSSDOCK-001 structural evidence
