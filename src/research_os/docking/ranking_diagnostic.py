@@ -119,7 +119,7 @@ def analyze_ranking(
         )
 
         if first_success_rank is None:
-            classification = "SEARCH_FAILURE_NO_RETURNED_POSE_LE_2A"
+            classification = "POSE_SET_MISS_NO_RETURNED_POSE_LE_2A"
             score_penalty = None
         else:
             first_success_ranks.append(first_success_rank)
@@ -162,8 +162,8 @@ def analyze_ranking(
         "RANKING_FAILURE_RECOVERED": sum(
             item["classification"] == "RANKING_FAILURE_RECOVERED" for item in case_results
         ),
-        "SEARCH_FAILURE_NO_RETURNED_POSE_LE_2A": sum(
-            item["classification"] == "SEARCH_FAILURE_NO_RETURNED_POSE_LE_2A"
+        "POSE_SET_MISS_NO_RETURNED_POSE_LE_2A": sum(
+            item["classification"] == "POSE_SET_MISS_NO_RETURNED_POSE_LE_2A"
             for item in case_results
         ),
     }
