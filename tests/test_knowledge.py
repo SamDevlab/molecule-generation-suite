@@ -6,6 +6,8 @@ from research_os.knowledge import (
     KnowledgeBundle,
     NoteRecord,
     SourceRecord,
+    bundle_from_json,
+    bundle_to_json,
 )
 
 
@@ -53,6 +55,13 @@ def test_bundle_identity_is_deterministic_and_order_independent():
     assert len(first) == 64
 
 
+def test_json_roundtrip_preserves_scientific_identity():
+    original = _bundle()
+    restored = bundle_from_json(bundle_to_json(original))
+    assert restored.scientific_identity == original.scientific_identity
+    assert restored.to_dict() == original.to_dict()
+
+
 def test_non_hypothesis_claim_requires_source_note():
     claim = ClaimRecord("C1", "A factual claim", "SUPPORTED")
     with pytest.raises(ValueError, match="Sem fonte, sem fato"):
@@ -82,3 +91,8 @@ def test_evidence_requires_scientific_identity():
     link = EvidenceLink("E1", "C1", "B1", "P1", "")
     with pytest.raises(ValueError, match="scientific result identity"):
         link.validate()
+
+
+def test_schema_is_fail_closed():
+    with pytest.raises(ValueError, match="unsupported knowledge schema"):
+        bundle_from_json('{"schema":"research-os.knowledge.v999"}')
