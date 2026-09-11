@@ -48,6 +48,25 @@ For each directed case:
 
 The preflight records source/target PDB hashes, alignment transform, alignment RMSD, reference coordinate identities, grid identity, and a selection-manifest hash. It explicitly reports `docking_executed=false` and `vina_imported_or_invoked=false`.
 
+### Successful prospective freeze
+
+The no-docking preflight ran successfully **before any CROSSDOCK-001 Vina outcome existed**:
+
+```text
+freeze head SHA                  = 34780d629b800578becd72ad1280b36c1b90f252
+workflow run                     = 34605661949
+artifact id                      = 10266555733
+artifact ZIP SHA-256             = de539ce3c3f08d892ae967bb09f7aaac0fd4cec6fadfe5407ad3ff0cd650eff4
+eligible directed cases          = 10 / 10
+selection manifest hash          = 9631023f89b2971a503cab193989e0ac8d3eb53642d27fdcbf5572e5e04e4a26
+docking executed                 = false
+Vina binary present              = false
+```
+
+All ten directions exceeded the minimum eight matched pocket Cα pairs. Observed receptor-pocket alignment RMSDs ranged from approximately **0.239 Å to 1.070 Å** and all prospective grids remained inside the frozen 20–30 Å domain. Alignment RMSD was descriptive only and did not remove any case.
+
+The preflight identities are sealed in `crossdock001_freeze.py`; a later docking runner must reproduce these structural identities before Vina is allowed to execute.
+
 ## Docking protocol after the freeze
 
 Only after all 10 directed cases pass the no-docking preflight and the exact preflight identity is frozen may a later commit enable docking.
