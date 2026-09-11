@@ -73,7 +73,7 @@ The portable preflight identities are sealed in `crossdock001_freeze.py`; a late
 
 Only after all 10 directed cases pass the no-docking preflight and the exact portable preflight identity is independently reproduced may a later commit enable docking.
 
-The intended docking parameters are inherited from the validated redocking workflow:
+The docking parameters are inherited from the validated redocking workflow:
 
 - AutoDock Vina `1.2.7`;
 - rigid target receptor;
@@ -96,6 +96,35 @@ Vina rank-1 same-frame symmetry-aware heavy-atom RMSD <= 2.0 Å
 ```
 
 Secondary descriptive endpoints may include best-of-N RMSD and first near-native rank, but they cannot replace the frozen rank-1 primary endpoint.
+
+## Evaluator audit: direct-SDF v1.0 invalidated, representation v1.1
+
+The first real Vina execution occurred only after the portable structural freeze was sealed. Vina completed all ten directed docking cases, but the original evaluator trusted Open Babel's PDBQT→SDF chemical reconstruction directly. In `XDK-05-1` that reconstruction produced neutral tetravalent nitrogen atoms that RDKit could not sanitize. The docking itself completed and produced 20 poses; the failure occurred only when converting the serialized pose representation into an evaluable RDKit molecule.
+
+That first evaluator attempt is retained, but **invalidated as a complete scientific result** because only 9/10 frozen pose-1 endpoints were evaluable:
+
+```text
+workflow run                     = 34612986306
+artifact id                      = 10269612880
+artifact ZIP SHA-256             = 4be2256cfeac8aa05d60cb1327587ba682faa90a27a405ada6b2cf0f9dd5cbd5
+invalidated scientific hash      = f7e9e77a6b375d14b05686de681478205b4e84bbcceafbfa8131de7814b09411
+Vina cases executed              = 10 / 10
+evaluable pose-1 cases           = 9 / 10
+technical indeterminate case     = XDK-05-1
+```
+
+The correction is `research-os.crossdocking.pose-representation.v1.1`. It applies **uniformly to every returned pose in all ten cases**, not only to the failed case:
+
+1. Parse the PDBQT→SDF pose without sanitizing the reconstructed chemistry.
+2. Take ligand chemistry/connectivity from that case's known pre-docking `starting_conformer.sdf`.
+3. Require an exact element/connectivity heavy-atom graph correspondence between the starting ligand and docked pose.
+4. Copy the docked heavy-atom coordinates exactly into the known ligand chemistry template.
+5. Reassign stereochemistry from the docked 3D coordinates and require the restored molecule to sanitize.
+6. Evaluate the restored representation with the unchanged REDOCK v1.2 same-frame RMSD metric.
+
+The correction does **not** use crystallographic ligand coordinates for mapping, translate or rotate a docked pose, fit the ligand, minimize it, rerank poses, alter Vina scores, alter grids, replace cases, or change the 2 Å endpoint. Each pose records the atom mapping and requires `max_heavy_atom_coordinate_delta_angstrom = 0.0`.
+
+The original Vina/docking protocol remains `research-os.crossdocking.rigid.v1.0`; only the pose-representation/evaluation layer is revised to v1.1.
 
 ## Interpretation boundary
 
