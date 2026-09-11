@@ -1,82 +1,118 @@
-# Research OS Knowledge Layer v1
+# Research OS knowledge workflow
 
-The knowledge layer turns literature, books, datasets, and benchmark outputs into auditable research context.
+Research OS already contains a knowledge subsystem: source registry, conservative ingestion, Zettelkasten notes, claims, lineage, graph/retrieval helpers, and private-corpus support.
 
-Its core rule is simple:
+This layer adds the missing bridge between that knowledge system and the reproducible benchmark suite.
+
+The operating rule is:
 
 > **Sem fonte, sem fato.**
 
-A statement that is presented as scientific knowledge must be traceable to a source note or be explicitly labelled as a hypothesis.
+For benchmark design and interpretation, reviewed knowledge must remain traceable to a registered source and a specific locator.
 
-## Pipeline
+## End-to-end flow
 
 ```text
-Source -> Note -> Claim -> EvidenceLink -> Benchmark / scientific result hash
+book / paper / dataset
+        |
+        v
+SourceRecord
+        |
+        v
+KnowledgeIngestionPipeline
+        |
+        v
+AUTO_GENERATED / REVIEW_REQUIRED Zettel
+        |
+     review
+        |
+        v
+VERIFIED Zettel + exact page/chapter/section locator
+        |
+        v
+BenchmarkKnowledgeLink
+        |
+        +--> benchmark_id
+        +--> protocol_id
+        +--> scientific_result_hash
+        |
+        v
+ScientificClaim / lineage after an executed run exists
 ```
 
-### Source
+## Existing components reused
 
-A source is a stable bibliographic or experimental object: paper, book, dataset, webpage, benchmark, or experiment.
+### `SourceRecord` / `SourceRegistry`
 
-External sources require a DOI, ISBN, or URL. Books should use ISBN when available and retain edition information in their title/metadata rather than silently merging editions.
+Papers, books, standards, datasets, databases, reports, manuals, web sources, experiments, and simulations already have a common provenance record. Books can retain ISBN and edition; local documents can retain a SHA-256 content hash.
 
-### Note
+### `KnowledgeIngestionPipeline`
 
-A note is a concise paraphrase tied to an exact locator such as:
+Ingestion extracts candidate Zettels, claims, equations, and entities, but it never silently promotes generated material to verified knowledge. Auto-extracted material enters the review queue.
 
-- `p. 143`
-- `pp. 143-147`
-- `Chapter 6, section 6.2`
-- `Table 1`
-- `Methods > Docking`
-- `Supplementary Table S3`
+### `Zettel`
 
-Notes are not free-floating summaries. A locator is mandatory.
+Atomic notes retain evidence level, review state, limitations, connections, and one or more `SourceLocator`s. A benchmark-linked Zettel must now be `VERIFIED` and retain a specific `page`, `chapter`, or `section` locator.
 
-### Claim
+### `ScientificClaim`
 
-A claim is a statement the project may rely on when designing or interpreting work. Supported, contested, and rejected claims require one or more notes. A hypothesis may be source-free, but must remain explicitly labelled `HYPOTHESIS` until evidence changes its status.
+Claims remain tied to run evidence and evidence levels. The literature bridge does not invent a second claim system.
 
-### EvidenceLink
+### `BenchmarkKnowledgeLink`
 
-An evidence link connects a claim to an executed benchmark using the benchmark ID, protocol ID, and **scientific result hash**. Artifact IDs are execution metadata and may also be recorded, but they are not substitutes for scientific identity.
+The new bridge associates reviewed source IDs and Zettel IDs with:
 
-## Why files first
+- benchmark ID;
+- protocol ID;
+- scientific result hash;
+- optional artifact ID;
+- boundary such as `pre-result`.
 
-Version 1 deliberately uses canonical JSON records and Git instead of a database:
-
-- deterministic diffs;
-- reviewable provenance;
-- rollback safety;
-- hashes can be tested in CI;
-- no hidden mutable state;
-- easy export to SQLite, graph databases, or vector indexes later.
-
-This mirrors the Research OS/S3 approach: keep a simple reference representation first; optimize only after equivalence can be tested.
+Artifact ZIP identity is execution metadata. The scientific result hash remains the benchmark identity used for the link.
 
 ## Books and PDFs
 
-The intended ingestion flow for books and long PDFs is:
+The workflow inspired by the S3 research process is now:
 
-1. register the book/PDF as a `SourceRecord`;
-2. extract its table of contents and stable page/section boundaries;
-3. create small, paraphrased `NoteRecord`s with exact page/section locators;
-4. derive claims only from those notes;
-5. connect relevant claims to protocols and benchmark outcomes;
-6. compute a canonical knowledge-bundle hash;
-7. only then build search/embedding indexes as disposable derived data.
+1. register a book/PDF as a `SourceRecord`;
+2. retain edition/ISBN and file hash when available;
+3. ingest text into review-required candidate notes;
+4. atomize useful knowledge into small Zettels;
+5. add exact page/chapter/section locators;
+6. review before changing the Zettel to `VERIFIED`;
+7. link only reviewed notes to benchmark/protocol identities;
+8. use the existing lineage/graph/retrieval layer to query the resulting knowledge;
+9. permit training/RAG export only from reviewed, sourced Zettels.
 
-The raw copyrighted book text should not be copied into the repository. The durable repository objects are bibliographic metadata, concise notes, locators, claims, and evidence identities.
+Raw copyrighted book text should not be committed as a knowledge artifact. Durable public-repository artifacts are bibliographic metadata, concise paraphrased notes, locators, relationships, and hashes. A private corpus can remain outside the public repository while its provenance and review outputs remain auditable.
 
-## First seeded case: APODOCK-001
+## Determinism
 
-The first knowledge records are anchored to Seeliger & de Groot (2010), which motivates the published ten-case apo/holo large-motion cohort used by APODOCK-001. The knowledge layer records the literature rationale separately from the prospective benchmark outcome. No APODOCK Vina result existed when the structural preflight boundary was frozen.
+`benchmark_knowledge_identity(...)` hashes a canonical scientific payload. Retrieval timestamps and Zettel creation timestamps are intentionally excluded from this identity; changing when a source was fetched must not make the underlying scientific knowledge appear different.
 
-## Next stages
+The committed JSON bundle verifier fails closed on:
 
-- `v1.1`: JSON loader/writer + CLI verifier.
-- `v1.2`: source registry and cross-file reference validation.
-- `v1.3`: PDF/book ingestion helpers that create draft notes, never autonomous claims.
-- `v1.4`: SQLite read model for fast queries.
-- `v1.5`: optional embeddings/vector search as a derived index.
-- `v2`: claim graph + automatic experiment-to-literature comparison reports.
+- unknown source/Zettel IDs;
+- unreviewed benchmark-linked Zettels;
+- missing page/chapter/section locators;
+- malformed scientific hashes;
+- unsupported schemas;
+- mismatched frozen knowledge identity once one is sealed.
+
+## First seeded bridge: APODOCK-001
+
+The first bundle records Seeliger & de Groot (2010) as the literature source for the ten-case apo/holo large-motion cohort and links the reviewed note to the already frozen APODOCK-001 structural-preflight identity:
+
+`c5fae682ecf6b7e8884de8b4d02fd052d306ea3b5d421b6ad44814289afae805`
+
+This is a **pre-result** literature/provenance link. It does not add an APODOCK docking outcome and does not alter the frozen cases, receptor alignment, grid, or future Vina parameters.
+
+## Direction from here
+
+The best path is to grow knowledge and experiments together:
+
+```text
+literature -> reviewed notes -> frozen protocol -> experiment -> evidence -> claim revision
+```
+
+For APODOCK-001 specifically, the next scientific step remains: resolve the predeclared APD-010 glycan preparation, freeze that representation and the execution runner, and only then allow the first Vina outcome.
