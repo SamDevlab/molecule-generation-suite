@@ -9,6 +9,7 @@ from research_os.docking.apodock_glycan import (
     structural_identity,
     validate_link_atoms,
 )
+from research_os.docking import apodock_glycan_freeze
 
 
 def _hetatm(serial: int, atom: str, res: str, chain: str, seq: int, element: str, xyz=(1.0, 2.0, 3.0)) -> str:
@@ -82,6 +83,24 @@ def test_structural_identity_is_independent_of_link_endpoint_order():
 
 
 def test_link_endpoint_must_exist_in_atom_inventory():
-    text = _hetatm(1, "C1", "BEM", "B", 2, "C") + "\n" + _link("C1", "BEM", "B", 2, "O4", "MAV", "B", 1)
-    with pytest.raises(ValueError, match="missing glycan components"):
-        parse_glycan_atoms(text, component_ids=("BEM", "MAV"), author_chain="B")
+    text = "\n".join(
+        [
+            _hetatm(1, "C1", "BEM", "B", 2, "C"),
+            _hetatm(2, "O4", "MAV", "B", 1, "O"),
+            _link("C1", "BEM", "B", 2, "O9", "MAV", "B", 1),
+        ]
+    )
+    atoms = parse_glycan_atoms(text, component_ids=("BEM", "MAV"), author_chain="B")
+    links = parse_glycan_links(text, component_ids=("BEM", "MAV"), author_chain="B")
+    with pytest.raises(ValueError, match="LINK endpoint is absent"):
+        validate_link_atoms(atoms, links)
+
+
+def test_real_apd010_link_identity_is_frozen_before_chemistry_adapter():
+    assert apodock_glycan_freeze.EXPECTED_LINK_ENDPOINTS == (
+        GlycanLinkEndpoint("BEM", 2, "", "C1", "B"),
+        GlycanLinkEndpoint("MAV", 1, "", "O4", "B"),
+    )
+    assert apodock_glycan_freeze.EXPECTED_COMPONENT_HEAVY_ATOM_COUNTS == {"BEM": 11, "MAV": 13}
+    assert apodock_glycan_freeze.EXPECTED_TOTAL_HEAVY_ATOMS == 24
+    assert apodock_glycan_freeze.GLYCAN_STRUCTURAL_IDENTITY == "468c8052ff213fbb3a11f6198b61170e41d4b92353a44461a90326b157bdf306"
