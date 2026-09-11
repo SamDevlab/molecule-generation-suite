@@ -1,0 +1,54 @@
+{
+  "claims": [
+    {
+      "claim_id": "CLAIM-APODOCK-LARGE-MOTION",
+      "note_ids": [
+        "NOTE-APODOCK-COHORT"
+      ],
+      "scope": "APODOCK-001 cohort rationale",
+      "statement": "APODOCK-001 is intentionally a large receptor-motion stress test rather than a routine cognate redocking benchmark.",
+      "status": "SUPPORTED"
+    }
+  ],
+  "evidence": [
+    {
+      "artifact_id": "10279879902",
+      "benchmark_id": "APODOCK-001",
+      "claim_id": "CLAIM-APODOCK-LARGE-MOTION",
+      "evidence_id": "EVIDENCE-APODOCK-PREFLIGHT",
+      "notes": "Prospective structural preflight only; 10/10 structurally eligible, 9/10 chemistry-ready, and no APODOCK Vina outcome.",
+      "protocol_id": "research-os.apodocking.rigid-known-site.v1.0",
+      "scientific_result_hash": "c5fae682ecf6b7e8884de8b4d02fd052d306ea3b5d421b6ad44814289afae805"
+    }
+  ],
+  "notes": [
+    {
+      "locator": "Abstract; Table 1",
+      "note_id": "NOTE-APODOCK-COHORT",
+      "source_id": "SRC-SEELIGER-2010",
+      "summary": "The study evaluates ten apo/holo protein-ligand systems selected for substantial receptor conformational rearrangements, with reported backbone changes reaching 7.1 Å.",
+      "tags": [
+        "apo-holo",
+        "benchmark",
+        "receptor-flexibility"
+      ]
+    }
+  ],
+  "schema": "research-os.knowledge.v1",
+  "sources": [
+    {
+      "authors": [
+        "Daniel Seeliger",
+        "Bert L. de Groot"
+      ],
+      "doi": "10.1371/journal.pcbi.1000634",
+      "isbn": null,
+      "kind": "paper",
+      "license": "CC BY",
+      "source_id": "SRC-SEELIGER-2010",
+      "title": "Conformational Transitions upon Ligand Binding: Holo-Structure Prediction from Apo Conformations",
+      "url": "https://doi.org/10.1371/journal.pcbi.1000634",
+      "year": 2010
+    }
+  ]
+}
