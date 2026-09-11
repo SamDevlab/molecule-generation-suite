@@ -1,6 +1,6 @@
 """Canonical, source-first knowledge records for Research OS.
 
-The first implementation is deliberately small and file-oriented.  It keeps
+The first implementation is deliberately small and file-oriented. It keeps
 scientific claims auditable before adding databases, embeddings, or automated
 PDF ingestion.
 """
@@ -139,13 +139,55 @@ class KnowledgeBundle:
             if link.claim_id not in claim_ids:
                 raise ValueError(f"evidence {link.evidence_id} references unknown claim {link.claim_id}")
 
-    @property
-    def scientific_identity(self) -> str:
+    def to_dict(self) -> dict[str, Any]:
         self.validate()
-        payload = {
+        return {
+            "schema": "research-os.knowledge.v1",
             "sources": [asdict(record) for record in sorted(self.sources, key=lambda r: r.source_id)],
             "notes": [asdict(record) for record in sorted(self.notes, key=lambda r: r.note_id)],
             "claims": [asdict(record) for record in sorted(self.claims, key=lambda r: r.claim_id)],
             "evidence": [asdict(record) for record in sorted(self.evidence, key=lambda r: r.evidence_id)],
         }
+
+    @property
+    def scientific_identity(self) -> str:
+        payload = self.to_dict().copy()
+        payload.pop("schema")
         return scientific_hash(payload)
+
+
+def bundle_from_dict(payload: dict[str, Any]) -> KnowledgeBundle:
+    if payload.get("schema") != "research-os.knowledge.v1":
+        raise ValueError("unsupported knowledge schema")
+
+    bundle = KnowledgeBundle(
+        sources=[
+            SourceRecord(**{**record, "authors": tuple(record.get("authors", ()))})
+            for record in payload.get("sources", [])
+        ],
+        notes=[
+            NoteRecord(**{**record, "tags": tuple(record.get("tags", ()))})
+            for record in payload.get("notes", [])
+        ],
+        claims=[
+            ClaimRecord(**{**record, "note_ids": tuple(record.get("note_ids", ()))})
+            for record in payload.get("claims", [])
+        ],
+        evidence=[EvidenceLink(**record) for record in payload.get("evidence", [])],
+    )
+    bundle.validate()
+    return bundle
+
+
+def bundle_from_json(text: str) -> KnowledgeBundle:
+    payload = json.loads(text)
+    if not isinstance(payload, dict):
+        raise ValueError("knowledge bundle root must be an object")
+    return bundle_from_dict(payload)
+
+
+def bundle_to_json(bundle: KnowledgeBundle, *, pretty: bool = True) -> str:
+    payload = bundle.to_dict()
+    if pretty:
+        return json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True) + "\n"
+    return canonical_json(payload)
