@@ -67,4 +67,35 @@ PB-002 is retrospective over an already-observed REDOCK-003 cohort. It can chara
 
 ## Prospective execution boundary
 
-This specification, source identity, case denominator, normalization method and endpoints are frozen **before the first PB-002 PoseBusters execution**. Poor or unexpected outcomes must remain data; they cannot be used to remove cases or redefine the endpoint in v1.0.
+The protocol, source identity, 15-case denominator, normalization method and endpoints were frozen at commit `c93b31575ff85bd8e9dcbda01a190a8a7f863558` before any PB-002 outcome existed. Dedicated freeze-only workflow run `34597231474` passed without downloading REDOCK-003 or executing PoseBusters.
+
+The first outcome-producing change was the later commit `c67470fa299965ac2ae00eadd14391eeb31110a3`. Poor or unexpected outcomes remain data and are not used to remove cases or redefine v1.0.
+
+## First frozen outcome
+
+The first PB-002 execution was dedicated workflow run `34597366020` on head `c67470fa299965ac2ae00eadd14391eeb31110a3`.
+
+```text
+source localization            =  8 / 15 = 53.33%
+PB-plausible                    = 15 / 15 = 100.00%
+PB-valid                        =  8 / 15 = 53.33%
+localized AND PB-plausible      =  8 / 15 = 53.33%
+scientific_result_hash          = aa3df8b21d610917f70867eb19fbdf78ed976a60b7061fbd9029c76abcc31e1a
+artifact_id                     = 10263150297
+artifact_zip_sha256             = 7099667ebeb810e49364d252e53f546e914a4aed054833f3ffd375e332343a11
+artifact_size_bytes             = 18303
+```
+
+The downloaded artifact ZIP independently matched GitHub's SHA-256 digest. Its JSON contains exactly 15 records. For all 15 records:
+
+- `max_heavy_atom_coordinate_delta_angstrom = 0.0`;
+- starting-conformer/reference connectivity matches;
+- starting-conformer/reference formula matches;
+- restored formula equals template formula;
+- every non-RMSD PoseBusters binary is `true`.
+
+The seven PB-valid failures are exactly the seven source localization failures (`ATX-003`, `ATX-004`, `ATX-006`, `ATX-009`, `ATX-012`, `ATX-013`, `ATX-014`), and in every one the only failed PoseBusters binary is `rmsd_≤_2å`.
+
+Therefore PB-002 supports a narrow interpretation: within this sealed 15-pose set, PoseBusters did not identify an additional physical/chemical plausibility failure beyond localization. It does **not** show that the seven misplaced poses are biologically correct, nor does it identify the cause of their localization errors.
+
+A second execution on this documentation-only successor commit is required to reproduce the scientific hash before integration.
