@@ -35,10 +35,10 @@ def test_rank001_sealed_snapshot_identity_and_expected_diagnostic() -> None:
     assert report["classification_counts"] == {
         "RANK1_SUCCESS": 8,
         "RANKING_FAILURE_RECOVERED": 4,
-        "SEARCH_FAILURE_NO_RETURNED_POSE_LE_2A": 3,
+        "POSE_SET_MISS_NO_RETURNED_POSE_LE_2A": 3,
     }
     assert report["diagnostic_hash"] == (
-        "23f75219fefe98c59102ea1adf43a53f7a4e35335a2d551cf36e4c04ad4a612e"
+        "36af521a178327b77e19a9bb2338637627312293d8ebddd7418f0b6c96a2b238"
     )
 
 
@@ -65,12 +65,12 @@ def test_rank001_recovered_rank1_failures_are_frozen() -> None:
 
 def test_rank001_three_cases_have_no_returned_pose_within_2a() -> None:
     report = analyze_ranking(load_sealed_input(FIXTURE))
-    search_failures = {
+    pose_set_misses = {
         item["case_id"]
         for item in report["cases"]
-        if item["classification"] == "SEARCH_FAILURE_NO_RETURNED_POSE_LE_2A"
+        if item["classification"] == "POSE_SET_MISS_NO_RETURNED_POSE_LE_2A"
     }
-    assert search_failures == {"ATX-003", "ATX-004", "ATX-014"}
+    assert pose_set_misses == {"ATX-003", "ATX-004", "ATX-014"}
 
 
 def test_rank001_rejects_source_identity_change() -> None:
