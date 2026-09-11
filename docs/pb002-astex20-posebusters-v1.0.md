@@ -111,7 +111,17 @@ artifact_zip_sha256             = 799186fac9b8fd2ce7fc1abf67cd291cc7e9233c8678f5
 artifact_size_bytes             = 18303
 ```
 
+A second documentation-only head (`efacd877aecf0d5c84ac415e2a9b8fd8e05e4124`) reproduced the same scientific hash again in workflow run `34597929687`; its artifact ID was `10262816530` and ZIP SHA-256 was `2807181f2641e96a7eb2aada37973b00bb01b216562ced7e61889374bc485351`.
+
 The raw artifact ZIP digest changed between executions while the portable scientific hash remained identical, demonstrating the intended scientific identity behavior.
+
+## Post-outcome source-integrity hardening
+
+After the outcome and its independent reproductions were already fixed, final code review found that PB-002 verified the **declared** REDOCK-003 scientific hash but did not independently recompute that hash from the downloaded report content. This was an input-integrity gap, not a scientific-method issue.
+
+The runner was therefore hardened to recompute REDOCK-003's portable scientific hash with the same `redocking_v12_identity.scientific_result_hash` function that originally generated it, and to fail closed unless the recomputed value equals the sealed `e4e4693f...b762` identity. A regression test explicitly rejects a source whose declared hash is correct but whose recomputed scientific content hash is not.
+
+This hardening does not change the 15 cases, source artifact, coordinates, PoseBusters version/configuration, representation normalization, endpoints, denominator or interpretation. The authentic sealed source is required to reproduce the same PB-002 scientific result after this implementation hardening.
 
 ## Interpretation
 
