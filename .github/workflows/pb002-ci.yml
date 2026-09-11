@@ -1,0 +1,64 @@
+name: pb002-ci
+
+on:
+  pull_request:
+    branches: ["research-os-v1.3"]
+
+jobs:
+  freeze-validation:
+    name: PB-002 frozen protocol validation
+    if: github.head_ref == 'benchmark/posebusters-astex20'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install frozen validation capability
+        run: python -m pip install -e ".[dev,molecule,validation]"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Compile PB-002 runner and tests
+        run: python -m py_compile scripts/run_posebusters_astex20_validation.py tests/test_posebusters_astex20.py
+      - name: Test sealed PB-002 source identity
+        run: pytest -q tests/test_posebusters_astex20.py tests/test_posebusters_validation.py
+
+  execute-pb002:
+    name: capability (PB-002 Astex-20 PoseBusters)
+    if: github.head_ref == 'benchmark/posebusters-astex20'
+    needs: freeze-validation
+    permissions:
+      actions: read
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install frozen PoseBusters validation capability
+        run: python -m pip install -e ".[dev,molecule,validation]"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Download sealed REDOCK-003 run 280 evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: redock-003-astex20-v1.0
+          path: /tmp/pb002-source
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: SamDevlab/molecule-generation-suite
+          run-id: 34546751594
+      - name: Execute frozen PB-002 over 15 sealed rank-1 poses
+        run: |
+          python scripts/run_posebusters_astex20_validation.py \
+            --source-dir /tmp/pb002-source \
+            --output /tmp/pb002-astex20/pb002-astex20-v1.0.json
+      - name: Upload PB-002 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pb002-astex20-v1.0
+          path: /tmp/pb002-astex20
+          if-no-files-found: error
