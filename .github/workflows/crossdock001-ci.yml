@@ -54,7 +54,7 @@ jobs:
           tests/test_crossdock001_freeze.py
           tests/test_crossdock001_runner.py
 
-      - name: Test deterministic selection, alignment, sealed identity and scientific hashing
+      - name: Test deterministic selection, alignment, portable freeze and scientific hashing
         run: >-
           python -m pytest -q
           tests/test_crossdock001.py
@@ -75,20 +75,31 @@ jobs:
           --workdir /tmp/crossdock001-preflight
           --output /tmp/crossdock001-evidence/crossdock001-preflight-v1.0.json
 
-      - name: Capture portable canonical identity before first Vina outcome
+      - name: Require exact portable freeze reproduction before Vina
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
+          from research_os.docking.crossdock001_freeze import (
+              FROZEN_DIRECTED_STRUCTURAL_IDENTITIES,
+              PREFLIGHT_SELECTION_MANIFEST_HASH,
+          )
 
           path = Path('/tmp/crossdock001-evidence/crossdock001-preflight-v1.0.json')
           report = json.loads(path.read_text())
           assert report['docking_executed'] is False
           assert report['vina_imported_or_invoked'] is False
           assert report['eligible_count'] == report['directed_case_count'] == 10
-          print('CANONICAL_SELECTION_MANIFEST_HASH=', report['selection_manifest_hash'])
+          assert report['selection_manifest_hash'] == PREFLIGHT_SELECTION_MANIFEST_HASH
           for record in report['records']:
-              print(record['case_id'], 'GRID_HASH=', record['grid']['grid_hash'])
+              expected = FROZEN_DIRECTED_STRUCTURAL_IDENTITIES[record['case_id']]
+              assert record['source_pdb_sha256'] == expected['source_pdb_sha256']
+              assert record['target_pdb_sha256'] == expected['target_pdb_sha256']
+              assert record['transformed_source_reference_coordinate_hash'] == expected['transformed_source_reference_coordinate_hash']
+              assert record['target_reference_coordinate_hash'] == expected['target_reference_coordinate_hash']
+              assert record['grid']['grid_hash'] == expected['grid_hash']
+              assert record['matched_identical_pocket_ca_pairs'] == expected['matched_identical_pocket_ca_pairs']
+          print('portable_selection_manifest_hash=', report['selection_manifest_hash'])
           PY
 
       - name: Upload CROSSDOCK-001 structural evidence
