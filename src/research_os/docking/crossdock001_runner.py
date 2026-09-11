@@ -6,6 +6,7 @@ import math
 from pathlib import Path
 import platform
 import statistics
+import time
 from typing import Any
 
 from rdkit import Chem
@@ -28,12 +29,28 @@ from research_os.docking.crossdock_alignment import (
     parse_protein_chain,
     target_pocket_residue_indices,
 )
+from research_os.docking.crossdock_identity import stable_hash
 from research_os.docking.schema import DockingRequest, GridBox
 from research_os.engines.openbabel import OpenBabelEngine
 from research_os.engines.vina import VinaEngine
 
 
 POSE_SUCCESS_THRESHOLD_ANGSTROM = 2.0
+
+
+def _download_with_retry(url: str, path: Path, *, attempts: int = 4) -> str:
+    """Retry transient RCSB transport errors while preserving exact content identity."""
+
+    last_error: Exception | None = None
+    for attempt in range(attempts):
+        try:
+            return base._download(url, path)
+        except Exception as exc:
+            last_error = exc
+            if attempt + 1 == attempts:
+                break
+            time.sleep(2 ** attempt)
+    raise RuntimeError(f"download failed after {attempts} attempts for {url}: {last_error}")
 
 
 def _reference_heavy_coordinates(mol: Chem.Mol) -> list[tuple[float, float, float]]:
@@ -77,7 +94,7 @@ def _union_grid(points: list[tuple[float, float, float]]) -> dict[str, Any]:
         "status": status,
         "reason": reason,
     }
-    payload["grid_hash"] = sha256_json(payload)
+    payload["grid_hash"] = stable_hash(payload)
     return payload
 
 
@@ -96,7 +113,7 @@ def _provisional_case(structure: crossdock001.SelectedStructure, target_name: st
 
 def _download_pdb(structure: crossdock001.SelectedStructure, root: Path) -> tuple[Path, str, str]:
     path = root / "sources" / f"{structure.pdb_id}.pdb"
-    digest = base._download(f"https://files.rcsb.org/download/{structure.pdb_id}.pdb", path)
+    digest = _download_with_retry(f"https://files.rcsb.org/download/{structure.pdb_id}.pdb", path)
     return path, digest, path.read_text(encoding="utf-8", errors="replace")
 
 
@@ -108,7 +125,7 @@ def _download_reference(
 ) -> tuple[Path, Chem.Mol]:
     case = _provisional_case(structure, target_name)
     path = root / "sources" / f"{structure.pdb_id}-{structure.ligand_id}-reference.sdf"
-    base._download(base._instance_sdf_url(case, auth_seq_id), path)
+    _download_with_retry(base._instance_sdf_url(case, auth_seq_id), path)
     return path, base.load_single_sdf(path)
 
 
@@ -206,7 +223,9 @@ def _prepare_structural_case(case: dict[str, object], case_dir: Path) -> dict[st
         raise RuntimeError(f"{case_id}: frozen cross-docking grid identity changed")
 
     receptor_pdb = case_dir / "target_receptor.pdb"
-    receptor_pdb.write_text(_target_receptor_pdb(target_text, target.receptor_author_chain), encoding="utf-8")
+    receptor_pdb.write_text(
+        _target_receptor_pdb(target_text, target.receptor_author_chain), encoding="utf-8"
+    )
     transformed_reference_sdf = case_dir / "transformed_native_reference.sdf"
     transformed_reference = _transform_reference(source_reference, transform, transformed_reference_sdf)
     if _coordinate_hash(_reference_heavy_coordinates(transformed_reference)) != expected[
@@ -585,11 +604,11 @@ def run_frozen_crossdock001(workdir: str | Path) -> dict[str, Any]:
             "openbabel_version": obabel.version,
         },
     }
-    stable_hash = scientific_result_hash(report)
-    report["scientific_result_hash"] = stable_hash
+    scientific_hash = scientific_result_hash(report)
+    report["scientific_result_hash"] = scientific_hash
     report["execution_hash"] = sha256_json(
         {
-            "scientific_result_hash": stable_hash,
+            "scientific_result_hash": scientific_hash,
             "environment": _normalize(report["environment"]),
         }
     )
