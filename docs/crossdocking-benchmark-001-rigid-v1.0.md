@@ -126,6 +126,38 @@ The correction does **not** use crystallographic ligand coordinates for mapping,
 
 The original Vina/docking protocol remains `research-os.crossdocking.rigid.v1.0`; only the pose-representation/evaluation layer is revised to v1.1.
 
+## Validated v1.1 result
+
+The first complete v1.1 execution is workflow run `34615447564` on head `ddb7906b661d87b6f417cee8ff855de170a5e646`. All ten directed cases were technically evaluable and every returned pose passed the representation audit with **0.0 Å heavy-atom coordinate movement**, no crystallographic mapping coordinates, no rigid fit, and no minimization.
+
+```text
+artifact id                  = 10271091364
+artifact ZIP SHA-256         = a5094acefffa7d52e30d887ef765d7524e728faff0beb9cf5eb6048caa663e91
+evaluable pose-1 cases       = 10 / 10
+rank-1 RMSD <= 2 Å           = 3 / 10 (30%)
+any returned pose <= 2 Å     = 5 / 10 (50%)
+pose-1 RMSD mean             = 3.9466324496 Å
+pose-1 RMSD median           = 3.7489267768 Å
+scientific_result_hash       = d1d5b980816837301c1fe70d2c0a397ba4a0e662bced7aa17bb118c61f2bff16
+```
+
+| Case | Direction | Rank-1 RMSD (Å) | Best returned RMSD (Å) | First ≤2 Å rank | Primary |
+| --- | --- | ---: | ---: | ---: | --- |
+| XDK-01-1 | 1KI4 → 1KIM | 1.9728 | 1.0529 | 1 | PASS |
+| XDK-01-2 | 1KIM → 1KI4 | 0.7721 | 0.7721 | 1 | PASS |
+| XDK-02-1 | 1AQ1 → 1DM2 | 5.2686 | 4.7620 | — | FAIL |
+| XDK-02-2 | 1DM2 → 1AQ1 | 5.1950 | 2.8063 | — | FAIL |
+| XDK-03-1 | 1P8D → 1PQ6 | 3.6346 | 2.0740 | — | FAIL |
+| XDK-03-2 | 1PQ6 → 1P8D | 3.8633 | 3.2376 | — | FAIL |
+| XDK-04-1 | 1CX2 → 3PGH | 0.9291 | 0.9291 | 1 | PASS |
+| XDK-04-2 | 3PGH → 1CX2 | 6.6721 | 1.3018 | 4 | FAIL |
+| XDK-05-1 | 1KSN → 1XKA | 2.4767 | 2.4767 | — | FAIL |
+| XDK-05-2 | 1XKA → 1KSN | 8.6819 | 1.6314 | 6 | FAIL |
+
+The primary endpoint therefore falls from the REDOCK-003 prospective **8/15 = 53.3%** rank-1 localization rate to **3/10 = 30%** under non-cognate holo receptor conformations. Two additional directions (`XDK-04-2` and `XDK-05-2`) contained a near-native pose but ranked it below pose 1, while the remaining five primary failures had no returned pose within 2 Å. This is evidence of reduced robustness under receptor-conformation change, with both ranking and pose-set limitations represented; it is not an affinity or biological-performance claim.
+
+A documentation-only follow-up commit is used to request an independent reproduction of this same frozen experiment. The result is not considered closed until the same scientific hash is reproduced on that later head.
+
 ## Interpretation boundary
 
 CROSSDOCK-001 measures robustness to a non-cognate **holo receptor conformation** under a known-pocket setup. It is not blind docking, apo docking, induced-fit docking, affinity prediction, free-energy estimation, potency prediction, biological validation, or clinical evidence.
