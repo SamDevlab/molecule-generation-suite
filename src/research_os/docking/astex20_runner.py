@@ -28,19 +28,39 @@ HISTORICAL_REDOCK_002_TOTAL = 5
 
 
 def _descriptive_astex20(prospective_summary: dict[str, object]) -> dict[str, object]:
-    prospective_passing = int(prospective_summary["passing_rmsd_cases"])
-    prospective_total = int(prospective_summary["total_cases"])
-    combined_passing = HISTORICAL_REDOCK_002_PASSING + prospective_passing
+    """Combine historical and prospective <=2 Å counts for context only.
+
+    ``passing_rmsd_cases`` in the shared redocking summary means that RMSD was
+    successfully evaluated; it does *not* mean RMSD <= 2 Å. This descriptive
+    aggregate therefore reads the threshold-specific count/denominator directly
+    and uses explicit field names so technical PASS cannot be mistaken for
+    pose-localization success again.
+    """
+
+    criterion = prospective_summary.get("pose_1_rmsd_le_2_angstrom")
+    if not isinstance(criterion, dict):
+        raise ValueError("prospective summary is missing the pose-1 <=2 Å criterion")
+
+    prospective_successes = int(criterion["count"])
+    prospective_total = int(criterion["denominator"])
+    summary_total = int(prospective_summary["total_cases"])
+    if prospective_total != summary_total:
+        raise ValueError("prospective <=2 Å denominator does not match total_cases")
+    if prospective_successes < 0 or prospective_successes > prospective_total:
+        raise ValueError("prospective <=2 Å success count is outside its denominator")
+
+    combined_successes = HISTORICAL_REDOCK_002_PASSING + prospective_successes
     combined_total = HISTORICAL_REDOCK_002_TOTAL + prospective_total
     return {
         "role": "descriptive-only; includes 5 previously observed REDOCK-002 cases",
-        "historical_passing_rmsd_cases": HISTORICAL_REDOCK_002_PASSING,
+        "criterion": "rank-1 same-frame RMSD <= 2 Å",
+        "historical_pose_1_rmsd_le_2_count": HISTORICAL_REDOCK_002_PASSING,
         "historical_total_cases": HISTORICAL_REDOCK_002_TOTAL,
-        "prospective_passing_rmsd_cases": prospective_passing,
+        "prospective_pose_1_rmsd_le_2_count": prospective_successes,
         "prospective_total_cases": prospective_total,
-        "combined_passing_rmsd_cases": combined_passing,
+        "combined_pose_1_rmsd_le_2_count": combined_successes,
         "combined_total_cases": combined_total,
-        "combined_fraction": combined_passing / combined_total,
+        "combined_fraction_pose_1_rmsd_le_2": combined_successes / combined_total,
     }
 
 

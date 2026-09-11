@@ -1,6 +1,6 @@
 # REDOCK-003 / Astex-20 redocking benchmark v1.0
 
-Status: **15-case prospective cohort frozen before any REDOCK-003 Vina execution**.
+Status: **prospective 15-case result observed; reporting-layer aggregate corrected after run 279**.
 
 ## Purpose
 
@@ -98,6 +98,83 @@ After the cohort freeze, REDOCK-003 reuses the validated REDOCK-001 v1.2 executo
 
 A scientific failure does not make the workflow fail merely because RMSD exceeds 2 Å; scientific outcomes are recorded rather than optimized away.
 
+## First interpretable prospective execution — run 279
+
+GitHub Actions run `279` / `34544932121` executed commit `e2fedd02e7241f12c43d45d2f5cc448f8d9f3af2` after the pre-result case-count guard correction. Core Python 3.11/3.12, Cantera, REDOCK-001 regression, structural preflight and REDOCK-003 all completed successfully.
+
+Environment identity:
+
+```text
+Python                 = 3.12.14
+Open Babel             = 3.1.1
+AutoDock Vina          = 1.2.7
+Vina binary SHA-256    = f31f774f723bba7bbe6e9d1c47577020eea9a8da16424284c043d22593570644
+```
+
+The frozen prospective outcomes were:
+
+| Case | Pose-1 RMSD (Å) | Minimum RMSD (Å) | Vina rank-1 (kcal/mol) | Poses | Rank-1 <=2 Å |
+|---|---:|---:|---:|---:|---|
+| ATX-001 | 1.261 | 1.261 | -9.563 | 13 | yes |
+| ATX-002 | 0.962 | 0.962 | -11.217 | 4 | yes |
+| ATX-003 | 7.228 | 3.992 | -7.376 | 20 | no |
+| ATX-004 | 5.656 | 5.656 | -7.417 | 20 | no |
+| ATX-005 | 1.122 | 1.122 | -10.367 | 18 | yes |
+| ATX-006 | 7.016 | 1.589 | -8.987 | 19 | no |
+| ATX-007 | 1.902 | 1.902 | -11.106 | 17 | yes |
+| ATX-008 | 0.546 | 0.546 | -8.229 | 20 | yes |
+| ATX-009 | 6.498 | 0.459 | -9.454 | 20 | no |
+| ATX-010 | 0.489 | 0.489 | -10.328 | 5 | yes |
+| ATX-011 | 0.534 | 0.534 | -8.897 | 20 | yes |
+| ATX-012 | 4.588 | 0.702 | -7.900 | 20 | no |
+| ATX-013 | 6.473 | 0.621 | -8.289 | 20 | no |
+| ATX-014 | 4.385 | 4.385 | -6.033 | 20 | no |
+| ATX-015 | 1.577 | 1.577 | -7.552 | 20 | yes |
+
+Primary prospective endpoint:
+
+```text
+rank-1 RMSD <= 2 Å       = 8 / 15 = 53.3333333333%
+mean pose-1 RMSD          = 3.3491571633530675 Å
+median pose-1 RMSD        = 1.9023353234713458 Å
+technically evaluable     = 15 / 15
+scientific_result_hash    = e4e4693f890b86327fac16b547966fe64862045d1562c4340dcc3d7d4a06b762
+execution_hash            = 4b2e438dd7e78462f5daae62712def563df96a90aa79ef22180973d70fce1420
+summary_hash              = 7fff66446032e26e4fa77d4c348a5cc5de499495025fcbf979f0e5124a316fd8
+artifact_id               = 10179158216
+artifact_zip_sha256       = 5d4e8140f7de1c18f6a7eb0ba449c16d2eb1f1b3fa7d71c6818fd0fa3493225c
+```
+
+`status = PASS` for all 15 cases means that the docking/RMSD evaluation completed and produced an evaluable pose-1 RMSD. It does **not** mean that all 15 met the <=2 Å scientific success criterion.
+
+### Secondary sampling/ranking diagnostic
+
+This was not the pre-registered primary endpoint, but the already-generated returned poses permit a useful diagnosis without rerunning or retuning anything:
+
+- 12/15 cases had at least one returned pose with RMSD <=2 Å;
+- `ATX-006`, `ATX-009`, `ATX-012` and `ATX-013` contained a <=2 Å pose but did not rank it first;
+- `ATX-003`, `ATX-004` and `ATX-014` had no returned pose <=2 Å among the frozen set of modes.
+
+This separates rank-1 selection error from failure to sample a <=2 Å pose under the frozen search protocol. It is diagnostic only and does not replace the 8/15 primary endpoint.
+
+## Reporting-layer defect found after run 279
+
+Run 279 correctly reported the primary threshold field `pose_1_rmsd_le_2_angstrom.count = 8` with denominator 15. However, the top-level descriptive Astex-20 helper incorrectly treated `passing_rmsd_cases = 15` as if it meant 15 threshold successes. In the shared summary, `passing_rmsd_cases` means only that RMSD was technically evaluable.
+
+Consequently the run-279 descriptive value `17/20 = 85%` is **invalidated and must not be cited**. It did not alter the frozen docking outcomes or the 15-case primary endpoint.
+
+The corrected descriptive calculation is:
+
+```text
+historical REDOCK-002       = 2 / 5
+prospective REDOCK-003      = 8 / 15
+combined descriptive only   = 10 / 20 = 50%
+```
+
+The reporting helper now reads the explicit `pose_1_rmsd_le_2_angstrom.count` and `.denominator` fields and uses threshold-specific output names. A regression test deliberately supplies `passing_rmsd_cases = 15` together with threshold count `8` and requires the combined result to remain `10/20 = 50%`.
+
+The primary `scientific_result_hash` excludes the top-level descriptive Astex-20 context and remains bound to the frozen prospective cases, records and primary summary. The reporting correction therefore does not reinterpret or alter the underlying prospective experiment.
+
 ## Reporting contract
 
 The result reports separately:
@@ -108,8 +185,6 @@ The result reports separately:
 4. per-case pose-1 RMSD, minimum RMSD, Vina rank-1 score, pose count and first-loss state;
 5. a portable scientific result hash for the 15-case prospective experiment, excluding runtime/path/log noise.
 
-The primary `scientific_result_hash` is bound to the frozen 15 cases and preflight manifest through the prospective summary. Historical/context-only fields are not allowed to turn the 15-case endpoint into a retrospective 20-case claim.
-
 ## Interpretation boundary
 
-REDOCK-003 can measure pose-localization reproduction for this frozen prospective Astex extension under this exact protocol. It cannot establish measured affinity, potency, selectivity, biological activity, toxicity, safety, efficacy, clinical performance or universal docking correctness.
+REDOCK-003 measures pose-localization reproduction for this frozen prospective Astex extension under this exact protocol. It does not establish measured affinity, potency, selectivity, biological activity, toxicity, safety, efficacy, clinical performance or universal docking correctness.

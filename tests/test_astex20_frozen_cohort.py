@@ -60,12 +60,27 @@ def test_astex20_rejections_are_pre_result_structural_only():
     assert all(reason == "multiple ligand instances" for _, _, reason in astex20.PREFLIGHT_REJECTED_BEFORE_COHORT_FILLED)
 
 
-def test_descriptive_astex20_keeps_historical_and_prospective_denominators_explicit():
+def test_descriptive_astex20_uses_threshold_success_not_evaluable_pass_count():
     assert HISTORICAL_REDOCK_002_PASSING == 2
     assert HISTORICAL_REDOCK_002_TOTAL == 5
-    summary = _descriptive_astex20({"passing_rmsd_cases": 6, "total_cases": 15})
-    assert summary["prospective_passing_rmsd_cases"] == 6
+    summary = _descriptive_astex20(
+        {
+            # All 15 can have a technically evaluable PASS while only eight
+            # satisfy the scientific rank-1 RMSD <= 2 Å criterion.
+            "passing_rmsd_cases": 15,
+            "total_cases": 15,
+            "pose_1_rmsd_le_2_angstrom": {
+                "count": 8,
+                "denominator": 15,
+                "fraction_all_frozen_cases": 8 / 15,
+            },
+        }
+    )
+    assert summary["criterion"] == "rank-1 same-frame RMSD <= 2 Å"
+    assert summary["historical_pose_1_rmsd_le_2_count"] == 2
+    assert summary["historical_total_cases"] == 5
+    assert summary["prospective_pose_1_rmsd_le_2_count"] == 8
     assert summary["prospective_total_cases"] == 15
-    assert summary["combined_passing_rmsd_cases"] == 8
+    assert summary["combined_pose_1_rmsd_le_2_count"] == 10
     assert summary["combined_total_cases"] == 20
-    assert summary["combined_fraction"] == 0.4
+    assert summary["combined_fraction_pose_1_rmsd_le_2"] == 0.5
