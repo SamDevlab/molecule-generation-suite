@@ -99,6 +99,21 @@ def test_detects_stable_primary_and_variable_secondary() -> None:
     assert len(diagnostic["diagnostic_hash"]) == 64
 
 
+def test_custom_threshold_is_recomputed_from_rmsd_not_stored_two_angstrom_flags() -> None:
+    first = _report("hash-a", variant=True)
+    second = _report("hash-b", variant=True)
+
+    # Stored flags in the fixture were calculated at 2.0 Å. At 1.5 Å,
+    # XDK-B must be a secondary failure despite first_near_native_rank=4.
+    diagnostic = analyze_replicates([first, second], success_threshold_angstrom=1.5)
+
+    assert diagnostic["primary_endpoint"]["success_counts"] == [1, 1]
+    assert diagnostic["secondary_endpoint"]["success_counts"] == [1, 1]
+    case_b = next(case for case in diagnostic["cases"] if case["case_id"] == "XDK-B")
+    assert case_b["primary_success"] == [False, False]
+    assert case_b["secondary_success"] == [False, False]
+
+
 def test_detects_input_identity_drift() -> None:
     first = _report("hash-a")
     second = _report("hash-a")
