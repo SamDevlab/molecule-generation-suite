@@ -1,0 +1,34 @@
+name: rank-002-diagnostic
+
+on:
+  pull_request:
+    branches: ["research-os-v1.3"]
+
+jobs:
+  rank002:
+    name: capability (RANK-002 sampling-vs-scoring diagnostic)
+    if: github.head_ref == 'diagnostic/rank002-sampling-scoring'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install Research OS test capability
+        run: python -m pip install -e ".[dev,molecule]"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Test sealed sampling-vs-scoring diagnostic
+        run: pytest -q tests/test_sampling_scoring_diagnostic.py
+      - name: Execute RANK-002 from sealed artifacts snapshot
+        run: |
+          python scripts/analyze_sampling_scoring.py \
+            validation/rank002-sampling-scoring-input-v1.0.json \
+            --output /tmp/rank-002/rank-002-sampling-scoring-v1.0.json
+      - name: Upload RANK-002 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: rank-002-sampling-scoring-v1.0
+          path: /tmp/rank-002
+          if-no-files-found: error
