@@ -4,6 +4,7 @@ import argparse
 import json
 import math
 from pathlib import Path
+import time
 
 from rdkit import Chem
 
@@ -18,6 +19,21 @@ from research_os.docking.crossdock_alignment import (
     parse_protein_chain,
     target_pocket_residue_indices,
 )
+
+
+def _download_with_retry(url: str, path: Path, *, attempts: int = 4) -> str:
+    """Retry transient public RCSB transport failures without changing identity."""
+
+    last_error: Exception | None = None
+    for attempt in range(attempts):
+        try:
+            return base._download(url, path)
+        except Exception as exc:
+            last_error = exc
+            if attempt + 1 == attempts:
+                break
+            time.sleep(2 ** attempt)
+    raise RuntimeError(f"download failed after {attempts} attempts for {url}: {last_error}")
 
 
 def _provisional_case(structure: crossdock001.SelectedStructure, target: str) -> base.RedockingCase:
@@ -86,7 +102,7 @@ def _download_pdb(pdb_id: str, root: Path) -> tuple[Path, str]:
         from research_os.core.hashing import sha256_file
 
         return path, sha256_file(path)
-    digest = base._download(f"https://files.rcsb.org/download/{pdb_id}.pdb", path)
+    digest = _download_with_retry(f"https://files.rcsb.org/download/{pdb_id}.pdb", path)
     return path, digest
 
 
@@ -98,7 +114,7 @@ def _download_reference(
 ) -> tuple[Path, Chem.Mol]:
     case = _provisional_case(structure, target_name)
     path = root / "reference" / f"{structure.pdb_id}-{structure.ligand_id}.sdf"
-    base._download(base._instance_sdf_url(case, ligand_auth_seq_id), path)
+    _download_with_retry(base._instance_sdf_url(case, ligand_auth_seq_id), path)
     return path, base.load_single_sdf(path)
 
 
