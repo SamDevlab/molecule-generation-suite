@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Validate Research OS knowledge bundles and print their scientific identity."""
+"""Validate benchmark-linked Research OS knowledge bundles."""
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
-from research_os.knowledge import bundle_from_json
+from research_os.knowledge import verify_bundle
 
 
 def main() -> int:
@@ -14,8 +15,9 @@ def main() -> int:
     args = parser.parse_args()
 
     for path in args.paths:
-        bundle = bundle_from_json(path.read_text(encoding="utf-8"))
-        print(f"{path}: {bundle.scientific_identity}")
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        identity = verify_bundle(payload)
+        print(f"{path}: {identity}")
     return 0
 
 
