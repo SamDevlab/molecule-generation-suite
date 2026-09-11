@@ -43,8 +43,8 @@ def _float_or_none(value: Any) -> float | None:
 
 
 def _primary_success(result: dict[str, Any], threshold: float) -> bool | None:
-    if "pose_1_success" in result and result["pose_1_success"] is not None:
-        return bool(result["pose_1_success"])
+    """Recompute the primary classification from RMSD for the requested threshold."""
+
     rmsd = _float_or_none(result.get("pose_1_rmsd_angstrom"))
     if rmsd is None:
         return None
@@ -52,9 +52,8 @@ def _primary_success(result: dict[str, Any], threshold: float) -> bool | None:
 
 
 def _secondary_success(result: dict[str, Any], threshold: float) -> bool | None:
-    first_rank = result.get("first_near_native_rank")
-    if first_rank is not None:
-        return True
+    """Recompute best-returned-pose classification for the requested threshold."""
+
     minimum = _float_or_none(result.get("minimum_rmsd_angstrom"))
     if minimum is None:
         return None
