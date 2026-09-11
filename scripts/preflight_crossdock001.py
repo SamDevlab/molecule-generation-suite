@@ -19,6 +19,7 @@ from research_os.docking.crossdock_alignment import (
     parse_protein_chain,
     target_pocket_residue_indices,
 )
+from research_os.docking.crossdock_identity import stable_hash
 
 
 def _download_with_retry(url: str, path: Path, *, attempts: int = 4) -> str:
@@ -92,7 +93,7 @@ def _union_grid(points: list[tuple[float, float, float]]) -> dict[str, object]:
         "status": status,
         "reason": reason,
     }
-    payload["grid_hash"] = sha256_json(payload)
+    payload["grid_hash"] = stable_hash(payload)
     return payload
 
 
@@ -286,7 +287,7 @@ def main() -> int:
         "minimum_alignment_ca_pairs": crossdock001.MIN_ALIGNMENT_CA_PAIRS,
         "records": records,
         "eligible_count": eligible,
-        "selection_manifest_hash": sha256_json(manifest_payload),
+        "selection_manifest_hash": stable_hash(manifest_payload),
         "docking_executed": False,
         "vina_imported_or_invoked": False,
     }
