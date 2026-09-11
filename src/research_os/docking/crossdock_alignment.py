@@ -5,7 +5,9 @@ import math
 from typing import Iterable
 
 import numpy as np
+from rdkit import Chem
 
+from research_os.core.hashing import sha256_json
 from research_os.docking import redocking as base
 
 
@@ -152,10 +154,10 @@ def needleman_wunsch_indices(
     trace = np.zeros((n + 1, m + 1), dtype=np.int8)
     for i in range(1, n + 1):
         score[i, 0] = i * gap_score
-        trace[i, 0] = 2  # up
+        trace[i, 0] = 2
     for j in range(1, m + 1):
         score[0, j] = j * gap_score
-        trace[0, j] = 3  # left
+        trace[0, j] = 3
 
     for i in range(1, n + 1):
         for j in range(1, m + 1):
@@ -269,3 +271,91 @@ def minimum_distance(
             for bx, by, bz in second_points
         )
     )
+
+
+def heavy_atom_coordinates(mol: Chem.Mol) -> tuple[tuple[float, float, float], ...]:
+    heavy = base._heavy_atom_copy(mol)
+    conformer = heavy.GetConformer()
+    return tuple(
+        (
+            float(conformer.GetAtomPosition(index).x),
+            float(conformer.GetAtomPosition(index).y),
+            float(conformer.GetAtomPosition(index).z),
+        )
+        for index in range(heavy.GetNumAtoms())
+    )
+
+
+def ligand_diameter(mol: Chem.Mol) -> float:
+    coordinates = heavy_atom_coordinates(mol)
+    if len(coordinates) < 2:
+        return 0.0
+    return max(
+        math.dist(first, second)
+        for index, first in enumerate(coordinates)
+        for second in coordinates[index + 1 :]
+    )
+
+
+def derive_crossdock_grid(
+    target_cognate_reference: Chem.Mol,
+    incoming_source_reference: Chem.Mol,
+    *,
+    protocol_id: str,
+    padding_angstrom: float = 6.0,
+    min_side_angstrom: float = 20.0,
+    max_side_angstrom: float = 30.0,
+) -> base.RedockingGrid:
+    target_coordinates = heavy_atom_coordinates(target_cognate_reference)
+    mins = [min(point[axis] for point in target_coordinates) for axis in range(3)]
+    maxs = [max(point[axis] for point in target_coordinates) for axis in range(3)]
+    center = [(low + high) / 2.0 for low, high in zip(mins, maxs)]
+    target_required = [
+        high - low + 2.0 * padding_angstrom
+        for low, high in zip(mins, maxs)
+    ]
+    incoming_required = ligand_diameter(incoming_source_reference) + 2.0 * padding_angstrom
+    required = [max(side, incoming_required) for side in target_required]
+    sizes = [min(max(side, min_side_angstrom), max_side_angstrom) for side in required]
+    status = "PASS"
+    reason = None
+    if any(side > max_side_angstrom for side in required):
+        status = "OUT_OF_DOMAIN"
+        reason = "cross-dock grid rule requires a side larger than the frozen 30 Å maximum"
+    grid_hash = sha256_json(
+        {
+            "protocol_id": protocol_id,
+            "center": center,
+            "size": sizes,
+            "unclamped_size": required,
+            "target_cognate_padding_angstrom": padding_angstrom,
+            "incoming_ligand_diameter_angstrom": incoming_required - 2.0 * padding_angstrom,
+            "status": status,
+            "reason": reason,
+        }
+    )
+    return base.RedockingGrid(
+        *center,
+        *sizes,
+        *required,
+        status=status,
+        reason=reason,
+        grid_hash=grid_hash,
+    )
+
+
+def transform_molecule(mol: Chem.Mol, transform: RigidTransform) -> Chem.Mol:
+    transformed = Chem.Mol(mol)
+    conformer = transformed.GetConformer()
+    coordinates = [
+        (
+            float(conformer.GetAtomPosition(index).x),
+            float(conformer.GetAtomPosition(index).y),
+            float(conformer.GetAtomPosition(index).z),
+        )
+        for index in range(transformed.GetNumAtoms())
+    ]
+    moved = transform.apply(coordinates)
+    for index, (x, y, z) in enumerate(moved):
+        conformer.SetAtomPosition(index, (x, y, z))
+    return transformed
