@@ -1,0 +1,29 @@
+name: pb002-ci
+
+on:
+  pull_request:
+    branches: ["research-os-v1.3"]
+
+jobs:
+  freeze-validation:
+    name: PB-002 frozen protocol validation (no outcomes)
+    if: github.head_ref == 'benchmark/posebusters-astex20'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install frozen validation capability
+        run: python -m pip install -e ".[dev,molecule,validation]"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Compile PB-002 runner and tests
+        run: python -m py_compile scripts/run_posebusters_astex20_validation.py tests/test_posebusters_astex20.py
+      - name: Test sealed PB-002 source identity
+        run: pytest -q tests/test_posebusters_astex20.py tests/test_posebusters_validation.py
+      - name: Confirm this job does not execute PB-002 outcomes
+        run: |
+          test ! -e /tmp/pb002-astex20
+          echo "PB-002 protocol freeze validated without downloading REDOCK-003 or executing PoseBusters."
