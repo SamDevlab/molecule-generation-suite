@@ -8,6 +8,9 @@ from research_os.docking.posebusters_validation import (
     POSEBUSTERS_REDOCK_CONFIG_GIT_BLOB_SHA1,
     POSEBUSTERS_VERSION,
 )
+from research_os.docking.redocking_v12_identity import (
+    scientific_result_hash as redock_scientific_result_hash,
+)
 
 
 BENCHMARK_ID = "PB-002"
@@ -41,6 +44,13 @@ def verify_source_report(report: Mapping[str, Any]) -> list[dict[str, Any]]:
         raise RuntimeError(
             "source scientific identity mismatch: "
             f"{report.get('scientific_result_hash')!r}"
+        )
+
+    recomputed_hash = redock_scientific_result_hash(dict(report))
+    if recomputed_hash != SOURCE_SCIENTIFIC_RESULT_HASH:
+        raise RuntimeError(
+            "source scientific content hash mismatch: "
+            f"expected {SOURCE_SCIENTIFIC_RESULT_HASH}, got {recomputed_hash}"
         )
 
     records = report.get("records")
