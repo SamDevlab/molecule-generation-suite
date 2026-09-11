@@ -4,7 +4,7 @@ Status: **retrospective deterministic diagnostic over sealed REDOCK-003 run 280*
 
 ## Purpose
 
-RANK-001 answers a narrower question raised by REDOCK-003: when rank-1 pose localization fails, did AutoDock Vina fail to return a native-like pose at all, or did it return one but rank another pose above it?
+RANK-001 answers a narrower question raised by REDOCK-003: when rank-1 pose localization fails, did the returned pose set contain a native-like pose at all, and if so, did AutoDock Vina rank it first?
 
 This is **not a new holdout** and is not independent evidence of generalization. The same already-observed 15 prospective Astex cases from REDOCK-003 are re-read without any new docking, optimization, parameter change, model fitting, or case selection.
 
@@ -63,12 +63,12 @@ For these four cases, the first native-like pose appears at mean rank `3.25` (me
 The three cases with no returned pose within 2 Å are `ATX-003`, `ATX-004`, and `ATX-014`.
 
 ```text
-diagnostic_hash = 23f75219fefe98c59102ea1adf43a53f7a4e35335a2d551cf36e4c04ad4a612e
+diagnostic_hash = 36af521a178327b77e19a9bb2338637627312293d8ebddd7418f0b6c96a2b238
 ```
 
 ## Interpretation
 
-Within the already-observed REDOCK-003 pose sets, four of seven rank-1 localization failures are consistent with a **ranking limitation**: a <=2 Å pose exists, but Vina's score places another pose above it. Three failures remain **search/sampling failures under this protocol**, because no returned pose reaches <=2 Å.
+Within the already-observed REDOCK-003 pose sets, four of seven rank-1 localization failures are consistent with a **ranking limitation**: a <=2 Å pose exists, but Vina's score places another pose above it. Three failures remain **pose-set misses under this protocol**, because no returned pose reaches <=2 Å. This diagnostic alone does not identify why those three pose sets missed the threshold.
 
 The small score differences in the four recoverable cases show that native-like and selected non-native poses can be close under the frozen Vina scoring function. They do **not** prove that a different scorer would generalize, nor that re-ranking would improve affinity prediction or biological performance.
 
