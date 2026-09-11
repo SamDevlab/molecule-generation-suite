@@ -69,9 +69,9 @@ PB-002 is retrospective over an already-observed REDOCK-003 cohort. It can chara
 
 The protocol, source identity, 15-case denominator, normalization method and endpoints were frozen at commit `c93b31575ff85bd8e9dcbda01a190a8a7f863558` before any PB-002 outcome existed. Dedicated freeze-only workflow run `34597231474` passed without downloading REDOCK-003 or executing PoseBusters.
 
-The first outcome-producing change was the later commit `c67470fa299965ac2ae00eadd14391eeb31110a3`. Poor or unexpected outcomes remain data and are not used to remove cases or redefine v1.0.
+The first outcome-producing change was the later commit `c67470fa299965ac2ae00eadd14391eeb31110a3`. Poor or unexpected outcomes remained data and were not used to remove cases or redefine v1.0.
 
-## First frozen outcome
+## Frozen outcome
 
 The first PB-002 execution was dedicated workflow run `34597366020` on head `c67470fa299965ac2ae00eadd14391eeb31110a3`.
 
@@ -96,6 +96,23 @@ The downloaded artifact ZIP independently matched GitHub's SHA-256 digest. Its J
 
 The seven PB-valid failures are exactly the seven source localization failures (`ATX-003`, `ATX-004`, `ATX-006`, `ATX-009`, `ATX-012`, `ATX-013`, `ATX-014`), and in every one the only failed PoseBusters binary is `rmsd_≤_2å`.
 
-Therefore PB-002 supports a narrow interpretation: within this sealed 15-pose set, PoseBusters did not identify an additional physical/chemical plausibility failure beyond localization. It does **not** show that the seven misplaced poses are biologically correct, nor does it identify the cause of their localization errors.
+## Independent reproduction
 
-A second execution on this documentation-only successor commit is required to reproduce the scientific hash before integration.
+A documentation-only successor commit `2f831f13babbb9dbeb8164afd8d01ae8c4194dea` triggered dedicated workflow run `34597627696`. It reproduced the scientific result exactly:
+
+```text
+source localization            =  8 / 15
+PB-plausible                    = 15 / 15
+PB-valid                        =  8 / 15
+localized AND PB-plausible      =  8 / 15
+scientific_result_hash          = aa3df8b21d610917f70867eb19fbdf78ed976a60b7061fbd9029c76abcc31e1a
+artifact_id                     = 10263180825
+artifact_zip_sha256             = 799186fac9b8fd2ce7fc1abf67cd291cc7e9233c8678f53ff92388e7ef50ecbe
+artifact_size_bytes             = 18303
+```
+
+The raw artifact ZIP digest changed between executions while the portable scientific hash remained identical, demonstrating the intended scientific identity behavior.
+
+## Interpretation
+
+PB-002 supports a narrow interpretation: within this sealed 15-pose set, PoseBusters did not identify an additional physical/chemical plausibility failure beyond localization. It does **not** show that the seven misplaced poses are biologically correct, nor does it identify the cause of their localization errors.
