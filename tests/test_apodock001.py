@@ -4,8 +4,9 @@ import math
 
 import pytest
 
-from research_os.docking import apodock001
+from research_os.docking import apodock001, apodock001_freeze
 from research_os.docking.crossdock_alignment import ProteinResidue, kabsch_source_to_target
+from research_os.docking.crossdock_identity import stable_hash
 
 
 def _residue(letter: str, xyz: tuple[float, float, float]) -> ProteinResidue:
@@ -74,3 +75,14 @@ def test_global_alignment_pairs_all_identical_aligned_residues() -> None:
     assert transform.rmsd_angstrom == pytest.approx(0.0, abs=1e-10)
     for observed, expected in zip(transform.apply([res.ca_xyz for res in holo]), [res.ca_xyz for res in apo]):
         assert math.dist(observed, expected) == pytest.approx(0.0, abs=1e-10)
+
+
+def test_successful_no_vina_preflight_identity_is_frozen() -> None:
+    identities = list(apodock001_freeze.FROZEN_STRUCTURAL_IDENTITIES)
+    assert len(identities) == 10
+    assert [row["case_id"] for row in identities] == list(apodock001.EXPECTED_CASE_IDS)
+    assert stable_hash(identities) == apodock001_freeze.SELECTION_MANIFEST_HASH
+    assert apodock001_freeze.STRUCTURALLY_ELIGIBLE_COUNT == 10
+    assert apodock001_freeze.CHEMISTRY_READY_FOR_VINA_COUNT == 9
+    assert identities[-1]["ligand_components"] == ["BEM", "MAV"]
+    assert identities[-1]["chemistry_ready_for_vina"] is False

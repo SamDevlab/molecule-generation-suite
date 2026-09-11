@@ -6,6 +6,7 @@ on:
       - research-os-v1.3
     paths:
       - "src/research_os/docking/apodock001.py"
+      - "src/research_os/docking/apodock001_freeze.py"
       - "scripts/preflight_apodock001.py"
       - "tests/test_apodock001.py"
       - "docs/apodocking-benchmark-001-large-motion-v1.0.md"
@@ -37,6 +38,7 @@ jobs:
         run: >-
           python -m py_compile
           src/research_os/docking/apodock001.py
+          src/research_os/docking/apodock001_freeze.py
           scripts/preflight_apodock001.py
           tests/test_apodock001.py
 
@@ -57,25 +59,16 @@ jobs:
           --workdir /tmp/apodock001-preflight
           --output /tmp/apodock001-evidence/apodock001-preflight-v1.0.json
 
-      - name: Enforce prospective pre-Vina boundary
+      - name: Enforce frozen prospective pre-Vina boundary
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
+          from research_os.docking.apodock001_freeze import validate_frozen_preflight
 
           path = Path('/tmp/apodock001-evidence/apodock001-preflight-v1.0.json')
           report = json.loads(path.read_text())
-          assert report['docking_executed'] is False
-          assert report['vina_imported_or_invoked'] is False
-          assert report['published_case_count'] == 10
-          assert len(report['records']) == 10
-          assert report['structurally_eligible_count'] == 10
-          # Nine ligands are one RCSB CCD; APD-010 is a published two-component glycan.
-          assert report['chemistry_ready_for_vina_count'] == 9
-          glycan = next(r for r in report['records'] if r['case']['case_id'] == 'APD-010')
-          assert glycan['status'] == 'STRUCTURALLY_ELIGIBLE'
-          assert glycan['chemistry_ready_for_vina'] is False
-          assert glycan['case']['holo_ligand_components'] == ['BEM', 'MAV']
+          validate_frozen_preflight(report)
           print('selection_manifest_hash=', report['selection_manifest_hash'])
           PY
 

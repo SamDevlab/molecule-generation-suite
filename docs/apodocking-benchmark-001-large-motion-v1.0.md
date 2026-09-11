@@ -1,6 +1,6 @@
 # APODOCK-001 — rigid apo-receptor, known-site large-motion benchmark
 
-Status: **prospective structural preflight only; Vina is forbidden in this phase.**
+Status: **prospective structural preflight frozen; Vina is still forbidden in this PR.**
 
 ## Scientific question
 
@@ -16,12 +16,10 @@ conformational mismatch from site-search failure.
 
 ## Prospective source cohort
 
-The cohort is the complete ten-case Table 1 benchmark from:
-
-Daniel Seeliger and Bert L. de Groot (2010), *Conformational Transitions upon
-Ligand Binding: Holo-Structure Prediction from Apo Conformations*,
-PLoS Computational Biology 6(1):e1000634.
-DOI: https://doi.org/10.1371/journal.pcbi.1000634
+The cohort is the complete ten-case Table 1 benchmark from Daniel Seeliger and
+Bert L. de Groot (2010), *Conformational Transitions upon Ligand Binding:
+Holo-Structure Prediction from Apo Conformations*, PLoS Computational Biology
+6(1):e1000634. DOI: https://doi.org/10.1371/journal.pcbi.1000634
 
 The publication reports apo→holo backbone rearrangements from 2.1 to 7.1 Å.
 The ten pairs are frozen in table order before any APODOCK-001 Vina execution:
@@ -49,37 +47,47 @@ RCSB confirms the single-component mappings used above. 1Y3N is different:
 the published alginate disaccharide is an oligosaccharide entity composed of BEM
 and MAV. PDB carbohydrate remediation (entry major version 2.0, 2020-07-29)
 represents that oligosaccharide as its own chain B while the protein remains chain
-A. The initial no-Vina run used chain A for the sugar, failed closed with zero BEM
-instances, and no docking was executed. This mapping was corrected before any
-APODOCK-001 Vina job existed.
+A. Initial no-Vina run `34642494049` used chain A for the sugar and failed closed
+with zero BEM instances. No docking was executed. The mapping was corrected in
+`fa0a737eaa1989856474068f330c3c2c52d74344` before any APODOCK-001 Vina job existed.
 
 ## No-Vina preflight
 
-For each published case the preflight:
-
-1. downloads the apo and holo PDB entries;
-2. parses frozen receptor author chain A in both structures;
-3. verifies the frozen holo ligand component mapping, including chain B for the
-   remediated 1Y3N oligosaccharide;
-4. globally sequence-aligns the receptor chains and retains identical matched Cα atoms;
-5. computes one Kabsch transform from **holo receptor → apo receptor** using all
-   matched identical Cα pairs;
-6. applies only that rigid transform to the holo ligand reference;
-7. creates the known-site grid from the transformed holo ligand using the frozen
-   6 Å padding, 20 Å minimum side, and 30 Å maximum side rule;
-8. validates the RCSB instance SDF for each single-CCD ligand;
-9. records the branched 1Y3N ligand as requiring a dedicated covalent
-   multi-component preparation adapter before Vina;
-10. writes a portable structural manifest and explicitly records
-    `docking_executed=false` and `vina_imported_or_invoked=false`.
+For each published case the preflight downloads apo/holo PDB entries, parses the
+frozen receptor chains, verifies the ligand mapping, globally sequence-aligns the
+receptors, retains identical matched Cα atoms, computes one Kabsch transform from
+**holo receptor → apo receptor**, applies only that rigid transform to the holo
+ligand, derives the known-site grid, and validates the RCSB instance SDF for every
+single-CCD ligand. APD-010 remains a two-component covalent glycan and is marked as
+requiring a dedicated preparation adapter before Vina.
 
 No docking score, pose, RMSD outcome, or Vina binary can influence this phase.
 
-## Prospective boundary
+## Frozen successful preflight
 
-The first successful no-Vina artifact will be frozen in a follow-up commit,
-including the structural manifest hash and per-case PDB/reference/grid identities.
-Only after that freeze may an APODOCK-001 Vina job be introduced.
+First successful no-Vina preflight after the carbohydrate mapping correction:
 
-If a published case is structurally ineligible, the reason remains in the
-preflight evidence. Cases are not replaced with easier alternatives.
+- workflow run: `34642755042`
+- head SHA: `fa0a737eaa1989856474068f330c3c2c52d74344`
+- artifact: `apodock001-preflight-v1.0`, ID `10280154166`
+- artifact ZIP SHA-256: `2026a042818c4ec021fea672d4ceba72a31734c61da4ce8c97413dcb3bfcace8`
+- structurally eligible: **10/10**
+- directly chemistry-ready for Vina: **9/10**
+- selection manifest hash: `c5fae682ecf6b7e8884de8b4d02fd052d306ea3b5d421b6ad44814289afae805`
+- `docking_executed=false`
+- `vina_imported_or_invoked=false`
+
+`src/research_os/docking/apodock001_freeze.py` now freezes the portable per-case
+PDB hashes, reference-coordinate hashes, transformed-reference hashes, matched-Cα
+counts, grid hashes, structural status, and chemistry-readiness state. Subsequent
+no-Vina runs must reproduce those identities exactly. The artifact ZIP digest is
+execution/package metadata; the portable manifest hash is the scientific
+structural identity gate.
+
+## Boundary after this PR
+
+This PR does not add or execute Vina. A later change may prepare APODOCK-001
+execution only after this frozen preflight reproduces successfully. APD-010 must
+receive an explicit covalent multi-component ligand preparation path or remain a
+predeclared unsupported chemistry case; it must not be silently simplified or
+replaced.
