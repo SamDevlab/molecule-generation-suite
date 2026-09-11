@@ -38,7 +38,7 @@ def main() -> int:
 
     if report["protocol_id"] != PROTOCOL_ID:
         raise SystemExit("Astex-20 protocol identity changed")
-    if len(report["records"]) != len(FROZEN_PROSPECTIVE_CASES) != 15:
+    if len(FROZEN_PROSPECTIVE_CASES) != 15 or len(report["records"]) != 15:
         raise SystemExit("frozen Astex-20 prospective case count was not preserved")
     executed = sum(bool(record.get("provenance", {}).get("docking")) for record in report["records"])
     if executed == 0:
