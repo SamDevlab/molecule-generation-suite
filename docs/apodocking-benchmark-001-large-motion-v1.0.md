@@ -58,8 +58,9 @@ frozen receptor chains, verifies the ligand mapping, globally sequence-aligns th
 receptors, retains identical matched Cα atoms, computes one Kabsch transform from
 **holo receptor → apo receptor**, applies only that rigid transform to the holo
 ligand, derives the known-site grid, and validates the RCSB instance SDF for every
-single-CCD ligand. APD-010 remains a two-component covalent glycan and is marked as
-requiring a dedicated preparation adapter before Vina.
+single-CCD ligand. APD-010 is handled by the separate deterministic chemical
+gate documented in `docs/apd010-bem-mav-chemistry-gate-v1.0.md`; the original
+structural manifest remains unchanged.
 
 No docking score, pose, RMSD outcome, or Vina binary can influence this phase.
 
@@ -86,8 +87,7 @@ structural identity gate.
 
 ## Boundary after this PR
 
-This PR does not add or execute Vina. A later change may prepare APODOCK-001
-execution only after this frozen preflight reproduces successfully. APD-010 must
-receive an explicit covalent multi-component ligand preparation path or remain a
-predeclared unsupported chemistry case; it must not be silently simplified or
-replaced.
+This change does not add or execute Vina. A later change may prepare APODOCK-001
+execution only after the immutable structural preflight and this chemical gate
+reproduce successfully. The next independent step is to freeze the APODOCK
+runner and parameters; no runner or parameter freeze is performed here.
