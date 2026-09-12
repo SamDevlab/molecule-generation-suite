@@ -1,3 +1,7 @@
+import json
+from dataclasses import replace
+from pathlib import Path
+
 import pytest
 
 from research_os.core.types import EvidenceLevel
@@ -12,6 +16,7 @@ from research_os.knowledge import (
     benchmark_knowledge_identity,
     bundle_from_mapping,
     validate_benchmark_knowledge_link,
+    verify_bundle,
 )
 
 
@@ -111,3 +116,70 @@ def test_link_requires_sha256_scientific_identity():
             source_ids=("S1",),
             zettel_ids=("Z1",),
         )
+
+
+def test_duplicate_record_and_evidence_link_ids_fail_closed():
+    source, zettel, link = _records()
+    with pytest.raises(ValueError, match="duplicate source source_id"):
+        benchmark_knowledge_identity(
+            sources=(source, replace(source)), zettels=(zettel,), links=(link,)
+        )
+
+    with pytest.raises(ValueError, match="duplicate evidence link link_id"):
+        benchmark_knowledge_identity(
+            sources=(source,), zettels=(zettel,), links=(link, replace(link))
+        )
+
+
+def test_unknown_note_locator_source_fails_even_when_note_is_not_linked():
+    source, zettel, link = _records()
+    orphaned = replace(
+        zettel,
+        zettel_id="ZTL-ORPHANED-SOURCE",
+        sources=(SourceLocator("SRC-MISSING", section="Methods"),),
+    )
+    with pytest.raises(ValueError, match="references unknown source"):
+        benchmark_knowledge_identity(
+            sources=(source,), zettels=(zettel, orphaned), links=(link,)
+        )
+
+
+def test_artifact_id_is_operational_metadata_not_scientific_identity():
+    source, zettel, link = _records()
+    other_artifact = replace(link, artifact_id="a-different-repackaged-artifact")
+    assert benchmark_knowledge_identity(
+        sources=(source,), zettels=(zettel,), links=(link,)
+    ) == benchmark_knowledge_identity(
+        sources=(source,), zettels=(zettel,), links=(other_artifact,)
+    )
+    assert link.digest == other_artifact.digest
+
+
+def test_record_order_and_json_format_do_not_change_identity():
+    source, zettel, link = _records()
+    source_two = replace(source, source_id="SRC-SECOND", title="A second source")
+    zettel_two = replace(
+        zettel,
+        zettel_id="ZTL-SECOND",
+        title="A second note",
+        sources=(SourceLocator(source_two.source_id, section="Results", doi=source_two.doi),),
+    )
+    link_two = replace(
+        link,
+        link_id="BKL-SECOND",
+        source_ids=(source_two.source_id,),
+        zettel_ids=(zettel_two.zettel_id,),
+    )
+    ordered = benchmark_knowledge_identity(
+        sources=(source, source_two), zettels=(zettel, zettel_two), links=(link, link_two)
+    )
+    reversed_records = benchmark_knowledge_identity(
+        sources=(source_two, source), zettels=(zettel_two, zettel), links=(link_two, link)
+    )
+    assert ordered == reversed_records
+
+    bundle_path = Path(__file__).parents[1] / "knowledge" / "apodock001-preflight.json"
+    payload = json.loads(bundle_path.read_text(encoding="utf-8"))
+    pretty_identity = verify_bundle(payload)
+    compact_payload = json.loads(json.dumps(payload, separators=(",", ":")))
+    assert pretty_identity == verify_bundle(compact_payload)
