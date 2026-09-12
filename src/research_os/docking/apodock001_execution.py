@@ -31,9 +31,9 @@ from research_os.core.hashing import sha256_file, sha256_json
 from research_os.docking.apodock001_protocol import (
     DEFAULT_PROTOCOL_PATH,
     is_canonical_sha256,
-    load_and_validate,
 )
 from research_os.docking.apodock001_runner import APODOCK001Runner
+from research_os.docking.apodock001_input_bundle import verify_frozen_input_bundle
 from research_os.docking.apodock_glycan_chemistry import (
     adapt_apd010,
     chemistry_identity,
@@ -179,14 +179,15 @@ class ExecutionAuthorization:
     execution_authorized: bool = False
     authorization_label: str | None = None
 
-    def require(self) -> None:
+    def require(self, expected_label: str | None = None) -> None:
         if not self.execution_authorized:
             raise ExecutionAuthorizationError(
                 "prospective execution is disabled; explicit authorization is required"
             )
-        if self.authorization_label != "APODOCK-001-v1.0.1":
+        required = expected_label or "APODOCK-001-v1.0.1"
+        if self.authorization_label != required:
             raise ExecutionAuthorizationError(
-                "authorization label must be APODOCK-001-v1.0.1"
+                f"authorization label must be {required}"
             )
 
 
@@ -326,13 +327,18 @@ def _path_is_within(candidate: Path, parent: Path) -> bool:
 
 def _case_plan(protocol: Mapping[str, Any], case: Mapping[str, Any]) -> APODOCK001CasePlan:
     case_id = str(case["case_id"])
+    bundle_mode = "input_bundle" in protocol
     ligand_filename = case.get("reference_filename")
     if ligand_filename:
-        ligand_input = f"sources/{ligand_filename}"
+        ligand_input = f"reference-sdf/{ligand_filename}" if bundle_mode else f"sources/{ligand_filename}"
         ligand_identity = str(case["reference_sdf_sha256"])
         ligand_kind = "frozen_reference_sdf"
     else:
-        ligand_input = "derived/APD-010-BEM-MAV-1.0.0.sdf"
+        ligand_input = (
+            "apd010/BEM_ideal.sdf+MAV_ideal.sdf"
+            if bundle_mode
+            else "derived/APD-010-BEM-MAV-1.0.0.sdf"
+        )
         ligand_identity = str(protocol["chemistry"]["apd010"]["output_sdf_sha256"])
         ligand_kind = "frozen_apd010_adapter_output"
     input_hashes = {
@@ -383,7 +389,9 @@ def _case_plan(protocol: Mapping[str, Any], case: Mapping[str, Any]) -> APODOCK0
     }
     return APODOCK001CasePlan(
         case_id=case_id,
-        receptor_input=_logical_path(f"sources/{case['apo_pdb_id']}.pdb"),
+        receptor_input=_logical_path(
+            f"pdb/{case['apo_pdb_id']}.pdb" if bundle_mode else f"sources/{case['apo_pdb_id']}.pdb"
+        ),
         ligand_input=_logical_path(ligand_input),
         input_hashes=input_hashes,
         chemistry=chemistry,
@@ -435,7 +443,7 @@ def build_vina_command(
     if tuple(case.vina["flags"]) != FROZEN_VINA_FLAGS:
         raise APODOCK001InfrastructureError("Vina flags differ from the frozen contract")
     if case.vina["energy_range_kcal_per_mol"] is not None:
-        raise APODOCK001InfrastructureError("energy_range is not allowed by protocol v1.0.1")
+        raise APODOCK001InfrastructureError("energy_range is not allowed by the frozen protocol")
     root = Path(run_root)
     values: tuple[tuple[str, str], ...] = (
         ("--receptor", str(root / case.receptor_prepared_output)),
@@ -769,9 +777,13 @@ class APODOCK001ExecutionAdapter:
         git_sha: str = "unknown",
     ) -> None:
         self.spec_path = Path(spec_path)
-        self.protocol = load_and_validate(self.spec_path)
         self.runner = APODOCK001Runner(self.spec_path)
+        self.protocol = self.runner.protocol
         self.source_root = Path(source_root)
+        if "input_bundle" in self.protocol and self.source_root == Path("inputs/apodock001"):
+            self.source_root = Path("inputs/apodock001/v1.0.2")
+        if "input_bundle" in self.protocol:
+            verify_frozen_input_bundle(self.protocol, self.source_root)
         self.run_root = Path(run_root)
         self.staging_root = (
             Path(staging_root)
@@ -826,6 +838,8 @@ class APODOCK001ExecutionAdapter:
         openbabel: ToolIdentity | None = None,
         observed_manifest: Mapping[str, Any] | None = None,
     ) -> dict[str, Any]:
+        if "input_bundle" in self.protocol:
+            verify_frozen_input_bundle(self.protocol, self.source_root)
         self.verify_execution_manifest(observed_manifest)
         verify_pristine_run_directory(self.run_root)
         environment = build_environment_manifest(
@@ -1009,7 +1023,9 @@ class APODOCK001ExecutionAdapter:
         failed case is recorded once and is never retried here.
         """
 
-        authorization.require()
+        authorization.require(f"APODOCK-001-v{self.protocol['protocol_version']}")
+        if "input_bundle" in self.protocol:
+            verify_frozen_input_bundle(self.protocol, self.source_root)
         self.verify_execution_manifest()
         if vina.version != str(self.protocol["vina"]["version"]):
             raise APODOCK001InfrastructureError("Vina identity is not frozen")

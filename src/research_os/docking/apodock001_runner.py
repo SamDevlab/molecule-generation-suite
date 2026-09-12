@@ -18,7 +18,10 @@ from research_os.docking.apodock001_protocol import (
     build_dry_run_report,
     is_canonical_sha256,
     load_and_validate,
+    load_and_validate_v102,
+    load_protocol,
     validate_protocol,
+    validate_protocol_v102,
 )
 
 
@@ -31,7 +34,11 @@ class APODOCK001Runner:
 
     def __init__(self, spec_path: str | Path = DEFAULT_PROTOCOL_PATH) -> None:
         self.spec_path = Path(spec_path)
-        self.protocol = load_and_validate(self.spec_path)
+        raw_protocol = load_protocol(self.spec_path)
+        if raw_protocol.get("protocol_version") == "1.0.2":
+            self.protocol = load_and_validate_v102(self.spec_path)
+        else:
+            self.protocol = load_and_validate(self.spec_path)
 
     def dry_run(self) -> dict[str, Any]:
         return build_dry_run_report(self.protocol)
@@ -39,11 +46,14 @@ class APODOCK001Runner:
     def expected_execution_manifest(self) -> dict[str, Any]:
         """Build the exact pre-execution manifest expected by this protocol."""
 
-        validate_protocol(self.protocol)
+        if self.protocol.get("protocol_version") == "1.0.2":
+            validate_protocol_v102(self.protocol)
+        else:
+            validate_protocol(self.protocol)
         benchmark = self.protocol["benchmark"]
         chemistry = self.protocol["chemistry"]
         vina = self.protocol["vina"]
-        return {
+        manifest = {
             "schema_version": "research-os.apodock001.execution.v1",
             "protocol_id": self.protocol["protocol_id"],
             "protocol_hash": self.protocol["protocol_hash"],
@@ -85,6 +95,9 @@ class APODOCK001Runner:
             "box": deepcopy(self.protocol["box"]),
             "analysis": deepcopy(self.protocol["analysis"]),
         }
+        if "input_bundle" in self.protocol:
+            manifest["input_bundle"] = deepcopy(self.protocol["input_bundle"])
+        return manifest
 
     def verify_execution_manifest(self, observed: Mapping[str, Any]) -> None:
         """Fail closed unless the complete observed manifest matches exactly."""

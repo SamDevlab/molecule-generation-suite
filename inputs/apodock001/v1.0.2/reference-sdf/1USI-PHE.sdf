@@ -1,0 +1,72 @@
+PHE
+  ModelServer 0.9.13
+
+ 12 12  0  0  1  0  0  0  0  0  0
+   -1.3430    5.9590   29.4240 N   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.5780    7.1970   29.5020 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -1.1680    8.3170   28.6550 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.5460    9.3820   28.6340 O   0  0  0  0  0  0  0  0  0  0  0  0
+    0.8790    7.0000   29.0200 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.5810    5.8290   29.6230 C   0  0  0  0  0  0  0  0  0  0  0  0
+    2.3320    4.9680   28.8420 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.5920    5.6450   30.9890 C   0  0  0  0  0  0  0  0  0  0  0  0
+    3.0330    3.9230   29.4290 C   0  0  0  0  0  0  0  0  0  0  0  0
+    2.2490    4.6160   31.5590 C   0  0  0  0  0  0  0  0  0  0  0  0
+    2.9470    3.7370   30.8040 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -2.1590    8.1230   27.9920 O   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0  0  0  0
+  2  3  1  0  0  0  0
+  2  5  1  0  0  0  0
+  3  4  2  0  0  0  0
+  3 12  1  0  0  0  0
+  5  6  1  0  0  0  0
+  6  7  2  0  0  0  0
+  6  8  1  0  0  0  0
+  7  9  1  0  0  0  0
+  8 10  2  0  0  0  0
+  9 11  2  0  0  0  0
+ 10 11  1  0  0  0  0
+M  END
+> <model_server_result.job_id>
+V-Zv_dOLhZvlRO3sfrX8dw
+
+> <model_server_result.datetime_utc>
+2026-09-12 21:00:13
+
+> <model_server_result.server_version>
+0.9.13
+
+> <model_server_result.query_name>
+ligand
+
+> <model_server_result.source_id>
+pdb-bcif
+
+> <model_server_result.entry_id>
+1usi
+
+> <model_server_params.name>
+atom_site
+
+> <model_server_params.value>
+{"auth_asym_id":"A","auth_seq_id":1346}
+
+> <model_server_stats.io_time_ms>
+3
+
+> <model_server_stats.parse_time_ms>
+6
+
+> <model_server_stats.create_model_time_ms>
+6
+
+> <model_server_stats.query_time_ms>
+292
+
+> <model_server_stats.encode_time_ms>
+0
+
+> <model_server_stats.element_count>
+12
+
+$$$$

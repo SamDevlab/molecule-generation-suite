@@ -1,0 +1,72 @@
+BGC
+  ModelServer 0.9.13
+
+ 12 12  0  0  1  0  0  0  0  0  0
+    8.0930    5.7480   52.8430 C   0  0  0  0  0  0  0  0  0  0  0  0
+    9.1750    5.1850   53.7680 C   0  0  0  0  0  0  0  0  0  0  0  0
+    8.5700    4.6820   55.0790 C   0  0  0  0  0  0  0  0  0  0  0  0
+    7.4080    3.7280   54.7930 C   0  0  0  0  0  0  0  0  0  0  0  0
+    6.6940    3.2940   56.0630 C   0  0  0  0  0  0  0  0  0  0  0  0
+    6.9580    4.7370   52.6750 C   0  0  0  0  0  0  0  0  0  0  0  0
+    5.9360    5.3080   51.9310 O   0  0  0  0  0  0  0  0  0  0  0  0
+    8.6530    6.0290   51.5710 O   0  0  0  0  0  0  0  0  0  0  0  0
+   10.1330    6.1930   54.0550 O   0  0  0  0  0  0  0  0  0  0  0  0
+    9.5690    4.0000   55.8230 O   0  0  0  0  0  0  0  0  0  0  0  0
+    6.4290    4.3800   53.9560 O   0  0  0  0  0  0  0  0  0  0  0  0
+    6.2540    4.4130   56.8250 O   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0  0  0  0
+  1  6  1  0  0  0  0
+  1  8  1  0  0  0  0
+  2  3  1  0  0  0  0
+  2  9  1  0  0  0  0
+  3  4  1  0  0  0  0
+  3 10  1  0  0  0  0
+  4  5  1  0  0  0  0
+  4 11  1  0  0  0  0
+  5 12  1  0  0  0  0
+  6  7  1  0  0  0  0
+  6 11  1  0  0  0  0
+M  END
+> <model_server_result.job_id>
+n2386mHKtupmyRfI3Fd6fA
+
+> <model_server_result.datetime_utc>
+2026-09-12 21:00:27
+
+> <model_server_result.server_version>
+0.9.13
+
+> <model_server_result.query_name>
+ligand
+
+> <model_server_result.source_id>
+pdb-bcif
+
+> <model_server_result.entry_id>
+2e2o
+
+> <model_server_params.name>
+atom_site
+
+> <model_server_params.value>
+{"auth_asym_id":"A","auth_seq_id":400}
+
+> <model_server_stats.io_time_ms>
+2
+
+> <model_server_stats.parse_time_ms>
+3
+
+> <model_server_stats.create_model_time_ms>
+2
+
+> <model_server_stats.query_time_ms>
+201
+
+> <model_server_stats.encode_time_ms>
+0
+
+> <model_server_stats.element_count>
+12
+
+$$$$
