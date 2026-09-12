@@ -86,6 +86,7 @@ def test_default_authorization_blocks_before_subprocess(tmp_path: Path, monkeypa
 def test_vina_hash_and_version_are_fail_closed(tmp_path: Path) -> None:
     executable = tmp_path / "vina"
     executable.write_bytes(b"synthetic-vina-fixture")
+    executable.chmod(0o755)
     observed_hash = sha256_file(executable)
 
     with pytest.raises(APODOCK001InfrastructureError):
@@ -99,6 +100,7 @@ def test_vina_hash_and_version_are_fail_closed(tmp_path: Path) -> None:
 def test_openbabel_version_and_options_are_fail_closed(tmp_path: Path) -> None:
     executable = tmp_path / "obabel"
     executable.write_bytes(b"synthetic-openbabel-fixture")
+    executable.chmod(0o755)
     identity = verify_openbabel_tool(
         executable,
         version_output="Open Babel 3.1.1",
