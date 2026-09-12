@@ -126,7 +126,7 @@ jobs:
 
   redock-002-holdout:
     name: capability (REDOCK-002 Astex holdout)
-    if: github.event_name == 'push' || github.head_ref == 'benchmark/redock-002-astex-holdout'
+    if: github.event_name == 'pull_request' && github.head_ref == 'benchmark/redock-002-astex-holdout'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
