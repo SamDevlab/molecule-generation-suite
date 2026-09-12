@@ -37,6 +37,8 @@ SCHEMA_VERSION = "research-os.apodock001.protocol.v1"
 PROTOCOL_ID_PREFIX = "research-os.apodock001.protocol.v1.0+"
 EXPECTED_VINA_VERSION = "1.2.7"
 EXPECTED_VINA_SHA256 = "f31f774f723bba7bbbe6e9d1c47577020eea9a8da16424284c043d22593570644"
+EXPECTED_PROTOCOL_HASH = "fef2036e5bcd8d979dfa3d0a1bbab8c6e0832cb3cb8d1fdecef4a341431db97e"
+EXPECTED_PROTOCOL_ID = f"{PROTOCOL_ID_PREFIX}{EXPECTED_PROTOCOL_HASH[:16]}"
 EXPECTED_CASE_IDS = tuple(f"APD-{index:03d}" for index in range(1, 11))
 
 _TOP_LEVEL_KEYS = frozenset(
@@ -262,6 +264,8 @@ def validate_protocol(protocol: Mapping[str, Any]) -> dict[str, str]:
     _require_equal(_require_mapping(protocol.get("prospective_boundary"), "prospective_boundary").get("preflight_only"), True, "prospective_boundary.preflight_only")
     _require_equal(_require_mapping(protocol.get("prospective_boundary"), "prospective_boundary").get("docking_executed"), False, "prospective_boundary.docking_executed")
     _require_equal(_require_mapping(protocol.get("prospective_boundary"), "prospective_boundary").get("vina_imported_or_invoked"), False, "prospective_boundary.vina_imported_or_invoked")
+    _require_equal(protocol.get("protocol_hash"), EXPECTED_PROTOCOL_HASH, "protocol_hash is not the frozen v1.0 identity")
+    _require_equal(protocol.get("protocol_id"), EXPECTED_PROTOCOL_ID, "protocol_id is not the frozen v1.0 identity")
     derived_hash = protocol_hash(protocol)
     derived_id = protocol_id(protocol)
     _require_equal(protocol.get("protocol_hash"), derived_hash, "protocol_hash")

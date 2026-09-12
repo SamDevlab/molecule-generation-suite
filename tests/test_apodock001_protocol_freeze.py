@@ -141,6 +141,15 @@ def test_protocol_hash_changes_for_scientific_input_change() -> None:
         validate_protocol(changed)
 
 
+def test_recomputed_scientific_identity_is_still_rejected() -> None:
+    changed = deepcopy(_protocol())
+    changed["analysis"]["success_threshold_angstrom"] = 1.5
+    changed["protocol_hash"] = protocol_hash(changed)
+    changed["protocol_id"] = protocol_id(changed)
+    with pytest.raises(ProtocolValidationError, match="frozen v1.0 identity"):
+        validate_protocol(changed)
+
+
 def test_duplicate_json_keys_fail_closed(tmp_path: Path) -> None:
     path = tmp_path / "duplicate.json"
     path.write_text('{"schema_version":"a","schema_version":"b"}', encoding="utf-8")
@@ -182,7 +191,7 @@ def test_runner_exposes_only_frozen_execution_manifest() -> None:
     manifest = APODOCK001Runner(SPEC).expected_execution_manifest()
     assert manifest["protocol_id"] == _protocol()["protocol_id"]
     assert manifest["benchmark"]["case_order"] == [f"APD-{i:03d}" for i in range(1, 11)]
-    assert set(manifest["boxes"]) == set(manifest["benchmark"]["input_hashes"])
+    assert set(manifest["box"]["cases"]) == set(manifest["benchmark"]["input_hashes"])
 
 
 def test_runner_rejects_modified_execution_manifest() -> None:
@@ -191,6 +200,15 @@ def test_runner_rejects_modified_execution_manifest() -> None:
     manifest["vina"]["seed"] = 7
     with pytest.raises(APODOCK001ExecutionError, match="no docking process"):
         runner.verify_execution_manifest(manifest)
+
+
+def test_runner_manifest_carries_preparation_and_analysis_contracts() -> None:
+    manifest = APODOCK001Runner(SPEC).expected_execution_manifest()
+    assert "receptor_preparation" in manifest
+    assert "ligand_preparation" in manifest
+    assert "analysis" in manifest
+    assert "box" in manifest
+    assert "boxes" not in manifest
 
 
 def test_runner_rejects_modified_tool_identity() -> None:

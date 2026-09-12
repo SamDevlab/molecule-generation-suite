@@ -48,6 +48,9 @@ class APODOCK001Runner:
             "protocol_hash": self.protocol["protocol_hash"],
             "benchmark": {
                 "id": benchmark["id"],
+                "source_list_sha256": benchmark["source_list_sha256"],
+                "case_metadata_sha256": benchmark["case_metadata_sha256"],
+                "selection_manifest_hash": benchmark["selection_manifest_hash"],
                 "case_order": list(benchmark["case_order"]),
                 "input_hashes": {
                     case["case_id"]: {
@@ -75,17 +78,11 @@ class APODOCK001Runner:
                     )
                 },
             },
-            "vina": {
-                "version": vina["version"],
-                "binary_sha256": vina["binary_sha256"],
-                "scoring_function": vina["scoring_function"],
-                "seed": vina["seed"],
-                "cpu": vina["cpu"],
-                "exhaustiveness": vina["exhaustiveness"],
-                "num_modes": vina["num_modes"],
-                "energy_range_kcal_per_mol": vina["energy_range_kcal_per_mol"],
-            },
-            "boxes": deepcopy(self.protocol["box"]["cases"]),
+            "receptor_preparation": deepcopy(self.protocol["receptor_preparation"]),
+            "ligand_preparation": deepcopy(self.protocol["ligand_preparation"]),
+            "vina": deepcopy(vina),
+            "box": deepcopy(self.protocol["box"]),
+            "analysis": deepcopy(self.protocol["analysis"]),
         }
 
     def verify_execution_manifest(self, observed: Mapping[str, Any]) -> None:
