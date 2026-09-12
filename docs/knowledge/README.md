@@ -13,16 +13,16 @@ For benchmark design and interpretation, reviewed knowledge must remain traceabl
 ## End-to-end flow
 
 ```text
-book / paper / dataset
+PDF / book / paper / dataset
         |
         v
 SourceRecord
         |
         v
-KnowledgeIngestionPipeline
+table of contents / pages / sections
         |
         v
-AUTO_GENERATED / REVIEW_REQUIRED Zettel
+draft notes (AUTO_GENERATED / REVIEW_REQUIRED)
         |
      review
         |
@@ -30,7 +30,7 @@ AUTO_GENERATED / REVIEW_REQUIRED Zettel
 VERIFIED Zettel + exact page/chapter/section locator
         |
         v
-BenchmarkKnowledgeLink
+BenchmarkKnowledgeLink (evidence bridge)
         |
         +--> benchmark_id
         +--> protocol_id
@@ -44,7 +44,10 @@ ScientificClaim / lineage after an executed run exists
 
 ### `SourceRecord` / `SourceRegistry`
 
-Papers, books, standards, datasets, databases, reports, manuals, web sources, experiments, and simulations already have a common provenance record. Books can retain ISBN and edition; local documents can retain a SHA-256 content hash.
+Papers, books, datasets, benchmarks, standards, databases, reports, manuals,
+web sources, experiments, and simulations already have a common provenance
+record. External sources retain DOI, ISBN, or URL as applicable. Books can
+retain ISBN and edition; local documents can retain a SHA-256 content hash.
 
 ### `KnowledgeIngestionPipeline`
 
@@ -52,15 +55,22 @@ Ingestion extracts candidate Zettels, claims, equations, and entities, but it ne
 
 ### `Zettel`
 
-Atomic notes retain evidence level, review state, limitations, connections, and one or more `SourceLocator`s. A benchmark-linked Zettel must now be `VERIFIED` and retain a specific `page`, `chapter`, or `section` locator.
+Atomic notes are the v1 `NoteRecord`: they retain evidence level, review state,
+limitations, connections, and one or more `SourceLocator`s. Every note in a
+validated benchmark bundle must resolve to a registered source and retain a
+specific `page`, `chapter`, or `section` locator. A note without provenance is
+not silently promoted into scientific knowledge.
 
 ### `ScientificClaim`
 
-Claims remain tied to run evidence and evidence levels. The literature bridge does not invent a second claim system.
+Claims remain tied to run evidence and evidence levels in the existing
+Research OS claim subsystem. The literature bridge does not invent a second
+parallel claim model: reviewed notes provide the source-backed rationale, and
+benchmark evidence links provide the bridge to the result identity.
 
 ### `BenchmarkKnowledgeLink`
 
-The new bridge associates reviewed source IDs and Zettel IDs with:
+The v1 evidence link associates reviewed source IDs and Zettel IDs with:
 
 - benchmark ID;
 - protocol ID;
@@ -68,23 +78,39 @@ The new bridge associates reviewed source IDs and Zettel IDs with:
 - optional artifact ID;
 - boundary such as `pre-result`.
 
-Artifact ZIP identity is execution metadata. The scientific result hash remains the benchmark identity used for the link.
+`artifact_id` is execution/package metadata and is deliberately excluded from
+the scientific knowledge identity. Repackaging the same result therefore does
+not create a new scientific identity. The scientific result hash remains the
+benchmark identity used for the link.
+
+The verifier also fails closed on duplicate source, note, or evidence-link IDs,
+duplicate references, unknown note locators, non-specific locators, and
+malformed source document hashes. Record order, JSON whitespace, retrieval
+timestamps, and note creation timestamps do not change the identity.
 
 ## Books and PDFs
 
-The workflow inspired by the S3 research process is now:
+The future ingestion architecture is intentionally small:
 
-1. register a book/PDF as a `SourceRecord`;
-2. retain edition/ISBN and file hash when available;
-3. ingest text into review-required candidate notes;
-4. atomize useful knowledge into small Zettels;
-5. add exact page/chapter/section locators;
-6. review before changing the Zettel to `VERIFIED`;
-7. link only reviewed notes to benchmark/protocol identities;
-8. use the existing lineage/graph/retrieval layer to query the resulting knowledge;
-9. permit training/RAG export only from reviewed, sourced Zettels.
+```text
+PDF / book
+    |
+    v
+SourceRecord
+    |
+    v
+table of contents / pages / sections
+    |
+    v
+draft notes -> review -> claims -> evidence
+```
 
-Raw copyrighted book text should not be committed as a knowledge artifact. Durable public-repository artifacts are bibliographic metadata, concise paraphrased notes, locators, relationships, and hashes. A private corpus can remain outside the public repository while its provenance and review outputs remain auditable.
+Store bibliographic metadata, edition/ISBN or URL/DOI as applicable, page or
+section locators, short notes/paraphrases, claims, hashes, and relationships.
+Never copy an entire book or PDF into the repository. A private corpus may
+remain outside the public repository while its provenance and review outputs
+remain auditable. Future embeddings are a derived, disposable index; they are
+never the source of truth.
 
 ## Determinism
 
@@ -96,8 +122,19 @@ The committed JSON bundle verifier fails closed on:
 - unreviewed benchmark-linked Zettels;
 - missing page/chapter/section locators;
 - malformed scientific hashes;
+- duplicate IDs and unresolved note/source references;
 - unsupported schemas;
 - mismatched frozen knowledge identity once one is sealed.
+
+Run the verifier locally without GitHub Actions:
+
+```bash
+python scripts/verify_knowledge.py knowledge/*.json
+python scripts/verify_knowledge.py --json knowledge/*.json
+```
+
+The command prints one scientific identity per valid bundle and exits non-zero
+if any bundle cannot be loaded or validated.
 
 ## First seeded bridge: APODOCK-001
 

@@ -15,6 +15,7 @@ from research_os.core.hashing import sha256_file, sha256_json
 class SourceType(str, Enum):
     PAPER = "paper"
     BOOK = "book"
+    BENCHMARK = "benchmark"
     STANDARD = "standard"
     DATASET = "dataset"
     DATABASE = "database"
