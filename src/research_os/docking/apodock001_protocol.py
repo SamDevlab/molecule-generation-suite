@@ -1,4 +1,4 @@
-"""Strict APODOCK-001 v1.0 protocol contract.
+"""Strict APODOCK-001 v1.0.1 protocol contract.
 
 This module validates the committed declarative protocol and produces a
 no-docking preflight report.  It deliberately does not import Vina, Open Babel,
@@ -12,6 +12,7 @@ from copy import deepcopy
 import json
 import math
 from pathlib import Path
+import re
 from typing import Any, Mapping
 
 from research_os.core.hashing import sha256_json
@@ -31,15 +32,22 @@ from research_os.docking.apodock_glycan_chemistry import (
 DEFAULT_PROTOCOL_PATH = (
     Path(__file__).resolve().parents[3]
     / "configs"
-    / "apodock001-protocol-freeze-v1.0.json"
+    / "apodock001-protocol-freeze-v1.0.1.json"
 )
+HISTORICAL_PROTOCOL_PATH = DEFAULT_PROTOCOL_PATH.with_name("apodock001-protocol-freeze-v1.0.json")
 SCHEMA_VERSION = "research-os.apodock001.protocol.v1"
-PROTOCOL_ID_PREFIX = "research-os.apodock001.protocol.v1.0+"
+PROTOCOL_VERSION = "1.0.1"
+PROTOCOL_ID_PREFIX = "research-os.apodock001.protocol.v1.0.1+"
 EXPECTED_VINA_VERSION = "1.2.7"
-EXPECTED_VINA_SHA256 = "f31f774f723bba7bbbe6e9d1c47577020eea9a8da16424284c043d22593570644"
-EXPECTED_PROTOCOL_HASH = "fef2036e5bcd8d979dfa3d0a1bbab8c6e0832cb3cb8d1fdecef4a341431db97e"
+EXPECTED_VINA_SHA256 = "f31f774f723bba7bbe6e9d1c47577020eea9a8da16424284c043d22593570644"
+EXPECTED_PROTOCOL_HASH = "9e293289c972960333cdd442324c0c6c2485d0b3e90471f9882abfa3312a8f13"
 EXPECTED_PROTOCOL_ID = f"{PROTOCOL_ID_PREFIX}{EXPECTED_PROTOCOL_HASH[:16]}"
+HISTORICAL_PROTOCOL_VERSION = "1.0.0"
+HISTORICAL_PROTOCOL_ID = "research-os.apodock001.protocol.v1.0+fef2036e5bcd8d97"
+HISTORICAL_PROTOCOL_HASH = "fef2036e5bcd8d979dfa3d0a1bbab8c6e0832cb3cb8d1fdecef4a341431db97e"
+HISTORICAL_VINA_SHA256 = "f31f774f723bba7bbbe6e9d1c47577020eea9a8da16424284c043d22593570644"
 EXPECTED_CASE_IDS = tuple(f"APD-{index:03d}" for index in range(1, 11))
+_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 _TOP_LEVEL_KEYS = frozenset(
     {
@@ -67,6 +75,40 @@ _NON_SCIENTIFIC_KEYS = frozenset(
 
 class ProtocolValidationError(ValueError):
     """Raised when a frozen protocol is incomplete or scientifically altered."""
+
+
+def _require_sha256(value: Any, path: str) -> None:
+    """Require the repository's canonical lowercase SHA-256 representation."""
+
+    if not is_canonical_sha256(value):
+        raise ProtocolValidationError(
+            f"{path} must be exactly 64 lowercase hexadecimal characters"
+        )
+
+
+def is_canonical_sha256(value: Any) -> bool:
+    """Return whether *value* follows the frozen lowercase SHA-256 policy."""
+
+    return isinstance(value, str) and _SHA256_RE.fullmatch(value) is not None
+
+
+def _validate_hash_fields(value: Any, path: str = "$") -> None:
+    """Validate every declared hash/identity field before semantic checks."""
+
+    if isinstance(value, Mapping):
+        for key, child in value.items():
+            child_path = f"{path}.{key}"
+            if (
+                key == "protocol_hash"
+                or key.endswith("_sha256")
+                or key.endswith("_hash")
+                or key in {"input_identity", "output_identity", "structural_identity"}
+            ) and child is not None:
+                _require_sha256(child, child_path)
+            _validate_hash_fields(child, child_path)
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            _validate_hash_fields(child, f"{path}[{index}]")
 
 
 def _reject_duplicate_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -183,10 +225,7 @@ def _validate_benchmark(protocol: Mapping[str, Any]) -> None:
             _require_equal(case_map.get(key), frozen[key], f"benchmark.cases[{case_id}].{key}")
         if case_map.get("ligand_representation") == "single_ccd":
             reference_hash = case_map.get("reference_sdf_sha256")
-            if not isinstance(reference_hash, str) or len(reference_hash) != 64:
-                raise ProtocolValidationError(
-                    f"benchmark.cases[{case_id}].reference_sdf_sha256 must be a SHA-256 hash"
-                )
+            _require_sha256(reference_hash, f"benchmark.cases[{case_id}].reference_sdf_sha256")
         if case_id == "APD-010":
             _require_equal(
                 case_map.get("structural_preflight_chemistry_ready_for_vina"),
@@ -257,20 +296,59 @@ def validate_protocol(protocol: Mapping[str, Any]) -> dict[str, str]:
         extra = sorted(set(protocol) - _TOP_LEVEL_KEYS)
         raise ProtocolValidationError(f"protocol schema keys changed; missing={missing}, extra={extra}")
     _require_equal(protocol.get("schema_version"), SCHEMA_VERSION, "schema_version")
-    _require_equal(protocol.get("protocol_version"), "1.0.0", "protocol_version")
+    _require_equal(protocol.get("protocol_version"), PROTOCOL_VERSION, "protocol_version")
+    _validate_hash_fields(protocol)
     _validate_benchmark(protocol)
     _validate_chemistry(protocol)
     _validate_parameters(protocol)
     _require_equal(_require_mapping(protocol.get("prospective_boundary"), "prospective_boundary").get("preflight_only"), True, "prospective_boundary.preflight_only")
     _require_equal(_require_mapping(protocol.get("prospective_boundary"), "prospective_boundary").get("docking_executed"), False, "prospective_boundary.docking_executed")
     _require_equal(_require_mapping(protocol.get("prospective_boundary"), "prospective_boundary").get("vina_imported_or_invoked"), False, "prospective_boundary.vina_imported_or_invoked")
-    _require_equal(protocol.get("protocol_hash"), EXPECTED_PROTOCOL_HASH, "protocol_hash is not the frozen v1.0 identity")
-    _require_equal(protocol.get("protocol_id"), EXPECTED_PROTOCOL_ID, "protocol_id is not the frozen v1.0 identity")
+    _require_equal(protocol.get("protocol_hash"), EXPECTED_PROTOCOL_HASH, "protocol_hash is not the frozen v1.0.1 identity")
+    _require_equal(protocol.get("protocol_id"), EXPECTED_PROTOCOL_ID, "protocol_id is not the frozen v1.0.1 identity")
     derived_hash = protocol_hash(protocol)
     derived_id = protocol_id(protocol)
     _require_equal(protocol.get("protocol_hash"), derived_hash, "protocol_hash")
     _require_equal(protocol.get("protocol_id"), derived_id, "protocol_id")
     return {"protocol_hash": derived_hash, "protocol_id": derived_id}
+
+
+def validate_historical_v1_0(protocol: Mapping[str, Any]) -> dict[str, str]:
+    """Classify the untouched v1.0 freeze without making it executable.
+
+    v1.0 is intentionally not accepted by :func:`validate_protocol`: its
+    recorded Vina digest is 65 characters and therefore cannot identify a
+    SHA-256 binary.  The normalization below is in-memory only and proves
+    that the erratum changes only the Vina digest and derived versioned
+    identity before returning the historical status.
+    """
+
+    _require_equal(protocol.get("protocol_version"), HISTORICAL_PROTOCOL_VERSION, "historical protocol_version")
+    _require_equal(protocol.get("protocol_id"), HISTORICAL_PROTOCOL_ID, "historical protocol_id")
+    _require_equal(protocol.get("protocol_hash"), HISTORICAL_PROTOCOL_HASH, "historical protocol_hash")
+    vina = _require_mapping(protocol.get("vina"), "historical vina")
+    _require_equal(vina.get("binary_sha256"), HISTORICAL_VINA_SHA256, "historical vina.binary_sha256")
+
+    normalized = deepcopy(protocol)
+    normalized["protocol_version"] = PROTOCOL_VERSION
+    normalized["protocol_id"] = EXPECTED_PROTOCOL_ID
+    normalized["protocol_hash"] = EXPECTED_PROTOCOL_HASH
+    normalized_vina = _require_mapping(normalized.get("vina"), "historical normalized vina")
+    normalized_vina["binary_sha256"] = EXPECTED_VINA_SHA256
+    validate_protocol(normalized)
+    return {
+        "status": "FROZEN_BUT_UNEXECUTABLE",
+        "protocol_version": HISTORICAL_PROTOCOL_VERSION,
+        "protocol_id": HISTORICAL_PROTOCOL_ID,
+        "reason": "v1.0 recorded a non-SHA-256 Vina digest; no APODOCK docking occurred",
+    }
+
+
+def load_and_classify_historical_v1_0(path: str | Path = HISTORICAL_PROTOCOL_PATH) -> dict[str, Any]:
+    """Load the original v1.0 manifest and return its non-executable status."""
+
+    protocol = load_protocol(path)
+    return validate_historical_v1_0(protocol)
 
 
 def build_dry_run_report(protocol: Mapping[str, Any]) -> dict[str, Any]:

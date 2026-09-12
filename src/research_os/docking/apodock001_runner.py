@@ -16,6 +16,7 @@ from research_os.docking.apodock001_protocol import (
     DEFAULT_PROTOCOL_PATH,
     ProtocolValidationError,
     build_dry_run_report,
+    is_canonical_sha256,
     load_and_validate,
     validate_protocol,
 )
@@ -103,5 +104,8 @@ class APODOCK001Runner:
             raise APODOCK001ExecutionError(
                 f"Vina version mismatch: {vina_version!r} != {expected['version']!r}"
             )
-        if vina_sha256.lower() != expected["binary_sha256"].lower():
+        if (
+            not is_canonical_sha256(vina_sha256)
+            or vina_sha256 != expected["binary_sha256"]
+        ):
             raise APODOCK001ExecutionError("Vina binary SHA-256 mismatch")
