@@ -1,0 +1,78 @@
+name: apodock001-execution-infrastructure
+
+on:
+  pull_request:
+    branches:
+      - research-os-v1.3
+    paths:
+      - "src/research_os/docking/apodock001_execution.py"
+      - "src/research_os/docking/apodock001_protocol.py"
+      - "src/research_os/docking/apodock001_runner.py"
+      - "scripts/apodock001_execution.py"
+      - "tests/test_apodock001_execution.py"
+      - "docs/apodock001-execution-adapter-v1.0.md"
+      - ".github/workflows/apodock001-execution.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  infrastructure-dry-run:
+    name: APODOCK-001 execution infrastructure (dry-run only)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Research OS molecular dependencies
+        run: python -m pip install -e ".[dev,molecule]"
+
+      - name: Install and verify Open Babel 3.1.1
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+
+      - name: Download and verify frozen Vina 1.2.7
+        run: |
+          curl --fail --location --retry 3 \
+            https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 \
+            --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          echo "f31f774f723bba7bbbe6e9d1c47577020eea9a8da16424284c043d22593570644  /tmp/vina_1.2.7" | sha256sum --check
+          /tmp/vina_1.2.7 --version
+
+      - name: Run execution adapter tests
+        run: python -m pytest -q tests/test_apodock001_execution.py
+
+      - name: Build verified APODOCK execution plan and no-results scaffold
+        run: |
+          python scripts/apodock001_execution.py \
+            --git-sha "$GITHUB_SHA" \
+            --run-root /tmp/apodock001-future-run \
+            --vina /tmp/vina_1.2.7 \
+            --openbabel "$(command -v obabel)" \
+            --output /tmp/apodock001-infrastructure/dry-run.json
+
+      - name: Assert infrastructure did not execute docking
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path('/tmp/apodock001-infrastructure/dry-run.json').read_text())
+          assert report['execution_authorized'] is False
+          assert report['vina_docking_executed'] is False
+          assert report['evidence_scaffold']['status'] == 'NOT_EXECUTED'
+          assert report['evidence_scaffold']['results'] == []
+          assert report['evidence_scaffold']['poses'] == []
+          assert report['evidence_scaffold']['scores'] == []
+          assert report['case_count'] == 10
+          print('APODOCK-001 cases executed: 0/10')
+          print('No Vina docking process was started.')
+          PY
