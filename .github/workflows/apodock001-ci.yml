@@ -6,15 +6,21 @@ on:
       - research-os-v1.3
     paths:
       - "src/research_os/docking/apodock001.py"
+      - "src/research_os/docking/apodock001_protocol.py"
+      - "src/research_os/docking/apodock001_runner.py"
       - "src/research_os/docking/apodock001_freeze.py"
       - "src/research_os/docking/apodock_glycan.py"
       - "src/research_os/docking/apodock_glycan_chemistry.py"
       - "src/research_os/docking/apodock_glycan_freeze.py"
       - "scripts/preflight_apodock001.py"
+      - "scripts/preflight_apodock001_protocol.py"
       - "scripts/preflight_apd010_bem_mav.py"
       - "tests/test_apodock001.py"
+      - "tests/test_apodock001_protocol_freeze.py"
       - "tests/test_apodock_glycan_chemistry.py"
       - "docs/apodocking-benchmark-001-large-motion-v1.0.md"
+      - "docs/apodock001-protocol-freeze-v1.0.md"
+      - "configs/apodock001-protocol-freeze-v1.0.json"
       - "docs/apd010-bem-mav-chemistry-gate-v1.0.md"
       - ".github/workflows/apodock001-ci.yml"
 
@@ -44,17 +50,29 @@ jobs:
         run: >-
           python -m py_compile
           src/research_os/docking/apodock001.py
+          src/research_os/docking/apodock001_protocol.py
+          src/research_os/docking/apodock001_runner.py
           src/research_os/docking/apodock001_freeze.py
           src/research_os/docking/apodock_glycan.py
           src/research_os/docking/apodock_glycan_chemistry.py
           src/research_os/docking/apodock_glycan_freeze.py
           scripts/preflight_apodock001.py
+          scripts/preflight_apodock001_protocol.py
           scripts/preflight_apd010_bem_mav.py
           tests/test_apodock001.py
+          tests/test_apodock001_protocol_freeze.py
           tests/test_apodock_glycan_chemistry.py
 
       - name: Test frozen source cohort and alignment semantics
         run: python -m pytest -q tests/test_apodock001.py
+
+      - name: Test frozen APODOCK-001 protocol identity and fail-closed boundaries
+        run: python -m pytest -q tests/test_apodock001_protocol_freeze.py
+
+      - name: Verify declarative APODOCK-001 protocol without docking
+        run: >-
+          python scripts/preflight_apodock001_protocol.py
+          --output /tmp/apodock001-evidence/apodock001-protocol-freeze-v1.0.json
 
       - name: Test APD-010 fail-closed chemistry adapter
         run: python -m pytest -q tests/test_apodock_glycan_chemistry.py
