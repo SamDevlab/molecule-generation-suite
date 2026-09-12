@@ -7,9 +7,15 @@ on:
     paths:
       - "src/research_os/docking/apodock001.py"
       - "src/research_os/docking/apodock001_freeze.py"
+      - "src/research_os/docking/apodock_glycan.py"
+      - "src/research_os/docking/apodock_glycan_chemistry.py"
+      - "src/research_os/docking/apodock_glycan_freeze.py"
       - "scripts/preflight_apodock001.py"
+      - "scripts/preflight_apd010_bem_mav.py"
       - "tests/test_apodock001.py"
+      - "tests/test_apodock_glycan_chemistry.py"
       - "docs/apodocking-benchmark-001-large-motion-v1.0.md"
+      - "docs/apd010-bem-mav-chemistry-gate-v1.0.md"
       - ".github/workflows/apodock001-ci.yml"
 
 permissions:
@@ -39,11 +45,19 @@ jobs:
           python -m py_compile
           src/research_os/docking/apodock001.py
           src/research_os/docking/apodock001_freeze.py
+          src/research_os/docking/apodock_glycan.py
+          src/research_os/docking/apodock_glycan_chemistry.py
+          src/research_os/docking/apodock_glycan_freeze.py
           scripts/preflight_apodock001.py
+          scripts/preflight_apd010_bem_mav.py
           tests/test_apodock001.py
+          tests/test_apodock_glycan_chemistry.py
 
       - name: Test frozen source cohort and alignment semantics
         run: python -m pytest -q tests/test_apodock001.py
+
+      - name: Test APD-010 fail-closed chemistry adapter
+        run: python -m pytest -q tests/test_apodock_glycan_chemistry.py
 
       - name: Verify Vina binary is absent
         shell: bash
@@ -70,6 +84,30 @@ jobs:
           report = json.loads(path.read_text())
           validate_frozen_preflight(report)
           print('selection_manifest_hash=', report['selection_manifest_hash'])
+          PY
+
+      - name: Execute APD-010 chemistry gate without docking
+        run: >-
+          python scripts/preflight_apd010_bem_mav.py
+          --workdir /tmp/apd010-bem-mav
+          --output /tmp/apodock001-evidence/apd010-chemistry-gate-v1.0.json
+
+      - name: Enforce APD-010 chemical gate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('/tmp/apodock001-evidence/apd010-chemistry-gate-v1.0.json')
+          report = json.loads(path.read_text())
+          assert report['chemistry_ready_for_vina_count'] == 10
+          assert report['structurally_eligible_count'] == 10
+          assert report['apd010']['diagnostics']['formula'] == 'C12H18O13'
+          assert report['apd010']['diagnostics']['heavy_atoms'] == 25
+          assert report['apd010']['diagnostics']['fragment_count'] == 1
+          assert report['docking_executed'] is False
+          assert report['vina_imported_or_invoked'] is False
+          print('APD-010 chemistry gate: 10/10, no docking')
           PY
 
       - name: Upload APODOCK-001 preflight evidence
