@@ -1,4 +1,4 @@
-"""Strict APODOCK-001 v1.0.1 protocol contract.
+"""Strict APODOCK-001 protocol contracts for v1.0.1 and v1.0.2.
 
 This module validates the committed declarative protocol and produces a
 no-docking preflight report.  It deliberately does not import Vina, Open Babel,
@@ -34,10 +34,12 @@ DEFAULT_PROTOCOL_PATH = (
     / "configs"
     / "apodock001-protocol-freeze-v1.0.1.json"
 )
+DEFAULT_PROTOCOL_PATH_V102 = DEFAULT_PROTOCOL_PATH.with_name("apodock001-protocol-freeze-v1.0.2.json")
 HISTORICAL_PROTOCOL_PATH = DEFAULT_PROTOCOL_PATH.with_name("apodock001-protocol-freeze-v1.0.json")
 SCHEMA_VERSION = "research-os.apodock001.protocol.v1"
 PROTOCOL_VERSION = "1.0.1"
 PROTOCOL_ID_PREFIX = "research-os.apodock001.protocol.v1.0.1+"
+PROTOCOL_V102_ID_PREFIX = "research-os.apodock001.protocol.v1.0.2+"
 EXPECTED_VINA_VERSION = "1.2.7"
 EXPECTED_VINA_SHA256 = "f31f774f723bba7bbe6e9d1c47577020eea9a8da16424284c043d22593570644"
 EXPECTED_PROTOCOL_HASH = "9e293289c972960333cdd442324c0c6c2485d0b3e90471f9882abfa3312a8f13"
@@ -71,6 +73,7 @@ _TOP_LEVEL_KEYS = frozenset(
 _NON_SCIENTIFIC_KEYS = frozenset(
     {"schema_version", "protocol_id", "protocol_hash", "operational_metadata"}
 )
+_V102_TOP_LEVEL_KEYS = _TOP_LEVEL_KEYS | frozenset({"input_bundle"})
 
 
 class ProtocolValidationError(ValueError):
@@ -313,6 +316,56 @@ def validate_protocol(protocol: Mapping[str, Any]) -> dict[str, str]:
     return {"protocol_hash": derived_hash, "protocol_id": derived_id}
 
 
+def validate_protocol_v102(protocol: Mapping[str, Any]) -> dict[str, str]:
+    """Validate v1.0.2 with the same science plus an immutable local bundle."""
+
+    if set(protocol) != _V102_TOP_LEVEL_KEYS:
+        missing = sorted(_V102_TOP_LEVEL_KEYS - set(protocol))
+        extra = sorted(set(protocol) - _V102_TOP_LEVEL_KEYS)
+        raise ProtocolValidationError(
+            f"v1.0.2 protocol schema keys changed; missing={missing}, extra={extra}"
+        )
+    _require_equal(protocol.get("schema_version"), SCHEMA_VERSION, "schema_version")
+    _require_equal(protocol.get("protocol_version"), "1.0.2", "protocol_version")
+    _validate_hash_fields(protocol)
+    _validate_benchmark(protocol)
+    _validate_chemistry(protocol)
+    _validate_parameters(protocol)
+    _require_equal(
+        _require_mapping(protocol.get("prospective_boundary"), "prospective_boundary").get("preflight_only"),
+        True,
+        "prospective_boundary.preflight_only",
+    )
+    _require_equal(
+        _require_mapping(protocol.get("prospective_boundary"), "prospective_boundary").get("docking_executed"),
+        False,
+        "prospective_boundary.docking_executed",
+    )
+    _require_equal(
+        _require_mapping(protocol.get("prospective_boundary"), "prospective_boundary").get("vina_imported_or_invoked"),
+        False,
+        "prospective_boundary.vina_imported_or_invoked",
+    )
+    bundle = _require_mapping(protocol.get("input_bundle"), "input_bundle")
+    _require_equal(bundle.get("schema_version"), "research-os.apodock001.input-bundle.v1", "input_bundle.schema_version")
+    _require_equal(bundle.get("offline_required"), True, "input_bundle.offline_required")
+    _require_sha256(bundle.get("bundle_hash"), "input_bundle.bundle_hash")
+    bundle_id = bundle.get("bundle_id")
+    if not isinstance(bundle_id, str) or not bundle_id.startswith("research-os.apodock001.input-bundle.v1+"):
+        raise ProtocolValidationError("input_bundle.bundle_id is not a frozen bundle identity")
+    derived_hash = sha256_json(scientific_payload(protocol))
+    derived_id = f"{PROTOCOL_V102_ID_PREFIX}{derived_hash[:16]}"
+    _require_equal(protocol.get("protocol_hash"), derived_hash, "protocol_hash")
+    _require_equal(protocol.get("protocol_id"), derived_id, "protocol_id")
+    return {"protocol_hash": derived_hash, "protocol_id": derived_id}
+
+
+def load_and_validate_v102(path: str | Path = DEFAULT_PROTOCOL_PATH_V102) -> dict[str, Any]:
+    protocol = load_protocol(path)
+    validate_protocol_v102(protocol)
+    return protocol
+
+
 def validate_historical_v1_0(protocol: Mapping[str, Any]) -> dict[str, str]:
     """Classify the untouched v1.0 freeze without making it executable.
 
@@ -354,7 +407,11 @@ def load_and_classify_historical_v1_0(path: str | Path = HISTORICAL_PROTOCOL_PAT
 def build_dry_run_report(protocol: Mapping[str, Any]) -> dict[str, Any]:
     """Return the final no-docking status payload without touching a tool binary."""
 
-    identity = validate_protocol(protocol)
+    identity = (
+        validate_protocol_v102(protocol)
+        if protocol.get("protocol_version") == "1.0.2"
+        else validate_protocol(protocol)
+    )
     return {
         "benchmark": "APODOCK-001",
         "protocol_status": "FROZEN",

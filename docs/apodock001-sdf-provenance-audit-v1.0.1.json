@@ -1,0 +1,1340 @@
+{
+  "audit_kind": "APODOCK-001 SDF provenance audit; no docking",
+  "audit_report_hash": "248d56c08f725485147c5e12626bd31258b5e7e21a7f9e0913b7c86251a38191",
+  "generated_at_utc": "2026-09-12T21:00:30.853429+00:00",
+  "historical_artifact": {
+    "artifact_id": "10280154166",
+    "artifact_name": "apodock001-preflight-v1.0",
+    "artifact_zip_sha256": "2026a042818c4ec021fea672d4ceba72a31734c61da4ce8c97413dcb3bfcace8",
+    "contains_reference_sdfs": false,
+    "files": [
+      "apodock001-preflight-v1.0.json"
+    ],
+    "frozen_sdf_bytes_recovered": false,
+    "head_sha": "fa0a737eaa1989856474068f330c3c2c52d74344",
+    "workflow_run": "34642755042"
+  },
+  "protocol_hash": "9e293289c972960333cdd442324c0c6c2485d0b3e90471f9882abfa3312a8f13",
+  "protocol_id": "research-os.apodock001.protocol.v1.0.1+9e293289c9729603",
+  "protocol_manifest_unchanged": true,
+  "records": [
+    {
+      "auth_chain": "A",
+      "auth_seq_id": 428,
+      "byte_match": false,
+      "case_id": "APD-001",
+      "ccd_cif_download": {
+        "bytes": 6926,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\AMQ.cif",
+        "retrieved_at_utc": "2026-09-12T21:00:05.549738+00:00",
+        "sha256": "3110448b76b91c06eb26171859e8056f9378cae39d3d941d4f13762505827927",
+        "url": "https://files.rcsb.org/ligands/view/AMQ.cif"
+      },
+      "ccd_id": "AMQ",
+      "ccd_ideal_download": {
+        "bytes": 1642,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\AMQ_ideal.sdf",
+        "retrieved_at_utc": "2026-09-12T21:00:05.333118+00:00",
+        "sha256": "faf192fa3916e441d0e9285bd9d70b5d327ebafea10ba9d356b8320babe50e96",
+        "url": "https://files.rcsb.org/ligands/view/AMQ_ideal.sdf"
+      },
+      "ccd_ideal_identity": {
+        "canonical_isomeric_smiles": "Cc1onc(O)c1C[C@H](N)C(=O)O",
+        "canonical_smiles": "Cc1onc(O)c1CC(N)C(=O)O",
+        "element_counts": {
+          "C": 7,
+          "N": 2,
+          "O": 4
+        },
+        "formal_charge": 0,
+        "formula": "C7H10N2O4",
+        "heavy_atom_count": 13
+      },
+      "chemical_equivalent_to_ccd_and_holo_instance": true,
+      "classification": "REPRESENTATION_DRIFT",
+      "coordinate_comparison": {
+        "best_mapping": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "coordinate_equivalent": true,
+        "coordinate_equivalent_threshold_angstrom": 0.0011,
+        "frozen_holo_coordinate_hash": "5352f4a8b0add589f6b952173f4fe4cb684098d64b76cd64633d076b4db963fd",
+        "frozen_holo_coordinate_hash_matches": true,
+        "graph_isomorphism_count": 2,
+        "graph_match": true,
+        "mapped_coordinate_hash": "5352f4a8b0add589f6b952173f4fe4cb684098d64b76cd64633d076b4db963fd",
+        "max_delta_angstrom": 0.0,
+        "rmsd_angstrom": 0.0,
+        "same_frame_rigid_fit_performed": false
+      },
+      "current_identity": {
+        "canonical_isomeric_smiles": "Cc1onc(O)c1C[C@H](N)C(=O)O",
+        "canonical_smiles": "Cc1onc(O)c1CC(N)C(=O)O",
+        "element_counts": {
+          "C": 7,
+          "N": 2,
+          "O": 4
+        },
+        "formal_charge": 0,
+        "formula": "C7H10N2O4",
+        "heavy_atom_count": 13
+      },
+      "download_attempts": [
+        {
+          "bytes": 1913,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-001\\attempt-1.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:02.068134+00:00",
+          "sha256": "a893e515f7ba97c50b504e756e02e336c3b382f588d8eb7bb21cab0d9e3b6ba2",
+          "url": "https://models.rcsb.org/v1/1ftm/ligand?auth_asym_id=A&auth_seq_id=428&encoding=sdf"
+        },
+        {
+          "bytes": 1912,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-001\\attempt-2.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:03.652253+00:00",
+          "sha256": "655e65b853829a33c846a848d5d27b897689d71e5390b697a5b5b8540cc4bb35",
+          "url": "https://models.rcsb.org/v1/1ftm/ligand?auth_asym_id=A&auth_seq_id=428&encoding=sdf"
+        },
+        {
+          "bytes": 1912,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-001\\attempt-3.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:04.725618+00:00",
+          "sha256": "bfc59112de608e3954d08bac0b3a4c304c9d7495930f03f0c3818a7d13110368",
+          "url": "https://models.rcsb.org/v1/1ftm/ligand?auth_asym_id=A&auth_seq_id=428&encoding=sdf"
+        }
+      ],
+      "download_hashes_identical": false,
+      "filename": "1FTM-AMQ.sdf",
+      "frozen_reference_sdf_sha256": "2f39cdd28b98dc8b43b11d4dae25707030ebabd1c8516f82063e0e130f0d19d8",
+      "holo_pdb_identity": {
+        "auth_seq_id": 428,
+        "author_chain": "A",
+        "component_ids": [
+          "AMQ"
+        ],
+        "element_counts": {
+          "C": 7,
+          "N": 2,
+          "O": 4
+        },
+        "heavy_atom_count": 13
+      },
+      "observed_reference_sdf_sha256": "a893e515f7ba97c50b504e756e02e336c3b382f588d8eb7bb21cab0d9e3b6ba2",
+      "pdb_id": "1FTM",
+      "url": "https://models.rcsb.org/v1/1ftm/ligand?auth_asym_id=A&auth_seq_id=428&encoding=sdf"
+    },
+    {
+      "auth_chain": "A",
+      "auth_seq_id": 400,
+      "byte_match": false,
+      "case_id": "APD-002",
+      "ccd_cif_download": {
+        "bytes": 10358,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\UDP.cif",
+        "retrieved_at_utc": "2026-09-12T21:00:08.112848+00:00",
+        "sha256": "472b875fa842107960f9e5e6a957067b914a4d5fbe93d1395ae3bd41ebc8e8bd",
+        "url": "https://files.rcsb.org/ligands/view/UDP.cif"
+      },
+      "ccd_id": "UDP",
+      "ccd_ideal_download": {
+        "bytes": 2749,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\UDP_ideal.sdf",
+        "retrieved_at_utc": "2026-09-12T21:00:07.958848+00:00",
+        "sha256": "37f922630919947dc04aa0c6368775fb9a52360bf4fd4a904f97f5bd1f924a77",
+        "url": "https://files.rcsb.org/ligands/view/UDP_ideal.sdf"
+      },
+      "ccd_ideal_identity": {
+        "canonical_isomeric_smiles": "O=c1ccn([C@@H]2O[C@H](CO[P@@](=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]2O)c(=O)[nH]1",
+        "canonical_smiles": "O=c1ccn(C2OC(COP(=O)(O)OP(=O)(O)O)C(O)C2O)c(=O)[nH]1",
+        "element_counts": {
+          "C": 9,
+          "N": 2,
+          "O": 12,
+          "P": 2
+        },
+        "formal_charge": 0,
+        "formula": "C9H14N2O12P2",
+        "heavy_atom_count": 25
+      },
+      "chemical_equivalent_to_ccd_and_holo_instance": true,
+      "classification": "REPRESENTATION_DRIFT",
+      "coordinate_comparison": {
+        "best_mapping": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24
+        ],
+        "coordinate_equivalent": true,
+        "coordinate_equivalent_threshold_angstrom": 0.0011,
+        "frozen_holo_coordinate_hash": "5b0878987f0c9e7f7fe66ce95b70d97b6602417b8b00fdd2d7b3618a8c752609",
+        "frozen_holo_coordinate_hash_matches": true,
+        "graph_isomorphism_count": 12,
+        "graph_match": true,
+        "mapped_coordinate_hash": "5b0878987f0c9e7f7fe66ce95b70d97b6602417b8b00fdd2d7b3618a8c752609",
+        "max_delta_angstrom": 0.0,
+        "rmsd_angstrom": 0.0,
+        "same_frame_rigid_fit_performed": false
+      },
+      "current_identity": {
+        "canonical_isomeric_smiles": "O=c1ccn([C@@H]2O[C@H](CO[P@@](=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]2O)c(=O)[nH]1",
+        "canonical_smiles": "O=c1ccn(C2OC(COP(=O)(O)OP(=O)(O)O)C(O)C2O)c(=O)[nH]1",
+        "element_counts": {
+          "C": 9,
+          "N": 2,
+          "O": 12,
+          "P": 2
+        },
+        "formal_charge": 0,
+        "formula": "C9H14N2O12P2",
+        "heavy_atom_count": 25
+      },
+      "download_attempts": [
+        {
+          "bytes": 3038,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-002\\attempt-1.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:06.642139+00:00",
+          "sha256": "b4584cc9658b6147db694e6582aedda0151321848b1813b6bbce3b6e35aa4830",
+          "url": "https://models.rcsb.org/v1/1jg6/ligand?auth_asym_id=A&auth_seq_id=400&encoding=sdf"
+        },
+        {
+          "bytes": 3038,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-002\\attempt-2.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:07.206425+00:00",
+          "sha256": "87aaecc7a84995bddb496b6264b46f0d20c210beecdc0842f6cd1e1bed7c6f0c",
+          "url": "https://models.rcsb.org/v1/1jg6/ligand?auth_asym_id=A&auth_seq_id=400&encoding=sdf"
+        },
+        {
+          "bytes": 3038,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-002\\attempt-3.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:07.840122+00:00",
+          "sha256": "57724b22c7d32dad8bb067845c5af3ba29d2efc59e18a297b3263e04bc119f38",
+          "url": "https://models.rcsb.org/v1/1jg6/ligand?auth_asym_id=A&auth_seq_id=400&encoding=sdf"
+        }
+      ],
+      "download_hashes_identical": false,
+      "filename": "1JG6-UDP.sdf",
+      "frozen_reference_sdf_sha256": "a682e91ad95000725b01d2b4009bf33e2d074628dd0aabcbe1fb97a5aca2f839",
+      "holo_pdb_identity": {
+        "auth_seq_id": 400,
+        "author_chain": "A",
+        "component_ids": [
+          "UDP"
+        ],
+        "element_counts": {
+          "C": 9,
+          "N": 2,
+          "O": 12,
+          "P": 2
+        },
+        "heavy_atom_count": 25
+      },
+      "observed_reference_sdf_sha256": "b4584cc9658b6147db694e6582aedda0151321848b1813b6bbce3b6e35aa4830",
+      "pdb_id": "1JG6",
+      "url": "https://models.rcsb.org/v1/1jg6/ligand?auth_asym_id=A&auth_seq_id=400&encoding=sdf"
+    },
+    {
+      "auth_chain": "A",
+      "auth_seq_id": 291,
+      "byte_match": false,
+      "case_id": "APD-003",
+      "ccd_cif_download": {
+        "bytes": 8054,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\ALL.cif",
+        "retrieved_at_utc": "2026-09-12T21:00:10.375400+00:00",
+        "sha256": "3b32ac62cb55882cc3b2ec804ecf6f2d5611369e5aabc3bc1c24c9a58d309075",
+        "url": "https://files.rcsb.org/ligands/view/ALL.cif"
+      },
+      "ccd_id": "ALL",
+      "ccd_ideal_download": {
+        "bytes": 1710,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\ALL_ideal.sdf",
+        "retrieved_at_utc": "2026-09-12T21:00:10.217872+00:00",
+        "sha256": "cdfa20197d3c86ddcc4b7b0727ef6f4ea2aa3a5f3c5453c0d04edb004c24bcd5",
+        "url": "https://files.rcsb.org/ligands/view/ALL_ideal.sdf"
+      },
+      "ccd_ideal_identity": {
+        "canonical_isomeric_smiles": "OC[C@H]1O[C@@H](O)[C@H](O)[C@H](O)[C@@H]1O",
+        "canonical_smiles": "OCC1OC(O)C(O)C(O)C1O",
+        "element_counts": {
+          "C": 6,
+          "O": 6
+        },
+        "formal_charge": 0,
+        "formula": "C6H12O6",
+        "heavy_atom_count": 12
+      },
+      "chemical_equivalent_to_ccd_and_holo_instance": true,
+      "classification": "REPRESENTATION_DRIFT",
+      "coordinate_comparison": {
+        "best_mapping": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "coordinate_equivalent": true,
+        "coordinate_equivalent_threshold_angstrom": 0.0011,
+        "frozen_holo_coordinate_hash": "b63b2365c278ec0074cca7b9ad7a51e0ced6840c2af346d2923f17d36dad5d1c",
+        "frozen_holo_coordinate_hash_matches": true,
+        "graph_isomorphism_count": 1,
+        "graph_match": true,
+        "mapped_coordinate_hash": "b63b2365c278ec0074cca7b9ad7a51e0ced6840c2af346d2923f17d36dad5d1c",
+        "max_delta_angstrom": 0.0,
+        "rmsd_angstrom": 0.0,
+        "same_frame_rigid_fit_performed": false
+      },
+      "current_identity": {
+        "canonical_isomeric_smiles": "OC[C@H]1O[C@@H](O)[C@H](O)[C@H](O)[C@@H]1O",
+        "canonical_smiles": "OCC1OC(O)C(O)C(O)C1O",
+        "element_counts": {
+          "C": 6,
+          "O": 6
+        },
+        "formal_charge": 0,
+        "formula": "C6H12O6",
+        "heavy_atom_count": 12
+      },
+      "download_attempts": [
+        {
+          "bytes": 1820,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-003\\attempt-1.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:08.809655+00:00",
+          "sha256": "8039ffe1369ec42b47d82cd286772a1e66fe4103f733615a18df531588ff18a3",
+          "url": "https://models.rcsb.org/v1/1rpj/ligand?auth_asym_id=A&auth_seq_id=291&encoding=sdf"
+        },
+        {
+          "bytes": 1820,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-003\\attempt-2.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:09.458173+00:00",
+          "sha256": "a448cd32f33d8dab695875b01614aedb14db1d0194fbc580fee46ea4277e2b46",
+          "url": "https://models.rcsb.org/v1/1rpj/ligand?auth_asym_id=A&auth_seq_id=291&encoding=sdf"
+        },
+        {
+          "bytes": 1820,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-003\\attempt-3.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:10.094632+00:00",
+          "sha256": "8025fcae93c5a2c662946fac58ce0e948c8a6ba2458037353da89a149d2ce8cf",
+          "url": "https://models.rcsb.org/v1/1rpj/ligand?auth_asym_id=A&auth_seq_id=291&encoding=sdf"
+        }
+      ],
+      "download_hashes_identical": false,
+      "filename": "1RPJ-ALL.sdf",
+      "frozen_reference_sdf_sha256": "988255475de09e1ad1e92a7f82da5e39fad1b0fdc32ef42356491e69c981b9f2",
+      "holo_pdb_identity": {
+        "auth_seq_id": 291,
+        "author_chain": "A",
+        "component_ids": [
+          "ALL"
+        ],
+        "element_counts": {
+          "C": 6,
+          "O": 6
+        },
+        "heavy_atom_count": 12
+      },
+      "observed_reference_sdf_sha256": "8039ffe1369ec42b47d82cd286772a1e66fe4103f733615a18df531588ff18a3",
+      "pdb_id": "1RPJ",
+      "url": "https://models.rcsb.org/v1/1rpj/ligand?auth_asym_id=A&auth_seq_id=291&encoding=sdf"
+    },
+    {
+      "auth_chain": "A",
+      "auth_seq_id": 272,
+      "byte_match": false,
+      "case_id": "APD-004",
+      "ccd_cif_download": {
+        "bytes": 8416,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\RIP.cif",
+        "retrieved_at_utc": "2026-09-12T21:00:13.023148+00:00",
+        "sha256": "fc96781e7a05a3a938176a017f8681b214f91d556ebb9825ad86ed5a69cd35df",
+        "url": "https://files.rcsb.org/ligands/view/RIP.cif"
+      },
+      "ccd_id": "RIP",
+      "ccd_ideal_download": {
+        "bytes": 1438,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\RIP_ideal.sdf",
+        "retrieved_at_utc": "2026-09-12T21:00:12.375327+00:00",
+        "sha256": "ca1e20f6176f542c0661ae0cc478381ea6f2b152f093e2f669de2f9c4adf3471",
+        "url": "https://files.rcsb.org/ligands/view/RIP_ideal.sdf"
+      },
+      "ccd_ideal_identity": {
+        "canonical_isomeric_smiles": "O[C@@H]1[C@H](O)[C@H](O)CO[C@H]1O",
+        "canonical_smiles": "OC1COC(O)C(O)C1O",
+        "element_counts": {
+          "C": 5,
+          "O": 5
+        },
+        "formal_charge": 0,
+        "formula": "C5H10O5",
+        "heavy_atom_count": 10
+      },
+      "chemical_equivalent_to_ccd_and_holo_instance": true,
+      "classification": "REPRESENTATION_DRIFT",
+      "coordinate_comparison": {
+        "best_mapping": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "coordinate_equivalent": true,
+        "coordinate_equivalent_threshold_angstrom": 0.0011,
+        "frozen_holo_coordinate_hash": "8c6158195559d2f1d82366e31cbe7666f4b0a01edc8d5c872e49fa4eadb411ba",
+        "frozen_holo_coordinate_hash_matches": true,
+        "graph_isomorphism_count": 1,
+        "graph_match": true,
+        "mapped_coordinate_hash": "8c6158195559d2f1d82366e31cbe7666f4b0a01edc8d5c872e49fa4eadb411ba",
+        "max_delta_angstrom": 0.0,
+        "rmsd_angstrom": 0.0,
+        "same_frame_rigid_fit_performed": false
+      },
+      "current_identity": {
+        "canonical_isomeric_smiles": "O[C@@H]1[C@H](O)[C@H](O)CO[C@H]1O",
+        "canonical_smiles": "OC1COC(O)C(O)C1O",
+        "element_counts": {
+          "C": 5,
+          "O": 5
+        },
+        "formal_charge": 0,
+        "formula": "C5H10O5",
+        "heavy_atom_count": 10
+      },
+      "download_attempts": [
+        {
+          "bytes": 2556,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-004\\attempt-1.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:11.015561+00:00",
+          "sha256": "5457e8146f22b30b9eb57c13220edd77a3972a0cbe507fe3245766aedc8330b3",
+          "url": "https://models.rcsb.org/v1/2dri/ligand?auth_asym_id=A&auth_seq_id=272&encoding=sdf"
+        },
+        {
+          "bytes": 2556,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-004\\attempt-2.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:11.653519+00:00",
+          "sha256": "b8aa807f141b4988bbdb4e73e5c380e765903a764bba6d3a48ed1dbe483910e1",
+          "url": "https://models.rcsb.org/v1/2dri/ligand?auth_asym_id=A&auth_seq_id=272&encoding=sdf"
+        },
+        {
+          "bytes": 2556,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-004\\attempt-3.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:12.271158+00:00",
+          "sha256": "a608c46e86880829397afeea9c9b1556a90a0c6f7c0093d4330767af66d94121",
+          "url": "https://models.rcsb.org/v1/2dri/ligand?auth_asym_id=A&auth_seq_id=272&encoding=sdf"
+        }
+      ],
+      "download_hashes_identical": false,
+      "filename": "2DRI-RIP.sdf",
+      "frozen_reference_sdf_sha256": "627c77aa18e9b7bbb7756c035a29a7f08a3a1ff2ab2bd76f06d755190a80e0a6",
+      "holo_pdb_identity": {
+        "auth_seq_id": 272,
+        "author_chain": "A",
+        "component_ids": [
+          "RIP"
+        ],
+        "element_counts": {
+          "C": 5,
+          "O": 5
+        },
+        "heavy_atom_count": 10
+      },
+      "observed_reference_sdf_sha256": "5457e8146f22b30b9eb57c13220edd77a3972a0cbe507fe3245766aedc8330b3",
+      "pdb_id": "2DRI",
+      "url": "https://models.rcsb.org/v1/2dri/ligand?auth_asym_id=A&auth_seq_id=272&encoding=sdf"
+    },
+    {
+      "auth_chain": "A",
+      "auth_seq_id": 1346,
+      "byte_match": false,
+      "case_id": "APD-005",
+      "ccd_cif_download": {
+        "bytes": 7335,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\PHE.cif",
+        "retrieved_at_utc": "2026-09-12T21:00:16.984733+00:00",
+        "sha256": "002c626d24aec78fd622459d4f4470c682c7c3f9f97d32414fec4313d780496e",
+        "url": "https://files.rcsb.org/ligands/view/PHE.cif"
+      },
+      "ccd_id": "PHE",
+      "ccd_ideal_download": {
+        "bytes": 1642,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\PHE_ideal.sdf",
+        "retrieved_at_utc": "2026-09-12T21:00:16.889534+00:00",
+        "sha256": "6d4ee8141f317a445ff033b6a9c4c853f8b011ab060ff99a465005362fd036f1",
+        "url": "https://files.rcsb.org/ligands/view/PHE_ideal.sdf"
+      },
+      "ccd_ideal_identity": {
+        "canonical_isomeric_smiles": "N[C@@H](Cc1ccccc1)C(=O)O",
+        "canonical_smiles": "NC(Cc1ccccc1)C(=O)O",
+        "element_counts": {
+          "C": 9,
+          "N": 1,
+          "O": 2
+        },
+        "formal_charge": 0,
+        "formula": "C9H11NO2",
+        "heavy_atom_count": 12
+      },
+      "chemical_equivalent_to_ccd_and_holo_instance": true,
+      "classification": "REPRESENTATION_DRIFT",
+      "coordinate_comparison": {
+        "best_mapping": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "coordinate_equivalent": true,
+        "coordinate_equivalent_threshold_angstrom": 0.0011,
+        "frozen_holo_coordinate_hash": "e51188114c9aa3f6c7468f6d58dea703542ff95f4e19b17b0f173ddffd90e4e2",
+        "frozen_holo_coordinate_hash_matches": true,
+        "graph_isomorphism_count": 4,
+        "graph_match": true,
+        "mapped_coordinate_hash": "e51188114c9aa3f6c7468f6d58dea703542ff95f4e19b17b0f173ddffd90e4e2",
+        "max_delta_angstrom": 0.0,
+        "rmsd_angstrom": 0.0,
+        "same_frame_rigid_fit_performed": false
+      },
+      "current_identity": {
+        "canonical_isomeric_smiles": "N[C@@H](Cc1ccccc1)C(=O)O",
+        "canonical_smiles": "NC(Cc1ccccc1)C(=O)O",
+        "element_counts": {
+          "C": 9,
+          "N": 1,
+          "O": 2
+        },
+        "formal_charge": 0,
+        "formula": "C9H11NO2",
+        "heavy_atom_count": 12
+      },
+      "download_attempts": [
+        {
+          "bytes": 1821,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-005\\attempt-1.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:14.306566+00:00",
+          "sha256": "31a3fce7a28ca150a3e30f669bd6cb5ca8a074e44d70b949e77bdbd2ff28de20",
+          "url": "https://models.rcsb.org/v1/1usi/ligand?auth_asym_id=A&auth_seq_id=1346&encoding=sdf"
+        },
+        {
+          "bytes": 1822,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-005\\attempt-2.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:15.821654+00:00",
+          "sha256": "6639a5dc6e5d585ebd72928a780b477aad6cdf597116421f1fcc061f93c8bd37",
+          "url": "https://models.rcsb.org/v1/1usi/ligand?auth_asym_id=A&auth_seq_id=1346&encoding=sdf"
+        },
+        {
+          "bytes": 1821,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-005\\attempt-3.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:16.727397+00:00",
+          "sha256": "c952b67e7344f0bcfc52ffb3133ff49a97f63e8397fa27efadc308bc1e315d88",
+          "url": "https://models.rcsb.org/v1/1usi/ligand?auth_asym_id=A&auth_seq_id=1346&encoding=sdf"
+        }
+      ],
+      "download_hashes_identical": false,
+      "filename": "1USI-PHE.sdf",
+      "frozen_reference_sdf_sha256": "8f7e5bec593c54cfa85d55fbca86e97d51a8dc4888f93f33f98db1e92bfe9062",
+      "holo_pdb_identity": {
+        "auth_seq_id": 1346,
+        "author_chain": "A",
+        "component_ids": [
+          "PHE"
+        ],
+        "element_counts": {
+          "C": 9,
+          "N": 1,
+          "O": 2
+        },
+        "heavy_atom_count": 12
+      },
+      "observed_reference_sdf_sha256": "31a3fce7a28ca150a3e30f669bd6cb5ca8a074e44d70b949e77bdbd2ff28de20",
+      "pdb_id": "1USI",
+      "url": "https://models.rcsb.org/v1/1usi/ligand?auth_asym_id=A&auth_seq_id=1346&encoding=sdf"
+    },
+    {
+      "auth_chain": "A",
+      "auth_seq_id": 1451,
+      "byte_match": false,
+      "case_id": "APD-006",
+      "ccd_cif_download": {
+        "bytes": 9623,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\SPQ.cif",
+        "retrieved_at_utc": "2026-09-12T21:00:20.237652+00:00",
+        "sha256": "edad0411184fd68a8908f2d7bfd1a1e1997f6d4020a1064b52c837a129f207f0",
+        "url": "https://files.rcsb.org/ligands/view/SPQ.cif"
+      },
+      "ccd_id": "SPQ",
+      "ccd_ideal_download": {
+        "bytes": 2934,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\SPQ_ideal.sdf",
+        "retrieved_at_utc": "2026-09-12T21:00:20.066928+00:00",
+        "sha256": "562e2b20ad9d2ba4ec765fd1d88243995f4c57feadde9a62bb0bdcb06c7cb260",
+        "url": "https://files.rcsb.org/ligands/view/SPQ_ideal.sdf"
+      },
+      "ccd_ideal_identity": {
+        "canonical_isomeric_smiles": "O=C(O)C1=C[C@@H](OP(=O)(O)O)[C@@H](O)[C@H](O[C@@](CF)(OP(=O)(O)O)C(=O)O)C1",
+        "canonical_smiles": "O=C(O)C1=CC(OP(=O)(O)O)C(O)C(OC(CF)(OP(=O)(O)O)C(=O)O)C1",
+        "element_counts": {
+          "C": 10,
+          "F": 1,
+          "O": 14,
+          "P": 2
+        },
+        "formal_charge": 0,
+        "formula": "C10H15FO14P2",
+        "heavy_atom_count": 27
+      },
+      "chemical_equivalent_to_ccd_and_holo_instance": true,
+      "classification": "REPRESENTATION_DRIFT",
+      "coordinate_comparison": {
+        "best_mapping": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26
+        ],
+        "coordinate_equivalent": true,
+        "coordinate_equivalent_threshold_angstrom": 0.0011,
+        "frozen_holo_coordinate_hash": "0d12d168ffba95b309fcebdde9cf791f64fecdf73d9c3b1c4f3b19e63011c397",
+        "frozen_holo_coordinate_hash_matches": true,
+        "graph_isomorphism_count": 144,
+        "graph_match": true,
+        "mapped_coordinate_hash": "0d12d168ffba95b309fcebdde9cf791f64fecdf73d9c3b1c4f3b19e63011c397",
+        "max_delta_angstrom": 0.0,
+        "rmsd_angstrom": 0.0,
+        "same_frame_rigid_fit_performed": false
+      },
+      "current_identity": {
+        "canonical_isomeric_smiles": "O=C(O)C1=C[C@@H](OP(=O)(O)O)[C@@H](O)[C@H](O[C@@](CF)(OP(=O)(O)O)C(=O)O)C1",
+        "canonical_smiles": "O=C(O)C1=CC(OP(=O)(O)O)C(O)C(OC(CF)(OP(=O)(O)O)C(=O)O)C1",
+        "element_counts": {
+          "C": 10,
+          "F": 1,
+          "O": 14,
+          "P": 2
+        },
+        "formal_charge": 0,
+        "formula": "C10H15FO14P2",
+        "heavy_atom_count": 27
+      },
+      "download_attempts": [
+        {
+          "bytes": 3201,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-006\\attempt-1.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:17.726679+00:00",
+          "sha256": "4758b41bb282af21d8b65b67027ce5845a69611a175e7ae6d13f75e8c1cced99",
+          "url": "https://models.rcsb.org/v1/1rf4/ligand?auth_asym_id=A&auth_seq_id=1451&encoding=sdf"
+        },
+        {
+          "bytes": 3202,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-006\\attempt-2.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:18.623180+00:00",
+          "sha256": "c5c7456874782fe0048a5b101c0edaf8538a29e78a153fc9a554ac60dcae253a",
+          "url": "https://models.rcsb.org/v1/1rf4/ligand?auth_asym_id=A&auth_seq_id=1451&encoding=sdf"
+        },
+        {
+          "bytes": 3203,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-006\\attempt-3.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:19.360734+00:00",
+          "sha256": "1a6a2d009766ab893cfd4f3a945eb8d951c64d2b7bf840a9029984cd813140a6",
+          "url": "https://models.rcsb.org/v1/1rf4/ligand?auth_asym_id=A&auth_seq_id=1451&encoding=sdf"
+        }
+      ],
+      "download_hashes_identical": false,
+      "filename": "1RF4-SPQ.sdf",
+      "frozen_reference_sdf_sha256": "e90e52934bf9bb8c0cc0da441714430385662af14b2fba320a2128cbfa6627a2",
+      "holo_pdb_identity": {
+        "auth_seq_id": 1451,
+        "author_chain": "A",
+        "component_ids": [
+          "SPQ"
+        ],
+        "element_counts": {
+          "C": 10,
+          "F": 1,
+          "O": 14,
+          "P": 2
+        },
+        "heavy_atom_count": 27
+      },
+      "observed_reference_sdf_sha256": "4758b41bb282af21d8b65b67027ce5845a69611a175e7ae6d13f75e8c1cced99",
+      "pdb_id": "1RF4",
+      "url": "https://models.rcsb.org/v1/1rf4/ligand?auth_asym_id=A&auth_seq_id=1451&encoding=sdf"
+    },
+    {
+      "auth_chain": "A",
+      "auth_seq_id": 301,
+      "byte_match": false,
+      "case_id": "APD-007",
+      "ccd_cif_download": {
+        "bytes": 6806,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\BET.cif",
+        "retrieved_at_utc": "2026-09-12T21:00:23.179905+00:00",
+        "sha256": "331d0ebde083067c13b080f18d2a952062ab4b6543edbc108b0fc88a5aa44ea4",
+        "url": "https://files.rcsb.org/ligands/view/BET.cif"
+      },
+      "ccd_id": "BET",
+      "ccd_ideal_download": {
+        "bytes": 1437,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\BET_ideal.sdf",
+        "retrieved_at_utc": "2026-09-12T21:00:23.024105+00:00",
+        "sha256": "34595df9d92a89b9e7d11e7c945e952dd9d88ab136896262a767c76255b15e2f",
+        "url": "https://files.rcsb.org/ligands/view/BET_ideal.sdf"
+      },
+      "ccd_ideal_identity": {
+        "canonical_isomeric_smiles": "C[N+](C)(C)CC(=O)O",
+        "canonical_smiles": "C[N+](C)(C)CC(=O)O",
+        "element_counts": {
+          "C": 5,
+          "N": 1,
+          "O": 2
+        },
+        "formal_charge": 1,
+        "formula": "C5H12NO2+",
+        "heavy_atom_count": 8
+      },
+      "chemical_equivalent_to_ccd_and_holo_instance": true,
+      "classification": "REPRESENTATION_DRIFT",
+      "coordinate_comparison": {
+        "best_mapping": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "coordinate_equivalent": true,
+        "coordinate_equivalent_threshold_angstrom": 0.0011,
+        "frozen_holo_coordinate_hash": "d8bd23ca3f24a1d98bda4298351d36f2e3a8fb3224de5c1d639a535005da6f00",
+        "frozen_holo_coordinate_hash_matches": true,
+        "graph_isomorphism_count": 12,
+        "graph_match": true,
+        "mapped_coordinate_hash": "d8bd23ca3f24a1d98bda4298351d36f2e3a8fb3224de5c1d639a535005da6f00",
+        "max_delta_angstrom": 0.0,
+        "rmsd_angstrom": 0.0,
+        "same_frame_rigid_fit_performed": false
+      },
+      "current_identity": {
+        "canonical_isomeric_smiles": "C[N+](C)(C)CC(=O)O",
+        "canonical_smiles": "C[N+](C)(C)CC(=O)O",
+        "element_counts": {
+          "C": 5,
+          "N": 1,
+          "O": 2
+        },
+        "formal_charge": 1,
+        "formula": "C5H12NO2+",
+        "heavy_atom_count": 8
+      },
+      "download_attempts": [
+        {
+          "bytes": 1431,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-007\\attempt-1.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:21.192702+00:00",
+          "sha256": "640e93624d0537a86fea8985b9165af9d78700b09164c70e9c901e19654671c4",
+          "url": "https://models.rcsb.org/v1/1sw2/ligand?auth_asym_id=A&auth_seq_id=301&encoding=sdf"
+        },
+        {
+          "bytes": 1429,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-007\\attempt-2.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:21.843322+00:00",
+          "sha256": "5b76d00cd9015b97e91a29b17abbedbbb742fb0df0eda4aed7bb88d37af9bcd0",
+          "url": "https://models.rcsb.org/v1/1sw2/ligand?auth_asym_id=A&auth_seq_id=301&encoding=sdf"
+        },
+        {
+          "bytes": 1429,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-007\\attempt-3.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:22.913895+00:00",
+          "sha256": "3ac37ce9b045beae910f154007dc8c0f83e8ea1720427c174c037ace902a80ed",
+          "url": "https://models.rcsb.org/v1/1sw2/ligand?auth_asym_id=A&auth_seq_id=301&encoding=sdf"
+        }
+      ],
+      "download_hashes_identical": false,
+      "filename": "1SW2-BET.sdf",
+      "frozen_reference_sdf_sha256": "fccf596bede93d055ff037eea0c3d4895d0bf276dd8c6b395c69dd2af566548a",
+      "holo_pdb_identity": {
+        "auth_seq_id": 301,
+        "author_chain": "A",
+        "component_ids": [
+          "BET"
+        ],
+        "element_counts": {
+          "C": 5,
+          "N": 1,
+          "O": 2
+        },
+        "heavy_atom_count": 8
+      },
+      "observed_reference_sdf_sha256": "640e93624d0537a86fea8985b9165af9d78700b09164c70e9c901e19654671c4",
+      "pdb_id": "1SW2",
+      "url": "https://models.rcsb.org/v1/1sw2/ligand?auth_asym_id=A&auth_seq_id=301&encoding=sdf"
+    },
+    {
+      "auth_chain": "A",
+      "auth_seq_id": 187,
+      "byte_match": false,
+      "case_id": "APD-008",
+      "ccd_cif_download": {
+        "bytes": 10073,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\5GP.cif",
+        "retrieved_at_utc": "2026-09-12T21:00:26.962330+00:00",
+        "sha256": "fd2ccfec74597393d71463ba629ca8a830c19563ec8d211bdf182b54e52cca66",
+        "url": "https://files.rcsb.org/ligands/view/5GP.cif"
+      },
+      "ccd_id": "5GP",
+      "ccd_ideal_download": {
+        "bytes": 2700,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\5GP_ideal.sdf",
+        "retrieved_at_utc": "2026-09-12T21:00:26.819349+00:00",
+        "sha256": "597f5fb7a6e8879458168b9a7dc07098a077564f0ff3e1b30da54251e21db5e2",
+        "url": "https://files.rcsb.org/ligands/view/5GP_ideal.sdf"
+      },
+      "ccd_ideal_identity": {
+        "canonical_isomeric_smiles": "Nc1nc2c(ncn2[C@@H]2O[C@H](COP(=O)(O)O)[C@@H](O)[C@H]2O)c(=O)[nH]1",
+        "canonical_smiles": "Nc1nc2c(ncn2C2OC(COP(=O)(O)O)C(O)C2O)c(=O)[nH]1",
+        "element_counts": {
+          "C": 10,
+          "N": 5,
+          "O": 8,
+          "P": 1
+        },
+        "formal_charge": 0,
+        "formula": "C10H14N5O8P",
+        "heavy_atom_count": 24
+      },
+      "chemical_equivalent_to_ccd_and_holo_instance": true,
+      "classification": "REPRESENTATION_DRIFT",
+      "coordinate_comparison": {
+        "best_mapping": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "coordinate_equivalent": true,
+        "coordinate_equivalent_threshold_angstrom": 0.0011,
+        "frozen_holo_coordinate_hash": "02500fcb1d6a9f3d5b409ffa698f45440e22c3fe08b59404e7b27c8e828ead1b",
+        "frozen_holo_coordinate_hash_matches": true,
+        "graph_isomorphism_count": 6,
+        "graph_match": true,
+        "mapped_coordinate_hash": "02500fcb1d6a9f3d5b409ffa698f45440e22c3fe08b59404e7b27c8e828ead1b",
+        "max_delta_angstrom": 0.0,
+        "rmsd_angstrom": 0.0,
+        "same_frame_rigid_fit_performed": false
+      },
+      "current_identity": {
+        "canonical_isomeric_smiles": "Nc1nc2c(ncn2[C@@H]2O[C@H](COP(=O)(O)O)[C@@H](O)[C@H]2O)c(=O)[nH]1",
+        "canonical_smiles": "Nc1nc2c(ncn2C2OC(COP(=O)(O)O)C(O)C2O)c(=O)[nH]1",
+        "element_counts": {
+          "C": 10,
+          "N": 5,
+          "O": 8,
+          "P": 1
+        },
+        "formal_charge": 0,
+        "formula": "C10H14N5O8P",
+        "heavy_atom_count": 24
+      },
+      "download_attempts": [
+        {
+          "bytes": 2969,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-008\\attempt-1.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:23.816810+00:00",
+          "sha256": "a87d64b1867409ad808068e545c3e680441222f17424baafa9c99c13147ef5e3",
+          "url": "https://models.rcsb.org/v1/1ex7/ligand?auth_asym_id=A&auth_seq_id=187&encoding=sdf"
+        },
+        {
+          "bytes": 2968,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-008\\attempt-2.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:24.752893+00:00",
+          "sha256": "14fa02f2c910db3b8b56e7aeda52e99b9da649f7613cc514954743cf1753181a",
+          "url": "https://models.rcsb.org/v1/1ex7/ligand?auth_asym_id=A&auth_seq_id=187&encoding=sdf"
+        },
+        {
+          "bytes": 2968,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-008\\attempt-3.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:25.695842+00:00",
+          "sha256": "c3ed31828841321c26ef3d217482e9c2d45c18572501c7aada4603dce96a8474",
+          "url": "https://models.rcsb.org/v1/1ex7/ligand?auth_asym_id=A&auth_seq_id=187&encoding=sdf"
+        }
+      ],
+      "download_hashes_identical": false,
+      "filename": "1EX7-5GP.sdf",
+      "frozen_reference_sdf_sha256": "a9e1d894b39b39b6173587929a1c6e2dc22a200794ca73b554e085d118591d52",
+      "holo_pdb_identity": {
+        "auth_seq_id": 187,
+        "author_chain": "A",
+        "component_ids": [
+          "5GP"
+        ],
+        "element_counts": {
+          "C": 10,
+          "N": 5,
+          "O": 8,
+          "P": 1
+        },
+        "heavy_atom_count": 24
+      },
+      "observed_reference_sdf_sha256": "a87d64b1867409ad808068e545c3e680441222f17424baafa9c99c13147ef5e3",
+      "pdb_id": "1EX7",
+      "url": "https://models.rcsb.org/v1/1ex7/ligand?auth_asym_id=A&auth_seq_id=187&encoding=sdf"
+    },
+    {
+      "auth_chain": "A",
+      "auth_seq_id": 400,
+      "byte_match": false,
+      "case_id": "APD-009",
+      "ccd_cif_download": {
+        "bytes": 9789,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\BGC.cif",
+        "retrieved_at_utc": "2026-09-12T21:00:30.825707+00:00",
+        "sha256": "f5bb693508c257f731303e53d18fdcc03cd572bfce1d289c21ec1a2e76f3bb82",
+        "url": "https://files.rcsb.org/ligands/view/BGC.cif"
+      },
+      "ccd_id": "BGC",
+      "ccd_ideal_download": {
+        "bytes": 1710,
+        "content_length_header": null,
+        "content_type": "text/plain",
+        "etag": null,
+        "http_status": 200,
+        "last_modified": null,
+        "path": ".audit\\apodock001-sdf-provenance\\ccd\\BGC_ideal.sdf",
+        "retrieved_at_utc": "2026-09-12T21:00:30.235014+00:00",
+        "sha256": "14255091133dbea893a04e764c178737a97f619f9a4fff39ec7b7a49cc2f38f2",
+        "url": "https://files.rcsb.org/ligands/view/BGC_ideal.sdf"
+      },
+      "ccd_ideal_identity": {
+        "canonical_isomeric_smiles": "OC[C@H]1O[C@@H](O)[C@H](O)[C@@H](O)[C@@H]1O",
+        "canonical_smiles": "OCC1OC(O)C(O)C(O)C1O",
+        "element_counts": {
+          "C": 6,
+          "O": 6
+        },
+        "formal_charge": 0,
+        "formula": "C6H12O6",
+        "heavy_atom_count": 12
+      },
+      "chemical_equivalent_to_ccd_and_holo_instance": true,
+      "classification": "REPRESENTATION_DRIFT",
+      "coordinate_comparison": {
+        "best_mapping": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "coordinate_equivalent": true,
+        "coordinate_equivalent_threshold_angstrom": 0.0011,
+        "frozen_holo_coordinate_hash": "bcb8b22fb9bf71e4f07d8beefb5b3f525c9d1797dd45823f605b9c8c368adad3",
+        "frozen_holo_coordinate_hash_matches": true,
+        "graph_isomorphism_count": 1,
+        "graph_match": true,
+        "mapped_coordinate_hash": "bcb8b22fb9bf71e4f07d8beefb5b3f525c9d1797dd45823f605b9c8c368adad3",
+        "max_delta_angstrom": 0.0,
+        "rmsd_angstrom": 0.0,
+        "same_frame_rigid_fit_performed": false
+      },
+      "current_identity": {
+        "canonical_isomeric_smiles": "OC[C@H]1O[C@@H](O)[C@H](O)[C@@H](O)[C@@H]1O",
+        "canonical_smiles": "OCC1OC(O)C(O)C(O)C1O",
+        "element_counts": {
+          "C": 6,
+          "O": 6
+        },
+        "formal_charge": 0,
+        "formula": "C6H12O6",
+        "heavy_atom_count": 12
+      },
+      "download_attempts": [
+        {
+          "bytes": 1820,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-009\\attempt-1.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:27.556414+00:00",
+          "sha256": "62077e92a402efe5355472e65b14bd0a2840336a98295be2040506dc808ef2b4",
+          "url": "https://models.rcsb.org/v1/2e2o/ligand?auth_asym_id=A&auth_seq_id=400&encoding=sdf"
+        },
+        {
+          "bytes": 1820,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-009\\attempt-2.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:28.222180+00:00",
+          "sha256": "fe4e6f7afc0b58a33b9ca9d178afadc430db420543200222f59d630cd18ed6b2",
+          "url": "https://models.rcsb.org/v1/2e2o/ligand?auth_asym_id=A&auth_seq_id=400&encoding=sdf"
+        },
+        {
+          "bytes": 1820,
+          "content_length_header": null,
+          "content_type": "text/plain; charset=utf-8",
+          "etag": null,
+          "http_status": 200,
+          "last_modified": null,
+          "path": ".audit\\apodock001-sdf-provenance\\downloads\\APD-009\\attempt-3.sdf",
+          "retrieved_at_utc": "2026-09-12T21:00:30.063671+00:00",
+          "sha256": "0dd5d27e1ccf88d17cfa36719d5bb0c59b4265f433f29b8d931758ac9697953c",
+          "url": "https://models.rcsb.org/v1/2e2o/ligand?auth_asym_id=A&auth_seq_id=400&encoding=sdf"
+        }
+      ],
+      "download_hashes_identical": false,
+      "filename": "2E2O-BGC.sdf",
+      "frozen_reference_sdf_sha256": "98bb6e838039037c4dc4653600850d8474f951208e63c2f52be1f85be60a7376",
+      "holo_pdb_identity": {
+        "auth_seq_id": 400,
+        "author_chain": "A",
+        "component_ids": [
+          "BGC"
+        ],
+        "element_counts": {
+          "C": 6,
+          "O": 6
+        },
+        "heavy_atom_count": 12
+      },
+      "observed_reference_sdf_sha256": "62077e92a402efe5355472e65b14bd0a2840336a98295be2040506dc808ef2b4",
+      "pdb_id": "2E2O",
+      "url": "https://models.rcsb.org/v1/2e2o/ligand?auth_asym_id=A&auth_seq_id=400&encoding=sdf"
+    }
+  ],
+  "scientific_identity_note": "The frozen v1.0.1 byte hashes remain authoritative. A stable current SDF that is chemically and coordinate equivalent is representation drift, not permission to mutate v1.0.1; it can support a separately reviewed v1.0.2 input bundle only.",
+  "source_contract": {
+    "audit_url_template": "https://models.rcsb.org/v1/{pdb_id}/ligand?auth_asym_id={chain}&auth_seq_id={auth_seq_id}&encoding=sdf",
+    "ccd_ideal_endpoint": "https://files.rcsb.org/ligands/view/{ccd}_ideal.sdf",
+    "current_downloads_per_case": 3,
+    "historical_download_user_agent": "Research-OS/5.1 REDOCK-001"
+  },
+  "summary": {
+    "all_nine_byte_exact": false,
+    "all_nine_scientifically_equivalent": true,
+    "byte_exact_cases": 0,
+    "case_count": 9,
+    "classifications": {
+      "REPRESENTATION_DRIFT": 9
+    },
+    "prospective_scores_or_poses_observed": false,
+    "scientifically_equivalent_cases": 9,
+    "stable_current_download_cases": 0,
+    "v1_0_1_byte_exactly_executable": false,
+    "v1_0_2_scientifically_justified_if_reviewed": true,
+    "vina_docking_executed": false,
+    "vina_received_receptor_or_ligand": false
+  }
+}
