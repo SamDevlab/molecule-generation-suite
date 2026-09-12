@@ -1,4 +1,4 @@
-"""Build and validate the APODOCK-001 v1.0 execution infrastructure.
+"""Build and validate the APODOCK-001 v1.0.1 execution infrastructure.
 
 The command is deliberately a dry-run tool.  It can verify the exact Linux
 tools in CI and emit a no-results evidence scaffold, but it has no flag that
@@ -20,7 +20,7 @@ from research_os.docking.apodock001_execution import (
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--spec", type=Path, default=None)
-    parser.add_argument("--run-root", type=Path, default=Path("runs/apodock001-v1.0"))
+    parser.add_argument("--run-root", type=Path, default=Path("runs/apodock001-v1.0.1"))
     parser.add_argument("--git-sha", default="unknown")
     parser.add_argument("--vina", type=Path)
     parser.add_argument("--openbabel", type=Path)

@@ -1,4 +1,4 @@
-# APODOCK-001 execution adapter v1.0
+# APODOCK-001 execution adapter v1.0.1
 
 This document describes the infrastructure prepared for the first
 prospective run. It does not authorize or perform docking.
@@ -22,7 +22,7 @@ Ligand preparation reuses the reviewed ETKDGv3/UFF implementation with seed
 BEM+MAV adapter identities; no alternate chemical reconstruction is allowed.
 
 `ExecutionAuthorization` defaults to false and requires the exact label
-`APODOCK-001-v1.0`. The adapter also rejects an existing raw PDBQT, SDF,
+`APODOCK-001-v1.0.1`. The adapter also rejects an existing raw PDBQT, SDF,
 seal, or run-manifest marker in the future run directory. The infrastructure
 workflow verifies Vina with `vina --version` and its frozen SHA-256, verifies
 Open Babel 3.1.1, runs tests, builds the plan, and writes a scaffold whose

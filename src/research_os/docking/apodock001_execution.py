@@ -1,4 +1,4 @@
-"""Normative, fail-closed execution infrastructure for APODOCK-001.
+"""Normative, fail-closed execution infrastructure for APODOCK-001 v1.0.1.
 
 This module prepares the future prospective run without performing one by
 default.  The frozen protocol remains the only source of scientific inputs;
@@ -29,6 +29,7 @@ from rdkit import Chem
 from research_os.core.hashing import sha256_file, sha256_json
 from research_os.docking.apodock001_protocol import (
     DEFAULT_PROTOCOL_PATH,
+    is_canonical_sha256,
     load_and_validate,
 )
 from research_os.docking.apodock001_runner import APODOCK001Runner
@@ -148,9 +149,9 @@ class ExecutionAuthorization:
             raise ExecutionAuthorizationError(
                 "prospective execution is disabled; explicit authorization is required"
             )
-        if self.authorization_label != "APODOCK-001-v1.0":
+        if self.authorization_label != "APODOCK-001-v1.0.1":
             raise ExecutionAuthorizationError(
-                "authorization label must be APODOCK-001-v1.0"
+                "authorization label must be APODOCK-001-v1.0.1"
             )
 
 
@@ -205,7 +206,11 @@ def verify_vina_tool(
 
     path = _executable_file(executable)
     digest = sha256_file(path)
-    if digest.lower() != required_sha256.lower():
+    if (
+        not is_canonical_sha256(required_sha256)
+        or not is_canonical_sha256(digest)
+        or digest != required_sha256
+    ):
         raise APODOCK001InfrastructureError(
             f"Vina SHA-256 mismatch: {digest} != {required_sha256}"
         )
@@ -379,7 +384,7 @@ def build_vina_command(
     if tuple(case.vina["flags"]) != FROZEN_VINA_FLAGS:
         raise APODOCK001InfrastructureError("Vina flags differ from the frozen contract")
     if case.vina["energy_range_kcal_per_mol"] is not None:
-        raise APODOCK001InfrastructureError("energy_range is not allowed by protocol v1.0")
+        raise APODOCK001InfrastructureError("energy_range is not allowed by protocol v1.0.1")
     root = Path(run_root)
     values: tuple[tuple[str, str], ...] = (
         ("--receptor", str(root / case.receptor_prepared_output)),
@@ -648,7 +653,7 @@ class APODOCK001ExecutionAdapter:
         spec_path: str | Path = DEFAULT_PROTOCOL_PATH,
         *,
         source_root: str | Path = "inputs/apodock001",
-        run_root: str | Path = "runs/apodock001-v1.0",
+        run_root: str | Path = "runs/apodock001-v1.0.1",
         git_sha: str = "unknown",
     ) -> None:
         self.spec_path = Path(spec_path)

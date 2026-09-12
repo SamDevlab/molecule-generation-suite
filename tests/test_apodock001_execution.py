@@ -26,15 +26,15 @@ from research_os.docking.apodock001_execution import (
 )
 
 
-SPEC = Path(__file__).parents[1] / "configs" / "apodock001-protocol-freeze-v1.0.json"
-VINA_SHA = "f31f774f723bba7bbbe6e9d1c47577020eea9a8da16424284c043d22593570644"
+SPEC = Path(__file__).parents[1] / "configs" / "apodock001-protocol-freeze-v1.0.1.json"
+VINA_SHA = "f31f774f723bba7bbe6e9d1c47577020eea9a8da16424284c043d22593570644"
 
 
 def _adapter(tmp_path: Path) -> APODOCK001ExecutionAdapter:
     return APODOCK001ExecutionAdapter(
         SPEC,
         run_root=tmp_path / "future-run",
-        git_sha="0cd669e6f1fe5e924d731f91d8b8fb1cd46c14dd",
+        git_sha="7dea47673c5dd1b251661bf43496731a050ba0aa",
     )
 
 
@@ -43,6 +43,7 @@ def test_execution_plan_is_complete_and_deterministic(tmp_path: Path) -> None:
     second = _adapter(tmp_path / "b")
 
     assert first.plan.planned_run_id == second.plan.planned_run_id
+    assert first.plan.protocol_id == "research-os.apodock001.protocol.v1.0.1+9e293289c9729603"
     assert [case.case_id for case in first.plan.cases] == [f"APD-{n:03d}" for n in range(1, 11)]
     assert first.plan.cases[-1].chemistry["adapter_version"] == "1.0.0"
     assert first.plan.cases[-1].chemistry["output_identity"] == "1586aa91b6a57fdc938ad3ffa8679996e78d73a834624a3af557c5593e2eb052"
@@ -93,6 +94,8 @@ def test_vina_hash_and_version_are_fail_closed(tmp_path: Path) -> None:
         verify_vina_tool(executable, required_version="1.2.7", required_sha256=VINA_SHA, version_output="AutoDock Vina v1.2.7")
     identity = verify_vina_tool(executable, required_version="1.2.7", required_sha256=observed_hash, version_output="AutoDock Vina v1.2.7")
     assert identity.version == "1.2.7"
+    with pytest.raises(APODOCK001InfrastructureError):
+        verify_vina_tool(executable, required_version="1.2.7", required_sha256=observed_hash.upper(), version_output="AutoDock Vina v1.2.7")
     with pytest.raises(APODOCK001InfrastructureError):
         verify_vina_tool(executable, required_version="1.2.7", required_sha256=observed_hash, version_output="AutoDock Vina v1.2.6")
 
@@ -244,7 +247,7 @@ def test_authorized_execution_is_one_pass_and_seals_raw_outputs(tmp_path: Path, 
         vina=vina,
         openbabel=openbabel,
         prepared_artifacts=prepared,
-        authorization=ExecutionAuthorization(True, "APODOCK-001-v1.0"),
+        authorization=ExecutionAuthorization(True, "APODOCK-001-v1.0.1"),
     )
     assert len(calls) == 10
     assert manifest["status"] == "RAW_RESULTS_SEALED"

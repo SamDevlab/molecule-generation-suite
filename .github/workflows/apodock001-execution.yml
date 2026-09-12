@@ -8,6 +8,7 @@ on:
       - "src/research_os/docking/apodock001_execution.py"
       - "src/research_os/docking/apodock001_protocol.py"
       - "src/research_os/docking/apodock001_runner.py"
+      - "configs/apodock001-protocol-freeze-v1.0.1.json"
       - "scripts/apodock001_execution.py"
       - "tests/test_apodock001_execution.py"
       - "docs/apodock001-execution-adapter-v1.0.md"
@@ -46,7 +47,7 @@ jobs:
           chmod +x /tmp/vina_1.2.7
           observed_sha256="$(sha256sum /tmp/vina_1.2.7 | cut -d ' ' -f1)"
           echo "observed_sha256=$observed_sha256"
-          test "$observed_sha256" = "f31f774f723bba7bbbe6e9d1c47577020eea9a8da16424284c043d22593570644"
+          test "$observed_sha256" = "f31f774f723bba7bbe6e9d1c47577020eea9a8da16424284c043d22593570644"
           /tmp/vina_1.2.7 --version
 
       - name: Run execution adapter tests
