@@ -1,8 +1,16 @@
 # APODOCK-001 prospective protocol freeze v1.0
 
-Status: **FROZEN**. This document and
+Historical status: **FROZEN_BUT_UNEXECUTABLE**. The manifest below is
+preserved unchanged for auditability. Its recorded Vina digest has 65
+characters and is not a valid SHA-256 digest, so v1.0 is not an executable
+protocol. No APODOCK-001 docking occurred under v1.0. The corrected successor
+is documented in
+[`docs/apodock001-protocol-erratum-v1.0.1.md`](apodock001-protocol-erratum-v1.0.1.md).
+
+Historical record: **PRESERVED**. This document and
 [`configs/apodock001-protocol-freeze-v1.0.json`](../configs/apodock001-protocol-freeze-v1.0.json)
-are normative for the first prospective APODOCK-001 run.
+are retained as the original v1.0 audit record and are not normative for a
+future run. Use the v1.0.1 erratum for the active protocol.
 
 ## Scope
 

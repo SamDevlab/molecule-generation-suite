@@ -10,8 +10,10 @@ import pytest
 from research_os.docking.apodock001_protocol import (
     EXPECTED_VINA_SHA256,
     EXPECTED_VINA_VERSION,
+    HISTORICAL_PROTOCOL_PATH,
     ProtocolValidationError,
     build_dry_run_report,
+    load_and_classify_historical_v1_0,
     load_and_validate,
     load_protocol,
     protocol_hash,
@@ -22,7 +24,7 @@ from research_os.docking.apodock001_protocol import (
 from research_os.docking.apodock001_runner import APODOCK001ExecutionError, APODOCK001Runner
 
 
-SPEC = Path(__file__).parents[1] / "configs" / "apodock001-protocol-freeze-v1.0.json"
+SPEC = Path(__file__).parents[1] / "configs" / "apodock001-protocol-freeze-v1.0.1.json"
 
 
 def _protocol() -> dict[str, object]:
@@ -31,6 +33,7 @@ def _protocol() -> dict[str, object]:
 
 def test_protocol_schema_is_frozen() -> None:
     assert _protocol()["schema_version"] == "research-os.apodock001.protocol.v1"
+    assert _protocol()["protocol_version"] == "1.0.1"
 
 
 def test_protocol_has_exact_case_count() -> None:
@@ -146,8 +149,57 @@ def test_recomputed_scientific_identity_is_still_rejected() -> None:
     changed["analysis"]["success_threshold_angstrom"] = 1.5
     changed["protocol_hash"] = protocol_hash(changed)
     changed["protocol_id"] = protocol_id(changed)
-    with pytest.raises(ProtocolValidationError, match="frozen v1.0 identity"):
+    with pytest.raises(ProtocolValidationError, match="frozen v1.0.1 identity"):
         validate_protocol(changed)
+
+
+@pytest.mark.parametrize(
+    "bad_sha",
+    [
+        "a" * 63,
+        "a" * 65,
+        "g" * 64,
+        "A" * 64,
+    ],
+)
+def test_sha256_fields_require_exact_lowercase_64_hex(bad_sha: str) -> None:
+    changed = deepcopy(_protocol())
+    changed["vina"]["binary_sha256"] = bad_sha
+    with pytest.raises(ProtocolValidationError, match="exactly 64 lowercase hexadecimal"):
+        validate_protocol(changed)
+
+
+def test_valid_sha256_field_is_accepted() -> None:
+    protocol = _protocol()
+    assert len(protocol["vina"]["binary_sha256"]) == 64
+    assert protocol["vina"]["binary_sha256"].islower()
+
+
+def test_original_v1_0_is_preserved_but_classified_non_executable() -> None:
+    status = load_and_classify_historical_v1_0(HISTORICAL_PROTOCOL_PATH)
+    assert status["status"] == "FROZEN_BUT_UNEXECUTABLE"
+    assert status["protocol_id"] == "research-os.apodock001.protocol.v1.0+fef2036e5bcd8d97"
+
+
+def test_v1_0_1_scientific_diff_is_only_corrected_vina_digest() -> None:
+    old = json.loads(HISTORICAL_PROTOCOL_PATH.read_text(encoding="utf-8"))
+    current = _protocol()
+    old_payload = deepcopy(old)
+    current_payload = deepcopy(current)
+    for payload in (old_payload, current_payload):
+        payload.pop("schema_version")
+        payload.pop("protocol_id")
+        payload.pop("protocol_hash")
+        payload.pop("operational_metadata")
+        payload.pop("protocol_version")
+        payload["vina"].pop("binary_sha256")
+    assert old_payload == current_payload
+    assert old["vina"]["binary_sha256"] != current["vina"]["binary_sha256"]
+
+
+def test_historical_v1_0_is_not_accepted_as_active_protocol() -> None:
+    with pytest.raises(ProtocolValidationError, match="protocol_version"):
+        load_and_validate(HISTORICAL_PROTOCOL_PATH)
 
 
 def test_duplicate_json_keys_fail_closed(tmp_path: Path) -> None:
@@ -215,3 +267,9 @@ def test_runner_rejects_modified_tool_identity() -> None:
     runner = APODOCK001Runner(SPEC)
     with pytest.raises(APODOCK001ExecutionError, match="version mismatch"):
         runner.verify_tool_identity(vina_version="1.2.6", vina_sha256=EXPECTED_VINA_SHA256)
+
+
+def test_runner_rejects_uppercase_tool_digest() -> None:
+    runner = APODOCK001Runner(SPEC)
+    with pytest.raises(APODOCK001ExecutionError, match="SHA-256 mismatch"):
+        runner.verify_tool_identity(vina_version=EXPECTED_VINA_VERSION, vina_sha256=EXPECTED_VINA_SHA256.upper())

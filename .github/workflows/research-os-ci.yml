@@ -57,7 +57,9 @@ jobs:
 
   redocking-reference:
     name: capability (REDOCK-001 v1.2)
-    if: github.event_name == 'push' || github.head_ref != 'feat/apodock001-protocol-freeze'
+    # REDOCK is an explicit benchmark run, never an incidental check for an
+    # APODOCK protocol/adapter PR or a merge into the protected research base.
+    if: github.event_name == 'pull_request' && github.head_ref == 'benchmark/redock-001-v1.2'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
