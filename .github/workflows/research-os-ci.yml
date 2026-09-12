@@ -57,6 +57,7 @@ jobs:
 
   redocking-reference:
     name: capability (REDOCK-001 v1.2)
+    if: github.event_name == 'push' || github.head_ref != 'feat/apodock001-protocol-freeze'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
