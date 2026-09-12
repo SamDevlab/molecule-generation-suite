@@ -44,7 +44,9 @@ jobs:
             https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 \
             --output /tmp/vina_1.2.7
           chmod +x /tmp/vina_1.2.7
-          test "$(sha256sum /tmp/vina_1.2.7 | awk '{print $1}')" = "f31f774f723bba7bbbe6e9d1c47577020eea9a8da16424284c043d22593570644"
+          observed_sha256="$(sha256sum /tmp/vina_1.2.7 | cut -d ' ' -f1)"
+          echo "observed_sha256=$observed_sha256"
+          test "$observed_sha256" = "f31f774f723bba7bbbe6e9d1c47577020eea9a8da16424284c043d22593570644"
           /tmp/vina_1.2.7 --version
 
       - name: Run execution adapter tests
