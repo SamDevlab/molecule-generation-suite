@@ -21,13 +21,23 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--spec", type=Path, default=None)
     parser.add_argument("--run-root", type=Path, default=Path("runs/apodock001-v1.0.1"))
+    parser.add_argument(
+        "--staging-root",
+        type=Path,
+        default=None,
+        help="external pre-execution staging directory (never a run output directory)",
+    )
     parser.add_argument("--git-sha", default="unknown")
     parser.add_argument("--vina", type=Path)
     parser.add_argument("--openbabel", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
-    adapter_kwargs = {"run_root": args.run_root, "git_sha": args.git_sha}
+    adapter_kwargs = {
+        "run_root": args.run_root,
+        "staging_root": args.staging_root,
+        "git_sha": args.git_sha,
+    }
     if args.spec:
         adapter_kwargs["spec_path"] = args.spec
     adapter = APODOCK001ExecutionAdapter(**adapter_kwargs)
