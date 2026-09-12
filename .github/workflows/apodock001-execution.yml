@@ -58,6 +58,7 @@ jobs:
           python scripts/apodock001_execution.py \
             --git-sha "$GITHUB_SHA" \
             --run-root /tmp/apodock001-future-run \
+            --staging-root /tmp/apodock001-prepared-staging \
             --vina /tmp/vina_1.2.7 \
             --openbabel "$(command -v obabel)" \
             --output /tmp/apodock001-infrastructure/dry-run.json
@@ -77,5 +78,5 @@ jobs:
           assert report['evidence_scaffold']['scores'] == []
           assert report['case_count'] == 10
           print('APODOCK-001 cases executed: 0/10')
-          print('No Vina docking process was started.')
+          print('No APODOCK Vina docking command was started.')
           PY

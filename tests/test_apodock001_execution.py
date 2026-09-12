@@ -34,8 +34,36 @@ def _adapter(tmp_path: Path) -> APODOCK001ExecutionAdapter:
     return APODOCK001ExecutionAdapter(
         SPEC,
         run_root=tmp_path / "future-run",
+        staging_root=tmp_path / "prepared-staging",
         git_sha="7dea47673c5dd1b251661bf43496731a050ba0aa",
     )
+
+
+def _prepared_artifacts(
+    adapter: APODOCK001ExecutionAdapter, root: Path
+) -> dict[str, dict[str, dict[str, object]]]:
+    prepared: dict[str, dict[str, dict[str, object]]] = {}
+    source_root = root / "prepared-sources"
+    for case in adapter.plan.cases:
+        prepared[case.case_id] = {}
+        for kind in ("receptor", "ligand"):
+            path = source_root / case.case_id / f"{kind}.pdbqt"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(f"synthetic {kind} fixture {case.case_id}\n".encode())
+            source_hashes = deepcopy(case.input_hashes)
+            prepared[case.case_id][kind] = {
+                "case_id": case.case_id,
+                "artifact_kind": kind,
+                "source_hashes": source_hashes,
+                "chemistry": deepcopy(case.chemistry),
+                "preparation": deepcopy(case.preparation[kind]),
+                "output_path": str(path),
+                "output_sha256": sha256_file(path),
+                "expected_destination": getattr(case, f"{kind}_prepared_output"),
+                "protocol_id": adapter.plan.protocol_id,
+                "planned_run_id": adapter.plan.planned_run_id,
+            }
+    return prepared
 
 
 def test_execution_plan_is_complete_and_deterministic(tmp_path: Path) -> None:
@@ -186,6 +214,147 @@ def test_existing_output_blocks_rerun(tmp_path: Path) -> None:
         _adapter(tmp_path).preflight()
 
 
+def test_external_staging_does_not_contaminate_pristine_run_root(tmp_path: Path) -> None:
+    adapter = _adapter(tmp_path)
+    staged = adapter.stage_prepared_artifacts(_prepared_artifacts(adapter, tmp_path))
+    adapter.verify_staged_artifacts(staged)
+    assert adapter.staging_root.is_dir()
+    assert not adapter.run_root.exists()
+    adapter.preflight()
+    assert not adapter.run_root.exists()
+    assert len(staged) == 10
+    assert sum("receptor" in artifacts for artifacts in staged.values()) == 10
+    assert sum("ligand" in artifacts for artifacts in staged.values()) == 10
+
+
+def test_missing_staged_artifact_blocks_before_execution(tmp_path: Path) -> None:
+    adapter = _adapter(tmp_path)
+    staged = adapter.stage_prepared_artifacts(_prepared_artifacts(adapter, tmp_path))
+    (adapter.staging_root / "APD-001" / "ligand.pdbqt").unlink()
+    with pytest.raises(APODOCK001InfrastructureError):
+        adapter.verify_staged_artifacts(staged)
+
+
+def test_duplicate_or_extra_artifact_blocks_closed(tmp_path: Path) -> None:
+    adapter = _adapter(tmp_path)
+    prepared = _prepared_artifacts(adapter, tmp_path)
+    prepared["APD-001"]["duplicate"] = deepcopy(prepared["APD-001"]["ligand"])
+    with pytest.raises(APODOCK001InfrastructureError):
+        adapter.stage_prepared_artifacts(prepared)
+
+
+def test_staged_hash_mutation_blocks_before_execution(tmp_path: Path) -> None:
+    adapter = _adapter(tmp_path)
+    staged = adapter.stage_prepared_artifacts(_prepared_artifacts(adapter, tmp_path))
+    path = adapter.staging_root / "APD-002" / "receptor.pdbqt"
+    path.write_bytes(b"mutated staged bytes\n")
+    with pytest.raises(APODOCK001InfrastructureError):
+        adapter.verify_staged_artifacts(staged)
+
+
+def test_incomplete_staging_never_reaches_subprocess(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    adapter = _adapter(tmp_path)
+    prepared = _prepared_artifacts(adapter, tmp_path)
+    missing = tmp_path / "missing-ligand.pdbqt"
+    prepared["APD-001"]["ligand"]["output_path"] = str(missing)
+
+    def forbidden(*args: object, **kwargs: object) -> None:
+        raise AssertionError("Vina must not be called before complete staging")
+
+    monkeypatch.setattr(subprocess, "run", forbidden)
+    vina = ToolIdentity("AutoDock Vina", "/tmp/vina_1.2.7", "1.2.7", "AutoDock Vina v1.2.7", VINA_SHA, VINA_SHA, "1.2.7")
+    openbabel = ToolIdentity("Open Babel", "/usr/bin/obabel", "3.1.1", "Open Babel 3.1.1", "b" * 64, None, "3.1.1")
+    with pytest.raises(APODOCK001InfrastructureError):
+        adapter.execute_prospective(
+            vina=vina,
+            openbabel=openbabel,
+            prepared_artifacts=prepared,
+            authorization=ExecutionAuthorization(True, "APODOCK-001-v1.0.1"),
+        )
+    assert not adapter.run_root.exists()
+
+
+def test_existing_run_output_blocks_after_staging_but_before_subprocess(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    adapter = _adapter(tmp_path)
+    prepared = _prepared_artifacts(adapter, tmp_path)
+    (adapter.run_root / "raw").mkdir(parents=True)
+    (adapter.run_root / "raw" / "existing.pdbqt").write_bytes(b"existing")
+
+    def forbidden(*args: object, **kwargs: object) -> None:
+        raise AssertionError("Vina must not be called on an existing run")
+
+    monkeypatch.setattr(subprocess, "run", forbidden)
+    vina = ToolIdentity("AutoDock Vina", "/tmp/vina_1.2.7", "1.2.7", "AutoDock Vina v1.2.7", VINA_SHA, VINA_SHA, "1.2.7")
+    openbabel = ToolIdentity("Open Babel", "/usr/bin/obabel", "3.1.1", "Open Babel 3.1.1", "b" * 64, None, "3.1.1")
+    with pytest.raises(ExistingProspectiveRunError):
+        adapter.execute_prospective(
+            vina=vina,
+            openbabel=openbabel,
+            prepared_artifacts=prepared,
+            authorization=ExecutionAuthorization(True, "APODOCK-001-v1.0.1"),
+        )
+
+
+def test_protocol_and_planned_run_identity_are_unchanged_by_staging(tmp_path: Path) -> None:
+    adapter = _adapter(tmp_path)
+    protocol_id = adapter.plan.protocol_id
+    planned_run_id = adapter.plan.planned_run_id
+    scientific_payload = deepcopy(adapter.plan.scientific_payload())
+    adapter.stage_prepared_artifacts(_prepared_artifacts(adapter, tmp_path))
+    assert adapter.plan.protocol_id == protocol_id
+    assert adapter.plan.planned_run_id == planned_run_id
+    assert adapter.plan.scientific_payload() == scientific_payload
+
+
+def test_preparation_and_apd010_contract_mutations_block_staging(tmp_path: Path) -> None:
+    adapter = _adapter(tmp_path)
+    prepared = _prepared_artifacts(adapter, tmp_path)
+    prepared["APD-003"]["receptor"]["preparation"] = {"changed": True}
+    with pytest.raises(APODOCK001InfrastructureError):
+        adapter.stage_prepared_artifacts(prepared)
+
+    prepared = _prepared_artifacts(adapter, tmp_path / "second")
+    prepared["APD-010"]["ligand"]["chemistry"]["adapter_version"] = "changed"
+    with pytest.raises(APODOCK001InfrastructureError):
+        adapter.stage_prepared_artifacts(prepared)
+
+
+def test_staging_copy_preserves_bytes_and_command_inputs_exist(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    adapter = _adapter(tmp_path)
+    prepared = _prepared_artifacts(adapter, tmp_path)
+    vina = ToolIdentity("AutoDock Vina", "/tmp/vina_1.2.7", "1.2.7", "AutoDock Vina v1.2.7", VINA_SHA, VINA_SHA, "1.2.7")
+    openbabel = ToolIdentity("Open Babel", "/usr/bin/obabel", "3.1.1", "Open Babel 3.1.1", "b" * 64, None, "3.1.1")
+    calls: list[tuple[str, ...]] = []
+
+    def fake_run(command: tuple[str, ...], **kwargs: object) -> subprocess.CompletedProcess[str]:
+        receptor = Path(command[command.index("--receptor") + 1])
+        ligand = Path(command[command.index("--ligand") + 1])
+        assert receptor.is_file() and receptor.stat().st_size > 0
+        assert ligand.is_file() and ligand.stat().st_size > 0
+        calls.append(command)
+        output = Path(command[command.index("--out") + 1])
+        output.write_text("synthetic Vina fixture; no real docking\n", encoding="utf-8")
+        return subprocess.CompletedProcess(command, 0, "synthetic stdout", "")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    manifest = adapter.execute_prospective(
+        vina=vina,
+        openbabel=openbabel,
+        prepared_artifacts=prepared,
+        authorization=ExecutionAuthorization(True, "APODOCK-001-v1.0.1"),
+    )
+    assert len(calls) == 10
+    for case in adapter.plan.cases:
+        for kind in ("receptor", "ligand"):
+            staged_path = adapter.staging_root / case.case_id / f"{kind}.pdbqt"
+            run_path = adapter.run_root / getattr(case, f"{kind}_prepared_output")
+            assert staged_path.read_bytes() == run_path.read_bytes()
+            assert sha256_file(staged_path) == sha256_file(run_path)
+    assert manifest["status"] == "RAW_RESULTS_SEALED"
+
+
 def test_evidence_scaffold_has_no_results(tmp_path: Path) -> None:
     adapter = _adapter(tmp_path)
     environment = build_environment_manifest(
@@ -246,22 +415,16 @@ def test_ligand_conformer_uses_frozen_seed_and_uff_limit(tmp_path: Path) -> None
 
 def test_authorized_execution_is_one_pass_and_seals_raw_outputs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     adapter = _adapter(tmp_path)
-    prepared = {}
-    for case in adapter.plan.cases:
-        path = tmp_path / f"{case.case_id}.prepared.pdbqt"
-        path.write_text(f"synthetic prepared fixture {case.case_id}\n", encoding="utf-8")
-        prepared[case.case_id] = {
-            "case_id": case.case_id,
-            "source_hashes": deepcopy(case.input_hashes),
-            "preparation": deepcopy(case.preparation),
-            "output_path": str(path),
-            "output_sha256": sha256_file(path),
-        }
+    prepared = _prepared_artifacts(adapter, tmp_path)
     vina = ToolIdentity("AutoDock Vina", "/tmp/vina_1.2.7", "1.2.7", "AutoDock Vina v1.2.7", VINA_SHA, VINA_SHA, "1.2.7")
     openbabel = ToolIdentity("Open Babel", "/usr/bin/obabel", "3.1.1", "Open Babel 3.1.1", "b" * 64, None, "3.1.1")
     calls: list[tuple[str, ...]] = []
 
     def fake_run(command: tuple[str, ...], **kwargs: object) -> subprocess.CompletedProcess[str]:
+        receptor = Path(command[command.index("--receptor") + 1])
+        ligand = Path(command[command.index("--ligand") + 1])
+        assert receptor.is_file() and receptor.stat().st_size > 0
+        assert ligand.is_file() and ligand.stat().st_size > 0
         calls.append(command)
         output = Path(command[command.index("--out") + 1])
         output.write_text("synthetic Vina fixture; no real docking\n", encoding="utf-8")

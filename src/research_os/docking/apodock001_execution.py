@@ -21,6 +21,7 @@ import os
 from pathlib import Path
 import platform
 import re
+import shutil
 import subprocess
 from typing import Any, Mapping, Sequence
 
@@ -73,6 +74,9 @@ class ExecutionAuthorizationError(APODOCK001InfrastructureError):
 
 class ExistingProspectiveRunError(APODOCK001InfrastructureError):
     """Raised when a prospective run directory is not pristine."""
+
+
+PREPARED_ARTIFACT_KINDS: tuple[str, ...] = ("receptor", "ligand")
 
 
 @dataclass(frozen=True)
@@ -133,6 +137,37 @@ class APODOCK001ExecutionPlan:
     def to_dict(self) -> dict[str, Any]:
         return {
             **self.scientific_payload(),
+            "planned_run_id": self.planned_run_id,
+        }
+
+
+@dataclass(frozen=True)
+class PreparedArtifact:
+    """One immutable, pre-execution artifact staged for a future run."""
+
+    case_id: str
+    artifact_kind: str
+    source_hashes: dict[str, str]
+    chemistry: dict[str, Any]
+    preparation: dict[str, Any]
+    source_path: str
+    staged_path: str
+    staged_sha256: str
+    expected_destination: str
+    protocol_id: str
+    planned_run_id: str
+
+    def to_manifest(self) -> dict[str, Any]:
+        return {
+            "case_id": self.case_id,
+            "artifact_kind": self.artifact_kind,
+            "source_hashes": deepcopy(self.source_hashes),
+            "chemistry": deepcopy(self.chemistry),
+            "preparation": deepcopy(self.preparation),
+            "output_path": self.staged_path,
+            "output_sha256": self.staged_sha256,
+            "expected_destination": self.expected_destination,
+            "protocol_id": self.protocol_id,
             "planned_run_id": self.planned_run_id,
         }
 
@@ -283,6 +318,12 @@ def _logical_path(value: str) -> str:
     return path.as_posix()
 
 
+def _path_is_within(candidate: Path, parent: Path) -> bool:
+    candidate_resolved = candidate.resolve()
+    parent_resolved = parent.resolve()
+    return candidate_resolved == parent_resolved or parent_resolved in candidate_resolved.parents
+
+
 def _case_plan(protocol: Mapping[str, Any], case: Mapping[str, Any]) -> APODOCK001CasePlan:
     case_id = str(case["case_id"])
     ligand_filename = case.get("reference_filename")
@@ -423,21 +464,81 @@ def verify_prepared_artifact(
     artifact: Mapping[str, Any],
     *,
     expected_case: APODOCK001CasePlan,
+    artifact_kind: str | None = None,
+    protocol_id: str | None = None,
+    planned_run_id: str | None = None,
+    expected_destination: str | None = None,
 ) -> None:
     """Verify a prepared artifact manifest before future execution."""
 
     if artifact.get("case_id") != expected_case.case_id:
         raise APODOCK001InfrastructureError("prepared artifact case identity mismatch")
-    if artifact.get("source_hashes") != expected_case.input_hashes:
-        raise APODOCK001InfrastructureError("prepared input hashes differ from the plan")
-    if artifact.get("preparation") != expected_case.preparation:
-        raise APODOCK001InfrastructureError("preparation contract differs from the plan")
+    if artifact_kind is not None:
+        if artifact_kind not in PREPARED_ARTIFACT_KINDS:
+            raise APODOCK001InfrastructureError(
+                f"unknown prepared artifact kind: {artifact_kind}"
+            )
+        expected_source_hashes = _expected_artifact_source_hashes(
+            expected_case, artifact_kind
+        )
+        if artifact.get("artifact_kind") != artifact_kind:
+            raise APODOCK001InfrastructureError(
+                "prepared artifact kind differs from the plan"
+            )
+        if artifact.get("source_hashes") != expected_source_hashes:
+            raise APODOCK001InfrastructureError(
+                "prepared input hashes differ from the plan"
+            )
+        if artifact.get("chemistry") != expected_case.chemistry:
+            raise APODOCK001InfrastructureError(
+                "prepared chemistry identity differs from the plan"
+            )
+        if artifact.get("preparation") != expected_case.preparation[artifact_kind]:
+            raise APODOCK001InfrastructureError(
+                "preparation contract differs from the plan"
+            )
+        for key, expected in (
+            ("protocol_id", protocol_id),
+            ("planned_run_id", planned_run_id),
+            ("expected_destination", expected_destination),
+        ):
+            if expected is not None and artifact.get(key) != expected:
+                raise APODOCK001InfrastructureError(
+                    f"prepared artifact {key} differs from the plan"
+                )
+    else:
+        # Retain the generic verifier for callers that validate a single
+        # legacy prepared artifact.  Prospective execution uses the strict
+        # receptor/ligand form above and never takes this compatibility path.
+        if artifact.get("source_hashes") != expected_case.input_hashes:
+            raise APODOCK001InfrastructureError(
+                "prepared input hashes differ from the plan"
+            )
+        if artifact.get("preparation") != expected_case.preparation:
+            raise APODOCK001InfrastructureError(
+                "preparation contract differs from the plan"
+            )
     output_path = Path(str(artifact.get("output_path", "")))
     if not output_path.is_file() or output_path.stat().st_size == 0:
         raise APODOCK001InfrastructureError("prepared artifact is absent or empty")
     observed_hash = sha256_file(output_path)
     if artifact.get("output_sha256") != observed_hash:
         raise APODOCK001InfrastructureError("prepared artifact hash mismatch")
+
+
+def _expected_artifact_source_hashes(
+    case: APODOCK001CasePlan,
+    artifact_kind: str,
+) -> dict[str, str]:
+    if artifact_kind not in PREPARED_ARTIFACT_KINDS:
+        raise APODOCK001InfrastructureError(
+            f"unknown prepared artifact kind: {artifact_kind}"
+        )
+    # Each prepared output carries the complete frozen case identity, not
+    # only the source file directly consumed by that preparation step. This
+    # prevents a valid receptor and ligand from different input identities
+    # being combined accidentally.
+    return deepcopy(case.input_hashes)
 
 
 def verify_pristine_run_directory(run_root: str | Path) -> None:
@@ -664,6 +765,7 @@ class APODOCK001ExecutionAdapter:
         *,
         source_root: str | Path = "inputs/apodock001",
         run_root: str | Path = "runs/apodock001-v1.0.1",
+        staging_root: str | Path | None = None,
         git_sha: str = "unknown",
     ) -> None:
         self.spec_path = Path(spec_path)
@@ -671,6 +773,17 @@ class APODOCK001ExecutionAdapter:
         self.runner = APODOCK001Runner(self.spec_path)
         self.source_root = Path(source_root)
         self.run_root = Path(run_root)
+        self.staging_root = (
+            Path(staging_root)
+            if staging_root is not None
+            else self.run_root.parent / f"{self.run_root.name}.staging"
+        )
+        run_root_resolved = self.run_root.resolve()
+        staging_root_resolved = self.staging_root.resolve()
+        if run_root_resolved == staging_root_resolved or run_root_resolved in staging_root_resolved.parents:
+            raise APODOCK001InfrastructureError(
+                "staging_root must be separate from run_root"
+            )
         self.git_sha = git_sha
         self.plan = build_execution_plan(self.protocol, self.runner)
 
@@ -734,6 +847,8 @@ class APODOCK001ExecutionAdapter:
             "planned_run_id": self.plan.planned_run_id,
             "case_count": len(self.plan.cases),
             "cases": [case.case_id for case in self.plan.cases],
+            "run_root": str(self.run_root),
+            "staging_root": str(self.staging_root),
             "environment": environment,
             "evidence_scaffold": scaffold,
             "vina_docking_executed": False,
@@ -744,6 +859,137 @@ class APODOCK001ExecutionAdapter:
         if case is None:
             raise APODOCK001InfrastructureError(f"unknown frozen case: {case_id}")
         return build_vina_command(case, vina_executable, run_root=self.run_root)
+
+    def _verify_prepared_artifact_collection(
+        self,
+        prepared_artifacts: Mapping[str, Mapping[str, Mapping[str, Any]]],
+        *,
+        staged: bool,
+    ) -> None:
+        expected_case_ids = {case.case_id for case in self.plan.cases}
+        if set(prepared_artifacts) != expected_case_ids:
+            raise APODOCK001InfrastructureError(
+                "prepared artifacts must cover exactly APD-001 through APD-010"
+            )
+        for case in self.plan.cases:
+            artifacts = prepared_artifacts[case.case_id]
+            if set(artifacts) != set(PREPARED_ARTIFACT_KINDS):
+                raise APODOCK001InfrastructureError(
+                    f"{case.case_id} must contain exactly one receptor and one ligand artifact"
+                )
+            for artifact_kind in PREPARED_ARTIFACT_KINDS:
+                expected_destination = getattr(
+                    case, f"{artifact_kind}_prepared_output"
+                )
+                verify_prepared_artifact(
+                    artifacts[artifact_kind],
+                    expected_case=case,
+                    artifact_kind=artifact_kind,
+                    protocol_id=self.plan.protocol_id,
+                    planned_run_id=self.plan.planned_run_id,
+                    expected_destination=expected_destination,
+                )
+                output_path = Path(str(artifacts[artifact_kind]["output_path"])).resolve()
+                if staged:
+                    expected_staged_path = (
+                        self.staging_root / case.case_id / f"{artifact_kind}.pdbqt"
+                    ).resolve()
+                    if output_path != expected_staged_path:
+                        raise APODOCK001InfrastructureError(
+                            f"{case.case_id} {artifact_kind} is not at the normative staging path"
+                        )
+                elif _path_is_within(output_path, self.run_root):
+                    raise APODOCK001InfrastructureError(
+                        "prepared source artifact must remain outside run_root"
+                    )
+
+    def stage_prepared_artifacts(
+        self,
+        prepared_artifacts: Mapping[str, Mapping[str, Mapping[str, Any]]],
+    ) -> dict[str, dict[str, dict[str, Any]]]:
+        """Copy verified prepared inputs into an external immutable staging root."""
+
+        self._verify_prepared_artifact_collection(prepared_artifacts, staged=False)
+        verify_pristine_run_directory(self.staging_root)
+        self.staging_root.mkdir(parents=True, exist_ok=True)
+        staged: dict[str, dict[str, dict[str, Any]]] = {}
+        for case in self.plan.cases:
+            staged[case.case_id] = {}
+            for artifact_kind in PREPARED_ARTIFACT_KINDS:
+                source = Path(str(prepared_artifacts[case.case_id][artifact_kind]["output_path"]))
+                destination = (
+                    self.staging_root / case.case_id / f"{artifact_kind}.pdbqt"
+                )
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, destination)
+                source_hash = sha256_file(source)
+                staged_hash = sha256_file(destination)
+                if staged_hash != source_hash:
+                    raise APODOCK001InfrastructureError(
+                        f"staged {case.case_id} {artifact_kind} hash differs from source"
+                    )
+                manifest = PreparedArtifact(
+                    case_id=case.case_id,
+                    artifact_kind=artifact_kind,
+                    source_hashes=deepcopy(
+                        prepared_artifacts[case.case_id][artifact_kind]["source_hashes"]
+                    ),
+                    chemistry=deepcopy(case.chemistry),
+                    preparation=deepcopy(
+                        prepared_artifacts[case.case_id][artifact_kind]["preparation"]
+                    ),
+                    source_path=str(source),
+                    staged_path=str(destination),
+                    staged_sha256=staged_hash,
+                    expected_destination=getattr(
+                        case, f"{artifact_kind}_prepared_output"
+                    ),
+                    protocol_id=self.plan.protocol_id,
+                    planned_run_id=self.plan.planned_run_id,
+                )
+                staged[case.case_id][artifact_kind] = manifest.to_manifest()
+        self._verify_prepared_artifact_collection(staged, staged=True)
+        return staged
+
+    def verify_staged_artifacts(
+        self,
+        staged_artifacts: Mapping[str, Mapping[str, Mapping[str, Any]]],
+    ) -> None:
+        """Re-verify every staged byte and manifest immediately before the boundary."""
+
+        self._verify_prepared_artifact_collection(staged_artifacts, staged=True)
+
+    def _copy_staged_artifacts_to_run_root(
+        self,
+        staged_artifacts: Mapping[str, Mapping[str, Mapping[str, Any]]],
+    ) -> None:
+        for case in self.plan.cases:
+            for artifact_kind in PREPARED_ARTIFACT_KINDS:
+                artifact = staged_artifacts[case.case_id][artifact_kind]
+                source = Path(str(artifact["output_path"]))
+                destination = self.run_root / getattr(
+                    case, f"{artifact_kind}_prepared_output"
+                )
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, destination)
+                if sha256_file(destination) != artifact["output_sha256"]:
+                    raise APODOCK001InfrastructureError(
+                        f"run_root copy changed {case.case_id} {artifact_kind} bytes"
+                    )
+
+    @staticmethod
+    def _verify_command_inputs(command: Sequence[str]) -> None:
+        for flag in ("--receptor", "--ligand"):
+            try:
+                path = Path(command[command.index(flag) + 1])
+            except (ValueError, IndexError) as exc:
+                raise APODOCK001InfrastructureError(
+                    f"Vina command is missing {flag}"
+                ) from exc
+            if not path.is_file() or path.stat().st_size == 0:
+                raise APODOCK001InfrastructureError(
+                    f"Vina command input is absent or empty: {path}"
+                )
 
     def execute_prospective(
         self,
@@ -757,26 +1003,25 @@ class APODOCK001ExecutionAdapter:
 
         This method is intentionally not called by the CLI or CI in this
         change. It is the single future entry point that can cross the
-        prospective boundary. Preparation manifests must already be verified;
-        a failed case is recorded once and is never retried here.
+        prospective boundary. All receptor/ligand artifacts are first copied
+        into and re-verified in the external staging root; only then is the
+        run lock created and the prepared set copied into ``run_root``. A
+        failed case is recorded once and is never retried here.
         """
 
         authorization.require()
         self.verify_execution_manifest()
-        verify_pristine_run_directory(self.run_root)
         if vina.version != str(self.protocol["vina"]["version"]):
             raise APODOCK001InfrastructureError("Vina identity is not frozen")
-        if vina.sha256 != str(self.protocol["vina"]["binary_sha256"]):
-            raise APODOCK001InfrastructureError("Vina bytes are not frozen")
+        self.runner.verify_tool_identity(
+            vina_version=vina.version,
+            vina_sha256=vina.sha256 or "",
+        )
         if openbabel.version != EXPECTED_OPENBABEL_VERSION:
             raise APODOCK001InfrastructureError("Open Babel identity is not frozen")
-        expected_case_ids = {case.case_id for case in self.plan.cases}
-        if set(prepared_artifacts) != expected_case_ids:
-            raise APODOCK001InfrastructureError(
-                "prepared artifacts must cover exactly APD-001 through APD-010"
-            )
-        for case in self.plan.cases:
-            verify_prepared_artifact(prepared_artifacts[case.case_id], expected_case=case)
+        staged_artifacts = self.stage_prepared_artifacts(prepared_artifacts)
+        self.verify_staged_artifacts(staged_artifacts)
+        verify_pristine_run_directory(self.run_root)
 
         self.run_root.mkdir(parents=True, exist_ok=False)
         lock = {
@@ -788,10 +1033,12 @@ class APODOCK001ExecutionAdapter:
             "started_at": datetime.now(timezone.utc).isoformat(),
         }
         write_json(self.run_root / "prospective-run.lock", lock)
+        self._copy_staged_artifacts_to_run_root(staged_artifacts)
 
         records: list[dict[str, Any]] = []
         for case in self.plan.cases:
             command = build_vina_command(case, vina.executable, run_root=self.run_root)
+            self._verify_command_inputs(command)
             stdout_path = self.run_root / case.stdout_output
             stderr_path = self.run_root / case.stderr_output
             raw_path = self.run_root / case.raw_vina_output
@@ -886,6 +1133,7 @@ class APODOCK001ExecutionAdapter:
         authorization.require()
         self.preflight()
         command = self.build_command(case_id, vina_executable)
+        self._verify_command_inputs(command)
         return subprocess.run(command, capture_output=True, text=True, check=False, shell=False)
 
 
@@ -897,6 +1145,7 @@ __all__ = [
     "ExecutionAuthorization",
     "ExecutionAuthorizationError",
     "ExistingProspectiveRunError",
+    "PreparedArtifact",
     "ToolIdentity",
     "build_environment_manifest",
     "build_evidence_scaffold",
