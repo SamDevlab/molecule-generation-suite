@@ -243,13 +243,23 @@ def verify_openbabel_tool(
     option_probe: list[str] = []
     if required_options:
         help_text = help_output or _probe(path, ("--help",))
+        option_evidence = help_text
+        if "--partialcharge" in required_options and "--partialcharge" not in option_evidence:
+            # Open Babel 3.1.1 exposes charge models through the plugin list,
+            # not consistently through the generic CLI help text.
+            charge_help = _probe(path, ("-L", "charges"))
+            if "gasteiger" not in charge_help.lower():
+                raise APODOCK001InfrastructureError(
+                    "Open Babel Gasteiger charge model is unavailable"
+                )
+            option_evidence = f"{option_evidence}\n--partialcharge\ngasteiger"
         if "-xr" in required_options and "-xr" not in help_text:
             # ``-xr`` is a PDBQT format option and is exposed by the
             # format-specific help rather than the generic usage text.
             format_help = _probe(path, ("-H", "pdbqt"))
-            help_text = f"{help_text}\n{format_help}"
+            option_evidence = f"{option_evidence}\n{format_help}"
         for option in required_options:
-            if option not in help_text:
+            if option not in option_evidence:
                 raise APODOCK001InfrastructureError(
                     f"Open Babel required option is unavailable: {option}"
                 )

@@ -117,6 +117,31 @@ def test_openbabel_version_and_options_are_fail_closed(tmp_path: Path) -> None:
         verify_openbabel_tool(executable, version_output="Open Babel 3.1.1", help_output="-h", required_options=("-xr",))
 
 
+def test_openbabel_charge_option_probe_uses_charge_plugin_list(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    executable = tmp_path / "obabel"
+    executable.write_bytes(b"synthetic-openbabel-fixture")
+    executable.chmod(0o755)
+
+    def fake_probe(path: Path, args: tuple[str, ...]) -> str:
+        if args == ("--help",):
+            return "-h"
+        if args == ("-L", "charges"):
+            return "gasteiger"
+        if args == ("-H", "pdbqt"):
+            return "-xr"
+        raise AssertionError(args)
+
+    monkeypatch.setattr("research_os.docking.apodock001_execution._probe", fake_probe)
+    identity = verify_openbabel_tool(
+        executable,
+        version_output="Open Babel 3.1.1",
+        required_options=("-h", "--partialcharge", "gasteiger", "-xr"),
+    )
+    assert identity.option_probe == ("-h", "--partialcharge", "gasteiger", "-xr")
+
+
 def test_execution_manifest_mutations_fail_closed(tmp_path: Path) -> None:
     adapter = _adapter(tmp_path)
     changed = deepcopy(adapter.plan.execution_manifest)
