@@ -69,8 +69,19 @@ class ResearchProgramStore:
                     created_at TEXT NOT NULL
                 )"""
             )
+            self.connection.execute(
+                """CREATE TABLE IF NOT EXISTS program_syntheses (
+                    synthesis_id TEXT PRIMARY KEY,
+                    execution_id TEXT NOT NULL,
+                    protocol_id TEXT NOT NULL,
+                    synthesis_hash TEXT NOT NULL,
+                    payload_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL
+                )"""
+            )
             self.connection.execute("CREATE INDEX IF NOT EXISTS idx_program_exec_program ON program_executions(program_id)")
             self.connection.execute("CREATE INDEX IF NOT EXISTS idx_program_campaign_exec ON program_campaign_executions(execution_id)")
+            self.connection.execute("CREATE INDEX IF NOT EXISTS idx_program_synthesis_exec ON program_syntheses(execution_id)")
 
     def close(self) -> None:
         with self._lock:
@@ -157,6 +168,31 @@ class ResearchProgramStore:
                 "INSERT INTO program_events(execution_id,event_type,payload_json,created_at) VALUES(?,?,?,?)",
                 (execution_id, event_type, json.dumps(payload, ensure_ascii=False, sort_keys=True), created_at),
             )
+
+    def save_synthesis(self, record: dict[str, Any], created_at: str) -> None:
+        """Append one immutable synthesis record; an existing ID is a conflict."""
+        with self._lock, self.connection:
+            existing = self.connection.execute("SELECT synthesis_hash, payload_json FROM program_syntheses WHERE synthesis_id=?", (str(record["synthesis_id"]),)).fetchone()
+            if existing is not None:
+                if existing["synthesis_hash"] == str(record["synthesis_hash"]):
+                    return
+                raise ValueError("PROGRAM_SYNTHESIS_ID_CONFLICT")
+            self.connection.execute(
+                "INSERT INTO program_syntheses(synthesis_id,execution_id,protocol_id,synthesis_hash,payload_json,created_at) VALUES(?,?,?,?,?,?)",
+                (str(record["synthesis_id"]), str(record["program_execution_id"]), str(record["program_protocol_id"]), str(record["synthesis_hash"]), json.dumps(record, ensure_ascii=False, sort_keys=True), created_at),
+            )
+
+    def get_synthesis(self, synthesis_id: str) -> dict[str, Any]:
+        with self._lock:
+            row = self.connection.execute("SELECT payload_json FROM program_syntheses WHERE synthesis_id=?", (synthesis_id,)).fetchone()
+        if row is None:
+            raise KeyError(synthesis_id)
+        return json.loads(row["payload_json"])
+
+    def list_syntheses(self, execution_id: str) -> tuple[dict[str, Any], ...]:
+        with self._lock:
+            rows = self.connection.execute("SELECT payload_json FROM program_syntheses WHERE execution_id=? ORDER BY created_at, synthesis_id", (execution_id,)).fetchall()
+        return tuple(json.loads(row["payload_json"]) for row in rows)
 
     def get_execution(self, execution_id: str) -> dict[str, Any]:
         with self._lock:
