@@ -1,14 +1,14 @@
 {
   "record_schema": "research-os.docking.validation-record.v1",
-  "profile_id": "research-os.docking.capability-profile.v1+b795a9dbd963044d",
-  "profile_hash": "b795a9dbd963044dd11cbdc677dcd1799c031f668ee2fd1c814a032de36d94f5",
+  "profile_id": "research-os.docking.capability-profile.v1+b8c5c799b2035bae",
+  "profile_hash": "b8c5c799b2035bae2796de714cc55dc4e607420e13b309b7f33792ebaf5597bb",
   "evidence_level": "E2_COMPUTATIONAL",
   "source_of_truth": "configs/docking-capability-profile-v1.json",
   "source_benchmarks": [
     {"benchmark_id": "REDOCK-003", "scientific_result_hash": "e4e4693f890b86327fac16b547966fe64862045d1562c4340dcc3d7d4a06b762"},
     {"benchmark_id": "CROSSDOCK-001", "scientific_result_hash": "d1d5b980816837301c1fe70d2c0a397ba4a0e662bced7aa17bb118c61f2bff16"},
-    {"benchmark_id": "APODOCK-001-v1.0.2", "scientific_result_hash": "c062d259edf170235654967c0057aaffe0ec19066d25af520ea440e42064666b"},
-    {"benchmark_id": "APODOCK-001-v1.1", "scientific_result_hash": "ee31206f4d97e8fc5085374dfae5d85b23844bf2d969b9fe4b1c972d52cc7715"}
+    {"benchmark_id": "APODOCK-001-v1.0.2", "run_id": "research-os.apodock001.run.v1+1797487357db1db1", "raw_results_seal_sha256": "a57ca576e170f09a6768217f07d9965cf23cf18faa58be423a703816463482e1", "evidence_bundle_sha256": "c062d259edf170235654967c0057aaffe0ec19066d25af520ea440e42064666b"},
+    {"benchmark_id": "APODOCK-001-v1.1", "run_id": "research-os.apodock001.run.v2+852d9aa525862df6", "raw_results_seal_sha256": "ee31206f4d97e8fc5085374dfae5d85b23844bf2d969b9fe4b1c972d52cc7715", "evidence_bundle_sha256": "3b09d33f39f7612f8a363da206b1e6d6e61b210dcbc0ab616df9ffc079965264"}
   ],
   "frozen_conclusions": [
     "Cognate redocking is validated only within its bounded benchmark envelope.",

@@ -7,7 +7,8 @@ describes bounded computational workflow behavior under frozen protocols; it
 does not turn docking into affinity, potency, efficacy, clinical, or
 experimental structural evidence. The machine-readable source is
 `configs/docking-capability-profile-v1.json`, with identity
-`research-os.docking.capability-profile.v1+b795a9dbd963044d`.
+The profile identity is recorded in the machine-readable source and changes
+when its evidence references or interpretation rules change.
 
 All entries remain `E2_COMPUTATIONAL`. The profile references historical
 benchmark identities and hashes; it does not copy or rewrite their raw

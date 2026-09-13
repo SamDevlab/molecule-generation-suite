@@ -32,7 +32,7 @@ jobs:
       - name: Install test dependencies
         run: python -m pip install -e ".[dev]"
       - name: Validate profile identity and references
-        run: python -c "from research_os.docking.capability import load_profile; p=load_profile(); assert p.profile_id == 'research-os.docking.capability-profile.v1+b795a9dbd963044d'; assert p.evidence_level.value == 'E2_COMPUTATIONAL'; print(p.profile_id)"
+        run: python -c "from research_os.docking.capability import load_profile; p=load_profile(); assert p.profile_id == 'research-os.docking.capability-profile.v1+b8c5c799b2035bae'; assert p.evidence_level.value == 'E2_COMPUTATIONAL'; print(p.profile_id)"
       - name: Run capability and DockingLab tests without engines
         run: python -m pytest -q tests/test_docking_capability.py tests/test_docking_lab.py
       - name: Compile capability integration
