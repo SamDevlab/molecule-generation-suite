@@ -18,6 +18,11 @@ from research_os.experiments import (
     reproduce_experiment_run,
     verify_experiment_run,
 )
+from research_os.campaigns.declarative import (
+    DeclarativeCampaignRunner,
+    inspect_campaign_execution,
+    verify_campaign_execution,
+)
 from research_os.legacy_runtime import biolab_preflight
 from research_os.artifacts import ModelArtifactManifest
 from research_os.datasets import DatasetManifest, DatasetRegistry
@@ -121,6 +126,27 @@ def _is_dataset_registry_command(argv: Sequence[str]) -> bool:
     return len(argv) >= 2 and argv[0] == "registry" and argv[1] == "dataset"
 
 
+def _campaign_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="research-os campaign", description="Static declarative multi-experiment campaign utilities")
+    commands = parser.add_subparsers(dest="campaign_command", required=True)
+    plan = commands.add_parser("plan", help="resolve child protocols without executing experiments")
+    plan.add_argument("protocol")
+    validate = commands.add_parser("validate", help="validate a campaign protocol without executing experiments")
+    validate.add_argument("protocol")
+    run = commands.add_parser("run", help="run a predeclared campaign through the Experiment Engine")
+    run.add_argument("protocol")
+    run.add_argument("--output", required=True)
+    verify = commands.add_parser("verify", help="verify a completed campaign package")
+    verify.add_argument("root")
+    inspect = commands.add_parser("inspect", help="inspect a campaign package without loading model bytes")
+    inspect.add_argument("root")
+    return parser
+
+
+def _is_campaign_command(argv: Sequence[str]) -> bool:
+    return len(argv) >= 1 and argv[0] == "campaign"
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     import sys
 
@@ -187,6 +213,28 @@ def main(argv: Sequence[str] | None = None) -> int:
                 return 0
             return 2
         except (KeyError, ValueError, OSError, RuntimeError, json.JSONDecodeError) as exc:
+            _json({"error": str(exc), "first_loss": getattr(exc, "first_loss", None)})
+            return 1
+
+    if _is_campaign_command(values):
+        args = _campaign_parser().parse_args(values[1:])
+        try:
+            runner = DeclarativeCampaignRunner()
+            if args.campaign_command in {"plan", "validate"}:
+                _json(runner.plan(args.protocol).to_dict())
+                return 0
+            if args.campaign_command == "run":
+                _json(runner.run(args.protocol, args.output))
+                return 0
+            if args.campaign_command == "verify":
+                result = verify_campaign_execution(args.root)
+                _json(result.to_dict())
+                return 0 if result.status == "PASS" else 1
+            if args.campaign_command == "inspect":
+                _json(inspect_campaign_execution(args.root))
+                return 0
+            return 2
+        except (KeyError, ValueError, OSError, RuntimeError) as exc:
             _json({"error": str(exc), "first_loss": getattr(exc, "first_loss", None)})
             return 1
 
