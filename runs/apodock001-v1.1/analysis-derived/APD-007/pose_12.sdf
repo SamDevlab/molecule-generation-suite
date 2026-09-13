@@ -1,0 +1,47 @@
+BET
+     RDKit          3D
+
+  8  7  0  0  0  0  0  0  0  0999 V2000
+   77.5720   10.5910   72.0330 C   0  0  0  0  0  2  0  0  0  0  0  0
+   77.4540   11.6470   73.0800 N   0  0  1  0  0  0  0  0  0  0  0  0
+   78.7690   12.2760   73.3510 C   0  0  0  0  0  1  0  0  0  0  0  0
+   76.4790   12.6890   72.6760 C   0  0  0  0  0  1  0  0  0  0  0  0
+   76.9710   11.0110   74.3300 C   0  0  0  0  0  1  0  0  0  0  0  0
+   78.9120    9.9000   72.0100 C   0  0  0  0  0  0  0  0  0  0  0  0
+   79.6460    9.9760   70.9880 O   0  0  0  0  0  0  0  0  0  0  0  0
+   79.3380    9.1740   73.1180 O   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0
+  2  3  1  1
+  2  5  1  0
+  4  2  1  0
+  6  1  1  0
+  6  8  1  0
+  7  6  2  0
+M  CHG  1   2   1
+M  RAD  4   1   3   3   2   4   2   5   2
+M  END
+>  <MODEL>  (1) 
+12
+
+>  <REMARK>  (1) 
+ VINA RESULT:    -3.325     14.187     15.119
+ INTER + INTRA:          -3.700
+ INTER:                  -3.927
+ INTRA:                   0.227
+ UNBOUND:                 0.111
+  Name = BET
+  6 active torsions:
+  status: ('A' for Active; 'I' for Inactive)
+    1  A    between atoms: N_1  and  C_2
+    2  A    between atoms: N_1  and  C_6
+    3  A    between atoms: N_1  and  C_7
+    4  A    between atoms: N_1  and  C_8
+    5  A    between atoms: C_2  and  C_3
+    6  A    between atoms: C_3  and  O_5
+                            x       y       z     vdW  Elec       q    Type
+                         _______ _______ _______ _____ _____    ______ ____
+
+>  <TORSDO>  (1) 
+F 3
+
+$$$$

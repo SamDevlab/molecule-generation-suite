@@ -1,0 +1,5 @@
+# Preserve byte-addressed APODOCK-001 v1.1 evidence across Windows checkouts.
+runs/apodock001-v1.1/**/*.pdbqt -text
+runs/apodock001-v1.1/**/*.sdf -text
+runs/apodock001-v1.1/**/*.stdout -text
+runs/apodock001-v1.1/**/*.stderr -text
