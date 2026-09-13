@@ -19,8 +19,8 @@ PROFILE_PATH = Path(__file__).parents[1] / "configs" / "docking-capability-profi
 
 def test_profile_loads_with_deterministic_identity_and_e2_level():
     profile = load_profile(PROFILE_PATH)
-    assert profile.profile_id == "research-os.docking.capability-profile.v1+b795a9dbd963044d"
-    assert profile.profile_hash == "b795a9dbd963044dd11cbdc677dcd1799c031f668ee2fd1c814a032de36d94f5"
+    assert profile.profile_id == "research-os.docking.capability-profile.v1+b8c5c799b2035bae"
+    assert profile.profile_hash == "b8c5c799b2035bae2796de714cc55dc4e607420e13b309b7f33792ebaf5597bb"
     assert profile.evidence_level is EvidenceLevel.E2_COMPUTATIONAL
 
 
