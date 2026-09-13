@@ -198,6 +198,24 @@ class EvidenceSpec:
 
 
 @dataclass(frozen=True)
+class ModelRegistrySpec:
+    """Explicit opt-in for durable registration of declarative model outputs."""
+
+    enabled: bool
+    root: str
+
+    @classmethod
+    def from_mapping(cls, raw: Mapping[str, Any]) -> "ModelRegistrySpec":
+        _strict_keys(raw, allowed={"enabled", "root"}, required={"enabled", "root"}, field_name="model_registry")
+        enabled = _boolean(raw["enabled"], field_name="model_registry.enabled")
+        root = _nonempty_string(raw["root"], field_name="model_registry.root")
+        return cls(enabled=enabled, root=root)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {"enabled": self.enabled, "root": self.root}
+
+
+@dataclass(frozen=True)
 class ExperimentProtocol:
     protocol: str
     experiment: ExperimentSpec
@@ -207,11 +225,13 @@ class ExperimentProtocol:
     metrics: tuple[str, ...]
     evidence: EvidenceSpec
     source_path: Path
+    model_registry: ModelRegistrySpec | None = None
 
     @classmethod
     def from_mapping(cls, raw: Mapping[str, Any], *, source_path: str | Path) -> "ExperimentProtocol":
-        allowed = {"protocol", "experiment", "dataset", "split", "models", "metrics", "evidence"}
-        _strict_keys(raw, allowed=allowed, required=allowed, field_name="protocol document")
+        required = {"protocol", "experiment", "dataset", "split", "models", "metrics", "evidence"}
+        allowed = required | {"model_registry"}
+        _strict_keys(raw, allowed=allowed, required=required, field_name="protocol document")
         protocol = _nonempty_string(raw["protocol"], field_name="protocol")
         if protocol != PROTOCOL_ID:
             raise ProtocolError(f"unsupported protocol: {protocol}")
@@ -232,10 +252,13 @@ class ExperimentProtocol:
         if len(set(metrics)) != len(metrics):
             raise ProtocolError("metrics must not contain duplicates")
         evidence = EvidenceSpec.from_mapping(_mapping(raw["evidence"], field_name="evidence"))
-        return cls(protocol, experiment, dataset, split, models, metrics, evidence, Path(source_path))
+        model_registry = None
+        if "model_registry" in raw:
+            model_registry = ModelRegistrySpec.from_mapping(_mapping(raw["model_registry"], field_name="model_registry"))
+        return cls(protocol, experiment, dataset, split, models, metrics, evidence, Path(source_path), model_registry)
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload = {
             "protocol": self.protocol,
             "experiment": self.experiment.to_dict(),
             "dataset": self.dataset.to_dict(),
@@ -244,6 +267,9 @@ class ExperimentProtocol:
             "metrics": list(self.metrics),
             "evidence": self.evidence.to_dict(),
         }
+        if self.model_registry is not None:
+            payload["model_registry"] = self.model_registry.to_dict()
+        return payload
 
 
 def _load_yaml_strict(text: str) -> Any:
