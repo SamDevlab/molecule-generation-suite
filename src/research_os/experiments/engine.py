@@ -13,8 +13,10 @@ from typing import Any, Mapping
 import yaml
 
 from research_os.core.hashing import sha256_file, sha256_json
+from research_os.artifacts import ModelArtifactManifest
 from research_os.experiments.registry import ExperimentExecutionError, ExperimentRegistry
 from research_os.experiments.schema import PROTOCOL_ID, ExperimentProtocol, load_protocol
+from research_os.ml.registry import ModelRegistry
 
 
 REQUIRED_ARTIFACTS = (
@@ -27,6 +29,7 @@ REQUIRED_ARTIFACTS = (
     "hashes.json",
     "report.md",
 )
+OPTIONAL_ARTIFACTS = ("model-registry.json",)
 _IMPLEMENTATION_FILES = ("__init__.py", "engine.py", "registry.py", "schema.py")
 
 
@@ -265,6 +268,71 @@ class ExperimentEngine:
             raise ExperimentExecutionError(f"run target already exists: {target}")
         target.mkdir(parents=True, exist_ok=False)
 
+        model_registry_refs: dict[str, dict[str, Any]] = {}
+        model_registry_root: Path | None = None
+        if protocol.model_registry is not None and protocol.model_registry.enabled:
+            model_registry_root = Path(protocol.model_registry.root)
+            if not model_registry_root.is_absolute():
+                model_registry_root = (protocol.source_path.parent / model_registry_root).resolve()
+            model_registry = ModelRegistry(root=model_registry_root)
+            dataset_identity = f"dataset-sha256:{table.dataset_hash}"
+            environment_identity = sha256_json(environment)
+            with tempfile.TemporaryDirectory(prefix="research-os-model-registration-") as temporary:
+                for model in protocol.models:
+                    artifact_path = Path(temporary) / f"{model.id}.json"
+                    _write_json(artifact_path, {
+                        "schema": "research-os.declarative-model-artifact.v1",
+                        "model_id": model.id,
+                        "adapter": model.adapter,
+                        "model_identity": model_identities[model.id],
+                        "fitted_parameters": fitted_parameters[model.id],
+                    })
+                    model_manifest = ModelArtifactManifest.from_model_file(
+                        model_id=f"{protocol.experiment.id}:{model.id}",
+                        task=protocol.experiment.task,
+                        training_run_id=protocol.experiment.id,
+                        dataset_id=dataset_identity,
+                        dataset_hash=table.dataset_hash,
+                        feature_schema_id=table.schema_hash,
+                        metrics=metrics[model.id],
+                        framework="research-os.declarative-experiment",
+                        framework_version="v1",
+                        model_file=artifact_path,
+                        model_family=model.adapter,
+                        model_adapter=model.adapter,
+                        adapter_version="research-os.declarative-experiment.v1",
+                        target=protocol.dataset.target,
+                        hyperparameters=dict(model.config),
+                        split_strategy=protocol.split.strategy,
+                        train_count=len(split.train_indices),
+                        test_count=len(split.test_indices),
+                        seed=protocol.experiment.seed,
+                        implementation_identity=environment["engine"]["sha256"],
+                        environment_identity=environment_identity,
+                        metadata={"declarative_model_id": model.id},
+                    )
+                    record = model_registry.register(
+                        model_manifest,
+                        lineage={
+                            "source_run_id": protocol.experiment.id,
+                            "protocol_hash": protocol_hash,
+                            "dataset_id": dataset_identity,
+                            "split_membership_hash": split.membership_hash,
+                        },
+                        provenance={
+                            "dataset": {"id": dataset_identity, "sha256": table.dataset_hash, "schema_id": table.schema_hash},
+                            "source_run": {"run_id": protocol.experiment.id, "manifest_path": str((target / "manifest.json").resolve())},
+                            "implementation_identity": environment["engine"]["sha256"],
+                            "environment_identity": environment_identity,
+                        },
+                    )
+                    model_registry_refs[model.id] = {
+                        "record_id": record.record_id,
+                        "scientific_model_id": record.scientific_model_id,
+                        "artifact_sha256": record.artifact_sha256,
+                        "artifact_id": record.manifest.artifact_id,
+                    }
+
         manifest = {
             "protocol": protocol.protocol,
             "experiment_id": protocol.experiment.id,
@@ -301,6 +369,11 @@ class ExperimentEngine:
             "execution_hash": execution_hash,
             "implementation_hash": environment["engine"]["sha256"],
         }
+        if model_registry_root is not None:
+            manifest["model_registry"] = {
+                "registry_root": str(model_registry_root),
+                "models": model_registry_refs,
+            }
         provenance = {
             "dataset": {
                 "declared_path": protocol.dataset.path,
@@ -317,6 +390,8 @@ class ExperimentEngine:
             "compatibility": compatibility_payload,
             "implementation": environment["engine"],
         }
+        if model_registry_root is not None:
+            provenance["models"] = model_registry_refs
         evidence = {
             "status": "PASS",
             "gates": [
@@ -327,6 +402,8 @@ class ExperimentEngine:
                 {"rule_id": "DECL-IMPLEMENTATION-ID", "status": "PASS", "reason": "engine source identity recorded"},
             ],
         }
+        if model_registry_root is not None:
+            evidence["gates"].append({"rule_id": "DECL-MODEL-REGISTRY", "status": "PASS", "reason": "model artifacts were explicitly registered with durable provenance"})
 
         _write_json(target / "manifest.json", manifest)
         (target / "protocol.yaml").write_text(yaml.safe_dump(protocol_payload, sort_keys=True, allow_unicode=True), encoding="utf-8")
@@ -335,11 +412,18 @@ class ExperimentEngine:
         _write_json(target / "evidence.json", evidence)
         _write_json(target / "environment.json", environment)
         (target / "report.md").write_text(_report(manifest, metrics), encoding="utf-8")
+        if model_registry_root is not None:
+            _write_json(target / "model-registry.json", {
+                "schema_version": "research-os.experiment-model-registry.v1",
+                "registry_root": str(model_registry_root),
+                "models": model_registry_refs,
+            })
 
         artifact_hashes = {
             name: sha256_file(target / name)
-            for name in REQUIRED_ARTIFACTS
+            for name in (*REQUIRED_ARTIFACTS, *OPTIONAL_ARTIFACTS)
             if name != "hashes.json"
+            and (target / name).is_file()
         }
         package_hash = sha256_json({
             "artifacts": artifact_hashes,
@@ -374,7 +458,8 @@ def verify_experiment_run(root: str | Path) -> VerificationResult:
     hashes = _read_json(target / "hashes.json")
     if not isinstance(hashes, Mapping) or not isinstance(hashes.get("artifacts"), Mapping):
         raise ExperimentExecutionError("hashes.json has an invalid structure")
-    for name in REQUIRED_ARTIFACTS:
+    artifact_names = (*REQUIRED_ARTIFACTS, *(name for name in OPTIONAL_ARTIFACTS if (target / name).is_file()))
+    for name in artifact_names:
         if name == "hashes.json":
             continue
         expected = hashes["artifacts"].get(name)
@@ -431,6 +516,34 @@ def verify_experiment_run(root: str | Path) -> VerificationResult:
     if provenance.get("implementation", {}).get("sha256") != recorded_implementation:
         raise ExperimentExecutionError("provenance implementation identity mismatch")
 
+    model_registry_payload = manifest.get("model_registry")
+    if model_registry_payload is not None:
+        if not isinstance(model_registry_payload, Mapping):
+            raise ExperimentExecutionError("model registry metadata is invalid")
+        registry_reference_file = target / "model-registry.json"
+        if not registry_reference_file.is_file():
+            raise ExperimentExecutionError("model registry reference artifact is missing")
+        registry_reference = _read_json(registry_reference_file)
+        if registry_reference.get("registry_root") != model_registry_payload.get("registry_root") or registry_reference.get("models") != model_registry_payload.get("models"):
+            raise ExperimentExecutionError("model registry reference artifact does not match manifest")
+        registry_root = model_registry_payload.get("registry_root")
+        models_payload = model_registry_payload.get("models")
+        if not isinstance(registry_root, str) or not isinstance(models_payload, Mapping):
+            raise ExperimentExecutionError("model registry metadata is incomplete")
+        registry = ModelRegistry(root=registry_root)
+        for model_id, reference in models_payload.items():
+            if not isinstance(reference, Mapping):
+                raise ExperimentExecutionError(f"model registry reference is invalid: {model_id}")
+            try:
+                verification = registry.verify(str(reference["record_id"]))
+            except (KeyError, ValueError, OSError) as exc:
+                raise ExperimentExecutionError(f"model registry verification failed: {model_id}") from exc
+            if verification.status != "PASS":
+                raise ExperimentExecutionError(f"model registry verification failed: {model_id}: {verification.first_loss}")
+            if verification.artifact_sha256 != reference.get("artifact_sha256"):
+                raise ExperimentExecutionError(f"model registry artifact identity mismatch: {model_id}")
+        gates.append({"rule_id": "DECL-MODEL-REGISTRY", "status": "PASS", "reason": "registered model records and artifact bytes verify"})
+
     execution_hash = sha256_json({"scientific_result_hash": scientific_result_hash, "environment": environment})
     if execution_hash != hashes.get("execution_hash") or execution_hash != manifest.get("execution_hash"):
         raise ExperimentExecutionError("execution hash mismatch")
@@ -463,6 +576,7 @@ def inspect_experiment_run(root: str | Path) -> dict[str, Any]:
         "split": manifest["split"],
         "models": {key: {"adapter": value["adapter"], "identity": value["identity"]} for key, value in manifest["models"].items()},
         "metrics": metrics,
+        "model_registry": manifest.get("model_registry"),
         "scientific_protocol_hash": manifest["scientific_protocol_hash"],
         "scientific_result_hash": manifest["scientific_result_hash"],
         "execution_hash": manifest["execution_hash"],
@@ -510,6 +624,13 @@ def reproduce_experiment_run(
     source_protocol = load_protocol(source / "protocol.yaml")
     protocol_payload = source_protocol.to_dict()
     protocol_payload["dataset"]["path"] = str(dataset_path)
+    if isinstance(protocol_payload.get("model_registry"), Mapping) and protocol_payload["model_registry"].get("enabled"):
+        # Registry location is operational metadata. Reproduction gets its
+        # own durable namespace and cannot overwrite the source records.
+        protocol_payload["model_registry"] = {
+            **protocol_payload["model_registry"],
+            "root": str((Path(output_root).resolve() / "model-registry")),
+        }
     engine = ExperimentEngine(registry=registry)
     with tempfile.TemporaryDirectory(prefix="research-os-experiment-reproduce-") as temporary:
         protocol_path = Path(temporary) / "protocol.yaml"
@@ -554,11 +675,26 @@ def compare_experiment_runs(left: str | Path, right: str | Path) -> dict[str, An
         }
         for model_id in left_metrics
     }
+    left_models = left_manifest.get("model_registry", {}).get("models", {}) if isinstance(left_manifest.get("model_registry"), Mapping) else {}
+    right_models = right_manifest.get("model_registry", {}).get("models", {}) if isinstance(right_manifest.get("model_registry"), Mapping) else {}
     return {
         "compatible": True,
         "compatibility_hash": left_manifest["compatibility_hash"],
         "same_dataset_content": left_manifest["dataset"]["sha256"] == right_manifest["dataset"]["sha256"],
         "same_implementation": left_manifest.get("implementation_hash") == right_manifest.get("implementation_hash"),
         "same_scientific_result": left_manifest["scientific_result_hash"] == right_manifest["scientific_result_hash"],
+        "model_registry": {
+            "present_in_both": bool(left_models) and bool(right_models),
+            "same_scientific_models": {
+                model_id: left_models[model_id].get("scientific_model_id") == right_models.get(model_id, {}).get("scientific_model_id")
+                for model_id in left_models
+                if model_id in right_models
+            },
+            "same_artifacts": {
+                model_id: left_models[model_id].get("artifact_sha256") == right_models.get(model_id, {}).get("artifact_sha256")
+                for model_id in left_models
+                if model_id in right_models
+            },
+        },
         "metric_deltas_right_minus_left": deltas,
     }

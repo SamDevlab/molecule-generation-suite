@@ -6,7 +6,7 @@ split or promotion logic.
 """
 
 from research_os.ml.metrics import RegressionMetrics, compute_regression_metrics, metric_value
-from research_os.ml.registry import ModelRecord, ModelRegistry, ModelStage
+from research_os.ml.registry import ModelRecord, ModelRegistry, ModelRegistryError, ModelStage, ModelVerification
 from research_os.ml.schema import (
     ApplicabilityDomainResult,
     DataSplit,
@@ -66,7 +66,9 @@ __all__ = [
     "ModelPromotionEngine",
     "ModelRecord",
     "ModelRegistry",
+    "ModelRegistryError",
     "ModelStage",
+    "ModelVerification",
     "OutOfDomainScorer",
     "PredictionIntervalEstimator",
     "PromotionDecision",

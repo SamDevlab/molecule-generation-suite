@@ -171,3 +171,21 @@ Research OS 5.1 is implementation-complete when all of the following are true:
 - rewriting the frozen ONLINE-EXP-001 through ONLINE-EXP-005 results
 
 Those can be evaluated after the declarative engine has demonstrated a stable, auditable core.
+
+## Explicit durable model registration
+
+An experiment may opt into durable model provenance without changing the
+scientific protocol identity:
+
+```yaml
+model_registry:
+  enabled: true
+  root: model-registry
+```
+
+The engine then records model record IDs, scientific model IDs, and artifact
+SHA-256 references in the run. `experiment-verify` rechecks the registry and
+artifact bytes; `experiment-inspect` exposes the references;
+`experiment-reproduce` uses a separate registry root. Protocols that omit
+this optional block preserve the original 5.1 behavior and historical run
+packages remain readable.
