@@ -1,0 +1,930 @@
+{
+  "APD-001": {
+    "ligand": {
+      "artifact_kind": "ligand",
+      "case_id": "APD-001",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "a893e515f7ba97c50b504e756e02e336c3b382f588d8eb7bb21cab0d9e3b6ba2"
+      },
+      "expected_destination": "prepared/APD-001/ligand.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-001/ligand.pdbqt",
+      "output_sha256": "3b72485b130026c03f583bb2a3927a36ea4ce0bf3ce2fbad97b30f00aa5c9ae9",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "aromaticity": "preserve the validated RDKit/Open Babel representation; no manual aromaticity edits",
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "conformer_generation": "RDKit ETKDGv3 followed by UFF optimization when parameters are available",
+        "fail_closed": true,
+        "format": "SDF to PDBQT",
+        "hydrogens": "Open Babel -h during PDBQT conversion",
+        "input": "RCSB instance SDF for APD-001..009; APD-010 immutable BEM+MAV adapter chemical graph",
+        "native_pose_advantage": false,
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "seed": 42,
+        "stereochemistry_and_bond_order": "must be explicit and unambiguous; otherwise fail closed",
+        "tool": "Open Babel",
+        "torsions": "Open Babel default rotatable-bond perception; no manual torsion edits",
+        "uff_max_iters": 1000
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "0ce7725547277e0f5099cfdf8ab160f10565aca56f2673576b029e6b9a8ff5c5",
+        "holo_pdb_sha256": "ed3e80b20042c83ce90e2722878210e0ac46905472980bdeaea4c49a9d200ee0",
+        "holo_reference_coordinate_hash": "5352f4a8b0add589f6b952173f4fe4cb684098d64b76cd64633d076b4db963fd",
+        "ligand_input_sha256": "a893e515f7ba97c50b504e756e02e336c3b382f588d8eb7bb21cab0d9e3b6ba2",
+        "reference_sdf_sha256": "a893e515f7ba97c50b504e756e02e336c3b382f588d8eb7bb21cab0d9e3b6ba2",
+        "transformed_holo_reference_coordinate_hash": "ccf67ec008dc4a63f21b0263c745b16dcbebfe18b21eb32fb9d90dfccf5b8f4d"
+      }
+    },
+    "receptor": {
+      "artifact_kind": "receptor",
+      "case_id": "APD-001",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "a893e515f7ba97c50b504e756e02e336c3b382f588d8eb7bb21cab0d9e3b6ba2"
+      },
+      "expected_destination": "prepared/APD-001/receptor.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-001/receptor.pdbqt",
+      "output_sha256": "d36a2fa451c1776bc860049b8a137757b598981d5262b80ff0c4e5cf82eb3e93",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "cleaning": [
+          "retain only the selected receptor author chain",
+          "remove waters",
+          "remove non-polymer ions, solvent, and other small molecules by default",
+          "retain no cofactor unless explicitly present in the frozen case spec",
+          "do not invent or substitute cofactors",
+          "no flexible residues"
+        ],
+        "fail_closed": true,
+        "format": "PDB to PDBQT",
+        "hydrogens": "Open Babel -h",
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger",
+          "-xr"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "source": "Apo PDB input and selected author chain from the frozen benchmark case",
+        "tool": "Open Babel"
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "0ce7725547277e0f5099cfdf8ab160f10565aca56f2673576b029e6b9a8ff5c5",
+        "holo_pdb_sha256": "ed3e80b20042c83ce90e2722878210e0ac46905472980bdeaea4c49a9d200ee0",
+        "holo_reference_coordinate_hash": "5352f4a8b0add589f6b952173f4fe4cb684098d64b76cd64633d076b4db963fd",
+        "ligand_input_sha256": "a893e515f7ba97c50b504e756e02e336c3b382f588d8eb7bb21cab0d9e3b6ba2",
+        "reference_sdf_sha256": "a893e515f7ba97c50b504e756e02e336c3b382f588d8eb7bb21cab0d9e3b6ba2",
+        "transformed_holo_reference_coordinate_hash": "ccf67ec008dc4a63f21b0263c745b16dcbebfe18b21eb32fb9d90dfccf5b8f4d"
+      }
+    }
+  },
+  "APD-002": {
+    "ligand": {
+      "artifact_kind": "ligand",
+      "case_id": "APD-002",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "b4584cc9658b6147db694e6582aedda0151321848b1813b6bbce3b6e35aa4830"
+      },
+      "expected_destination": "prepared/APD-002/ligand.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-002/ligand.pdbqt",
+      "output_sha256": "c0f0f244265beeb025da9d5d19fcef1cc168466c044683e658b3b52a6171584d",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "aromaticity": "preserve the validated RDKit/Open Babel representation; no manual aromaticity edits",
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "conformer_generation": "RDKit ETKDGv3 followed by UFF optimization when parameters are available",
+        "fail_closed": true,
+        "format": "SDF to PDBQT",
+        "hydrogens": "Open Babel -h during PDBQT conversion",
+        "input": "RCSB instance SDF for APD-001..009; APD-010 immutable BEM+MAV adapter chemical graph",
+        "native_pose_advantage": false,
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "seed": 42,
+        "stereochemistry_and_bond_order": "must be explicit and unambiguous; otherwise fail closed",
+        "tool": "Open Babel",
+        "torsions": "Open Babel default rotatable-bond perception; no manual torsion edits",
+        "uff_max_iters": 1000
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "acb4491398d6c9314df4f86c23bef6173673c8198911759c46473ff91b8cede0",
+        "holo_pdb_sha256": "a8dd05039e3aa3ebcfc0e9d7a7ab3e6c1adbe42a5ba8cefc195bcd8ff25d4540",
+        "holo_reference_coordinate_hash": "5b0878987f0c9e7f7fe66ce95b70d97b6602417b8b00fdd2d7b3618a8c752609",
+        "ligand_input_sha256": "b4584cc9658b6147db694e6582aedda0151321848b1813b6bbce3b6e35aa4830",
+        "reference_sdf_sha256": "b4584cc9658b6147db694e6582aedda0151321848b1813b6bbce3b6e35aa4830",
+        "transformed_holo_reference_coordinate_hash": "ba2d66ac1b2df5eb501971cad24d1f62dcbff40b482de67c31c35809be262fd5"
+      }
+    },
+    "receptor": {
+      "artifact_kind": "receptor",
+      "case_id": "APD-002",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "b4584cc9658b6147db694e6582aedda0151321848b1813b6bbce3b6e35aa4830"
+      },
+      "expected_destination": "prepared/APD-002/receptor.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-002/receptor.pdbqt",
+      "output_sha256": "cb44f3d026290a8ec600b23a2732a8a9755bd398896d8483922d43b96fa6a53a",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "cleaning": [
+          "retain only the selected receptor author chain",
+          "remove waters",
+          "remove non-polymer ions, solvent, and other small molecules by default",
+          "retain no cofactor unless explicitly present in the frozen case spec",
+          "do not invent or substitute cofactors",
+          "no flexible residues"
+        ],
+        "fail_closed": true,
+        "format": "PDB to PDBQT",
+        "hydrogens": "Open Babel -h",
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger",
+          "-xr"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "source": "Apo PDB input and selected author chain from the frozen benchmark case",
+        "tool": "Open Babel"
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "acb4491398d6c9314df4f86c23bef6173673c8198911759c46473ff91b8cede0",
+        "holo_pdb_sha256": "a8dd05039e3aa3ebcfc0e9d7a7ab3e6c1adbe42a5ba8cefc195bcd8ff25d4540",
+        "holo_reference_coordinate_hash": "5b0878987f0c9e7f7fe66ce95b70d97b6602417b8b00fdd2d7b3618a8c752609",
+        "ligand_input_sha256": "b4584cc9658b6147db694e6582aedda0151321848b1813b6bbce3b6e35aa4830",
+        "reference_sdf_sha256": "b4584cc9658b6147db694e6582aedda0151321848b1813b6bbce3b6e35aa4830",
+        "transformed_holo_reference_coordinate_hash": "ba2d66ac1b2df5eb501971cad24d1f62dcbff40b482de67c31c35809be262fd5"
+      }
+    }
+  },
+  "APD-003": {
+    "ligand": {
+      "artifact_kind": "ligand",
+      "case_id": "APD-003",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "8039ffe1369ec42b47d82cd286772a1e66fe4103f733615a18df531588ff18a3"
+      },
+      "expected_destination": "prepared/APD-003/ligand.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-003/ligand.pdbqt",
+      "output_sha256": "cdcb772540d0e1cb0a094bdfd10cd8f8ff8286df71da4f01d7402ef255f311a7",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "aromaticity": "preserve the validated RDKit/Open Babel representation; no manual aromaticity edits",
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "conformer_generation": "RDKit ETKDGv3 followed by UFF optimization when parameters are available",
+        "fail_closed": true,
+        "format": "SDF to PDBQT",
+        "hydrogens": "Open Babel -h during PDBQT conversion",
+        "input": "RCSB instance SDF for APD-001..009; APD-010 immutable BEM+MAV adapter chemical graph",
+        "native_pose_advantage": false,
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "seed": 42,
+        "stereochemistry_and_bond_order": "must be explicit and unambiguous; otherwise fail closed",
+        "tool": "Open Babel",
+        "torsions": "Open Babel default rotatable-bond perception; no manual torsion edits",
+        "uff_max_iters": 1000
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "39690cc3b27d863ce7f0c2501098ad7865df4b0cae3033a0088233f00e7632cd",
+        "holo_pdb_sha256": "a92c80a7c9335c70f602bc93fa8b90a1d39136a07cfe9595bad7e6bbfc3951e5",
+        "holo_reference_coordinate_hash": "b63b2365c278ec0074cca7b9ad7a51e0ced6840c2af346d2923f17d36dad5d1c",
+        "ligand_input_sha256": "8039ffe1369ec42b47d82cd286772a1e66fe4103f733615a18df531588ff18a3",
+        "reference_sdf_sha256": "8039ffe1369ec42b47d82cd286772a1e66fe4103f733615a18df531588ff18a3",
+        "transformed_holo_reference_coordinate_hash": "c4abe58e6a046c1de40eb1c0dd45fd7bc4f63b8e2ab1949510c9ec7bc51132cf"
+      }
+    },
+    "receptor": {
+      "artifact_kind": "receptor",
+      "case_id": "APD-003",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "8039ffe1369ec42b47d82cd286772a1e66fe4103f733615a18df531588ff18a3"
+      },
+      "expected_destination": "prepared/APD-003/receptor.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-003/receptor.pdbqt",
+      "output_sha256": "ea5360bd3904203210120c358de4a989b1490f8319456ab9eb7dd45f81deb560",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "cleaning": [
+          "retain only the selected receptor author chain",
+          "remove waters",
+          "remove non-polymer ions, solvent, and other small molecules by default",
+          "retain no cofactor unless explicitly present in the frozen case spec",
+          "do not invent or substitute cofactors",
+          "no flexible residues"
+        ],
+        "fail_closed": true,
+        "format": "PDB to PDBQT",
+        "hydrogens": "Open Babel -h",
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger",
+          "-xr"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "source": "Apo PDB input and selected author chain from the frozen benchmark case",
+        "tool": "Open Babel"
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "39690cc3b27d863ce7f0c2501098ad7865df4b0cae3033a0088233f00e7632cd",
+        "holo_pdb_sha256": "a92c80a7c9335c70f602bc93fa8b90a1d39136a07cfe9595bad7e6bbfc3951e5",
+        "holo_reference_coordinate_hash": "b63b2365c278ec0074cca7b9ad7a51e0ced6840c2af346d2923f17d36dad5d1c",
+        "ligand_input_sha256": "8039ffe1369ec42b47d82cd286772a1e66fe4103f733615a18df531588ff18a3",
+        "reference_sdf_sha256": "8039ffe1369ec42b47d82cd286772a1e66fe4103f733615a18df531588ff18a3",
+        "transformed_holo_reference_coordinate_hash": "c4abe58e6a046c1de40eb1c0dd45fd7bc4f63b8e2ab1949510c9ec7bc51132cf"
+      }
+    }
+  },
+  "APD-004": {
+    "ligand": {
+      "artifact_kind": "ligand",
+      "case_id": "APD-004",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "5457e8146f22b30b9eb57c13220edd77a3972a0cbe507fe3245766aedc8330b3"
+      },
+      "expected_destination": "prepared/APD-004/ligand.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-004/ligand.pdbqt",
+      "output_sha256": "c25bd1217ac360fca7609b0242a275e6c0b767b834d8b25cfca08eda0c913fb3",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "aromaticity": "preserve the validated RDKit/Open Babel representation; no manual aromaticity edits",
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "conformer_generation": "RDKit ETKDGv3 followed by UFF optimization when parameters are available",
+        "fail_closed": true,
+        "format": "SDF to PDBQT",
+        "hydrogens": "Open Babel -h during PDBQT conversion",
+        "input": "RCSB instance SDF for APD-001..009; APD-010 immutable BEM+MAV adapter chemical graph",
+        "native_pose_advantage": false,
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "seed": 42,
+        "stereochemistry_and_bond_order": "must be explicit and unambiguous; otherwise fail closed",
+        "tool": "Open Babel",
+        "torsions": "Open Babel default rotatable-bond perception; no manual torsion edits",
+        "uff_max_iters": 1000
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "bec62c4708fb02bfff5c8688edc209878dadad4f24a3941e800e946d3f470594",
+        "holo_pdb_sha256": "4bb0398e05a34fcba530e1afd2696e0f5822c190787fc78d29fdcd5b06c16b35",
+        "holo_reference_coordinate_hash": "8c6158195559d2f1d82366e31cbe7666f4b0a01edc8d5c872e49fa4eadb411ba",
+        "ligand_input_sha256": "5457e8146f22b30b9eb57c13220edd77a3972a0cbe507fe3245766aedc8330b3",
+        "reference_sdf_sha256": "5457e8146f22b30b9eb57c13220edd77a3972a0cbe507fe3245766aedc8330b3",
+        "transformed_holo_reference_coordinate_hash": "2840d4781616d3900dcbdf3230462df12d880d5b215c8afbbc9ec7d2efe43c96"
+      }
+    },
+    "receptor": {
+      "artifact_kind": "receptor",
+      "case_id": "APD-004",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "5457e8146f22b30b9eb57c13220edd77a3972a0cbe507fe3245766aedc8330b3"
+      },
+      "expected_destination": "prepared/APD-004/receptor.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-004/receptor.pdbqt",
+      "output_sha256": "511705be1ee503a34961470be77ee53164d5e66820e60c861a128abf4ab2a49d",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "cleaning": [
+          "retain only the selected receptor author chain",
+          "remove waters",
+          "remove non-polymer ions, solvent, and other small molecules by default",
+          "retain no cofactor unless explicitly present in the frozen case spec",
+          "do not invent or substitute cofactors",
+          "no flexible residues"
+        ],
+        "fail_closed": true,
+        "format": "PDB to PDBQT",
+        "hydrogens": "Open Babel -h",
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger",
+          "-xr"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "source": "Apo PDB input and selected author chain from the frozen benchmark case",
+        "tool": "Open Babel"
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "bec62c4708fb02bfff5c8688edc209878dadad4f24a3941e800e946d3f470594",
+        "holo_pdb_sha256": "4bb0398e05a34fcba530e1afd2696e0f5822c190787fc78d29fdcd5b06c16b35",
+        "holo_reference_coordinate_hash": "8c6158195559d2f1d82366e31cbe7666f4b0a01edc8d5c872e49fa4eadb411ba",
+        "ligand_input_sha256": "5457e8146f22b30b9eb57c13220edd77a3972a0cbe507fe3245766aedc8330b3",
+        "reference_sdf_sha256": "5457e8146f22b30b9eb57c13220edd77a3972a0cbe507fe3245766aedc8330b3",
+        "transformed_holo_reference_coordinate_hash": "2840d4781616d3900dcbdf3230462df12d880d5b215c8afbbc9ec7d2efe43c96"
+      }
+    }
+  },
+  "APD-005": {
+    "ligand": {
+      "artifact_kind": "ligand",
+      "case_id": "APD-005",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "31a3fce7a28ca150a3e30f669bd6cb5ca8a074e44d70b949e77bdbd2ff28de20"
+      },
+      "expected_destination": "prepared/APD-005/ligand.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-005/ligand.pdbqt",
+      "output_sha256": "d09a49db42721f8e73705cef557f43a02458b46f9ca3618d4738cfcdb54e62fd",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "aromaticity": "preserve the validated RDKit/Open Babel representation; no manual aromaticity edits",
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "conformer_generation": "RDKit ETKDGv3 followed by UFF optimization when parameters are available",
+        "fail_closed": true,
+        "format": "SDF to PDBQT",
+        "hydrogens": "Open Babel -h during PDBQT conversion",
+        "input": "RCSB instance SDF for APD-001..009; APD-010 immutable BEM+MAV adapter chemical graph",
+        "native_pose_advantage": false,
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "seed": 42,
+        "stereochemistry_and_bond_order": "must be explicit and unambiguous; otherwise fail closed",
+        "tool": "Open Babel",
+        "torsions": "Open Babel default rotatable-bond perception; no manual torsion edits",
+        "uff_max_iters": 1000
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "f996b2dd2d9e2104acb659dd4d6841859cbf26e8630a4c0b1297c3f9840433b8",
+        "holo_pdb_sha256": "a736ec7553dfcfdf33345c8eaeeb75bc8cfcea533bc5335f9c0e938e361a3cf8",
+        "holo_reference_coordinate_hash": "e51188114c9aa3f6c7468f6d58dea703542ff95f4e19b17b0f173ddffd90e4e2",
+        "ligand_input_sha256": "31a3fce7a28ca150a3e30f669bd6cb5ca8a074e44d70b949e77bdbd2ff28de20",
+        "reference_sdf_sha256": "31a3fce7a28ca150a3e30f669bd6cb5ca8a074e44d70b949e77bdbd2ff28de20",
+        "transformed_holo_reference_coordinate_hash": "682566809a5273fb4b4467d31b0b3d3afeef30cf372a268f89002c536225489b"
+      }
+    },
+    "receptor": {
+      "artifact_kind": "receptor",
+      "case_id": "APD-005",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "31a3fce7a28ca150a3e30f669bd6cb5ca8a074e44d70b949e77bdbd2ff28de20"
+      },
+      "expected_destination": "prepared/APD-005/receptor.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-005/receptor.pdbqt",
+      "output_sha256": "9cdadfdfb0ca8fdb83d77aca029d39adb611aa675f878d5dd91bad90e3e1bfb9",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "cleaning": [
+          "retain only the selected receptor author chain",
+          "remove waters",
+          "remove non-polymer ions, solvent, and other small molecules by default",
+          "retain no cofactor unless explicitly present in the frozen case spec",
+          "do not invent or substitute cofactors",
+          "no flexible residues"
+        ],
+        "fail_closed": true,
+        "format": "PDB to PDBQT",
+        "hydrogens": "Open Babel -h",
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger",
+          "-xr"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "source": "Apo PDB input and selected author chain from the frozen benchmark case",
+        "tool": "Open Babel"
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "f996b2dd2d9e2104acb659dd4d6841859cbf26e8630a4c0b1297c3f9840433b8",
+        "holo_pdb_sha256": "a736ec7553dfcfdf33345c8eaeeb75bc8cfcea533bc5335f9c0e938e361a3cf8",
+        "holo_reference_coordinate_hash": "e51188114c9aa3f6c7468f6d58dea703542ff95f4e19b17b0f173ddffd90e4e2",
+        "ligand_input_sha256": "31a3fce7a28ca150a3e30f669bd6cb5ca8a074e44d70b949e77bdbd2ff28de20",
+        "reference_sdf_sha256": "31a3fce7a28ca150a3e30f669bd6cb5ca8a074e44d70b949e77bdbd2ff28de20",
+        "transformed_holo_reference_coordinate_hash": "682566809a5273fb4b4467d31b0b3d3afeef30cf372a268f89002c536225489b"
+      }
+    }
+  },
+  "APD-006": {
+    "ligand": {
+      "artifact_kind": "ligand",
+      "case_id": "APD-006",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "4758b41bb282af21d8b65b67027ce5845a69611a175e7ae6d13f75e8c1cced99"
+      },
+      "expected_destination": "prepared/APD-006/ligand.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-006/ligand.pdbqt",
+      "output_sha256": "b6589b0a6dddd9095afc040eaf5f5f42ced15a2b74ac510b21334490391c9524",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "aromaticity": "preserve the validated RDKit/Open Babel representation; no manual aromaticity edits",
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "conformer_generation": "RDKit ETKDGv3 followed by UFF optimization when parameters are available",
+        "fail_closed": true,
+        "format": "SDF to PDBQT",
+        "hydrogens": "Open Babel -h during PDBQT conversion",
+        "input": "RCSB instance SDF for APD-001..009; APD-010 immutable BEM+MAV adapter chemical graph",
+        "native_pose_advantage": false,
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "seed": 42,
+        "stereochemistry_and_bond_order": "must be explicit and unambiguous; otherwise fail closed",
+        "tool": "Open Babel",
+        "torsions": "Open Babel default rotatable-bond perception; no manual torsion edits",
+        "uff_max_iters": 1000
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "3e327ed733fece4c37d56fa1c337d9d22a1956e99bc203c13fca2bf2146e575f",
+        "holo_pdb_sha256": "4179442c7fa29744fba08ef57528c96bba2ac8760c3faff4c6b76de32440d109",
+        "holo_reference_coordinate_hash": "0d12d168ffba95b309fcebdde9cf791f64fecdf73d9c3b1c4f3b19e63011c397",
+        "ligand_input_sha256": "4758b41bb282af21d8b65b67027ce5845a69611a175e7ae6d13f75e8c1cced99",
+        "reference_sdf_sha256": "4758b41bb282af21d8b65b67027ce5845a69611a175e7ae6d13f75e8c1cced99",
+        "transformed_holo_reference_coordinate_hash": "7f8abb711910d00e1e28aa1e0891406bbdb25fe625ff9039174dc5c201d40b1e"
+      }
+    },
+    "receptor": {
+      "artifact_kind": "receptor",
+      "case_id": "APD-006",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "4758b41bb282af21d8b65b67027ce5845a69611a175e7ae6d13f75e8c1cced99"
+      },
+      "expected_destination": "prepared/APD-006/receptor.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-006/receptor.pdbqt",
+      "output_sha256": "80380b96380a9ce2d8697472ac0b96a038796086030ebacd87b39723bc6d4a38",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "cleaning": [
+          "retain only the selected receptor author chain",
+          "remove waters",
+          "remove non-polymer ions, solvent, and other small molecules by default",
+          "retain no cofactor unless explicitly present in the frozen case spec",
+          "do not invent or substitute cofactors",
+          "no flexible residues"
+        ],
+        "fail_closed": true,
+        "format": "PDB to PDBQT",
+        "hydrogens": "Open Babel -h",
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger",
+          "-xr"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "source": "Apo PDB input and selected author chain from the frozen benchmark case",
+        "tool": "Open Babel"
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "3e327ed733fece4c37d56fa1c337d9d22a1956e99bc203c13fca2bf2146e575f",
+        "holo_pdb_sha256": "4179442c7fa29744fba08ef57528c96bba2ac8760c3faff4c6b76de32440d109",
+        "holo_reference_coordinate_hash": "0d12d168ffba95b309fcebdde9cf791f64fecdf73d9c3b1c4f3b19e63011c397",
+        "ligand_input_sha256": "4758b41bb282af21d8b65b67027ce5845a69611a175e7ae6d13f75e8c1cced99",
+        "reference_sdf_sha256": "4758b41bb282af21d8b65b67027ce5845a69611a175e7ae6d13f75e8c1cced99",
+        "transformed_holo_reference_coordinate_hash": "7f8abb711910d00e1e28aa1e0891406bbdb25fe625ff9039174dc5c201d40b1e"
+      }
+    }
+  },
+  "APD-007": {
+    "ligand": {
+      "artifact_kind": "ligand",
+      "case_id": "APD-007",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "640e93624d0537a86fea8985b9165af9d78700b09164c70e9c901e19654671c4"
+      },
+      "expected_destination": "prepared/APD-007/ligand.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-007/ligand.pdbqt",
+      "output_sha256": "c7c1058335bc98c47bf1fe6fae4bb8bd91b280e64ae68cc9da90169a7b7c5c1f",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "aromaticity": "preserve the validated RDKit/Open Babel representation; no manual aromaticity edits",
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "conformer_generation": "RDKit ETKDGv3 followed by UFF optimization when parameters are available",
+        "fail_closed": true,
+        "format": "SDF to PDBQT",
+        "hydrogens": "Open Babel -h during PDBQT conversion",
+        "input": "RCSB instance SDF for APD-001..009; APD-010 immutable BEM+MAV adapter chemical graph",
+        "native_pose_advantage": false,
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "seed": 42,
+        "stereochemistry_and_bond_order": "must be explicit and unambiguous; otherwise fail closed",
+        "tool": "Open Babel",
+        "torsions": "Open Babel default rotatable-bond perception; no manual torsion edits",
+        "uff_max_iters": 1000
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "06b2712fe25ddad5b69171a3ff80b9cc9efec2983cdc981b3f0cee2698773355",
+        "holo_pdb_sha256": "1f40b28ab62214959ef1cfb0c07a375e9deb6e5674aa1599ee6f91853710996c",
+        "holo_reference_coordinate_hash": "d8bd23ca3f24a1d98bda4298351d36f2e3a8fb3224de5c1d639a535005da6f00",
+        "ligand_input_sha256": "640e93624d0537a86fea8985b9165af9d78700b09164c70e9c901e19654671c4",
+        "reference_sdf_sha256": "640e93624d0537a86fea8985b9165af9d78700b09164c70e9c901e19654671c4",
+        "transformed_holo_reference_coordinate_hash": "602d52a1355b258ec5867d9eb71ee6ea6054a64f3e05f589b6216c31fb707ef9"
+      }
+    },
+    "receptor": {
+      "artifact_kind": "receptor",
+      "case_id": "APD-007",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "640e93624d0537a86fea8985b9165af9d78700b09164c70e9c901e19654671c4"
+      },
+      "expected_destination": "prepared/APD-007/receptor.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-007/receptor.pdbqt",
+      "output_sha256": "d0e6142b0cd30e46dd4ab6ea977aa3d681d1bc47663698635eb04f96dd15e461",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "cleaning": [
+          "retain only the selected receptor author chain",
+          "remove waters",
+          "remove non-polymer ions, solvent, and other small molecules by default",
+          "retain no cofactor unless explicitly present in the frozen case spec",
+          "do not invent or substitute cofactors",
+          "no flexible residues"
+        ],
+        "fail_closed": true,
+        "format": "PDB to PDBQT",
+        "hydrogens": "Open Babel -h",
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger",
+          "-xr"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "source": "Apo PDB input and selected author chain from the frozen benchmark case",
+        "tool": "Open Babel"
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "06b2712fe25ddad5b69171a3ff80b9cc9efec2983cdc981b3f0cee2698773355",
+        "holo_pdb_sha256": "1f40b28ab62214959ef1cfb0c07a375e9deb6e5674aa1599ee6f91853710996c",
+        "holo_reference_coordinate_hash": "d8bd23ca3f24a1d98bda4298351d36f2e3a8fb3224de5c1d639a535005da6f00",
+        "ligand_input_sha256": "640e93624d0537a86fea8985b9165af9d78700b09164c70e9c901e19654671c4",
+        "reference_sdf_sha256": "640e93624d0537a86fea8985b9165af9d78700b09164c70e9c901e19654671c4",
+        "transformed_holo_reference_coordinate_hash": "602d52a1355b258ec5867d9eb71ee6ea6054a64f3e05f589b6216c31fb707ef9"
+      }
+    }
+  },
+  "APD-008": {
+    "ligand": {
+      "artifact_kind": "ligand",
+      "case_id": "APD-008",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "a87d64b1867409ad808068e545c3e680441222f17424baafa9c99c13147ef5e3"
+      },
+      "expected_destination": "prepared/APD-008/ligand.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-008/ligand.pdbqt",
+      "output_sha256": "53fcc5369e0fd078caa5c7cd7d2178f27dbcb26d0838bbd3e64304dd47dba6fa",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "aromaticity": "preserve the validated RDKit/Open Babel representation; no manual aromaticity edits",
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "conformer_generation": "RDKit ETKDGv3 followed by UFF optimization when parameters are available",
+        "fail_closed": true,
+        "format": "SDF to PDBQT",
+        "hydrogens": "Open Babel -h during PDBQT conversion",
+        "input": "RCSB instance SDF for APD-001..009; APD-010 immutable BEM+MAV adapter chemical graph",
+        "native_pose_advantage": false,
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "seed": 42,
+        "stereochemistry_and_bond_order": "must be explicit and unambiguous; otherwise fail closed",
+        "tool": "Open Babel",
+        "torsions": "Open Babel default rotatable-bond perception; no manual torsion edits",
+        "uff_max_iters": 1000
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "546afe6d3517db719edbf0b31f7fe0a9731a31e2d61b750c5dc318921ee2aeb0",
+        "holo_pdb_sha256": "545bb8efeea0d3c1629502ceb240b4278b18e8fba7ffae320b921d05046798ee",
+        "holo_reference_coordinate_hash": "02500fcb1d6a9f3d5b409ffa698f45440e22c3fe08b59404e7b27c8e828ead1b",
+        "ligand_input_sha256": "a87d64b1867409ad808068e545c3e680441222f17424baafa9c99c13147ef5e3",
+        "reference_sdf_sha256": "a87d64b1867409ad808068e545c3e680441222f17424baafa9c99c13147ef5e3",
+        "transformed_holo_reference_coordinate_hash": "02cfec87655f2be9d56d7eeaafcb505051916ddec6f2122c8e4b39c57795dd0b"
+      }
+    },
+    "receptor": {
+      "artifact_kind": "receptor",
+      "case_id": "APD-008",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "a87d64b1867409ad808068e545c3e680441222f17424baafa9c99c13147ef5e3"
+      },
+      "expected_destination": "prepared/APD-008/receptor.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-008/receptor.pdbqt",
+      "output_sha256": "130d571df4509c39707f9dcd6443b9047d6cf6ffdf9df1f8caac823b9d241fa9",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "cleaning": [
+          "retain only the selected receptor author chain",
+          "remove waters",
+          "remove non-polymer ions, solvent, and other small molecules by default",
+          "retain no cofactor unless explicitly present in the frozen case spec",
+          "do not invent or substitute cofactors",
+          "no flexible residues"
+        ],
+        "fail_closed": true,
+        "format": "PDB to PDBQT",
+        "hydrogens": "Open Babel -h",
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger",
+          "-xr"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "source": "Apo PDB input and selected author chain from the frozen benchmark case",
+        "tool": "Open Babel"
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "546afe6d3517db719edbf0b31f7fe0a9731a31e2d61b750c5dc318921ee2aeb0",
+        "holo_pdb_sha256": "545bb8efeea0d3c1629502ceb240b4278b18e8fba7ffae320b921d05046798ee",
+        "holo_reference_coordinate_hash": "02500fcb1d6a9f3d5b409ffa698f45440e22c3fe08b59404e7b27c8e828ead1b",
+        "ligand_input_sha256": "a87d64b1867409ad808068e545c3e680441222f17424baafa9c99c13147ef5e3",
+        "reference_sdf_sha256": "a87d64b1867409ad808068e545c3e680441222f17424baafa9c99c13147ef5e3",
+        "transformed_holo_reference_coordinate_hash": "02cfec87655f2be9d56d7eeaafcb505051916ddec6f2122c8e4b39c57795dd0b"
+      }
+    }
+  },
+  "APD-009": {
+    "ligand": {
+      "artifact_kind": "ligand",
+      "case_id": "APD-009",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "62077e92a402efe5355472e65b14bd0a2840336a98295be2040506dc808ef2b4"
+      },
+      "expected_destination": "prepared/APD-009/ligand.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-009/ligand.pdbqt",
+      "output_sha256": "d1b0dc69b3d7e4492f14f472e2819a65fc7cd8bb8095f1e0f3b2621e7927521b",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "aromaticity": "preserve the validated RDKit/Open Babel representation; no manual aromaticity edits",
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "conformer_generation": "RDKit ETKDGv3 followed by UFF optimization when parameters are available",
+        "fail_closed": true,
+        "format": "SDF to PDBQT",
+        "hydrogens": "Open Babel -h during PDBQT conversion",
+        "input": "RCSB instance SDF for APD-001..009; APD-010 immutable BEM+MAV adapter chemical graph",
+        "native_pose_advantage": false,
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "seed": 42,
+        "stereochemistry_and_bond_order": "must be explicit and unambiguous; otherwise fail closed",
+        "tool": "Open Babel",
+        "torsions": "Open Babel default rotatable-bond perception; no manual torsion edits",
+        "uff_max_iters": 1000
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "5feb770ff43215aa327509ba9174e4076a3962393493a49074e822dc624e57b2",
+        "holo_pdb_sha256": "978d8d59c2fb03c6691b6e51ffd8098786334c13363c6ebaf04707708adb3a8e",
+        "holo_reference_coordinate_hash": "bcb8b22fb9bf71e4f07d8beefb5b3f525c9d1797dd45823f605b9c8c368adad3",
+        "ligand_input_sha256": "62077e92a402efe5355472e65b14bd0a2840336a98295be2040506dc808ef2b4",
+        "reference_sdf_sha256": "62077e92a402efe5355472e65b14bd0a2840336a98295be2040506dc808ef2b4",
+        "transformed_holo_reference_coordinate_hash": "9b9530b6789cbba566b8f8b5ab37580a377d50585086c1b981bc33cc881745d0"
+      }
+    },
+    "receptor": {
+      "artifact_kind": "receptor",
+      "case_id": "APD-009",
+      "chemistry": {
+        "chemistry_ready_for_vina": true,
+        "kind": "frozen_reference_sdf",
+        "ligand_input_sha256": "62077e92a402efe5355472e65b14bd0a2840336a98295be2040506dc808ef2b4"
+      },
+      "expected_destination": "prepared/APD-009/receptor.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-009/receptor.pdbqt",
+      "output_sha256": "e0008df34e654f1cdd7e32cadcd012dbe9f6f5938fbc52259d32ec0b12cbf9b3",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "cleaning": [
+          "retain only the selected receptor author chain",
+          "remove waters",
+          "remove non-polymer ions, solvent, and other small molecules by default",
+          "retain no cofactor unless explicitly present in the frozen case spec",
+          "do not invent or substitute cofactors",
+          "no flexible residues"
+        ],
+        "fail_closed": true,
+        "format": "PDB to PDBQT",
+        "hydrogens": "Open Babel -h",
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger",
+          "-xr"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "source": "Apo PDB input and selected author chain from the frozen benchmark case",
+        "tool": "Open Babel"
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "5feb770ff43215aa327509ba9174e4076a3962393493a49074e822dc624e57b2",
+        "holo_pdb_sha256": "978d8d59c2fb03c6691b6e51ffd8098786334c13363c6ebaf04707708adb3a8e",
+        "holo_reference_coordinate_hash": "bcb8b22fb9bf71e4f07d8beefb5b3f525c9d1797dd45823f605b9c8c368adad3",
+        "ligand_input_sha256": "62077e92a402efe5355472e65b14bd0a2840336a98295be2040506dc808ef2b4",
+        "reference_sdf_sha256": "62077e92a402efe5355472e65b14bd0a2840336a98295be2040506dc808ef2b4",
+        "transformed_holo_reference_coordinate_hash": "9b9530b6789cbba566b8f8b5ab37580a377d50585086c1b981bc33cc881745d0"
+      }
+    }
+  },
+  "APD-010": {
+    "ligand": {
+      "artifact_kind": "ligand",
+      "case_id": "APD-010",
+      "chemistry": {
+        "adapter_id": "research-os.apd010.bem-mav",
+        "adapter_version": "1.0.0",
+        "chemistry_ready_for_vina": true,
+        "input_identity": "9941f9b3975839f101b2a440a1d579d97f081b7bf473c7cde6bed696c64b5956",
+        "kind": "frozen_apd010_adapter_output",
+        "ligand_input_sha256": "84f154b100861fb9131e5cb7fb0a9b25be289529b0e852bb741e653bcd3340b9",
+        "output_identity": "1586aa91b6a57fdc938ad3ffa8679996e78d73a834624a3af557c5593e2eb052",
+        "structural_identity": "468c8052ff213fbb3a11f6198b61170e41d4b92353a44461a90326b157bdf306"
+      },
+      "expected_destination": "prepared/APD-010/ligand.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-010/ligand.pdbqt",
+      "output_sha256": "40a7250fc6bcf111d54831b8aff39ef7675db299bba82b1bf7b6a39a8317f58c",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "aromaticity": "preserve the validated RDKit/Open Babel representation; no manual aromaticity edits",
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "conformer_generation": "RDKit ETKDGv3 followed by UFF optimization when parameters are available",
+        "fail_closed": true,
+        "format": "SDF to PDBQT",
+        "hydrogens": "Open Babel -h during PDBQT conversion",
+        "input": "RCSB instance SDF for APD-001..009; APD-010 immutable BEM+MAV adapter chemical graph",
+        "native_pose_advantage": false,
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "seed": 42,
+        "stereochemistry_and_bond_order": "must be explicit and unambiguous; otherwise fail closed",
+        "tool": "Open Babel",
+        "torsions": "Open Babel default rotatable-bond perception; no manual torsion edits",
+        "uff_max_iters": 1000
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "47a531a5430f585f133bce3069a952d29d591610d8442de522e9b37b7348efbe",
+        "holo_pdb_sha256": "d524b4932316fdaf7fbea162aae79285639010f51bfb4a09c169127aa0248c8f",
+        "holo_reference_coordinate_hash": "77f9f08b253ad978dba2f931b69039cb029191b296139111caca65a1294ae419",
+        "ligand_input_sha256": "84f154b100861fb9131e5cb7fb0a9b25be289529b0e852bb741e653bcd3340b9",
+        "transformed_holo_reference_coordinate_hash": "2f6132da1553abbca2b5acfb31065299e0e3bfc7d3006e31778ad22dffdc8641"
+      }
+    },
+    "receptor": {
+      "artifact_kind": "receptor",
+      "case_id": "APD-010",
+      "chemistry": {
+        "adapter_id": "research-os.apd010.bem-mav",
+        "adapter_version": "1.0.0",
+        "chemistry_ready_for_vina": true,
+        "input_identity": "9941f9b3975839f101b2a440a1d579d97f081b7bf473c7cde6bed696c64b5956",
+        "kind": "frozen_apd010_adapter_output",
+        "ligand_input_sha256": "84f154b100861fb9131e5cb7fb0a9b25be289529b0e852bb741e653bcd3340b9",
+        "output_identity": "1586aa91b6a57fdc938ad3ffa8679996e78d73a834624a3af557c5593e2eb052",
+        "structural_identity": "468c8052ff213fbb3a11f6198b61170e41d4b92353a44461a90326b157bdf306"
+      },
+      "expected_destination": "prepared/APD-010/receptor.pdbqt",
+      "output_path": "/tmp/apodock001-v1.0.2-prepared/APD-010/receptor.pdbqt",
+      "output_sha256": "8f2a5d499cac9a975648c09c2787465aaa835ff2c1e73373050c92a2cd1b31f0",
+      "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+      "preparation": {
+        "binary_version": "3.1.1",
+        "charges": "Open Babel Gasteiger partial charges",
+        "cleaning": [
+          "retain only the selected receptor author chain",
+          "remove waters",
+          "remove non-polymer ions, solvent, and other small molecules by default",
+          "retain no cofactor unless explicitly present in the frozen case spec",
+          "do not invent or substitute cofactors",
+          "no flexible residues"
+        ],
+        "fail_closed": true,
+        "format": "PDB to PDBQT",
+        "hydrogens": "Open Babel -h",
+        "options": [
+          "-h",
+          "--partialcharge",
+          "gasteiger",
+          "-xr"
+        ],
+        "package_requirement": "openbabel-wheel>=3.1.1.23",
+        "source": "Apo PDB input and selected author chain from the frozen benchmark case",
+        "tool": "Open Babel"
+      },
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "source_hashes": {
+        "apo_pdb_sha256": "47a531a5430f585f133bce3069a952d29d591610d8442de522e9b37b7348efbe",
+        "holo_pdb_sha256": "d524b4932316fdaf7fbea162aae79285639010f51bfb4a09c169127aa0248c8f",
+        "holo_reference_coordinate_hash": "77f9f08b253ad978dba2f931b69039cb029191b296139111caca65a1294ae419",
+        "ligand_input_sha256": "84f154b100861fb9131e5cb7fb0a9b25be289529b0e852bb741e653bcd3340b9",
+        "transformed_holo_reference_coordinate_hash": "2f6132da1553abbca2b5acfb31065299e0e3bfc7d3006e31778ad22dffdc8641"
+      }
+    }
+  }
+}

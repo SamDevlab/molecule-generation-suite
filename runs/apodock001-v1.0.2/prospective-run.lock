@@ -1,0 +1,8 @@
+{
+  "git_sha": "f64ae09ed8b982da7d75c8ba818b9aa4585b7fa5",
+  "planned_run_id": "research-os.apodock001.planned-run.v1+ff217589e517ab64",
+  "prospective_execution_started": true,
+  "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+  "schema_version": "research-os.apodock001.execution-lock.v1",
+  "started_at": "2026-09-12T23:34:40.154632+00:00"
+}

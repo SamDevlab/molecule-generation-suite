@@ -1,0 +1,47 @@
+BET
+ OpenBabel09132600403D
+
+  9  8  0  0  0  0  0  0  0  0999 V2000
+   74.3050   20.8580   62.5680 C   0  0  0  0  0  2  0  0  0  0  0  0
+   75.1080   20.7000   61.3200 N   0  0  0  0  0  4  0  0  0  0  0  0
+   76.4770   21.2410   61.4970 C   0  0  0  0  0  1  0  0  0  0  0  0
+   75.1850   19.2770   60.9130 C   0  0  0  0  0  1  0  0  0  0  0  0
+   74.4390   21.4630   60.2370 C   0  0  0  0  0  1  0  0  0  0  0  0
+   75.0990   20.6620   63.8340 C   0  0  0  0  0  0  0  0  0  0  0  0
+   75.4330   21.6570   64.5320 O   0  0  0  0  0  0  0  0  0  0  0  0
+   75.4670   19.3810   64.2320 O   0  0  0  0  0  0  0  0  0  0  0  0
+   76.2630   18.9150   63.8110 H   0  0  0  0  0  0  0  0  0  0  0  0
+  1  6  1  0  0  0  0
+  2  3  1  0  0  0  0
+  2  1  1  0  0  0  0
+  4  2  1  0  0  0  0
+  5  2  1  0  0  0  0
+  6  8  1  0  0  0  0
+  6  7  2  0  0  0  0
+  9  8  1  0  0  0  0
+M  END
+>  <MODEL>
+2
+
+>  <REMARK>
+ VINA RESULT:    -4.411      1.056      2.049
+ INTER + INTRA:          -4.944
+ INTER:                  -5.037
+ INTRA:                   0.093
+ UNBOUND:                 0.112
+  Name = BET
+  6 active torsions:
+  status: ('A' for Active; 'I' for Inactive)
+    1  A    between atoms: N_1  and  C_2
+    2  A    between atoms: N_1  and  C_6
+    3  A    between atoms: N_1  and  C_7
+    4  A    between atoms: N_1  and  C_8
+    5  A    between atoms: C_2  and  C_3
+    6  A    between atoms: C_3  and  O_5
+                            x       y       z     vdW  Elec       q    Type
+                         _______ _______ _______ _____ _____    ______ ____
+
+>  <TORSDO>
+F 3
+
+$$$$
