@@ -18,3 +18,10 @@ def docking_claim_gate(statement: str, *, evidence_level: EvidenceLevel | str = 
 
 def validate_docking_claim(statement: str, *, evidence_level: EvidenceLevel | str = EvidenceLevel.E2_COMPUTATIONAL) -> bool:
     return docking_claim_gate(statement, evidence_level=evidence_level).status == GateStatus.PASS
+
+
+def docking_capability_claim_gate(statement: str, *, docking_context: str, profile=None) -> GateResult:
+    """Apply the bounded capability profile before emitting an interpretation."""
+    from research_os.docking.capability import capability_claim_gate
+
+    return capability_claim_gate(statement, docking_context=docking_context, profile=profile)

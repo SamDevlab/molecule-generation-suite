@@ -4,6 +4,7 @@ from typing import Any
 import uuid
 from research_os.core.hashing import sha256_file
 from research_os.core.types import Evidence, EvidenceLevel, GateResult, GateStatus, RunManifest
+from research_os.docking.capability import capability_metadata, load_profile
 from research_os.docking.rules import docking_rules
 from research_os.docking.schema import DockingRequest, GridBox
 from research_os.engines.vina import VinaEngine
@@ -15,8 +16,9 @@ from research_os.proof.engine import ProofEngine
 class DockingLab(Lab):
     name = "DockingLab"
 
-    def __init__(self, engine=None):
+    def __init__(self, engine=None, capability_profile=None):
         self.engine = engine or VinaEngine()
+        self.capability_profile = capability_profile or load_profile()
 
     def normalize(self, raw: dict[str, Any]) -> dict[str, Any]:
         grid = raw.get("grid") or {}
@@ -39,6 +41,7 @@ class DockingLab(Lab):
             "prepared_ligand_manifest": raw.get("prepared_ligand_manifest"),
             "prepared_receptor_manifest": raw.get("prepared_receptor_manifest"),
             "num_modes": int(raw.get("num_modes", 9)),
+            "docking_context": str(raw.get("docking_context", "UNKNOWN_DOCKING_CONTEXT")),
         }
 
     def rules(self):
@@ -46,6 +49,7 @@ class DockingLab(Lab):
 
     def run(self, raw: dict[str, Any], experiment: str = "vina_docking") -> RunManifest:
         n = self.normalize(raw)
+        capability = capability_metadata(n["docking_context"], self.capability_profile)
         m = RunManifest(
             lab=self.name,
             experiment=experiment,
@@ -57,6 +61,7 @@ class DockingLab(Lab):
                 "protocol_id": n["protocol_id"],
                 "target_id": n.get("target_id"),
                 "grid_hash": GridBox(**n["grid"]).grid_hash,
+                "docking_capability": capability,
             },
         )
         proof = ProofEngine()
@@ -83,6 +88,7 @@ class DockingLab(Lab):
                     "species": n.get("species"),
                     "prepared_ligand_manifest": n.get("prepared_ligand_manifest"),
                     "prepared_receptor_manifest": n.get("prepared_receptor_manifest"),
+                    "docking_capability": capability,
                 },
             )
         )
@@ -117,6 +123,8 @@ class DockingLab(Lab):
             return m
 
         payload = result.to_dict()
+        payload["docking_capability"] = capability
+        payload["interpretation_limit"] = "computational docking evidence within a bounded capability context; not affinity, efficacy, clinical evidence, or experimental pose truth"
         if result.output_path and Path(result.output_path).is_file():
             payload["output_sha256"] = sha256_file(result.output_path)
         engine_manifest = EngineManifest(
