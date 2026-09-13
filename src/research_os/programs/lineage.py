@@ -168,14 +168,63 @@ class ResearchProgramProtocol:
         if len(ids) != len(set(ids)):
             raise ProgramProtocolError("campaign local_ids must be unique")
         synthesis = _m(raw["synthesis"], "synthesis")
-        _strict(synthesis, {"mode", "primary_campaigns", "complementary_campaigns", "knowledge_gain_summary"}, {"mode", "primary_campaigns", "complementary_campaigns"}, "synthesis")
+        _strict(synthesis, {"mode", "primary_campaigns", "complementary_campaigns", "knowledge_gain_summary", "claims"}, {"mode", "primary_campaigns", "complementary_campaigns"}, "synthesis")
         synthesis_payload = dict(synthesis)
         synthesis_payload["primary_campaigns"] = list(synthesis_payload.get("primary_campaigns", []))
         synthesis_payload["complementary_campaigns"] = list(synthesis_payload.get("complementary_campaigns", []))
-        if synthesis_payload.get("mode") not in {"STRUCTURAL_ONLY", "DESCRIPTIVE_ONLY"}:
-            raise ProgramProtocolError("synthesis.mode must be STRUCTURAL_ONLY or DESCRIPTIVE_ONLY")
+        if synthesis_payload.get("mode") not in {"STRUCTURAL_ONLY", "DESCRIPTIVE_ONLY", "CLAIM_LEVEL"}:
+            raise ProgramProtocolError("synthesis.mode must be STRUCTURAL_ONLY, DESCRIPTIVE_ONLY or CLAIM_LEVEL")
         if any(item not in ids for item in synthesis_payload["primary_campaigns"] + synthesis_payload["complementary_campaigns"]):
             raise ProgramProtocolError("synthesis references an undeclared campaign")
+        claims = synthesis_payload.get("claims", [])
+        if not isinstance(claims, list):
+            raise ProgramProtocolError("synthesis.claims must be a list")
+        claim_ids: list[str] = []
+        normalized_claims: list[dict[str, Any]] = []
+        for index, claim in enumerate(claims):
+            item = _m(claim, f"synthesis.claims[{index}]")
+            _strict(item, {"local_id", "statement", "minimum_evidence_level", "campaigns", "comparability", "decision_rule", "prior_claim"}, {"local_id", "statement", "minimum_evidence_level", "campaigns", "comparability", "decision_rule"}, f"synthesis.claims[{index}]")
+            local_id = _s(item["local_id"], f"synthesis.claims[{index}].local_id")
+            if not _SAFE_ID.fullmatch(local_id) or local_id in claim_ids:
+                raise ProgramProtocolError("synthesis claim local_ids must be unique safe identifiers")
+            claim_ids.append(local_id)
+            _s(item["statement"], f"synthesis.claims[{index}].statement")
+            _s(item["minimum_evidence_level"], f"synthesis.claims[{index}].minimum_evidence_level")
+            members = item["campaigns"]
+            if isinstance(members, str) or not isinstance(members, list) or not members or any(not isinstance(member, str) for member in members) or len(set(members)) != len(members) or any(member not in ids for member in members):
+                raise ProgramProtocolError(f"synthesis.claims[{index}].campaigns must list unique declared campaigns")
+            comparability = _m(item["comparability"], f"synthesis.claims[{index}].comparability")
+            _strict(comparability, {"required_dimensions"}, {"required_dimensions"}, f"synthesis.claims[{index}].comparability")
+            dimensions = comparability["required_dimensions"]
+            if isinstance(dimensions, str) or not isinstance(dimensions, list) or any(not _s(dimension, "comparability.required_dimensions") for dimension in dimensions):
+                raise ProgramProtocolError(f"synthesis.claims[{index}].comparability.required_dimensions must be a list")
+            decision_rule = _m(item["decision_rule"], f"synthesis.claims[{index}].decision_rule")
+            _strict(decision_rule, {"type", "required_direction"}, {"type"}, f"synthesis.claims[{index}].decision_rule")
+            if decision_rule["type"] not in {"DESCRIPTIVE_AGREEMENT", "REQUIRE_CONSISTENT_SUPPORT", "PREDECLARED_DIRECTION"}:
+                raise ProgramProtocolError(f"unsupported synthesis decision rule for {local_id}")
+            if decision_rule["type"] == "PREDECLARED_DIRECTION" and decision_rule.get("required_direction") not in {"SUPPORTS", "CONTRADICTS"}:
+                raise ProgramProtocolError(f"PREDECLARED_DIRECTION requires SUPPORTS or CONTRADICTS for {local_id}")
+            normalized_item = dict(item)
+            normalized_item["campaigns"] = sorted(members)
+            normalized_comparability = dict(comparability)
+            normalized_comparability["required_dimensions"] = sorted(str(dimension) for dimension in dimensions)
+            normalized_item["comparability"] = normalized_comparability
+            normalized_item["decision_rule"] = dict(decision_rule)
+            prior_claim = item.get("prior_claim")
+            if prior_claim is not None:
+                prior = _m(prior_claim, f"synthesis.claims[{index}].prior_claim")
+                _strict(prior, {"claim_id", "version", "statement", "status", "evidence_ids", "revision_id"}, {"claim_id", "version", "statement", "status", "evidence_ids"}, f"synthesis.claims[{index}].prior_claim")
+                if not isinstance(prior["version"], int) or prior["version"] < 1 or not isinstance(prior["evidence_ids"], list):
+                    raise ProgramProtocolError(f"invalid prior claim history for {local_id}")
+                normalized_prior = dict(prior)
+                normalized_prior["evidence_ids"] = sorted(str(value) for value in prior["evidence_ids"])
+                normalized_item["prior_claim"] = normalized_prior
+            normalized_claims.append(normalized_item)
+        synthesis_payload["primary_campaigns"] = sorted(synthesis_payload["primary_campaigns"])
+        synthesis_payload["complementary_campaigns"] = sorted(synthesis_payload["complementary_campaigns"])
+        synthesis_payload["claims"] = sorted(normalized_claims, key=lambda item: item["local_id"])
+        if synthesis_payload["mode"] == "CLAIM_LEVEL" and not claims:
+            raise ProgramProtocolError("CLAIM_LEVEL synthesis requires at least one declared claim")
         return cls(_s(program["program_id"], "program.program_id"), _s(program["title"], "program.title"), _s(program["domain"], "program.domain"), _s(program["objective"], "program.objective"), _s(program["motivation"], "program.motivation"), _s(program["initial_problem"], "program.initial_problem"), questions, tuple(campaigns), _i(limits["max_campaigns"], "limits.max_campaigns", 1), _i(limits["max_runs"], "limits.max_runs", 1), _i(limits["max_failures"], "limits.max_failures"), failure_policy, retry_count, str(program["evidence_target"]) if program.get("evidence_target") is not None else None, synthesis_payload, Path(source_path).resolve(), schema, mode)
 
     def scientific_payload(self, resolved_campaigns: Mapping[str, Mapping[str, Any]] | None = None) -> dict[str, Any]:
@@ -286,9 +335,16 @@ class ResearchProgramBundle:
     unresolved_uncertainties: tuple[str, ...]
     bundle_hash: str
     sealed: bool = True
+    synthesis_id: str | None = None
+    synthesis_hash: str | None = None
+    claim_ids: tuple[str, ...] = ()
+    claim_revision_ids: tuple[str, ...] = ()
+    agreement_assessment_ids: tuple[str, ...] = ()
+    conflict_refs: tuple[Mapping[str, Any], ...] = ()
+    negative_result_refs: tuple[Mapping[str, Any], ...] = ()
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload = {
             "schema_version": "research-os.program-bundle.v1",
             "program_id": self.program_id,
             "bundle_id": self.bundle_id,
@@ -306,6 +362,9 @@ class ResearchProgramBundle:
             "bundle_hash": self.bundle_hash,
             "sealed": self.sealed,
         }
+        if self.synthesis_id is not None:
+            payload.update({"synthesis_id": self.synthesis_id, "synthesis_hash": self.synthesis_hash, "claim_ids": list(self.claim_ids), "claim_revision_ids": list(self.claim_revision_ids), "agreement_assessment_ids": list(self.agreement_assessment_ids), "conflict_refs": [dict(item) for item in self.conflict_refs], "negative_result_refs": [dict(item) for item in self.negative_result_refs]})
+        return payload
 
 
 def _first_loss(exc: Exception, fallback: str) -> str:
@@ -521,14 +580,29 @@ def verify_program_execution(root: str | Path) -> ProgramVerification:
             raise ProgramProtocolError("program run limit exceeded", first_loss="PROGRAM_RUN_LIMIT_EXCEEDED")
         if int(manifest.get("failure_count", 0)) > int(manifest.get("max_failures", 0)):
             raise ProgramProtocolError("program failure limit exceeded", first_loss="PROGRAM_FAILURE_LIMIT_EXCEEDED")
-        if manifest.get("evidence_level") != "E2_COMPUTATIONAL" or manifest.get("scientific_status") != "UNASSESSED":
-            raise ProgramProtocolError("program aggregation attempted an evidence or scientific status promotion")
+        if manifest.get("evidence_level") != "E2_COMPUTATIONAL":
+            raise ProgramProtocolError("program aggregation attempted an evidence level promotion", first_loss="PROGRAM_SYNTHESIS_LEVEL_INFLATION")
+        if manifest.get("synthesis") is None and manifest.get("scientific_status") != "UNASSESSED":
+            raise ProgramProtocolError("program scientific status changed without a formal synthesis", first_loss="PROGRAM_SYNTHESIS_INVALID")
+        if manifest.get("synthesis") is not None and manifest.get("scientific_status") != "ASSESSED":
+            raise ProgramProtocolError("formal synthesis does not have ASSESSED scientific status", first_loss="PROGRAM_SYNTHESIS_INVALID")
         bundle_path = target / "program-bundle.json"
         if not bundle_path.is_file() or json.loads(bundle_path.read_text(encoding="utf-8")) != manifest.get("bundle"):
             raise ProgramProtocolError("program bundle is missing or inconsistent", first_loss="PROGRAM_BUNDLE_MISMATCH")
         bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
         if sha256_json({key: value for key, value in bundle.items() if key != "bundle_hash"}) != bundle.get("bundle_hash"):
             raise ProgramProtocolError("program bundle hash mismatch", first_loss="PROGRAM_BUNDLE_MISMATCH")
+        if manifest.get("synthesis") is not None:
+            synthesis_file = target / "program-synthesis.json"
+            if not synthesis_file.is_file() or json.loads(synthesis_file.read_text(encoding="utf-8")) != manifest.get("synthesis"):
+                raise ProgramProtocolError("program synthesis record is missing or inconsistent", first_loss="PROGRAM_SYNTHESIS_IDENTITY_MISMATCH")
+            if bundle.get("synthesis_id") != manifest["synthesis"].get("synthesis_id") or bundle.get("synthesis_hash") != manifest["synthesis"].get("synthesis_hash"):
+                raise ProgramProtocolError("program bundle does not reference the formal synthesis", first_loss="PROGRAM_BUNDLE_MISMATCH")
+            from research_os.programs.synthesis import _verify_synthesis_payload
+
+            synthesis_verification = _verify_synthesis_payload(target, manifest)
+            if synthesis_verification.status != "PASS":
+                raise ProgramProtocolError(f"program synthesis verification failed: {synthesis_verification.first_loss}", first_loss=synthesis_verification.first_loss or "PROGRAM_SYNTHESIS_INVALID")
         store = ResearchProgramStore(target / "program-store.sqlite3")
         snapshot = store.get_execution(str(manifest["program_execution_id"]))
         program_snapshot = store.get(str(manifest["program_id"]))
@@ -555,7 +629,7 @@ def inspect_program_execution(root: str | Path) -> dict[str, Any]:
     verification = verify_program_execution(root)
     target = Path(root).resolve()
     manifest = json.loads((target / "program-manifest.json").read_text(encoding="utf-8"))
-    return {"verification": verification.to_dict(), "program_id": manifest.get("program_id"), "program_protocol_id": manifest.get("program_protocol_id"), "program_execution_id": manifest.get("program_execution_id"), "status": manifest.get("status"), "scientific_status": manifest.get("scientific_status"), "evidence_level": manifest.get("evidence_level"), "execution_order": manifest.get("execution_order"), "campaigns": manifest.get("campaigns"), "knowledge_gain": manifest.get("knowledge_gain"), "bundle": manifest.get("bundle")}
+    return {"verification": verification.to_dict(), "program_id": manifest.get("program_id"), "program_protocol_id": manifest.get("program_protocol_id"), "program_execution_id": manifest.get("program_execution_id"), "status": manifest.get("status"), "scientific_status": manifest.get("scientific_status"), "evidence_level": manifest.get("evidence_level"), "execution_order": manifest.get("execution_order"), "campaigns": manifest.get("campaigns"), "knowledge_gain": manifest.get("knowledge_gain"), "synthesis": manifest.get("synthesis"), "bundle": manifest.get("bundle")}
 
 
 __all__ = ["PROGRAM_PROTOCOL_ID", "PROGRAM_SCHEMA_VERSION", "ProgramCampaignRef", "ProgramProtocolError", "ProgramVerification", "ResearchProgramBundle", "ResearchProgramExecutionPlan", "ResearchProgramProtocol", "DeclarativeProgramRunner", "inspect_program_execution", "load_program_protocol", "verify_program_execution"]

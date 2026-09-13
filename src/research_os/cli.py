@@ -24,6 +24,7 @@ from research_os.campaigns.declarative import (
     verify_campaign_execution,
 )
 from research_os.programs.lineage import DeclarativeProgramRunner, inspect_program_execution, verify_program_execution
+from research_os.programs.synthesis import synthesize_program
 from research_os.legacy_runtime import biolab_preflight
 from research_os.artifacts import ModelArtifactManifest
 from research_os.datasets import DatasetManifest, DatasetRegistry
@@ -162,6 +163,8 @@ def _program_parser() -> argparse.ArgumentParser:
     verify.add_argument("root")
     inspect = commands.add_parser("inspect", help="inspect program lineage and statuses")
     inspect.add_argument("root")
+    synthesize = commands.add_parser("synthesize", help="synthesize verified Campaign evidence at claim level")
+    synthesize.add_argument("root")
     return parser
 
 
@@ -276,6 +279,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                 return 0 if result.status == "PASS" else 1
             if args.program_command == "inspect":
                 _json(inspect_program_execution(args.root))
+                return 0
+            if args.program_command == "synthesize":
+                _json(synthesize_program(args.root))
                 return 0
             return 2
         except (KeyError, ValueError, OSError, RuntimeError) as exc:
