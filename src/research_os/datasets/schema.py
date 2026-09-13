@@ -93,6 +93,11 @@ class DatasetManifest:
     redistribution_status: str | None = None
     provenance: tuple[str, ...] = ()
     license: str | None = None
+    # Optional operational byte metadata for durable registrations.  It is
+    # absent from legacy manifests and is not part of scientific identity.
+    artifact_size: int | None = None
+    implementation_identity: str | None = None
+    environment_identity: str | None = None
 
     def __post_init__(self) -> None:
         if not self.dataset_id.strip() or not self.version.strip() or not self.schema_id.strip():
@@ -101,6 +106,8 @@ class DatasetManifest:
             raise ValueError("row_count cannot be negative")
         if self.column_count < 0:
             raise ValueError("column_count cannot be negative")
+        if self.artifact_size is not None and self.artifact_size < 0:
+            raise ValueError("artifact_size cannot be negative")
         if len(self.sha256) != 64 or any(character not in "0123456789abcdefABCDEF" for character in self.sha256):
             raise ValueError("sha256 must be a 64-character hexadecimal digest")
         object.__setattr__(self, "sources", _values(self.sources))
@@ -130,7 +137,7 @@ class DatasetManifest:
         return is_experimental_ground_truth(self)
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload = {
             "dataset_id": self.dataset_id,
             "version": self.version,
             "schema_id": self.schema_id,
@@ -162,6 +169,51 @@ class DatasetManifest:
             "provenance": list(self.provenance),
             "license": self.license,
         }
+        if self.artifact_size is not None:
+            payload["artifact_size"] = self.artifact_size
+        if self.implementation_identity is not None:
+            payload["implementation_identity"] = self.implementation_identity
+        if self.environment_identity is not None:
+            payload["environment_identity"] = self.environment_identity
+        return payload
+
+    def scientific_identity_payload(self) -> dict[str, Any]:
+        """Canonical scientific fields; paths and execution metadata excluded."""
+        return {
+            "schema_version": "research-os.dataset-scientific-identity.v1",
+            "dataset_id": self.dataset_id,
+            "version": self.version,
+            "schema_id": self.schema_id,
+            "row_count": self.row_count,
+            "column_count": self.column_count,
+            "sources": list(self.sources),
+            "licenses": list(self.licenses),
+            "source_types": [source.value for source in self.source_types],
+            "evidence_levels": [level.value for level in self.evidence_levels],
+            "synthetic_fraction": self.synthetic_fraction,
+            "experimental_fraction": self.experimental_fraction,
+            "computational_fraction": self.computational_fraction,
+            "parent_datasets": list(self.parent_datasets),
+            "target": self.target,
+            "units": self.units,
+            "conditions": dict(self.conditions),
+            "measurement_method": self.measurement_method,
+            "uncertainty": self.uncertainty,
+            "provenance": list(self.provenance),
+            "license": self.license,
+        }
+
+    @property
+    def scientific_dataset_hash(self) -> str:
+        return sha256_json(self.scientific_identity_payload())
+
+    @property
+    def scientific_dataset_id(self) -> str:
+        return f"research-os.dataset.scientific.v1+{self.scientific_dataset_hash[:16]}"
+
+    @property
+    def artifact_id(self) -> str:
+        return f"research-os.dataset.artifact.v1+{self.sha256.lower()}"
 
     @classmethod
     def from_records(cls, *, dataset_id: str, version: str, schema_id: str, records: Iterable[Mapping[str, Any]], **metadata: Any) -> "DatasetManifest":
@@ -181,7 +233,7 @@ class DatasetManifest:
     @classmethod
     def from_mapping(cls, raw: Mapping[str, Any]) -> "DatasetManifest":
         return cls(
-            dataset_id=str(raw["dataset_id"]), version=str(raw["version"]), schema_id=str(raw["schema_id"]), sha256=str(raw["sha256"]), row_count=int(raw["row_count"]), column_count=int(raw.get("column_count", 0)), created_at=str(raw.get("created_at") or datetime.now(timezone.utc).isoformat()), sources=_values(raw.get("sources")), licenses=_values(raw.get("licenses")), source_types=_values(raw.get("source_types")), evidence_levels=_values(raw.get("evidence_levels")), synthetic_fraction=float(raw.get("synthetic_fraction", 0.0)), experimental_fraction=float(raw.get("experimental_fraction", 0.0)), computational_fraction=float(raw.get("computational_fraction", 0.0)), parent_datasets=_values(raw.get("parent_datasets")), transformation_run_id=raw.get("transformation_run_id"), notes=raw.get("notes"), storage_format=str(raw.get("storage_format", "records")), source_file_hash=raw.get("source_file_hash"), artifact_path=raw.get("artifact_path"), source_path=raw.get("source_path"), target=raw.get("target"), units=raw.get("units"), conditions=dict(raw.get("conditions") or {}), measurement_method=raw.get("measurement_method"), uncertainty=raw.get("uncertainty"), source_url=raw.get("source_url"), redistribution_status=raw.get("redistribution_status"), provenance=_values(raw.get("provenance")), license=raw.get("license"),
+            dataset_id=str(raw["dataset_id"]), version=str(raw["version"]), schema_id=str(raw["schema_id"]), sha256=str(raw["sha256"]), row_count=int(raw["row_count"]), column_count=int(raw.get("column_count", 0)), created_at=str(raw.get("created_at") or datetime.now(timezone.utc).isoformat()), sources=_values(raw.get("sources")), licenses=_values(raw.get("licenses")), source_types=_values(raw.get("source_types")), evidence_levels=_values(raw.get("evidence_levels")), synthetic_fraction=float(raw.get("synthetic_fraction", 0.0)), experimental_fraction=float(raw.get("experimental_fraction", 0.0)), computational_fraction=float(raw.get("computational_fraction", 0.0)), parent_datasets=_values(raw.get("parent_datasets")), transformation_run_id=raw.get("transformation_run_id"), notes=raw.get("notes"), storage_format=str(raw.get("storage_format", "records")), source_file_hash=raw.get("source_file_hash"), artifact_path=raw.get("artifact_path"), source_path=raw.get("source_path"), target=raw.get("target"), units=raw.get("units"), conditions=dict(raw.get("conditions") or {}), measurement_method=raw.get("measurement_method"), uncertainty=raw.get("uncertainty"), source_url=raw.get("source_url"), redistribution_status=raw.get("redistribution_status"), provenance=_values(raw.get("provenance")), license=raw.get("license"), artifact_size=int(raw["artifact_size"]) if raw.get("artifact_size") is not None else None, implementation_identity=raw.get("implementation_identity"), environment_identity=raw.get("environment_identity"),
         )
 
 
