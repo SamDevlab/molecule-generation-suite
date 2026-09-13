@@ -9,7 +9,7 @@ from research_os.experiments.engine import (
     verify_experiment_run,
 )
 from research_os.experiments.registry import ExperimentExecutionError, ExperimentRegistry
-from research_os.experiments.schema import PROTOCOL_ID, ExperimentProtocol, ModelRegistrySpec, ProtocolError, load_protocol
+from research_os.experiments.schema import DatasetRegistrySpec, PROTOCOL_ID, ExperimentProtocol, ModelRegistrySpec, ProtocolError, load_protocol
 
 __all__ = [
     "PROTOCOL_ID",
@@ -17,6 +17,7 @@ __all__ = [
     "ExperimentReproductionResult",
     "ExperimentExecutionError",
     "ExperimentProtocol",
+    "DatasetRegistrySpec",
     "ModelRegistrySpec",
     "ExperimentRegistry",
     "ExperimentRunResult",

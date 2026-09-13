@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 import json
 import math
@@ -14,6 +14,7 @@ import yaml
 
 from research_os.core.hashing import sha256_file, sha256_json
 from research_os.artifacts import ModelArtifactManifest
+from research_os.datasets import DatasetRegistry
 from research_os.experiments.registry import ExperimentExecutionError, ExperimentRegistry
 from research_os.experiments.schema import PROTOCOL_ID, ExperimentProtocol, load_protocol
 from research_os.ml.registry import ModelRegistry
@@ -223,7 +224,24 @@ class ExperimentEngine:
         metric_functions = {metric_id: self.registry.metric(metric_id) for metric_id in protocol.metrics}
         model_adapters = {model.id: self.registry.model(model.adapter) for model in protocol.models}
 
-        table = dataset_adapter.load(protocol.dataset, protocol.source_path)
+        dataset_spec = protocol.dataset
+        dataset_registry: DatasetRegistry | None = None
+        dataset_registry_manifest = None
+        dataset_registry_root: Path | None = None
+        if protocol.dataset_registry is not None and protocol.dataset_registry.enabled:
+            dataset_registry_root = Path(protocol.dataset_registry.root)
+            if not dataset_registry_root.is_absolute():
+                dataset_registry_root = (protocol.source_path.parent / dataset_registry_root).resolve()
+            dataset_registry = DatasetRegistry(root=dataset_registry_root)
+            dataset_verification = dataset_registry.verify(protocol.dataset_registry.dataset_id, protocol.dataset_registry.version)
+            if dataset_verification.status != "PASS":
+                raise ExperimentExecutionError(f"dataset registry verification failed: {dataset_verification.first_loss}")
+            dataset_registry_manifest = dataset_registry.get(protocol.dataset_registry.dataset_id, protocol.dataset_registry.version)
+            dataset_spec = replace(protocol.dataset, path=str(dataset_registry.resolve_artifact(protocol.dataset_registry.dataset_id, protocol.dataset_registry.version)))
+
+        table = dataset_adapter.load(dataset_spec, protocol.source_path)
+        if dataset_registry_manifest is not None and table.dataset_hash != dataset_registry_manifest.sha256:
+            raise ExperimentExecutionError("dataset registry artifact hash differs from loaded dataset bytes")
         split = split_strategy.split(table.row_count, protocol.split, protocol.experiment.seed)
         train_x = [table.features[index] for index in split.train_indices]
         train_y = [table.target[index] for index in split.train_indices]
@@ -274,8 +292,9 @@ class ExperimentEngine:
             model_registry_root = Path(protocol.model_registry.root)
             if not model_registry_root.is_absolute():
                 model_registry_root = (protocol.source_path.parent / model_registry_root).resolve()
-            model_registry = ModelRegistry(root=model_registry_root)
-            dataset_identity = f"dataset-sha256:{table.dataset_hash}"
+            model_registry = ModelRegistry(root=model_registry_root, dataset_registry=dataset_registry)
+            dataset_identity = dataset_registry_manifest.dataset_id if dataset_registry_manifest is not None else f"dataset-sha256:{table.dataset_hash}"
+            dataset_version = dataset_registry_manifest.version if dataset_registry_manifest is not None else None
             environment_identity = sha256_json(environment)
             with tempfile.TemporaryDirectory(prefix="research-os-model-registration-") as temporary:
                 for model in protocol.models:
@@ -292,6 +311,7 @@ class ExperimentEngine:
                         task=protocol.experiment.task,
                         training_run_id=protocol.experiment.id,
                         dataset_id=dataset_identity,
+                        dataset_version=dataset_version,
                         dataset_hash=table.dataset_hash,
                         feature_schema_id=table.schema_hash,
                         metrics=metrics[model.id],
@@ -374,6 +394,15 @@ class ExperimentEngine:
                 "registry_root": str(model_registry_root),
                 "models": model_registry_refs,
             }
+        if dataset_registry_manifest is not None and dataset_registry_root is not None:
+            manifest["dataset"]["registry"] = {
+                "registry_root": str(dataset_registry_root),
+                "dataset_id": dataset_registry_manifest.dataset_id,
+                "version": dataset_registry_manifest.version,
+                "scientific_dataset_id": dataset_registry_manifest.scientific_dataset_id,
+                "record_id": dataset_registry.get_record(dataset_registry_manifest.dataset_id, dataset_registry_manifest.version).record_id if dataset_registry is not None else None,
+                "artifact_sha256": dataset_registry_manifest.sha256,
+            }
         provenance = {
             "dataset": {
                 "declared_path": protocol.dataset.path,
@@ -392,6 +421,8 @@ class ExperimentEngine:
         }
         if model_registry_root is not None:
             provenance["models"] = model_registry_refs
+        if dataset_registry_manifest is not None and dataset_registry_root is not None:
+            provenance["dataset"]["registry"] = manifest["dataset"]["registry"]
         evidence = {
             "status": "PASS",
             "gates": [
@@ -508,6 +539,26 @@ def verify_experiment_run(root: str | Path) -> VerificationResult:
     if provenance.get("dataset", {}).get("sha256") != dataset.get("sha256") or provenance.get("split", {}).get("membership_hash") != split.get("membership_hash"):
         raise ExperimentExecutionError("provenance does not match manifest identities")
 
+    dataset_registry_payload = dataset.get("registry")
+    if dataset_registry_payload is not None:
+        if not isinstance(dataset_registry_payload, Mapping):
+            raise ExperimentExecutionError("dataset registry metadata is invalid")
+        registry_root = dataset_registry_payload.get("registry_root")
+        dataset_id = dataset_registry_payload.get("dataset_id")
+        version = dataset_registry_payload.get("version")
+        if not all(isinstance(value, str) and value.strip() for value in (registry_root, dataset_id, version)):
+            raise ExperimentExecutionError("dataset registry metadata is incomplete")
+        registry = DatasetRegistry(root=registry_root)
+        dataset_verification = registry.verify(dataset_id, version)
+        if dataset_verification.status != "PASS":
+            raise ExperimentExecutionError(f"dataset registry verification failed: {dataset_verification.first_loss}")
+        registered = registry.get(dataset_id, version)
+        if registered.sha256 != dataset.get("sha256") or registered.scientific_dataset_id != dataset_registry_payload.get("scientific_dataset_id") or registered.artifact_path is None:
+            raise ExperimentExecutionError("dataset registry reference does not match run manifest")
+        if provenance.get("dataset", {}).get("registry") != dict(dataset_registry_payload):
+            raise ExperimentExecutionError("dataset registry provenance does not match manifest")
+        gates.append({"rule_id": "DECL-DATASET-REGISTRY", "status": "PASS", "reason": "registered dataset record and artifact bytes verify"})
+
     recorded_implementation = environment.get("engine", {}).get("sha256")
     if not isinstance(recorded_implementation, str) or len(recorded_implementation) != 64:
         raise ExperimentExecutionError("environment is missing a valid implementation identity")
@@ -611,19 +662,45 @@ def reproduce_experiment_run(
         raise ExperimentExecutionError("reproduction blocked: implementation identity differs from source run")
 
     dataset_record = provenance.get("dataset", {})
+    dataset_registry_record = dataset_record.get("registry")
     dataset_path_value = dataset_record.get("resolved_path")
     expected_dataset_hash = source_manifest.get("dataset", {}).get("sha256")
+    if isinstance(dataset_registry_record, Mapping):
+        registry_root = dataset_registry_record.get("registry_root")
+        dataset_id = dataset_registry_record.get("dataset_id")
+        version = dataset_registry_record.get("version")
+        if not all(isinstance(value, str) and value.strip() for value in (registry_root, dataset_id, version)):
+            raise ExperimentExecutionError("reproduction blocked: dataset registry reference is incomplete")
+        dataset_registry = DatasetRegistry(root=registry_root)
+        verification = dataset_registry.verify(dataset_id, version)
+        if verification.status != "PASS":
+            raise ExperimentExecutionError(f"reproduction blocked: dataset registry verification failed: {verification.first_loss}")
+        dataset_path = dataset_registry.resolve_artifact(dataset_id, version)
+        if dataset_registry.get(dataset_id, version).sha256 != expected_dataset_hash:
+            raise ExperimentExecutionError("reproduction blocked: registered dataset identity changed")
+    else:
+        dataset_registry = None
     if not isinstance(dataset_path_value, str) or not dataset_path_value.strip():
-        raise ExperimentExecutionError("reproduction blocked: source run has no resolved dataset dependency")
-    dataset_path = Path(dataset_path_value)
-    if not dataset_path.is_file():
-        raise ExperimentExecutionError(f"reproduction blocked: dataset dependency is unavailable: {dataset_path}")
-    if sha256_file(dataset_path) != expected_dataset_hash or dataset_record.get("sha256") != expected_dataset_hash:
-        raise ExperimentExecutionError("reproduction blocked: dataset content hash changed")
+        if dataset_registry is None:
+            raise ExperimentExecutionError("reproduction blocked: source run has no resolved dataset dependency")
+    else:
+        if dataset_registry is None:
+            dataset_path = Path(dataset_path_value)
+            if not dataset_path.is_file():
+                raise ExperimentExecutionError(f"reproduction blocked: dataset dependency is unavailable: {dataset_path}")
+            if sha256_file(dataset_path) != expected_dataset_hash or dataset_record.get("sha256") != expected_dataset_hash:
+                raise ExperimentExecutionError("reproduction blocked: dataset content hash changed")
 
     source_protocol = load_protocol(source / "protocol.yaml")
     protocol_payload = source_protocol.to_dict()
     protocol_payload["dataset"]["path"] = str(dataset_path)
+    if isinstance(dataset_registry_record, Mapping):
+        protocol_payload["dataset_registry"] = {
+            "enabled": True,
+            "root": str(Path(str(dataset_registry_record["registry_root"])).resolve()),
+            "dataset_id": str(dataset_registry_record["dataset_id"]),
+            "version": str(dataset_registry_record["version"]),
+        }
     if isinstance(protocol_payload.get("model_registry"), Mapping) and protocol_payload["model_registry"].get("enabled"):
         # Registry location is operational metadata. Reproduction gets its
         # own durable namespace and cannot overwrite the source records.
@@ -677,10 +754,17 @@ def compare_experiment_runs(left: str | Path, right: str | Path) -> dict[str, An
     }
     left_models = left_manifest.get("model_registry", {}).get("models", {}) if isinstance(left_manifest.get("model_registry"), Mapping) else {}
     right_models = right_manifest.get("model_registry", {}).get("models", {}) if isinstance(right_manifest.get("model_registry"), Mapping) else {}
+    left_dataset_registry = left_manifest.get("dataset", {}).get("registry") if isinstance(left_manifest.get("dataset"), Mapping) else None
+    right_dataset_registry = right_manifest.get("dataset", {}).get("registry") if isinstance(right_manifest.get("dataset"), Mapping) else None
     return {
         "compatible": True,
         "compatibility_hash": left_manifest["compatibility_hash"],
         "same_dataset_content": left_manifest["dataset"]["sha256"] == right_manifest["dataset"]["sha256"],
+        "same_dataset_scientific_identity": (
+            left_dataset_registry is not None
+            and right_dataset_registry is not None
+            and left_dataset_registry.get("scientific_dataset_id") == right_dataset_registry.get("scientific_dataset_id")
+        ) if left_dataset_registry is not None or right_dataset_registry is not None else None,
         "same_implementation": left_manifest.get("implementation_hash") == right_manifest.get("implementation_hash"),
         "same_scientific_result": left_manifest["scientific_result_hash"] == right_manifest["scientific_result_hash"],
         "model_registry": {

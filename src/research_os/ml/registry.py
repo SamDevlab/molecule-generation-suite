@@ -271,11 +271,18 @@ class ModelRegistry:
                     raise ModelRegistryError(f"DATASET_REFERENCE_MISSING: {manifest.dataset_id}") from exc
                 if dataset.sha256 != manifest.dataset_hash:
                     raise ModelRegistryError("DATASET_IDENTITY_MISMATCH: dataset hash differs from manifest")
+                verifier = getattr(self.dataset_registry, "verify", None)
+                if callable(verifier):
+                    dataset_verification = verifier(manifest.dataset_id, manifest.dataset_version)
+                    if dataset_verification.status != "PASS":
+                        raise ModelRegistryError(f"DATASET_PROVENANCE_INSUFFICIENT: {dataset_verification.first_loss}")
                 provenance_payload["dataset"] = {
                     "id": dataset.dataset_id,
                     "version": dataset.version,
                     "sha256": dataset.sha256,
                     "schema_id": dataset.schema_id,
+                    "scientific_dataset_id": getattr(dataset, "scientific_dataset_id", None),
+                    "record_id": getattr(self.dataset_registry.get_record(manifest.dataset_id, manifest.dataset_version), "record_id", None) if hasattr(self.dataset_registry, "get_record") else None,
                 }
 
         record = ModelRecord(
@@ -382,6 +389,12 @@ class ModelRegistry:
             if current.sha256 != record.manifest.dataset_hash:
                 gate("MODEL-DATASET-PROVENANCE", "FAIL", "dataset SHA-256 differs from registered model")
                 return ModelVerification(str(record.record_id), "FAIL", "DATASET_IDENTITY_MISMATCH", tuple(gates), record.scientific_model_id, artifact_hash)
+            verifier = getattr(self.dataset_registry, "verify", None)
+            if callable(verifier):
+                dataset_verification = verifier(record.manifest.dataset_id, record.manifest.dataset_version)
+                if dataset_verification.status != "PASS":
+                    gate("MODEL-DATASET-PROVENANCE", dataset_verification.status, f"dataset registry verification failed: {dataset_verification.first_loss}")
+                    return ModelVerification(str(record.record_id), dataset_verification.status, dataset_verification.first_loss or "DATASET_PROVENANCE_INSUFFICIENT", tuple(gates), record.scientific_model_id, artifact_hash)
         elif dataset and dataset.get("sha256") != record.manifest.dataset_hash:
             gate("MODEL-DATASET-PROVENANCE", "FAIL", "recorded dataset reference differs from manifest")
             return ModelVerification(str(record.record_id), "FAIL", "DATASET_IDENTITY_MISMATCH", tuple(gates), record.scientific_model_id, artifact_hash)

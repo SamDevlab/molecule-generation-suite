@@ -20,6 +20,7 @@ from research_os.experiments import (
 )
 from research_os.legacy_runtime import biolab_preflight
 from research_os.artifacts import ModelArtifactManifest
+from research_os.datasets import DatasetManifest, DatasetRegistry
 from research_os.ml.registry import ModelRegistry, ModelStage
 
 
@@ -96,6 +97,30 @@ def _is_model_registry_command(argv: Sequence[str]) -> bool:
     return len(argv) >= 2 and argv[0] == "registry" and argv[1] == "model"
 
 
+def _dataset_registry_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="research-os registry dataset", description="Durable dataset provenance registry")
+    commands = parser.add_subparsers(dest="dataset_command", required=True)
+    register = commands.add_parser("register", help="register a dataset manifest and managed/external artifact")
+    register.add_argument("manifest")
+    register.add_argument("--root", required=True)
+    register.add_argument("--artifact-mode", choices=("managed", "external"), default="managed")
+    verify = commands.add_parser("verify", help="verify dataset record, artifact and lineage")
+    verify.add_argument("dataset_id")
+    verify.add_argument("version", nargs="?", default=None)
+    verify.add_argument("--root", required=True)
+    inspect = commands.add_parser("inspect", help="inspect dataset provenance without loading records")
+    inspect.add_argument("dataset_id")
+    inspect.add_argument("version", nargs="?", default=None)
+    inspect.add_argument("--root", required=True)
+    listing = commands.add_parser("list", help="list dataset records metadata-only")
+    listing.add_argument("--root", required=True)
+    return parser
+
+
+def _is_dataset_registry_command(argv: Sequence[str]) -> bool:
+    return len(argv) >= 2 and argv[0] == "registry" and argv[1] == "dataset"
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     import sys
 
@@ -129,6 +154,36 @@ def main(argv: Sequence[str] | None = None) -> int:
                 return 0
             if args.model_command == "list":
                 _json([record.to_dict() for record in registry.list()])
+                return 0
+            return 2
+        except (KeyError, ValueError, OSError, RuntimeError, json.JSONDecodeError) as exc:
+            _json({"error": str(exc), "first_loss": getattr(exc, "first_loss", None)})
+            return 1
+
+    if _is_dataset_registry_command(values):
+        args = _dataset_registry_parser().parse_args(values[2:])
+        try:
+            registry = DatasetRegistry(root=args.root)
+            if args.dataset_command == "register":
+                manifest_path = Path(args.manifest)
+                raw = json.loads(manifest_path.read_text(encoding="utf-8"))
+                if isinstance(raw, dict) and raw.get("schema_version") == "research-os.dataset-record.v1":
+                    raise ValueError("register expects a manifest, not an already-enveloped dataset record")
+                manifest = DatasetManifest.from_mapping(raw)
+                if manifest.artifact_path and not Path(manifest.artifact_path).is_absolute():
+                    manifest = replace(manifest, artifact_path=str((manifest_path.parent / manifest.artifact_path).resolve()))
+                registered = registry.register(manifest, artifact_mode=args.artifact_mode)
+                _json({"manifest": registered.to_dict(), "record": registry.get_record(registered.dataset_id, registered.version).to_dict(), "verification": registry.verify(registered.dataset_id, registered.version).to_dict()})
+                return 0
+            if args.dataset_command == "verify":
+                result = registry.verify(args.dataset_id, args.version)
+                _json(result.to_dict())
+                return 0 if result.status == "PASS" else 1
+            if args.dataset_command == "inspect":
+                _json(registry.inspect(args.dataset_id, args.version))
+                return 0
+            if args.dataset_command == "list":
+                _json([record.to_dict() for record in registry.list_records()])
                 return 0
             return 2
         except (KeyError, ValueError, OSError, RuntimeError, json.JSONDecodeError) as exc:
