@@ -1,0 +1,27 @@
+{
+  "openbabel": {
+    "executable": "/usr/bin/obabel",
+    "name": "Open Babel",
+    "option_probe": [
+      "-h",
+      "--partialcharge",
+      "gasteiger",
+      "-xr"
+    ],
+    "required_sha256": null,
+    "required_version": "3.1.1",
+    "sha256": "57584125b4946eea824d3bfa75c3fce2c018efa680368e1bdfdbf9c121784876",
+    "version": "3.1.1",
+    "version_output": "Open Babel 3.1.1 -- Jan  4 2023 -- 09:58:24"
+  },
+  "vina": {
+    "executable": "/tmp/vina_1.2.7",
+    "name": "AutoDock Vina",
+    "option_probe": [],
+    "required_sha256": "f31f774f723bba7bbe6e9d1c47577020eea9a8da16424284c043d22593570644",
+    "required_version": "1.2.7",
+    "sha256": "f31f774f723bba7bbe6e9d1c47577020eea9a8da16424284c043d22593570644",
+    "version": "1.2.7",
+    "version_output": "AutoDock Vina v1.2.7"
+  }
+}

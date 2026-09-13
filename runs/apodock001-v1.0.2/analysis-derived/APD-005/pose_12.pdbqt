@@ -1,0 +1,45 @@
+MODEL 12
+REMARK VINA RESULT:    -4.572     11.700     12.841
+REMARK INTER + INTRA:          -5.824
+REMARK INTER:                  -5.622
+REMARK INTRA:                  -0.202
+REMARK UNBOUND:                -0.183
+REMARK  Name = PHE
+REMARK  5 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: N_1  and  CA_2
+REMARK    2  A    between atoms: CA_2  and  C_3
+REMARK    3  A    between atoms: CA_2  and  CB_5
+REMARK    4  A    between atoms: C_3  and  OXT_12
+REMARK    5  A    between atoms: CB_5  and  CG_6
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  CA  PHE A   1      28.570  -4.949  12.786  0.00  0.00    +0.165 C 
+ENDROOT
+BRANCH   1   2
+ATOM      2  N   PHE A   1      29.739  -4.337  13.423  0.00  0.00    -0.318 NA
+ATOM      3  H1  PHE A   1      30.604  -4.856  13.142  0.00  0.00    +0.119 HD
+ATOM      4  H2  PHE A   1      29.642  -4.427  14.461  0.00  0.00    +0.119 HD
+ENDBRANCH   1   2
+BRANCH   1   5
+ATOM      5  C   PHE A   1      27.373  -4.041  12.883  0.00  0.00    +0.322 C 
+ATOM      6  O   PHE A   1      26.209  -4.523  12.948  0.00  0.00    -0.249 OA
+BRANCH   5   7
+ATOM      7  OXT PHE A   1      27.551  -2.661  12.898  0.00  0.00    -0.480 OA
+ATOM      8  HXT PHE A   1      27.158  -2.078  12.170  0.00  0.00    +0.295 HD
+ENDBRANCH   5   7
+ENDBRANCH   1   5
+BRANCH   1   9
+ATOM      9  CB  PHE A   1      28.261  -6.317  13.419  0.00  0.00    +0.065 C 
+BRANCH   9  10
+ATOM     10  CG  PHE A   1      28.658  -7.447  12.504  0.00  0.00    -0.045 A 
+ATOM     11  CD1 PHE A   1      28.292  -7.421  11.147  0.00  0.00    +0.004 A 
+ATOM     12  CD2 PHE A   1      29.437  -8.513  12.986  0.00  0.00    +0.004 A 
+ATOM     13  CE1 PHE A   1      28.683  -8.456  10.291  0.00  0.00    +0.000 A 
+ATOM     14  CE2 PHE A   1      29.826  -9.546  12.126  0.00  0.00    +0.000 A 
+ATOM     15  CZ  PHE A   1      29.449  -9.517  10.781  0.00  0.00    +0.000 A 
+ENDBRANCH   9  10
+ENDBRANCH   1   9
+TORSDOF 5
+ENDMDL

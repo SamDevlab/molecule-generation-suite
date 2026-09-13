@@ -1,0 +1,14 @@
+{
+  "analysis_engine_id": "research-os.apodock001.analysis.v1+25ebfa66ecace1dd",
+  "derived_artifacts_verified": 360,
+  "derived_pdbqt_bytes_identical": true,
+  "derived_sdf_bytes_identical": false,
+  "first_analysis_manifest_sha256": "94be3fef8191c8d386ff8ed4c8aeafe33b33f2a2d7fe9f0dcb93aaae7a4a2fa7",
+  "note": "Open Babel-derived SDF serialization was byte-variable across analysis reruns; same-frame metrics, scores, mappings, statuses, aggregation, and raw output hashes were identical. This is an operational limitation, not a scientific parameter change.",
+  "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+  "raw_output_hashes_unchanged": true,
+  "run_id": "research-os.apodock001.run.v1+1797487357db1db1",
+  "schema_version": "research-os.apodock001.analysis-determinism-check.v1",
+  "scientific_metrics_identical": true,
+  "second_analysis_manifest_sha256": "1fa33d7e84f0159c8b18d3f785cdaa0ae077e65f65b1275d79606b1c3985d10a"
+}
