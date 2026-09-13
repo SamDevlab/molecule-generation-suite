@@ -106,6 +106,17 @@ class ResearchProgram:
     def valid(self) -> bool:
         return self.digest == sha256_json(self._hash_payload())
 
+    @property
+    def snapshot_integrity(self) -> str | None:
+        """Digest of the complete mutable program snapshot.
+
+        This is deliberately not a scientific protocol identity.  It covers
+        state such as status, progress cursors, timestamps and stop reasons so
+        persisted snapshots can be checked for accidental or unauthorized
+        mutation.
+        """
+        return self.digest
+
     def to_dict(self) -> dict[str, Any]:
         data = self._hash_payload()
         data["digest"] = self.digest

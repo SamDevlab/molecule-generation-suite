@@ -23,6 +23,7 @@ from research_os.campaigns.declarative import (
     inspect_campaign_execution,
     verify_campaign_execution,
 )
+from research_os.programs.lineage import DeclarativeProgramRunner, inspect_program_execution, verify_program_execution
 from research_os.legacy_runtime import biolab_preflight
 from research_os.artifacts import ModelArtifactManifest
 from research_os.datasets import DatasetManifest, DatasetRegistry
@@ -147,6 +148,27 @@ def _is_campaign_command(argv: Sequence[str]) -> bool:
     return len(argv) >= 1 and argv[0] == "campaign"
 
 
+def _program_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="research-os program", description="Static durable Research Program lineage utilities")
+    commands = parser.add_subparsers(dest="program_command", required=True)
+    plan = commands.add_parser("plan", help="resolve declared campaigns without executing them")
+    plan.add_argument("protocol")
+    validate = commands.add_parser("validate", help="validate a program protocol without executing campaigns")
+    validate.add_argument("protocol")
+    run = commands.add_parser("run", help="run declared campaigns through the Campaign runner")
+    run.add_argument("protocol")
+    run.add_argument("--output", required=True)
+    verify = commands.add_parser("verify", help="verify a durable program execution")
+    verify.add_argument("root")
+    inspect = commands.add_parser("inspect", help="inspect program lineage and statuses")
+    inspect.add_argument("root")
+    return parser
+
+
+def _is_program_command(argv: Sequence[str]) -> bool:
+    return len(argv) >= 1 and argv[0] == "program"
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     import sys
 
@@ -232,6 +254,28 @@ def main(argv: Sequence[str] | None = None) -> int:
                 return 0 if result.status == "PASS" else 1
             if args.campaign_command == "inspect":
                 _json(inspect_campaign_execution(args.root))
+                return 0
+            return 2
+        except (KeyError, ValueError, OSError, RuntimeError) as exc:
+            _json({"error": str(exc), "first_loss": getattr(exc, "first_loss", None)})
+            return 1
+
+    if _is_program_command(values):
+        args = _program_parser().parse_args(values[1:])
+        try:
+            runner = DeclarativeProgramRunner()
+            if args.program_command in {"plan", "validate"}:
+                _json(runner.plan(args.protocol).to_dict())
+                return 0
+            if args.program_command == "run":
+                _json(runner.run(args.protocol, args.output))
+                return 0
+            if args.program_command == "verify":
+                result = verify_program_execution(args.root)
+                _json(result.to_dict())
+                return 0 if result.status == "PASS" else 1
+            if args.program_command == "inspect":
+                _json(inspect_program_execution(args.root))
                 return 0
             return 2
         except (KeyError, ValueError, OSError, RuntimeError) as exc:
