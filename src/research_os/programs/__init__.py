@@ -9,6 +9,8 @@ from research_os.programs.models import (
     UtilityRecommendation,
 )
 from research_os.programs.runner import ResearchProgramController
+from research_os.programs.store import ResearchProgramStore
+from research_os.programs.lineage import DeclarativeProgramRunner, ProgramCampaignRef, ProgramProtocolError, ProgramVerification, ResearchProgramBundle, ResearchProgramExecutionPlan, ResearchProgramProtocol, inspect_program_execution, load_program_protocol, verify_program_execution
 from research_os.impact import ConfidenceFailureCase, ConditionDependentDecision, FalseConservatismAudit, ImpactStatus, ProtocolSensitivityAssessment, ResearchImpactReview, ResearchImpactReviewStore, ResearchOutcomeImpact, ResearchOutcomeImpactStore, ScientificChallenge, ScientificChallengeStatus, ScientificChallengeStore
 
 __all__ = [
@@ -20,6 +22,17 @@ __all__ = [
     "ProgramExecutionStatus",
     "ResearchProgram",
     "ResearchProgramController",
+    "ResearchProgramStore",
+    "DeclarativeProgramRunner",
+    "ProgramCampaignRef",
+    "ProgramProtocolError",
+    "ProgramVerification",
+    "ResearchProgramBundle",
+    "ResearchProgramExecutionPlan",
+    "ResearchProgramProtocol",
+    "load_program_protocol",
+    "verify_program_execution",
+    "inspect_program_execution",
     "ProtocolSensitivityAssessment",
     "ResearchImpactReview",
     "ResearchImpactReviewStore",
