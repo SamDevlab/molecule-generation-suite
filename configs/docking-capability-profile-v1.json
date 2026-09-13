@@ -1,0 +1,181 @@
+{
+  "schema_version": "research-os.docking.capability-profile.v1",
+  "profile_version": "1.0",
+  "profile_id": "research-os.docking.capability-profile.v1+b795a9dbd963044d",
+  "profile_hash": "b795a9dbd963044dd11cbdc677dcd1799c031f668ee2fd1c814a032de36d94f5",
+  "evidence_level": "E2_COMPUTATIONAL",
+  "profile_scope": "bounded computational workflow behavior under frozen docking protocols; not affinity, potency, efficacy, or experimental truth",
+  "evidence_sources": [
+    {
+      "source_id": "REDOCK-003",
+      "benchmark_id": "REDOCK-003",
+      "protocol_id": "research-os.redocking.astex20.v1.0",
+      "protocol_hash": null,
+      "protocol_hash_status": "NOT_DECLARED_IN_SOURCE_ARTIFACT",
+      "run_or_result_identity": "scientific_result_hash:e4e4693f890b86327fac16b547966fe64862045d1562c4340dcc3d7d4a06b762",
+      "scientific_result_hash": "e4e4693f890b86327fac16b547966fe64862045d1562c4340dcc3d7d4a06b762",
+      "sample_size": 15,
+      "endpoint": "same-frame symmetry-aware pose-1 heavy-atom RMSD <= 2.0 angstrom",
+      "primary_performance": {
+        "success_count": 8,
+        "denominator": 15,
+        "mean_angstrom": 3.3491571633530675,
+        "median_angstrom": 1.9023353234713458
+      },
+      "limitations": [
+        "cognate receptor benchmark only",
+        "known-site rigid-receptor pose localization",
+        "not an affinity or biological validation",
+        "the historical REDOCK v1.1 GetBestRMS localization result is invalidated and excluded"
+      ]
+    },
+    {
+      "source_id": "CROSSDOCK-001",
+      "benchmark_id": "CROSSDOCK-001",
+      "protocol_id": "research-os.crossdocking.rigid.v1.0",
+      "protocol_hash": null,
+      "protocol_hash_status": "NOT_DECLARED_IN_SOURCE_ARTIFACT",
+      "run_or_result_identity": "scientific_result_hash:d1d5b980816837301c1fe70d2c0a397ba4a0e662bced7aa17bb118c61f2bff16",
+      "scientific_result_hash": "d1d5b980816837301c1fe70d2c0a397ba4a0e662bced7aa17bb118c61f2bff16",
+      "sample_size": 10,
+      "endpoint": "same-frame symmetry-aware heavy-atom pose localization in non-cognate holo receptor",
+      "primary_performance": {
+        "rank_1_success_count": 3,
+        "rank_1_denominator": 10,
+        "any_returned_pose_success_count": 5,
+        "any_returned_pose_denominator": 10,
+        "threshold_angstrom": 2.0
+      },
+      "limitations": [
+        "non-cognate holo receptor conformation",
+        "known pocket and rigid receptor",
+        "sampling and ranking failures are not separated by the primary endpoint",
+        "not blind docking, apo docking, induced fit, affinity, biological, or clinical validation"
+      ]
+    },
+    {
+      "source_id": "APODOCK-001-v1.0.2",
+      "benchmark_id": "APODOCK-001",
+      "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+      "protocol_hash": "aa40517362e14795a9ea4747b632fab81b2fc1f5bb49e4c880d9ad38699de03c",
+      "protocol_hash_status": "DECLARED",
+      "run_or_result_identity": "research-os.apodock001.run.v1+1797487357db1db1",
+      "scientific_result_hash": "c062d259edf170235654967c0057aaffe0ec19066d25af520ea440e42064666b",
+      "sample_size": 10,
+      "endpoint": "same-frame symmetry-aware pose-1 heavy-atom RMSD <= 2.0 angstrom",
+      "primary_performance": {
+        "success_count": 0,
+        "determinate_denominator": 7,
+        "mean_angstrom": 5.174,
+        "median_angstrom": 5.606,
+        "execution_failures": 1,
+        "analysis_indeterminate": 2
+      },
+      "limitations": [
+        "rigid apo receptor and known-site prospective docking",
+        "APD-006 execution failure",
+        "APD-007 pose conversion indeterminate",
+        "APD-010 reference coordinates incomplete",
+        "no demonstrated <=2.0 angstrom pose recovery under the evaluated protocol"
+      ]
+    },
+    {
+      "source_id": "APODOCK-001-v1.1",
+      "benchmark_id": "APODOCK-001",
+      "protocol_id": "research-os.apodock001.protocol.v1.1+b1a3c7b16db63ea4",
+      "protocol_hash": "b1a3c7b16db63ea426202a82db2551cc07301e34ea5584bfab75706681481a9e",
+      "protocol_hash_status": "DECLARED",
+      "run_or_result_identity": "research-os.apodock001.run.v2+852d9aa525862df6",
+      "scientific_result_hash": "ee31206f4d97e8fc5085374dfae5d85b23844bf2d969b9fe4b1c972d52cc7715",
+      "sample_size": 10,
+      "endpoint": "same-frame symmetry-aware pose-1 heavy-atom RMSD <= 2.0 angstrom",
+      "primary_performance": {
+        "success_count": 0,
+        "determinate_denominator": 5,
+        "execution_failures": 0,
+        "analysis_indeterminate": 5
+      },
+      "limitations": [
+        "exhaustiveness 32 diagnostic continuation, not a new validated capability",
+        "four POSE_CONVERSION_FAILED cases and one REFERENCE_COORDINATES_INCOMPLETE case",
+        "increased exhaustiveness did not produce consistent improvement",
+        "no scientific justification for APODOCK v1.2"
+      ]
+    }
+  ],
+  "contexts": [
+    {
+      "context_id": "COGNATE_REDOCKING",
+      "description": "Cognate receptor, known site, rigid receptor, and the validated same-frame pose-localization workflow within the frozen benchmark envelope.",
+      "classification": "VALIDATED_IN_DOMAIN",
+      "execution_allowed": true,
+      "evidence_source_ids": ["REDOCK-003"],
+      "claim_boundary": "E2 computational pose-localization result within the bounded cognate redocking benchmark envelope; not universal validation.",
+      "limitations": [
+        "validated only within the declared cognate benchmark envelope",
+        "does not establish affinity, potency, efficacy, or experimental pose truth"
+      ]
+    },
+    {
+      "context_id": "NON_COGNATE_HOLO_CROSSDOCKING",
+      "description": "Non-cognate holo receptor conformation of the same target family, known pocket, rigid receptor, and same-frame pose localization.",
+      "classification": "PARTIALLY_VALIDATED",
+      "execution_allowed": true,
+      "evidence_source_ids": ["CROSSDOCK-001"],
+      "claim_boundary": "E2 computational cross-docking result with partial bounded validation and reduced robustness relative to cognate redocking.",
+      "limitations": [
+        "rank-1 and any-pose observations are distinct endpoints",
+        "not validated for apo, blind, induced-fit, affinity, biological, or clinical claims"
+      ]
+    },
+    {
+      "context_id": "RIGID_APO_DOCKING",
+      "description": "Prospective ligand docking into a rigid apo receptor at a known site under the APODOCK protocols.",
+      "classification": "INSUFFICIENTLY_VALIDATED",
+      "execution_allowed": true,
+      "evidence_source_ids": ["APODOCK-001-v1.0.2", "APODOCK-001-v1.1"],
+      "claim_boundary": "Exploratory E2 computational result only; the evaluated evidence does not support a reliable pose-recovery claim for rigid apo docking.",
+      "limitations": [
+        "no demonstrated <=2.0 angstrom pose recovery in the evaluated determinate cases",
+        "execution and analysis indeterminates are preserved",
+        "APODOCK v1.2 is not scientifically justified by current evidence"
+      ]
+    },
+    {
+      "context_id": "UNKNOWN_DOCKING_CONTEXT",
+      "description": "Missing, unsupported, or unproven docking context.",
+      "classification": "OUT_OF_DOMAIN",
+      "execution_allowed": true,
+      "evidence_source_ids": [],
+      "claim_boundary": "No validated docking capability claim may be elevated from an unknown context; retain an explicit out-of-domain limitation.",
+      "limitations": ["context must be declared and supported before a bounded capability claim is made"]
+    }
+  ],
+  "known_failure_modes": [
+    {"id": "POSE_CONVERSION_FAILED", "category": "analysis_failure", "description": "A returned pose cannot be converted into the declared analysis representation."},
+    {"id": "REFERENCE_COORDINATES_INCOMPLETE", "category": "analysis_failure", "description": "The frozen reference lacks a complete permitted heavy-atom correspondence."},
+    {"id": "ADAPTER_SUBPROCESS_TIMEOUT", "category": "engine_failure", "description": "A declared preparation or docking subprocess exceeds its immutable timeout."},
+    {"id": "EXECUTION_FAILED", "category": "engine_failure", "description": "The docking engine does not produce a valid completed case result."},
+    {"id": "POOR_RANK_1_LOCALIZATION", "category": "scientific_performance_failure", "description": "Pose 1 exceeds the frozen same-frame localization threshold."},
+    {"id": "NEAR_NATIVE_POSE_MISRANKED", "category": "scientific_performance_failure", "description": "A near-native pose is present in the returned set but is not ranked first."},
+    {"id": "NO_NEAR_NATIVE_POSE_RETURNED", "category": "scientific_performance_failure", "description": "No returned pose reaches the frozen localization threshold."},
+    {"id": "RECEPTOR_CONFORMATION_MISMATCH", "category": "scientific_performance_failure", "description": "The receptor conformation differs from the context supported by the evidence."},
+    {"id": "REPRESENTATION_RECONSTRUCTION_INSTABILITY", "category": "analysis_failure", "description": "A representation adapter produces unstable or non-reproducible derived artifacts."},
+    {"id": "DERIVED_SDF_BYTE_NONDETERMINISM", "category": "analysis_failure", "description": "Derived SDF bytes differ despite identical scientific metrics; preserve raw outputs and record the limitation."}
+  ],
+  "interpretation_boundaries": [
+    {"id": "NO_AFFINITY_INFERENCE", "prohibition": "docking score is not measured binding affinity, potency, or free energy"},
+    {"id": "NO_EFFICACY_INFERENCE", "prohibition": "docking success is not efficacy, safety, therapeutic activity, or clinical evidence"},
+    {"id": "NO_EXPERIMENTAL_TRUTH", "prohibition": "a predicted docking pose is not experimental structural truth"},
+    {"id": "NO_GENERALIZATION_FROM_ONE_BENCHMARK", "prohibition": "one benchmark cannot establish general validation outside its frozen envelope"},
+    {"id": "E2_REMAINS_E2", "prohibition": "computational docking evidence remains E2_COMPUTATIONAL regardless of benchmark outcome"}
+  ],
+  "claim_restrictions": {
+    "forbidden_inference_classes": ["AFFINITY", "POTENCY", "EFFICACY", "SAFETY", "CLINICAL", "EXPERIMENTAL_TRUTH", "UNIVERSAL_VALIDATION"],
+    "required_for_bounded_claim": ["declared_docking_context", "capability_profile_id", "evidence_level", "validation_source_ids", "known_limitations"]
+  },
+  "operational_metadata": {
+    "generated_at": "not_identity_bearing",
+    "local_path": "not_identity_bearing"
+  }
+}
