@@ -44,6 +44,16 @@ def test_cli_inspects_and_compares_identical_runs(tmp_path: Path, capsys) -> Non
     assert compared["same_scientific_result"] is True
 
 
+def test_cli_reproduces_a_verified_run(tmp_path: Path, capsys) -> None:
+    assert main(["run", "experiment", REFERENCE_PROTOCOL, "--output", str(tmp_path / "source")]) == 0
+    source = _last_json(capsys)
+    assert main(["run", "experiment-reproduce", source["root"], "--output", str(tmp_path / "reproduced")]) == 0
+    reproduction = _last_json(capsys)
+    assert reproduction["status"] == "PASS"
+    assert reproduction["same_scientific_result"] is True
+    assert reproduction["scientific_result_hash"] == source["scientific_result_hash"]
+
+
 def test_cli_delegates_existing_commands_to_preserved_cli(capsys) -> None:
     assert main(["labs"]) == 0
     payload = _last_json(capsys)

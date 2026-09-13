@@ -80,6 +80,7 @@ research-os run experiment protocol.yaml --output runs
 research-os run experiment-verify runs/REFERENCE-REGRESSION-001
 research-os run experiment-inspect runs/REFERENCE-REGRESSION-001
 research-os run experiment-compare runs/A runs/B
+research-os run experiment-reproduce runs/REFERENCE-REGRESSION-001 --output reproduced-runs
 ```
 
 `experiment-compare` must fail closed when the two run packages are not methodologically compatible. At minimum, protocol version, task, dataset schema identity, feature names, target name, split strategy, model identifiers/configuration, and metric set participate in the compatibility identity. Dataset content hashes may differ so the command can compare reruns on separately materialized but schema-compatible data; the difference must be reported, never hidden.
@@ -121,6 +122,15 @@ The package records:
 - The same protocol + dataset + seed + implementation must reproduce the same split membership and scientific-result hash.
 - Any modification to a hashed run artifact must make verification fail.
 - Time stamps may exist for auditability but must not participate in scientific identity.
+
+`experiment-reproduce` is the explicit reproduction contract for a verified
+run package. It first verifies the complete source package, checks that the
+recorded implementation identity is the current implementation, resolves the
+dataset path recorded in provenance, and verifies the dataset bytes before
+execution. The reproduction is blocked if the dependency is missing, its hash
+changed, the implementation drifted, or the resulting scientific identity
+does not match. The reproduced package is written to a separate output root;
+the source package is never overwritten.
 
 ## Safety / fail-closed rules
 

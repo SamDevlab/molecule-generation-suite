@@ -13,6 +13,7 @@ from research_os.experiments import (
     compare_experiment_runs,
     inspect_experiment_run,
     load_protocol,
+    reproduce_experiment_run,
     verify_experiment_run,
 )
 from research_os.experiments.engine import REQUIRED_ARTIFACTS
@@ -212,3 +213,30 @@ def test_inspect_verifies_before_returning_summary(tmp_path: Path) -> None:
     assert summary["experiment_id"] == "REFERENCE-REGRESSION-001"
     assert summary["scientific_result_hash"] == result.scientific_result_hash
     assert len(summary["implementation_hash"]) == 64
+
+
+def test_reproduction_contract_reexecutes_same_scientific_identity(tmp_path: Path) -> None:
+    source = ExperimentEngine().run(REFERENCE_PROTOCOL, tmp_path / "source")
+    reproduced = reproduce_experiment_run(source.root, tmp_path / "reproduced")
+    assert reproduced.status == "PASS"
+    assert reproduced.source_scientific_result_hash == source.scientific_result_hash
+    assert reproduced.scientific_result_hash == source.scientific_result_hash
+    assert verify_experiment_run(reproduced.reproduced_root).status == "PASS"
+
+
+def test_reproduction_blocks_changed_dataset_dependency(tmp_path: Path) -> None:
+    dataset = tmp_path / "data.csv"
+    _write_dataset(dataset)
+    protocol = tmp_path / "protocol.yaml"
+    _write_protocol(protocol, _protocol_payload(tmp_path, dataset_name="data.csv"))
+    source = ExperimentEngine().run(protocol, tmp_path / "source")
+    dataset.write_text(dataset.read_text(encoding="utf-8") + "20,1,2\n", encoding="utf-8")
+    with pytest.raises(ExperimentExecutionError, match="dataset content hash changed"):
+        reproduce_experiment_run(source.root, tmp_path / "reproduced")
+
+
+def test_reproduction_blocks_implementation_drift(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    source = ExperimentEngine().run(REFERENCE_PROTOCOL, tmp_path / "source")
+    monkeypatch.setattr("research_os.experiments.engine._implementation_identity", lambda: {"sha256": "0" * 64})
+    with pytest.raises(ExperimentExecutionError, match="implementation identity differs"):
+        reproduce_experiment_run(source.root, tmp_path / "reproduced")

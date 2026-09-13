@@ -13,6 +13,7 @@ from research_os.experiments import (
     ExperimentEngine,
     compare_experiment_runs,
     inspect_experiment_run,
+    reproduce_experiment_run,
     verify_experiment_run,
 )
 from research_os.legacy_runtime import biolab_preflight
@@ -39,6 +40,10 @@ def _experiment_parser() -> argparse.ArgumentParser:
     compare = commands.add_parser("experiment-compare", help="compare compatible declarative experiment packages")
     compare.add_argument("left")
     compare.add_argument("right")
+
+    reproduce = commands.add_parser("experiment-reproduce", help="reproduce a verified declarative experiment package")
+    reproduce.add_argument("run")
+    reproduce.add_argument("--output", default="reproduced-runs")
     return parser
 
 
@@ -57,6 +62,7 @@ def _is_experiment_command(argv: Sequence[str]) -> bool:
         "experiment-verify",
         "experiment-inspect",
         "experiment-compare",
+        "experiment-reproduce",
     }
 
 
@@ -91,6 +97,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 0
         if args.run_command == "experiment-compare":
             _json(compare_experiment_runs(args.left, args.right))
+            return 0
+        if args.run_command == "experiment-reproduce":
+            _json(reproduce_experiment_run(args.run, args.output).to_dict())
             return 0
         return 2
     except (KeyError, ValueError, OSError, RuntimeError) as exc:

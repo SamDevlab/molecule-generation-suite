@@ -7,6 +7,7 @@ import math
 from pathlib import Path
 import platform
 import sys
+import tempfile
 from typing import Any, Mapping
 
 import yaml
@@ -64,6 +65,29 @@ class VerificationResult:
             "scientific_result_hash": self.scientific_result_hash,
             "execution_hash": self.execution_hash,
             "gates": [dict(gate) for gate in self.gates],
+        }
+
+
+@dataclass(frozen=True)
+class ExperimentReproductionResult:
+    source_root: str
+    reproduced_root: str
+    source_scientific_result_hash: str
+    scientific_result_hash: str
+    compatibility_hash: str
+    implementation_hash: str
+    status: str = "PASS"
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "status": self.status,
+            "source_root": self.source_root,
+            "reproduced_root": self.reproduced_root,
+            "source_scientific_result_hash": self.source_scientific_result_hash,
+            "scientific_result_hash": self.scientific_result_hash,
+            "same_scientific_result": self.source_scientific_result_hash == self.scientific_result_hash,
+            "compatibility_hash": self.compatibility_hash,
+            "implementation_hash": self.implementation_hash,
         }
 
 
@@ -444,6 +468,73 @@ def inspect_experiment_run(root: str | Path) -> dict[str, Any]:
         "execution_hash": manifest["execution_hash"],
         "implementation_hash": manifest["implementation_hash"],
     }
+
+
+def reproduce_experiment_run(
+    source_root: str | Path,
+    output_root: str | Path = "reproduced-runs",
+    *,
+    registry: ExperimentRegistry | None = None,
+) -> ExperimentReproductionResult:
+    """Re-execute a verified run with its exact scientific identities.
+
+    The run package does not embed a second copy of the dataset. Reproduction
+    therefore resolves the recorded provenance path and verifies its bytes
+    before execution. Any missing dependency, implementation drift, or
+    scientific identity mismatch fails closed.
+    """
+    source = Path(source_root).resolve()
+    verify_experiment_run(source)
+    source_manifest = _read_json(source / "manifest.json")
+    provenance = _read_json(source / "provenance.json")
+    source_environment = _read_json(source / "environment.json")
+    source_implementation = source_environment.get("engine", {}).get("sha256")
+    try:
+        current_implementation = _implementation_identity()["sha256"]
+    except OSError as exc:
+        raise ExperimentExecutionError("reproduction blocked: implementation artifact unavailable") from exc
+    if source_implementation != current_implementation:
+        raise ExperimentExecutionError("reproduction blocked: implementation identity differs from source run")
+
+    dataset_record = provenance.get("dataset", {})
+    dataset_path_value = dataset_record.get("resolved_path")
+    expected_dataset_hash = source_manifest.get("dataset", {}).get("sha256")
+    if not isinstance(dataset_path_value, str) or not dataset_path_value.strip():
+        raise ExperimentExecutionError("reproduction blocked: source run has no resolved dataset dependency")
+    dataset_path = Path(dataset_path_value)
+    if not dataset_path.is_file():
+        raise ExperimentExecutionError(f"reproduction blocked: dataset dependency is unavailable: {dataset_path}")
+    if sha256_file(dataset_path) != expected_dataset_hash or dataset_record.get("sha256") != expected_dataset_hash:
+        raise ExperimentExecutionError("reproduction blocked: dataset content hash changed")
+
+    source_protocol = load_protocol(source / "protocol.yaml")
+    protocol_payload = source_protocol.to_dict()
+    protocol_payload["dataset"]["path"] = str(dataset_path)
+    engine = ExperimentEngine(registry=registry)
+    with tempfile.TemporaryDirectory(prefix="research-os-experiment-reproduce-") as temporary:
+        protocol_path = Path(temporary) / "protocol.yaml"
+        protocol_path.write_text(yaml.safe_dump(protocol_payload, sort_keys=True, allow_unicode=True), encoding="utf-8")
+        reproduced = engine.run(protocol_path, output_root)
+
+    verify_experiment_run(reproduced.root)
+    reproduced_manifest = _read_json(Path(reproduced.root) / "manifest.json")
+    for field in ("scientific_protocol_hash", "compatibility_hash", "implementation_hash"):
+        if source_manifest.get(field) != reproduced_manifest.get(field):
+            raise ExperimentExecutionError(f"reproduction identity mismatch: {field}")
+    if source_manifest.get("dataset", {}).get("sha256") != reproduced_manifest.get("dataset", {}).get("sha256"):
+        raise ExperimentExecutionError("reproduction identity mismatch: dataset hash")
+    if source_manifest.get("split", {}).get("membership_hash") != reproduced_manifest.get("split", {}).get("membership_hash"):
+        raise ExperimentExecutionError("reproduction identity mismatch: split membership")
+    if source_manifest.get("scientific_result_hash") != reproduced_manifest.get("scientific_result_hash"):
+        raise ExperimentExecutionError("reproduction scientific identity mismatch")
+    return ExperimentReproductionResult(
+        source_root=str(source),
+        reproduced_root=str(Path(reproduced.root).resolve()),
+        source_scientific_result_hash=str(source_manifest["scientific_result_hash"]),
+        scientific_result_hash=str(reproduced_manifest["scientific_result_hash"]),
+        compatibility_hash=str(reproduced_manifest["compatibility_hash"]),
+        implementation_hash=str(reproduced_manifest["implementation_hash"]),
+    )
 
 
 def compare_experiment_runs(left: str | Path, right: str | Path) -> dict[str, Any]:
