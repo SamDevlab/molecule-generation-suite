@@ -1,0 +1,116 @@
+{
+  "adapted_case_ids": [
+    "APD-010"
+  ],
+  "adapter_id": "research-os.apd010.bem-mav",
+  "adapter_version": "1.0.0",
+  "apd010": {
+    "adapter_id": "research-os.apd010.bem-mav",
+    "adapter_version": "1.0.0",
+    "case_id": "APD-010",
+    "chemical_input_identity": "9941f9b3975839f101b2a440a1d579d97f081b7bf473c7cde6bed696c64b5956",
+    "chemical_output_identity": "1586aa91b6a57fdc938ad3ffa8679996e78d73a834624a3af557c5593e2eb052",
+    "chemistry_ready_for_vina": true,
+    "diagnostics": {
+      "aromatic_atoms": 0,
+      "coordinate_mapping": {
+        "adapter_removed_source_keys": [
+          [
+            "BEM",
+            "O1"
+          ]
+        ],
+        "expected_heavy_atoms": 25,
+        "missing_coordinate_keys": [
+          [
+            "BEM",
+            "O4"
+          ]
+        ],
+        "observed_heavy_atoms": 24,
+        "starting_conformer_generated": false,
+        "unexpected_coordinate_keys": []
+      },
+      "dummy_atoms": 0,
+      "formal_charge": 0,
+      "formula": "C12H18O13",
+      "fragment_count": 1,
+      "heavy_atoms": 25,
+      "input_components": [
+        "BEM",
+        "MAV"
+      ],
+      "intercomponent_bond": {
+        "atom_a": [
+          "BEM",
+          "C1"
+        ],
+        "atom_b": [
+          "MAV",
+          "O4"
+        ],
+        "order": "SING"
+      },
+      "source_hashes": {
+        "1Y3N.pdb": "d524b4932316fdaf7fbea162aae79285639010f51bfb4a09c169127aa0248c8f",
+        "BEM.cif": "3a27261ff1b78bf232392277cceb3c0b9c8e7c8ff0b5eafccaa70068c10c396f",
+        "BEM.sdf": "0c2d5387285bb068a89b226bbc5bc7ce086e47d1474a99a54439700bddaebda6",
+        "MAV.cif": "7c848be1fef6660ce7fe67c93141669cf073ea71fb5b740b92ed3e257e4c410e",
+        "MAV.sdf": "84f154b100861fb9131e5cb7fb0a9b25be289529b0e852bb741e653bcd3340b9"
+      },
+      "unexpected_elements": []
+    },
+    "structural_heavy_atoms": 24,
+    "structural_identity": "468c8052ff213fbb3a11f6198b61170e41d4b92353a44461a90326b157bdf306",
+    "transformations": [
+      "load BEM and MAV from RCSB CCD ideal SDF plus matching CCD CIF",
+      "normalize validated explicit CCD hydrogens to implicit valence; no protonation heuristic",
+      "remove CCD-declared BEM O1 leaving atom",
+      "add one single covalent bond BEM C1--MAV O4",
+      "controlled RDKit sanitization with fail-closed validation",
+      "discard conformers; retain chemical graph only"
+    ]
+  },
+  "baseline_direct_chemistry_ready_case_ids": [
+    "APD-001",
+    "APD-002",
+    "APD-003",
+    "APD-004",
+    "APD-005",
+    "APD-006",
+    "APD-007",
+    "APD-008",
+    "APD-009"
+  ],
+  "case_id": "APD-010",
+  "chemical_input_identity": "9941f9b3975839f101b2a440a1d579d97f081b7bf473c7cde6bed696c64b5956",
+  "chemical_output_identity": "1586aa91b6a57fdc938ad3ffa8679996e78d73a834624a3af557c5593e2eb052",
+  "chemistry_ready_for_vina": true,
+  "chemistry_ready_for_vina_count": 10,
+  "docking_executed": false,
+  "gate_id": "research-os.apodock001.chemistry-gate",
+  "gate_version": "1.0.0",
+  "molecule_id": "APD-010",
+  "pdb_id": "1Y3N",
+  "pdb_sha256": "d524b4932316fdaf7fbea162aae79285639010f51bfb4a09c169127aa0248c8f",
+  "report_identity": "db217fcee613e074261b10191140ff95722738316a49a30a395fe383cd7e3b76",
+  "schema_version": "apd010-chemistry-gate-v1",
+  "source_hashes": {
+    "1Y3N.pdb": "d524b4932316fdaf7fbea162aae79285639010f51bfb4a09c169127aa0248c8f",
+    "BEM.cif": "3a27261ff1b78bf232392277cceb3c0b9c8e7c8ff0b5eafccaa70068c10c396f",
+    "BEM.sdf": "0c2d5387285bb068a89b226bbc5bc7ce086e47d1474a99a54439700bddaebda6",
+    "MAV.cif": "7c848be1fef6660ce7fe67c93141669cf073ea71fb5b740b92ed3e257e4c410e",
+    "MAV.sdf": "84f154b100861fb9131e5cb7fb0a9b25be289529b0e852bb741e653bcd3340b9"
+  },
+  "structural_identity": "468c8052ff213fbb3a11f6198b61170e41d4b92353a44461a90326b157bdf306",
+  "structurally_eligible_count": 10,
+  "transformations": [
+    "load BEM and MAV from RCSB CCD ideal SDF plus matching CCD CIF",
+    "normalize validated explicit CCD hydrogens to implicit valence; no protonation heuristic",
+    "remove CCD-declared BEM O1 leaving atom",
+    "add one single covalent bond BEM C1--MAV O4",
+    "controlled RDKit sanitization with fail-closed validation",
+    "discard conformers; retain chemical graph only"
+  ],
+  "vina_imported_or_invoked": false
+}
