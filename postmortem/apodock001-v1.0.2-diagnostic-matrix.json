@@ -1,0 +1,660 @@
+{
+  "cases": [
+    {
+      "analysis_status": "DETERMINATE",
+      "apo_holo_pocket_shift": {
+        "global_ca_transform_rmsd_angstrom": 2.257905283045445,
+        "matched_ca_pairs": 257,
+        "maximum_ca_displacement_angstrom": 5.417152162249402,
+        "mean_ca_displacement_angstrom": 2.480751332756619,
+        "median_ca_displacement_angstrom": 1.7972641254575095,
+        "residue_count": 27,
+        "selection": "transformed holo C-alpha within 8 \u00c5 of mapped ligand heavy atoms"
+      },
+      "best_pose_index": 5,
+      "best_rmsd_angstrom": 3.3235114341480663,
+      "best_score_kcal_mol": -5.303,
+      "box_coverage": {
+        "any_atom_outside": false,
+        "classification": "BOX_COVERAGE_OK",
+        "fraction_inside": 1.0,
+        "minimum_distance_to_edge_by_axis_angstrom": [
+          8.51321293986802,
+          7.8265927171410254,
+          6.5358687062297705
+        ],
+        "reference_heavy_atoms": 13
+      },
+      "case": "APD-001",
+      "diagnostics": {
+        "apd010_reference_incomplete": false,
+        "historical_result_unchanged": true,
+        "reference_heavy_atoms_mapped": 13
+      },
+      "execution_status": "COMPLETED",
+      "first_loss": null,
+      "ligand_complexity": {
+        "formal_charge": 0,
+        "heavy_atoms": 13,
+        "heteroatom_count": 6,
+        "preparation_metadata": "RDKit ETKDGv3 seed=42; UFF max_iterations=1000; Open Babel -h Gasteiger",
+        "ring_count": 1,
+        "rotatable_bonds": 3
+      },
+      "pose_1_rmsd_angstrom": 5.606383981682715,
+      "pose_1_score_kcal_mol": -5.668,
+      "primary_to_secondary_delta_angstrom": 2.2828725475346485,
+      "returned_pose_count": 20,
+      "runtime_seconds": 91.576169,
+      "sampling_spread": {
+        "maximum_angstrom": 7.238795575550906,
+        "mean_angstrom": 4.534874772496723,
+        "median_angstrom": 4.570055246514751,
+        "metric": "pairwise predicted-predicted heavy-atom RMSD in raw atom order; no fitting",
+        "minimum_angstrom": 1.98631454244751,
+        "pose_count": 20
+      },
+      "score_rmsd_descriptive": {
+        "pearson_score_vs_same_frame_rmsd": -0.18874334840264131,
+        "sample_size": 20,
+        "spearman_score_vs_same_frame_rmsd": -0.2661654135338346
+      },
+      "timeout_classification": {
+        "confidence": null,
+        "is_timeout": false,
+        "stage": null
+      }
+    },
+    {
+      "analysis_status": "DETERMINATE",
+      "apo_holo_pocket_shift": {
+        "global_ca_transform_rmsd_angstrom": 2.0986347613138836,
+        "matched_ca_pairs": 351,
+        "maximum_ca_displacement_angstrom": 6.732029274911051,
+        "mean_ca_displacement_angstrom": 2.5554530402172606,
+        "median_ca_displacement_angstrom": 2.43777974802066,
+        "residue_count": 30,
+        "selection": "transformed holo C-alpha within 8 \u00c5 of mapped ligand heavy atoms"
+      },
+      "best_pose_index": 15,
+      "best_rmsd_angstrom": 4.762285299721937,
+      "best_score_kcal_mol": -6.597,
+      "box_coverage": {
+        "any_atom_outside": false,
+        "classification": "BOX_COVERAGE_OK",
+        "fraction_inside": 1.0,
+        "minimum_distance_to_edge_by_axis_angstrom": [
+          7.097531042631388,
+          6.0,
+          5.999999999999999
+        ],
+        "reference_heavy_atoms": 25
+      },
+      "case": "APD-002",
+      "diagnostics": {
+        "apd010_reference_incomplete": false,
+        "historical_result_unchanged": true,
+        "reference_heavy_atoms_mapped": 25
+      },
+      "execution_status": "COMPLETED",
+      "first_loss": null,
+      "ligand_complexity": {
+        "formal_charge": 0,
+        "heavy_atoms": 25,
+        "heteroatom_count": 16,
+        "preparation_metadata": "RDKit ETKDGv3 seed=42; UFF max_iterations=1000; Open Babel -h Gasteiger",
+        "ring_count": 2,
+        "rotatable_bonds": 6
+      },
+      "pose_1_rmsd_angstrom": 7.231624554587633,
+      "pose_1_score_kcal_mol": -7.266,
+      "primary_to_secondary_delta_angstrom": 2.4693392548656954,
+      "returned_pose_count": 20,
+      "runtime_seconds": 347.836242,
+      "sampling_spread": {
+        "maximum_angstrom": 12.252652876826309,
+        "mean_angstrom": 7.795853190193073,
+        "median_angstrom": 7.893449931324856,
+        "metric": "pairwise predicted-predicted heavy-atom RMSD in raw atom order; no fitting",
+        "minimum_angstrom": 1.8982486876065527,
+        "pose_count": 20
+      },
+      "score_rmsd_descriptive": {
+        "pearson_score_vs_same_frame_rmsd": -0.07995882757170776,
+        "sample_size": 20,
+        "spearman_score_vs_same_frame_rmsd": -0.08721804511278196
+      },
+      "timeout_classification": {
+        "confidence": null,
+        "is_timeout": false,
+        "stage": null
+      }
+    },
+    {
+      "analysis_status": "DETERMINATE",
+      "apo_holo_pocket_shift": {
+        "global_ca_transform_rmsd_angstrom": 4.45162675116743,
+        "matched_ca_pairs": 288,
+        "maximum_ca_displacement_angstrom": 9.344848474154318,
+        "mean_ca_displacement_angstrom": 4.44042569316945,
+        "median_ca_displacement_angstrom": 4.190453102146604,
+        "residue_count": 29,
+        "selection": "transformed holo C-alpha within 8 \u00c5 of mapped ligand heavy atoms"
+      },
+      "best_pose_index": 12,
+      "best_rmsd_angstrom": 4.3644501338240795,
+      "best_score_kcal_mol": -4.606,
+      "box_coverage": {
+        "any_atom_outside": false,
+        "classification": "BOX_COVERAGE_OK",
+        "fraction_inside": 1.0,
+        "minimum_distance_to_edge_by_axis_angstrom": [
+          7.361075406273124,
+          7.235463203640103,
+          9.201113668016884
+        ],
+        "reference_heavy_atoms": 12
+      },
+      "case": "APD-003",
+      "diagnostics": {
+        "apd010_reference_incomplete": false,
+        "historical_result_unchanged": true,
+        "reference_heavy_atoms_mapped": 12
+      },
+      "execution_status": "COMPLETED",
+      "first_loss": null,
+      "ligand_complexity": {
+        "formal_charge": 0,
+        "heavy_atoms": 12,
+        "heteroatom_count": 6,
+        "preparation_metadata": "RDKit ETKDGv3 seed=42; UFF max_iterations=1000; Open Babel -h Gasteiger",
+        "ring_count": 1,
+        "rotatable_bonds": 1
+      },
+      "pose_1_rmsd_angstrom": 6.858354838333819,
+      "pose_1_score_kcal_mol": -5.116,
+      "primary_to_secondary_delta_angstrom": 2.493904704509739,
+      "returned_pose_count": 20,
+      "runtime_seconds": 62.703656,
+      "sampling_spread": {
+        "maximum_angstrom": 17.85417613846501,
+        "mean_angstrom": 6.492663786614622,
+        "median_angstrom": 4.788391757000806,
+        "metric": "pairwise predicted-predicted heavy-atom RMSD in raw atom order; no fitting",
+        "minimum_angstrom": 1.8786732242019455,
+        "pose_count": 20
+      },
+      "score_rmsd_descriptive": {
+        "pearson_score_vs_same_frame_rmsd": -0.035604699480732215,
+        "sample_size": 20,
+        "spearman_score_vs_same_frame_rmsd": -0.07669172932330827
+      },
+      "timeout_classification": {
+        "confidence": null,
+        "is_timeout": false,
+        "stage": null
+      }
+    },
+    {
+      "analysis_status": "DETERMINATE",
+      "apo_holo_pocket_shift": {
+        "global_ca_transform_rmsd_angstrom": 4.061917878259812,
+        "matched_ca_pairs": 271,
+        "maximum_ca_displacement_angstrom": 5.6865765491894145,
+        "mean_ca_displacement_angstrom": 3.5707537475772018,
+        "median_ca_displacement_angstrom": 3.532446121056843,
+        "residue_count": 23,
+        "selection": "transformed holo C-alpha within 8 \u00c5 of mapped ligand heavy atoms"
+      },
+      "best_pose_index": 18,
+      "best_rmsd_angstrom": 2.6464435368886092,
+      "best_score_kcal_mol": -4.041,
+      "box_coverage": {
+        "any_atom_outside": false,
+        "classification": "BOX_COVERAGE_OK",
+        "fraction_inside": 1.0,
+        "minimum_distance_to_edge_by_axis_angstrom": [
+          8.197085851258166,
+          7.8965369118135165,
+          8.2190435197373
+        ],
+        "reference_heavy_atoms": 10
+      },
+      "case": "APD-004",
+      "diagnostics": {
+        "apd010_reference_incomplete": false,
+        "historical_result_unchanged": true,
+        "reference_heavy_atoms_mapped": 10
+      },
+      "execution_status": "COMPLETED",
+      "first_loss": null,
+      "ligand_complexity": {
+        "formal_charge": 0,
+        "heavy_atoms": 10,
+        "heteroatom_count": 5,
+        "preparation_metadata": "RDKit ETKDGv3 seed=42; UFF max_iterations=1000; Open Babel -h Gasteiger",
+        "ring_count": 1,
+        "rotatable_bonds": 0
+      },
+      "pose_1_rmsd_angstrom": 3.6525388501748277,
+      "pose_1_score_kcal_mol": -4.772,
+      "primary_to_secondary_delta_angstrom": 1.0060953132862185,
+      "returned_pose_count": 20,
+      "runtime_seconds": 38.595219,
+      "sampling_spread": {
+        "maximum_angstrom": 15.589516721181578,
+        "mean_angstrom": 4.5967835852877235,
+        "median_angstrom": 3.7320996533266095,
+        "metric": "pairwise predicted-predicted heavy-atom RMSD in raw atom order; no fitting",
+        "minimum_angstrom": 1.6899526916455387,
+        "pose_count": 20
+      },
+      "score_rmsd_descriptive": {
+        "pearson_score_vs_same_frame_rmsd": -0.05258233891177824,
+        "sample_size": 20,
+        "spearman_score_vs_same_frame_rmsd": -0.12481203007518797
+      },
+      "timeout_classification": {
+        "confidence": null,
+        "is_timeout": false,
+        "stage": null
+      }
+    },
+    {
+      "analysis_status": "DETERMINATE",
+      "apo_holo_pocket_shift": {
+        "global_ca_transform_rmsd_angstrom": 7.141597802005218,
+        "matched_ca_pairs": 345,
+        "maximum_ca_displacement_angstrom": 11.217428051080075,
+        "mean_ca_displacement_angstrom": 7.539013052761001,
+        "median_ca_displacement_angstrom": 7.267178946696969,
+        "residue_count": 25,
+        "selection": "transformed holo C-alpha within 8 \u00c5 of mapped ligand heavy atoms"
+      },
+      "best_pose_index": 5,
+      "best_rmsd_angstrom": 2.556364201549729,
+      "best_score_kcal_mol": -4.922,
+      "box_coverage": {
+        "any_atom_outside": false,
+        "classification": "BOX_COVERAGE_OK",
+        "fraction_inside": 1.0,
+        "minimum_distance_to_edge_by_axis_angstrom": [
+          8.327744138333571,
+          6.515081394767794,
+          8.63405722499473
+        ],
+        "reference_heavy_atoms": 12
+      },
+      "case": "APD-005",
+      "diagnostics": {
+        "apd010_reference_incomplete": false,
+        "historical_result_unchanged": true,
+        "reference_heavy_atoms_mapped": 12
+      },
+      "execution_status": "COMPLETED",
+      "first_loss": null,
+      "ligand_complexity": {
+        "formal_charge": 0,
+        "heavy_atoms": 12,
+        "heteroatom_count": 3,
+        "preparation_metadata": "RDKit ETKDGv3 seed=42; UFF max_iterations=1000; Open Babel -h Gasteiger",
+        "ring_count": 1,
+        "rotatable_bonds": 3
+      },
+      "pose_1_rmsd_angstrom": 3.1640655087825422,
+      "pose_1_score_kcal_mol": -5.169,
+      "primary_to_secondary_delta_angstrom": 0.607701307232813,
+      "returned_pose_count": 20,
+      "runtime_seconds": 58.023309,
+      "sampling_spread": {
+        "maximum_angstrom": 14.948959910865595,
+        "mean_angstrom": 7.760232316703266,
+        "median_angstrom": 4.98819931611658,
+        "metric": "pairwise predicted-predicted heavy-atom RMSD in raw atom order; no fitting",
+        "minimum_angstrom": 1.4102373618177422,
+        "pose_count": 20
+      },
+      "score_rmsd_descriptive": {
+        "pearson_score_vs_same_frame_rmsd": 0.5640612793774663,
+        "sample_size": 20,
+        "spearman_score_vs_same_frame_rmsd": 0.6120300751879699
+      },
+      "timeout_classification": {
+        "confidence": null,
+        "is_timeout": false,
+        "stage": null
+      }
+    },
+    {
+      "analysis_status": "FAILED_EXECUTION",
+      "apo_holo_pocket_shift": {
+        "global_ca_transform_rmsd_angstrom": 3.688294034408114,
+        "matched_ca_pairs": 427,
+        "maximum_ca_displacement_angstrom": 14.910024959811494,
+        "mean_ca_displacement_angstrom": 4.080540034424845,
+        "median_ca_displacement_angstrom": 3.3933884098395475,
+        "residue_count": 35,
+        "selection": "transformed holo C-alpha within 8 \u00c5 of mapped ligand heavy atoms"
+      },
+      "best_pose_index": null,
+      "best_rmsd_angstrom": null,
+      "best_score_kcal_mol": null,
+      "box_coverage": {
+        "any_atom_outside": false,
+        "classification": "BOX_COVERAGE_OK",
+        "fraction_inside": 1.0,
+        "minimum_distance_to_edge_by_axis_angstrom": [
+          6.0,
+          6.0,
+          6.254288817789373
+        ],
+        "reference_heavy_atoms": 27
+      },
+      "case": "APD-006",
+      "diagnostics": {
+        "apd010_reference_incomplete": false,
+        "historical_result_unchanged": true,
+        "reference_heavy_atoms_mapped": 27
+      },
+      "execution_status": "FAILED",
+      "first_loss": "EXECUTION_FAILED",
+      "ligand_complexity": {
+        "formal_charge": 0,
+        "heavy_atoms": 27,
+        "heteroatom_count": 17,
+        "preparation_metadata": "RDKit ETKDGv3 seed=42; UFF max_iterations=1000; Open Babel -h Gasteiger",
+        "ring_count": 1,
+        "rotatable_bonds": 9
+      },
+      "pose_1_rmsd_angstrom": null,
+      "pose_1_score_kcal_mol": null,
+      "primary_to_secondary_delta_angstrom": null,
+      "returned_pose_count": 0,
+      "runtime_seconds": 901.483133,
+      "sampling_spread": null,
+      "score_rmsd_descriptive": null,
+      "timeout_classification": {
+        "confidence": "HIGH",
+        "is_timeout": true,
+        "raw_output_present": false,
+        "retry_count": 0,
+        "stage": "ADAPTER_SUBPROCESS_TIMEOUT",
+        "timeout_seconds": 900.0
+      }
+    },
+    {
+      "analysis_status": "INDETERMINATE",
+      "apo_holo_pocket_shift": {
+        "global_ca_transform_rmsd_angstrom": 5.035390730693099,
+        "matched_ca_pairs": 270,
+        "maximum_ca_displacement_angstrom": 10.51646113900859,
+        "mean_ca_displacement_angstrom": 4.3942651811921625,
+        "median_ca_displacement_angstrom": 4.068746572280933,
+        "residue_count": 20,
+        "selection": "transformed holo C-alpha within 8 \u00c5 of mapped ligand heavy atoms"
+      },
+      "best_pose_index": null,
+      "best_rmsd_angstrom": null,
+      "best_score_kcal_mol": null,
+      "box_coverage": {
+        "any_atom_outside": false,
+        "classification": "BOX_COVERAGE_OK",
+        "fraction_inside": 1.0,
+        "minimum_distance_to_edge_by_axis_angstrom": [
+          7.943035249750494,
+          8.466069266791642,
+          8.795184283375974
+        ],
+        "reference_heavy_atoms": 8
+      },
+      "case": "APD-007",
+      "diagnostics": {
+        "apd010_reference_incomplete": false,
+        "historical_result_unchanged": true,
+        "reference_heavy_atoms_mapped": 8
+      },
+      "execution_status": "COMPLETED",
+      "first_loss": "POSE_CONVERSION_FAILED",
+      "ligand_complexity": {
+        "formal_charge": 1,
+        "heavy_atoms": 8,
+        "heteroatom_count": 3,
+        "preparation_metadata": "RDKit ETKDGv3 seed=42; UFF max_iterations=1000; Open Babel -h Gasteiger",
+        "ring_count": 0,
+        "rotatable_bonds": 2
+      },
+      "pose_1_rmsd_angstrom": null,
+      "pose_1_score_kcal_mol": -4.457,
+      "primary_to_secondary_delta_angstrom": null,
+      "returned_pose_count": 20,
+      "runtime_seconds": 110.951675,
+      "sampling_spread": {
+        "maximum_angstrom": 17.223329432778087,
+        "mean_angstrom": 9.078716634749032,
+        "median_angstrom": 8.65145749467108,
+        "metric": "pairwise predicted-predicted heavy-atom RMSD in raw atom order; no fitting",
+        "minimum_angstrom": 1.5430098023019791,
+        "pose_count": 20
+      },
+      "score_rmsd_descriptive": null,
+      "timeout_classification": {
+        "confidence": null,
+        "is_timeout": false,
+        "stage": null
+      }
+    },
+    {
+      "analysis_status": "DETERMINATE",
+      "apo_holo_pocket_shift": {
+        "global_ca_transform_rmsd_angstrom": 3.6399852180357186,
+        "matched_ca_pairs": 186,
+        "maximum_ca_displacement_angstrom": 8.021871796350638,
+        "mean_ca_displacement_angstrom": 2.945167195234023,
+        "median_ca_displacement_angstrom": 2.3665840740367323,
+        "residue_count": 28,
+        "selection": "transformed holo C-alpha within 8 \u00c5 of mapped ligand heavy atoms"
+      },
+      "best_pose_index": 15,
+      "best_rmsd_angstrom": 4.894071813461033,
+      "best_score_kcal_mol": -6.12,
+      "box_coverage": {
+        "any_atom_outside": false,
+        "classification": "BOX_COVERAGE_OK",
+        "fraction_inside": 1.0,
+        "minimum_distance_to_edge_by_axis_angstrom": [
+          6.960230715503194,
+          6.0,
+          6.104494223697422
+        ],
+        "reference_heavy_atoms": 24
+      },
+      "case": "APD-008",
+      "diagnostics": {
+        "apd010_reference_incomplete": false,
+        "historical_result_unchanged": true,
+        "reference_heavy_atoms_mapped": 24
+      },
+      "execution_status": "COMPLETED",
+      "first_loss": null,
+      "ligand_complexity": {
+        "formal_charge": 0,
+        "heavy_atoms": 24,
+        "heteroatom_count": 14,
+        "preparation_metadata": "RDKit ETKDGv3 seed=42; UFF max_iterations=1000; Open Babel -h Gasteiger",
+        "ring_count": 3,
+        "rotatable_bonds": 4
+      },
+      "pose_1_rmsd_angstrom": 6.384141352703716,
+      "pose_1_score_kcal_mol": -6.827,
+      "primary_to_secondary_delta_angstrom": 1.4900695392426826,
+      "returned_pose_count": 20,
+      "runtime_seconds": 835.891352,
+      "sampling_spread": {
+        "maximum_angstrom": 14.130002661299583,
+        "mean_angstrom": 7.428853795670392,
+        "median_angstrom": 7.048215461689622,
+        "metric": "pairwise predicted-predicted heavy-atom RMSD in raw atom order; no fitting",
+        "minimum_angstrom": 1.59924388384011,
+        "pose_count": 20
+      },
+      "score_rmsd_descriptive": {
+        "pearson_score_vs_same_frame_rmsd": -0.4688944376306667,
+        "sample_size": 20,
+        "spearman_score_vs_same_frame_rmsd": -0.3097744360902256
+      },
+      "timeout_classification": {
+        "confidence": null,
+        "is_timeout": false,
+        "stage": null
+      }
+    },
+    {
+      "analysis_status": "DETERMINATE",
+      "apo_holo_pocket_shift": {
+        "global_ca_transform_rmsd_angstrom": 2.9892105319954263,
+        "matched_ca_pairs": 298,
+        "maximum_ca_displacement_angstrom": 4.87237929745972,
+        "mean_ca_displacement_angstrom": 2.194440092623004,
+        "median_ca_displacement_angstrom": 1.8898362498773955,
+        "residue_count": 26,
+        "selection": "transformed holo C-alpha within 8 \u00c5 of mapped ligand heavy atoms"
+      },
+      "best_pose_index": 10,
+      "best_rmsd_angstrom": 2.349907497850655,
+      "best_score_kcal_mol": -5.3,
+      "box_coverage": {
+        "any_atom_outside": false,
+        "classification": "BOX_COVERAGE_OK",
+        "fraction_inside": 1.0,
+        "minimum_distance_to_edge_by_axis_angstrom": [
+          7.542586358610741,
+          7.671209645699781,
+          9.076856276365639
+        ],
+        "reference_heavy_atoms": 12
+      },
+      "case": "APD-009",
+      "diagnostics": {
+        "apd010_reference_incomplete": false,
+        "historical_result_unchanged": true,
+        "reference_heavy_atoms_mapped": 12
+      },
+      "execution_status": "COMPLETED",
+      "first_loss": null,
+      "ligand_complexity": {
+        "formal_charge": 0,
+        "heavy_atoms": 12,
+        "heteroatom_count": 6,
+        "preparation_metadata": "RDKit ETKDGv3 seed=42; UFF max_iterations=1000; Open Babel -h Gasteiger",
+        "ring_count": 1,
+        "rotatable_bonds": 1
+      },
+      "pose_1_rmsd_angstrom": 3.323365930623804,
+      "pose_1_score_kcal_mol": -5.886,
+      "primary_to_secondary_delta_angstrom": 0.9734584327731493,
+      "returned_pose_count": 20,
+      "runtime_seconds": 74.152347,
+      "sampling_spread": {
+        "maximum_angstrom": 4.534211021041404,
+        "mean_angstrom": 3.1831484814114717,
+        "median_angstrom": 3.209922367093416,
+        "metric": "pairwise predicted-predicted heavy-atom RMSD in raw atom order; no fitting",
+        "minimum_angstrom": 1.9714942302730691,
+        "pose_count": 20
+      },
+      "score_rmsd_descriptive": {
+        "pearson_score_vs_same_frame_rmsd": 0.38960831493925574,
+        "sample_size": 20,
+        "spearman_score_vs_same_frame_rmsd": 0.36541353383458647
+      },
+      "timeout_classification": {
+        "confidence": null,
+        "is_timeout": false,
+        "stage": null
+      }
+    },
+    {
+      "analysis_status": "INDETERMINATE",
+      "apo_holo_pocket_shift": {
+        "global_ca_transform_rmsd_angstrom": 4.792500401522142,
+        "matched_ca_pairs": 490,
+        "maximum_ca_displacement_angstrom": 6.771984965847206,
+        "mean_ca_displacement_angstrom": 4.1052711623656055,
+        "median_ca_displacement_angstrom": 3.8103482516179654,
+        "residue_count": 26,
+        "selection": "transformed holo C-alpha within 8 \u00c5 of mapped ligand heavy atoms"
+      },
+      "best_pose_index": null,
+      "best_rmsd_angstrom": null,
+      "best_score_kcal_mol": null,
+      "box_coverage": {
+        "any_atom_outside": false,
+        "classification": "BOX_COVERAGE_OK",
+        "fraction_inside": 1.0,
+        "minimum_distance_to_edge_by_axis_angstrom": [
+          5.9999999999999964,
+          7.03076426506982,
+          6.306787806748829
+        ],
+        "reference_heavy_atoms": 24
+      },
+      "case": "APD-010",
+      "diagnostics": {
+        "apd010_reference_incomplete": true,
+        "historical_result_unchanged": true,
+        "reference_heavy_atoms_mapped": 24
+      },
+      "execution_status": "COMPLETED",
+      "first_loss": "REFERENCE_COORDINATES_INCOMPLETE",
+      "ligand_complexity": {
+        "formal_charge": 0,
+        "heavy_atoms": 25,
+        "heteroatom_count": 13,
+        "preparation_metadata": "BEM+MAV adapter 1.0.0; no experimental coordinate completion",
+        "ring_count": 2,
+        "rotatable_bonds": 4
+      },
+      "pose_1_rmsd_angstrom": null,
+      "pose_1_score_kcal_mol": -7.289,
+      "primary_to_secondary_delta_angstrom": null,
+      "returned_pose_count": 20,
+      "runtime_seconds": 872.547277,
+      "sampling_spread": {
+        "maximum_angstrom": 7.698657711575441,
+        "mean_angstrom": 5.505121830111047,
+        "median_angstrom": 6.16013010652741,
+        "metric": "pairwise predicted-predicted heavy-atom RMSD in raw atom order; no fitting",
+        "minimum_angstrom": 1.7530700955751877,
+        "pose_count": 20
+      },
+      "score_rmsd_descriptive": null,
+      "timeout_classification": {
+        "confidence": null,
+        "is_timeout": false,
+        "stage": null
+      }
+    }
+  ],
+  "definitions": {
+    "box_edge_risk_angstrom": 2.0,
+    "correlation_warning": "descriptive only; seven determinate cases and twenty poses per case",
+    "pocket_cutoff_angstrom": 8.0,
+    "sampling_metric": "pairwise predicted-predicted heavy-atom RMSD in raw atom order; no fitting"
+  },
+  "schema_version": "research-os.apodock001.postmortem-diagnostic.v1",
+  "scientific_summary": {
+    "all_reference_boxes": "BOX_COVERAGE_OK",
+    "best_of_20_above_threshold_for_all_determinate_cases": true,
+    "interpretation": "observations support mixed representation/search/receptor hypotheses; they do not identify a single causal mechanism",
+    "primary_success": "0/7",
+    "secondary_success": "0/7"
+  },
+  "source": {
+    "historical_analysis_engine_id": "research-os.apodock001.analysis.v1+25ebfa66ecace1dd",
+    "no_vina_invoked": true,
+    "protocol_hash": "aa40517362e14795a9ea4747b632fab81b2fc1f5bb49e4c880d9ad38699de03c",
+    "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+    "raw_results_seal_sha256": "a57ca576e170f09a6768217f07d9965cf23cf18faa58be423a703816463482e1",
+    "run_id": "research-os.apodock001.run.v1+1797487357db1db1"
+  }
+}
