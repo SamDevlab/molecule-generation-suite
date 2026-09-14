@@ -25,6 +25,7 @@ from research_os.campaigns.declarative import (
 )
 from research_os.programs.lineage import DeclarativeProgramRunner, inspect_program_execution, verify_program_execution
 from research_os.programs.synthesis import synthesize_program
+from research_os.programs.reproduction import inspect_program_reproduction, reproduce_program_execution, verify_program_reproduction
 from research_os.legacy_runtime import biolab_preflight
 from research_os.artifacts import ModelArtifactManifest
 from research_os.datasets import DatasetManifest, DatasetRegistry
@@ -165,6 +166,13 @@ def _program_parser() -> argparse.ArgumentParser:
     inspect.add_argument("root")
     synthesize = commands.add_parser("synthesize", help="synthesize verified Campaign evidence at claim level")
     synthesize.add_argument("root")
+    reproduce = commands.add_parser("reproduce", help="reproduce a verified Program into a new isolated root")
+    reproduce.add_argument("root")
+    reproduce.add_argument("--output", required=True)
+    reproduction_verify = commands.add_parser("reproduction-verify", help="verify a durable Program reproduction record")
+    reproduction_verify.add_argument("root")
+    reproduction_inspect = commands.add_parser("reproduction-inspect", help="inspect a Program reproduction record")
+    reproduction_inspect.add_argument("root")
     return parser
 
 
@@ -282,6 +290,17 @@ def main(argv: Sequence[str] | None = None) -> int:
                 return 0
             if args.program_command == "synthesize":
                 _json(synthesize_program(args.root))
+                return 0
+            if args.program_command == "reproduce":
+                result = reproduce_program_execution(args.root, args.output)
+                _json(result)
+                return 0 if result.get("status") != "BLOCKED" else 1
+            if args.program_command == "reproduction-verify":
+                result = verify_program_reproduction(args.root)
+                _json(result.to_dict())
+                return 0 if result.status == "PASS" else 1
+            if args.program_command == "reproduction-inspect":
+                _json(inspect_program_reproduction(args.root))
                 return 0
             return 2
         except (KeyError, ValueError, OSError, RuntimeError) as exc:
