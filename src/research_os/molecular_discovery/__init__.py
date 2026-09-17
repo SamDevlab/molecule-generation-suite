@@ -1,1 +1,25 @@
-"""Molecular Discovery vertical for Research OS 5.1.\n\nThe package composes existing Research OS capabilities. It is intentionally not\nanother orchestration layer.\n"""\n\nfrom research_os.molecular_discovery.solubility import (\n    FrozenESOLSolubilityPredictor,\n    SolubilityCapabilityError,\n    SolubilityPrediction,\n)\nfrom research_os.molecular_discovery.workflow import (\n    CandidateAssessment,\n    MolecularDiscoveryReport,\n    MolecularDiscoveryWorkflow,\n)\n\n__all__ = [\n    "CandidateAssessment",\n    "FrozenESOLSolubilityPredictor",\n    "MolecularDiscoveryReport",\n    "MolecularDiscoveryWorkflow",\n    "SolubilityCapabilityError",\n    "SolubilityPrediction",\n]\n
+"""Molecular Discovery vertical for Research OS 5.1.
+
+The package composes existing Research OS capabilities. It is intentionally not
+another orchestration layer.
+"""
+
+from research_os.molecular_discovery.solubility import (
+    FrozenESOLSolubilityPredictor,
+    SolubilityCapabilityError,
+    SolubilityPrediction,
+)
+from research_os.molecular_discovery.workflow import (
+    CandidateAssessment,
+    MolecularDiscoveryReport,
+    MolecularDiscoveryWorkflow,
+)
+
+__all__ = [
+    "CandidateAssessment",
+    "FrozenESOLSolubilityPredictor",
+    "MolecularDiscoveryReport",
+    "MolecularDiscoveryWorkflow",
+    "SolubilityCapabilityError",
+    "SolubilityPrediction",
+]
