@@ -122,3 +122,29 @@ def test_workflow_without_predictor_is_explicitly_incomplete():
     result = workflow.run([{"id": "A", "smiles": "CCO"}]).candidates[0]
     assert result.solubility_status == "UNAVAILABLE"
     assert result.priority_group == "INCOMPLETE_EVIDENCE"
+
+
+def test_nonfrozen_predictor_smoke_with_discovery_dependencies():
+    pytest.importorskip("sklearn")
+    pytest.importorskip("rdkit")
+    records = [
+        SolubilityRecord("M01", "CCO", -0.3),
+        SolubilityRecord("M02", "CCCO", -0.7),
+        SolubilityRecord("M03", "CCN", -0.5),
+        SolubilityRecord("M04", "CC(=O)O", -0.2),
+        SolubilityRecord("M05", "c1ccccc1", -2.1),
+        SolubilityRecord("M06", "c1ccncc1", -1.5),
+        SolubilityRecord("M07", "C1CCCCC1", -2.0),
+        SolubilityRecord("M08", "CCOC", -0.8),
+        SolubilityRecord("M09", "CCCl", -1.1),
+        SolubilityRecord("M10", "CCBr", -1.3),
+        SolubilityRecord("M11", "CC(C)O", -0.6),
+        SolubilityRecord("M12", "O=C(O)c1ccccc1", -1.4),
+    ]
+    predictor = FrozenESOLSolubilityPredictor.fit(records, enforce_frozen_identity=False)
+    prediction = predictor.predict("CCO")
+    assert prediction.predicted_log_s_mol_l == pytest.approx(
+        prediction.predicted_log_s_mol_l
+    )
+    assert 0.0 <= prediction.max_training_tanimoto <= 1.0
+    assert predictor.model_identity
