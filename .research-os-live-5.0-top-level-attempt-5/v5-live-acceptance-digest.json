@@ -1,0 +1,20 @@
+{
+  "cleanup_hash": "1cbbed23ae30bca2b5f7076777f7cae249bd123a0d132b7f39527905f9a8cbd2",
+  "consistency_hash": "e8d8bd075a6c48d29bd65ecc1af52a1c748290b94ae8f386a6a9e1975f01c24b",
+  "digest": "186bbbb73c9ddd4b5a16681ed993dea2a33a65d9907993aeeb3f022103b39a44",
+  "evidence_created_by_codex": 0,
+  "evidence_levels_mutated_by_codex": 0,
+  "final_exam_hash": "71791de31faf15c8e14671687b82cbac66e303a5d73f1880647cddb3e18f8f4a",
+  "followup_hash": "5defcc3a450ea86e77c966caa2e246dab67dbbd444c9ac7564c2f7a4b20d9408",
+  "live_call_count": 30,
+  "live_execution_commit": "4b1228500779fe940b338d3912050dfc22fd5f69",
+  "live_failures": 0,
+  "pass": false,
+  "reviewer_panel_hash": "502eca14c7f46c03e6e7407097fdcbc06de5e38d41f2fd8474e27cf05b11117b",
+  "scientific_audit_hash": "f4e3d5674c20239d83dd6e6f89e81c8468016cbd0d24f5e79a544234da8c8a17",
+  "security_audit_hash": "56cc006f84298a623f27ffe898666456217740b76a96d8feb7ef04c19ba255ba",
+  "starting_commit": "4b1228500779fe940b338d3912050dfc22fd5f69",
+  "stress_hash": "bdcf1574930396e8f33f4e2ed082eb66ee4626486e33dbacad894557028bc197",
+  "synthesis_hash": "27a81d3a8b3b61b09355080287fe86fce41f56a1a5f9b75ad0db48992046556e",
+  "timeouts": 0
+}

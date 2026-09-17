@@ -1,0 +1,202 @@
+name: crossdock001-preflight
+
+on:
+  pull_request:
+    branches:
+      - research-os-v1.3
+    paths:
+      - "src/research_os/docking/crossdock001.py"
+      - "src/research_os/docking/crossdock_alignment.py"
+      - "src/research_os/docking/crossdock_identity.py"
+      - "src/research_os/docking/crossdock001_freeze.py"
+      - "src/research_os/docking/crossdock001_runner.py"
+      - "src/research_os/docking/crossdock001_evaluator_v11.py"
+      - "scripts/preflight_crossdock001.py"
+      - "scripts/run_crossdock001.py"
+      - "scripts/run_crossdock001_v11.py"
+      - "tests/test_crossdock001.py"
+      - "tests/test_crossdock001_freeze.py"
+      - "tests/test_crossdock001_runner.py"
+      - "tests/test_crossdock001_evaluator_v11.py"
+      - "docs/crossdocking-benchmark-001-rigid-v1.0.md"
+      - ".github/workflows/crossdock001-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  structural-preflight-no-vina:
+    name: CROSSDOCK-001 structural preflight (no Vina)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install structural preflight dependencies
+        run: python -m pip install -e ".[dev,molecule]"
+
+      - name: Check dependency consistency
+        run: python -m pip check
+
+      - name: Compile frozen cross-docking protocol and evaluators
+        run: >-
+          python -m py_compile
+          src/research_os/docking/crossdock001.py
+          src/research_os/docking/crossdock_alignment.py
+          src/research_os/docking/crossdock_identity.py
+          src/research_os/docking/crossdock001_freeze.py
+          src/research_os/docking/crossdock001_runner.py
+          src/research_os/docking/crossdock001_evaluator_v11.py
+          scripts/preflight_crossdock001.py
+          scripts/run_crossdock001.py
+          scripts/run_crossdock001_v11.py
+          tests/test_crossdock001.py
+          tests/test_crossdock001_freeze.py
+          tests/test_crossdock001_runner.py
+          tests/test_crossdock001_evaluator_v11.py
+
+      - name: Test deterministic selection, portable freeze and corrected evaluator
+        run: >-
+          python -m pytest -q
+          tests/test_crossdock001.py
+          tests/test_crossdock001_freeze.py
+          tests/test_crossdock001_runner.py
+          tests/test_crossdock001_evaluator_v11.py
+
+      - name: Verify Vina binary is not installed for preflight
+        shell: bash
+        run: |
+          if command -v vina >/dev/null 2>&1; then
+            echo "Vina must not be available in the structural preflight job" >&2
+            exit 1
+          fi
+
+      - name: Execute canonical structural preflight without docking
+        run: >-
+          python scripts/preflight_crossdock001.py
+          --workdir /tmp/crossdock001-preflight
+          --output /tmp/crossdock001-evidence/crossdock001-preflight-v1.0.json
+
+      - name: Require exact portable freeze reproduction before Vina
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from research_os.docking.crossdock001_freeze import (
+              FROZEN_DIRECTED_STRUCTURAL_IDENTITIES,
+              PREFLIGHT_SELECTION_MANIFEST_HASH,
+          )
+
+          path = Path('/tmp/crossdock001-evidence/crossdock001-preflight-v1.0.json')
+          report = json.loads(path.read_text())
+          assert report['docking_executed'] is False
+          assert report['vina_imported_or_invoked'] is False
+          assert report['eligible_count'] == report['directed_case_count'] == 10
+          assert report['selection_manifest_hash'] == PREFLIGHT_SELECTION_MANIFEST_HASH
+          for record in report['records']:
+              expected = FROZEN_DIRECTED_STRUCTURAL_IDENTITIES[record['case_id']]
+              assert record['source_pdb_sha256'] == expected['source_pdb_sha256']
+              assert record['target_pdb_sha256'] == expected['target_pdb_sha256']
+              assert record['transformed_source_reference_coordinate_hash'] == expected['transformed_source_reference_coordinate_hash']
+              assert record['target_reference_coordinate_hash'] == expected['target_reference_coordinate_hash']
+              assert record['grid']['grid_hash'] == expected['grid_hash']
+              assert record['matched_identical_pocket_ca_pairs'] == expected['matched_identical_pocket_ca_pairs']
+          print('portable_selection_manifest_hash=', report['selection_manifest_hash'])
+          PY
+
+      - name: Upload CROSSDOCK-001 structural evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: crossdock001-preflight-v1.0
+          path: /tmp/crossdock001-evidence
+          if-no-files-found: error
+
+  frozen-vina-crossdock:
+    name: CROSSDOCK-001 frozen Vina 1.2.7 + evaluator v1.1
+    needs: structural-preflight-no-vina
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Research OS molecular capability
+        run: python -m pip install -e ".[dev,molecule]"
+
+      - name: Re-test frozen protocol and representation correction before docking
+        run: >-
+          python -m pytest -q
+          tests/test_crossdock001.py
+          tests/test_crossdock001_freeze.py
+          tests/test_crossdock001_runner.py
+          tests/test_crossdock001_evaluator_v11.py
+
+      - name: Install Open Babel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+
+      - name: Install official AutoDock Vina 1.2.7 binary
+        run: |
+          curl --fail --location --retry 3 \
+            https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 \
+            --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          /tmp/vina_1.2.7 --version
+          sha256sum /tmp/vina_1.2.7
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+
+      - name: Check dependency consistency
+        run: python -m pip check
+
+      - name: Execute frozen 10-case CROSSDOCK-001 with evaluator v1.1
+        run: |
+          python scripts/run_crossdock001_v11.py \
+            --workdir /tmp/crossdock001-run \
+            --output /tmp/crossdock001-run/crossdock001-result-v1.1.json
+
+      - name: Require complete technical denominator without judging scientific success
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from research_os.docking.crossdock001_evaluator_v11 import PROTOCOL_ID
+          from research_os.docking.crossdock001_freeze import PREFLIGHT_SELECTION_MANIFEST_HASH
+
+          path = Path('/tmp/crossdock001-run/crossdock001-result-v1.1.json')
+          report = json.loads(path.read_text())
+          assert report['preflight']['selection_manifest_hash'] == PREFLIGHT_SELECTION_MANIFEST_HASH
+          assert report['pose_representation_protocol_id'] == PROTOCOL_ID
+          assert len(report['records']) == 10
+          assert report['summary']['total_cases'] == 10
+          assert report['summary']['evaluable_pose_1_cases'] == 10
+          assert all(record['result']['status'] == 'PASS' for record in report['records'])
+          for record in report['records']:
+              for pose in record['poses']:
+                  normalization = pose['representation_normalization']
+                  assert normalization['max_heavy_atom_coordinate_delta_angstrom'] == 0.0
+                  assert normalization['crystal_coordinates_used_for_mapping'] is False
+                  assert normalization['rigid_fit_performed'] is False
+                  assert normalization['minimization_performed'] is False
+          print('scientific_result_hash=', report['scientific_result_hash'])
+          print('summary=', json.dumps(report['summary'], sort_keys=True))
+          PY
+
+      - name: Upload CROSSDOCK-001 evidence bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: crossdock-001-rigid-v1.1
+          path: /tmp/crossdock001-run
+          if-no-files-found: warn

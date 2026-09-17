@@ -1,0 +1,79 @@
+name: APODOCK-001 v1.1 freeze validation (no docking)
+
+on:
+  pull_request:
+    branches:
+      - research-os-v1.3
+    paths:
+      - "configs/apodock001-protocol-freeze-v1.0.2.json"
+      - "configs/apodock001-protocol-freeze-v1.1.json"
+      - "inputs/apodock001/v1.0.2/**"
+      - "src/research_os/docking/apodock001_v11.py"
+      - "scripts/generate_apodock001_v11_protocol.py"
+      - "scripts/preflight_apodock001_v11.py"
+      - "tests/test_apodock001_v11.py"
+      - "docs/apodock001-v1.1-preregistration.md"
+      - ".github/workflows/apodock001-v11-freeze.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  freeze-validation:
+    name: APODOCK-001 v1.1 offline validation (no docking)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install Research OS molecular dependencies
+        run: python -m pip install -e ".[dev,molecule]"
+
+      - name: Verify deterministic v1.1 manifest generation
+        run: |
+          tmp_manifest="$(mktemp)"
+          python scripts/generate_apodock001_v11_protocol.py --output "$tmp_manifest"
+          cmp --silent "$tmp_manifest" configs/apodock001-protocol-freeze-v1.1.json
+
+      - name: Confirm v1.0.2 protocol and input bundle are unchanged
+        run: |
+          git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha }}"
+          git diff --exit-code FETCH_HEAD -- \
+            configs/apodock001-protocol-freeze-v1.0.2.json \
+            inputs/apodock001/v1.0.2
+
+      - name: Run v1.1 freeze tests
+        run: python -m pytest -q tests/test_apodock001_v11.py tests/test_apodock001_future.py
+
+      - name: Run explicit offline preflight
+        run: |
+          python scripts/preflight_apodock001_v11.py \
+            --git-sha "$GITHUB_SHA" \
+            --output /tmp/apodock001-v11-preflight.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('/tmp/apodock001-v11-preflight.json').read_text())
+          assert report['status'] == 'READY_FOR_EXPLICIT_AUTHORIZATION'
+          assert report['execution_authorized'] is False
+          assert report['prospective_execution_started'] is False
+          assert report['run_id'] is None
+          assert report['evidence_scaffold_status'] == 'NOT_EXECUTED'
+          assert report['results'] == []
+          assert report['scores'] == []
+          assert report['poses'] == []
+          assert report['vina_docking_executed'] is False
+          print('APODOCK-001 v1.1 cases executed: 0/10')
+          print('No APODOCK-001 v1.1 docking command was started.')
+          PY
+
+      - name: Compile freeze implementation
+        run: python -m py_compile src/research_os/docking/apodock001_v11.py scripts/generate_apodock001_v11_protocol.py scripts/preflight_apodock001_v11.py
+
+      - name: Check whitespace
+        run: git diff --check

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Research OS live Oracle transport envelope",
+  "description": "The strict Codex CLI envelope carries one JSON-encoded Research OS planning/narration object. The inner object is validated by Research OS.",
+  "type": "object",
+  "required": ["result"],
+  "properties": {
+    "result": {"type": "string", "minLength": 2}
+  },
+  "additionalProperties": false
+}

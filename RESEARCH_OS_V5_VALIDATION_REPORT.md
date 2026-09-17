@@ -1,0 +1,37 @@
+# Research OS v5.0 validation report
+
+This is an execution report for the v5.0 attempt, not a release declaration.
+
+| Measure | Observed | Gate |
+|---|---:|---|
+| Research programs | 15 | PASS, minimum 12 |
+| Codex-dynamic programs | 4 | PASS, minimum 4 |
+| Systematic questions | 150 | PASS |
+| Codex-current-turn questions | 50 | PASS |
+| Total questions | 200 | PASS |
+| Fresh engine runs | 3 | PASS, bundles and Ledger registration |
+| Sealed replays | 30 | PASS |
+| FIRST_DIVERGENCE cases | 1 | PASS |
+| Stress cases | 75 | PASS |
+| Live reviewer roles | 0 completed | BLOCKED: nested CODEX_LIVE timeout |
+| Final Live exam | 0 completed | BLOCKED: nested CODEX_LIVE timeout |
+| Boundary recovery smoke | 1 real attempt + 9 bounded cases | SAFE REJECTION in Codex-owned host; Live gate remains blocked |
+| Top-level owner launcher | implemented; 0 calls from this task | READY: requires genuinely external owner; configured for 39 sequential calls, ceiling 45 |
+| Top-level external Attempt 1 | 17 calls; 3 reviewers, final exam, 12 follow-ups accepted | BLOCKED after schema-valid `V5-FOLLOWUP-13` failed post-response grounding validation |
+| Top-level external Attempt 2 | 33 calls; 3 reviewers, final exam, 15 follow-ups, 10 stress, consistency through `TL-CONSISTENCY-02-B` | BLOCKED correctly on `UNKNOWN_GROUNDED_RECORD_ID`; `CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY` was not found in official artifacts |
+| Top-level external Attempt 3 | 30 calls; 3 reviewers, final exam, 15 follow-ups, 10 stress, `TL-CONSISTENCY-01-A` | BLOCKED correctly on the consistency shape: missing `primary_record_id` and `limitation_codes`; Run B was not executed |
+| Top-level external Attempt 4 | 30 calls; 3 reviewers, final exam, 15 follow-ups, 10 stress, `TL-CONSISTENCY-01-A` | BLOCKED correctly: outer envelope passed, but `live_consistency.schema.json` was not bound to `codex exec`; Run B was not executed |
+| Top-level external Attempt 5 | 30 calls; 3 reviewers, final exam, 15 follow-ups, 10 stress, `TL-CONSISTENCY-01-A` | BLOCKED correctly: provider omitted the explicit per-call consistency context, so the transport selected `ENVELOPE`; Run B was not executed |
+| Top-level external Attempt 6 | 30 calls; 3 reviewers, final exam, 15 follow-ups, 10 stress, `TL-CONSISTENCY-01-A` | BLOCKED correctly: routing selected `CONSISTENCY`/`live_consistency.schema.json`, but the provider process returned `PROCESS_ERROR` before schema validation; cleanup passed and Run B was not executed |
+
+The fresh H2 run at `phi=1.05` returned `2395.300775369576 K` under the declared Cantera HP-equilibrium protocol. This is E3 physics output and is not an E4/E5 experiment. The associated material change is a narrow condition-map extension, not a universal combustion claim.
+
+The DLS-100 validation remains a failed unrestricted-generalization test: its 56-record unique subset was OOD for the frozen model, with no retraining or post-result threshold tuning. Battery and hydrogen-materials questions remain blocked by missing condition-complete external records. No private user corpus was found; v4.2 remains `INFRASTRUCTURE_READY_AWAITING_USER_CORPUS`.
+
+The authoritative status is in `.research-os-live-5.0/master-real-research-validation.json`; its `status_checks` field is the gate record.
+
+The recovery pass did not overwrite that prior attempt. Its diagnostic, smoke matrix, and blocked Live-stage artifacts are under `.research-os-live-5.0-recovery/`. The corrected provider records `REJECTED_REENTRANT` at admission in this host, so no reviewer/exam answer is counted as Live.
+
+The official external execution contract is [TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md](TOP_LEVEL_LIVE_ACCEPTANCE_V5_0.md). The top-level launcher was not invoked from this Codex-owned task.
+
+Attempt 1 is preserved at `.research-os-live-5.0-top-level/`; Attempts 2–6 remain in their numbered namespaces. Attempt 2 is classified as `MODEL_REFERENCE_HALLUCINATION`, not a missing registered record. Attempts 3 and 4 are provider-boundary failures: general grounding passed, but the required consistency fields were absent; Attempt 4 additionally proved that the CLI had enforced only the outer envelope. Attempt 5 isolated `PER_CALL_CONTEXT_PROPAGATION_BUG`; Attempt 6 confirmed the corrected route but exposed a provider-side completion/schema-admission process error before any response was validated. The provider-facing schema was simplified to portable structural keywords and deterministic semantic validators remain authoritative; recognized admission errors are bounded and typed. No scientific state is changed by any operational failure.

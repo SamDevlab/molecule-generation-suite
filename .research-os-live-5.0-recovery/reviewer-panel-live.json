@@ -1,0 +1,22 @@
+{
+  "reason": "LIVE-BOUNDARY-01 did not complete in the Codex-owned host; no reviewer output was fabricated.",
+  "roles": [
+    {
+      "response": null,
+      "role": "METHODOLOGY",
+      "status": "NOT_EXECUTED_LIVE_BOUNDARY_BLOCKED"
+    },
+    {
+      "response": null,
+      "role": "EVIDENCE",
+      "status": "NOT_EXECUTED_LIVE_BOUNDARY_BLOCKED"
+    },
+    {
+      "response": null,
+      "role": "REPRODUCIBILITY",
+      "status": "NOT_EXECUTED_LIVE_BOUNDARY_BLOCKED"
+    }
+  ],
+  "scientific_evidence_created": false,
+  "status": "BLOCKED_BEFORE_PASS"
+}

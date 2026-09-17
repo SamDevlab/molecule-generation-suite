@@ -1,0 +1,24 @@
+{
+  "failure_reason": "Explicit valence for atom #1 N, 4, is greater than permitted; SDF omits the formal positive charge.",
+  "failure_stage": "RDKit sanitization of Open Babel SDF",
+  "future_adapter": {
+    "diagnostic_same_frame_rmsd_angstrom": 8.846362999313287,
+    "diagnostic_status": "PASS",
+    "mapping_length": 8,
+    "predicted_heavy_atoms": 8,
+    "reference_heavy_atoms": 8,
+    "strategy": "remove explicit hydrogens, match the heavy-atom graph to the frozen reference, copy frozen formal charges, sanitize, and preserve coordinates"
+  },
+  "historical_case_status": "INDETERMINATE",
+  "historical_derived_sdf_path": "runs/apodock001-v1.0.2/analysis-derived/APD-007/pose_01.sdf",
+  "historical_derived_sdf_sha256": "b727a5e12e71c0fd953bbd7c516bc7d8e0f6074933b555fc76a26d9ef4793093",
+  "historical_first_loss": "POSE_CONVERSION_FAILED",
+  "historical_manifest_rewritten": false,
+  "historical_primary_and_secondary_unchanged": true,
+  "historical_rdkit_sanitize_failed": true,
+  "returned_models": 20,
+  "schema_version": "research-os.apodock001.apd007-postmortem-diagnostic.v1",
+  "source_raw_path": "runs/apodock001-v1.0.2/raw/APD-007/vina_poses.pdbqt",
+  "source_raw_sha256": "0e0bc980c0c44ed0cda075fbe5b4130ec8a945921426dd5ffdd7e0ecda956829",
+  "status": "POSTMORTEM_DIAGNOSTIC_ONLY"
+}

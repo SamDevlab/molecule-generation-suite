@@ -1,0 +1,287 @@
+name: research-os-ci
+
+on:
+  push:
+    branches: ["research-os-v1.3"]
+  pull_request:
+
+jobs:
+  test:
+    name: core (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install Research OS core + molecular + data dependencies
+        run: python -m pip install -e ".[dev,molecule,data]"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Compile source and tests
+        run: python -m compileall -q src tests
+      - name: Compile hardened legacy ML entrypoint
+        run: python -m py_compile formolecular/g_oraculo_farma.py
+      - name: Run Research OS tests
+        run: pytest -q
+      - name: Execute declarative reference protocol twice
+        run: |
+          research-os run experiment examples/experiments/reference-regression.yaml --output /tmp/research-os-declarative-a
+          research-os run experiment examples/experiments/reference-regression.yaml --output /tmp/research-os-declarative-b
+      - name: Verify declarative reference package
+        run: research-os run experiment-verify /tmp/research-os-declarative-a/REFERENCE-REGRESSION-001
+      - name: Inspect declarative reference package
+        run: research-os run experiment-inspect /tmp/research-os-declarative-a/REFERENCE-REGRESSION-001
+      - name: Compare deterministic declarative reruns
+        run: research-os run experiment-compare /tmp/research-os-declarative-a/REFERENCE-REGRESSION-001 /tmp/research-os-declarative-b/REFERENCE-REGRESSION-001
+
+  cantera-reference:
+    name: capability (Cantera reference)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install combustion capability
+        run: python -m pip install -e ".[dev,molecule,combustion]"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Execute real Cantera reference gate
+        run: pytest -q tests/test_cantera_reference.py
+
+  redocking-reference:
+    name: capability (REDOCK-001 v1.2)
+    # REDOCK is an explicit benchmark run, never an incidental check for an
+    # APODOCK protocol/adapter PR or a merge into the protected research base.
+    if: github.event_name == 'pull_request' && github.head_ref == 'benchmark/redock-001-v1.2'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install Research OS molecular capability
+        run: python -m pip install -e ".[dev,molecule]"
+      - name: Install Open Babel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+      - name: Install official AutoDock Vina 1.2.7 binary
+        run: |
+          curl --fail --location --retry 3 \
+            https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 \
+            --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          /tmp/vina_1.2.7 --version
+          sha256sum /tmp/vina_1.2.7
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Execute REDOCK-001 v1.2
+        run: |
+          python scripts/run_redocking_benchmark_v12.py \
+            --workdir /tmp/redock-001-v12 \
+            --output /tmp/redock-001-v12/redocking-result-v1.2.json
+      - name: Upload REDOCK-001 v1.2 evidence bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redock-001-v1.2
+          path: /tmp/redock-001-v12
+          if-no-files-found: warn
+
+  redock-002-preflight:
+    name: capability (REDOCK-002 structural preflight)
+    if: github.event_name == 'pull_request' && github.head_ref == 'benchmark/redock-002-astex-holdout'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install molecular capability
+        run: python -m pip install -e ".[molecule]"
+      - name: Validate frozen RCSB chains and ligand instances without docking
+        run: |
+          python scripts/preflight_redocking_holdout.py \
+            --workdir /tmp/redock-002-preflight \
+            --output /tmp/redock-002-preflight/preflight-redock-002.json
+      - name: Upload REDOCK-002 preflight evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redock-002-preflight
+          path: /tmp/redock-002-preflight
+          if-no-files-found: warn
+
+  redock-002-holdout:
+    name: capability (REDOCK-002 Astex holdout)
+    if: github.event_name == 'pull_request' && github.head_ref == 'benchmark/redock-002-astex-holdout'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install Research OS molecular capability
+        run: python -m pip install -e ".[dev,molecule]"
+      - name: Install Open Babel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+      - name: Install official AutoDock Vina 1.2.7 binary
+        run: |
+          curl --fail --location --retry 3 \
+            https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 \
+            --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          /tmp/vina_1.2.7 --version
+          sha256sum /tmp/vina_1.2.7
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Execute frozen REDOCK-002 Astex holdout v1.0
+        run: |
+          python scripts/run_redocking_holdout.py \
+            --workdir /tmp/redock-002-astex \
+            --output /tmp/redock-002-astex/redocking-holdout-result-v1.0.json
+      - name: Upload REDOCK-002 evidence bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redock-002-astex-holdout-v1.0
+          path: /tmp/redock-002-astex
+          if-no-files-found: warn
+
+  posebusters-redock-validation:
+    name: capability (PoseBusters redock v1.1)
+    if: github.event_name == 'pull_request' && github.head_ref == 'benchmark/posebusters-redock-validation'
+    permissions:
+      actions: read
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install frozen PoseBusters validation capability
+        run: python -m pip install -e ".[dev,molecule,validation]"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Run PoseBusters validation unit tests
+        run: pytest -q tests/test_posebusters_validation.py
+      - name: Download frozen REDOCK-001 run 261 evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: redock-001-v1.2
+          path: /tmp/pb-sources/redock-001
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: SamDevlab/molecule-generation-suite
+          run-id: 34540186017
+      - name: Download frozen REDOCK-002 run 261 evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: redock-002-astex-holdout-v1.0
+          path: /tmp/pb-sources/redock-002
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: SamDevlab/molecule-generation-suite
+          run-id: 34540186017
+      - name: Validate ten frozen Vina rank-1 poses with PoseBusters 0.6.5 v1.1 protocol
+        run: |
+          python scripts/run_posebusters_redock_validation.py \
+            --redock-001-dir /tmp/pb-sources/redock-001 \
+            --redock-002-dir /tmp/pb-sources/redock-002 \
+            --output /tmp/posebusters-redock-v1.1/posebusters-redock-v1.1.json
+      - name: Upload PoseBusters v1.1 validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: posebusters-redock-v1.1
+          path: /tmp/posebusters-redock-v1.1
+          if-no-files-found: warn
+
+  astex20-preflight:
+    name: capability (REDOCK-003 Astex-20 structural preflight)
+    if: github.event_name == 'pull_request' && github.head_ref == 'benchmark/astex20-v1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install molecular test capability only
+        run: python -m pip install -e ".[dev,molecule]"
+      - name: Test frozen Astex-20 selection logic
+        run: pytest -q tests/test_astex20_selection.py tests/test_astex20_frozen_cohort.py
+      - name: Select and structurally preflight prospective Astex extension without docking
+        run: |
+          python scripts/preflight_astex20.py \
+            --workdir /tmp/astex20-preflight \
+            --output /tmp/astex20-preflight/astex20-preflight-v1.0.json
+      - name: Upload Astex-20 structural preflight evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redock-003-astex20-preflight-v1.0
+          path: /tmp/astex20-preflight
+          if-no-files-found: warn
+
+  astex20-redocking:
+    name: capability (REDOCK-003 Astex-20 prospective redocking)
+    if: github.event_name == 'pull_request' && github.head_ref == 'benchmark/astex20-v1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install Research OS molecular capability
+        run: python -m pip install -e ".[dev,molecule]"
+      - name: Test frozen Astex-20 cohort before docking
+        run: pytest -q tests/test_astex20_selection.py tests/test_astex20_frozen_cohort.py tests/test_redocking_v12.py tests/test_redocking_v12_identity.py
+      - name: Install Open Babel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+      - name: Install official AutoDock Vina 1.2.7 binary
+        run: |
+          curl --fail --location --retry 3 \
+            https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 \
+            --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          /tmp/vina_1.2.7 --version
+          sha256sum /tmp/vina_1.2.7
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+      - name: Check dependency consistency
+        run: python -m pip check
+      - name: Execute frozen 15-case prospective Astex extension
+        run: |
+          python scripts/run_astex20_redocking.py \
+            --workdir /tmp/redock-003-astex20 \
+            --output /tmp/redock-003-astex20/redocking-astex20-result-v1.0.json
+      - name: Upload REDOCK-003 Astex-20 evidence bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redock-003-astex20-v1.0
+          path: /tmp/redock-003-astex20
+          if-no-files-found: warn

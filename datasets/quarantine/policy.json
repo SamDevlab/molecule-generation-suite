@@ -1,0 +1,13 @@
+{
+  "policy_id": "legacy-quarantine.v1",
+  "eligible_for_training_default": false,
+  "copy_or_move_legacy_files": false,
+  "required_review": [
+    "source provenance",
+    "license",
+    "units and conditions",
+    "independent validation",
+    "train-test split and leakage",
+    "synthetic feedback and heuristic labels"
+  ]
+}

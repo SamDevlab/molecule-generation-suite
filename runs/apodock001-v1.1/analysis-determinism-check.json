@@ -1,0 +1,36 @@
+{
+  "schema_version": "research-os.apodock001.analysis-determinism-check.v1",
+  "run_id": "research-os.apodock001.run.v2+852d9aa525862df6",
+  "protocol_id": "research-os.apodock001.protocol.v1.1+b1a3c7b16db63ea4",
+  "raw_results_seal_sha256": "ee31206f4d97e8fc5085374dfae5d85b23844bf2d969b9fe4b1c972d52cc7715",
+  "rerun_environment": "isolated copy in the same Linux x86_64 container; no Vina invocation",
+  "scientific_metrics_identical": true,
+  "case_statuses_identical": true,
+  "first_loss_stages_identical": true,
+  "scientific_pose_identities_identical": true,
+  "derived_pdbqt_bytes_identical": {
+    "APD-001": true,
+    "APD-002": true,
+    "APD-003": true,
+    "APD-004": true,
+    "APD-005": true,
+    "APD-006": true,
+    "APD-007": true,
+    "APD-008": true,
+    "APD-009": true,
+    "APD-010": true
+  },
+  "derived_sdf_bytes_identical": {
+    "APD-001": false,
+    "APD-002": false,
+    "APD-003": true,
+    "APD-004": true,
+    "APD-005": false,
+    "APD-006": true,
+    "APD-007": true,
+    "APD-008": false,
+    "APD-009": true,
+    "APD-010": false
+  },
+  "limitation": "Open Babel-derived SDF serialization varied byte-for-byte for indeterminate cases, while raw PDBQT bytes, derived PDBQT bytes, scientific identities, statuses, losses, and metrics remained unchanged."
+}

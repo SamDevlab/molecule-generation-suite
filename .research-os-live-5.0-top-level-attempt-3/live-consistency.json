@@ -1,0 +1,169 @@
+{
+  "pairs": [
+    {
+      "calls": [
+        {
+          "call_id": 30,
+          "diagnostic": {
+            "attempt": 1,
+            "command_contract": "codex exec --ephemeral --skip-git-repo-check --sandbox read-only --color never --output-schema <fixed-schema> -",
+            "completed_at": "2026-09-05T12:46:49.721299+00:00",
+            "depth": 0,
+            "elapsed": 21.446369,
+            "exit_status": "COMPLETED",
+            "failure_code": null,
+            "failure_stage": "NONE",
+            "invocation_id": "LIVE-1061F403CF144F33",
+            "max_attempts": 1,
+            "model": "gpt-5.6-luna",
+            "operation": "final_exam_followup",
+            "parent_invocation_id": null,
+            "provider": "CODEX_LIVE",
+            "reentrancy_state": "COMPLETED",
+            "schema_status": "PASS",
+            "started_at": "2026-09-05T12:46:28.274930+00:00",
+            "stderr_bytes": 39115,
+            "stderr_truncated": false,
+            "stdout_bytes": 945,
+            "stdout_truncated": false,
+            "timeout_budget": 120.0
+          },
+          "elapsed": 21.453000000008615,
+          "error": null,
+          "label": "TL-CONSISTENCY-01-A",
+          "operation": "final_exam_followup",
+          "process_events": [
+            {
+              "call_id": 30,
+              "cleanup_status": "RUNNING",
+              "label": "TL-CONSISTENCY-01-A",
+              "parent_pid": 11664,
+              "pid": 15180,
+              "started_at": "2026-09-05T12:46:28.286042+00:00"
+            },
+            {
+              "call_id": 30,
+              "cleanup_status": "EXITED",
+              "completed_at": "2026-09-05T12:46:49.718107+00:00",
+              "exit_code": 0,
+              "label": "TL-CONSISTENCY-01-A",
+              "parent_pid": 11664,
+              "pid": 15180,
+              "started_at": "2026-09-05T12:46:28.286042+00:00",
+              "termination_reason": "NORMAL_EXIT"
+            }
+          ],
+          "response_hash": "be0c1648030fdf1c124f707497753a43736c2e96f706c31c3413704e9c22a195",
+          "status": "COMPLETED"
+        }
+      ],
+      "consistency_assessment": {
+        "failure_code": "RUN_A_GROUNDING_FAILURE",
+        "limitation_codes_equal": false,
+        "missing_ids_in_b": [
+          "CLM-DOCKING-DECISION-BOUNDARY",
+          "IMP-V50-DYNAMIC-BATTERY",
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "IMP-V50-DYNAMIC-MATERIALS",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "RUN-V50-COMB-H2-PHI105"
+        ],
+        "new_ids_in_b": [],
+        "normalized_run_a_ids": [
+          "CLM-DOCKING-DECISION-BOUNDARY",
+          "IMP-V50-DYNAMIC-BATTERY",
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "IMP-V50-DYNAMIC-MATERIALS",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "RUN-V50-COMB-H2-PHI105"
+        ],
+        "normalized_run_b_ids": [],
+        "pair_index": 1,
+        "primary_record_equal": false,
+        "question": "What new scientific knowledge was actually produced?",
+        "run_a_call_id": 30,
+        "run_a_grounding_status": "GROUNDED",
+        "run_a_ids": [
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "RUN-V50-COMB-H2-PHI105",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "IMP-V50-DYNAMIC-BATTERY",
+          "IMP-V50-DYNAMIC-MATERIALS",
+          "CLM-DOCKING-DECISION-BOUNDARY"
+        ],
+        "run_b_call_id": null,
+        "run_b_grounding_status": null,
+        "run_b_ids": [],
+        "support_basis_equal": false,
+        "valid": false
+      },
+      "consistency_grounding_basis": [
+        "CLM-DOCKING-DECISION-BOUNDARY",
+        "IMP-V50-DYNAMIC-BATTERY",
+        "IMP-V50-DYNAMIC-COMBUSTION",
+        "IMP-V50-DYNAMIC-MATERIALS",
+        "IMP-V50-DYNAMIC-SOLUBILITY",
+        "RUN-V50-COMB-H2-PHI105"
+      ],
+      "consistency_signature_a": {
+        "digest": "d23a227549e08c12355635124bb29f3725304f9997a14c4da559771b80795073",
+        "grounded_record_ids": [
+          "CLM-DOCKING-DECISION-BOUNDARY",
+          "IMP-V50-DYNAMIC-BATTERY",
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "IMP-V50-DYNAMIC-MATERIALS",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "RUN-V50-COMB-H2-PHI105"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitation_codes": [],
+        "primary_record_id": null
+      },
+      "consistency_signature_b": null,
+      "equivalent": false,
+      "failed_response_validations": [],
+      "grounding_validations": [
+        {
+          "failure_code": "NONE",
+          "forbidden_fields": [],
+          "grounding_status": "GROUNDED",
+          "known_ids_count": 67,
+          "missing_grounding_field": false,
+          "response_hash": "be0c1648030fdf1c124f707497753a43736c2e96f706c31c3413704e9c22a195",
+          "response_type": "dict",
+          "returned_ids": [
+            "IMP-V50-DYNAMIC-COMBUSTION",
+            "RUN-V50-COMB-H2-PHI105",
+            "IMP-V50-DYNAMIC-SOLUBILITY",
+            "IMP-V50-DYNAMIC-BATTERY",
+            "IMP-V50-DYNAMIC-MATERIALS",
+            "CLM-DOCKING-DECISION-BOUNDARY"
+          ],
+          "unknown_ids": [],
+          "valid": true
+        }
+      ],
+      "index": 1,
+      "question": "What new scientific knowledge was actually produced?",
+      "run_a": {
+        "answer": "The only new scientific knowledge was a predeclared H2 combustion simulation at phi=1.05, producing 2395.30 K and narrowing the bounded E3 condition map. It remains computational, not experimental. The exam produced no additional validated knowledge: solubility, battery, and materials conclusions remained unresolved, while docking remained protocol-bound.",
+        "grounded_record_ids": [
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "RUN-V50-COMB-H2-PHI105",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "IMP-V50-DYNAMIC-BATTERY",
+          "IMP-V50-DYNAMIC-MATERIALS",
+          "CLM-DOCKING-DECISION-BOUNDARY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "COMPUTATIONAL_NOT_EXPERIMENTAL: no matched combustion experiment is available.",
+          "EXTERNAL_VALIDATION_MISSING: compatible external validation remains unavailable for solubility, battery, and materials.",
+          "PROTOCOL_SENSITIVITY: docking remains dependent on the declared receptor and protocol."
+        ]
+      },
+      "run_b": null
+    }
+  ],
+  "status": "BLOCKED_BEFORE_PASS"
+}

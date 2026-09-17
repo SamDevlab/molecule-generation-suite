@@ -1,0 +1,9 @@
+from research_os.campaigns.analysis import analyze_model_failures
+from research_os.campaigns.catalog import REAL_PROBLEM_CATALOG, REAL_SOURCE_CATALOG, discover_and_select, register_real_sources, source_map, validate_catalog
+from research_os.campaigns.models import CampaignStatus, ConflictStatus, ModelFailureAnalysis, NegativeResult, ProblemCandidate, ProblemDiscoveryResult, ResearchCampaign, ResearchCampaignBundle, ResearchGap, SourceConflict, TargetRecord, new_campaign_id
+from research_os.campaigns.store import CampaignStore
+from research_os.campaigns.store import DeclarativeCampaignStore
+from research_os.campaigns.declarative import CampaignExperimentSpec, CampaignExecutionPlan, CampaignProtocol, CampaignProtocolError, CampaignVerification, DeclarativeCampaignRunner, inspect_campaign_execution, load_campaign_protocol, verify_campaign_execution
+from research_os.campaigns.manager import CampaignManager, FINAL_RESEARCHER_PROMPT, FINAL_RESOLUTION_CHALLENGE_PROMPT, FINAL_UNRESOLVABLE_CHALLENGE_PROMPT
+
+__all__ = ["CampaignStatus", "ConflictStatus", "ModelFailureAnalysis", "NegativeResult", "ProblemCandidate", "ProblemDiscoveryResult", "ResearchCampaign", "ResearchCampaignBundle", "ResearchGap", "SourceConflict", "TargetRecord", "CampaignStore", "DeclarativeCampaignStore", "CampaignExperimentSpec", "CampaignExecutionPlan", "CampaignProtocol", "CampaignProtocolError", "CampaignVerification", "DeclarativeCampaignRunner", "load_campaign_protocol", "verify_campaign_execution", "inspect_campaign_execution", "CampaignManager", "FINAL_RESEARCHER_PROMPT", "FINAL_RESOLUTION_CHALLENGE_PROMPT", "FINAL_UNRESOLVABLE_CHALLENGE_PROMPT", "REAL_PROBLEM_CATALOG", "REAL_SOURCE_CATALOG", "discover_and_select", "register_real_sources", "source_map", "validate_catalog", "analyze_model_failures", "new_campaign_id"]

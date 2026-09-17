@@ -1,0 +1,190 @@
+{
+  "pairs": [
+    {
+      "calls": [
+        {
+          "call_id": 30,
+          "diagnostic": {
+            "attempt": 1,
+            "command_contract": "codex exec --ephemeral --skip-git-repo-check --sandbox read-only --color never --output-schema <fixed-schema> -",
+            "completed_at": "2026-09-06T02:23:08.891608+00:00",
+            "depth": 0,
+            "elapsed": 23.916463,
+            "exit_status": "COMPLETED",
+            "failure_code": null,
+            "failure_stage": "NONE",
+            "invocation_id": "LIVE-2276E15800FF462D",
+            "max_attempts": 1,
+            "model": "gpt-5.6-luna",
+            "operation": "final_exam_followup",
+            "output_contract": "ENVELOPE",
+            "output_schema_name": "live_output.schema.json",
+            "parent_invocation_id": null,
+            "provider": "CODEX_LIVE",
+            "reentrancy_state": "COMPLETED",
+            "schema_status": "PASS",
+            "started_at": "2026-09-06T02:22:44.975145+00:00",
+            "stderr_bytes": 38893,
+            "stderr_truncated": false,
+            "stdout_bytes": 832,
+            "stdout_truncated": false,
+            "timeout_budget": 120.0
+          },
+          "elapsed": 23.90599999999904,
+          "error": null,
+          "label": "TL-CONSISTENCY-01-A",
+          "operation": "final_exam_followup",
+          "process_events": [
+            {
+              "call_id": 30,
+              "cleanup_status": "RUNNING",
+              "label": "TL-CONSISTENCY-01-A",
+              "parent_pid": 20156,
+              "pid": 12156,
+              "started_at": "2026-09-06T02:22:44.980899+00:00"
+            },
+            {
+              "call_id": 30,
+              "cleanup_status": "EXITED",
+              "completed_at": "2026-09-06T02:23:08.891088+00:00",
+              "exit_code": 0,
+              "label": "TL-CONSISTENCY-01-A",
+              "parent_pid": 20156,
+              "pid": 12156,
+              "started_at": "2026-09-06T02:22:44.980899+00:00",
+              "termination_reason": "NORMAL_EXIT"
+            }
+          ],
+          "response_hash": "bebb6c4ad3a38e20d0e642b19107e27973f6d9a283e03269d961a1c202f2be61",
+          "status": "COMPLETED"
+        }
+      ],
+      "consistency_assessment": {
+        "failure_code": "RUN_A_GROUNDING_FAILURE",
+        "limitation_codes_equal": false,
+        "missing_ids_in_b": [
+          "BND-A0AD79098BC8",
+          "CLM-BATTERY-NO-DECISION",
+          "CLM-MATERIALS-CONDITION-GAP",
+          "CLM-V41-COMBUSTION-BOUNDARY",
+          "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "RUN-V50-COMB-H2-PHI105"
+        ],
+        "new_ids_in_b": [],
+        "normalized_run_a_ids": [
+          "BND-A0AD79098BC8",
+          "CLM-BATTERY-NO-DECISION",
+          "CLM-MATERIALS-CONDITION-GAP",
+          "CLM-V41-COMBUSTION-BOUNDARY",
+          "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "RUN-V50-COMB-H2-PHI105"
+        ],
+        "normalized_run_b_ids": [],
+        "pair_index": 1,
+        "primary_record_equal": false,
+        "question": "What new scientific knowledge was actually produced?",
+        "run_a_call_id": 30,
+        "run_a_grounding_status": "GROUNDED",
+        "run_a_ids": [
+          "RUN-V50-COMB-H2-PHI105",
+          "BND-A0AD79098BC8",
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "CLM-V41-COMBUSTION-BOUNDARY",
+          "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "CLM-BATTERY-NO-DECISION",
+          "CLM-MATERIALS-CONDITION-GAP"
+        ],
+        "run_b_call_id": null,
+        "run_b_grounding_status": null,
+        "run_b_ids": [],
+        "support_basis_equal": false,
+        "valid": false
+      },
+      "consistency_grounding_basis": [
+        "BND-A0AD79098BC8",
+        "CLM-BATTERY-NO-DECISION",
+        "CLM-MATERIALS-CONDITION-GAP",
+        "CLM-V41-COMBUSTION-BOUNDARY",
+        "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+        "DECISION-REVISION-V50-COMB-PHI105",
+        "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+        "RUN-V50-COMB-H2-PHI105"
+      ],
+      "consistency_signature_a": {
+        "digest": "1a9849fa747772c56807da7a13ed3e5e3aca83c6dc11e1380b1ca93262f5b743",
+        "grounded_record_ids": [
+          "BND-A0AD79098BC8",
+          "CLM-BATTERY-NO-DECISION",
+          "CLM-MATERIALS-CONDITION-GAP",
+          "CLM-V41-COMBUSTION-BOUNDARY",
+          "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "RUN-V50-COMB-H2-PHI105"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitation_codes": [],
+        "primary_record_id": null
+      },
+      "consistency_signature_b": null,
+      "contract_failure_reasons": [
+        "MISSING_PRIMARY_RECORD_ID",
+        "MISSING_LIMITATION_CODES"
+      ],
+      "equivalent": false,
+      "failed_response_validations": [],
+      "grounding_validations": [
+        {
+          "failure_code": "NONE",
+          "forbidden_fields": [],
+          "grounding_status": "GROUNDED",
+          "known_ids_count": 67,
+          "missing_grounding_field": false,
+          "response_hash": "bebb6c4ad3a38e20d0e642b19107e27973f6d9a283e03269d961a1c202f2be61",
+          "response_type": "dict",
+          "returned_ids": [
+            "RUN-V50-COMB-H2-PHI105",
+            "BND-A0AD79098BC8",
+            "DECISION-REVISION-V50-COMB-PHI105",
+            "CLM-V41-COMBUSTION-BOUNDARY",
+            "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+            "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+            "CLM-BATTERY-NO-DECISION",
+            "CLM-MATERIALS-CONDITION-GAP"
+          ],
+          "unknown_ids": [],
+          "valid": true
+        }
+      ],
+      "index": 1,
+      "question": "What new scientific knowledge was actually produced?",
+      "run_a": {
+        "answer": "The only new scientific knowledge was a predeclared Cantera H2 phi=1.05 equilibrium result, which narrowed the combustion condition map as bounded E3 computational evidence. It did not produce experimental validation or a general solubility conclusion; external solubility records were OOD, while battery and materials decisions remain blocked.",
+        "grounded_record_ids": [
+          "RUN-V50-COMB-H2-PHI105",
+          "BND-A0AD79098BC8",
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "CLM-V41-COMBUSTION-BOUNDARY",
+          "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "CLM-BATTERY-NO-DECISION",
+          "CLM-MATERIALS-CONDITION-GAP"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "COMPUTATIONAL_NOT_EXPERIMENTAL",
+          "EXTERNAL_VALIDATION_MISSING",
+          "OUT_OF_DOMAIN",
+          "MISSING_CONDITION_COMPLETE_DATA"
+        ]
+      },
+      "run_b": null
+    }
+  ],
+  "status": "BLOCKED_BEFORE_PASS"
+}

@@ -1,0 +1,846 @@
+{
+  "children": [
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 1,
+          "cleanup_status": "RUNNING",
+          "label": "V5-REVIEW-METHODOLOGY",
+          "parent_pid": 20156,
+          "pid": 2052,
+          "started_at": "2026-09-06T02:11:39.544536+00:00"
+        },
+        {
+          "call_id": 1,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:12:53.400842+00:00",
+          "exit_code": 0,
+          "label": "V5-REVIEW-METHODOLOGY",
+          "parent_pid": 20156,
+          "pid": 2052,
+          "started_at": "2026-09-06T02:11:39.544536+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "2052",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 2,
+          "cleanup_status": "RUNNING",
+          "label": "V5-REVIEW-EVIDENCE",
+          "parent_pid": 20156,
+          "pid": 2072,
+          "started_at": "2026-09-06T02:12:53.415482+00:00"
+        },
+        {
+          "call_id": 2,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:14:00.191814+00:00",
+          "exit_code": 0,
+          "label": "V5-REVIEW-EVIDENCE",
+          "parent_pid": 20156,
+          "pid": 2072,
+          "started_at": "2026-09-06T02:12:53.415482+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "2072",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 3,
+          "cleanup_status": "RUNNING",
+          "label": "V5-REVIEW-REPRODUCIBILITY",
+          "parent_pid": 20156,
+          "pid": 14876,
+          "started_at": "2026-09-06T02:14:00.207145+00:00"
+        },
+        {
+          "call_id": 3,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:14:54.900396+00:00",
+          "exit_code": 0,
+          "label": "V5-REVIEW-REPRODUCIBILITY",
+          "parent_pid": 20156,
+          "pid": 14876,
+          "started_at": "2026-09-06T02:14:00.207145+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "14876",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 4,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FINAL-SCIENTIFIC-EXAM",
+          "parent_pid": 20156,
+          "pid": 23048,
+          "started_at": "2026-09-06T02:14:54.910926+00:00"
+        },
+        {
+          "call_id": 4,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:15:50.188407+00:00",
+          "exit_code": 0,
+          "label": "V5-FINAL-SCIENTIFIC-EXAM",
+          "parent_pid": 20156,
+          "pid": 23048,
+          "started_at": "2026-09-06T02:14:54.910926+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "23048",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 5,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-01",
+          "parent_pid": 20156,
+          "pid": 18192,
+          "started_at": "2026-09-06T02:15:50.251969+00:00"
+        },
+        {
+          "call_id": 5,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:16:12.972044+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-01",
+          "parent_pid": 20156,
+          "pid": 18192,
+          "started_at": "2026-09-06T02:15:50.251969+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "18192",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 6,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-02",
+          "parent_pid": 20156,
+          "pid": 20988,
+          "started_at": "2026-09-06T02:16:12.999670+00:00"
+        },
+        {
+          "call_id": 6,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:16:32.557666+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-02",
+          "parent_pid": 20156,
+          "pid": 20988,
+          "started_at": "2026-09-06T02:16:12.999670+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "20988",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 7,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-03",
+          "parent_pid": 20156,
+          "pid": 22564,
+          "started_at": "2026-09-06T02:16:32.572819+00:00"
+        },
+        {
+          "call_id": 7,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:16:48.184574+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-03",
+          "parent_pid": 20156,
+          "pid": 22564,
+          "started_at": "2026-09-06T02:16:32.572819+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "22564",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 8,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-04",
+          "parent_pid": 20156,
+          "pid": 24460,
+          "started_at": "2026-09-06T02:16:48.210660+00:00"
+        },
+        {
+          "call_id": 8,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:17:03.838255+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-04",
+          "parent_pid": 20156,
+          "pid": 24460,
+          "started_at": "2026-09-06T02:16:48.210660+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "24460",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 9,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-05",
+          "parent_pid": 20156,
+          "pid": 13504,
+          "started_at": "2026-09-06T02:17:03.866527+00:00"
+        },
+        {
+          "call_id": 9,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:17:19.951642+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-05",
+          "parent_pid": 20156,
+          "pid": 13504,
+          "started_at": "2026-09-06T02:17:03.866527+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "13504",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 10,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-06",
+          "parent_pid": 20156,
+          "pid": 1488,
+          "started_at": "2026-09-06T02:17:20.023569+00:00"
+        },
+        {
+          "call_id": 10,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:17:35.569065+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-06",
+          "parent_pid": 20156,
+          "pid": 1488,
+          "started_at": "2026-09-06T02:17:20.023569+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "1488",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 11,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-07",
+          "parent_pid": 20156,
+          "pid": 22252,
+          "started_at": "2026-09-06T02:17:35.611784+00:00"
+        },
+        {
+          "call_id": 11,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:17:47.799768+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-07",
+          "parent_pid": 20156,
+          "pid": 22252,
+          "started_at": "2026-09-06T02:17:35.611784+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "22252",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 12,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-08",
+          "parent_pid": 20156,
+          "pid": 6056,
+          "started_at": "2026-09-06T02:17:47.817638+00:00"
+        },
+        {
+          "call_id": 12,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:18:04.539791+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-08",
+          "parent_pid": 20156,
+          "pid": 6056,
+          "started_at": "2026-09-06T02:17:47.817638+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "6056",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 13,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-09",
+          "parent_pid": 20156,
+          "pid": 10676,
+          "started_at": "2026-09-06T02:18:04.555932+00:00"
+        },
+        {
+          "call_id": 13,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:18:20.218699+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-09",
+          "parent_pid": 20156,
+          "pid": 10676,
+          "started_at": "2026-09-06T02:18:04.555932+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "10676",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 14,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-10",
+          "parent_pid": 20156,
+          "pid": 22624,
+          "started_at": "2026-09-06T02:18:20.238162+00:00"
+        },
+        {
+          "call_id": 14,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:18:38.521044+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-10",
+          "parent_pid": 20156,
+          "pid": 22624,
+          "started_at": "2026-09-06T02:18:20.238162+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "22624",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 15,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-11",
+          "parent_pid": 20156,
+          "pid": 18860,
+          "started_at": "2026-09-06T02:18:38.533076+00:00"
+        },
+        {
+          "call_id": 15,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:18:58.588646+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-11",
+          "parent_pid": 20156,
+          "pid": 18860,
+          "started_at": "2026-09-06T02:18:38.533076+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "18860",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 16,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-12",
+          "parent_pid": 20156,
+          "pid": 14720,
+          "started_at": "2026-09-06T02:18:58.621792+00:00"
+        },
+        {
+          "call_id": 16,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:19:24.167611+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-12",
+          "parent_pid": 20156,
+          "pid": 14720,
+          "started_at": "2026-09-06T02:18:58.621792+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "14720",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 17,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-13",
+          "parent_pid": 20156,
+          "pid": 10272,
+          "started_at": "2026-09-06T02:19:24.236952+00:00"
+        },
+        {
+          "call_id": 17,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:19:40.141186+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-13",
+          "parent_pid": 20156,
+          "pid": 10272,
+          "started_at": "2026-09-06T02:19:24.236952+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "10272",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 18,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-14",
+          "parent_pid": 20156,
+          "pid": 19308,
+          "started_at": "2026-09-06T02:19:40.168733+00:00"
+        },
+        {
+          "call_id": 18,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:19:59.943682+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-14",
+          "parent_pid": 20156,
+          "pid": 19308,
+          "started_at": "2026-09-06T02:19:40.168733+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "19308",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 19,
+          "cleanup_status": "RUNNING",
+          "label": "V5-FOLLOWUP-15",
+          "parent_pid": 20156,
+          "pid": 22588,
+          "started_at": "2026-09-06T02:19:59.956927+00:00"
+        },
+        {
+          "call_id": 19,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:20:14.137115+00:00",
+          "exit_code": 0,
+          "label": "V5-FOLLOWUP-15",
+          "parent_pid": 20156,
+          "pid": 22588,
+          "started_at": "2026-09-06T02:19:59.956927+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "22588",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 20,
+          "cleanup_status": "RUNNING",
+          "label": "TL-LIVE-01",
+          "parent_pid": 20156,
+          "pid": 7372,
+          "started_at": "2026-09-06T02:20:14.160905+00:00"
+        },
+        {
+          "call_id": 20,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:20:28.181611+00:00",
+          "exit_code": 0,
+          "label": "TL-LIVE-01",
+          "parent_pid": 20156,
+          "pid": 7372,
+          "started_at": "2026-09-06T02:20:14.160905+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "7372",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 21,
+          "cleanup_status": "RUNNING",
+          "label": "TL-LIVE-02",
+          "parent_pid": 20156,
+          "pid": 16820,
+          "started_at": "2026-09-06T02:20:28.195262+00:00"
+        },
+        {
+          "call_id": 21,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:20:43.699786+00:00",
+          "exit_code": 0,
+          "label": "TL-LIVE-02",
+          "parent_pid": 20156,
+          "pid": 16820,
+          "started_at": "2026-09-06T02:20:28.195262+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "16820",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 22,
+          "cleanup_status": "RUNNING",
+          "label": "TL-LIVE-03",
+          "parent_pid": 20156,
+          "pid": 19260,
+          "started_at": "2026-09-06T02:20:43.713853+00:00"
+        },
+        {
+          "call_id": 22,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:20:55.711239+00:00",
+          "exit_code": 0,
+          "label": "TL-LIVE-03",
+          "parent_pid": 20156,
+          "pid": 19260,
+          "started_at": "2026-09-06T02:20:43.713853+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "19260",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 23,
+          "cleanup_status": "RUNNING",
+          "label": "TL-LIVE-04",
+          "parent_pid": 20156,
+          "pid": 21688,
+          "started_at": "2026-09-06T02:20:55.718470+00:00"
+        },
+        {
+          "call_id": 23,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:21:10.591412+00:00",
+          "exit_code": 0,
+          "label": "TL-LIVE-04",
+          "parent_pid": 20156,
+          "pid": 21688,
+          "started_at": "2026-09-06T02:20:55.718470+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "21688",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 24,
+          "cleanup_status": "RUNNING",
+          "label": "TL-LIVE-05",
+          "parent_pid": 20156,
+          "pid": 12008,
+          "started_at": "2026-09-06T02:21:10.601342+00:00"
+        },
+        {
+          "call_id": 24,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:21:26.316828+00:00",
+          "exit_code": 0,
+          "label": "TL-LIVE-05",
+          "parent_pid": 20156,
+          "pid": 12008,
+          "started_at": "2026-09-06T02:21:10.601342+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "12008",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 25,
+          "cleanup_status": "RUNNING",
+          "label": "TL-LIVE-06",
+          "parent_pid": 20156,
+          "pid": 22288,
+          "started_at": "2026-09-06T02:21:26.330466+00:00"
+        },
+        {
+          "call_id": 25,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:21:44.952489+00:00",
+          "exit_code": 0,
+          "label": "TL-LIVE-06",
+          "parent_pid": 20156,
+          "pid": 22288,
+          "started_at": "2026-09-06T02:21:26.330466+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "22288",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 26,
+          "cleanup_status": "RUNNING",
+          "label": "TL-LIVE-07",
+          "parent_pid": 20156,
+          "pid": 16308,
+          "started_at": "2026-09-06T02:21:44.968053+00:00"
+        },
+        {
+          "call_id": 26,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:22:02.536288+00:00",
+          "exit_code": 0,
+          "label": "TL-LIVE-07",
+          "parent_pid": 20156,
+          "pid": 16308,
+          "started_at": "2026-09-06T02:21:44.968053+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "16308",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 27,
+          "cleanup_status": "RUNNING",
+          "label": "TL-LIVE-08",
+          "parent_pid": 20156,
+          "pid": 21412,
+          "started_at": "2026-09-06T02:22:02.553265+00:00"
+        },
+        {
+          "call_id": 27,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:22:16.425495+00:00",
+          "exit_code": 0,
+          "label": "TL-LIVE-08",
+          "parent_pid": 20156,
+          "pid": 21412,
+          "started_at": "2026-09-06T02:22:02.553265+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "21412",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 28,
+          "cleanup_status": "RUNNING",
+          "label": "TL-LIVE-09",
+          "parent_pid": 20156,
+          "pid": 18040,
+          "started_at": "2026-09-06T02:22:16.436941+00:00"
+        },
+        {
+          "call_id": 28,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:22:31.093517+00:00",
+          "exit_code": 0,
+          "label": "TL-LIVE-09",
+          "parent_pid": 20156,
+          "pid": 18040,
+          "started_at": "2026-09-06T02:22:16.436941+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "18040",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 29,
+          "cleanup_status": "RUNNING",
+          "label": "TL-LIVE-10",
+          "parent_pid": 20156,
+          "pid": 15864,
+          "started_at": "2026-09-06T02:22:31.102885+00:00"
+        },
+        {
+          "call_id": 29,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:22:44.966833+00:00",
+          "exit_code": 0,
+          "label": "TL-LIVE-10",
+          "parent_pid": 20156,
+          "pid": 15864,
+          "started_at": "2026-09-06T02:22:31.102885+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "15864",
+      "termination_reason": "NORMAL_EXIT"
+    },
+    {
+      "cleanup_status": "EXITED",
+      "events": [
+        {
+          "call_id": 30,
+          "cleanup_status": "RUNNING",
+          "label": "TL-CONSISTENCY-01-A",
+          "parent_pid": 20156,
+          "pid": 12156,
+          "started_at": "2026-09-06T02:22:44.980899+00:00"
+        },
+        {
+          "call_id": 30,
+          "cleanup_status": "EXITED",
+          "completed_at": "2026-09-06T02:23:08.891088+00:00",
+          "exit_code": 0,
+          "label": "TL-CONSISTENCY-01-A",
+          "parent_pid": 20156,
+          "pid": 12156,
+          "started_at": "2026-09-06T02:22:44.980899+00:00",
+          "termination_reason": "NORMAL_EXIT"
+        }
+      ],
+      "exit_code": 0,
+      "parent_pid": 20156,
+      "pid": "12156",
+      "termination_reason": "NORMAL_EXIT"
+    }
+  ],
+  "owned_child_processes_remaining": false,
+  "status": "PASS"
+}

@@ -1,0 +1,471 @@
+{
+  "acceptance": {
+    "blocked_external": true,
+    "claim_revision_grounded": true,
+    "decision_revisit_required_when_needed": true,
+    "failed_validation_preserved": true,
+    "five_campaigns_attempted": true,
+    "full_ci_green": true,
+    "independence_assessed_for_all": true,
+    "no_eligible_external_data": true,
+    "no_evidence_level_inflation": true,
+    "validated_partial_or_failed_independent": true
+  },
+  "branch": "research-os-v1.3",
+  "campaigns": [
+    {
+      "campaign_id": "VAL-V43-SOLUBILITY-DLS100",
+      "candidate_datasets": [
+        "DLS-100-UNIQUE-56-CSV"
+      ],
+      "candidate_sources": [
+        "SRC-DLS100-UNIQUE-PATWALTERS"
+      ],
+      "claim_revision_ids": [
+        "REV-V43-SOLUBILITY-EXTERNAL-FAILURE"
+      ],
+      "created_at": "2026-09-04T23:57:38.236038+00:00",
+      "current_evidence": [
+        "EVD-V36-DATA-9294874036DA",
+        "EVD-V36-ML-3509F0DAF83D",
+        "EVD-V36-PRED-484D53B3FE94",
+        "EVD-V39-SOLUBILITY-DATA",
+        "EVD-V39-SOLUBILITY-MODEL",
+        "EVD-V39-SOLUBILITY-PRED",
+        "EVD-V41-SOLUBILITY-FAILURE-ANALYSIS"
+      ],
+      "decision_revision_ids": [],
+      "digest": "a8087ef1f2da7c30df58c92f0a5dcdeb88441695bb18eabcec66250d43e65e3d",
+      "independence_assessments": [
+        {
+          "dataset_id": "DLS-100-UNIQUE-56-CSV",
+          "independence_status": "INDEPENDENT",
+          "notes": "DLS-100 unique subset is a distinct public source; intrinsic/general aqueous semantic difference prevents full condition equivalence.",
+          "overlap_count": 0,
+          "shared_training_run": false,
+          "source_id": "SRC-DLS100-UNIQUE-PATWALTERS"
+        }
+      ],
+      "protocol": {
+        "model_frozen": true,
+        "model_id": "MODEL-V39-AQSOLDB",
+        "ood_policy": "retain OOD for audit; exclude from rankable predictions",
+        "retraining_before_test": false,
+        "target_units": "log10(mol/L)",
+        "threshold_tuning_after_test": false
+      },
+      "required_validation": "Independent measured solubility source, compatible log10(mol/L) target, molecule identity and overlap audit; exact condition semantics must be disclosed.",
+      "result": {
+        "compatibility": "PARTIAL_TARGET_COMPATIBILITY",
+        "metrics": {
+          "MAE": 1.1679929908471445,
+          "R2": 0.2642411682723491,
+          "RMSE": 1.4232440240440678,
+          "bias": -0.03151556768784511,
+          "in_domain_count": 0,
+          "interval_coverage": 0.8928571428571429,
+          "mean_uncertainty": 2.2046852853438867,
+          "ood_fraction": 1.0,
+          "overlap_count": 0,
+          "record_count": 56
+        },
+        "validation_interpretation": "FAILED_VALIDATION_FOR_UNRESTRICTED_GENERALIZATION"
+      },
+      "selected_validation_source": "SRC-DLS100-UNIQUE-PATWALTERS",
+      "status": "FAILED_VALIDATION",
+      "target_claim_id": "CLM-863B37BB0E38"
+    },
+    {
+      "campaign_id": "VAL-V43-COX2-4Z0L",
+      "candidate_datasets": [
+        "RCSB-4Z0L"
+      ],
+      "candidate_sources": [
+        "SRC-RCSB-4Z0L"
+      ],
+      "claim_revision_ids": [],
+      "created_at": "2026-09-04T23:57:38.237102+00:00",
+      "current_evidence": [],
+      "decision_revision_ids": [],
+      "digest": "7ceb8443ebe3c252da3678fcdd1353b9d7ca2768cb719c154a2ae661364de16a",
+      "independence_assessments": [
+        {
+          "eligible": false,
+          "independence_status": "INDEPENDENT",
+          "reason": "alternate legitimate murine COX-2 structure is structural comparison, not independent experiment; Vina unavailable for cross-structure execution",
+          "source_id": "SRC-RCSB-4Z0L"
+        }
+      ],
+      "protocol": {
+        "executed": false,
+        "reason": "structural source found, but no executable Vina cross-structure run was available; no E4 label is permitted"
+      },
+      "required_validation": "independent receptor structure comparison with declared preparation, grid and replicated E2 docking",
+      "result": {
+        "reason": "structural source found, but no executable Vina cross-structure run was available; no E4 label is permitted"
+      },
+      "selected_validation_source": null,
+      "status": "NO_ELIGIBLE_EXTERNAL_DATA",
+      "target_claim_id": "CLM-COX2-1PXX-V2"
+    },
+    {
+      "campaign_id": "VAL-V43-COMBUSTION-EXPERIMENT",
+      "candidate_datasets": [],
+      "candidate_sources": [
+        "SRC-EXTERNAL-COMBUSTION-LITERATURE"
+      ],
+      "claim_revision_ids": [],
+      "created_at": "2026-09-04T23:57:38.237102+00:00",
+      "current_evidence": [],
+      "decision_revision_ids": [],
+      "digest": "ea51aaae6b739db15304726ee610a8064e7c05d1446b7bfea5dbe1fed77554e9",
+      "independence_assessments": [
+        {
+          "eligible": false,
+          "independence_status": "UNKNOWN",
+          "reason": "public literature search found comparisons but no downloaded condition-matched raw observation under the exact bounded mixture/state protocol",
+          "source_id": "SRC-EXTERNAL-COMBUSTION-LITERATURE"
+        }
+      ],
+      "protocol": {
+        "executed": false,
+        "reason": "compatible experimental record was not available for hash/parse/match in this bounded campaign"
+      },
+      "required_validation": "condition-matched E3↔E4 comparison with mixture, temperature, pressure, equivalence ratio, mechanism context and measured property",
+      "result": {
+        "reason": "compatible experimental record was not available for hash/parse/match in this bounded campaign"
+      },
+      "selected_validation_source": null,
+      "status": "BLOCKED_EXTERNAL",
+      "target_claim_id": "CLM-V41-COMBUSTION-BOUNDARY"
+    },
+    {
+      "campaign_id": "VAL-V43-BATTERY-EXTERNAL",
+      "candidate_datasets": [
+        "NASA-ALT-BATTERY-2023"
+      ],
+      "candidate_sources": [
+        "SRC-NASA-ALT-2023"
+      ],
+      "claim_revision_ids": [],
+      "created_at": "2026-09-04T23:57:38.237637+00:00",
+      "current_evidence": [],
+      "decision_revision_ids": [],
+      "digest": "72d2101c16d1d62fd1c3f43621c8ff676e8c0d8243b909c4381a6aaf0133a0fd",
+      "independence_assessments": [
+        {
+          "eligible": false,
+          "independence_status": "INDEPENDENT",
+          "reason": "NASA metadata exposes capacity/degradation fields, but the artifact was not downloaded and parsed in this run; no cross-dataset result is claimed",
+          "source_id": "SRC-NASA-ALT-2023"
+        }
+      ],
+      "protocol": {
+        "executed": false,
+        "reason": "candidate metadata is promising but not an eligible validated dataset until exact-file ingestion and schema audit"
+      },
+      "required_validation": "independent battery artifact with cell identity, protocol, capacity/resistance and uncertainty fields",
+      "result": {
+        "reason": "candidate metadata is promising but not an eligible validated dataset until exact-file ingestion and schema audit"
+      },
+      "selected_validation_source": null,
+      "status": "NO_ELIGIBLE_EXTERNAL_DATA",
+      "target_claim_id": "CLM-V41-BATTERY-SCHEMA-BOUNDARY"
+    },
+    {
+      "campaign_id": "VAL-V43-MATERIALS-CONDITION",
+      "candidate_datasets": [
+        "ZENODO-316L-2026",
+        "DEHY-WP3",
+        "MENDELEY-AL-HE-2026"
+      ],
+      "candidate_sources": [
+        "SRC-ZENODO-316L-2026",
+        "SRC-TUDelft-DEHY-WP3",
+        "SRC-MENDELEY-AL-HE-2026"
+      ],
+      "claim_revision_ids": [],
+      "created_at": "2026-09-04T23:57:38.237637+00:00",
+      "current_evidence": [],
+      "decision_revision_ids": [],
+      "digest": "8748867f7b351b65af9faff36efd11d3332ace982827e394ac1c2a70b8b2da4c",
+      "independence_assessments": [
+        {
+          "eligible": false,
+          "independence_status": "INDEPENDENT",
+          "reason": "public 316L record is promising but condition-level file ingestion and pressure/temperature semantics were not completed",
+          "source_id": "SRC-ZENODO-316L-2026"
+        },
+        {
+          "eligible": false,
+          "independence_status": "INDEPENDENT",
+          "reason": "heterogeneous public files require exact-file review and condition matcher",
+          "source_id": "SRC-TUDelft-DEHY-WP3"
+        },
+        {
+          "eligible": false,
+          "independence_status": "INDEPENDENT",
+          "reason": "public metadata reports composition/processing/ductility but the complete hydrogen/stress condition row was not parsed",
+          "source_id": "SRC-MENDELEY-AL-HE-2026"
+        }
+      ],
+      "protocol": {
+        "executed": false,
+        "reason": "sources were discovered, but no condition-complete record was ingested and matched; material conclusion remains blocked"
+      },
+      "required_validation": "record-level alloy, composition, processing, microstructure, hydrogen environment, pressure/concentration, temperature, loading, method, property, uncertainty and locator",
+      "result": {
+        "reason": "sources were discovered, but no condition-complete record was ingested and matched; material conclusion remains blocked"
+      },
+      "selected_validation_source": null,
+      "status": "BLOCKED_EXTERNAL",
+      "target_claim_id": "CLM-V41-MATERIALS-CONDITION-GAP"
+    }
+  ],
+  "claim_revision": {
+    "claim_id": "CLM-863B37BB0E38",
+    "conditions": {
+      "external_dataset": "DLS-100-UNIQUE-56-CSV",
+      "ood_count": 56,
+      "overlap_count": 0
+    },
+    "created_at": "2026-09-04T23:57:38.236038+00:00",
+    "current_status": "SUPPORTED",
+    "derived_from": [
+      "REV-V41-SOLUBILITY-BOUNDARY",
+      "RUN-V43-DLS100-LOCKED"
+    ],
+    "digest": "343dd4f7209d4f12dee738244880c1ebb77c13653e764906c814b26bae35e16e",
+    "evidence_ids": [
+      "EVD-V36-DATA-9294874036DA",
+      "EVD-V36-ML-3509F0DAF83D",
+      "EVD-V36-PRED-484D53B3FE94",
+      "EVD-V39-SOLUBILITY-DATA",
+      "EVD-V39-SOLUBILITY-MODEL",
+      "EVD-V39-SOLUBILITY-PRED",
+      "EVD-V41-SOLUBILITY-FAILURE-ANALYSIS",
+      "EVD-V43-DLS-LOCKED-MODEL",
+      "EVD-V43-DLS-SOURCE"
+    ],
+    "limitations": [
+      "DLS-100 intrinsic-solubility conditions are not identical to the AqSolDB training target semantics.",
+      "All 56 external records were OOD; no external ranking is authorized."
+    ],
+    "new_evidence_ids": [
+      "EVD-V43-DLS-LOCKED-MODEL",
+      "EVD-V43-DLS-SOURCE"
+    ],
+    "new_status": "SUPPORTED",
+    "previous_evidence_ids": [
+      "EVD-V36-DATA-9294874036DA",
+      "EVD-V36-ML-3509F0DAF83D",
+      "EVD-V36-PRED-484D53B3FE94",
+      "EVD-V39-SOLUBILITY-DATA",
+      "EVD-V39-SOLUBILITY-MODEL",
+      "EVD-V39-SOLUBILITY-PRED",
+      "EVD-V41-SOLUBILITY-FAILURE-ANALYSIS"
+    ],
+    "previous_revision_id": "REV-V41-SOLUBILITY-BOUNDARY",
+    "previous_status": "SUPPORTED",
+    "reason": "Independent source and molecule overlap audit were completed before one frozen evaluation; the observed OOD boundary and condition-semantic mismatch narrow the claim without changing EvidenceLevel.",
+    "revision_id": "REV-V43-SOLUBILITY-EXTERNAL-FAILURE",
+    "statement": "The locked AqSolDB scaffold-split model remains a sample-specific E1 boundary result; the independent non-overlapping DLS-100 subset was entirely OOD and did not validate unrestricted external generalization.",
+    "supersedes": null,
+    "timestamp": "2026-09-04T23:57:38.236038+00:00",
+    "valid": true,
+    "version": 5
+  },
+  "created_at": "2026-09-04T23:57:38.285731+00:00",
+  "external_source_notes": [
+    {
+      "role": "independent source metadata and data lineage",
+      "source_id": "SRC-DLS100-UNIQUE-PATWALTERS",
+      "url": "https://research-portal.st-andrews.ac.uk/en/datasets/dls-100-solubility-dataset/"
+    },
+    {
+      "role": "alternate structural source; still E2 if executed",
+      "source_id": "SRC-RCSB-4Z0L",
+      "url": "https://rcsb.org/experimental/4Z0L"
+    },
+    {
+      "role": "candidate battery source; not ingested in this run",
+      "source_id": "SRC-NASA-ALT-2023",
+      "url": "https://ntrs.nasa.gov/citations/20230014884"
+    },
+    {
+      "role": "candidate materials source; not ingested in this run",
+      "source_id": "SRC-ZENODO-316L-2026",
+      "url": "https://zenodo.org/records/19813205"
+    },
+    {
+      "role": "candidate materials source; not ingested in this run",
+      "source_id": "SRC-TUDelft-DEHY-WP3",
+      "url": "https://research.tudelft.nl/en/datasets/data-and-code-underlying-the-project-designing-hydrogen-resistant/"
+    },
+    {
+      "role": "candidate materials source; not ingested in this run",
+      "source_id": "SRC-MENDELEY-AL-HE-2026",
+      "url": "https://data.mendeley.com/datasets/hgsvkttdyb/1"
+    }
+  ],
+  "independence_gate": {
+    "all_campaigns_audited": true,
+    "evidence_level_inflation": false,
+    "independent_completed_campaign": true,
+    "no_same_source_reuse_as_independent": true,
+    "retraining_before_external_test": false,
+    "threshold_tuning_after_result": false
+  },
+  "ledger": {
+    "run_count": 1,
+    "status": "PASS"
+  },
+  "prior_checkpoints": {
+    "v4.0": "PASS",
+    "v4.1": "PASS"
+  },
+  "protocol_version": "research-os.v4.3.external-validation-campaigns.v1",
+  "solubility_external_validation": {
+    "metrics": {
+      "MAE": 1.1679929908471445,
+      "R2": 0.2642411682723491,
+      "RMSE": 1.4232440240440678,
+      "bias": -0.03151556768784511,
+      "in_domain_count": 0,
+      "interval_coverage": 0.8928571428571429,
+      "mean_uncertainty": 2.2046852853438867,
+      "ood_fraction": 1.0,
+      "overlap_count": 0,
+      "record_count": 56
+    },
+    "model": {
+      "frozen": true,
+      "model_dataset_id": "aqsoldb-g-real-sample",
+      "model_id": "MODEL-V39-AQSOLDB",
+      "retrained": false
+    },
+    "negative_result": "All 56 records were OOD under the frozen 0.4 maximum Morgan/Tanimoto threshold; the external metrics are a boundary/failure result, not a rankable prediction set.",
+    "protocol": {
+      "DLS_target_semantics": "intrinsic aqueous solubility",
+      "fingerprint": "Morgan radius 2, 2048 bits",
+      "regressor": "NumPy Ridge alpha=1",
+      "target_units": "log10(mol/L)"
+    },
+    "run": {
+      "bundle_hash": "eb1da016309b77fd2d39b6acc1d92d60d5af06a9237afbde6e9dc176a3ea6ca1",
+      "bundle_id": "BND-20F25E86C18A",
+      "bundle_passed": true,
+      "bundle_path": ".research-os-live-4.3-final\\bundles\\RUN-V43-DLS100-LOCKED",
+      "bundle_status": "PASS",
+      "claim_ids": [],
+      "evidence_ids": [
+        "EVD-V43-DLS-SOURCE",
+        "EVD-V43-DLS-LOCKED-MODEL"
+      ],
+      "ledger_status": "REGISTERED",
+      "run_id": "RUN-V43-DLS100-LOCKED"
+    },
+    "sample_predictions": [
+      {
+        "absolute_error": 0.7851446316214168,
+        "name": "Adenosine",
+        "observed": -1.73,
+        "ood_status": "OUT_OF_DOMAIN",
+        "prediction": -2.5151446316214168,
+        "smiles": "c1nc(c2c(n1)n(cn2)[C@H]3[C@@H]([C@@H]([C@H](O3)CO)O)O)N",
+        "uncertainty": 2.2046852853438867
+      },
+      {
+        "absolute_error": 0.03651194723642881,
+        "name": "Allopurinol",
+        "observed": -2.26,
+        "ood_status": "OUT_OF_DOMAIN",
+        "prediction": -2.2965119472364286,
+        "smiles": "c1c2c([nH]n1)ncnc2O",
+        "uncertainty": 2.2046852853438867
+      },
+      {
+        "absolute_error": 0.14679271456607523,
+        "name": "Trimethoprim",
+        "observed": -2.95,
+        "ood_status": "OUT_OF_DOMAIN",
+        "prediction": -2.803207285433925,
+        "smiles": "COc1cc(cc(c1OC)OC)Cc2cnc(nc2N)N",
+        "uncertainty": 2.2046852853438867
+      },
+      {
+        "absolute_error": 1.329159341437009,
+        "name": "Benzoic acid",
+        "observed": -1.58,
+        "ood_status": "OUT_OF_DOMAIN",
+        "prediction": -2.909159341437009,
+        "smiles": "c1ccc(cc1)C(=O)O",
+        "uncertainty": 2.2046852853438867
+      },
+      {
+        "absolute_error": 1.855062465264451,
+        "name": "Salbutamol",
+        "observed": -1.22,
+        "ood_status": "OUT_OF_DOMAIN",
+        "prediction": -3.075062465264451,
+        "smiles": "OCc1cc(ccc1O)C(O)CNC(C)(C)C",
+        "uncertainty": 2.2046852853438867
+      },
+      {
+        "absolute_error": 0.30654898968755484,
+        "name": "Quinidine",
+        "observed": -2.81,
+        "ood_status": "OUT_OF_DOMAIN",
+        "prediction": -3.116548989687555,
+        "smiles": "O(c4cc1c(nccc1[C@H](O)[C@@H]2N3CC[C@@H](C2)[C@@H](/C=C)C3)cc4)C",
+        "uncertainty": 2.2046852853438867
+      },
+      {
+        "absolute_error": 1.1621619082325525,
+        "name": "(RS)-Atenolol",
+        "observed": -1.21,
+        "ood_status": "OUT_OF_DOMAIN",
+        "prediction": -2.3721619082325525,
+        "smiles": "CC(C)NCC(COc1ccc(cc1)CC(=O)N)O",
+        "uncertainty": 2.2046852853438867
+      },
+      {
+        "absolute_error": 3.688901120872351,
+        "name": "Chloral Hydrate",
+        "observed": 1.7,
+        "ood_status": "OUT_OF_DOMAIN",
+        "prediction": -1.9889011208723506,
+        "smiles": "ClC(Cl)(Cl)C(O)O",
+        "uncertainty": 2.2046852853438867
+      },
+      {
+        "absolute_error": 1.3343472187535537,
+        "name": "Cimetidine",
+        "observed": -1.69,
+        "ood_status": "OUT_OF_DOMAIN",
+        "prediction": -3.0243472187535536,
+        "smiles": "Cc1c(nc[nH]1)CSCCN\\C(=N\\C)NC#N",
+        "uncertainty": 2.2046852853438867
+      },
+      {
+        "absolute_error": 2.7373883066019085,
+        "name": "Chlorprothixene",
+        "observed": -6.75,
+        "ood_status": "OUT_OF_DOMAIN",
+        "prediction": -4.0126116933980915,
+        "smiles": "Clc2cc1C(\\c3c(Sc1cc2)cccc3)=C/CCN(C)C",
+        "uncertainty": 2.2046852853438867
+      }
+    ],
+    "source": {
+      "dataset_id": "DLS-100-UNIQUE-56-CSV",
+      "record_count": 56,
+      "sha256": "7f6ba392c6208c716adb5083b095d431890eb8b805d95ed88ec0f7b0b9a67fb9",
+      "source_id": "SRC-DLS100-UNIQUE-PATWALTERS",
+      "source_url": "https://raw.githubusercontent.com/PatWalters/solubility/master/dls_100_unique.csv"
+    }
+  },
+  "started_at": "2026-09-04T23:57:37.841725+00:00",
+  "status": "PASS",
+  "version": "4.3.0"
+}

@@ -1,0 +1,53 @@
+{
+  "evidence_level_changed": false,
+  "reviewers": [
+    {
+      "concern_response": {
+        "action": "create gap",
+        "final_status": "BLOCKED",
+        "reason": "Live reviewer could not be completed; no claim was promoted."
+      },
+      "error": {
+        "message": "Codex CLI invocation failed: TimeoutExpired",
+        "type": "LiveCodexUnavailable"
+      },
+      "record_type": "REVIEW / ANALYSIS",
+      "response": null,
+      "reviewer": "Methodology",
+      "task": "Find methodological weaknesses in the selected program."
+    },
+    {
+      "concern_response": {
+        "action": "create gap",
+        "final_status": "BLOCKED",
+        "reason": "Live reviewer could not be completed; no claim was promoted."
+      },
+      "error": {
+        "message": "Codex CLI invocation failed: TimeoutExpired",
+        "type": "LiveCodexUnavailable"
+      },
+      "record_type": "REVIEW / ANALYSIS",
+      "response": null,
+      "reviewer": "Evidence",
+      "task": "Find unsupported or weakly supported claims."
+    },
+    {
+      "concern_response": {
+        "action": "create gap",
+        "final_status": "BLOCKED",
+        "reason": "Live reviewer could not be completed; no claim was promoted."
+      },
+      "error": {
+        "message": "Codex CLI invocation failed: TimeoutExpired",
+        "type": "LiveCodexUnavailable"
+      },
+      "record_type": "REVIEW / ANALYSIS",
+      "response": null,
+      "reviewer": "Reproducibility",
+      "task": "Identify what another researcher would need to reproduce this."
+    }
+  ],
+  "same_stored_evidence": true,
+  "scientific_evidence_created": false,
+  "status": "FAIL"
+}

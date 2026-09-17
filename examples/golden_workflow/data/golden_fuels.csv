@@ -1,0 +1,4 @@
+fuel_id,name,smiles,description
+F-001,ethanol,CCO,common benign fixture molecule
+F-002,water,O,common benign fixture molecule
+F-003,methane,C,common benign fixture molecule

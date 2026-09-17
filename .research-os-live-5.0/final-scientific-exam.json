@@ -1,0 +1,113 @@
+{
+  "answers": [
+    {
+      "answer": "The bounded Cantera E3 condition statement and the narrow 1PXX docking statement remain justified within their declared protocols; neither is an experiment or efficacy claim.",
+      "grounded_record_ids": [
+        "RUN-V50-COMB-H2-PHI105",
+        "CLM-V41-COMBUSTION-BOUNDARY"
+      ],
+      "index": 1,
+      "question": "What conclusion are we justified in keeping?"
+    },
+    {
+      "answer": "Unrestricted generalization of the frozen solubility model should be weakened after the independent DLS pass was entirely OOD and failed the declared external validation protocol.",
+      "grounded_record_ids": [
+        "VAL-V43-SOLUBILITY-DLS100",
+        "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY"
+      ],
+      "index": 2,
+      "question": "Which conclusion should be weakened?"
+    },
+    {
+      "answer": "Condition-matched hydrogen-embrittlement comparison remains unanswered because the required record-level conditions and measured property are absent.",
+      "grounded_record_ids": [
+        "VAL-V43-MATERIALS-CONDITION",
+        "GAP-MATERIALS-CONDITION-COMPLETE"
+      ],
+      "index": 3,
+      "question": "Which question still cannot be answered?"
+    },
+    {
+      "answer": "Another identical 1PXX docking run with the same receptor, grid and protocol is currently low information gain.",
+      "grounded_record_ids": [
+        "IMP-V41-PROG-V41-COX2",
+        "CH-V45-COX2"
+      ],
+      "index": 4,
+      "question": "Which step is redundant?"
+    },
+    {
+      "answer": "A compatible in-domain solubility dataset with declared target semantics and an independent condition-matched materials record are higher-value acquisitions than repeated sealed computations; the first is immediately tied to the failed validation boundary.",
+      "grounded_record_ids": [
+        "VAL-V43-SOLUBILITY-DLS100",
+        "GAP-SOLUBILITY-EXTERNAL-VALIDATION"
+      ],
+      "index": 5,
+      "question": "Which external dataset or experiment has highest value?"
+    },
+    {
+      "answer": "The broad combustion refusal was reconsidered: the current state supports a narrower bounded E3 decision while retaining the E3-to-E4 gap.",
+      "grounded_record_ids": [
+        "FCA-V45-COMBUSTION",
+        "DECISION-V41-COMBUSTION-BOUNDARY"
+      ],
+      "index": 6,
+      "question": "Which previous NO_DECISION should be reconsidered?"
+    },
+    {
+      "answer": "The COX-2 ordering is most vulnerable because all support shares one receptor structure and docking protocol; it remains E2 and protocol-scoped.",
+      "grounded_record_ids": [
+        "CH-V45-DOCKING-DECISION",
+        "GAP-DOCKING-E2-ONLY"
+      ],
+      "index": 7,
+      "question": "Which supported decision is most vulnerable to protocol sensitivity?"
+    },
+    {
+      "answer": "Acquire and condition-audit a compatible external solubility source, then test the frozen model once before any retraining; this directly addresses the failed validation gap.",
+      "grounded_record_ids": [
+        "PROG-V50-DYN-SOLUBILITY",
+        "GAP-SOLUBILITY-EXTERNAL-VALIDATION"
+      ],
+      "index": 8,
+      "question": "What new program has highest realistic information gain?"
+    },
+    {
+      "answer": "A predeclared H2 phi=1.05, 300 K, 101325 Pa, gri30 HP-equilibrium run was executed and sealed. It extended the condition map; it did not create an experimental claim.",
+      "grounded_record_ids": [
+        "RUN-V50-COMB-H2-PHI105",
+        "EVD-B4B5770122CD"
+      ],
+      "index": 9,
+      "question": "What bounded program was executed?"
+    },
+    {
+      "answer": "The condition map gained one registered E3 result and the bounded combustion decision was appended with a phi=1.05 sensitivity point. Solubility, battery and materials external gaps remain unresolved; no EvidenceLevel changed.",
+      "grounded_record_ids": [
+        "IMP-V50-DYNAMIC-COMBUSTION",
+        "IMP-V50-DYNAMIC-BATTERY",
+        "IMP-V50-DYNAMIC-MATERIALS"
+      ],
+      "index": 10,
+      "question": "Exactly what changed scientifically?"
+    }
+  ],
+  "codex_selection": {
+    "error": {
+      "message": "Codex CLI invocation failed: TimeoutExpired",
+      "type": "LiveCodexUnavailable"
+    }
+  },
+  "criteria_declared_before_execution": true,
+  "evidence_level_changed_by_codex": false,
+  "execution_stop": "stopped after one bounded run; external blockers and no-progress paths were not pursued",
+  "live_followups": {
+    "error": {
+      "message": "Codex CLI invocation failed: TimeoutExpired",
+      "type": "LiveCodexUnavailable"
+    }
+  },
+  "scientific_evidence_created_by_codex": false,
+  "status": "FAIL",
+  "task": "Act as the primary research planner for the final Research OS validation. Using only the current Ledger, Knowledge OS, ResearchPrograms, ResearchGaps, datasets, models, engines, claims, decisions, evidence, outcome-impact records and scientific challenges: identify one justified conclusion, one conclusion to weaken, one unanswered question, one redundant step, one highest-value external dataset or experiment, one NO_DECISION to reconsider, one protocol-sensitive decision, one high-information program, execute it within strict limits, and state exactly what changed. Do not invent evidence, change EvidenceLevels, or continue after NO_PROGRESS or an external blocker."
+}

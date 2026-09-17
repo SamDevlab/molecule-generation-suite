@@ -1,0 +1,551 @@
+{
+  "cases": [
+    {
+      "case_id": "REPRO-V50-01",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "649f8867276b6d330d592535164c13ce437d0bc8630c4ebc1908fd221208f9be",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.11-smoke2\\codex-live\\bundles\\RUN-D0C07FF8E4D1",
+      "rerun_digest": "649f8867276b6d330d592535164c13ce437d0bc8630c4ebc1908fd221208f9be",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.11-smoke2\\codex-live\\bundles\\RUN-D0C07FF8E4D1",
+      "status": "REPRODUCED",
+      "target": "RUN-D0C07FF8E4D1"
+    },
+    {
+      "case_id": "REPRO-V50-02",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "5f6b382765c6d45fd6be4e2356a26313b7a97581e1d7d743856df3291464f0c2",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.11-smoke3\\codex-live\\bundles\\RUN-00C6C9103699",
+      "rerun_digest": "5f6b382765c6d45fd6be4e2356a26313b7a97581e1d7d743856df3291464f0c2",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.11-smoke3\\codex-live\\bundles\\RUN-00C6C9103699",
+      "status": "REPRODUCED",
+      "target": "RUN-00C6C9103699"
+    },
+    {
+      "case_id": "REPRO-V50-03",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "440758aa15b745831cfc3e7e7340b4e0d3e733137c59be1556582bfab82644c5",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.11-smoke\\codex-live\\bundles\\RUN-EC1838147EF4",
+      "rerun_digest": "440758aa15b745831cfc3e7e7340b4e0d3e733137c59be1556582bfab82644c5",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.11-smoke\\codex-live\\bundles\\RUN-EC1838147EF4",
+      "status": "REPRODUCED",
+      "target": "RUN-EC1838147EF4"
+    },
+    {
+      "case_id": "REPRO-V50-04",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "33e4ffa3142960f1f084bfc11c1ae8f6dc5b6705787b8718912de663d529a0cd",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\PLAN-18AF9724E440",
+      "rerun_digest": "33e4ffa3142960f1f084bfc11c1ae8f6dc5b6705787b8718912de663d529a0cd",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\PLAN-18AF9724E440",
+      "status": "REPRODUCED",
+      "target": "PLAN-18AF9724E440"
+    },
+    {
+      "case_id": "REPRO-V50-05",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "15bf492c8fbcdabcdbba15558a84ccb25781527d70d8d1190c73d9530d5fd42b",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\PLAN-2D91E849DF15",
+      "rerun_digest": "15bf492c8fbcdabcdbba15558a84ccb25781527d70d8d1190c73d9530d5fd42b",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\PLAN-2D91E849DF15",
+      "status": "REPRODUCED",
+      "target": "PLAN-2D91E849DF15"
+    },
+    {
+      "case_id": "REPRO-V50-06",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "7c8037e501166c4b9ca2662c7735b79baa0d37f60f6a5c264422b25d36b1d01d",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\PLAN-62F164388EC0",
+      "rerun_digest": "7c8037e501166c4b9ca2662c7735b79baa0d37f60f6a5c264422b25d36b1d01d",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\PLAN-62F164388EC0",
+      "status": "REPRODUCED",
+      "target": "PLAN-62F164388EC0"
+    },
+    {
+      "case_id": "REPRO-V50-07",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "82c84bfe8845464f69360c0ae46f6cfe43cd9faad221df619a7f364fdffed8a8",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\PLAN-78F032FB85EF",
+      "rerun_digest": "82c84bfe8845464f69360c0ae46f6cfe43cd9faad221df619a7f364fdffed8a8",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\PLAN-78F032FB85EF",
+      "status": "REPRODUCED",
+      "target": "PLAN-78F032FB85EF"
+    },
+    {
+      "case_id": "REPRO-V50-08",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "8aa4233454a01b735cc020376617ede5e2bdc30d9cda38c5a31b6495ee75677b",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\PLAN-A991901938E6",
+      "rerun_digest": "8aa4233454a01b735cc020376617ede5e2bdc30d9cda38c5a31b6495ee75677b",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\PLAN-A991901938E6",
+      "status": "REPRODUCED",
+      "target": "PLAN-A991901938E6"
+    },
+    {
+      "case_id": "REPRO-V50-09",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "6f33fc69f06cba781e2d7941c775c9772eafc972e25455b1a13a86f3bfeb36f5",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\PLAN-B05963ACAEF5",
+      "rerun_digest": "6f33fc69f06cba781e2d7941c775c9772eafc972e25455b1a13a86f3bfeb36f5",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\PLAN-B05963ACAEF5",
+      "status": "REPRODUCED",
+      "target": "PLAN-B05963ACAEF5"
+    },
+    {
+      "case_id": "REPRO-V50-10",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "6051dbba310bde46b4e5fc44e817dd5f138f21739b97f5416d5aad0725841891",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\RUN-C3CCCEA3D681",
+      "rerun_digest": "6051dbba310bde46b4e5fc44e817dd5f138f21739b97f5416d5aad0725841891",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-accepted\\bundles\\RUN-C3CCCEA3D681",
+      "status": "REPRODUCED",
+      "target": "RUN-C3CCCEA3D681"
+    },
+    {
+      "case_id": "REPRO-V50-11",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "a54d2ff477fe017deb2ca96238d7502fde75a289ce87450d5dccac6b39656574",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\PLAN-086EF5B102F9",
+      "rerun_digest": "a54d2ff477fe017deb2ca96238d7502fde75a289ce87450d5dccac6b39656574",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\PLAN-086EF5B102F9",
+      "status": "REPRODUCED",
+      "target": "PLAN-086EF5B102F9"
+    },
+    {
+      "case_id": "REPRO-V50-12",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "a62267134906b130fe97d340acd1ff92c610336b8cfaa0225196749a879450ae",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\PLAN-0F24B4D7E1F6",
+      "rerun_digest": "a62267134906b130fe97d340acd1ff92c610336b8cfaa0225196749a879450ae",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\PLAN-0F24B4D7E1F6",
+      "status": "REPRODUCED",
+      "target": "PLAN-0F24B4D7E1F6"
+    },
+    {
+      "case_id": "REPRO-V50-13",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "d7bf85663aa224b873c94ff62532be2b2c375460a10544d804363d94089bc21c",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\PLAN-1DD2F24F4C41",
+      "rerun_digest": "d7bf85663aa224b873c94ff62532be2b2c375460a10544d804363d94089bc21c",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\PLAN-1DD2F24F4C41",
+      "status": "REPRODUCED",
+      "target": "PLAN-1DD2F24F4C41"
+    },
+    {
+      "case_id": "REPRO-V50-14",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "4991590edfed313fbb0706cc5affc5984be8e959af5401ff51d4c4740a9048aa",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\PLAN-46E4EC340E67",
+      "rerun_digest": "4991590edfed313fbb0706cc5affc5984be8e959af5401ff51d4c4740a9048aa",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\PLAN-46E4EC340E67",
+      "status": "REPRODUCED",
+      "target": "PLAN-46E4EC340E67"
+    },
+    {
+      "case_id": "REPRO-V50-15",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "8173f9409123ecc20d0286ea21305ef5d5de201de51ab5f72511a75979e425d5",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\PLAN-5D549C8BAB76",
+      "rerun_digest": "8173f9409123ecc20d0286ea21305ef5d5de201de51ab5f72511a75979e425d5",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\PLAN-5D549C8BAB76",
+      "status": "REPRODUCED",
+      "target": "PLAN-5D549C8BAB76"
+    },
+    {
+      "case_id": "REPRO-V50-16",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "fce16706963a0cd350f899da1f5f6b42f845fada8bca159cbd156a3e0ea3709e",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\PLAN-D21E0B971A4F",
+      "rerun_digest": "fce16706963a0cd350f899da1f5f6b42f845fada8bca159cbd156a3e0ea3709e",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\PLAN-D21E0B971A4F",
+      "status": "REPRODUCED",
+      "target": "PLAN-D21E0B971A4F"
+    },
+    {
+      "case_id": "REPRO-V50-17",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "7d3839d7805f1929ef43a3f432473167e826added960548c545e7e23db2b2094",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\RUN-67BB25B32F72",
+      "rerun_digest": "7d3839d7805f1929ef43a3f432473167e826added960548c545e7e23db2b2094",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final-pass\\bundles\\RUN-67BB25B32F72",
+      "status": "REPRODUCED",
+      "target": "RUN-67BB25B32F72"
+    },
+    {
+      "case_id": "REPRO-V50-18",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "2ee0d0403d3262843e5f89dbf322474e83ab0280ef67d1ca8f3671a38a7d971f",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final\\bundles\\PLAN-0B7F901A07B5",
+      "rerun_digest": "2ee0d0403d3262843e5f89dbf322474e83ab0280ef67d1ca8f3671a38a7d971f",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final\\bundles\\PLAN-0B7F901A07B5",
+      "status": "REPRODUCED",
+      "target": "PLAN-0B7F901A07B5"
+    },
+    {
+      "case_id": "REPRO-V50-19",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "35971933d6185470a9ae337d759af792bd6dbc051f6c4fefa5d5834c4fee6820",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final\\bundles\\PLAN-9BFE5844493C",
+      "rerun_digest": "35971933d6185470a9ae337d759af792bd6dbc051f6c4fefa5d5834c4fee6820",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final\\bundles\\PLAN-9BFE5844493C",
+      "status": "REPRODUCED",
+      "target": "PLAN-9BFE5844493C"
+    },
+    {
+      "case_id": "REPRO-V50-20",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "30835f5d1b6f78e7737fe7e5e09e580949893498570f70400dc9be5ddfdec154",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final\\bundles\\PLAN-9FBFE1142DFC",
+      "rerun_digest": "30835f5d1b6f78e7737fe7e5e09e580949893498570f70400dc9be5ddfdec154",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final\\bundles\\PLAN-9FBFE1142DFC",
+      "status": "REPRODUCED",
+      "target": "PLAN-9FBFE1142DFC"
+    },
+    {
+      "case_id": "REPRO-V50-21",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "53db47fe2a5ec8e9332e967e4d1123f4a32e3e8ae6f64d2916b6e7e3acad8fc0",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final\\bundles\\RUN-54DC131EC9F1",
+      "rerun_digest": "53db47fe2a5ec8e9332e967e4d1123f4a32e3e8ae6f64d2916b6e7e3acad8fc0",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-final\\bundles\\RUN-54DC131EC9F1",
+      "status": "REPRODUCED",
+      "target": "RUN-54DC131EC9F1"
+    },
+    {
+      "case_id": "REPRO-V50-22",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "24754accda5da9a676de128c159024a75343888493739a5cfe75db4ece9a24b9",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-3E567D4842CC",
+      "rerun_digest": "24754accda5da9a676de128c159024a75343888493739a5cfe75db4ece9a24b9",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-3E567D4842CC",
+      "status": "REPRODUCED",
+      "target": "PLAN-3E567D4842CC"
+    },
+    {
+      "case_id": "REPRO-V50-23",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "02082a620a56f125e9ec85dcee893c88c9eb03bb32fa830aaaa28506499427d3",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-3F4D2409A2BD",
+      "rerun_digest": "02082a620a56f125e9ec85dcee893c88c9eb03bb32fa830aaaa28506499427d3",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-3F4D2409A2BD",
+      "status": "REPRODUCED",
+      "target": "PLAN-3F4D2409A2BD"
+    },
+    {
+      "case_id": "REPRO-V50-24",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "e4405c0e44de7f41e32456cfa8e7a695db2ea962952137b00a553581fe0a955f",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-5890AB04DE65",
+      "rerun_digest": "e4405c0e44de7f41e32456cfa8e7a695db2ea962952137b00a553581fe0a955f",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-5890AB04DE65",
+      "status": "REPRODUCED",
+      "target": "PLAN-5890AB04DE65"
+    },
+    {
+      "case_id": "REPRO-V50-25",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "6d349aba137a0456eda4cece89bde0f8f944024009558ac7edacf961214f7be2",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-5A83E4D8F7CC",
+      "rerun_digest": "6d349aba137a0456eda4cece89bde0f8f944024009558ac7edacf961214f7be2",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-5A83E4D8F7CC",
+      "status": "REPRODUCED",
+      "target": "PLAN-5A83E4D8F7CC"
+    },
+    {
+      "case_id": "REPRO-V50-26",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "d69f06a792d3a24cbc81547d76d57fbfa1acb8221902e888498e63d4424bd9cf",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-A2C7A0A0076B",
+      "rerun_digest": "d69f06a792d3a24cbc81547d76d57fbfa1acb8221902e888498e63d4424bd9cf",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-A2C7A0A0076B",
+      "status": "REPRODUCED",
+      "target": "PLAN-A2C7A0A0076B"
+    },
+    {
+      "case_id": "REPRO-V50-27",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "6de90fd1bf7faf8b25d89140e4b95889ff231a4ea995d1c187b1fcc6a79f5a33",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-A5F8EE4070CE",
+      "rerun_digest": "6de90fd1bf7faf8b25d89140e4b95889ff231a4ea995d1c187b1fcc6a79f5a33",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-A5F8EE4070CE",
+      "status": "REPRODUCED",
+      "target": "PLAN-A5F8EE4070CE"
+    },
+    {
+      "case_id": "REPRO-V50-28",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "e6030dc45497e01e81576d09ee8a9e81c53526ae5e37067d0c522069ea928fcc",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-F47CAF8336F3",
+      "rerun_digest": "e6030dc45497e01e81576d09ee8a9e81c53526ae5e37067d0c522069ea928fcc",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\PLAN-F47CAF8336F3",
+      "status": "REPRODUCED",
+      "target": "PLAN-F47CAF8336F3"
+    },
+    {
+      "case_id": "REPRO-V50-29",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "00d7e5e167c1e457fdd2673fa3a3265f7c1f191f9b5ef6a83702177e2deec595",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\RUN-6483CBBBF9EC",
+      "rerun_digest": "00d7e5e167c1e457fdd2673fa3a3265f7c1f191f9b5ef6a83702177e2deec595",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-pass\\bundles\\RUN-6483CBBBF9EC",
+      "status": "REPRODUCED",
+      "target": "RUN-6483CBBBF9EC"
+    },
+    {
+      "case_id": "REPRO-V50-30",
+      "environment": {
+        "mode": "sealed_bundle_replay",
+        "verification": "PASS"
+      },
+      "first_divergence": null,
+      "notes": [
+        "Replay revalidated the sealed bundle; it did not claim a fresh engine measurement."
+      ],
+      "original_digest": "4b854798e63217d10aeb8cddd39b4fa56ea66f9e5850c9bd6049d08f55d626fa",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-rerun\\bundles\\PLAN-1686DCA326DD",
+      "rerun_digest": "4b854798e63217d10aeb8cddd39b4fa56ea66f9e5850c9bd6049d08f55d626fa",
+      "rerun_reference": "sealed-replay:C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.2-rerun\\bundles\\PLAN-1686DCA326DD",
+      "status": "REPRODUCED",
+      "target": "PLAN-1686DCA326DD"
+    },
+    {
+      "case_id": "REPRO-V50-TAMPER",
+      "environment": {
+        "mode": "tamper_injection"
+      },
+      "first_divergence": {
+        "category": "BUNDLE-HASH-001",
+        "reason": "manifest payload changed after seal; integrity verification stopped comparison"
+      },
+      "notes": [
+        "FIRST_DIVERGENCE is recorded before any scientific comparison."
+      ],
+      "original_digest": "649f8867276b6d330d592535164c13ce437d0bc8630c4ebc1908fd221208f9be",
+      "original_reference": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.11-smoke2\\codex-live\\bundles\\RUN-D0C07FF8E4D1",
+      "rerun_digest": "tampered-manifest",
+      "rerun_reference": "tampered-replay:C:\\Users\\samue\\AppData\\Local\\Temp\\research-os-v50-divergence-n6hbqtqm\\RUN-D0C07FF8E4D1",
+      "status": "DIVERGED",
+      "target": "RUN-D0C07FF8E4D1"
+    }
+  ],
+  "counts": {
+    "diverged": 1,
+    "first_divergence": 1,
+    "reproduced": 30,
+    "total": 31
+  },
+  "interpretation": "Sealed bundle replay is provenance verification, not a new independent observation.",
+  "protocol_version": "research-os.v5.0.sealed-replay.v1",
+  "status": "PASS",
+  "tamper_probe": {
+    "first_divergence": {
+      "category": "BUNDLE-HASH-001",
+      "reason": "manifest payload changed after seal; integrity verification stopped comparison"
+    },
+    "source_bundle": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-3.11-smoke2\\codex-live\\bundles\\RUN-D0C07FF8E4D1",
+    "status": "FAIL",
+    "tampered_bundle": "C:\\Users\\samue\\AppData\\Local\\Temp\\research-os-v50-divergence-n6hbqtqm\\RUN-D0C07FF8E4D1"
+  }
+}

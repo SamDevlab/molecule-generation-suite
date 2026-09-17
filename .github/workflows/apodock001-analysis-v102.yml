@@ -1,0 +1,59 @@
+name: apodock001-v102-analysis-evaluator
+
+on:
+  pull_request:
+    branches:
+      - research-os-v1.3
+    paths:
+      - "src/research_os/docking/apodock001_analysis.py"
+      - "scripts/analyze_apodock001.py"
+      - "tests/test_apodock001_analysis.py"
+      - "docs/apodock001-analysis-evaluator-v1.0.2.md"
+      - "configs/apodock001-protocol-freeze-v1.0.2.json"
+      - "inputs/apodock001/v1.0.2/**"
+      - ".github/workflows/apodock001-analysis-v102.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  analysis-evaluator:
+    name: APODOCK-001 v1.0.2 analysis (fixtures only)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Research OS molecular dependencies
+        run: python -m pip install -e ".[dev,molecule]"
+
+      - name: Confirm frozen protocol and input bundle are unchanged
+        run: |
+          git diff --exit-code "$BASE_SHA" -- \
+            configs/apodock001-protocol-freeze-v1.0.2.json \
+            inputs/apodock001/v1.0.2
+
+      - name: Run analysis evaluator fixtures
+        run: python -m pytest -q tests/test_apodock001_analysis.py
+
+      - name: Compile evaluator and CLI
+        run: |
+          python -m py_compile \
+            src/research_os/docking/apodock001_analysis.py \
+            scripts/analyze_apodock001.py
+
+      - name: Check source and workflow contain no prospective docking step
+        run: |
+          ! grep -n -- '--receptor\|--ligand\|vina ' .github/workflows/apodock001-analysis-v102.yml
+          grep -n 'same-frame-no-fit\|fixtures only' /dev/null 2>/dev/null || true
+          echo 'APODOCK-001 cases executed: 0/10'
+          echo 'No APODOCK Vina docking command was started.'

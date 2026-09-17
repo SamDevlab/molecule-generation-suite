@@ -1,0 +1,41 @@
+{
+  "git_sha": "f64ae09ed8b982da7d75c8ba818b9aa4585b7fa5",
+  "openbabel": {
+    "executable": "/usr/bin/obabel",
+    "name": "Open Babel",
+    "option_probe": [
+      "-h",
+      "--partialcharge",
+      "gasteiger",
+      "-xr"
+    ],
+    "required_sha256": null,
+    "required_version": "3.1.1",
+    "sha256": "57584125b4946eea824d3bfa75c3fce2c018efa680368e1bdfdbf9c121784876",
+    "version": "3.1.1",
+    "version_output": "Open Babel 3.1.1 -- Jan  4 2023 -- 09:58:24"
+  },
+  "platform": {
+    "architecture": "64bit",
+    "machine": "x86_64",
+    "release": "6.18.33.2-microsoft-standard-WSL2",
+    "system": "Linux"
+  },
+  "protocol_id": "research-os.apodock001.protocol.v1.0.2+aa40517362e14795",
+  "python": {
+    "implementation": "CPython",
+    "version": "3.12.14"
+  },
+  "rdkit_version": "2026.03.6",
+  "schema_version": "research-os.apodock001.environment.v1",
+  "vina": {
+    "executable": "/tmp/vina_1.2.7",
+    "name": "AutoDock Vina",
+    "option_probe": [],
+    "required_sha256": "f31f774f723bba7bbe6e9d1c47577020eea9a8da16424284c043d22593570644",
+    "required_version": "1.2.7",
+    "sha256": "f31f774f723bba7bbe6e9d1c47577020eea9a8da16424284c043d22593570644",
+    "version": "1.2.7",
+    "version_output": "AutoDock Vina v1.2.7"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "cpu": 1,
+  "energy_range": null,
+  "exhaustiveness": 32,
+  "num_modes": 20,
+  "protocol_id": "research-os.apodock001.protocol.v1.1+b1a3c7b16db63ea4",
+  "retry_count": 0,
+  "seed": 42,
+  "timeout_seconds": 1800.0
+}

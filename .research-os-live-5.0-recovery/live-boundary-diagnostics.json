@@ -1,0 +1,122 @@
+{
+  "baseline_reproduction": {
+    "classification": "TIMEOUT",
+    "commit": "cacfaa6",
+    "error": "LiveCodexUnavailable: Codex CLI invocation failed: TimeoutExpired",
+    "interpretation": "The inherited CODEX_* context made the child codex exec a recursive session boundary; this is retained as a prior observation, not treated as scientific evidence.",
+    "observed_before_reentrancy_guard": true,
+    "status": "TIMEOUT"
+  },
+  "call_graph_audit": {
+    "buffering_and_pipes": "stdout/stderr are captured for byte counts only; raw streams are not persisted",
+    "cwd_and_stdin": "declared workdir only; structured prompt is the sole stdin payload",
+    "environment": "Codex session markers and CODEX_HOME are removed from child environment",
+    "handles_and_waits": "subprocess.run is bounded by timeout; no unbounded wait/retry path exists",
+    "nested_codex_exec": "detected through inherited CODEX_THREAD_ID/CODEX_SESSION_ID markers",
+    "ownership": "current process is Codex-owned; no recursive child is admitted",
+    "process_lifecycle": "admit -> start -> bounded wait -> classify -> parse -> complete",
+    "provider_entry": "CodexLiveProvider._call",
+    "provider_reentry": "context-local active invocation plus controller serialization rejects nested entry",
+    "retries": "only process-start and pipe-I/O transients retry within max_retries",
+    "schema_and_context": "fixed schema path; redacted structured payload; bounded output retention",
+    "session_ownership": "top-level owner required; trusted external owner can opt in explicitly",
+    "status": "SAFE_REENTRANCY_BLOCK",
+    "subprocess_contract": "fixed argv, shell=False, fixed output schema",
+    "timeout_propagation": "operation budget is min(timeout_seconds, stage budget)",
+    "transport_entry": "CodexCliTransport.__call__"
+  },
+  "created_at": "2026-09-05T02:43:12.530217+00:00",
+  "diagnostics": [
+    {
+      "attempt": 1,
+      "command_contract": "codex exec --ephemeral --skip-git-repo-check --sandbox read-only --color never --output-schema <fixed-schema> -",
+      "completed_at": "2026-09-05T02:43:12.372344+00:00",
+      "depth": 1,
+      "elapsed": 0.000527,
+      "exit_status": "REJECTED_REENTRANT",
+      "failure_code": "REENTRANT_INVOCATION_REJECTED",
+      "failure_stage": "ADMISSION",
+      "invocation_id": "LIVE-6BF634C999334EA3",
+      "max_attempts": 1,
+      "model": "MODEL_ID_UNVERIFIED_FROM_RUNTIME",
+      "operation": "interpret_question",
+      "parent_invocation_id": "CODEX_CONTEXT:01a063ef-f668-7062-88f5-5d7fee2a592b",
+      "provider": "CODEX_LIVE",
+      "reentrancy_state": "REJECTED_REENTRANT",
+      "schema_status": "NOT_CHECKED",
+      "started_at": "2026-09-05T02:43:12.371817+00:00",
+      "stderr_bytes": 0,
+      "stderr_truncated": false,
+      "stdout_bytes": 0,
+      "stdout_truncated": false,
+      "timeout_budget": 8.0
+    }
+  ],
+  "post_fix_real_smoke": {
+    "case_id": "LIVE-BOUNDARY-01",
+    "classification": "REENTRANCY_REJECTED",
+    "diagnostic": {
+      "attempt": 1,
+      "command_contract": "codex exec --ephemeral --skip-git-repo-check --sandbox read-only --color never --output-schema <fixed-schema> -",
+      "completed_at": "2026-09-05T02:43:12.372344+00:00",
+      "depth": 1,
+      "elapsed": 0.000527,
+      "exit_status": "REJECTED_REENTRANT",
+      "failure_code": "REENTRANT_INVOCATION_REJECTED",
+      "failure_stage": "ADMISSION",
+      "invocation_id": "LIVE-6BF634C999334EA3",
+      "max_attempts": 1,
+      "model": "MODEL_ID_UNVERIFIED_FROM_RUNTIME",
+      "operation": "interpret_question",
+      "parent_invocation_id": "CODEX_CONTEXT:01a063ef-f668-7062-88f5-5d7fee2a592b",
+      "provider": "CODEX_LIVE",
+      "reentrancy_state": "REJECTED_REENTRANT",
+      "schema_status": "NOT_CHECKED",
+      "started_at": "2026-09-05T02:43:12.371817+00:00",
+      "stderr_bytes": 0,
+      "stderr_truncated": false,
+      "stdout_bytes": 0,
+      "stdout_truncated": false,
+      "timeout_budget": 8.0
+    },
+    "elapsed": 0.0,
+    "error": "CODEX_LIVE_REENTRANCY=REJECTED_REENTRANT",
+    "error_type": "LiveCodexUnavailable",
+    "execution_mode": "REAL_CODEX_LIVE_PROVIDER",
+    "live_attempt_completed": false,
+    "model": "MODEL_ID_UNVERIFIED_FROM_RUNTIME",
+    "provider": "CODEX_LIVE",
+    "status": "BLOCKED_REENTRANT"
+  },
+  "provider_audit": {
+    "evidence_level_changed": false,
+    "provider": "CODEX_LIVE",
+    "reentrancy_contract": "CODEX_LIVE_REENTRANCY",
+    "scientific_evidence_created": false,
+    "transport": "CodexCliTransport"
+  },
+  "scientific_audit": {
+    "checks": {
+      "blocked_live_review_is_not_counted_as_scientific_output": true,
+      "live_provider_changes_zero_evidence_levels": true,
+      "live_provider_creates_zero_evidence": true,
+      "prior_v5_scientific_audit_preserved": true
+    },
+    "status": "PASS"
+  },
+  "security_audit": {
+    "checks": {
+      "audited_environment_allowlist": true,
+      "bounded_timeout_and_retries": true,
+      "codex_session_markers_not_forwarded": true,
+      "fixed_argv_contract": true,
+      "fixed_codex_executable_allowlist": true,
+      "no_live_provider_reentry": true,
+      "raw_stdout_stderr_not_persisted": true,
+      "schema_fail_closed": true,
+      "shell_false": true
+    },
+    "status": "PASS"
+  },
+  "status": "BLOCKED_BEFORE_LIVE_REVIEW"
+}

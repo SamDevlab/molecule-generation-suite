@@ -1,0 +1,280 @@
+{
+  "answers": [
+    {
+      "call_id": 5,
+      "index": 1,
+      "question": "What new scientific knowledge was actually produced?",
+      "response": {
+        "answer": "The only new scientific knowledge was a bounded E3 computational combustion extension: Cantera predicted 2395.30 K for H2 at equivalence ratio 1.05 under the recorded reference conditions, narrowing the condition map without producing experimental evidence. Solubility gained no generalizable knowledge because all 56 external records were OOD; battery and materials remained externally blocked.",
+        "grounded_record_ids": [
+          "RUN-V50-COMB-H2-PHI105",
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "IMP-V50-DYNAMIC-BATTERY",
+          "IMP-V50-DYNAMIC-MATERIALS"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible E4 experimental comparison was available.",
+          "The solubility finding is sample- and protocol-specific, not population-wide."
+        ]
+      }
+    },
+    {
+      "call_id": 6,
+      "index": 2,
+      "question": "Which claim changed?",
+      "response": {
+        "answer": "The combustion claim changed: the predeclared phi=1.05 Cantera run narrowed the result to a bounded E3 computational condition-map extension; it remains computational, not experimental evidence.",
+        "grounded_record_ids": [
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "RUN-V50-COMB-H2-PHI105",
+          "DECISION-REVISION-V50-COMB-PHI105"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "The result does not provide an E4 experimental comparison."
+        ]
+      }
+    },
+    {
+      "call_id": 7,
+      "index": 3,
+      "question": "Which decision changed?",
+      "response": {
+        "answer": "The combustion decision changed: DECISION-REVISION-V50-COMB-PHI105 added a bounded E3 condition-map extension at phi=1.05, while remaining computational rather than experimental. No other decision materially changed.",
+        "grounded_record_ids": [
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "RUN-V50-COMB-H2-PHI105"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "The update does not support an experimental or population-wide conclusion."
+        ]
+      }
+    },
+    {
+      "call_id": 8,
+      "index": 4,
+      "question": "Which gap closed?",
+      "response": {
+        "answer": "No gap was fully closed. GAP-E3-E4-COMPARISON was only partially resolved by the new phi=1.05 combustion condition map; an experimental E4 comparison remains outstanding.",
+        "grounded_record_ids": [
+          "GAP-E3-E4-COMPARISON",
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "RUN-V50-COMB-H2-PHI105"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "The result remains a bounded E3 computational extension, not experimental evidence."
+        ]
+      }
+    },
+    {
+      "call_id": 9,
+      "index": 5,
+      "question": "Which gap remains?",
+      "response": {
+        "answer": "The highest-priority remaining gap is GAP-SOLUBILITY-EXTERNAL-VALIDATION: an independent, condition-compatible, non-OOD external dataset or experiment for the frozen solubility model. Battery and materials also remain externally blocked, and combustion still lacks an E3–E4 comparison.",
+        "grounded_record_ids": [
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+          "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+          "GAP-E3-E4-COMPARISON"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible non-OOD external solubility source is currently available."
+        ]
+      }
+    },
+    {
+      "call_id": 10,
+      "index": 6,
+      "question": "What was the strongest negative result?",
+      "response": {
+        "answer": "The strongest negative result was the frozen solubility model’s external validation failure: all 56 records were out of distribution, so unrestricted validation and population-wide failure claims were not justified; the result remained sample- and protocol-specific.",
+        "grounded_record_ids": [
+          "CH-V45-EXTERNAL-FAILURE",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "DECISION-V39-SOLUBILITY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible non-OOD external solubility source was available."
+        ]
+      }
+    },
+    {
+      "call_id": 11,
+      "index": 7,
+      "question": "What execution was avoided as redundant?",
+      "response": {
+        "answer": "Repeating the locked DLS pass or retraining/tuning thresholds before obtaining a compatible external source was avoided as redundant.",
+        "grounded_record_ids": [
+          "IMP-V50-DYNAMIC-SOLUBILITY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": []
+      }
+    },
+    {
+      "call_id": 12,
+      "index": 8,
+      "question": "Which result has the strongest provenance?",
+      "response": {
+        "answer": "The H2 combustion result at phi=1.05 has the strongest provenance: it is a fresh, condition-explicit Cantera E3 run with a passing registered bundle and ledger registration. Its conclusion remains bounded to a computational condition-map extension.",
+        "grounded_record_ids": [
+          "RUN-V50-COMB-H2-PHI105",
+          "BND-A0AD79098BC8",
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "CH-V45-COMBUSTION"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "It is not experimental evidence, and no compatible E3-to-E4 comparison is available."
+        ]
+      }
+    },
+    {
+      "call_id": 13,
+      "index": 9,
+      "question": "Which result is most uncertain?",
+      "response": {
+        "answer": "The external solubility-validation result is most uncertain, especially any population-wide claim that solubility models fail: all 56 records were out-of-domain, making the finding sample- and protocol-specific.",
+        "grounded_record_ids": [
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "CH-V45-EXTERNAL-FAILURE",
+          "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible non-OOD external solubility source is currently available."
+        ]
+      }
+    },
+    {
+      "call_id": 14,
+      "index": 10,
+      "question": "Which result most needs external validation?",
+      "response": {
+        "answer": "The external solubility failure/generalization result most needs validation: all 56 records were OOD, making it sample- and protocol-specific rather than population-wide evidence. Obtain an independent, condition-compatible, non-OOD record-level source before reconsidering DECISION-V39-SOLUBILITY.",
+        "grounded_record_ids": [
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "DECISION-V39-SOLUBILITY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible non-OOD external solubility source is currently available."
+        ]
+      }
+    },
+    {
+      "call_id": 15,
+      "index": 11,
+      "question": "Where could protocol sensitivity reverse a conclusion?",
+      "response": {
+        "answer": "Protocol sensitivity could most plausibly reverse the COX-2 docking ranking/decision: all scores share 1PXX and one engine, while receptor, grid, exhaustiveness, and ligand-preparation variation remain untested. It could also change the solubility no-decision because the external set was entirely OOD and target semantics/thresholds are protocol-dependent. Battery and materials are blocked rather than reversible conclusions, while combustion remains only a bounded E3 map without matched experimental comparison.",
+        "grounded_record_ids": [
+          "CH-V45-DOCKING-DECISION",
+          "CLM-DOCKING-DECISION-BOUNDARY",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "CH-V45-NO-DECISION-SOLUBILITY",
+          "CH-V45-BATTERY",
+          "CH-V45-MATERIALS",
+          "CH-V45-COMBUSTION",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "The registered records identify plausible reversal points but do not demonstrate an actual reversal."
+        ]
+      }
+    },
+    {
+      "call_id": 16,
+      "index": 12,
+      "question": "Where could dependent evidence create false confidence?",
+      "response": {
+        "answer": "False confidence is most likely where repeated outputs share the same source, model, engine, or protocol: docking scores all use 1PXX and one engine/protocol; combustion variants share gri30.yaml and the computational engine; solubility failure analysis reuses the same frozen model/sample, while all 56 external records were OOD; and battery conclusions rely on one NASA archive lineage. These repetitions increase apparent consistency, not independent validation.",
+        "grounded_record_ids": [
+          "CH-V45-DOCKING-DECISION",
+          "CH-V45-COMBUSTION",
+          "CH-V45-SOLUBILITY-FAILURE",
+          "CH-V45-EXTERNAL-FAILURE",
+          "CH-V45-BATTERY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "The records flag dependence but do not quantify its effect on uncertainty.",
+          "No independent measured-affinity, compatible non-OOD solubility, or condition-complete battery validation is registered."
+        ]
+      }
+    },
+    {
+      "call_id": 17,
+      "index": 13,
+      "question": "What would a skeptical reviewer challenge first?",
+      "response": {
+        "answer": "A skeptical reviewer would first challenge the COX-2 docking decision: all supporting scores depend on one receptor structure (1PXX), one engine/protocol, and unvaried receptor/grid/exhaustiveness settings, with no measured-affinity validation. The decision should therefore retain its E2 computational ceiling and avoid efficacy language.",
+        "grounded_record_ids": [
+          "CH-V45-DOCKING-DECISION",
+          "CLM-DOCKING-DECISION-BOUNDARY",
+          "CH-V45-COX2"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "The available evidence supports protocol-specific computational ranking only, not binding affinity or efficacy."
+        ]
+      }
+    },
+    {
+      "call_id": 18,
+      "index": 14,
+      "question": "What should NOT be claimed publicly?",
+      "response": {
+        "answer": "Do not publicly claim that the combustion output is experimental evidence; that docking scores are measured affinity, efficacy, or therapeutic benefit; that all solubility models fail or that the OOD result generalizes population-wide; or that battery degradation and materials safety conclusions are established, because condition-complete external records are missing.",
+        "grounded_record_ids": [
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "RUN-V50-COMB-H2-PHI105",
+          "CH-V45-DOCKING-DECISION",
+          "CLM-DOCKING-DECISION-BOUNDARY",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "CH-V45-EXTERNAL-FAILURE",
+          "CH-V45-BATTERY",
+          "CH-V45-MATERIALS"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "These boundaries reflect the registered computational and external-validation records; no experimental validation was created in this exam."
+        ]
+      }
+    },
+    {
+      "call_id": 19,
+      "index": 15,
+      "question": "What should the next real experiment/data acquisition be?",
+      "response": {
+        "answer": "Acquire an independent, record-level solubility dataset or experiment with comparable conditions and target semantics, predeclared non-OOD/comparability gates, and sufficient coverage. Test the frozen model once; do not retrain or tune thresholds if the gates fail.",
+        "grounded_record_ids": [
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "DECISION-V39-SOLUBILITY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible non-OOD external solubility source is currently available.",
+          "Battery and materials remain blocked pending condition-complete external records."
+        ]
+      }
+    }
+  ],
+  "status": "PASS"
+}

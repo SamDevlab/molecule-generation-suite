@@ -1,0 +1,281 @@
+{
+  "answers": [
+    {
+      "call_id": 5,
+      "index": 1,
+      "question": "What new scientific knowledge was actually produced?",
+      "response": {
+        "answer": "The only material new scientific knowledge was a bounded E3 computational extension of the combustion condition map: Cantera with gri30.yaml at H2, phi=1.05, 300 K, 101325 Pa produced an adiabatic HP temperature of 2395.30 K. It narrows the simulated condition map but establishes neither experimental behavior nor efficacy. The other reviewed domains produced validated boundaries or no-decision states, not new generalizable scientific findings.",
+        "grounded_record_ids": [
+          "RUN-V50-COMB-H2-PHI105",
+          "EVD-B4B5770122CD",
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "IMP-V50-DYNAMIC-BATTERY",
+          "IMP-V50-DYNAMIC-MATERIALS"
+        ],
+        "limitations": [
+          "No compatible Cantera E3↔E4 comparison is available.",
+          "The external solubility records were entirely OOD and do not support universal generalization.",
+          "Battery and materials questions remain blocked by missing condition-complete external records.",
+          "Docking remains E2 computational evidence and does not establish measured affinity or efficacy."
+        ]
+      }
+    },
+    {
+      "call_id": 6,
+      "index": 2,
+      "question": "Which claim changed?",
+      "response": {
+        "answer": "The combustion claim changed: RUN-V50-COMB-H2-PHI105 extended the result to a bounded E3 condition map at phi=1.05, without supporting experimental or efficacy claims. The unrestricted solubility-generalization claim was weakened because the external records were OOD.",
+        "grounded_record_ids": [
+          "RUN-V50-COMB-H2-PHI105",
+          "GAP-E3-E4-COMPARISON",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION"
+        ],
+        "limitations": [
+          "No compatible E3-to-E4 combustion comparison is available.",
+          "No compatible non-OOD solubility source is registered."
+        ]
+      }
+    },
+    {
+      "call_id": 7,
+      "index": 3,
+      "question": "Which decision changed?",
+      "response": {
+        "answer": "The combustion decision changed: DECISION-V41-COMBUSTION-BOUNDARY was revised to DECISION-REVISION-V50-COMB-PHI105 after the predeclared H2, phi=1.05 Cantera run. The result remains a bounded E3 condition-map extension, with no experimental or efficacy claim. No NO_DECISION was overturned.",
+        "grounded_record_ids": [
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "RUN-V50-COMB-H2-PHI105",
+          "EVD-B4B5770122CD"
+        ],
+        "limitations": [
+          "No compatible Cantera E3↔E4 comparison is available.",
+          "The solubility generalization claim was weakened because all 56 external records were OOD, but its decision was not overturned."
+        ]
+      }
+    },
+    {
+      "call_id": 8,
+      "index": 4,
+      "question": "Which gap closed?",
+      "response": {
+        "answer": "No gap was fully closed. GAP-E3-E4-COMPARISON was only partially resolved by the new H2 phi=1.05 Cantera run; an E4 experimental comparison remains missing.",
+        "grounded_record_ids": [
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "RUN-V50-COMB-H2-PHI105",
+          "GAP-E3-E4-COMPARISON"
+        ],
+        "limitations": [
+          "No compatible Cantera E3↔E4 comparison is available."
+        ]
+      }
+    },
+    {
+      "call_id": 9,
+      "index": 5,
+      "question": "Which gap remains?",
+      "response": {
+        "answer": "The highest-value unresolved gap is GAP-SOLUBILITY-EXTERNAL-VALIDATION: no independent, condition-compatible, non-OOD external dataset is registered. Additional open gaps remain for E3↔E4 combustion comparison, condition-complete battery/materials records, and measured validation of docking predictions.",
+        "grounded_record_ids": [
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "GAP-E3-E4-COMPARISON",
+          "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+          "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+          "CH-V45-DOCKING-DECISION"
+        ],
+        "limitations": [
+          "The available solubility external set is entirely OOD and cannot establish universal model failure.",
+          "No experimental, efficacy, measured-affinity, or condition-complete battery/materials conclusion is currently supported."
+        ]
+      }
+    },
+    {
+      "call_id": 10,
+      "index": 6,
+      "question": "What was the strongest negative result?",
+      "response": {
+        "answer": "The strongest negative result was the locked external solubility validation: all 56 records were out-of-domain for the frozen model, so unrestricted external validation failed and no population-wide generalization was supported.",
+        "grounded_record_ids": [
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "DECISION-V39-SOLUBILITY"
+        ],
+        "limitations": [
+          "This establishes a validation boundary, not universal solubility-model failure.",
+          "A compatible non-OOD external dataset with matching endpoint semantics, units, and conditions is still unavailable."
+        ]
+      }
+    },
+    {
+      "call_id": 11,
+      "index": 7,
+      "question": "What execution was avoided as redundant?",
+      "response": {
+        "answer": "The team avoided repeating the locked DLS validation, retraining or threshold tuning before a compatible external test, and repeating the identical 1PXX docking protocol; these were judged unlikely to add information.",
+        "grounded_record_ids": [
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "CH-V45-DOCKING-DECISION",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION"
+        ],
+        "limitations": [
+          "No new redundant execution was performed; compatible external solubility data and independent docking validation remain unavailable."
+        ]
+      }
+    },
+    {
+      "call_id": 12,
+      "index": 8,
+      "question": "Which result has the strongest provenance?",
+      "response": {
+        "answer": "RUN-V50-COMB-H2-PHI105 has the strongest end-to-end provenance: it was predeclared and freshly executed by the registered Cantera engine under explicit conditions, produced E3_PHYSICS evidence, passed bundle and ledger checks, and is traceable to a recorded decision revision. Its conclusion remains bounded computational evidence, not an experimental claim.",
+        "grounded_record_ids": [
+          "RUN-V50-COMB-H2-PHI105",
+          "EVD-B4B5770122CD",
+          "BND-A0AD79098BC8",
+          "DECISION-REVISION-V50-COMB-PHI105",
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "GAP-E3-E4-COMPARISON"
+        ],
+        "limitations": [
+          "No compatible E4 experimental comparison is available, so provenance does not establish experimental validity or efficacy."
+        ]
+      }
+    },
+    {
+      "call_id": 13,
+      "index": 9,
+      "question": "Which result is most uncertain?",
+      "response": {
+        "answer": "The docking decision is most uncertain: it depends on one receptor structure (1PXX) and one Vina protocol, with no independent structural comparison or measured binding/efficacy validation. It remains E2 computational evidence, not an affinity or efficacy result.",
+        "grounded_record_ids": [
+          "CH-V45-DOCKING-DECISION",
+          "CH-V45-COX2",
+          "CLM-DOCKING-DECISION-BOUNDARY"
+        ],
+        "limitations": [
+          "The registered evidence does not test receptor or protocol sensitivity beyond the declared seeds.",
+          "Measured binding and biological efficacy remain unanswered."
+        ]
+      }
+    },
+    {
+      "call_id": 14,
+      "index": 10,
+      "question": "Which result most needs external validation?",
+      "response": {
+        "answer": "The docking ranking and score-separation result most needs external validation because all scores depend on one receptor structure/grid and one Vina protocol; it remains E2 computational evidence and does not establish measured affinity or efficacy.",
+        "grounded_record_ids": [
+          "CH-V45-DOCKING-DECISION",
+          "CLM-DOCKING-DECISION-BOUNDARY",
+          "CH-V45-COX2"
+        ],
+        "limitations": [
+          "No measured binding or efficacy result is registered.",
+          "Independent receptor-structure or protocol validation is unavailable."
+        ]
+      }
+    },
+    {
+      "call_id": 15,
+      "index": 11,
+      "question": "Where could protocol sensitivity reverse a conclusion?",
+      "response": {
+        "answer": "Protocol sensitivity could most plausibly reverse the docking conclusion: changing receptor structure, grid, ligand preparation, or exhaustiveness could alter rankings beyond the small seed spread, while measured binding data could support or undermine the current E2 decision. The solubility no-decision could also change with a compatible non-OOD source matching endpoint, units, and conditions, but this would not establish universal generalization. Combustion protocol changes have shifted absolute temperatures without changing tested ordering; battery and materials remain externally blocked rather than protocol-reversible.",
+        "grounded_record_ids": [
+          "CH-V45-DOCKING-DECISION",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "CH-V45-COMBUSTION",
+          "CLM-DOCKING-DECISION-BOUNDARY",
+          "DECISION-V39-SOLUBILITY",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION"
+        ],
+        "limitations": [
+          "No compatible Cantera E3↔E4 comparison is available.",
+          "Docking remains E2 computational evidence and cannot establish measured affinity or efficacy.",
+          "The external solubility population is OOD under the frozen model and does not justify universal generalization."
+        ]
+      }
+    },
+    {
+      "call_id": 16,
+      "index": 12,
+      "question": "Where could dependent evidence create false confidence?",
+      "response": {
+        "answer": "False confidence could arise by treating repeated outputs as independent support when they share the same dependency: docking scores use one receptor/grid and Vina protocol; combustion variants use one mechanism and equilibrium engine; solubility validation reuses the frozen model and calibration while the external source has differing endpoint semantics; battery conclusions trace to one archive; and materials evidence is discovery metadata without matched observations. Replayed bundles establish provenance and integrity, not independent fresh executions.",
+        "grounded_record_ids": [
+          "CH-V45-COX2",
+          "CH-V45-COMBUSTION",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "CH-V45-BATTERY",
+          "CH-V45-MATERIALS",
+          "LEDGER-BUNDLE-001"
+        ],
+        "limitations": [
+          "The records identify dependency risks but do not quantify the resulting confidence inflation.",
+          "Docking remains E2 computational evidence, and combustion remains bounded E3 evidence without independent experimental comparison."
+        ]
+      }
+    }
+  ],
+  "failed_call": {
+    "call_id": 17,
+    "diagnostic": {
+      "attempt": 1,
+      "command_contract": "codex exec --ephemeral --skip-git-repo-check --sandbox read-only --color never --output-schema <fixed-schema> -",
+      "completed_at": "2026-09-05T04:09:34.044297+00:00",
+      "depth": 0,
+      "elapsed": 24.68117,
+      "exit_status": "COMPLETED",
+      "failure_code": null,
+      "failure_stage": "NONE",
+      "invocation_id": "LIVE-678B8D9DF5784470",
+      "max_attempts": 1,
+      "model": "gpt-5.6-luna",
+      "operation": "final_exam_followup",
+      "parent_invocation_id": null,
+      "provider": "CODEX_LIVE",
+      "reentrancy_state": "COMPLETED",
+      "schema_status": "PASS",
+      "started_at": "2026-09-05T04:09:09.363127+00:00",
+      "stderr_bytes": 35235,
+      "stderr_truncated": false,
+      "stdout_bytes": 545,
+      "stdout_truncated": false,
+      "timeout_budget": 120.0
+    },
+    "elapsed": 24.687000000005355,
+    "error": null,
+    "label": "V5-FOLLOWUP-13",
+    "operation": "final_exam_followup",
+    "process_events": [
+      {
+        "call_id": 17,
+        "cleanup_status": "RUNNING",
+        "label": "V5-FOLLOWUP-13",
+        "parent_pid": 16812,
+        "pid": 9588,
+        "started_at": "2026-09-05T04:09:09.370924+00:00"
+      },
+      {
+        "call_id": 17,
+        "cleanup_status": "EXITED",
+        "completed_at": "2026-09-05T04:09:34.039537+00:00",
+        "exit_code": 0,
+        "label": "V5-FOLLOWUP-13",
+        "parent_pid": 16812,
+        "pid": 9588,
+        "started_at": "2026-09-05T04:09:09.370924+00:00",
+        "termination_reason": "NORMAL_EXIT"
+      }
+    ],
+    "response_hash": "9d7e74e0770c3382a743ef5a3adcf2a5129ec7abf6fd15ada875f6f19109c963",
+    "status": "COMPLETED"
+  },
+  "status": "BLOCKED_BEFORE_PASS"
+}

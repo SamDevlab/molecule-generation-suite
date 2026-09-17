@@ -1,0 +1,113 @@
+{
+  "branch": "research-os-v1.3",
+  "checks": {
+    "branch": {
+      "ok": true,
+      "value": "research-os-v1.3"
+    },
+    "codex_cli": {
+      "ok": true
+    },
+    "grounding_schema": {
+      "ok": true
+    },
+    "head": {
+      "expected": "85bc7143f7de99500533923704d4274481d7ee56",
+      "ok": true,
+      "value": "85bc7143f7de99500533923704d4274481d7ee56"
+    },
+    "ledger": {
+      "ok": true,
+      "status": "PASS"
+    },
+    "owner": {
+      "ancestry_summary": [
+        "13996:python.exe<-1212",
+        "1212:python.exe<-6244",
+        "6244:powershell.exe<-6792",
+        "6792:explorer.exe<-6672"
+      ],
+      "codex_session_detected": false,
+      "cwd": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite",
+      "detection_signals": [],
+      "environment_digest": "c87eef846c8f0795d991d1b786bc3e51ba863b7dbb59034115f55a382880ccee",
+      "executable": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.venv\\Scripts\\python.exe",
+      "invocation_id": "TOPLEVEL-7B82C30F7A0540BC",
+      "parent_pid": 1212,
+      "parent_process_name": "python.exe",
+      "pid": 13996,
+      "process_name": "python.exe",
+      "result": "TOP_LEVEL_CONFIRMED",
+      "started_at": "2026-09-05T11:00:16.421250+00:00",
+      "top_level_eligible": true
+    },
+    "package": {
+      "ok": true,
+      "version": "4.5.0"
+    },
+    "provider": {
+      "ok": true,
+      "type": "CodexCliTransport"
+    },
+    "required_artifacts": [
+      {
+        "exists": true,
+        "path": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-5.0\\master-real-research-validation.json"
+      },
+      {
+        "exists": true,
+        "path": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-5.0\\final-scientific-exam.json"
+      },
+      {
+        "exists": true,
+        "path": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-5.0\\reviewer-panel.json"
+      },
+      {
+        "exists": true,
+        "path": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-5.0\\reproduction-matrix.json"
+      },
+      {
+        "exists": true,
+        "path": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.research-os-live-5.0\\ledger\\research_ledger.sqlite"
+      }
+    ],
+    "schema": {
+      "ok": true
+    },
+    "worktree": {
+      "allowed_paths": [],
+      "ok": true,
+      "raw_status": "!! .pytest_cache/.gitignore\n!! .pytest_cache/CACHEDIR.TAG\n!! .pytest_cache/README.md\n!! .pytest_cache/v/\n!! .research-os-live-3.10-pre/\n!! .research-os-live-3.10-smoke/\n!! .research-os-live-3.10-smoke2/\n!! .research-os-live-3.10-smoke4/\n!! .research-os-live-3.10/\n!! .research-os-live-3.11-smoke/\n!! .research-os-live-3.11-smoke2/\n!! .research-os-live-3.11-smoke3/\n!! .research-os-live-3.11/\n!! .research-os-live-3.12-smoke2/\n!! .research-os-live-3.12/\n!! .research-os-live-3.2-accepted/\n!! .research-os-live-3.2-final-pass/\n!! .research-os-live-3.2-final/\n!! .research-os-live-3.2-pass/\n!! .research-os-live-3.2-rerun/\n!! .research-os-live-3.2-verified/\n!! .research-os-live-3.2-verified2/\n!! .research-os-live-3.2/\n!! .research-os-live-3.3-final/\n!! .research-os-live-3.3-final2/\n!! .research-os-live-3.3-final3/\n!! .research-os-live-3.3-final4/\n!! .research-os-live-3.3-final5/\n!! .research-os-live-3.3-final6/\n!! .research-os-live-3.3-final7/\n!! .research-os-live-3.3/\n!! .research-os-live-3.4-battery/\n!! .research-os-live-3.4-final/\n!! .research-os-live-3.4-final2/\n!! .research-os-live-3.4-final3/\n!! .research-os-live-3.4.1-pharma-accept/\n!! .research-os-live-3.4.1-pharma/\n!! .research-os-live-3.5-final/\n!! .research-os-live-3.5-pharma-accept/\n!! .research-os-live-3.5-pharma-accept2/\n!! .research-os-live-3.5-pharma-accept3/\n!! .research-os-live-3.5-v35/\n!! .research-os-live-3.5/\n!! .research-os-live-3.6/\n!! .research-os-live-3.7-final-exam/\n!! .research-os-live-3.7-final-exam2/\n!! .research-os-live-3.7-final-exam3/\n!! .research-os-live-3.7-final-exam4/\n!! .research-os-live-3.7-pass/\n!! .research-os-live-3.7-pass2/\n!! .research-os-live-3.7-pass3/\n!! .research-os-live-3.7-pass4/\n!! .research-os-live-3.7-pass5/\n!! .research-os-live-3.7-pass6/\n!! .research-os-live-3.7-smoke/\n!! .research-os-live-3.7-smoke2/\n!! .research-os-live-3.7-smoke3/\n!! .research-os-live-3.7/\n!! .research-os-live-3.8-final/\n!! .research-os-live-3.8-final2/\n!! .research-os-live-3.8-final3/\n!! .research-os-live-3.8-pass2/\n!! .research-os-live-3.8-pass3/\n!! .research-os-live-3.8/\n!! .research-os-live-3.9-final/\n!! .research-os-live-3.9-run/\n!! .research-os-live-3.9-run2/\n!! .research-os-live-3.9/\n!! .research-os-live-4.0-replay/\n!! .research-os-live-4.0-smoke/\n!! .research-os-live-4.0-smoke2/\n!! .research-os-live-4.0-smoke3/\n!! .research-os-live-4.0-smoke4/\n!! .research-os-live-4.0-smoke5/\n!! .research-os-live-4.0-smoke6/\n!! .research-os-live-4.0/\n!! .research-os-live-4.1-final/\n!! .research-os-live-4.1-rerun/\n!! .research-os-live-4.1-smoke/\n!! .research-os-live-4.1-smoke2/\n!! .research-os-live-4.1/bundles/\n!! .research-os-live-4.1/claims/\n!! .research-os-live-4.1/decisions.sqlite\n!! .research-os-live-4.1/ledger/\n!! .research-os-live-4.1/solubility/\n!! .research-os-live-4.2/private-corpus-state/\n!! .research-os-live-4.3-external/\n!! .research-os-live-4.3-final/\n!! .research-os-live-5.0-run2/\n!! .research-os-live-5.0-run3/\n!! .research-os-live-5.0-run4/\n!! .research-os-live-5.0-run5/\n!! .research-os-live-5.0-run6/\n!! .research-os-live-5.0-run7/\n!! .research-os-live-5.0/bundles/\n!! .research-os-live-5.0/ledger/\n!! .tmp-live-run/\n!! .tmp-live-run2/\n!! .tmp-package-check-v34/\n!! .tmp-package-check-v35/\n!! .tmp-package-check-v36-final/\n!! .tmp-package-check-v36/\n!! .tmp-package-check-v37/\n!! .tmp-package-check-v38-pip/\n!! .tmp-package-check-v40/\n!! .tmp-package-check-v41-final-venv/\n!! .tmp-package-check-v41-final/\n!! .tmp-package-check-v41-venv2/\n!! .tmp-package-check-v41/\n!! .tmp-package-check-v43-final-venv/\n!! .tmp-package-check-v43-final/\n!! .tmp-package-check-v44-final-venv/\n!! .tmp-package-check-v44-final/\n!! .tmp-package-check-v45-final-venv/\n!! .tmp-package-check-v45-final/\n!! .tmp-package-check-v50-dist2/\n!! .tmp-package-check-v50-final/\n!! .tmp-package-check-v50-recovery/\n!! .tmp-package-check-v50-venv2/\n!! .tmp-package-check/\n!! .tmp-v36-ml-probe/\n!! .venv/\n!! build/\n!! dist/\n!! examples/golden_workflow/__pycache__/\n!! examples/golden_workflow/output/\n!! src/research_os/__pycache__/\n!! src/research_os/artifacts/__pycache__/\n!! src/research_os/benchmark/__pycache__/\n!! src/research_os/biolab/__pycache__/\n!! src/research_os/bundles/__pycache__/\n!! src/research_os/campaigns/__pycache__/\n!! src/research_os/combustion/__pycache__/\n!! src/research_os/core/__pycache__/\n!! src/research_os/dataset/__pycache__/\n!! src/research_os/datasets/__pycache__/\n!! src/research_os/decision/__pycache__/\n!! src/research_os/degradation/__pycache__/\n!! src/research_os/docking/__pycache__/\n!! src/research_os/engines/__pycache__/\n!! src/research_os/environment/__pycache__/\n!! src/research_os/evidence/__pycache__/\n!! src/research_os/external_evidence/__pycache__/\n!! src/research_os/fuel/__pycache__/\n!! src/research_os/impact/__pycache__/\n!! src/research_os/knowledge/__pycache__/\n!! src/research_os/labs/__pycache__/\n!! src/research_os/ledger/__pycache__/\n!! src/research_os/ledger/artifacts/__pycache__/\n!! src/research_os/legacy/__pycache__/\n!! src/research_os/memory/__pycache__/\n!! src/research_os/metal/__pycache__/\n!! src/research_os/ml/__pycache__/\n!! src/research_os/molecule/__pycache__/\n!! src/research_os/oracle/__pycache__/\n!! src/research_os/orchestration/__pycache__/\n!! src/research_os/pharma/__pycache__/\n!! src/research_os/prioritization/__pycache__/\n!! src/research_os/programs/__pycache__/\n!! src/research_os/proof/__pycache__/\n!! src/research_os/propulsion/__pycache__/\n!! src/research_os/resolution/__pycache__/\n!! src/research_os/service/__pycache__/\n!! src/research_os/thermal/__pycache__/\n!! src/research_os/web/__pycache__/\n!! src/research_os_core.egg-info/\n!! tests/__pycache__/\n!! tools/benchmark/__pycache__/\n!! tools/campaigns/__pycache__/\n!! tools/oracle/__pycache__/\n!! tools/resolution/__pycache__/\n!! v5-top-level-console.log",
+      "unexpected_paths": [],
+      "valid": true
+    }
+  },
+  "completed_at": "2026-09-05T11:00:16.736103+00:00",
+  "expected_branch": "research-os-v1.3",
+  "expected_head": "85bc7143f7de99500533923704d4274481d7ee56",
+  "head": "85bc7143f7de99500533923704d4274481d7ee56",
+  "owner": {
+    "ancestry_summary": [
+      "13996:python.exe<-1212",
+      "1212:python.exe<-6244",
+      "6244:powershell.exe<-6792",
+      "6792:explorer.exe<-6672"
+    ],
+    "codex_session_detected": false,
+    "cwd": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite",
+    "detection_signals": [],
+    "environment_digest": "c87eef846c8f0795d991d1b786bc3e51ba863b7dbb59034115f55a382880ccee",
+    "executable": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite\\.venv\\Scripts\\python.exe",
+    "invocation_id": "TOPLEVEL-7B82C30F7A0540BC",
+    "parent_pid": 1212,
+    "parent_process_name": "python.exe",
+    "pid": 13996,
+    "process_name": "python.exe",
+    "result": "TOP_LEVEL_CONFIRMED",
+    "started_at": "2026-09-05T11:00:16.421250+00:00",
+    "top_level_eligible": true
+  },
+  "root": "C:\\Users\\samue\\Desktop\\Bio\\molecule-generation-suite",
+  "started_at": "2026-09-05T11:00:16.403867+00:00",
+  "status": "READY"
+}

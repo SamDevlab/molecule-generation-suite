@@ -1,0 +1,186 @@
+{
+  "answers": [
+    {
+      "call_id": 20,
+      "index": 1,
+      "question": "What is the strongest v5 conclusion?",
+      "response": {
+        "answer": "v5 supports retaining a bounded computational E3 combustion conclusion from the predeclared H2 phi=1.05 run, while weakening broad solubility generalization to a sample-specific boundary. Solubility remains NO_DECISION pending compatible non-OOD validation; battery and materials remain externally blocked, and docking remains an E2 structural result without efficacy interpretation.",
+        "grounded_record_ids": [
+          "IMP-V50-DYNAMIC-COMBUSTION",
+          "RUN-V50-COMB-H2-PHI105",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "CH-V45-NO-DECISION-SOLUBILITY",
+          "CH-V45-BATTERY",
+          "CH-V45-MATERIALS",
+          "CH-V45-DOCKING-DECISION"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible E4 combustion comparison is available.",
+          "No compatible non-OOD solubility source is available.",
+          "Battery and materials lack condition-complete external records.",
+          "Docking does not establish measured binding, efficacy, or safety."
+        ]
+      }
+    },
+    {
+      "call_id": 21,
+      "index": 2,
+      "question": "What is the weakest conclusion?",
+      "response": {
+        "answer": "The broad external-solubility generalization is the weakest conclusion: because the available records were all OOD, the evidence supports only a sample-specific boundary, not population-wide model failure or transferability.",
+        "grounded_record_ids": [
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "A compatible non-OOD external validation source is still unavailable."
+        ]
+      }
+    },
+    {
+      "call_id": 22,
+      "index": 3,
+      "question": "Which result is most dataset-dependent?",
+      "response": {
+        "answer": "The solubility external-validation result is most dataset-dependent: all external records were OOD, so the finding supports only a sample-specific boundary and cannot establish population-wide model failure or transferability.",
+        "grounded_record_ids": [
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "CLM-V43-SOLUBILITY-EXTERNAL-BOUNDARY",
+          "CH-V45-NO-DECISION-SOLUBILITY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible non-OOD external source is currently available to test transferability."
+        ]
+      }
+    },
+    {
+      "call_id": 23,
+      "index": 4,
+      "question": "Which result is most protocol-sensitive?",
+      "response": {
+        "answer": "The COX-2 docking decision is most protocol-sensitive: its ranking depends on a single receptor structure and shared docking protocol, while receptor, grid, exhaustiveness, and ligand-preparation changes were not varied. Retain the E2 ceiling and make no efficacy interpretation.",
+        "grounded_record_ids": [
+          "CH-V45-COX2",
+          "CH-V45-DOCKING-DECISION",
+          "CLM-DOCKING-DECISION-BOUNDARY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No independent structural or measured-binding validation is available."
+        ]
+      }
+    },
+    {
+      "call_id": 24,
+      "index": 5,
+      "question": "What is the strongest preserved negative result?",
+      "response": {
+        "answer": "The strongest preserved negative result is that the frozen solubility model could not support unrestricted external generalization: all 56 external records were OOD, so the result remains a sample-specific boundary and NO_DECISION—not proof of universal model failure.",
+        "grounded_record_ids": [
+          "CLM-SOLUBILITY-NO-DECISION",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "A compatible non-OOD external dataset is still needed to assess transferability."
+        ]
+      }
+    },
+    {
+      "call_id": 25,
+      "index": 6,
+      "question": "Which gap is highest-value and actionable?",
+      "response": {
+        "answer": "GAP-SOLUBILITY-EXTERNAL-VALIDATION is the highest-value actionable gap: obtain an independent compatible non-OOD dataset with target semantics, units, and protocol metadata, then evaluate the frozen model using predeclared metrics. Battery and materials remain blocked by missing condition-complete fields, while the combustion gap was partially reduced by a bounded E3 condition point.",
+        "grounded_record_ids": [
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "V50-P-SOLUBILITY-COMPATIBLE",
+          "GAP-BATTERY-CONDITION-COMPLETE-EXTERNAL",
+          "GAP-MATERIALS-CONDITION-COMPLETE-RECORD",
+          "GAP-E3-E4-COMPARISON"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible non-OOD solubility source is currently available, so the next step is proposed rather than executed."
+        ]
+      }
+    },
+    {
+      "call_id": 26,
+      "index": 7,
+      "question": "Which gap should not be pursued right now?",
+      "response": {
+        "answer": "Do not pursue an identical 1PXX COX-2 docking repeat right now; its information gain is low because receptor and protocol dependence remain unchanged. Retain the E2 structural ceiling and defer until an alternative receptor or predeclared protocol is available.",
+        "grounded_record_ids": [
+          "V50-P-COX2-REPEAT",
+          "CH-V45-DOCKING-DECISION",
+          "CLM-DOCKING-DECISION-BOUNDARY"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "This prioritization does not invalidate the computational docking result or support efficacy claims."
+        ]
+      }
+    },
+    {
+      "call_id": 27,
+      "index": 8,
+      "question": "Which NO_DECISION should be revisited first if new evidence arrives?",
+      "response": {
+        "answer": "Revisit the solubility NO_DECISION first, but only after compatible non-OOD external validation becomes available; battery and materials remain blocked by missing condition-complete fields.",
+        "grounded_record_ids": [
+          "CH-V45-NO-DECISION-SOLUBILITY",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "CLM-SOLUBILITY-NO-DECISION"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "No compatible non-OOD solubility source is currently available, so the decision should remain unchanged until one is obtained."
+        ]
+      }
+    },
+    {
+      "call_id": 28,
+      "index": 9,
+      "question": "Which proposed computation is currently redundant?",
+      "response": {
+        "answer": "Repeating the locked DLS pass, retraining the model, or tuning thresholds before compatible non-OOD external data are available is currently redundant.",
+        "grounded_record_ids": [
+          "IMP-V50-DYNAMIC-SOLUBILITY",
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "This redundancy judgment should be revisited when compatible non-OOD validation data become available."
+        ]
+      }
+    },
+    {
+      "call_id": 29,
+      "index": 10,
+      "question": "What is the clearest remaining scientific limitation?",
+      "response": {
+        "answer": "The clearest remaining limitation is that solubility transferability remains untested: the available independent external records were all OOD or semantically/protocol-incompatible, so population-wide generalization cannot be established until a compatible non-OOD dataset with matched target semantics, units, conditions, and metadata is evaluated.",
+        "grounded_record_ids": [
+          "GAP-SOLUBILITY-EXTERNAL-VALIDATION",
+          "CH-V45-SOLUBILITY-EXTERNAL",
+          "CLM-SOLUBILITY-NO-DECISION"
+        ],
+        "grounding_status": "GROUNDED",
+        "limitations": [
+          "This supports a sample-specific validation boundary, not a claim that all solubility models fail."
+        ]
+      }
+    }
+  ],
+  "status": "PASS"
+}

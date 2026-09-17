@@ -1,0 +1,15 @@
+# Scientific review panel — v5.0 attempt
+
+The required panel was dispatched sequentially against the same stored evidence. Each role timed out at the Live bridge before returning a grounded review response:
+
+| Reviewer | Concern | Evidence | Response | Final status |
+|---|---|---|---|---|
+| Methodology | Live response unavailable | Stored v4.1/v4.3/v4.5 records were supplied | Keep scope-limiting concerns open; do not revise from absent review text | BLOCKED |
+| Evidence | Live response unavailable | Stored DLS failure, battery schema, and materials blocker were supplied | Preserve existing failed/blocked statuses; no promotion | BLOCKED |
+| Reproducibility | Live response unavailable | Stored bundle paths, hashes, environment and fresh run IDs were supplied | Preserve reproduction follow-up; no PASS claim | BLOCKED |
+
+These are `REVIEW / ANALYSIS` attempts, not Evidence. The v5.0 gate therefore remains blocked rather than being marked as a successful independent review.
+
+The recovery pass did not fabricate replacement panel text. The three roles remain explicitly `NOT_EXECUTED_LIVE_BOUNDARY_BLOCKED` in `.research-os-live-5.0-recovery/reviewer-panel-live.json` after the corrected provider rejected recursive launch in the current Codex-owned host. The later external Attempt 7 remains an operationally blocked record: reviewers and final examination completed, but consistency pair 4 exposed `PRIMARY_RECORD_DRIFT` after Run B selected a different primary record from Run A. Attempt 8 subsequently completed the reviewer panel and final scientific examination with `PASS`; these are `REVIEW / ANALYSIS` records, not Evidence.
+
+Top-level Attempt 1 is a separate real operational record at `.research-os-live-5.0-top-level/`; Attempts 2–8 are preserved in their numbered namespaces. Attempt 2 reached `TL-CONSISTENCY-02-B` before a schema-valid response introduced the unregistered literal `CH-V45-SOLUBILITY-EXTERNAL-BOUNDARY`; its `UNKNOWN_GROUNDED_RECORD_ID` rejection is a correct fail-closed result and is classified as `MODEL_REFERENCE_HALLUCINATION`. Attempts 3 and 4 reached `TL-CONSISTENCY-01-A`; their registered IDs passed general grounding, but the response omitted `primary_record_id` and `limitation_codes`, so Run B was not run. Attempt 4 established that only the outer envelope was machine-enforced. Attempt 5 reached the same call with the required fields still hidden in the payload rather than propagated as per-call transport context, so the transport selected the envelope and Run B was again withheld. Attempt 6 reached the intended `CONSISTENCY`/`live_consistency.schema.json` route but stopped on a provider process error before schema validation. Attempt 7 reached pair 4 Run B; its ID support basis, process, schema, and grounding checks passed, but `primary_record_id` drifted because the launcher had frozen only IDs. Attempt 8 passed all 39 required calls after the full status/IDs/primary/codes signature was frozen. Reviewer findings remain `REVIEW / ANALYSIS`, never Evidence.

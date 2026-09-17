@@ -1,0 +1,52 @@
+# New Core configuration.  Legacy Biolab/fabrica_g2.py remains unchanged.
+vina:
+  executable: vina
+  exhaustiveness: 8
+  cpu: 1
+
+openbabel:
+  executable: obabel
+
+compute:
+  max_workers: 4
+
+docking:
+  replicas: 3
+
+targets:
+  1cx2:
+    role: COX2
+    species: Homo sapiens
+    structure_id: PDB:1CX2
+    structure_source: PDB
+    receptor: Biolab/receptor_1cx2_limpo.pdbqt
+    grid:
+      center: [24.0, 24.0, 48.0]
+      size: [20.0, 20.0, 20.0]
+  4cox:
+    role: COX1
+    species: Homo sapiens
+    structure_id: PDB:4COX
+    structure_source: PDB
+    receptor: Biolab/receptor_4cox_limpo.pdbqt
+    grid:
+      center: [24.0, 24.0, 48.0]
+      size: [20.0, 20.0, 20.0]
+  6cox:
+    role: COX2
+    species: Homo sapiens
+    structure_id: PDB:6COX
+    structure_source: PDB
+    receptor: Biolab/receptor_6cox_limpo.pdbqt
+    grid:
+      center: [24.0, 24.0, 48.0]
+      size: [20.0, 20.0, 20.0]
+  1w0e:
+    role: OFFTARGET
+    species: Homo sapiens
+    structure_id: PDB:1W0E
+    structure_source: PDB
+    receptor: Biolab/receptor_1w0e_limpo.pdbqt
+    grid:
+      center: [24.0, 24.0, 48.0]
+      size: [20.0, 20.0, 20.0]
