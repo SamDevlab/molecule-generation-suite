@@ -1,0 +1,61 @@
+{
+  "schema_version": "research-os.molecular-discovery.solubility-validation.v1",
+  "capability_id": "research-os.molecular-discovery.solubility.esol-v2.v1",
+  "historical_prs": [2, 3, 4, 5, 6],
+  "parent_protocol": "research-os.online-exp-001.v2",
+  "dataset": {
+    "id": "Delaney-ESOL",
+    "doi": "10.1021/ci034243x",
+    "dataset_hash": "6de39771743dc4f15b191cffc27e1e02eb474457cc841afda565f31aff198e85",
+    "training_count": 902,
+    "training_hash": "300ddc4981e1a9c2fb3735e598bcca89fb98a1cd4722cd58454e5d923781f00b"
+  },
+  "model": {
+    "name": "random_forest_combined",
+    "representation": "8 RDKit descriptors + Morgan radius 2 / 2048 bits",
+    "n_estimators": 300,
+    "min_samples_leaf": 2,
+    "random_state": 42,
+    "n_jobs": 1
+  },
+  "applicability_domain": {
+    "metric": "Morgan radius 2 / 2048-bit Tanimoto",
+    "rule": "5th percentile of training leave-one-out nearest-neighbor similarity",
+    "accepted_threshold": 0.26684684684684684
+  },
+  "accepted_results": {
+    "internal_multi_seed": {
+      "test_rmse_mean": 0.803,
+      "test_rmse_sd": 0.113,
+      "test_r2_mean": 0.859,
+      "test_r2_sd": 0.031,
+      "scientific_result_hash": "16a5d5813b696e463e8d3c412f0625ed492da01002cd03805ba53f6762b90e9a"
+    },
+    "aqsoldb_external": {
+      "retained_records": 8863,
+      "mae": 1.0202,
+      "rmse": 1.4359,
+      "r2": 0.6421,
+      "in_domain_count": 6677,
+      "in_domain_rmse": 1.2349,
+      "out_of_domain_count": 2186,
+      "out_of_domain_rmse": 1.9239,
+      "scientific_result_hash": "2bcd795284143f73c1207f9c0a20fdd2272b5fb05cccbb3ac5da7d25e5e44057"
+    },
+    "diagnostics": {
+      "reliability_raw_rmse_gap": 0.8541281588526171,
+      "controlled_rmse_gap": 0.4663940071863022,
+      "source_aware_rmse_gap": 0.37427753546114495,
+      "reliability_scientific_result_hash": "eeca8e4f2c7006791913745204d7e7129e25d0f6a1a56dd67487ae4456b4347a",
+      "controlled_scientific_result_hash": "2427a72653d0adee34e30fa241c1dd416925159ad7b84bdc495f698913e95143",
+      "source_aware_scientific_result_hash": "3516c82f572e119c11b0033738d408dda5c11fdda6717656de83c76f222a003e"
+    }
+  },
+  "interpretation_boundaries": [
+    "The predictor is E1_ML, not an experimental solubility measurement.",
+    "External AqSolDB performance is materially weaker than internal structural-holdout performance.",
+    "Out-of-domain predictions have weaker empirical support under the frozen protocol.",
+    "Reliability/source diagnostics are descriptive and do not establish causal effects.",
+    "The capability establishes neither safety, efficacy, synthesizability nor clinical validity."
+  ]
+}
