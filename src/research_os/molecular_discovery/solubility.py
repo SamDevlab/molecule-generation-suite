@@ -449,12 +449,31 @@ class FrozenESOLSolubilityPredictor:
                     "out_of_domain_rmse": 1.9239,
                     "scientific_result_hash": "2bcd795284143f73c1207f9c0a20fdd2272b5fb05cccbb3ac5da7d25e5e44057",
                 },
+                "diagnostic_followups": {
+                    "reliability_strata": {
+                        "raw_higher_minus_lower_rmse": 0.8541281588526171,
+                        "scientific_result_hash": "eeca8e4f2c7006791913745204d7e7129e25d0f6a1a56dd67487ae4456b4347a",
+                    },
+                    "controlled_structural_target_confounders": {
+                        "higher_minus_lower_rmse": 0.4663940071863022,
+                        "scientific_result_hash": "2427a72653d0adee34e30fa241c1dd416925159ad7b84bdc495f698913e95143",
+                    },
+                    "source_aware_control": {
+                        "higher_minus_lower_rmse": 0.37427753546114495,
+                        "support": 312,
+                        "shared_cells": 68,
+                        "contributing_sources": ["A", "B", "C", "D", "E", "F", "I"],
+                        "scientific_result_hash": "3516c82f572e119c11b0033738d408dda5c11fdda6717656de83c76f222a003e",
+                    },
+                },
             },
             "limitations": [
                 "Prediction is an ML estimate of aqueous logS, not an experimental measurement.",
                 "External AqSolDB error is materially larger than internal ESOL structural-holdout error.",
                 "OUT_OF_DOMAIN predictions must not be treated as having the same support as in-domain predictions.",
                 "AqSolDB aggregates heterogeneous measurement sources and protocols.",
+                "Prediction error is associated with AqSolDB repeated-measurement dispersion strata, but structural, target-range and source effects materially confound that association.",
+                "The source-aware residual association is heterogeneous across source datasets and is not evidence that measurement dispersion causes model error.",
                 "This capability establishes neither safety, efficacy, synthesizability nor clinical validity.",
             ],
         }
