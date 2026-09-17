@@ -202,6 +202,26 @@ Successful runs emit an auditable package with the protocol, metrics, provenance
 
 The v1 declarative protocol intentionally exposes a small generic regression route rather than pretending to support arbitrary scientific domains. See [`docs/research-os-5.1-declarative-experiment-engine.md`](docs/research-os-5.1-declarative-experiment-engine.md).
 
+## Molecular Discovery — active vertical
+
+Research OS 5.1 is now treated as stable infrastructure. The active product/science
+vertical is **Molecular Discovery**, beginning with a bounded end-to-end workflow:
+
+```text
+SMILES -> MoleculeLab -> frozen ESOL solubility + AD -> optional DockingLab -> auditable triage/report
+```
+
+The first version reuses the accepted ONLINE-EXP-001 through ONLINE-EXP-005
+solubility work without merging the old stacked experiment branches into the
+active core. It reconstructs the frozen seed-42 ESOL model, verifies dataset and
+training identities, preserves external AqSolDB limitations, and marks
+out-of-domain predictions explicitly.
+
+No universal efficacy score is produced. Candidate ordering is computational
+review triage only.
+
+See [Molecular Discovery Program v0.1](docs/molecular-discovery-program-v0.1.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.
