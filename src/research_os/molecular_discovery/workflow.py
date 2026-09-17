@@ -147,7 +147,7 @@ class MolecularDiscoveryWorkflow:
     ) -> None:
         self.molecule_lab = molecule_lab or MoleculeLab()
         self.solubility_predictor = solubility_predictor
-        self.docking_lab = docking_lab or DockingLab()
+        self.docking_lab = docking_lab
 
     def assess(self, raw: Mapping[str, Any]) -> CandidateAssessment:
         candidate_id = str(raw.get("id") or raw.get("candidate_id") or "").strip()
