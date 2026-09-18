@@ -1,6 +1,6 @@
 # MOLDISC-006 — selected N-H non-cognate holo docking
 
-Status: **v1.1 corrective protocol frozen; v1.0 invalid preparation preserved**
+Status: **v1.2 corrective protocol frozen; v1.0/v1.1 failures preserved**
 
 ## Purpose
 
@@ -72,11 +72,30 @@ heavy-atom coordinates as the scientific reference identity.
 No candidate, target, box rule, Vina setting, docking context, or endpoint was
 changed in response to the invalid scores.
 
-## Corrected v1.1 preparation
+## Preserved v1.1 target-template failure
 
-MOLDISC-006 v1.1 uses **Meeko 0.8.0** for receptor and ligand PDBQT
-preparation. The corrected gate requires a non-empty receptor PDBQT and
-explicit preservation of HEM with exactly one iron atom.
+MOLDISC-006 v1.1 installed Meeko 0.8.0 successfully but stopped before Vina:
+the default residue template registry did not contain HEM, and Meeko's
+automatic CCD template reconstruction failed for residue A:430.
+
+That attempt is preserved as
+`validation/moldisc-006-v1.1-indeterminate-heme-template.json` and contains
+no valid docking result.
+
+## Corrected v1.2 preparation
+
+MOLDISC-006 v1.2 still uses **Meeko 0.8.0** for receptor and ligand PDBQT
+preparation, but supplies HEM explicitly through Meeko's supported
+`--add_templates HEM:<sdf>` mechanism.
+
+The template source is the official RCSB Chemical Component Dictionary ideal
+SDF:
+
+`https://files.rcsb.org/ligands/download/HEM_ideal.sdf`
+
+The template download SHA-256 is recorded as a scientific preparation input.
+The corrected gate requires a non-empty receptor PDBQT and explicit
+preservation of HEM with exactly one iron atom.
 
 ## Frozen ligand preparation
 
