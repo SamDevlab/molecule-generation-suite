@@ -27,6 +27,13 @@ from research_os.molecular_discovery.moldisc002 import (
     MOLDISC002Result,
     run_moldisc_002,
 )
+from research_os.molecular_discovery.moldisc003 import (
+    MOLDISC003Error,
+    MOLDISC003Result,
+    RCSBChemicalIdentity,
+    SeedSelection,
+    run_moldisc_003,
+)
 from research_os.molecular_discovery.solubility import (
     FrozenESOLSolubilityPredictor,
     SolubilityCapabilityError,
@@ -49,8 +56,12 @@ __all__ = [
     "MOLDISC001Result",
     "MOLDISC002Error",
     "MOLDISC002Result",
+    "MOLDISC003Error",
+    "MOLDISC003Result",
     "MolecularDiscoveryProgramError",
     "MolecularGenerationError",
+    "RCSBChemicalIdentity",
+    "SeedSelection",
     "FrozenESOLSolubilityPredictor",
     "MolecularDiscoveryReport",
     "MolecularDiscoveryWorkflow",
@@ -59,5 +70,6 @@ __all__ = [
     "generate_halogen_analogs",
     "run_moldisc_001",
     "run_moldisc_002",
+    "run_moldisc_003",
     "run_public_aqsoldb_coverage",
 ]
