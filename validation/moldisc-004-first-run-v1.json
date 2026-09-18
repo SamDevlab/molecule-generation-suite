@@ -1,0 +1,50 @@
+{
+  "schema_version": "research-os.molecular-discovery.program-result.v1",
+  "program_id": "MOLDISC-004",
+  "program_version": "1.0",
+  "status": "CLOSED_FIRST_RESULT_PRESERVED",
+  "protocol_freeze_commit": "d24f4f957c9675bd3d9f338052dc4bcfda6ba49f",
+  "first_successful_execution": {
+    "github_actions_run_id": 35295812056,
+    "workflow": "molecular-discovery-ci",
+    "workflow_run_number": 16,
+    "result": "PASS"
+  },
+  "seed_identity": {
+    "case_id": "ATX-014",
+    "pdb_id": "1P2Y",
+    "chem_comp_id": "NCT",
+    "canonical_smiles": "CN1CCCC1c1cccnc1",
+    "inchikey": "SNICXCGAKADSCV-UHFFFAOYSA-N"
+  },
+  "measured_anchor": {
+    "dataset": "AqSolDB",
+    "source_id": "E-468",
+    "measured_log_s_mol_l": 0.79
+  },
+  "frozen_predictor": {
+    "capability_id": "research-os.molecular-discovery.solubility.esol-v2.v1",
+    "predictor_model_identity": "2127d2aaa87cb83255f41ee2881a5691ccf63974c12e6cfb7502f6f24ed3ce61",
+    "applicability_threshold": 0.26684684684684684
+  },
+  "observed_calibration": {
+    "predicted_log_s_mol_l": -1.5196117645502645,
+    "measured_log_s_mol_l": 0.79,
+    "signed_error_predicted_minus_measured": -2.3096117645502643,
+    "absolute_error": 2.3096117645502643,
+    "max_training_tanimoto": 0.27906976744186046,
+    "applicability_domain_status": "IN_DOMAIN",
+    "distance_above_ad_threshold": 0.012222920595013621
+  },
+  "execution_identity": {
+    "workflow_scientific_summary_hash": "fee030cccbcc4aa6e3a22d91f54022acdbb93fd9cbd99351935a7bd5532ecaf3",
+    "program_scientific_hash": "f6302e53f49b948b3cd5213a81f17a413007ec0ec4f50b969706f104d3731218"
+  },
+  "scientific_conclusion": [
+    "NCT is classified IN_DOMAIN by the inherited ESOL applicability rule, but only narrowly above the frozen threshold.",
+    "The frozen ESOL predictor underpredicts the exact AqSolDB NCT source observation by 2.3096117645502643 logS units.",
+    "A single measured-anchor discrepancy is not a new validation benchmark and does not justify retraining or post-hoc correction.",
+    "The observed error means ESOL absolute logS should not be treated as a reliable ground-truth ranking signal for a future NCT analog series.",
+    "Future NCT analog generation may still record ESOL predictions and per-analog applicability-domain status, but selection should preserve the measured-anchor discrepancy and require independent local coverage/evidence rather than silently calibrating the model to NCT."
+  ]
+}
