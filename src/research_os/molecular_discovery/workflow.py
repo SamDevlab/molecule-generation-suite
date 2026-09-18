@@ -29,6 +29,7 @@ class CandidateAssessment:
     candidate_id: str
     smiles: str
     name: str | None
+    origin: Mapping[str, Any] | None
     chemistry_status: str
     molecule_run_id: str | None
     molecule_properties: Mapping[str, Any] | None
@@ -107,6 +108,7 @@ def _scientific_projection(
             {
                 "candidate_id": item.candidate_id,
                 "smiles": item.smiles,
+                "origin": item.origin,
                 "chemistry_status": item.chemistry_status,
                 "molecule_properties": item.molecule_properties,
                 "solubility_status": item.solubility_status,
@@ -153,6 +155,7 @@ class MolecularDiscoveryWorkflow:
         candidate_id = str(raw.get("id") or raw.get("candidate_id") or "").strip()
         smiles = str(raw.get("smiles") or raw.get("SMILES") or "").strip()
         name = str(raw.get("name")).strip() if raw.get("name") is not None else None
+        origin = dict(raw.get("origin") or {})
         if not candidate_id:
             candidate_id = "UNNAMED"
 
@@ -161,7 +164,7 @@ class MolecularDiscoveryWorkflow:
                 "id": candidate_id,
                 "name": name,
                 "smiles": smiles,
-                "source": "molecular-discovery",
+                "source": str(origin.get("source_type") or "molecular-discovery"),
             },
             experiment="molecular_discovery_characterization",
         )
@@ -191,7 +194,8 @@ class MolecularDiscoveryWorkflow:
         docking_request = raw.get("docking")
         if molecule.passed and docking_request:
             try:
-                docking_run = self.docking_lab.run(
+                docking_lab = self.docking_lab or DockingLab()
+                docking_run = docking_lab.run(
                     dict(docking_request),
                     experiment="molecular_discovery_docking",
                 )
@@ -215,6 +219,7 @@ class MolecularDiscoveryWorkflow:
             candidate_id=candidate_id,
             smiles=smiles,
             name=name,
+            origin=origin or None,
             chemistry_status=chemistry_status,
             molecule_run_id=getattr(molecule, "run_id", None),
             molecule_properties=molecule_properties,
@@ -312,6 +317,10 @@ class MolecularDiscoveryWorkflow:
                 "candidate_id",
                 "name",
                 "smiles",
+                "origin_type",
+                "origin_evidence_level",
+                "parent_id",
+                "generator_id",
                 "priority_group",
                 "chemistry_status",
                 "predicted_log_s_mol_l",
@@ -332,6 +341,10 @@ class MolecularDiscoveryWorkflow:
                         "candidate_id": candidate.candidate_id,
                         "name": candidate.name,
                         "smiles": candidate.smiles,
+                        "origin_type": (candidate.origin or {}).get("source_type"),
+                        "origin_evidence_level": (candidate.origin or {}).get("evidence_level"),
+                        "parent_id": (candidate.origin or {}).get("parent_id"),
+                        "generator_id": (candidate.origin or {}).get("generator_id"),
                         "priority_group": candidate.priority_group,
                         "chemistry_status": candidate.chemistry_status,
                         "predicted_log_s_mol_l": solubility.get("predicted_log_s_mol_l"),
