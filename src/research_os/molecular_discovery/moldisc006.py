@@ -6,6 +6,8 @@ from dataclasses import asdict, dataclass
 import json
 import math
 from pathlib import Path
+import shutil
+import subprocess
 from typing import Any, Mapping
 
 from rdkit import Chem
@@ -16,7 +18,6 @@ from research_os.docking.astex20 import FROZEN_PROSPECTIVE_CASES
 from research_os.docking.capability import capability_metadata
 from research_os.docking import redocking as base
 from research_os.docking.schema import DockingRequest, GridBox
-from research_os.engines.openbabel import OpenBabelEngine
 from research_os.engines.vina import VinaEngine
 
 
@@ -44,6 +45,7 @@ class MOLDISC006Result:
     best_affinity_kcal_mol: float | None
     source_pdb_sha256: str
     native_reference_sha256: str
+    native_reference_structure_hash: str
     receptor_extracted_sha256: str
     receptor_holo_metadata: Mapping[str, Any]
     starting_conformer_sha256: str
@@ -68,8 +70,8 @@ class MOLDISC006Result:
 
 def load_program_config_v6(path: str | Path) -> dict[str, Any]:
     config = json.loads(Path(path).read_text(encoding="utf-8"))
-    if config.get("program_id") != PROGRAM_ID or config.get("program_version") != "1.0":
-        raise MOLDISC006Error("MOLDISC-006 requires frozen program_id/version 1.0")
+    if config.get("program_id") != PROGRAM_ID or config.get("program_version") != "1.1":
+        raise MOLDISC006Error("MOLDISC-006 requires corrected frozen program_id/version 1.1")
     parent = config.get("parent_program") or {}
     if (
         parent.get("program_id") != "MOLDISC-005"
@@ -108,6 +110,11 @@ def load_program_config_v6(path: str | Path) -> dict[str, Any]:
         raise MOLDISC006Error("MOLDISC-006 receptor chain selection drifted")
     if receptor_prep.get("retained_cofactors") != ["HEM"]:
         raise MOLDISC006Error("MOLDISC-006 must retain the crystallographic HEM cofactor")
+    if receptor_prep.get("engine") != "Meeko" or receptor_prep.get("engine_version_required") != "0.8.0":
+        raise MOLDISC006Error("MOLDISC-006 v1.1 requires Meeko 0.8.0 receptor preparation")
+    ligand_prep = docking.get("ligand_preparation") or {}
+    if ligand_prep.get("engine") != "Meeko" or ligand_prep.get("engine_version_required") != "0.8.0":
+        raise MOLDISC006Error("MOLDISC-006 v1.1 requires Meeko 0.8.0 ligand preparation")
     primary = config.get("primary_endpoint") or {}
     if primary.get("rmsd_to_native_nct") != "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH":
         raise MOLDISC006Error("MOLDISC-006 must not define an NCT RMSD endpoint for N-H")
@@ -165,6 +172,139 @@ def _extract_holo_receptor_with_heme(pdb_text: str) -> tuple[str, dict[str, Any]
     }
 
 
+def _native_reference_structure_identity(molecule: Chem.Mol) -> dict[str, Any]:
+    if molecule.GetNumConformers() != 1:
+        raise MOLDISC006Error("NCT reference requires exactly one conformer")
+    heavy = Chem.RemoveHs(Chem.Mol(molecule), sanitize=True)
+    canonical = Chem.MolToSmiles(heavy, canonical=True, isomericSmiles=True)
+    conf = molecule.GetConformer()
+    coordinates = []
+    elements = []
+    for atom in molecule.GetAtoms():
+        if atom.GetAtomicNum() == 1:
+            continue
+        point = conf.GetAtomPosition(atom.GetIdx())
+        elements.append(atom.GetSymbol())
+        coordinates.append([round(float(point.x), 6), round(float(point.y), 6), round(float(point.z), 6)])
+    payload = {
+        "canonical_smiles": canonical,
+        "heavy_atom_count": len(elements),
+        "elements_in_sdf_order": elements,
+        "heavy_atom_coordinates_angstrom": coordinates,
+    }
+    return {**payload, "structure_hash": sha256_json(payload)}
+
+
+def _meeko_version() -> str:
+    try:
+        import meeko
+    except ImportError as exc:
+        raise MOLDISC006Error("Meeko 0.8.0 is required for MOLDISC-006 v1.1") from exc
+    version = str(getattr(meeko, "__version__", "unknown"))
+    if version != "0.8.0":
+        raise MOLDISC006Error(f"Meeko version drifted from 0.8.0: {version!r}")
+    return version
+
+
+def _find_cli(*names: str) -> str:
+    for name in names:
+        path = shutil.which(name)
+        if path:
+            return path
+    raise MOLDISC006Error(f"required executable is unavailable: {', '.join(names)}")
+
+
+def _run_cli(command: list[str], *, timeout: float) -> dict[str, Any]:
+    completed = subprocess.run(
+        command,
+        capture_output=True,
+        text=True,
+        timeout=timeout,
+        check=False,
+    )
+    return {
+        "command": command,
+        "returncode": completed.returncode,
+        "stdout": completed.stdout,
+        "stderr": completed.stderr,
+    }
+
+
+def _pdbqt_metadata(path: Path) -> dict[str, Any]:
+    if not path.is_file() or path.stat().st_size <= 0:
+        raise MOLDISC006Error(f"prepared PDBQT is missing or empty: {path}")
+    atom_lines = [
+        line for line in path.read_text(encoding="utf-8", errors="replace").splitlines()
+        if line.startswith(("ATOM", "HETATM"))
+    ]
+    if not atom_lines:
+        raise MOLDISC006Error(f"prepared PDBQT contains no receptor/ligand atom records: {path}")
+    heme_lines = [line for line in atom_lines if len(line) >= 20 and line[17:20].strip() == "HEM"]
+    iron_lines = [
+        line for line in heme_lines
+        if line[12:16].strip().upper() == "FE" or line.rstrip().split()[-1].upper() == "FE"
+    ]
+    return {
+        "bytes": path.stat().st_size,
+        "sha256": sha256_file(path),
+        "atom_record_count": len(atom_lines),
+        "heme_atom_record_count": len(heme_lines),
+        "heme_iron_record_count": len(iron_lines),
+    }
+
+
+def _prepare_with_meeko(
+    *,
+    receptor_pdb: Path,
+    ligand_sdf: Path,
+    receptor_pdbqt: Path,
+    ligand_pdbqt: Path,
+    timeout: float,
+) -> dict[str, Any]:
+    version = _meeko_version()
+    receptor_cli = _find_cli("mk_prepare_receptor.py", "mk_prepare_receptor")
+    ligand_cli = _find_cli("mk_prepare_ligand.py", "mk_prepare_ligand")
+
+    receptor_run = _run_cli(
+        [
+            receptor_cli,
+            "--read_pdb",
+            str(receptor_pdb),
+            "--write_pdbqt",
+            str(receptor_pdbqt),
+        ],
+        timeout=timeout,
+    )
+    if receptor_run["returncode"] != 0:
+        raise MOLDISC006Error(
+            "Meeko receptor preparation failed: "
+            + str(receptor_run["stderr"])[-4000:]
+        )
+    receptor_meta = _pdbqt_metadata(receptor_pdbqt)
+    if receptor_meta["heme_atom_record_count"] < 1 or receptor_meta["heme_iron_record_count"] != 1:
+        raise MOLDISC006Error(
+            "Meeko receptor PDBQT did not preserve exactly one HEM iron center"
+        )
+
+    ligand_run = _run_cli(
+        [ligand_cli, "-i", str(ligand_sdf), "-o", str(ligand_pdbqt)],
+        timeout=timeout,
+    )
+    if ligand_run["returncode"] != 0:
+        raise MOLDISC006Error(
+            "Meeko ligand preparation failed: "
+            + str(ligand_run["stderr"])[-4000:]
+        )
+    ligand_meta = _pdbqt_metadata(ligand_pdbqt)
+
+    return {
+        "engine": "Meeko",
+        "engine_version": version,
+        "receptor": {**receptor_run, **receptor_meta},
+        "ligand": {**ligand_run, **ligand_meta},
+    }
+
+
 def _candidate_identity() -> tuple[Chem.Mol, str, str]:
     from rdkit.Chem import inchi
 
@@ -213,7 +353,7 @@ def _scientific_payload(
     config_hash: str,
     candidate_identity: Mapping[str, Any],
     source_pdb_sha256: str,
-    native_reference_sha256: str,
+    native_reference_structure_hash: str,
     receptor_extracted_sha256: str,
     receptor_holo_metadata: Mapping[str, Any],
     grid: Mapping[str, Any],
@@ -224,7 +364,7 @@ def _scientific_payload(
     pose_scores: list[float],
     capability: Mapping[str, Any],
     vina_version: str | None,
-    openbabel_version: str | None,
+    meeko_version: str,
 ) -> dict[str, Any]:
     return {
         "program_id": PROGRAM_ID,
@@ -234,7 +374,7 @@ def _scientific_payload(
             "pdb_id": "1P2Y",
             "native_ligand": "NCT",
             "source_pdb_sha256": source_pdb_sha256,
-            "native_reference_sha256": native_reference_sha256,
+            "native_reference_structure_hash": native_reference_structure_hash,
             "receptor_extracted_sha256": receptor_extracted_sha256,
             "receptor_holo_metadata": dict(receptor_holo_metadata),
         },
@@ -247,7 +387,7 @@ def _scientific_payload(
         "docking": {
             "context": DOCKING_CONTEXT,
             "vina_version": vina_version,
-            "openbabel_version": openbabel_version,
+            "meeko_version": meeko_version,
             "seed": base.VINA_SEED,
             "cpu": base.VINA_CPU,
             "exhaustiveness": base.VINA_EXHAUSTIVENESS,
@@ -265,7 +405,6 @@ def run_moldisc_006(
     config_path: str | Path,
     output_root: str | Path,
     vina: VinaEngine | None = None,
-    obabel: OpenBabelEngine | None = None,
     timeout: float = 120.0,
 ) -> MOLDISC006Result:
     config = load_program_config_v6(config_path)
@@ -295,6 +434,7 @@ def run_moldisc_006(
         timeout=timeout,
     )
     native = base.load_single_sdf(native_reference)
+    native_reference_structure = _native_reference_structure_identity(native)
     if native.GetNumHeavyAtoms() != extraction.ligand_heavy_atoms:
         raise MOLDISC006Error("1P2Y NCT reference/PDB heavy-atom identity mismatch")
     grid = base.derive_redocking_grid(native)
@@ -304,10 +444,7 @@ def run_moldisc_006(
     starting_sdf = root / "nh_starting_conformer.sdf"
     starting_conformer = _write_starting_conformer(starting_sdf)
 
-    openbabel = obabel or OpenBabelEngine()
     vina_engine = vina or VinaEngine()
-    if not openbabel.available:
-        raise MOLDISC006Error("Open Babel is unavailable")
     if not vina_engine.available:
         raise MOLDISC006Error("AutoDock Vina is unavailable")
     if not vina_engine.version or "1.2.7" not in vina_engine.version:
@@ -315,24 +452,13 @@ def run_moldisc_006(
 
     receptor_pdbqt = root / "receptor.pdbqt"
     ligand_pdbqt = root / "nh_ligand.pdbqt"
-    receptor_prep = openbabel.convert(
-        receptor_pdb,
-        receptor_pdbqt,
-        options=("-h", "--partialcharge", "gasteiger", "-xr"),
+    preparation = _prepare_with_meeko(
+        receptor_pdb=receptor_pdb,
+        ligand_sdf=starting_sdf,
+        receptor_pdbqt=receptor_pdbqt,
+        ligand_pdbqt=ligand_pdbqt,
         timeout=timeout,
-        protocol_id="moldisc006.1p2y.receptor-openbabel.v1",
     )
-    ligand_prep = openbabel.convert(
-        starting_sdf,
-        ligand_pdbqt,
-        options=("-h", "--partialcharge", "gasteiger"),
-        timeout=timeout,
-        protocol_id="moldisc006.nh.ligand-openbabel.v1",
-    )
-    if receptor_prep.returncode != 0 or not receptor_pdbqt.is_file():
-        raise MOLDISC006Error(f"1P2Y receptor preparation failed: {receptor_prep.stderr}")
-    if ligand_prep.returncode != 0 or not ligand_pdbqt.is_file():
-        raise MOLDISC006Error(f"N-H ligand preparation failed: {ligand_prep.stderr}")
 
     vina_output = root / "nh_vina_poses.pdbqt"
     request = DockingRequest(
@@ -353,7 +479,7 @@ def run_moldisc_006(
         target_id="1P2Y:CYP101A1:NCT-known-pocket:N-H",
         species="Pseudomonas putida",
         role="NON_COGNATE_HOLO_CROSSDOCKING",
-        protocol_id="research-os.moldisc-006.1p2y-nh-crossdock.v1",
+        protocol_id="research-os.moldisc-006.1p2y-nh-crossdock.v1.1",
         timeout=900.0,
         num_modes=base.VINA_NUM_MODES,
     )
@@ -370,6 +496,8 @@ def run_moldisc_006(
         raise MOLDISC006Error("Vina score/model count is inconsistent")
     if any(not math.isfinite(float(score)) for score in scores):
         raise MOLDISC006Error("Vina emitted a non-finite pose score")
+    if all(abs(float(score)) < 1e-12 for score in scores):
+        raise MOLDISC006Error("Vina emitted only zero-valued scores; refusing invalid docking evidence")
 
     capability = capability_metadata(DOCKING_CONTEXT)
     if capability["capability_status"] != "PARTIALLY_VALIDATED":
@@ -392,7 +520,7 @@ def run_moldisc_006(
         config_hash=config_hash,
         candidate_identity=candidate_identity,
         source_pdb_sha256=source_pdb_sha256,
-        native_reference_sha256=native_reference_sha256,
+        native_reference_structure_hash=str(native_reference_structure["structure_hash"]),
         receptor_extracted_sha256=receptor_extracted_sha256,
         receptor_holo_metadata=receptor_holo_metadata,
         grid=grid_payload,
@@ -403,7 +531,7 @@ def run_moldisc_006(
         pose_scores=[float(score) for score in scores],
         capability=capability,
         vina_version=vina_engine.version,
-        openbabel_version=openbabel.version,
+        meeko_version=str(preparation["engine_version"]),
     )
     program_hash = sha256_json(scientific)
     result = MOLDISC006Result(
@@ -418,6 +546,7 @@ def run_moldisc_006(
         best_affinity_kcal_mol=float(docking.best_affinity_kcal_mol) if docking.best_affinity_kcal_mol is not None else min(float(score) for score in scores),
         source_pdb_sha256=source_pdb_sha256,
         native_reference_sha256=native_reference_sha256,
+        native_reference_structure_hash=str(native_reference_structure["structure_hash"]),
         receptor_extracted_sha256=receptor_extracted_sha256,
         receptor_holo_metadata=receptor_holo_metadata,
         starting_conformer_sha256=str(starting_conformer["sha256"]),
@@ -428,7 +557,7 @@ def run_moldisc_006(
         capability=capability,
         engine={
             "vina_version": vina_engine.version,
-            "openbabel_version": openbabel.version,
+            "meeko_version": preparation["engine_version"],
             "seed": base.VINA_SEED,
             "cpu": base.VINA_CPU,
             "exhaustiveness": base.VINA_EXHAUSTIVENESS,
@@ -438,14 +567,28 @@ def run_moldisc_006(
         },
         preparation={
             "starting_conformer": starting_conformer,
-            "receptor": asdict(receptor_prep),
-            "ligand": asdict(ligand_prep),
+            **preparation,
+            "native_reference_transport_sha256": native_reference_sha256,
+            "native_reference_structure": native_reference_structure,
         },
         program_scientific_hash=program_hash,
     )
 
     (root / "program_manifest.json").write_text(
         json.dumps(result.to_dict(), indent=2, sort_keys=True, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    (root / "transport_provenance.json").write_text(
+        json.dumps(
+            {
+                "source_pdb_sha256": source_pdb_sha256,
+                "native_reference_transport_sha256": native_reference_sha256,
+                "native_reference_structure_hash": native_reference_structure["structure_hash"],
+            },
+            indent=2,
+            sort_keys=True,
+            ensure_ascii=False,
+        ),
         encoding="utf-8",
     )
     (root / "scientific_payload.json").write_text(
