@@ -1,0 +1,58 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-005",
+  "program_version": "1.0",
+  "title": "Bounded NCT N-alkyl analog generation with dual solubility evidence",
+  "scientific_question": "Can a predeclared, chemically narrow N-alkyl series around the measured NCT seed produce valid analogs that retain explicit local AqSolDB coverage while their frozen ESOL applicability-domain status is recorded independently?",
+  "parent_program": {
+    "program_id": "MOLDISC-004",
+    "program_version": "1.0",
+    "program_scientific_hash": "f6302e53f49b948b3cd5213a81f17a413007ec0ec4f50b969706f104d3731218",
+    "workflow_scientific_summary_hash": "fee030cccbcc4aa6e3a22d91f54022acdbb93fd9cbd99351935a7bd5532ecaf3",
+    "seed_anchor_absolute_error_log_s": 2.3096117645502643
+  },
+  "seed": {
+    "case_id": "ATX-014",
+    "pdb_id": "1P2Y",
+    "chem_comp_id": "NCT",
+    "target": "CYTOCHROME P450-CAM",
+    "canonical_smiles": "CN1CCCC1c1cccnc1",
+    "inchikey": "SNICXCGAKADSCV-UHFFFAOYSA-N",
+    "aqsoldb_source_id": "E-468",
+    "measured_log_s_mol_l": 0.79
+  },
+  "generation": {
+    "generator_id": "research-os.molecular-discovery.nct-n-alkyl-series.v1",
+    "evidence_level": "E0_HEURISTIC",
+    "frozen_variants": [
+      {"variant_id": "N-H", "operation": "remove_seed_N_methyl_substituent"},
+      {"variant_id": "N-ETHYL", "operation": "extend_seed_N_methyl_substituent_by_one_carbon"},
+      {"variant_id": "N-PROPYL", "operation": "extend_seed_N_methyl_substituent_by_two_carbons"}
+    ],
+    "use_downstream_metrics_during_generation": false
+  },
+  "solubility_evidence": {
+    "esol_capability_id": "research-os.molecular-discovery.solubility.esol-v2.v1",
+    "aqsoldb_coverage_capability_id": "research-os.molecular-discovery.aqsoldb-coverage.v1",
+    "aqsoldb_coverage_boundary": 0.4,
+    "esol_absolute_ranking_allowed": false,
+    "reason": "MOLDISC-004 observed a 2.3096117645502643 logS absolute error for the measured NCT seed despite IN_DOMAIN status."
+  },
+  "generated_analog_followup_rule": {
+    "eligible_if": "chemistry PASS and nearest AqSolDB Tanimoto >= 0.4",
+    "selection_among_eligible": "highest nearest AqSolDB similarity, then variant_id ascending",
+    "esol_prediction_used_for_selection": false,
+    "if_none_eligible": "close MOLDISC-005 without selecting a generated analog"
+  },
+  "docking": {
+    "execute_in_v1": false,
+    "future_context_for_generated_analog_against_1P2Y_holo": "NON_COGNATE_HOLO_CROSSDOCKING"
+  },
+  "interpretation_boundaries": [
+    "Generated N-alkyl analogs are E0_HEURISTIC candidate structures, not evidence of biological activity.",
+    "The NCT AqSolDB measurement applies to the exact NCT structure and does not transfer to generated analogs.",
+    "Frozen ESOL predictions and AD status are recorded for every analog but are not used as the analog-selection score because MOLDISC-004 observed a large seed-level absolute error.",
+    "AqSolDB Tanimoto coverage is structural measured-source coverage, not proof of equal solubility.",
+    "No docking, affinity, potency, efficacy, safety, metabolism or clinical claim is made in MOLDISC-005."
+  ]
+}
