@@ -41,11 +41,13 @@ jobs:
       - name: Install Research OS discovery dependencies and frozen Meeko
         run: |
           python -m pip install -e ".[dev,discovery]"
-          python -m pip install "meeko==0.8.0"
+          python -m pip install "meeko==0.8.0" "gemmi==0.7.5"
           python - <<'PY'
+          import gemmi
           import meeko
           assert meeko.__version__ == "0.8.0"
-          print("Meeko", meeko.__version__)
+          assert gemmi.__version__ == "0.7.5"
+          print("Meeko", meeko.__version__, "Gemmi", gemmi.__version__)
           PY
 
       - name: Install official AutoDock Vina 1.2.7 binary
