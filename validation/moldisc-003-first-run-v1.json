@@ -1,0 +1,64 @@
+{
+  "schema_version": "research-os.molecular-discovery.program-result.v1",
+  "program_id": "MOLDISC-003",
+  "program_version": "1.0",
+  "status": "CLOSED_FIRST_RESULT_PRESERVED",
+  "protocol_freeze_commit": "bc779efd5c2a9e1908ced14ede28008278aede3b",
+  "first_successful_execution": {
+    "github_actions_run_id": 35295368702,
+    "workflow": "molecular-discovery-ci",
+    "workflow_run_number": 12,
+    "result": "PASS"
+  },
+  "source_identity": {
+    "rcsb_identity_hash": "62b6808bea71479a2c5c56f905cb22127a4834461500c555c902a4d7a56b39c8",
+    "aqsoldb_parsed_source_hash": "2c6e56f56389f0fd99fa2a3c843446f98b6b068a3f93aaab71a08822caa085f4"
+  },
+  "execution_identity": {
+    "coverage_scientific_hash": "90bd8e99c926993cc2e0e950da246945b1db199b9b1f027e2ba2b44ff0147e35",
+    "program_scientific_hash": "977428ab62ff38cda8033f5daf9ecc85e93f9f9994240ca2f13729405ab58e2b"
+  },
+  "eligibility": {
+    "frozen_boundary": 0.4,
+    "eligible_case_ids_in_selection_order": ["ATX-014", "ATX-007", "ATX-013", "ATX-012"],
+    "eligible_count": 4,
+    "selected_case_id": "ATX-014",
+    "selected_pdb_id": "1P2Y",
+    "selected_chem_comp_id": "NCT",
+    "selected_target": "CYTOCHROME P450-CAM",
+    "selected_nearest_similarity": 1.0
+  },
+  "selected_seed_anchor": {
+    "canonical_smiles": "CN1CCCC1c1cccnc1",
+    "inchikey": "SNICXCGAKADSCV-UHFFFAOYSA-N",
+    "aqsoldb_source_id": "E-468",
+    "aqsoldb_observation_count": 1,
+    "measured_log_s_mol_l": 0.79,
+    "structural_similarity": 1.0,
+    "interpretation": "The selected RCSB crystallographic seed has an exact canonical-structure match in the immutable AqSolDB source. The measured value is a source observation with heterogeneous-protocol limitations, not a universal solubility truth."
+  },
+  "coverage_rank": [
+    {"case_id":"ATX-014","pdb_id":"1P2Y","chem_comp_id":"NCT","nearest_similarity":1.0,"neighbors_ge_0_4":3},
+    {"case_id":"ATX-007","pdb_id":"1KZK","chem_comp_id":"JE2","nearest_similarity":0.569620253164557,"neighbors_ge_0_4":8},
+    {"case_id":"ATX-013","pdb_id":"1UOU","chem_comp_id":"CMU","nearest_similarity":0.5476190476190477,"neighbors_ge_0_4":1},
+    {"case_id":"ATX-012","pdb_id":"1TOW","chem_comp_id":"CRZ","nearest_similarity":0.45454545454545453,"neighbors_ge_0_4":6},
+    {"case_id":"ATX-001","pdb_id":"1R1H","chem_comp_id":"BIR","nearest_similarity":0.3877551020408163,"neighbors_ge_0_4":0},
+    {"case_id":"ATX-003","pdb_id":"1MEH","chem_comp_id":"MOA","nearest_similarity":0.3220338983050847,"neighbors_ge_0_4":0},
+    {"case_id":"ATX-010","pdb_id":"1Z95","chem_comp_id":"198","nearest_similarity":0.3148148148148148,"neighbors_ge_0_4":0},
+    {"case_id":"ATX-008","pdb_id":"1HQ2","chem_comp_id":"PH2","nearest_similarity":0.30434782608695654,"neighbors_ge_0_4":0},
+    {"case_id":"ATX-011","pdb_id":"1UNL","chem_comp_id":"RRC","nearest_similarity":0.30158730158730157,"neighbors_ge_0_4":0},
+    {"case_id":"ATX-005","pdb_id":"1T40","chem_comp_id":"ID5","nearest_similarity":0.2857142857142857,"neighbors_ge_0_4":0},
+    {"case_id":"ATX-004","pdb_id":"1V4S","chem_comp_id":"MRK","nearest_similarity":0.2753623188405797,"neighbors_ge_0_4":0},
+    {"case_id":"ATX-002","pdb_id":"1SJ0","chem_comp_id":"E4D","nearest_similarity":0.2716049382716049,"neighbors_ge_0_4":0},
+    {"case_id":"ATX-015","pdb_id":"1L7F","chem_comp_id":"BCZ","nearest_similarity":0.2692307692307692,"neighbors_ge_0_4":0},
+    {"case_id":"ATX-009","pdb_id":"1S3V","chem_comp_id":"TQD","nearest_similarity":0.2537313432835821,"neighbors_ge_0_4":0},
+    {"case_id":"ATX-006","pdb_id":"1PMN","chem_comp_id":"984","nearest_similarity":0.22857142857142856,"neighbors_ge_0_4":0}
+  ],
+  "scientific_conclusion": [
+    "Four of the 15 frozen REDOCK-003 crystallographic seeds meet the predeclared AqSolDB structural-coverage boundary of 0.4.",
+    "ATX-014 / PDB 1P2Y / NCT is selected by the frozen rule because its nearest AqSolDB similarity is 1.0, the highest in the cohort.",
+    "The selected NCT seed has an exact canonical-structure match in AqSolDB source E-468 with recorded logS 0.79.",
+    "This establishes source-backed measured-solubility coverage for the selected seed, not therapeutic superiority, affinity, potency or efficacy.",
+    "A separately frozen follow-up may now evaluate the NCT seed against the existing solubility predictor before any new analog generation."
+  ]
+}
