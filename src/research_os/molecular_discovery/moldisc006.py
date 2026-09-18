@@ -70,8 +70,8 @@ class MOLDISC006Result:
 
 def load_program_config_v6(path: str | Path) -> dict[str, Any]:
     config = json.loads(Path(path).read_text(encoding="utf-8"))
-    if config.get("program_id") != PROGRAM_ID or config.get("program_version") != "1.1":
-        raise MOLDISC006Error("MOLDISC-006 requires corrected frozen program_id/version 1.1")
+    if config.get("program_id") != PROGRAM_ID or config.get("program_version") != "1.2":
+        raise MOLDISC006Error("MOLDISC-006 requires corrected frozen program_id/version 1.2")
     parent = config.get("parent_program") or {}
     if (
         parent.get("program_id") != "MOLDISC-005"
@@ -111,10 +111,15 @@ def load_program_config_v6(path: str | Path) -> dict[str, Any]:
     if receptor_prep.get("retained_cofactors") != ["HEM"]:
         raise MOLDISC006Error("MOLDISC-006 must retain the crystallographic HEM cofactor")
     if receptor_prep.get("engine") != "Meeko" or receptor_prep.get("engine_version_required") != "0.8.0":
-        raise MOLDISC006Error("MOLDISC-006 v1.1 requires Meeko 0.8.0 receptor preparation")
+        raise MOLDISC006Error("MOLDISC-006 v1.2 requires Meeko 0.8.0 receptor preparation")
+    templates = receptor_prep.get("additional_residue_templates") or []
+    if len(templates) != 1 or templates[0].get("resname") != "HEM":
+        raise MOLDISC006Error("MOLDISC-006 v1.2 requires exactly one explicit HEM residue template")
+    if templates[0].get("url") != "https://files.rcsb.org/ligands/download/HEM_ideal.sdf":
+        raise MOLDISC006Error("MOLDISC-006 HEM template source drifted")
     ligand_prep = docking.get("ligand_preparation") or {}
     if ligand_prep.get("engine") != "Meeko" or ligand_prep.get("engine_version_required") != "0.8.0":
-        raise MOLDISC006Error("MOLDISC-006 v1.1 requires Meeko 0.8.0 ligand preparation")
+        raise MOLDISC006Error("MOLDISC-006 v1.2 requires Meeko 0.8.0 ligand preparation")
     primary = config.get("primary_endpoint") or {}
     if primary.get("rmsd_to_native_nct") != "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH":
         raise MOLDISC006Error("MOLDISC-006 must not define an NCT RMSD endpoint for N-H")
@@ -259,6 +264,7 @@ def _prepare_with_meeko(
     ligand_sdf: Path,
     receptor_pdbqt: Path,
     ligand_pdbqt: Path,
+    heme_template_sdf: Path,
     timeout: float,
 ) -> dict[str, Any]:
     version = _meeko_version()
@@ -272,6 +278,8 @@ def _prepare_with_meeko(
             str(receptor_pdb),
             "--write_pdbqt",
             str(receptor_pdbqt),
+            "--add_templates",
+            f"HEM:{heme_template_sdf}",
         ],
         timeout=timeout,
     )
@@ -300,6 +308,10 @@ def _prepare_with_meeko(
     return {
         "engine": "Meeko",
         "engine_version": version,
+        "heme_template": {
+            "path": str(heme_template_sdf),
+            "sha256": sha256_file(heme_template_sdf),
+        },
         "receptor": {**receptor_run, **receptor_meta},
         "ligand": {**ligand_run, **ligand_meta},
     }
@@ -354,6 +366,7 @@ def _scientific_payload(
     candidate_identity: Mapping[str, Any],
     source_pdb_sha256: str,
     native_reference_structure_hash: str,
+    heme_template_sha256: str,
     receptor_extracted_sha256: str,
     receptor_holo_metadata: Mapping[str, Any],
     grid: Mapping[str, Any],
@@ -375,6 +388,7 @@ def _scientific_payload(
             "native_ligand": "NCT",
             "source_pdb_sha256": source_pdb_sha256,
             "native_reference_structure_hash": native_reference_structure_hash,
+            "heme_template_sha256": heme_template_sha256,
             "receptor_extracted_sha256": receptor_extracted_sha256,
             "receptor_holo_metadata": dict(receptor_holo_metadata),
         },
@@ -441,6 +455,18 @@ def run_moldisc_006(
     if grid.status != "PASS":
         raise MOLDISC006Error(f"frozen native-ligand grid is not executable: {grid.reason}")
 
+    heme_template_sdf = root / "HEM_ideal.sdf"
+    heme_template_sha256 = base._download(
+        "https://files.rcsb.org/ligands/download/HEM_ideal.sdf",
+        heme_template_sdf,
+        timeout=timeout,
+    )
+    heme_template_mol = Chem.SDMolSupplier(str(heme_template_sdf), removeHs=False)[0]
+    if heme_template_mol is None:
+        raise MOLDISC006Error("official RCSB HEM ideal SDF is not parseable by RDKit")
+    if not any(atom.GetSymbol().upper() == "FE" for atom in heme_template_mol.GetAtoms()):
+        raise MOLDISC006Error("official RCSB HEM ideal SDF contains no Fe atom")
+
     starting_sdf = root / "nh_starting_conformer.sdf"
     starting_conformer = _write_starting_conformer(starting_sdf)
 
@@ -457,6 +483,7 @@ def run_moldisc_006(
         ligand_sdf=starting_sdf,
         receptor_pdbqt=receptor_pdbqt,
         ligand_pdbqt=ligand_pdbqt,
+        heme_template_sdf=heme_template_sdf,
         timeout=timeout,
     )
 
@@ -479,7 +506,7 @@ def run_moldisc_006(
         target_id="1P2Y:CYP101A1:NCT-known-pocket:N-H",
         species="Pseudomonas putida",
         role="NON_COGNATE_HOLO_CROSSDOCKING",
-        protocol_id="research-os.moldisc-006.1p2y-nh-crossdock.v1.1",
+        protocol_id="research-os.moldisc-006.1p2y-nh-crossdock.v1.2",
         timeout=900.0,
         num_modes=base.VINA_NUM_MODES,
     )
@@ -521,6 +548,7 @@ def run_moldisc_006(
         candidate_identity=candidate_identity,
         source_pdb_sha256=source_pdb_sha256,
         native_reference_structure_hash=str(native_reference_structure["structure_hash"]),
+        heme_template_sha256=heme_template_sha256,
         receptor_extracted_sha256=receptor_extracted_sha256,
         receptor_holo_metadata=receptor_holo_metadata,
         grid=grid_payload,
@@ -584,6 +612,7 @@ def run_moldisc_006(
                 "source_pdb_sha256": source_pdb_sha256,
                 "native_reference_transport_sha256": native_reference_sha256,
                 "native_reference_structure_hash": native_reference_structure["structure_hash"],
+                "heme_template_transport_sha256": heme_template_sha256,
             },
             indent=2,
             sort_keys=True,
