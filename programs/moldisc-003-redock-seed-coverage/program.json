@@ -1,0 +1,55 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-003",
+  "program_version": "1.0",
+  "title": "Solubility-coverage scan across frozen REDOCK-003 crystallographic seeds",
+  "scientific_question": "Which, if any, of the 15 frozen REDOCK-003 crystallographic ligands has AqSolDB structural coverage at or above the pre-existing 0.4 Morgan/Tanimoto boundary and is therefore eligible to seed a new Molecular Discovery program?",
+  "parent_benchmark": {
+    "benchmark_id": "REDOCK-003",
+    "protocol_id": "research-os.redocking.astex20.v1.0",
+    "case_count": 15
+  },
+  "cases": [
+    {"case_id": "ATX-001", "pdb_id": "1R1H", "chem_comp_id": "BIR", "target": "NEPRILYSIN"},
+    {"case_id": "ATX-002", "pdb_id": "1SJ0", "chem_comp_id": "E4D", "target": "ESTROGEN RECEPTOR"},
+    {"case_id": "ATX-003", "pdb_id": "1MEH", "chem_comp_id": "MOA", "target": "INOSINE-5'-MONOPHOSPHATE DEHYDROGENASE"},
+    {"case_id": "ATX-004", "pdb_id": "1V4S", "chem_comp_id": "MRK", "target": "GLUCOKINASE ISOFORM 2"},
+    {"case_id": "ATX-005", "pdb_id": "1T40", "chem_comp_id": "ID5", "target": "ALDOSE REDUCTASE"},
+    {"case_id": "ATX-006", "pdb_id": "1PMN", "chem_comp_id": "984", "target": "MITOGEN-ACTIVATED PROTEIN KINASE 10"},
+    {"case_id": "ATX-007", "pdb_id": "1KZK", "chem_comp_id": "JE2", "target": "PROTEASE"},
+    {"case_id": "ATX-008", "pdb_id": "1HQ2", "chem_comp_id": "PH2", "target": "6-HYDROXYMETHYL-7,8-DIHYDROPTERIN PYROPHOSPHOKINASE"},
+    {"case_id": "ATX-009", "pdb_id": "1S3V", "chem_comp_id": "TQD", "target": "DIHYDROFOLATE REDUCTASE"},
+    {"case_id": "ATX-010", "pdb_id": "1Z95", "chem_comp_id": "198", "target": "ANDROGEN RECEPTOR"},
+    {"case_id": "ATX-011", "pdb_id": "1UNL", "chem_comp_id": "RRC", "target": "CYCLIN-DEPENDENT KINASE 5"},
+    {"case_id": "ATX-012", "pdb_id": "1TOW", "chem_comp_id": "CRZ", "target": "FATTY ACID-BINDING PROTEIN, ADIPOCYTE"},
+    {"case_id": "ATX-013", "pdb_id": "1UOU", "chem_comp_id": "CMU", "target": "THYMIDINE PHOSPHORYLASE"},
+    {"case_id": "ATX-014", "pdb_id": "1P2Y", "chem_comp_id": "NCT", "target": "CYTOCHROME P450-CAM"},
+    {"case_id": "ATX-015", "pdb_id": "1L7F", "chem_comp_id": "BCZ", "target": "NEURAMINIDASE"}
+  ],
+  "rcsb_source": {
+    "provider": "RCSB PDB Data API",
+    "endpoint_template": "https://data.rcsb.org/rest/v1/core/chemcomp/{chem_comp_id}",
+    "required_identity_fields": ["chem_comp_id", "selected_smiles", "reported_or_rdkit_inchikey"],
+    "note": "The first successful program result will freeze the scientific projection hash of the retrieved chemical identities."
+  },
+  "aqsoldb_source": {
+    "capability_id": "research-os.molecular-discovery.aqsoldb-coverage.v1",
+    "source_commit": "98cdd10a372058743e4f3fb950a1c9974ec9603a",
+    "parsed_source_hash": "2c6e56f56389f0fd99fa2a3c843446f98b6b068a3f93aaab71a08822caa085f4"
+  },
+  "selection_rule": {
+    "eligibility_boundary": 0.4,
+    "boundary_provenance": "pre-existing ONLINE-EXP-002 descriptive similarity bin boundary",
+    "eligible_if": "nearest AqSolDB Morgan radius-2/2048 Tanimoto >= 0.4",
+    "selection_among_eligible": "highest nearest similarity, then case_id ascending",
+    "if_none_eligible": "close MOLDISC-003 without selecting a seed",
+    "post_result_threshold_tuning": false
+  },
+  "interpretation_boundaries": [
+    "Seed selection is based on measured-solubility structural coverage, not predicted efficacy or binding.",
+    "RCSB crystallographic presence establishes structural provenance, not therapeutic value.",
+    "AqSolDB similarity does not imply equal solubility or shared biological mechanism.",
+    "MOLDISC-003 performs no model fitting, molecule generation or docking.",
+    "A selected seed only becomes eligible for a separately frozen next program; it is not declared a superior drug candidate."
+  ]
+}
