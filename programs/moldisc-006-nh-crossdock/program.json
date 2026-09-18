@@ -52,6 +52,9 @@
     },
     "receptor_preparation": {
       "engine": "Open Babel",
+      "selected_author_chains": ["A"],
+      "retained_cofactors": ["HEM"],
+      "removed_hetero_components": "all HETATM except HEM; crystallographic waters are not retained",
       "options": ["-h", "--partialcharge", "gasteiger", "-xr"]
     },
     "ligand_preparation": {
@@ -70,6 +73,7 @@
     "A Vina score is E2 computational output and is not measured binding affinity, potency or free energy.",
     "No RMSD to crystallographic NCT is reported because N-H and NCT are different molecular graphs.",
     "The 1P2Y holo known-pocket context is NON_COGNATE_HOLO_CROSSDOCKING and remains only partially validated.",
+    "1P2Y is a heme enzyme; the receptor preparation must retain the crystallographic HEM cofactor and its iron atom. A receptor missing HEM is a protocol failure.",
     "A technically completed docking run does not establish correct binding mode, CYP activity, metabolism, efficacy, safety or clinical utility.",
     "Docking parameters, candidate identity and grid derivation may not be changed in response to the first observed score."
   ]
