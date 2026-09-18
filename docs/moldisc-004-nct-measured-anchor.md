@@ -1,6 +1,6 @@
 # MOLDISC-004 — NCT exact measured-anchor calibration
 
-Status: **protocol frozen before the first NCT predictor comparison is inspected**
+Status: **executed and closed; first NCT anchor comparison preserved without model tuning**
 
 ## Why this program exists
 
@@ -100,3 +100,44 @@ This program does not establish:
 
 Its purpose is narrower: calibrate one source-backed crystallographic seed with
 an exact measured-solubility observation before candidate generation resumes.
+
+
+## First execution — GitHub Actions run 16
+
+MOLDISC-004 completed successfully in workflow run `35295812056`.
+
+Observed calibration:
+
+- AqSolDB measured logS: `0.79`
+- frozen ESOL predicted logS: `-1.5196117645502645`
+- signed error (prediction - measurement): `-2.3096117645502643`
+- absolute error: `2.3096117645502643`
+- maximum ESOL-training Tanimoto: `0.27906976744186046`
+- frozen AD threshold: `0.26684684684684684`
+- applicability-domain status: `IN_DOMAIN`
+
+Scientific identities:
+
+- predictor model identity: `2127d2aaa87cb83255f41ee2881a5691ccf63974c12e6cfb7502f6f24ed3ce61`
+- workflow scientific hash: `fee030cccbcc4aa6e3a22d91f54022acdbb93fd9cbd99351935a7bd5532ecaf3`
+- program hash: `f6302e53f49b948b3cd5213a81f17a413007ec0ec4f50b969706f104d3731218`
+
+### Boundary interpretation
+
+NCT is technically inside the inherited applicability domain, but narrowly:
+its nearest-training similarity exceeds the frozen boundary by only about
+`0.01222`.
+
+More importantly, the frozen predictor differs from the exact AqSolDB source
+observation by about `2.31` logS units.
+
+MOLDISC-004 does not respond by fitting a correction, moving the AD threshold,
+or changing the model.
+
+The result instead changes how later evidence must be interpreted: ESOL may be
+recorded for NCT analogs, with each analog's own AD status, but its absolute
+prediction must not be treated as a ground-truth solubility ranking signal in
+this chemical neighborhood solely because the seed is technically in-domain.
+
+A future NCT generation program should therefore combine explicit per-analog AD
+with local measured-source coverage and preserve the NCT anchor discrepancy.
