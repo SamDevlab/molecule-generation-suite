@@ -222,6 +222,15 @@ review triage only.
 
 See [Molecular Discovery Program v0.1](docs/molecular-discovery-program-v0.1.md).
 
+### First active program: MOLDISC-001
+
+The first source-backed program is **MOLDISC-001**, using the crystallographic
+ID5 ligand from PDB 1T40 as a frozen seed. A bounded E0 halogen-substitution
+generator feeds the existing MoleculeLab + frozen solubility/applicability-domain
+workflow. No automatic docking or efficacy score is introduced.
+
+See [MOLDISC-001](docs/moldisc-001-id5.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.

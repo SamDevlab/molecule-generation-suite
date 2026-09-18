@@ -1,0 +1,70 @@
+{
+  "schema_version": "research-os.molecular-discovery.program-result.v1",
+  "program_id": "MOLDISC-001",
+  "program_version": "1.0",
+  "status": "CLOSED_FIRST_RESULT_PRESERVED",
+  "protocol_freeze_commit": "cdd77f97143564a0c75dc3ab759f36db2bb8f1d8",
+  "first_execution": {
+    "github_actions_run_id": 35293207930,
+    "workflow": "molecular-discovery-ci",
+    "workflow_run_number": 3,
+    "result": "PASS",
+    "environment": {
+      "python": "3.12.14",
+      "numpy": "2.5.3",
+      "rdkit": "2026.3.6",
+      "scikit_learn": "1.9.1"
+    }
+  },
+  "source": {
+    "target_pdb_id": "1T40",
+    "target": "human aldose reductase",
+    "seed_chem_comp_id": "ID5",
+    "seed_name": "IDD552",
+    "seed_inchi_key": "ZCAGEXZTORJQDZ-UHFFFAOYSA-N"
+  },
+  "execution_identity": {
+    "candidate_count": 9,
+    "generated_candidate_count": 8,
+    "generation_scientific_hash": "d2881a9906a6a60d54e90a303601d9509983e6f1a0b9ce01a0792bf088890abe",
+    "workflow_scientific_summary_hash": "fa36dc8b82a60d6edccad464c7c0dc3297e39c28ca52a40694da67cab3c1d48e",
+    "program_scientific_hash": "421541946e6e008441b0c5fa867fe200aeaf09c8aa0fb87c115af11e637c13d0"
+  },
+  "gates": {
+    "chemistry_pass_count": 9,
+    "docking_not_requested_count": 9,
+    "solubility_in_domain_count": 0,
+    "solubility_out_of_domain_count": 9,
+    "eligible_for_review_count": 0
+  },
+  "applicability_domain": {
+    "frozen_threshold": 0.26684684684684684,
+    "maximum_observed_train_tanimoto": 0.22666666666666666,
+    "seed_train_tanimoto": 0.19736842105263158,
+    "interpretation": "Every candidate is outside the frozen ESOL applicability domain. Predicted logS values are retained as model outputs but are not promoted to in-domain decision evidence."
+  },
+  "observed_model_outputs": {
+    "seed_predicted_log_s_mol_l": -4.525936814814818,
+    "least_negative_predicted_log_s_mol_l": -4.525936814814818,
+    "most_negative_predicted_log_s_mol_l": -4.914711765873015,
+    "boundary": "All values belong to OUT_OF_DOMAIN candidates and must not be used to claim reliable solubility ranking."
+  },
+  "triage": [
+    {"review_order": 1, "candidate_id": "MOLDISC-001-SEED-ID5", "max_training_tanimoto": 0.19736842105263158, "predicted_log_s_mol_l": -4.525936814814818, "priority_group": "OUT_OF_DOMAIN"},
+    {"review_order": 2, "candidate_id": "MOLDISC-001-ID5-GEN-37413AF665", "max_training_tanimoto": 0.21052631578947367, "predicted_log_s_mol_l": -4.62786528968254, "priority_group": "OUT_OF_DOMAIN"},
+    {"review_order": 3, "candidate_id": "MOLDISC-001-ID5-GEN-40F7449649", "max_training_tanimoto": 0.22666666666666666, "predicted_log_s_mol_l": -4.636551400793651, "priority_group": "OUT_OF_DOMAIN"},
+    {"review_order": 4, "candidate_id": "MOLDISC-001-ID5-GEN-20C30B98F0", "max_training_tanimoto": 0.22093023255813954, "predicted_log_s_mol_l": -4.769766710317461, "priority_group": "OUT_OF_DOMAIN"},
+    {"review_order": 5, "candidate_id": "MOLDISC-001-ID5-GEN-16A67CFF79", "max_training_tanimoto": 0.19736842105263158, "predicted_log_s_mol_l": -4.805838805555556, "priority_group": "OUT_OF_DOMAIN"},
+    {"review_order": 6, "candidate_id": "MOLDISC-001-ID5-GEN-61802182C1", "max_training_tanimoto": 0.189873417721519, "predicted_log_s_mol_l": -4.888481496031746, "priority_group": "OUT_OF_DOMAIN"},
+    {"review_order": 7, "candidate_id": "MOLDISC-001-ID5-GEN-6A4436A434", "max_training_tanimoto": 0.189873417721519, "predicted_log_s_mol_l": -4.888481496031746, "priority_group": "OUT_OF_DOMAIN"},
+    {"review_order": 8, "candidate_id": "MOLDISC-001-ID5-GEN-E0251716AB", "max_training_tanimoto": 0.19230769230769232, "predicted_log_s_mol_l": -4.909706773809523, "priority_group": "OUT_OF_DOMAIN"},
+    {"review_order": 9, "candidate_id": "MOLDISC-001-ID5-GEN-67517971B0", "max_training_tanimoto": 0.19230769230769232, "predicted_log_s_mol_l": -4.914711765873015, "priority_group": "OUT_OF_DOMAIN"}
+  ],
+  "scientific_conclusion": [
+    "The Research OS 5.1 Molecular Discovery pipeline successfully consumed a real source-backed seed and eight deterministically generated analogs.",
+    "All nine structures passed molecular validation.",
+    "All nine structures are outside the frozen ESOL applicability domain, so MOLDISC-001 v1 produces no in-domain solubility candidate for prioritization.",
+    "The observed out-of-domain result is retained rather than changing the generator, seed, applicability threshold or model after seeing the output.",
+    "MOLDISC-001 demonstrates fail-closed program behavior; a broader or different solubility evidence source would require a new program/protocol rather than post-hoc modification."
+  ]
+}

@@ -5,9 +5,14 @@ on:
     paths:
       - "src/research_os/molecular_discovery/**"
       - "scripts/run_molecular_discovery.py"
+      - "scripts/run_moldisc_001.py"
+      - "programs/moldisc-001-id5/**"
       - "tests/test_molecular_discovery.py"
+      - "tests/test_moldisc_001.py"
       - "validation/molecular-discovery-solubility-v1.json"
+      - "validation/moldisc-001-first-run-v1.json"
       - "docs/molecular-discovery-program-v0.1.md"
+      - "docs/moldisc-001-id5.md"
       - "pyproject.toml"
       - ".github/workflows/molecular-discovery-ci.yml"
   push:
@@ -16,8 +21,13 @@ on:
     paths:
       - "src/research_os/molecular_discovery/**"
       - "scripts/run_molecular_discovery.py"
+      - "scripts/run_moldisc_001.py"
+      - "programs/moldisc-001-id5/**"
       - "tests/test_molecular_discovery.py"
+      - "tests/test_moldisc_001.py"
       - "validation/molecular-discovery-solubility-v1.json"
+      - "validation/moldisc-001-first-run-v1.json"
+      - "docs/moldisc-001-id5.md"
       - "pyproject.toml"
       - ".github/workflows/molecular-discovery-ci.yml"
 
@@ -35,6 +45,44 @@ jobs:
       - name: Check dependency consistency
         run: python -m pip check
       - name: Compile Molecular Discovery
-        run: python -m compileall -q src/research_os/molecular_discovery scripts/run_molecular_discovery.py tests/test_molecular_discovery.py
+        run: python -m compileall -q src/research_os/molecular_discovery scripts/run_molecular_discovery.py scripts/run_moldisc_001.py tests/test_molecular_discovery.py tests/test_moldisc_001.py
       - name: Run Molecular Discovery tests
-        run: python -m pytest -q tests/test_molecular_discovery.py
+        run: python -m pytest -q tests/test_molecular_discovery.py tests/test_moldisc_001.py
+      - name: Execute frozen MOLDISC-001 from public ESOL source
+        run: python scripts/run_moldisc_001.py --output /tmp/moldisc-001
+      - name: Verify MOLDISC-001 artifacts
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          root = Path("/tmp/moldisc-001")
+          manifest = json.loads((root / "program_manifest.json").read_text())
+          generation = json.loads((root / "generation.json").read_text())
+          with (root / "workflow" / "candidates.csv").open(newline="") as handle:
+              candidates = list(csv.DictReader(handle))
+
+          assert manifest["program_id"] == "MOLDISC-001"
+          assert manifest["candidate_count"] == 9
+          assert generation["candidate_count"] == 8
+          assert len(candidates) == 9
+          assert all(row["chemistry_status"] == "PASS" for row in candidates)
+          assert all(row["docking_status"] == "NOT_REQUESTED" for row in candidates)
+          print(json.dumps({
+              "program_scientific_hash": manifest["program_scientific_hash"],
+              "generation_scientific_hash": manifest["generation_scientific_hash"],
+              "workflow_scientific_summary_hash": manifest["workflow_scientific_summary_hash"],
+              "triage": [
+                  {
+                      "review_order": row["review_order"],
+                      "candidate_id": row["candidate_id"],
+                      "priority_group": row["priority_group"],
+                      "solubility_status": row["solubility_status"],
+                      "predicted_log_s_mol_l": row["predicted_log_s_mol_l"],
+                      "max_training_tanimoto": row["max_training_tanimoto"],
+                  }
+                  for row in candidates
+              ],
+          }, indent=2, sort_keys=True))
+          PY

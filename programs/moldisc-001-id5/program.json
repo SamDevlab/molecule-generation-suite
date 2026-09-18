@@ -1,0 +1,50 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-001",
+  "program_version": "1.0",
+  "title": "ID5 halogen-neighborhood solubility triage",
+  "objective": "Explore a narrow single-halogen substitution neighborhood around the crystallographic ID5 ligand from PDB 1T40 and prioritize structurally valid, in-domain candidates by the frozen aqueous-solubility model for further computational review.",
+  "target": {
+    "pdb_id": "1T40",
+    "name": "human aldose reductase",
+    "protein_chain": "A",
+    "organism": "Homo sapiens",
+    "resolution_angstrom": 1.8,
+    "source_url": "https://www.rcsb.org/structure/1T40",
+    "validated_parent_case": "REDOCK-003 ATX-005",
+    "future_analog_docking_context": "NON_COGNATE_HOLO_CROSSDOCKING",
+    "docking_execution_in_program_v1": false
+  },
+  "seed": {
+    "seed_id": "ID5",
+    "name": "IDD552",
+    "pdb_chem_comp_id": "ID5",
+    "smiles": "Fc1ccc(c(OCC(=O)O)c1)C(=O)NCc2nc3c(F)c(F)cc(F)c3s2",
+    "inchi_key": "ZCAGEXZTORJQDZ-UHFFFAOYSA-N",
+    "formula": "C17H10F4N2O4S",
+    "molecular_weight": 414.331,
+    "source_url": "https://www.rcsb.org/ligand/ID5",
+    "source_type": "curated_crystallographic_ligand",
+    "source_evidence_level": "E4_CURATED_EXPERIMENTAL"
+  },
+  "generation": {
+    "generator_id": "research-os.molecular-discovery.halogen-single-substitution.v1",
+    "operation": "single_halogen_substitution",
+    "allowed_elements": ["F", "Cl", "Br"],
+    "max_candidates": 16,
+    "use_downstream_metrics_during_generation": false
+  },
+  "triage": {
+    "include_seed": true,
+    "primary_filter": "structural validity then applicability-domain status",
+    "within_eligible_review_order": "higher frozen-model predicted aqueous logS first",
+    "composite_efficacy_score": false
+  },
+  "interpretation_boundaries": [
+    "Generated analogs are E0_HEURISTIC candidate structures, not evidence of activity.",
+    "Solubility predictions are E1_ML estimates and preserve the frozen ESOL/AqSolDB applicability-domain limits.",
+    "No docking is executed automatically in MOLDISC-001 v1.",
+    "If analog docking is later requested against the 1T40 holo receptor, it must declare NON_COGNATE_HOLO_CROSSDOCKING and inherit the partially validated docking capability boundary.",
+    "This program does not establish binding affinity, potency, efficacy, safety, synthesizability or clinical value."
+  ]
+}
