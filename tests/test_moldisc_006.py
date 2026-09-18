@@ -32,6 +32,8 @@ def test_moldisc_006_protocol_freezes_parent_candidate_target_and_context():
     assert config["docking"]["cpu"] == 1
     assert config["docking"]["exhaustiveness"] == 16
     assert config["docking"]["num_modes"] == 20
+    assert config["docking"]["receptor_preparation"]["retained_cofactors"] == ["HEM"]
+    assert config["docking"]["receptor_preparation"]["selected_author_chains"] == ["A"]
     assert config["primary_endpoint"]["rmsd_to_native_nct"] == "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH"
 
 
