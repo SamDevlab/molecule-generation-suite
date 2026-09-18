@@ -1,0 +1,131 @@
+name: moldisc-006-ci
+
+on:
+  pull_request:
+    paths:
+      - "src/research_os/molecular_discovery/moldisc006.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_006.py"
+      - "tests/test_moldisc_006.py"
+      - "programs/moldisc-006-nh-crossdock/**"
+      - "docs/moldisc-006-nh-crossdock.md"
+      - "validation/moldisc-006-first-run-v1.json"
+      - ".github/workflows/moldisc006-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/research_os/molecular_discovery/moldisc006.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_006.py"
+      - "tests/test_moldisc_006.py"
+      - "programs/moldisc-006-nh-crossdock/**"
+      - "validation/moldisc-006-first-run-v1.json"
+      - ".github/workflows/moldisc006-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-nh-crossdock:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Research OS discovery dependencies
+        run: python -m pip install -e ".[dev,discovery]"
+
+      - name: Install Open Babel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+
+      - name: Install official AutoDock Vina 1.2.7 binary
+        run: |
+          curl --fail --location --retry 3             https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64             --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          /tmp/vina_1.2.7 --version
+          sha256sum /tmp/vina_1.2.7
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+
+      - name: Check dependency consistency
+        run: python -m pip check
+
+      - name: Compile frozen MOLDISC-006
+        run: >-
+          python -m py_compile
+          src/research_os/molecular_discovery/moldisc006.py
+          scripts/run_moldisc_006.py
+          tests/test_moldisc_006.py
+
+      - name: Test frozen identities and capability boundary
+        run: python -m pytest -q tests/test_moldisc_006.py
+
+      - name: Execute frozen MOLDISC-006 run A
+        run: python scripts/run_moldisc_006.py --output /tmp/moldisc-006-a
+
+      - name: Execute frozen MOLDISC-006 run B
+        run: python scripts/run_moldisc_006.py --output /tmp/moldisc-006-b
+
+      - name: Require technical completion and deterministic scientific identity
+        run: |
+          python - <<'PY'
+          import json
+          import math
+          from pathlib import Path
+
+          a = json.loads((Path("/tmp/moldisc-006-a") / "program_manifest.json").read_text())
+          b = json.loads((Path("/tmp/moldisc-006-b") / "program_manifest.json").read_text())
+          scientific = json.loads((Path("/tmp/moldisc-006-a") / "scientific_payload.json").read_text())
+
+          assert a["program_id"] == "MOLDISC-006"
+          assert a["candidate_id"] == "MOLDISC-005-NCT-84632F8200"
+          assert a["candidate_smiles"] == "c1cncc(C2CCCN2)c1"
+          assert a["technical_status"] == "PASS"
+          assert a["pose_count"] >= 1
+          assert math.isfinite(float(a["vina_pose_1_score_kcal_mol"]))
+          assert math.isfinite(float(a["best_affinity_kcal_mol"]))
+          assert a["capability"]["docking_context"] == "NON_COGNATE_HOLO_CROSSDOCKING"
+          assert a["capability"]["capability_status"] == "PARTIALLY_VALIDATED"
+          assert a["capability"]["evidence_level"] == "E2_COMPUTATIONAL"
+          assert a["grid"]["status"] == "PASS"
+          assert scientific["docking"]["rmsd_to_native_nct"] == "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH"
+          assert a["program_scientific_hash"] == b["program_scientific_hash"]
+          assert a["vina_output_sha256"] == b["vina_output_sha256"]
+          assert a["starting_conformer_sha256"] == b["starting_conformer_sha256"]
+          assert a["receptor_pdbqt_sha256"] == b["receptor_pdbqt_sha256"]
+          assert a["ligand_pdbqt_sha256"] == b["ligand_pdbqt_sha256"]
+
+          print(json.dumps({
+              "program_scientific_hash": a["program_scientific_hash"],
+              "candidate_inchikey": a["candidate_inchikey"],
+              "grid_hash": a["grid"]["grid_hash"],
+              "pose_count": a["pose_count"],
+              "pose_1_score_kcal_mol": a["vina_pose_1_score_kcal_mol"],
+              "best_affinity_kcal_mol": a["best_affinity_kcal_mol"],
+              "source_pdb_sha256": a["source_pdb_sha256"],
+              "native_reference_sha256": a["native_reference_sha256"],
+              "receptor_pdbqt_sha256": a["receptor_pdbqt_sha256"],
+              "ligand_pdbqt_sha256": a["ligand_pdbqt_sha256"],
+              "vina_output_sha256": a["vina_output_sha256"],
+              "capability": a["capability"],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Upload MOLDISC-006 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: moldisc-006-nh-crossdock
+          path: |
+            /tmp/moldisc-006-a
+            /tmp/moldisc-006-b
+          if-no-files-found: warn
