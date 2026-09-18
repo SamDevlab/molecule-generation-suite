@@ -26,9 +26,11 @@
     "pdb_id": "1P2Y",
     "native_chem_comp_id": "NCT",
     "ligand_author_chain": "A",
-    "receptor_author_chains": ["A"],
+    "receptor_author_chains": [
+      "A"
+    ],
     "target": "CYTOCHROME P450-CAM",
-    "resolution_angstrom": 2.30,
+    "resolution_angstrom": 2.3,
     "source_url": "https://www.rcsb.org/structure/1P2Y"
   },
   "docking": {
@@ -36,9 +38,9 @@
     "capability_classification": "PARTIALLY_VALIDATED",
     "evidence_level": "E2_COMPUTATIONAL",
     "grid_rule": "derive from exact crystallographic NCT reference coordinates using research-os.redocking.v1.1 native-ligand box rule",
-    "box_padding_angstrom": 6.0,
-    "box_min_side_angstrom": 20.0,
-    "box_max_side_angstrom": 30.0,
+    "box_padding_angstrom": 6,
+    "box_min_side_angstrom": 20,
+    "box_max_side_angstrom": 30,
     "vina_version_required": "1.2.7",
     "seed": 42,
     "cpu": 1,
@@ -53,7 +55,9 @@
     "receptor_preparation": {
       "engine": "Meeko",
       "engine_version_required": "0.8.0",
-      "selected_author_chains": ["A"],
+      "selected_author_chains": [
+        "A"
+      ],
       "additional_residue_templates": [
         {
           "resname": "HEM",
@@ -61,7 +65,9 @@
           "url": "https://files.rcsb.org/ligands/download/HEM_ideal.sdf"
         }
       ],
-      "retained_cofactors": ["HEM"],
+      "retained_cofactors": [
+        "HEM"
+      ],
       "removed_hetero_components": "all HETATM except HEM; crystallographic waters are not retained",
       "command_contract": "mk_prepare_receptor.py --read_pdb INPUT --write_pdbqt OUTPUT"
     },
@@ -88,5 +94,14 @@
     "Protocol v1.0 is preserved as INVALID_PREPARATION because Open Babel produced an empty receptor PDBQT.",
     "Protocol v1.1 is preserved as INDETERMINATE_TARGET_TEMPLATE because Meeko 0.8.0 could not resolve HEM from default/automatic templates and no docking was executed.",
     "Protocol v1.2 changes only HEM template resolution by supplying the official RCSB CCD HEM ideal SDF through Meeko --add_templates; candidate, target, grid, Vina settings and endpoint remain unchanged."
-  ]
+  ],
+  "status": "CLOSED_INDETERMINATE_TARGET_PREPARATION",
+  "closure": {
+    "accepted_docking_result": false,
+    "valid_vina_score": false,
+    "final_protocol_version": "1.2",
+    "reason": "1P2Y requires HEM. v1.0 produced an empty receptor with Open Babel; v1.1 could not resolve HEM in Meeko defaults; v1.2 supplied the official RCSB HEM CCD ideal SDF but the active RDKit/Meeko template path could not sanitize the metal-containing representation. No valid receptor PDBQT was produced.",
+    "decision": "Do not introduce manual Fe/HEME atom types, charges, or a new metalloprotein parameterization method inside MOLDISC-006.",
+    "next_step": "Return to a target whose preparation is already inside the validated non-metal docking capability envelope."
+  }
 }
