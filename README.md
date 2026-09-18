@@ -250,6 +250,14 @@ pre-existing 0.4 Morgan/Tanimoto boundary.
 
 See [MOLDISC-003](docs/moldisc-003-redock-seed-coverage.md).
 
+### Selected-seed calibration: MOLDISC-004
+
+MOLDISC-004 takes the coverage-selected NCT seed from PDB 1P2Y, verifies its
+exact AqSolDB observation, and compares that measurement with the already
+frozen ESOL predictor before any new analog generation is allowed.
+
+See [MOLDISC-004](docs/moldisc-004-nct-measured-anchor.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.

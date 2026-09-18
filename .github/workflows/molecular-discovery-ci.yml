@@ -8,21 +8,26 @@ on:
       - "scripts/run_moldisc_001.py"
       - "scripts/run_moldisc_002.py"
       - "scripts/run_moldisc_003.py"
+      - "scripts/run_moldisc_004.py"
       - "programs/moldisc-001-id5/**"
       - "programs/moldisc-002-aqsoldb-coverage/**"
       - "programs/moldisc-003-redock-seed-coverage/**"
+      - "programs/moldisc-004-nct-measured-anchor/**"
       - "tests/test_molecular_discovery.py"
       - "tests/test_moldisc_001.py"
       - "tests/test_moldisc_002.py"
       - "tests/test_moldisc_003.py"
+      - "tests/test_moldisc_004.py"
       - "validation/molecular-discovery-solubility-v1.json"
       - "validation/moldisc-001-first-run-v1.json"
       - "validation/moldisc-002-first-run-v1.json"
       - "validation/moldisc-003-first-run-v1.json"
+      - "validation/moldisc-004-first-run-v1.json"
       - "docs/molecular-discovery-program-v0.1.md"
       - "docs/moldisc-001-id5.md"
       - "docs/moldisc-002-aqsoldb-coverage.md"
       - "docs/moldisc-003-redock-seed-coverage.md"
+      - "docs/moldisc-004-nct-measured-anchor.md"
       - "pyproject.toml"
       - ".github/workflows/molecular-discovery-ci.yml"
   push:
@@ -34,13 +39,16 @@ on:
       - "scripts/run_moldisc_001.py"
       - "scripts/run_moldisc_002.py"
       - "scripts/run_moldisc_003.py"
+      - "scripts/run_moldisc_004.py"
       - "programs/moldisc-001-id5/**"
       - "programs/moldisc-002-aqsoldb-coverage/**"
       - "programs/moldisc-003-redock-seed-coverage/**"
+      - "programs/moldisc-004-nct-measured-anchor/**"
       - "tests/test_molecular_discovery.py"
       - "tests/test_moldisc_001.py"
       - "tests/test_moldisc_002.py"
       - "tests/test_moldisc_003.py"
+      - "tests/test_moldisc_004.py"
       - "validation/molecular-discovery-solubility-v1.json"
       - "validation/moldisc-001-first-run-v1.json"
       - "docs/moldisc-001-id5.md"
@@ -61,9 +69,9 @@ jobs:
       - name: Check dependency consistency
         run: python -m pip check
       - name: Compile Molecular Discovery
-        run: python -m compileall -q src/research_os/molecular_discovery scripts/run_molecular_discovery.py scripts/run_moldisc_001.py scripts/run_moldisc_002.py scripts/run_moldisc_003.py tests/test_molecular_discovery.py tests/test_moldisc_001.py tests/test_moldisc_002.py tests/test_moldisc_003.py
+        run: python -m compileall -q src/research_os/molecular_discovery scripts/run_molecular_discovery.py scripts/run_moldisc_001.py scripts/run_moldisc_002.py scripts/run_moldisc_003.py scripts/run_moldisc_004.py tests/test_molecular_discovery.py tests/test_moldisc_001.py tests/test_moldisc_002.py tests/test_moldisc_003.py tests/test_moldisc_004.py
       - name: Run Molecular Discovery tests
-        run: python -m pytest -q tests/test_molecular_discovery.py tests/test_moldisc_001.py tests/test_moldisc_002.py tests/test_moldisc_003.py
+        run: python -m pytest -q tests/test_molecular_discovery.py tests/test_moldisc_001.py tests/test_moldisc_002.py tests/test_moldisc_003.py tests/test_moldisc_004.py
       - name: Execute frozen MOLDISC-001 from public ESOL source
         run: python scripts/run_moldisc_001.py --output /tmp/moldisc-001
       - name: Verify MOLDISC-001 artifacts
@@ -179,5 +187,31 @@ jobs:
                       key=lambda row: (-row["nearest_similarity"], row["candidate_id"]),
                   )
               ],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Execute frozen MOLDISC-004 NCT measured-anchor calibration
+        run: python scripts/run_moldisc_004.py --output /tmp/moldisc-004
+      - name: Verify MOLDISC-004 artifacts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("/tmp/moldisc-004")
+          manifest = json.loads((root / "program_manifest.json").read_text())
+          assessment = json.loads((root / "assessment.json").read_text())
+
+          assert manifest["program_id"] == "MOLDISC-004"
+          assert manifest["anchor"]["source_id"] == "E-468"
+          assert manifest["anchor"]["inchikey"] == "SNICXCGAKADSCV-UHFFFAOYSA-N"
+          assert manifest["anchor"]["measured_log_s_mol_l"] == 0.79
+          assert assessment["chemistry_status"] == "PASS"
+          assert assessment["docking_status"] == "NOT_REQUESTED"
+          print(json.dumps({
+              "anchor": manifest["anchor"],
+              "calibration": manifest["calibration"],
+              "workflow_scientific_summary_hash": manifest["workflow_scientific_summary_hash"],
+              "program_scientific_hash": manifest["program_scientific_hash"],
           }, indent=2, sort_keys=True))
           PY

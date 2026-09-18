@@ -34,6 +34,13 @@ from research_os.molecular_discovery.moldisc003 import (
     SeedSelection,
     run_moldisc_003,
 )
+from research_os.molecular_discovery.moldisc004 import (
+    MOLDISC004Error,
+    MOLDISC004Result,
+    MeasuredSolubilityAnchor,
+    SeedCalibration,
+    run_moldisc_004,
+)
 from research_os.molecular_discovery.solubility import (
     FrozenESOLSolubilityPredictor,
     SolubilityCapabilityError,
@@ -58,9 +65,13 @@ __all__ = [
     "MOLDISC002Result",
     "MOLDISC003Error",
     "MOLDISC003Result",
+    "MOLDISC004Error",
+    "MOLDISC004Result",
     "MolecularDiscoveryProgramError",
+    "MeasuredSolubilityAnchor",
     "MolecularGenerationError",
     "RCSBChemicalIdentity",
+    "SeedCalibration",
     "SeedSelection",
     "FrozenESOLSolubilityPredictor",
     "MolecularDiscoveryReport",
@@ -71,5 +82,6 @@ __all__ = [
     "run_moldisc_001",
     "run_moldisc_002",
     "run_moldisc_003",
+    "run_moldisc_004",
     "run_public_aqsoldb_coverage",
 ]
