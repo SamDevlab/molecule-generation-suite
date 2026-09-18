@@ -1,6 +1,6 @@
 # MOLDISC-006 — selected N-H non-cognate holo docking
 
-Status: **v1.2 corrective protocol frozen; v1.0/v1.1 failures preserved**
+Status: **CLOSED — INDETERMINATE_TARGET_PREPARATION; no valid docking score accepted**
 
 ## Purpose
 
@@ -193,3 +193,44 @@ A successful run does **not** establish:
 MOLDISC-006 answers one narrower question: whether the selected N-H analog can
 be executed reproducibly through the frozen non-cognate holo docking protocol
 and what bounded E2 computational output that protocol returns.
+
+
+## Preserved v1.2 HEM-template failure
+
+The v1.2 attempt supplied the official RCSB CCD `HEM_ideal.sdf` through the
+supported Meeko additional-template path. The run still stopped **before
+receptor PDBQT preparation and before Vina execution** because the active
+RDKit/Meeko path could not sanitize the metal-containing HEM representation:
+
+```text
+Explicit valence for atom O is greater than permitted
+official RCSB HEM ideal SDF is not parseable by RDKit
+```
+
+This attempt is preserved in
+`validation/moldisc-006-v1.2-indeterminate-target-preparation.json`.
+
+## Program closure
+
+MOLDISC-006 is closed as `INDETERMINATE_TARGET_PREPARATION`.
+
+Across the three frozen attempts:
+
+- v1.0: Open Babel produced an empty receptor PDBQT; the resulting zero-valued
+  Vina outputs are invalid and were rejected.
+- v1.1: Meeko could not resolve HEM from its default/automatic residue-template
+  path; Vina was not executed.
+- v1.2: the official RCSB HEM CCD ideal SDF still could not be sanitized by the
+  active metal-containing template path; Vina was not executed.
+
+No valid docking score or pose was produced for N-H against 1P2Y.
+
+The program will **not** proceed to hand-authored Fe atom types, invented heme
+charges, or target-specific metalloprotein parameterization merely to force an
+execution. That would constitute a separate method-development project and
+would move Molecular Discovery back toward infrastructure/methodology work
+instead of using validated capabilities.
+
+The selected N-H candidate remains preserved as the MOLDISC-005 result. The
+next active program should use a target whose receptor preparation is already
+inside the operationally validated docking envelope.
