@@ -97,6 +97,9 @@ jobs:
           assert a["capability"]["capability_status"] == "PARTIALLY_VALIDATED"
           assert a["capability"]["evidence_level"] == "E2_COMPUTATIONAL"
           assert a["grid"]["status"] == "PASS"
+          assert a["receptor_holo_metadata"]["retained_cofactors"] == ["HEM"]
+          assert a["receptor_holo_metadata"]["heme_iron_atom_count"] == 1
+          assert scientific["source"]["receptor_holo_metadata"]["retained_cofactors"] == ["HEM"]
           assert scientific["docking"]["rmsd_to_native_nct"] == "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH"
           assert a["program_scientific_hash"] == b["program_scientific_hash"]
           assert a["vina_output_sha256"] == b["vina_output_sha256"]
@@ -113,6 +116,7 @@ jobs:
               "best_affinity_kcal_mol": a["best_affinity_kcal_mol"],
               "source_pdb_sha256": a["source_pdb_sha256"],
               "native_reference_sha256": a["native_reference_sha256"],
+              "receptor_holo_metadata": a["receptor_holo_metadata"],
               "receptor_pdbqt_sha256": a["receptor_pdbqt_sha256"],
               "ligand_pdbqt_sha256": a["ligand_pdbqt_sha256"],
               "vina_output_sha256": a["vina_output_sha256"],
