@@ -22,6 +22,7 @@ CONFIG = Path("programs/moldisc-006-nh-crossdock/program.json")
 def test_moldisc_006_protocol_freezes_parent_candidate_target_and_context():
     config = load_program_config_v6(CONFIG)
     assert config["program_id"] == PROGRAM_ID
+    assert config["program_version"] == "1.1"
     assert config["parent_program"]["selected_candidate_id"] == CANDIDATE_ID
     assert config["candidate"]["canonical_smiles"] == CANDIDATE_SMILES
     assert config["target"]["case_id"] == "ATX-014"
@@ -34,6 +35,9 @@ def test_moldisc_006_protocol_freezes_parent_candidate_target_and_context():
     assert config["docking"]["num_modes"] == 20
     assert config["docking"]["receptor_preparation"]["retained_cofactors"] == ["HEM"]
     assert config["docking"]["receptor_preparation"]["selected_author_chains"] == ["A"]
+    assert config["docking"]["receptor_preparation"]["engine"] == "Meeko"
+    assert config["docking"]["receptor_preparation"]["engine_version_required"] == "0.8.0"
+    assert config["docking"]["ligand_preparation"]["engine"] == "Meeko"
     assert config["primary_endpoint"]["rmsd_to_native_nct"] == "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH"
 
 
