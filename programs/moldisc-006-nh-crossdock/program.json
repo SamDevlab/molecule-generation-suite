@@ -1,7 +1,7 @@
 {
   "schema_version": "research-os.molecular-discovery.program.v1",
   "program_id": "MOLDISC-006",
-  "program_version": "1.1",
+  "program_version": "1.2",
   "title": "Selected N-H analog non-cognate holo docking against PDB 1P2Y",
   "scientific_question": "Can the single MOLDISC-005 coverage-selected N-H analog be prepared and docked reproducibly into the frozen 1P2Y holo receptor/known pocket under the existing partially validated non-cognate cross-docking capability boundary?",
   "parent_program": {
@@ -54,6 +54,13 @@
       "engine": "Meeko",
       "engine_version_required": "0.8.0",
       "selected_author_chains": ["A"],
+      "additional_residue_templates": [
+        {
+          "resname": "HEM",
+          "source": "RCSB_CCD_IDEAL_SDF",
+          "url": "https://files.rcsb.org/ligands/download/HEM_ideal.sdf"
+        }
+      ],
       "retained_cofactors": ["HEM"],
       "removed_hetero_components": "all HETATM except HEM; crystallographic waters are not retained",
       "command_contract": "mk_prepare_receptor.py --read_pdb INPUT --write_pdbqt OUTPUT"
@@ -78,6 +85,8 @@
     "1P2Y is a heme enzyme; the receptor preparation must retain the crystallographic HEM cofactor and its iron atom. A receptor missing HEM is a protocol failure.",
     "A technically completed docking run does not establish correct binding mode, CYP activity, metabolism, efficacy, safety or clinical utility.",
     "Docking parameters, candidate identity and grid derivation may not be changed in response to the first valid observed score.",
-    "Protocol v1.0 is preserved as INVALID_PREPARATION because Open Babel produced an empty receptor PDBQT; v1.1 changes only receptor/ligand preparation to Meeko 0.8.0 and transport-vs-structural identity handling."
+    "Protocol v1.0 is preserved as INVALID_PREPARATION because Open Babel produced an empty receptor PDBQT.",
+    "Protocol v1.1 is preserved as INDETERMINATE_TARGET_TEMPLATE because Meeko 0.8.0 could not resolve HEM from default/automatic templates and no docking was executed.",
+    "Protocol v1.2 changes only HEM template resolution by supplying the official RCSB CCD HEM ideal SDF through Meeko --add_templates; candidate, target, grid, Vina settings and endpoint remain unchanged."
   ]
 }
