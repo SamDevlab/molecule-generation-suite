@@ -49,11 +49,6 @@ from research_os.molecular_discovery.moldisc005 import (
     generate_nct_n_alkyl_series,
     run_moldisc_005,
 )
-from research_os.molecular_discovery.moldisc006 import (
-    MOLDISC006Error,
-    MOLDISC006Result,
-    run_moldisc_006,
-)
 from research_os.molecular_discovery.solubility import (
     FrozenESOLSolubilityPredictor,
     SolubilityCapabilityError,
@@ -76,8 +71,6 @@ __all__ = [
     "GeneratedNCTAnalog",
     "GenerationReport",
     "MOLDISC001Result",
-    "MOLDISC006Error",
-    "MOLDISC006Result",
     "MOLDISC002Error",
     "MOLDISC002Result",
     "MOLDISC003Error",
@@ -100,7 +93,6 @@ __all__ = [
     "generate_halogen_analogs",
     "generate_nct_n_alkyl_series",
     "run_moldisc_001",
-    "run_moldisc_006",
     "run_moldisc_002",
     "run_moldisc_003",
     "run_moldisc_004",
