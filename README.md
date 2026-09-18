@@ -241,6 +241,15 @@ model is worth opening.
 
 See [MOLDISC-002](docs/moldisc-002-aqsoldb-coverage.md).
 
+### Cohort seed selection: MOLDISC-003
+
+MOLDISC-003 scans the 15 frozen REDOCK-003 crystallographic ligands against the
+same immutable AqSolDB coverage capability. A seed is eligible for a new
+program only if its nearest measured-solubility neighbor reaches the
+pre-existing 0.4 Morgan/Tanimoto boundary.
+
+See [MOLDISC-003](docs/moldisc-003-redock-seed-coverage.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.
