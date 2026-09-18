@@ -1,6 +1,6 @@
 # MOLDISC-005 — Bounded NCT N-alkyl analog series
 
-Status: **protocol frozen before the first generated-analog evidence profile is inspected**
+Status: **executed and closed; N-H selected by the frozen measured-source coverage rule**
 
 ## Why this program exists
 
@@ -126,3 +126,48 @@ This program does not establish:
 Its purpose is to prove that molecule generation can continue while preserving
 the measured-anchor model discrepancy instead of hiding it behind a composite
 score.
+
+
+## First execution
+
+The frozen first execution completed successfully in GitHub Actions run `35296261407`.
+
+Scientific identities:
+
+- generation: `9ab6e8b8db7b55610612df7726cf4744cae435d8749e562f9c779d24ad03ed22`
+- workflow: `6ade5385aa0dab099af6c7863fadadd34c23f750446de50eaed73933f9022eec`
+- AqSolDB coverage: `9e87f1449bb7f6c480abf4c395db2b86eaec946cd7c1e21e4cb89f3076e35390`
+- program: `88e28697f8ce5ae14d0737089130c469275d28950c63e90053bc6fe6012dcac7`
+
+All three generated analogs passed molecular validation and crossed the frozen
+AqSolDB coverage boundary of `0.4`.
+
+### Frozen selection result
+
+The selected generated analog is:
+
+- variant: `N-H`
+- candidate: `MOLDISC-005-NCT-84632F8200`
+- canonical SMILES: `c1cncc(C2CCCN2)c1`
+- nearest AqSolDB similarity: `0.896551724137931`
+- nearest measured-source logS: `0.7898`
+- ESOL AD status: `IN_DOMAIN`
+- ESOL max-training similarity: `0.2894736842105263`
+- ESOL predicted logS: `-1.6511686018518512`
+
+The N-H candidate was selected because it had the highest AqSolDB nearest
+similarity, not because of its ESOL prediction.
+
+N-ethyl and N-propyl were also eligible by the measured-source coverage rule,
+but had lower AqSolDB nearest similarity. Both remained `OUT_OF_DOMAIN` for
+the frozen ESOL model.
+
+### Boundary retained
+
+The source logS near N-H is not an experimental measurement of N-H. Likewise,
+N-H being `IN_DOMAIN` for ESOL does not repair the MOLDISC-004 observation
+that the same frozen predictor had a large absolute error on exact NCT.
+
+MOLDISC-005 is closed on this selection. Any docking, additional analog
+generation, or experimental-solubility inference belongs to a new frozen
+program.
