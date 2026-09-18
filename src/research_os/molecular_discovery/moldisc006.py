@@ -45,6 +45,7 @@ class MOLDISC006Result:
     source_pdb_sha256: str
     native_reference_sha256: str
     receptor_extracted_sha256: str
+    receptor_holo_metadata: Mapping[str, Any]
     starting_conformer_sha256: str
     receptor_pdbqt_sha256: str
     ligand_pdbqt_sha256: str
@@ -58,6 +59,7 @@ class MOLDISC006Result:
     def to_dict(self) -> dict[str, Any]:
         value = asdict(self)
         value["grid"] = dict(self.grid)
+        value["receptor_holo_metadata"] = dict(self.receptor_holo_metadata)
         value["capability"] = dict(self.capability)
         value["engine"] = dict(self.engine)
         value["preparation"] = dict(self.preparation)
@@ -101,6 +103,11 @@ def load_program_config_v6(path: str | Path) -> dict[str, Any]:
     for key, value in expected.items():
         if docking.get(key) != value:
             raise MOLDISC006Error(f"MOLDISC-006 frozen docking field {key!r} drifted")
+    receptor_prep = docking.get("receptor_preparation") or {}
+    if receptor_prep.get("selected_author_chains") != ["A"]:
+        raise MOLDISC006Error("MOLDISC-006 receptor chain selection drifted")
+    if receptor_prep.get("retained_cofactors") != ["HEM"]:
+        raise MOLDISC006Error("MOLDISC-006 must retain the crystallographic HEM cofactor")
     primary = config.get("primary_endpoint") or {}
     if primary.get("rmsd_to_native_nct") != "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH":
         raise MOLDISC006Error("MOLDISC-006 must not define an NCT RMSD endpoint for N-H")
@@ -120,6 +127,42 @@ def _target_case() -> base.RedockingCase:
     ):
         raise MOLDISC006Error("frozen ATX-014 case content drifted")
     return case
+
+
+def _extract_holo_receptor_with_heme(pdb_text: str) -> tuple[str, dict[str, Any]]:
+    lines: list[str] = []
+    protein_atoms = 0
+    heme_atoms = 0
+    heme_iron_atoms = 0
+    for line in pdb_text.splitlines():
+        if len(line) < 27 or not base._primary_altloc(line):
+            continue
+        record = line[:6].strip()
+        chain = line[21].strip()
+        if chain != "A":
+            continue
+        if record == "ATOM":
+            lines.append(line)
+            protein_atoms += 1
+            continue
+        if record == "HETATM" and line[17:20].strip() == "HEM":
+            lines.append(line)
+            heme_atoms += 1
+            if base._element_from_pdb_line(line) == "FE":
+                heme_iron_atoms += 1
+    if protein_atoms < 1:
+        raise MOLDISC006Error("1P2Y receptor chain A contains no protein ATOM records")
+    if heme_atoms < 1 or heme_iron_atoms != 1:
+        raise MOLDISC006Error(
+            f"1P2Y holo receptor HEM identity is incomplete: heme_atoms={heme_atoms}, iron_atoms={heme_iron_atoms}"
+        )
+    return "\n".join(lines + ["TER", "END"]) + "\n", {
+        "protein_atom_count": protein_atoms,
+        "heme_atom_count": heme_atoms,
+        "heme_iron_atom_count": heme_iron_atoms,
+        "retained_cofactors": ["HEM"],
+        "removed_hetero_components": "all HETATM except HEM",
+    }
 
 
 def _candidate_identity() -> tuple[Chem.Mol, str, str]:
@@ -172,6 +215,7 @@ def _scientific_payload(
     source_pdb_sha256: str,
     native_reference_sha256: str,
     receptor_extracted_sha256: str,
+    receptor_holo_metadata: Mapping[str, Any],
     grid: Mapping[str, Any],
     starting_conformer: Mapping[str, Any],
     receptor_pdbqt_sha256: str,
@@ -192,6 +236,7 @@ def _scientific_payload(
             "source_pdb_sha256": source_pdb_sha256,
             "native_reference_sha256": native_reference_sha256,
             "receptor_extracted_sha256": receptor_extracted_sha256,
+            "receptor_holo_metadata": dict(receptor_holo_metadata),
         },
         "grid": dict(grid),
         "starting_conformer": dict(starting_conformer),
@@ -237,9 +282,10 @@ def run_moldisc_006(
     )
     pdb_text = source_pdb.read_text(encoding="utf-8", errors="replace")
     extraction = base.extract_case_from_pdb(pdb_text, case)
+    holo_receptor_text, receptor_holo_metadata = _extract_holo_receptor_with_heme(pdb_text)
 
     receptor_pdb = root / "receptor_extracted.pdb"
-    receptor_pdb.write_text(extraction.receptor_pdb, encoding="utf-8")
+    receptor_pdb.write_text(holo_receptor_text, encoding="utf-8")
     receptor_extracted_sha256 = sha256_file(receptor_pdb)
 
     native_reference = root / "nct_native_reference.sdf"
@@ -348,6 +394,7 @@ def run_moldisc_006(
         source_pdb_sha256=source_pdb_sha256,
         native_reference_sha256=native_reference_sha256,
         receptor_extracted_sha256=receptor_extracted_sha256,
+        receptor_holo_metadata=receptor_holo_metadata,
         grid=grid_payload,
         starting_conformer=starting_conformer,
         receptor_pdbqt_sha256=receptor_pdbqt_sha256,
@@ -372,6 +419,7 @@ def run_moldisc_006(
         source_pdb_sha256=source_pdb_sha256,
         native_reference_sha256=native_reference_sha256,
         receptor_extracted_sha256=receptor_extracted_sha256,
+        receptor_holo_metadata=receptor_holo_metadata,
         starting_conformer_sha256=str(starting_conformer["sha256"]),
         receptor_pdbqt_sha256=receptor_pdbqt_sha256,
         ligand_pdbqt_sha256=ligand_pdbqt_sha256,
