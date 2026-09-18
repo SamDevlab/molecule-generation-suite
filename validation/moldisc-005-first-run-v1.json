@@ -1,0 +1,80 @@
+{
+  "schema_version": "research-os.molecular-discovery.program-result.v1",
+  "program_id": "MOLDISC-005",
+  "program_version": "1.0",
+  "status": "CLOSED_FIRST_RESULT_PRESERVED",
+  "first_execution": {
+    "github_actions_run_id": 35296261407,
+    "workflow": "molecular-discovery-ci",
+    "workflow_run_number": 20,
+    "result": "PASS"
+  },
+  "execution_identity": {
+    "generation_scientific_hash": "9ab6e8b8db7b55610612df7726cf4744cae435d8749e562f9c779d24ad03ed22",
+    "workflow_scientific_summary_hash": "6ade5385aa0dab099af6c7863fadadd34c23f750446de50eaed73933f9022eec",
+    "coverage_scientific_hash": "9e87f1449bb7f6c480abf4c395db2b86eaec946cd7c1e21e4cb89f3076e35390",
+    "program_scientific_hash": "88e28697f8ce5ae14d0737089130c469275d28950c63e90053bc6fe6012dcac7"
+  },
+  "selection": {
+    "coverage_boundary": 0.4,
+    "selected_candidate_id": "MOLDISC-005-NCT-84632F8200",
+    "selected_variant_id": "N-H",
+    "selected_nearest_similarity": 0.896551724137931,
+    "eligible_generated_candidate_ids": [
+      "MOLDISC-005-NCT-84632F8200",
+      "MOLDISC-005-NCT-08B43D0AE7",
+      "MOLDISC-005-NCT-51E894EF5D"
+    ]
+  },
+  "profiles": [
+    {
+      "variant_id": "N-H",
+      "candidate_id": "MOLDISC-005-NCT-84632F8200",
+      "smiles": "c1cncc(C2CCCN2)c1",
+      "chemistry_status": "PASS",
+      "aqsoldb_nearest_similarity": 0.896551724137931,
+      "aqsoldb_neighbors_ge_0_4": 4,
+      "aqsoldb_top_neighbor_smiles": "c1cncc([C@@H]2CCCCN2)c1",
+      "aqsoldb_top_neighbor_measured_log_s_mol_l": 0.7898,
+      "esol_status": "IN_DOMAIN",
+      "esol_max_training_tanimoto": 0.2894736842105263,
+      "predicted_log_s_mol_l": -1.6511686018518512,
+      "followup_eligible": true
+    },
+    {
+      "variant_id": "N-ETHYL",
+      "candidate_id": "MOLDISC-005-NCT-51E894EF5D",
+      "smiles": "CCN1CCCC1c1cccnc1",
+      "chemistry_status": "PASS",
+      "aqsoldb_nearest_similarity": 0.6578947368421053,
+      "aqsoldb_neighbors_ge_0_4": 3,
+      "aqsoldb_top_neighbor_smiles": "CN1CCCC1c1cccnc1",
+      "aqsoldb_top_neighbor_measured_log_s_mol_l": 0.79,
+      "esol_status": "OUT_OF_DOMAIN",
+      "esol_max_training_tanimoto": 0.2608695652173913,
+      "predicted_log_s_mol_l": -2.1930997658730162,
+      "followup_eligible": true
+    },
+    {
+      "variant_id": "N-PROPYL",
+      "candidate_id": "MOLDISC-005-NCT-08B43D0AE7",
+      "smiles": "CCCN1CCCC1c1cccnc1",
+      "chemistry_status": "PASS",
+      "aqsoldb_nearest_similarity": 0.6666666666666666,
+      "aqsoldb_neighbors_ge_0_4": 3,
+      "aqsoldb_top_neighbor_smiles": "CN1CCCC1c1cccnc1",
+      "aqsoldb_top_neighbor_measured_log_s_mol_l": 0.79,
+      "esol_status": "OUT_OF_DOMAIN",
+      "esol_max_training_tanimoto": 0.25,
+      "predicted_log_s_mol_l": -2.7456486865079355,
+      "followup_eligible": true
+    }
+  ],
+  "scientific_conclusion": [
+    "All three frozen N-alkyl analogs passed chemistry and exceeded the predeclared AqSolDB coverage boundary.",
+    "N-H was selected solely by the predeclared highest-coverage rule, with nearest AqSolDB Tanimoto 0.896551724137931.",
+    "N-H is also IN_DOMAIN for the frozen ESOL model, but ESOL output was not used in the selection rule.",
+    "N-ethyl and N-propyl remain OUT_OF_DOMAIN for frozen ESOL while still meeting measured-source structural coverage.",
+    "The exact NCT measured anchor is not transferred to any generated analog; nearest-neighbor measurements remain contextual evidence only."
+  ]
+}

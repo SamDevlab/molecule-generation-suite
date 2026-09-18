@@ -41,6 +41,14 @@ from research_os.molecular_discovery.moldisc004 import (
     SeedCalibration,
     run_moldisc_004,
 )
+from research_os.molecular_discovery.moldisc005 import (
+    GeneratedAnalogSelection,
+    GeneratedNCTAnalog,
+    MOLDISC005Error,
+    MOLDISC005Result,
+    generate_nct_n_alkyl_series,
+    run_moldisc_005,
+)
 from research_os.molecular_discovery.solubility import (
     FrozenESOLSolubilityPredictor,
     SolubilityCapabilityError,
@@ -58,7 +66,9 @@ __all__ = [
     "CandidateAssessment",
     "CandidateCoverage",
     "GENERATOR_ID",
+    "GeneratedAnalogSelection",
     "GeneratedCandidate",
+    "GeneratedNCTAnalog",
     "GenerationReport",
     "MOLDISC001Result",
     "MOLDISC002Error",
@@ -67,6 +77,8 @@ __all__ = [
     "MOLDISC003Result",
     "MOLDISC004Error",
     "MOLDISC004Result",
+    "MOLDISC005Error",
+    "MOLDISC005Result",
     "MolecularDiscoveryProgramError",
     "MeasuredSolubilityAnchor",
     "MolecularGenerationError",
@@ -79,9 +91,11 @@ __all__ = [
     "SolubilityCapabilityError",
     "SolubilityPrediction",
     "generate_halogen_analogs",
+    "generate_nct_n_alkyl_series",
     "run_moldisc_001",
     "run_moldisc_002",
     "run_moldisc_003",
     "run_moldisc_004",
+    "run_moldisc_005",
     "run_public_aqsoldb_coverage",
 ]

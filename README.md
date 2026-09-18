@@ -258,6 +258,16 @@ frozen ESOL predictor before any new analog generation is allowed.
 
 See [MOLDISC-004](docs/moldisc-004-nct-measured-anchor.md).
 
+### Bounded NCT generation: MOLDISC-005
+
+MOLDISC-005 resumes molecule generation with a frozen N-H / N-methyl /
+N-ethyl / N-propyl neighborhood around the measured NCT seed. Every analog
+receives independent ESOL applicability-domain and AqSolDB measured-source
+coverage evidence; the known NCT ESOL anchor error prevents absolute model
+prediction from becoming the selection score.
+
+See [MOLDISC-005](docs/moldisc-005-nct-nalkyl-series.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.
