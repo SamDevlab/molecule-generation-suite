@@ -10,7 +10,9 @@ on:
       - "tests/test_molecular_discovery.py"
       - "tests/test_moldisc_001.py"
       - "validation/molecular-discovery-solubility-v1.json"
+      - "validation/moldisc-001-first-run-v1.json"
       - "docs/molecular-discovery-program-v0.1.md"
+      - "docs/moldisc-001-id5.md"
       - "pyproject.toml"
       - ".github/workflows/molecular-discovery-ci.yml"
   push:
@@ -24,6 +26,8 @@ on:
       - "tests/test_molecular_discovery.py"
       - "tests/test_moldisc_001.py"
       - "validation/molecular-discovery-solubility-v1.json"
+      - "validation/moldisc-001-first-run-v1.json"
+      - "docs/moldisc-001-id5.md"
       - "pyproject.toml"
       - ".github/workflows/molecular-discovery-ci.yml"
 
