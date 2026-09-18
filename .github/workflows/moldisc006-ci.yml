@@ -38,14 +38,15 @@ jobs:
           python-version: "3.12"
           cache: pip
 
-      - name: Install Research OS discovery dependencies
-        run: python -m pip install -e ".[dev,discovery]"
-
-      - name: Install Open Babel
+      - name: Install Research OS discovery dependencies and frozen Meeko
         run: |
-          sudo apt-get update
-          sudo apt-get install -y openbabel
-          obabel -V
+          python -m pip install -e ".[dev,discovery]"
+          python -m pip install "meeko==0.8.0"
+          python - <<'PY'
+          import meeko
+          assert meeko.__version__ == "0.8.0"
+          print("Meeko", meeko.__version__)
+          PY
 
       - name: Install official AutoDock Vina 1.2.7 binary
         run: |
@@ -87,6 +88,7 @@ jobs:
           scientific = json.loads((Path("/tmp/moldisc-006-a") / "scientific_payload.json").read_text())
 
           assert a["program_id"] == "MOLDISC-006"
+          assert a["config_hash"] == b["config_hash"]
           assert a["candidate_id"] == "MOLDISC-005-NCT-84632F8200"
           assert a["candidate_smiles"] == "c1cncc(C2CCCN2)c1"
           assert a["technical_status"] == "PASS"
@@ -99,9 +101,15 @@ jobs:
           assert a["grid"]["status"] == "PASS"
           assert a["receptor_holo_metadata"]["retained_cofactors"] == ["HEM"]
           assert a["receptor_holo_metadata"]["heme_iron_atom_count"] == 1
+          assert a["preparation"]["engine"] == "Meeko"
+          assert a["preparation"]["engine_version"] == "0.8.0"
+          assert a["preparation"]["receptor"]["bytes"] > 0
+          assert a["preparation"]["receptor"]["heme_iron_record_count"] == 1
           assert scientific["source"]["receptor_holo_metadata"]["retained_cofactors"] == ["HEM"]
           assert scientific["docking"]["rmsd_to_native_nct"] == "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH"
           assert a["program_scientific_hash"] == b["program_scientific_hash"]
+          assert a["native_reference_structure_hash"] == b["native_reference_structure_hash"]
+          # RCSB transport bytes may vary while the parsed structure/coordinates stay identical.
           assert a["vina_output_sha256"] == b["vina_output_sha256"]
           assert a["starting_conformer_sha256"] == b["starting_conformer_sha256"]
           assert a["receptor_pdbqt_sha256"] == b["receptor_pdbqt_sha256"]
@@ -115,7 +123,8 @@ jobs:
               "pose_1_score_kcal_mol": a["vina_pose_1_score_kcal_mol"],
               "best_affinity_kcal_mol": a["best_affinity_kcal_mol"],
               "source_pdb_sha256": a["source_pdb_sha256"],
-              "native_reference_sha256": a["native_reference_sha256"],
+              "native_reference_transport_sha256": a["native_reference_sha256"],
+              "native_reference_structure_hash": a["native_reference_structure_hash"],
               "receptor_holo_metadata": a["receptor_holo_metadata"],
               "receptor_pdbqt_sha256": a["receptor_pdbqt_sha256"],
               "ligand_pdbqt_sha256": a["ligand_pdbqt_sha256"],
