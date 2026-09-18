@@ -1,7 +1,7 @@
 {
   "schema_version": "research-os.molecular-discovery.program.v1",
   "program_id": "MOLDISC-006",
-  "program_version": "1.0",
+  "program_version": "1.1",
   "title": "Selected N-H analog non-cognate holo docking against PDB 1P2Y",
   "scientific_question": "Can the single MOLDISC-005 coverage-selected N-H analog be prepared and docked reproducibly into the frozen 1P2Y holo receptor/known pocket under the existing partially validated non-cognate cross-docking capability boundary?",
   "parent_program": {
@@ -51,15 +51,17 @@
       "uff_optimize_when_parameters_available": true
     },
     "receptor_preparation": {
-      "engine": "Open Babel",
+      "engine": "Meeko",
+      "engine_version_required": "0.8.0",
       "selected_author_chains": ["A"],
       "retained_cofactors": ["HEM"],
       "removed_hetero_components": "all HETATM except HEM; crystallographic waters are not retained",
-      "options": ["-h", "--partialcharge", "gasteiger", "-xr"]
+      "command_contract": "mk_prepare_receptor.py --read_pdb INPUT --write_pdbqt OUTPUT"
     },
     "ligand_preparation": {
-      "engine": "Open Babel",
-      "options": ["-h", "--partialcharge", "gasteiger"]
+      "engine": "Meeko",
+      "engine_version_required": "0.8.0",
+      "command_contract": "mk_prepare_ligand.py -i INPUT -o OUTPUT"
     }
   },
   "primary_endpoint": {
@@ -75,6 +77,7 @@
     "The 1P2Y holo known-pocket context is NON_COGNATE_HOLO_CROSSDOCKING and remains only partially validated.",
     "1P2Y is a heme enzyme; the receptor preparation must retain the crystallographic HEM cofactor and its iron atom. A receptor missing HEM is a protocol failure.",
     "A technically completed docking run does not establish correct binding mode, CYP activity, metabolism, efficacy, safety or clinical utility.",
-    "Docking parameters, candidate identity and grid derivation may not be changed in response to the first observed score."
+    "Docking parameters, candidate identity and grid derivation may not be changed in response to the first valid observed score.",
+    "Protocol v1.0 is preserved as INVALID_PREPARATION because Open Babel produced an empty receptor PDBQT; v1.1 changes only receptor/ligand preparation to Meeko 0.8.0 and transport-vs-structural identity handling."
   ]
 }
