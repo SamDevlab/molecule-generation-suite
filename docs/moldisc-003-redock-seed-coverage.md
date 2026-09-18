@@ -1,6 +1,6 @@
 # MOLDISC-003 — Solubility-coverage scan across REDOCK-003 seeds
 
-Status: **protocol frozen before first cohort-coverage result is inspected**
+Status: **executed and closed; first cohort selection preserved without post-hoc boundary changes**
 
 ## Why this program exists
 
@@ -136,3 +136,57 @@ Neither establishes:
 - safety;
 - synthesizability;
 - clinical utility.
+
+
+## First execution — GitHub Actions run 12
+
+MOLDISC-003 completed successfully in workflow run `35295368702`.
+
+Scientific identities:
+
+- RCSB chemical-identity hash: `62b6808bea71479a2c5c56f905cb22127a4834461500c555c902a4d7a56b39c8`
+- AqSolDB coverage hash: `90bd8e99c926993cc2e0e950da246945b1db199b9b1f027e2ba2b44ff0147e35`
+- program hash: `977428ab62ff38cda8033f5daf9ecc85e93f9f9994240ca2f13729405ab58e2b`
+
+### Eligible seeds
+
+Four frozen cases reached the predeclared `0.4` boundary:
+
+1. `ATX-014 / 1P2Y / NCT`: nearest Tanimoto `1.0`
+2. `ATX-007 / 1KZK / JE2`: `0.569620253164557`
+3. `ATX-013 / 1UOU / CMU`: `0.5476190476190477`
+4. `ATX-012 / 1TOW / CRZ`: `0.45454545454545453`
+
+The frozen rule therefore selects:
+
+`ATX-014 / PDB 1P2Y / NCT / CYTOCHROME P450-CAM`
+
+### Exact measured-solubility anchor
+
+The selected NCT chemical component has an exact canonical-structure match in
+the immutable AqSolDB source:
+
+- canonical SMILES: `CN1CCCC1c1cccnc1`
+- InChIKey: `SNICXCGAKADSCV-UHFFFAOYSA-N`
+- AqSolDB source ID: `E-468`
+- Tanimoto similarity: `1.0`
+- recorded logS: `0.79`
+
+This is materially different from the ID5 result: NCT is not merely near an
+AqSolDB molecule; its canonical structure is represented directly in the
+source.
+
+The AqSolDB value still inherits source/protocol heterogeneity. It is preserved
+as a measured source observation, not treated as a universal reference value.
+
+### Scientific conclusion
+
+MOLDISC-003 succeeds at its predeclared purpose: select a new crystallographic
+seed whose chemical region has measured-solubility coverage.
+
+It does **not** claim that NCT is the best drug candidate or that cytochrome
+P450-CAM is the best therapeutic target.
+
+The next program may use NCT as a source-backed seed and compare the existing
+frozen ESOL predictor with the exact AqSolDB observation before any new analog
+generation is introduced.
