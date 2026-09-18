@@ -1,0 +1,65 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-004",
+  "program_version": "1.0",
+  "title": "NCT exact measured-anchor calibration against the frozen ESOL predictor",
+  "scientific_question": "For the coverage-selected NCT crystallographic seed, how does the already frozen ESOL predictor behave relative to the exact AqSolDB source observation, and is the seed inside the predictor's inherited applicability domain?",
+  "parent_program": {
+    "program_id": "MOLDISC-003",
+    "program_version": "1.0",
+    "rcsb_identity_hash": "62b6808bea71479a2c5c56f905cb22127a4834461500c555c902a4d7a56b39c8",
+    "coverage_scientific_hash": "90bd8e99c926993cc2e0e950da246945b1db199b9b1f027e2ba2b44ff0147e35",
+    "program_scientific_hash": "977428ab62ff38cda8033f5daf9ecc85e93f9f9994240ca2f13729405ab58e2b",
+    "selected_case_id": "ATX-014"
+  },
+  "seed": {
+    "case_id": "ATX-014",
+    "pdb_id": "1P2Y",
+    "chem_comp_id": "NCT",
+    "target": "CYTOCHROME P450-CAM",
+    "canonical_smiles": "CN1CCCC1c1cccnc1",
+    "inchikey": "SNICXCGAKADSCV-UHFFFAOYSA-N",
+    "source_type": "RCSB_crystallographic_chemical_component"
+  },
+  "measured_anchor": {
+    "dataset": "AqSolDB",
+    "source_commit": "98cdd10a372058743e4f3fb950a1c9974ec9603a",
+    "parsed_source_hash": "2c6e56f56389f0fd99fa2a3c843446f98b6b068a3f93aaab71a08822caa085f4",
+    "source_id": "E-468",
+    "expected_canonical_smiles": "CN1CCCC1c1cccnc1",
+    "expected_inchikey": "SNICXCGAKADSCV-UHFFFAOYSA-N",
+    "expected_measured_log_s_mol_l": 0.79
+  },
+  "predictor": {
+    "capability_id": "research-os.molecular-discovery.solubility.esol-v2.v1",
+    "parent_protocol_id": "research-os.online-exp-001.v2",
+    "dataset_hash": "6de39771743dc4f15b191cffc27e1e02eb474457cc841afda565f31aff198e85",
+    "training_hash": "300ddc4981e1a9c2fb3735e598bcca89fb98a1cd4722cd58454e5d923781f00b",
+    "applicability_threshold": 0.26684684684684684,
+    "model_change_allowed": false
+  },
+  "comparison": {
+    "reported_quantities": [
+      "predicted_log_s_mol_l",
+      "measured_log_s_mol_l",
+      "signed_error_predicted_minus_measured",
+      "absolute_error",
+      "max_training_tanimoto",
+      "applicability_domain_status"
+    ],
+    "performance_threshold": null,
+    "post_result_model_tuning": false
+  },
+  "next_program_boundary": {
+    "generation_in_v1": false,
+    "docking_in_v1": false,
+    "rule": "MOLDISC-004 only calibrates the selected seed. Any analog generation is a separately frozen program, and every generated analog must be evaluated on its own applicability-domain status."
+  },
+  "interpretation_boundaries": [
+    "The AqSolDB value is an exact-structure source observation but still inherits heterogeneous measurement-protocol limitations.",
+    "A single seed comparison is not a new validation benchmark and cannot establish general model accuracy.",
+    "An in-domain seed does not imply that generated analogs will remain in domain.",
+    "An out-of-domain result does not authorize changing the frozen ESOL threshold or retraining the model inside this program.",
+    "No result in MOLDISC-004 establishes binding affinity, potency, efficacy, safety or clinical value."
+  ]
+}
