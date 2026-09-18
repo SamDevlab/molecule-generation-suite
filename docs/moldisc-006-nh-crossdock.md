@@ -38,7 +38,17 @@ The target is the existing REDOCK-003 case:
 - historical target label: `CYTOCHROME P450-CAM`
 
 The receptor is extracted from the exact RCSB PDB content downloaded at run
-time. The docking box is derived from the exact NCT crystallographic reference
+time. Chain A protein atoms are retained together with the crystallographic
+`HEM` cofactor and its iron atom. Other HETATM records, including
+crystallographic waters, are excluded.
+
+This target-specific retention is mandatory: 1P2Y is cytochrome P450cam and
+the deposited complex contains HEM; the crystallographic interpretation
+describes nicotine pyridine nitrogen coordination to the heme iron. A
+receptor missing HEM is therefore a protocol failure, not a permitted
+simplification.
+
+The docking box is derived from the exact NCT crystallographic reference
 coordinates using the existing `research-os.redocking.v1.1` native-ligand
 box rule.
 
@@ -92,12 +102,13 @@ PASS requires:
 
 1. exact target/candidate/config identity checks;
 2. RCSB receptor and NCT reference retrieval;
-3. valid native-ligand grid derivation;
-4. successful receptor and ligand PDBQT preparation;
-5. exact Vina 1.2.7 availability;
-6. Vina return code zero;
-7. at least one parseable scored pose;
-8. complete provenance hashes.
+3. explicit HEM retention with exactly one iron atom;
+4. valid native-ligand grid derivation;
+5. successful receptor and ligand PDBQT preparation;
+6. exact Vina 1.2.7 availability;
+7. Vina return code zero;
+8. at least one parseable scored pose;
+9. complete provenance hashes.
 
 There is deliberately no threshold such as “score better than X”.
 
