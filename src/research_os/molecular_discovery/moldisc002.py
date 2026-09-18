@@ -13,7 +13,7 @@ from research_os.molecular_discovery.aqsoldb_coverage import (
     run_public_aqsoldb_coverage,
 )
 from research_os.molecular_discovery.generation import generate_halogen_analogs
-from research_os.molecular_discovery.moldisc001 import load_program_config
+from research_os.molecular_discovery.moldisc001 import _verify_seed, load_program_config
 
 
 PROGRAM_ID = "MOLDISC-002"
@@ -68,8 +68,9 @@ def _parent_candidates(config: Mapping[str, Any], config_path: str | Path) -> tu
     parent_config = load_program_config(parent_path)
 
     seed = parent_config["seed"]
+    canonical_seed, _ = _verify_seed(parent_config)
     generation = generate_halogen_analogs(
-        str(seed["smiles"]),
+        canonical_seed,
         seed_id=f"MOLDISC-001-{seed['seed_id']}",
         max_candidates=int(parent_config["generation"]["max_candidates"]),
     )
@@ -83,7 +84,7 @@ def _parent_candidates(config: Mapping[str, Any], config_path: str | Path) -> tu
         {
             "id": f"MOLDISC-001-SEED-{seed['seed_id']}",
             "name": seed["name"],
-            "smiles": seed["smiles"],
+            "smiles": canonical_seed,
             "origin": {
                 "source_type": seed["source_type"],
                 "evidence_level": seed["source_evidence_level"],
