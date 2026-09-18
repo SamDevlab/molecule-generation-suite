@@ -1,0 +1,44 @@
+{
+  "schema_version": "research-os.molecular-discovery.invalid-run.v1",
+  "program_id": "MOLDISC-006",
+  "protocol_version": "1.0",
+  "status": "INVALID_PREPARATION",
+  "github_actions_run_id": 35297855475,
+  "artifact_id": 10529001042,
+  "reason": "Open Babel returned code 0 while reporting '0 molecules converted' and produced an empty receptor PDBQT. Vina execution against that empty receptor returned twenty zero-valued scores; those outputs are invalid and must not be interpreted as docking evidence.",
+  "observations": {
+    "receptor_pdbqt_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "receptor_pdbqt_bytes": 0,
+    "returned_pose_count": 20,
+    "all_vina_scores_kcal_mol": 0.0,
+    "run_a_program_scientific_hash": "42cadb8f78de5f6337af1ea496c7283b313ef0fc596a9be65ab8909a2894ab02",
+    "run_b_program_scientific_hash": "18e5bb2e46e0d00ec25f257193149b01f42c6f8facd4612b398257cec33c8a4b",
+    "starting_conformer_identical": true,
+    "prepared_ligand_identical": true,
+    "vina_output_identical": true,
+    "raw_nct_reference_bytes_identical": false
+  },
+  "root_causes": [
+    "Receptor preparation gate checked return code and file existence but not non-empty output or converter stderr indicating zero molecules.",
+    "Raw RCSB NCT SDF bytes were not stable across two HTTP retrievals and were incorrectly included as a scientific identity-bearing hash."
+  ],
+  "corrective_action": {
+    "next_protocol_version": "1.1",
+    "receptor_preparation": "Meeko 0.8.0 receptor preparation with HEM retained",
+    "ligand_preparation": "Meeko 0.8.0 ligand preparation",
+    "transport_identity_policy": "preserve raw response SHA-256 as provenance but use canonical structure/coordinate identity for scientific equality",
+    "unchanged": [
+      "selected N-H candidate",
+      "PDB 1P2Y target",
+      "NCT-derived grid rule",
+      "NON_COGNATE_HOLO_CROSSDOCKING context",
+      "Vina 1.2.7",
+      "seed 42",
+      "cpu 1",
+      "exhaustiveness 16",
+      "num_modes 20",
+      "no native-NCT RMSD endpoint"
+    ]
+  },
+  "interpretation": "MOLDISC-006 v1.0 produced no valid docking evidence."
+}
