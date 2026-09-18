@@ -231,6 +231,16 @@ workflow. No automatic docking or efficacy score is introduced.
 
 See [MOLDISC-001](docs/moldisc-001-id5.md).
 
+### Coverage follow-up: MOLDISC-002
+
+MOLDISC-002 reuses the exact frozen MOLDISC-001 candidate set and asks whether
+the immutable AqSolDB source provides experimentally measured structural
+neighbors. It performs no model training; the output is a source-coverage
+diagnostic that determines whether a separately validated local solubility
+model is worth opening.
+
+See [MOLDISC-002](docs/moldisc-002-aqsoldb-coverage.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.
