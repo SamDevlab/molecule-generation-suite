@@ -1,6 +1,6 @@
 # MOLDISC-006 — selected N-H non-cognate holo docking
 
-Status: **protocol frozen before the first N-H Vina score is inspected**
+Status: **v1.1 corrective protocol frozen; v1.0 invalid preparation preserved**
 
 ## Purpose
 
@@ -54,6 +54,30 @@ box rule.
 
 No box coordinate is tuned after seeing the N-H result.
 
+## Preserved v1.0 invalid preparation
+
+The first v1.0 execution is retained in
+`validation/moldisc-006-v1.0-invalid-preparation.json`.
+
+Open Babel returned code zero while reporting `0 molecules converted` for
+the holo receptor, produced a zero-byte receptor PDBQT, and Vina subsequently
+returned twenty zero-valued scores. Those outputs are **invalid** and are not
+docking evidence.
+
+The v1.0 investigation also showed that repeated HTTP retrievals of the same
+RCSB NCT SDF can differ at the raw-byte level. v1.1 therefore records raw
+transport SHA-256 separately while using the canonical parsed NCT graph plus
+heavy-atom coordinates as the scientific reference identity.
+
+No candidate, target, box rule, Vina setting, docking context, or endpoint was
+changed in response to the invalid scores.
+
+## Corrected v1.1 preparation
+
+MOLDISC-006 v1.1 uses **Meeko 0.8.0** for receptor and ligand PDBQT
+preparation. The corrected gate requires a non-empty receptor PDBQT and
+explicit preservation of HEM with exactly one iron atom.
+
 ## Frozen ligand preparation
 
 The N-H SMILES is converted to one starting conformer with:
@@ -62,19 +86,12 @@ The N-H SMILES is converted to one starting conformer with:
 - random seed `42`;
 - UFF optimization when all parameters are available.
 
-Open Babel then prepares the ligand PDBQT with:
-
-```text
--h --partialcharge gasteiger
-```
-
-The receptor PDBQT uses:
-
-```text
--h --partialcharge gasteiger -xr
-```
+Meeko 0.8.0 prepares the ligand PDBQT from the frozen 3D SDF and prepares the
+holo receptor PDBQT from the extracted chain-A + HEM PDB.
 
 All source, conformer and prepared-artifact SHA-256 identities are recorded.
+The receptor output must be non-empty and contain the HEM residue with exactly
+one Fe record.
 
 ## Frozen Vina execution
 
@@ -134,7 +151,7 @@ The scientific hash includes:
 - native-derived grid;
 - N-H starting conformer identity;
 - prepared receptor/ligand identities;
-- Vina/Open Babel versions;
+- Vina/Meeko versions;
 - all returned Vina pose scores;
 - Vina output identity;
 - docking capability profile metadata.
