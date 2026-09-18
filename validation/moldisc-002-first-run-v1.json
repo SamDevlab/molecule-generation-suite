@@ -1,0 +1,135 @@
+{
+  "schema_version": "research-os.molecular-discovery.program-result.v1",
+  "program_id": "MOLDISC-002",
+  "program_version": "1.0",
+  "status": "CLOSED_FIRST_RESULT_PRESERVED",
+  "protocol_freeze_commit": "c436cc811b4a04803bab5deb58cfbd404f0132ae",
+  "first_successful_execution": {
+    "github_actions_run_id": 35294959772,
+    "workflow": "molecular-discovery-ci",
+    "workflow_run_number": 9,
+    "result": "PASS",
+    "note": "The preceding run 8 failed in parent-generation reproduction before MOLDISC-002 executed; no AqSolDB result was observed before the canonical-seed implementation fix."
+  },
+  "parent_identity": {
+    "program_id": "MOLDISC-001",
+    "candidate_count": 9,
+    "generated_candidate_count": 8,
+    "generation_scientific_hash": "d2881a9906a6a60d54e90a303601d9509983e6f1a0b9ce01a0792bf088890abe"
+  },
+  "source_identity": {
+    "dataset": "AqSolDB",
+    "source_row_count": 9982,
+    "parsed_source_hash": "2c6e56f56389f0fd99fa2a3c843446f98b6b068a3f93aaab71a08822caa085f4",
+    "invalid_structure_count": 2,
+    "unique_valid_structure_count": 9980
+  },
+  "execution_identity": {
+    "coverage_scientific_hash": "f951cfe78c43d430f7077532a67fdcbf84b49157ca68214b4880066cd8158a56",
+    "program_scientific_hash": "3e7060ecd6fe307afef520a4b4506a961aa0e5a56aca4b2948dce13d0abcb4d6"
+  },
+  "coverage_summary": {
+    "candidate_count": 9,
+    "nearest_similarity_bin_counts": {
+      "[0.0,0.4)": 9,
+      "[0.4,0.6)": 0,
+      "[0.6,0.8)": 0,
+      "[0.8,1.0]": 0
+    },
+    "candidates_with_neighbors_ge_0_4": 0,
+    "candidates_with_neighbors_ge_0_6": 0,
+    "candidates_with_neighbors_ge_0_8": 0,
+    "maximum_nearest_similarity": 0.39655172413793105,
+    "maximum_similarity_candidate_id": "MOLDISC-001-ID5-GEN-20C30B98F0"
+  },
+  "candidate_nearest_neighbors": [
+    {
+      "candidate_id": "MOLDISC-001-ID5-GEN-16A67CFF79",
+      "nearest_similarity": 0.32786885245901637,
+      "similarity_bin": "[0.0,0.4)",
+      "neighbor_smiles": "O=C(O)COc1cccc(Cl)c1Cl",
+      "neighbor_inchikey": "RBJIGQRZLITQJG-UHFFFAOYSA-N",
+      "neighbor_source_id": "B-1949",
+      "neighbor_measured_log_s_mol_l": -2.8097
+    },
+    {
+      "candidate_id": "MOLDISC-001-ID5-GEN-20C30B98F0",
+      "nearest_similarity": 0.39655172413793105,
+      "similarity_bin": "[0.0,0.4)",
+      "neighbor_smiles": "O=C(O)COc1cc(Cl)ccc1Cl",
+      "neighbor_inchikey": "YVPLLFUCNGVUAY-UHFFFAOYSA-N",
+      "neighbor_source_id": "C-1803",
+      "neighbor_measured_log_s_mol_l": -2.62
+    },
+    {
+      "candidate_id": "MOLDISC-001-ID5-GEN-37413AF665",
+      "nearest_similarity": 0.3333333333333333,
+      "similarity_bin": "[0.0,0.4)",
+      "neighbor_smiles": "O=C(O)COc1ccccc1Cl",
+      "neighbor_inchikey": "OPQYFNRLWBWCST-UHFFFAOYSA-N",
+      "neighbor_source_id": "B-3752",
+      "neighbor_measured_log_s_mol_l": -2.1637
+    },
+    {
+      "candidate_id": "MOLDISC-001-ID5-GEN-40F7449649",
+      "nearest_similarity": 0.3333333333333333,
+      "similarity_bin": "[0.0,0.4)",
+      "neighbor_smiles": "O=C(O)COc1ccccc1Cl",
+      "neighbor_inchikey": "OPQYFNRLWBWCST-UHFFFAOYSA-N",
+      "neighbor_source_id": "B-3752",
+      "neighbor_measured_log_s_mol_l": -2.1637
+    },
+    {
+      "candidate_id": "MOLDISC-001-ID5-GEN-61802182C1",
+      "nearest_similarity": 0.2857142857142857,
+      "similarity_bin": "[0.0,0.4)",
+      "neighbor_smiles": "O=C(O)COc1ccc2ccccc2c1",
+      "neighbor_inchikey": "RZCJYMOBWVJQGV-UHFFFAOYSA-N",
+      "neighbor_source_id": "C-531",
+      "neighbor_measured_log_s_mol_l": -3.36
+    },
+    {
+      "candidate_id": "MOLDISC-001-ID5-GEN-67517971B0",
+      "nearest_similarity": 0.27692307692307694,
+      "similarity_bin": "[0.0,0.4)",
+      "neighbor_smiles": "Cc1cc(Cl)ccc1OCC(=O)O",
+      "neighbor_inchikey": "WHKUVVPPKQRRBV-UHFFFAOYSA-N",
+      "neighbor_source_id": "B-3731",
+      "neighbor_measured_log_s_mol_l": -2.503
+    },
+    {
+      "candidate_id": "MOLDISC-001-ID5-GEN-6A4436A434",
+      "nearest_similarity": 0.2727272727272727,
+      "similarity_bin": "[0.0,0.4)",
+      "neighbor_smiles": "Cc1cc(Cl)ccc1OCC(=O)O",
+      "neighbor_inchikey": "WHKUVVPPKQRRBV-UHFFFAOYSA-N",
+      "neighbor_source_id": "B-3731",
+      "neighbor_measured_log_s_mol_l": -2.503
+    },
+    {
+      "candidate_id": "MOLDISC-001-ID5-GEN-E0251716AB",
+      "nearest_similarity": 0.27692307692307694,
+      "similarity_bin": "[0.0,0.4)",
+      "neighbor_smiles": "Cc1cc(Cl)ccc1OCC(=O)O",
+      "neighbor_inchikey": "WHKUVVPPKQRRBV-UHFFFAOYSA-N",
+      "neighbor_source_id": "B-3731",
+      "neighbor_measured_log_s_mol_l": -2.503
+    },
+    {
+      "candidate_id": "MOLDISC-001-SEED-ID5",
+      "nearest_similarity": 0.2857142857142857,
+      "similarity_bin": "[0.0,0.4)",
+      "neighbor_smiles": "Cc1cc(Cl)ccc1OCC(=O)O",
+      "neighbor_inchikey": "WHKUVVPPKQRRBV-UHFFFAOYSA-N",
+      "neighbor_source_id": "B-3731",
+      "neighbor_measured_log_s_mol_l": -2.503
+    }
+  ],
+  "scientific_conclusion": [
+    "AqSolDB contains no unique canonical structure at Tanimoto similarity >=0.4 to any of the nine frozen MOLDISC-001 candidates under the predeclared Morgan radius-2/2048 representation.",
+    "The highest observed nearest-neighbor similarity is 0.39655172413793105, still inside the predeclared [0.0,0.4) low-similarity bin.",
+    "The larger AqSolDB source therefore does not provide a sufficiently close measured structural neighborhood under the existing ONLINE-EXP-002 similarity bins.",
+    "MOLDISC-002 does not justify training a local AqSolDB solubility model for these candidates under this protocol.",
+    "The closed MOLDISC-001 out-of-domain result remains unchanged."
+  ]
+}

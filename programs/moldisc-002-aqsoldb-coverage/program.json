@@ -1,0 +1,45 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-002",
+  "program_version": "1.0",
+  "title": "AqSolDB structural coverage of the frozen ID5 neighborhood",
+  "scientific_question": "Does the immutable AqSolDB source contain experimentally measured structural neighbors for the exact MOLDISC-001 seed and generated candidate set?",
+  "parent_program": {
+    "program_id": "MOLDISC-001",
+    "program_version": "1.0",
+    "parent_generation_scientific_hash": "d2881a9906a6a60d54e90a303601d9509983e6f1a0b9ce01a0792bf088890abe",
+    "candidate_count": 9,
+    "generated_candidate_count": 8,
+    "config_path": "programs/moldisc-001-id5/program.json"
+  },
+  "source": {
+    "dataset_id": "AqSolDB",
+    "doi": "10.1038/s41597-019-0151-1",
+    "source_commit": "98cdd10a372058743e4f3fb950a1c9974ec9603a",
+    "source_blob_sha": "67016e030cf0a741e250ba0267bd84461041db5f",
+    "url": "https://raw.githubusercontent.com/mcsorkun/AqSolDB/98cdd10a372058743e4f3fb950a1c9974ec9603a/results/data_curated.csv",
+    "expected_source_row_count": 9982,
+    "expected_parsed_source_hash": "2c6e56f56389f0fd99fa2a3c843446f98b6b068a3f93aaab71a08822caa085f4"
+  },
+  "coverage_protocol": {
+    "fingerprint": "Morgan radius 2 / 2048 bits",
+    "top_k_neighbors": 5,
+    "descriptive_similarity_bins": ["[0.0,0.4)", "[0.4,0.6)", "[0.6,0.8)", "[0.8,1.0]"],
+    "bin_provenance": "reused unchanged from ONLINE-EXP-002",
+    "training_or_fitting": false,
+    "target_averaging": false,
+    "post_result_threshold_tuning": false
+  },
+  "decision_rule": {
+    "purpose": "coverage diagnosis only",
+    "new_predictor_allowed_in_v1": false,
+    "interpretation": "The observed nearest-neighbor bins determine whether a later, separately frozen local-model experiment is scientifically worth opening; MOLDISC-002 itself does not train one."
+  },
+  "interpretation_boundaries": [
+    "AqSolDB measurements are experimental source records but heterogeneous across original protocols.",
+    "Structural similarity is not evidence of shared mechanism, binding, potency or efficacy.",
+    "MOLDISC-002 does not modify the closed MOLDISC-001 solubility result.",
+    "MOLDISC-002 does not train or select a new predictor.",
+    "Any local or AqSolDB-trained model requires a new protocol frozen before observing its performance."
+  ]
+}

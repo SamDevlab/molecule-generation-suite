@@ -6,13 +6,18 @@ on:
       - "src/research_os/molecular_discovery/**"
       - "scripts/run_molecular_discovery.py"
       - "scripts/run_moldisc_001.py"
+      - "scripts/run_moldisc_002.py"
       - "programs/moldisc-001-id5/**"
+      - "programs/moldisc-002-aqsoldb-coverage/**"
       - "tests/test_molecular_discovery.py"
       - "tests/test_moldisc_001.py"
+      - "tests/test_moldisc_002.py"
       - "validation/molecular-discovery-solubility-v1.json"
       - "validation/moldisc-001-first-run-v1.json"
+      - "validation/moldisc-002-first-run-v1.json"
       - "docs/molecular-discovery-program-v0.1.md"
       - "docs/moldisc-001-id5.md"
+      - "docs/moldisc-002-aqsoldb-coverage.md"
       - "pyproject.toml"
       - ".github/workflows/molecular-discovery-ci.yml"
   push:
@@ -22,9 +27,12 @@ on:
       - "src/research_os/molecular_discovery/**"
       - "scripts/run_molecular_discovery.py"
       - "scripts/run_moldisc_001.py"
+      - "scripts/run_moldisc_002.py"
       - "programs/moldisc-001-id5/**"
+      - "programs/moldisc-002-aqsoldb-coverage/**"
       - "tests/test_molecular_discovery.py"
       - "tests/test_moldisc_001.py"
+      - "tests/test_moldisc_002.py"
       - "validation/molecular-discovery-solubility-v1.json"
       - "validation/moldisc-001-first-run-v1.json"
       - "docs/moldisc-001-id5.md"
@@ -45,9 +53,9 @@ jobs:
       - name: Check dependency consistency
         run: python -m pip check
       - name: Compile Molecular Discovery
-        run: python -m compileall -q src/research_os/molecular_discovery scripts/run_molecular_discovery.py scripts/run_moldisc_001.py tests/test_molecular_discovery.py tests/test_moldisc_001.py
+        run: python -m compileall -q src/research_os/molecular_discovery scripts/run_molecular_discovery.py scripts/run_moldisc_001.py scripts/run_moldisc_002.py tests/test_molecular_discovery.py tests/test_moldisc_001.py tests/test_moldisc_002.py
       - name: Run Molecular Discovery tests
-        run: python -m pytest -q tests/test_molecular_discovery.py tests/test_moldisc_001.py
+        run: python -m pytest -q tests/test_molecular_discovery.py tests/test_moldisc_001.py tests/test_moldisc_002.py
       - name: Execute frozen MOLDISC-001 from public ESOL source
         run: python scripts/run_moldisc_001.py --output /tmp/moldisc-001
       - name: Verify MOLDISC-001 artifacts
@@ -83,6 +91,46 @@ jobs:
                       "max_training_tanimoto": row["max_training_tanimoto"],
                   }
                   for row in candidates
+              ],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Execute frozen MOLDISC-002 from immutable AqSolDB source
+        run: python scripts/run_moldisc_002.py --output /tmp/moldisc-002
+      - name: Verify MOLDISC-002 artifacts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("/tmp/moldisc-002")
+          manifest = json.loads((root / "program_manifest.json").read_text())
+          coverage = json.loads((root / "coverage.json").read_text())
+
+          assert manifest["program_id"] == "MOLDISC-002"
+          assert manifest["candidate_count"] == 9
+          assert manifest["parent_generation_scientific_hash"] == "d2881a9906a6a60d54e90a303601d9509983e6f1a0b9ce01a0792bf088890abe"
+          assert coverage["source_row_count"] == 9982
+          assert coverage["parsed_source_hash"] == "2c6e56f56389f0fd99fa2a3c843446f98b6b068a3f93aaab71a08822caa085f4"
+          assert coverage["candidate_count"] == 9
+          assert len(coverage["candidates"]) == 9
+          assert all(item["top_neighbors"] for item in coverage["candidates"])
+          print(json.dumps({
+              "program_scientific_hash": manifest["program_scientific_hash"],
+              "coverage_scientific_hash": manifest["coverage_scientific_hash"],
+              "unique_structure_count": coverage["unique_structure_count"],
+              "invalid_structure_count": coverage["invalid_structure_count"],
+              "candidates": [
+                  {
+                      "candidate_id": item["candidate_id"],
+                      "nearest_similarity": item["nearest_similarity"],
+                      "similarity_bin": item["similarity_bin"],
+                      "neighbors_ge_0_4": item["neighbors_ge_0_4"],
+                      "neighbors_ge_0_6": item["neighbors_ge_0_6"],
+                      "neighbors_ge_0_8": item["neighbors_ge_0_8"],
+                      "top_neighbor": item["top_neighbors"][0],
+                  }
+                  for item in coverage["candidates"]
               ],
           }, indent=2, sort_keys=True))
           PY
