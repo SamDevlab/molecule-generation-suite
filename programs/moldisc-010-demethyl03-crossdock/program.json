@@ -17,14 +17,18 @@
     "candidate_id": "MOLDISC-009-JE2-5461A4A267",
     "variant_id": "DEMETHYL-03",
     "canonical_smiles": "Cc1ccccc1CNC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C",
-    "generation_evidence_level": "E0_HEURISTIC"
+    "generation_evidence_level": "E0_HEURISTIC",
+    "inchikey": "XBNKKAGGYBXOJG-GMQQYTKMSA-N"
   },
   "target": {
     "case_id": "ATX-007",
     "pdb_id": "1KZK",
     "native_chem_comp_id": "JE2",
     "ligand_author_chain": "A",
-    "receptor_author_chains": ["A", "B"],
+    "receptor_author_chains": [
+      "A",
+      "B"
+    ],
     "target": "PROTEASE",
     "resolution_angstrom": 1.09,
     "source_url": "https://www.rcsb.org/structure/1KZK",
@@ -39,7 +43,12 @@
     "receptor_rule": "reuse REDOCK-003 ATX-007 receptor extraction: protein ATOM records from author chains A+B",
     "receptor_preparation": {
       "engine": "Open Babel",
-      "options": ["-h", "--partialcharge", "gasteiger", "-xr"]
+      "options": [
+        "-h",
+        "--partialcharge",
+        "gasteiger",
+        "-xr"
+      ]
     },
     "ligand_conformer": {
       "engine": "RDKit ETKDGv3",
@@ -48,7 +57,11 @@
     },
     "ligand_preparation": {
       "engine": "Open Babel",
-      "options": ["-h", "--partialcharge", "gasteiger"]
+      "options": [
+        "-h",
+        "--partialcharge",
+        "gasteiger"
+      ]
     },
     "vina_version_required": "1.2.7",
     "seed": 42,
