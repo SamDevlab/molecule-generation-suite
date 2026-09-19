@@ -1,0 +1,75 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-010",
+  "program_version": "1.0",
+  "title": "DEMETHYL-03 non-cognate docking in the 1KZK JE2 pocket",
+  "scientific_question": "Can the single MOLDISC-009-selected DEMETHYL-03 analog execute reproducibly through the already operational 1KZK receptor-preparation and native-pocket Vina protocol under the existing non-cognate holo cross-docking capability boundary?",
+  "parent_program": {
+    "program_id": "MOLDISC-009",
+    "program_version": "1.0",
+    "program_scientific_hash": "75ffaf31d6df6983e7692fca4f0a3fa2277c743dcac2b99cee179c9b39116615",
+    "selected_variant_id": "DEMETHYL-03",
+    "selected_candidate_id": "MOLDISC-009-JE2-5461A4A267",
+    "selected_aqsoldb_nearest_similarity": 0.631578947368421,
+    "selection_used_esol": false
+  },
+  "candidate": {
+    "candidate_id": "MOLDISC-009-JE2-5461A4A267",
+    "variant_id": "DEMETHYL-03",
+    "canonical_smiles": "Cc1ccccc1CNC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C",
+    "generation_evidence_level": "E0_HEURISTIC"
+  },
+  "target": {
+    "case_id": "ATX-007",
+    "pdb_id": "1KZK",
+    "native_chem_comp_id": "JE2",
+    "ligand_author_chain": "A",
+    "receptor_author_chains": ["A", "B"],
+    "target": "PROTEASE",
+    "resolution_angstrom": 1.09,
+    "source_url": "https://www.rcsb.org/structure/1KZK",
+    "operational_parent": "REDOCK-003",
+    "historical_native_pose_1_rmsd_angstrom": 1.902
+  },
+  "docking": {
+    "docking_context": "NON_COGNATE_HOLO_CROSSDOCKING",
+    "capability_classification": "PARTIALLY_VALIDATED",
+    "evidence_level": "E2_COMPUTATIONAL",
+    "grid_rule": "derive from exact crystallographic JE2 reference coordinates using research-os.redocking.v1.1 native-ligand box rule",
+    "receptor_rule": "reuse REDOCK-003 ATX-007 receptor extraction: protein ATOM records from author chains A+B",
+    "receptor_preparation": {
+      "engine": "Open Babel",
+      "options": ["-h", "--partialcharge", "gasteiger", "-xr"]
+    },
+    "ligand_conformer": {
+      "engine": "RDKit ETKDGv3",
+      "random_seed": 42,
+      "uff_optimize_when_parameters_available": true
+    },
+    "ligand_preparation": {
+      "engine": "Open Babel",
+      "options": ["-h", "--partialcharge", "gasteiger"]
+    },
+    "vina_version_required": "1.2.7",
+    "seed": 42,
+    "cpu": 1,
+    "exhaustiveness": 16,
+    "num_modes": 20,
+    "scoring_function": "vina"
+  },
+  "primary_endpoint": {
+    "name": "technical completion under frozen non-cognate JE2-pocket protocol",
+    "pass_condition": "non-empty receptor and ligand PDBQT, Vina 1.2.7 return code zero, at least one finite non-zero scored pose, complete provenance",
+    "scientific_success_threshold": null,
+    "rmsd_to_native_je2": "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH"
+  },
+  "interpretation_boundaries": [
+    "MOLDISC-010 docks exactly one candidate already selected by MOLDISC-009 and performs no candidate selection.",
+    "The receptor/grid protocol is reused from the operational REDOCK-003 ATX-007 context and is not tuned to DEMETHYL-03.",
+    "A Vina score is E2 computational evidence and is not measured affinity, potency or free energy.",
+    "No RMSD to native JE2 is reported because DEMETHYL-03 and JE2 are different molecular graphs.",
+    "NON_COGNATE_HOLO_CROSSDOCKING remains PARTIALLY_VALIDATED under the existing capability profile.",
+    "Technical completion does not establish a correct binding pose, protease inhibition, potency, efficacy, safety or clinical utility.",
+    "Candidate identity, grid derivation and Vina settings may not be changed in response to the first observed docking score."
+  ]
+}
