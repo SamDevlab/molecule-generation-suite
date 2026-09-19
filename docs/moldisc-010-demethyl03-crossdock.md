@@ -1,6 +1,6 @@
 # MOLDISC-010 — DEMETHYL-03 non-cognate docking in 1KZK
 
-Status: **protocol frozen before first DEMETHYL-03 Vina score is inspected**
+Status: **executed and closed; first CI result preserved with deterministic scientific identity**
 
 ## Why this program exists
 
@@ -111,6 +111,31 @@ inputs and requires identical program scientific hashes.
 Raw transport hashes are preserved separately. The scientific identity uses
 the parsed JE2 structure/coordinates, extracted receptor, candidate conformer,
 prepared inputs, grid, engine versions, scores and capability metadata.
+
+## First preserved result
+
+The first green CI execution is preserved in
+`validation/moldisc-010-first-run-v1.json`:
+
+- GitHub Actions run: `35474219286` (`moldisc-010-ci`), result `PASS`;
+- independent runs A/B: identical `program_scientific_hash`;
+  `360ef9eb66981287781a971a7e09aebbe2749be765af5b4c6dcb33e3839eb48b`;
+- technical status: `PASS`, with 20 scored poses;
+- pose 1: `-11.03 kcal/mol`;
+- grid hash: `a0bf032d8bdb1bc20f13f298d604673cac1d2c7da8596cc228ec6602b5989aef`;
+- native JE2 structure hash:
+  `82b48b534ff870fb8a922ed62da905bf77fe2e54f2420143986a4c5f9b9c9a4b`;
+- receptor scientific identity:
+  `f4182f7337c0509db49d34c97b6a1cf9639b0b3e3cb25735265fd8daede9b32c`;
+- ligand scientific identity:
+  `0fc2ec1c34cc9abe2223d860c35fe2c64576e72f4ed4b3c9bd2b502c1d36290b`.
+
+The receptor PDBQT raw SHA differed between A/B only because Open Babel
+embedded different temporary paths in `REMARK Name`; the parsed atom records,
+coordinates, partial charges and atom types were identical. The downloaded
+native SDF also varied only in ModelServer metadata and timing fields. Both
+raw hashes remain recorded in provenance. Neither observation changes the
+frozen candidate, target, grid, engine, or docking parameters.
 
 ## Interpretation boundaries
 
