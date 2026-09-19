@@ -9,7 +9,9 @@ on:
       - "tests/test_moldisc_006.py"
       - "programs/moldisc-006-nh-crossdock/**"
       - "docs/moldisc-006-nh-crossdock.md"
-      - "validation/moldisc-006-first-run-v1.json"
+      - "validation/moldisc-006-v1.0-invalid-preparation.json"
+      - "validation/moldisc-006-v1.1-indeterminate-heme-template.json"
+      - "validation/moldisc-006-v1.2-indeterminate-target-preparation.json"
       - ".github/workflows/moldisc006-ci.yml"
   push:
     branches:
@@ -20,16 +22,19 @@ on:
       - "scripts/run_moldisc_006.py"
       - "tests/test_moldisc_006.py"
       - "programs/moldisc-006-nh-crossdock/**"
-      - "validation/moldisc-006-first-run-v1.json"
+      - "docs/moldisc-006-nh-crossdock.md"
+      - "validation/moldisc-006-v1.0-invalid-preparation.json"
+      - "validation/moldisc-006-v1.1-indeterminate-heme-template.json"
+      - "validation/moldisc-006-v1.2-indeterminate-target-preparation.json"
       - ".github/workflows/moldisc006-ci.yml"
 
 permissions:
   contents: read
 
 jobs:
-  frozen-nh-crossdock:
+  closed-indeterminate-program:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -38,109 +43,64 @@ jobs:
           python-version: "3.12"
           cache: pip
 
-      - name: Install Research OS discovery dependencies and frozen Meeko
-        run: |
-          python -m pip install -e ".[dev,discovery]"
-          python -m pip install "meeko==0.8.0" "gemmi==0.7.5"
-          python - <<'PY'
-          import gemmi
-          import meeko
-          assert meeko.__version__ == "0.8.0"
-          assert gemmi.__version__ == "0.7.5"
-          print("Meeko", meeko.__version__, "Gemmi", gemmi.__version__)
-          PY
-
-      - name: Install official AutoDock Vina 1.2.7 binary
-        run: |
-          curl --fail --location --retry 3             https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64             --output /tmp/vina_1.2.7
-          chmod +x /tmp/vina_1.2.7
-          /tmp/vina_1.2.7 --version
-          sha256sum /tmp/vina_1.2.7
-          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
-          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+      - name: Install Research OS discovery dependencies
+        run: python -m pip install -e ".[dev,discovery]"
 
       - name: Check dependency consistency
         run: python -m pip check
 
-      - name: Compile frozen MOLDISC-006
+      - name: Compile closed MOLDISC-006
         run: >-
           python -m py_compile
           src/research_os/molecular_discovery/moldisc006.py
           scripts/run_moldisc_006.py
           tests/test_moldisc_006.py
 
-      - name: Test frozen identities and capability boundary
+      - name: Test frozen identities and closed-state boundary
         run: python -m pytest -q tests/test_moldisc_006.py
 
-      - name: Execute frozen MOLDISC-006 run A
-        run: python scripts/run_moldisc_006.py --output /tmp/moldisc-006-a
-
-      - name: Execute frozen MOLDISC-006 run B
-        run: python scripts/run_moldisc_006.py --output /tmp/moldisc-006-b
-
-      - name: Require technical completion and deterministic scientific identity
+      - name: Verify preserved v1.0-v1.2 closure evidence
         run: |
           python - <<'PY'
           import json
-          import math
           from pathlib import Path
 
-          a = json.loads((Path("/tmp/moldisc-006-a") / "program_manifest.json").read_text())
-          b = json.loads((Path("/tmp/moldisc-006-b") / "program_manifest.json").read_text())
-          scientific = json.loads((Path("/tmp/moldisc-006-a") / "scientific_payload.json").read_text())
+          root = Path(".")
+          config = json.loads((root / "programs/moldisc-006-nh-crossdock/program.json").read_text())
+          v10 = json.loads((root / "validation/moldisc-006-v1.0-invalid-preparation.json").read_text())
+          v11 = json.loads((root / "validation/moldisc-006-v1.1-indeterminate-heme-template.json").read_text())
+          v12 = json.loads((root / "validation/moldisc-006-v1.2-indeterminate-target-preparation.json").read_text())
+          docs = (root / "docs/moldisc-006-nh-crossdock.md").read_text()
 
-          assert a["program_id"] == "MOLDISC-006"
-          assert a["config_hash"] == b["config_hash"]
-          assert a["candidate_id"] == "MOLDISC-005-NCT-84632F8200"
-          assert a["candidate_smiles"] == "c1cncc(C2CCCN2)c1"
-          assert a["technical_status"] == "PASS"
-          assert a["pose_count"] >= 1
-          assert math.isfinite(float(a["vina_pose_1_score_kcal_mol"]))
-          assert math.isfinite(float(a["best_affinity_kcal_mol"]))
-          assert a["capability"]["docking_context"] == "NON_COGNATE_HOLO_CROSSDOCKING"
-          assert a["capability"]["capability_status"] == "PARTIALLY_VALIDATED"
-          assert a["capability"]["evidence_level"] == "E2_COMPUTATIONAL"
-          assert a["grid"]["status"] == "PASS"
-          assert a["receptor_holo_metadata"]["retained_cofactors"] == ["HEM"]
-          assert a["receptor_holo_metadata"]["heme_iron_atom_count"] == 1
-          assert a["preparation"]["engine"] == "Meeko"
-          assert a["preparation"]["engine_version"] == "0.8.0"
-          assert a["preparation"]["receptor"]["bytes"] > 0
-          assert a["preparation"]["receptor"]["heme_iron_record_count"] == 1
-          assert scientific["source"]["receptor_holo_metadata"]["retained_cofactors"] == ["HEM"]
-          assert scientific["docking"]["rmsd_to_native_nct"] == "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH"
-          assert a["program_scientific_hash"] == b["program_scientific_hash"]
-          assert a["native_reference_structure_hash"] == b["native_reference_structure_hash"]
-          # RCSB transport bytes may vary while the parsed structure/coordinates stay identical.
-          assert a["vina_output_sha256"] == b["vina_output_sha256"]
-          assert a["starting_conformer_sha256"] == b["starting_conformer_sha256"]
-          assert a["receptor_pdbqt_sha256"] == b["receptor_pdbqt_sha256"]
-          assert a["ligand_pdbqt_sha256"] == b["ligand_pdbqt_sha256"]
+          assert config["program_id"] == "MOLDISC-006"
+          assert config["program_version"] == "1.2"
+          assert config["status"] == "CLOSED_INDETERMINATE_TARGET_PREPARATION"
+          assert config["closure"]["accepted_docking_result"] is False
+          assert config["closure"]["valid_vina_score"] is False
+          assert config["closure"]["decision"].startswith("Do not introduce manual Fe/HEME")
+
+          assert v10["status"] == "INVALID_PREPARATION"
+          assert v10["observations"]["receptor_pdbqt_bytes"] == 0
+          assert v10["interpretation"] == "MOLDISC-006 v1.0 produced no valid docking evidence."
+
+          assert v11["status"] == "INDETERMINATE_TARGET_TEMPLATE"
+          assert v11["observations"]["docking_executed"] is False
+          assert v11["observations"]["valid_docking_evidence"] is False
+
+          assert v12["status"] == "INDETERMINATE_TARGET_PREPARATION"
+          assert v12["observations"]["receptor_pdbqt_produced"] is False
+          assert v12["observations"]["docking_executed"] is False
+          assert v12["observations"]["valid_docking_evidence"] is False
+          assert v12["closure"]["program_status"] == "CLOSED_INDETERMINATE_TARGET_PREPARATION"
+
+          assert "No valid docking score or pose was produced" in docs
+          assert "Do not construct manual Fe/HEME atom types" in json.dumps(v12)
 
           print(json.dumps({
-              "program_scientific_hash": a["program_scientific_hash"],
-              "candidate_inchikey": a["candidate_inchikey"],
-              "grid_hash": a["grid"]["grid_hash"],
-              "pose_count": a["pose_count"],
-              "pose_1_score_kcal_mol": a["vina_pose_1_score_kcal_mol"],
-              "best_affinity_kcal_mol": a["best_affinity_kcal_mol"],
-              "source_pdb_sha256": a["source_pdb_sha256"],
-              "native_reference_transport_sha256": a["native_reference_sha256"],
-              "native_reference_structure_hash": a["native_reference_structure_hash"],
-              "receptor_holo_metadata": a["receptor_holo_metadata"],
-              "receptor_pdbqt_sha256": a["receptor_pdbqt_sha256"],
-              "ligand_pdbqt_sha256": a["ligand_pdbqt_sha256"],
-              "vina_output_sha256": a["vina_output_sha256"],
-              "capability": a["capability"],
+              "program_id": config["program_id"],
+              "status": config["status"],
+              "accepted_docking_result": config["closure"]["accepted_docking_result"],
+              "history": [v10["status"], v11["status"], v12["status"]],
+              "next_step": config["closure"]["next_step"],
           }, indent=2, sort_keys=True))
           PY
-
-      - name: Upload MOLDISC-006 evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: moldisc-006-nh-crossdock
-          path: |
-            /tmp/moldisc-006-a
-            /tmp/moldisc-006-b
-          if-no-files-found: warn
