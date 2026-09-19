@@ -1,6 +1,6 @@
 # MOLDISC-009 — JE2 single-terminal-methyl deletion series
 
-Status: **protocol frozen before first generated-candidate evidence is inspected**
+Status: **executed and closed; DEMETHYL-03 selected by frozen measured-source coverage rule**
 
 ## Why this program exists
 
@@ -97,3 +97,54 @@ MOLDISC-009 performs no:
 
 A selected structure, if one exists, is only the measured-source-coverage
 choice for a separately frozen follow-up. It is not a biological winner.
+
+
+## First execution
+
+The first frozen execution completed successfully in GitHub Actions run
+`35448228979`.
+
+Scientific identities:
+
+- generation: `fcb80f20df6c7d283b84e902d4970036994490e13495ce22fdb51519d30b4334`
+- workflow: `305e2275869101fea148da4cb817414c49258c95ca2c711b0c707ec04f762824`
+- AqSolDB coverage: `bf21f32a3ba5927dc87ae77bed811640da2edd5239bea01b22b7cc1afb57b69d`
+- program: `75ffaf31d6df6983e7692fca4f0a3fa2277c743dcac2b99cee179c9b39116615`
+
+All three generated structures passed molecular validation.
+
+### Frozen coverage result
+
+| Variant | AqSolDB nearest | >=0.4 neighbors | ESOL AD | follow-up |
+|---|---:|---:|---|---|
+| JE2 seed | 0.5696202532 | 8 | OUT_OF_DOMAIN | seed only |
+| DEMETHYL-01 | 0.6081081081 | 8 | OUT_OF_DOMAIN | YES |
+| DEMETHYL-02 | 0.3977272727 | 0 | OUT_OF_DOMAIN | NO |
+| DEMETHYL-03 | 0.6315789474 | 8 | OUT_OF_DOMAIN | YES |
+
+The selected structure is:
+
+- variant: `DEMETHYL-03`
+- candidate: `MOLDISC-009-JE2-5461A4A267`
+- operation: right peripheral aryl methyl deletion
+- canonical SMILES:
+  `Cc1ccccc1CNC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C`
+- AqSolDB nearest similarity: `0.631578947368421`
+
+DEMETHYL-03 was selected only because it had the highest AqSolDB nearest
+similarity among generated candidates above the frozen 0.4 boundary.
+
+### ESOL boundary retained
+
+JE2 and all three generated analogs remained `OUT_OF_DOMAIN` for the frozen
+ESOL model. No numeric ESOL prediction was used in generation or selection,
+and none is promoted to a reliable solubility estimate.
+
+### Closure
+
+MOLDISC-009 is closed on the preserved DEMETHYL-03 selection.
+
+Any docking, further molecule generation, or stronger solubility inference
+must be opened as a new frozen program. The AqSolDB neighbor measurement of
+`-3.62` belongs to the neighboring source structure and is not transferred
+to DEMETHYL-03.
