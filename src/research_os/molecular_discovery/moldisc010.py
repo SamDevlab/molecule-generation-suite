@@ -6,7 +6,7 @@ from dataclasses import asdict, dataclass
 import json
 import math
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 
 from rdkit import Chem
 from rdkit.Chem import AllChem, inchi
