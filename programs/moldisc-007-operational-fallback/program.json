@@ -1,0 +1,73 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-007",
+  "program_version": "1.0",
+  "title": "Operational fallback seed selection after MOLDISC-006 target-preparation closure",
+  "scientific_question": "Among the REDOCK-003 seeds that already met the frozen AqSolDB coverage boundary, which remaining seed has the strongest pre-existing operational docking evidence without relying on the MOLDISC-006 heme target?",
+  "parent_evidence": {
+    "moldisc_003_program_scientific_hash": "977428ab62ff38cda8033f5daf9ecc85e93f9f9994240ca2f13729405ab58e2b",
+    "redock_003_scientific_result_hash": "e4e4693f890b86327fac16b547966fe64862045d1562c4340dcc3d7d4a06b762",
+    "moldisc_006_merge_commit": "464ab97017439caf6c8de75ef2aad42f11b2cf03",
+    "moldisc_006_status": "CLOSED_INDETERMINATE_TARGET_PREPARATION"
+  },
+  "candidates": [
+    {
+      "case_id": "ATX-014",
+      "pdb_id": "1P2Y",
+      "chem_comp_id": "NCT",
+      "target": "CYTOCHROME P450-CAM",
+      "aqsoldb_nearest_similarity": 1.0,
+      "redock_pose_1_rmsd_angstrom": 4.385,
+      "redock_rank_1_success": false,
+      "operationally_blocked": true,
+      "block_reason": "MOLDISC-006 closed because required HEM target preparation was not supported without new metalloprotein method development."
+    },
+    {
+      "case_id": "ATX-007",
+      "pdb_id": "1KZK",
+      "chem_comp_id": "JE2",
+      "target": "PROTEASE",
+      "aqsoldb_nearest_similarity": 0.569620253164557,
+      "redock_pose_1_rmsd_angstrom": 1.902,
+      "redock_rank_1_success": true,
+      "operationally_blocked": false,
+      "block_reason": null
+    },
+    {
+      "case_id": "ATX-013",
+      "pdb_id": "1UOU",
+      "chem_comp_id": "CMU",
+      "target": "THYMIDINE PHOSPHORYLASE",
+      "aqsoldb_nearest_similarity": 0.5476190476190477,
+      "redock_pose_1_rmsd_angstrom": 6.473,
+      "redock_rank_1_success": false,
+      "operationally_blocked": false,
+      "block_reason": null
+    },
+    {
+      "case_id": "ATX-012",
+      "pdb_id": "1TOW",
+      "chem_comp_id": "CRZ",
+      "target": "FATTY ACID-BINDING PROTEIN, ADIPOCYTE",
+      "aqsoldb_nearest_similarity": 0.45454545454545453,
+      "redock_pose_1_rmsd_angstrom": 4.588,
+      "redock_rank_1_success": false,
+      "operationally_blocked": false,
+      "block_reason": null
+    }
+  ],
+  "selection_rule": {
+    "aqsoldb_eligibility_boundary": 0.4,
+    "require_not_operationally_blocked": true,
+    "require_redock_rank_1_rmsd_lte_angstrom": 2.0,
+    "selection_among_eligible": "highest AqSolDB nearest similarity, then case_id ascending",
+    "post_result_rule_changes_allowed": false
+  },
+  "interpretation_boundaries": [
+    "MOLDISC-007 is an operational seed-selection program using previously observed evidence; it is not an independent validation experiment.",
+    "REDOCK-003 rank-1 RMSD is used only as an operational-readiness filter, not as evidence of affinity, potency or efficacy.",
+    "AqSolDB similarity indicates measured-solubility structural coverage, not equal solubility.",
+    "MOLDISC-006 target-preparation failure excludes 1P2Y from this fallback only because the required HEM preparation is outside the current operational envelope.",
+    "Selection of a fallback seed does not establish therapeutic superiority or biological value."
+  ]
+}
