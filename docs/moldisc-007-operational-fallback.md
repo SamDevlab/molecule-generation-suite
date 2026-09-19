@@ -1,6 +1,6 @@
 # MOLDISC-007 — Operational fallback seed selection
 
-Status: **protocol frozen before the fallback result is materialized**
+Status: **executed and closed; ATX-007 / 1KZK / JE2 selected by the frozen fallback rule**
 
 ## Why this program exists
 
@@ -85,3 +85,40 @@ AqSolDB similarity is used only as a measured-source coverage signal.
 
 The selected seed, if any, may open a separately frozen Molecular Discovery
 program. It does not become a biological winner.
+
+
+## First execution
+
+The first frozen execution completed successfully in GitHub Actions run
+`35416570675`.
+
+Program scientific hash:
+
+`92ca1d06d3d1c01466d284910854f36f35949bf4ce8031cf10f869373ed419de`
+
+Exactly one candidate satisfied all frozen requirements:
+
+- case: `ATX-007`
+- PDB: `1KZK`
+- ligand: `JE2`
+- target label: `PROTEASE`
+- AqSolDB nearest similarity: `0.569620253164557`
+- REDOCK-003 pose-1 RMSD: `1.902 Å`
+- operationally blocked: `false`
+
+The other frozen candidates were rejected for predeclared reasons:
+
+- `ATX-014`: operationally blocked by the closed MOLDISC-006 HEM preparation boundary;
+- `ATX-013`: pose-1 RMSD `6.473 Å`;
+- `ATX-012`: pose-1 RMSD `4.588 Å`.
+
+No Vina score participated in the selection.
+
+## Closure
+
+MOLDISC-007 is closed on the preserved ATX-007 selection.
+
+A separately frozen follow-up may now characterize JE2 and ask a new bounded
+molecular-generation or docking question. That follow-up must not present this
+operational selection as independent validation, affinity, potency, efficacy,
+or therapeutic superiority.
