@@ -1,0 +1,70 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-011",
+  "program_version": "1.0",
+  "title": "DEMETHYL-03 second terminal-methyl deletion series",
+  "scientific_question": "What chemistry status, immutable AqSolDB structural coverage and frozen ESOL applicability-domain profile is observed for the complete unique neighborhood obtained by deleting exactly one more terminal methyl from the MOLDISC-009-selected DEMETHYL-03 structure?",
+  "parent_program": {
+    "program_id": "MOLDISC-009",
+    "program_version": "1.0",
+    "program_scientific_hash": "75ffaf31d6df6983e7692fca4f0a3fa2277c743dcac2b99cee179c9b39116615",
+    "selected_variant_id": "DEMETHYL-03",
+    "selected_candidate_id": "MOLDISC-009-JE2-5461A4A267",
+    "selection_used_esol": false
+  },
+  "moldisc010_evidence": {
+    "program_scientific_hash": "360ef9eb66981287781a971a7e09aebbe2749be765af5b4c6dcb33e3839eb48b",
+    "technical_status": "PASS",
+    "docking_context": "NON_COGNATE_HOLO_CROSSDOCKING",
+    "capability": "PARTIALLY_VALIDATED",
+    "evidence_level": "E2_COMPUTATIONAL"
+  },
+  "seed": {
+    "candidate_id": "MOLDISC-009-JE2-5461A4A267",
+    "canonical_smiles": "Cc1ccccc1CNC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C",
+    "inchikey": "XBNKKAGGYBXOJG-GMQQYTKMSA-N",
+    "source_role": "MOLDISC-009-selected-generated-candidate",
+    "evidence_level": "E0_HEURISTIC"
+  },
+  "generation": {
+    "generator_id": "research-os.molecular-discovery.demethyl03-single-terminal-methyl-deletion.v1",
+    "evidence_level": "E0_HEURISTIC",
+    "rule": "parse the frozen DEMETHYL-03 SMILES; enumerate every carbon with atomic number 6, degree 1 and exactly three hydrogens; delete exactly one per raw product; sanitize; canonicalize to isomeric SMILES; deduplicate by canonical SMILES; sort canonical isomeric SMILES; assign variant IDs in that order",
+    "expected_seed_terminal_methyl_sites": 3,
+    "expected_unique_generated_candidates": 2,
+    "variant_ids_in_sorted_product_order": ["STEP2-DEMETHYL-01", "STEP2-DEMETHYL-02"],
+    "expected_products": [
+      {
+        "variant_id": "STEP2-DEMETHYL-01",
+        "smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)[C@@H]1C(=O)NCc1ccccc1",
+        "inchikey": "DRIAWXDDGSORDT-KKUQBAQOSA-N"
+      },
+      {
+        "variant_id": "STEP2-DEMETHYL-02",
+        "smiles": "Cc1ccccc1CNC(=O)[C@@H]1C(C)SCN1C(=O)[C@@H](O)[C@H](Cc1ccccc1)NC(=O)c1cccc(O)c1",
+        "inchikey": "WKWQZNZXWQKASU-XVJGRJRPSA-N"
+      }
+    ],
+    "use_downstream_metrics_during_generation": false
+  },
+  "evidence": {
+    "capabilities": [
+      "research-os.molecular-discovery.molecule-lab.v1",
+      "research-os.molecular-discovery.solubility.esol-v2.v1",
+      "research-os.molecular-discovery.aqsoldb-coverage.v1"
+    ],
+    "aqsoldb_coverage_boundary": 0.4,
+    "selection_rule": "eligible iff chemistry_status == PASS and AqSolDB nearest Tanimoto >= 0.4; rank eligible products by higher nearest similarity and break exact ties by variant_id ascending",
+    "esol_used_for_selection": false,
+    "moldisc010_score_used_for_generation": false,
+    "moldisc010_score_used_for_selection": false,
+    "docking_executed": false
+  },
+  "interpretation_boundaries": [
+    "The MOLDISC-010 docking result is preserved as parent technical evidence only and does not drive generation, filtering, ranking or selection.",
+    "Generated products are E0_HEURISTIC structures and are not experimental observations.",
+    "AqSolDB nearest-neighbor measurements are measured-source structural context and are not transferred to candidates unless an exact canonical structure match exists.",
+    "Frozen ESOL values are E1_ML outputs; OUT_OF_DOMAIN values are unsupported extrapolative model outputs, not reliable solubility estimates.",
+    "MOLDISC-011 performs no docking and makes no affinity, potency, efficacy, safety, ADMET or biological claim."
+  ]
+}
