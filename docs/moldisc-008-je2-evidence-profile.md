@@ -1,6 +1,6 @@
 # MOLDISC-008 — JE2 source-backed solubility evidence profile
 
-Status: **protocol frozen before the JE2 evidence profile is inspected**
+Status: **executed and closed; JE2 source-ready by coverage, ESOL out-of-domain**
 
 ## Why this program exists
 
@@ -99,3 +99,98 @@ MOLDISC-008 performs no:
 
 The only purpose is to characterize the JE2 seed evidence envelope before a
 separately frozen follow-up makes a new scientific move.
+
+
+## First execution
+
+The first frozen execution completed successfully in GitHub Actions run
+`35416888562`.
+
+Scientific identities:
+
+- workflow scientific hash:
+  `32de7d2b8d95ac0dd1a06020e1a3dbfc2a5fa6122e7852045b72be4ae2698a8e`
+- AqSolDB coverage scientific hash:
+  `03e9cd9ddc33a21276f4c4fb6a1cde458dc1389b98a968138ad2c3e7b22f600b`
+- frozen predictor model identity:
+  `2127d2aaa87cb83255f41ee2881a5691ccf63974c12e6cfb7502f6f24ed3ce61`
+- program scientific hash:
+  `fd2adf5923ba0ad822d14ee8a4c1199aa3bf6732b8c70cb396940951126d2b90`
+
+### RCSB identity
+
+The active RCSB/RDKit identity resolved to:
+
+- InChIKey: `CUFQBQOBLVLKRF-RZDMPUFOSA-N`
+- formula: `C32 H37 N3 O5 S`
+- formula weight: `575.718`
+- RCSB-reported InChIKey match: yes
+
+### Frozen ESOL result
+
+JE2 is:
+
+`OUT_OF_DOMAIN`
+
+Observed maximum training Tanimoto:
+
+`0.21052631578947367`
+
+Frozen AD threshold:
+
+`0.26684684684684684`
+
+The model emitted:
+
+`predicted logS = -4.715111341269841`
+
+Because JE2 is outside the frozen applicability domain, that numeric value is
+retained as an extrapolative model output and is **not** promoted to a reliable
+JE2 solubility estimate.
+
+### Immutable AqSolDB coverage
+
+JE2 reproduced the parent nearest similarity:
+
+`0.569620253164557`
+
+Observed coverage:
+
+- neighbors >=0.4: `8`
+- neighbors >=0.6: `0`
+- neighbors >=0.8: `0`
+- exact canonical AqSolDB match: `false`
+
+The nearest measured-source structure has:
+
+- InChIKey: `URHJIBSBOJFXDI-UHFFFAOYSA-N`
+- one recorded observation
+- measured logS: `-3.62`
+
+That measurement belongs to the neighboring structure, **not JE2**.
+
+### Frozen follow-up result
+
+`generation_source_ready = true`
+
+This passes only because:
+
+1. JE2 chemistry is `PASS`; and
+2. AqSolDB nearest similarity is >= `0.4`.
+
+The out-of-domain ESOL result neither blocks nor promotes the seed under the
+predeclared gate.
+
+No molecule was generated in MOLDISC-008.
+
+## Closure
+
+MOLDISC-008 is closed on this evidence profile.
+
+A new program may now generate a bounded JE2 neighborhood, but it must preserve
+all of these boundaries:
+
+- no measured logS transfer from the nearest AqSolDB neighbor;
+- no use of the out-of-domain ESOL value as a generation or ranking score;
+- no automatic docking;
+- no biological interpretation from structural coverage.
