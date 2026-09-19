@@ -268,6 +268,16 @@ prediction from becoming the selection score.
 
 See [MOLDISC-005](docs/moldisc-005-nct-nalkyl-series.md).
 
+### Active JE2 evidence profile: MOLDISC-008
+
+After MOLDISC-006 closed on unsupported heme target preparation and MOLDISC-007
+selected the operational fallback seed, MOLDISC-008 characterizes
+`ATX-007 / 1KZK / JE2` with MoleculeLab, frozen ESOL applicability-domain
+evidence, and immutable AqSolDB measured-source coverage before any new
+generation or docking.
+
+See [MOLDISC-008](docs/moldisc-008-je2-evidence-profile.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.
