@@ -10,29 +10,34 @@ on:
       - "scripts/run_moldisc_003.py"
       - "scripts/run_moldisc_004.py"
       - "scripts/run_moldisc_005.py"
+      - "scripts/run_moldisc_007.py"
       - "programs/moldisc-001-id5/**"
       - "programs/moldisc-002-aqsoldb-coverage/**"
       - "programs/moldisc-003-redock-seed-coverage/**"
       - "programs/moldisc-004-nct-measured-anchor/**"
       - "programs/moldisc-005-nct-nalkyl-series/**"
+      - "programs/moldisc-007-operational-fallback/**"
       - "tests/test_molecular_discovery.py"
       - "tests/test_moldisc_001.py"
       - "tests/test_moldisc_002.py"
       - "tests/test_moldisc_003.py"
       - "tests/test_moldisc_004.py"
       - "tests/test_moldisc_005.py"
+      - "tests/test_moldisc_007.py"
       - "validation/molecular-discovery-solubility-v1.json"
       - "validation/moldisc-001-first-run-v1.json"
       - "validation/moldisc-002-first-run-v1.json"
       - "validation/moldisc-003-first-run-v1.json"
       - "validation/moldisc-004-first-run-v1.json"
       - "validation/moldisc-005-first-run-v1.json"
+      - "validation/moldisc-007-first-run-v1.json"
       - "docs/molecular-discovery-program-v0.1.md"
       - "docs/moldisc-001-id5.md"
       - "docs/moldisc-002-aqsoldb-coverage.md"
       - "docs/moldisc-003-redock-seed-coverage.md"
       - "docs/moldisc-004-nct-measured-anchor.md"
       - "docs/moldisc-005-nct-nalkyl-series.md"
+      - "docs/moldisc-007-operational-fallback.md"
       - "pyproject.toml"
       - ".github/workflows/molecular-discovery-ci.yml"
   push:
@@ -46,20 +51,25 @@ on:
       - "scripts/run_moldisc_003.py"
       - "scripts/run_moldisc_004.py"
       - "scripts/run_moldisc_005.py"
+      - "scripts/run_moldisc_007.py"
       - "programs/moldisc-001-id5/**"
       - "programs/moldisc-002-aqsoldb-coverage/**"
       - "programs/moldisc-003-redock-seed-coverage/**"
       - "programs/moldisc-004-nct-measured-anchor/**"
       - "programs/moldisc-005-nct-nalkyl-series/**"
+      - "programs/moldisc-007-operational-fallback/**"
       - "tests/test_molecular_discovery.py"
       - "tests/test_moldisc_001.py"
       - "tests/test_moldisc_002.py"
       - "tests/test_moldisc_003.py"
       - "tests/test_moldisc_004.py"
       - "tests/test_moldisc_005.py"
+      - "tests/test_moldisc_007.py"
       - "validation/molecular-discovery-solubility-v1.json"
       - "validation/moldisc-001-first-run-v1.json"
+      - "validation/moldisc-007-first-run-v1.json"
       - "docs/moldisc-001-id5.md"
+      - "docs/moldisc-007-operational-fallback.md"
       - "pyproject.toml"
       - ".github/workflows/molecular-discovery-ci.yml"
 
@@ -77,9 +87,9 @@ jobs:
       - name: Check dependency consistency
         run: python -m pip check
       - name: Compile Molecular Discovery
-        run: python -m compileall -q src/research_os/molecular_discovery scripts/run_molecular_discovery.py scripts/run_moldisc_001.py scripts/run_moldisc_002.py scripts/run_moldisc_003.py scripts/run_moldisc_004.py scripts/run_moldisc_005.py tests/test_molecular_discovery.py tests/test_moldisc_001.py tests/test_moldisc_002.py tests/test_moldisc_003.py tests/test_moldisc_004.py tests/test_moldisc_005.py
+        run: python -m compileall -q src/research_os/molecular_discovery scripts/run_molecular_discovery.py scripts/run_moldisc_001.py scripts/run_moldisc_002.py scripts/run_moldisc_003.py scripts/run_moldisc_004.py scripts/run_moldisc_005.py scripts/run_moldisc_007.py tests/test_molecular_discovery.py tests/test_moldisc_001.py tests/test_moldisc_002.py tests/test_moldisc_003.py tests/test_moldisc_004.py tests/test_moldisc_005.py tests/test_moldisc_007.py
       - name: Run Molecular Discovery tests
-        run: python -m pytest -q tests/test_molecular_discovery.py tests/test_moldisc_001.py tests/test_moldisc_002.py tests/test_moldisc_003.py tests/test_moldisc_004.py tests/test_moldisc_005.py
+        run: python -m pytest -q tests/test_molecular_discovery.py tests/test_moldisc_001.py tests/test_moldisc_002.py tests/test_moldisc_003.py tests/test_moldisc_004.py tests/test_moldisc_005.py tests/test_moldisc_007.py
       - name: Execute frozen MOLDISC-001 from public ESOL source
         run: python scripts/run_moldisc_001.py --output /tmp/moldisc-001
       - name: Verify MOLDISC-001 artifacts
@@ -250,5 +260,31 @@ jobs:
               "selection": manifest["selection"],
               "program_scientific_hash": manifest["program_scientific_hash"],
               "profiles": profiles,
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Execute frozen MOLDISC-007 operational fallback selection
+        run: python scripts/run_moldisc_007.py --output /tmp/moldisc-007
+      - name: Verify MOLDISC-007 artifacts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("/tmp/moldisc-007")
+          manifest = json.loads((root / "program_manifest.json").read_text())
+          selection = json.loads((root / "selection.json").read_text())
+
+          assert manifest["program_id"] == "MOLDISC-007"
+          assert manifest["selection"]["selected_case_id"] == "ATX-007"
+          assert manifest["selection"]["selected_pdb_id"] == "1KZK"
+          assert manifest["selection"]["selected_chem_comp_id"] == "JE2"
+          assert manifest["selection"]["eligible_case_ids"] == ["ATX-007"]
+          assert len(manifest["program_scientific_hash"]) == 64
+          assert selection["candidate_evidence"][0]["case_id"] == "ATX-014"
+          assert selection["candidate_evidence"][0]["operationally_blocked"] is True
+          print(json.dumps({
+              "selection": manifest["selection"],
+              "program_scientific_hash": manifest["program_scientific_hash"],
           }, indent=2, sort_keys=True))
           PY
