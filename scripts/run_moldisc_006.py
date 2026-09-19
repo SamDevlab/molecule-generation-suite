@@ -14,9 +14,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Run frozen MOLDISC-006 N-H cross-docking program")
     parser.add_argument("--config", default=str(DEFAULT_CONFIG))
     parser.add_argument("--output", required=True)
+    parser.add_argument(
+        "--reproduce-closed-failure",
+        action="store_true",
+        help="explicitly reproduce the preserved v1.2 target-preparation failure",
+    )
     args = parser.parse_args()
 
-    result = run_moldisc_006(config_path=args.config, output_root=args.output)
+    result = run_moldisc_006(
+        config_path=args.config,
+        output_root=args.output,
+        reproduce_closed_failure=args.reproduce_closed_failure,
+    )
     print(
         json.dumps(
             {
