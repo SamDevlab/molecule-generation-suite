@@ -1,0 +1,106 @@
+name: moldisc-006-ci
+
+on:
+  pull_request:
+    paths:
+      - "src/research_os/molecular_discovery/moldisc006.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_006.py"
+      - "tests/test_moldisc_006.py"
+      - "programs/moldisc-006-nh-crossdock/**"
+      - "docs/moldisc-006-nh-crossdock.md"
+      - "validation/moldisc-006-v1.0-invalid-preparation.json"
+      - "validation/moldisc-006-v1.1-indeterminate-heme-template.json"
+      - "validation/moldisc-006-v1.2-indeterminate-target-preparation.json"
+      - ".github/workflows/moldisc006-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/research_os/molecular_discovery/moldisc006.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_006.py"
+      - "tests/test_moldisc_006.py"
+      - "programs/moldisc-006-nh-crossdock/**"
+      - "docs/moldisc-006-nh-crossdock.md"
+      - "validation/moldisc-006-v1.0-invalid-preparation.json"
+      - "validation/moldisc-006-v1.1-indeterminate-heme-template.json"
+      - "validation/moldisc-006-v1.2-indeterminate-target-preparation.json"
+      - ".github/workflows/moldisc006-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  closed-indeterminate-program:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Research OS discovery dependencies
+        run: python -m pip install -e ".[dev,discovery]"
+
+      - name: Check dependency consistency
+        run: python -m pip check
+
+      - name: Compile closed MOLDISC-006
+        run: >-
+          python -m py_compile
+          src/research_os/molecular_discovery/moldisc006.py
+          scripts/run_moldisc_006.py
+          tests/test_moldisc_006.py
+
+      - name: Test frozen identities and closed-state boundary
+        run: python -m pytest -q tests/test_moldisc_006.py
+
+      - name: Verify preserved v1.0-v1.2 closure evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path(".")
+          config = json.loads((root / "programs/moldisc-006-nh-crossdock/program.json").read_text())
+          v10 = json.loads((root / "validation/moldisc-006-v1.0-invalid-preparation.json").read_text())
+          v11 = json.loads((root / "validation/moldisc-006-v1.1-indeterminate-heme-template.json").read_text())
+          v12 = json.loads((root / "validation/moldisc-006-v1.2-indeterminate-target-preparation.json").read_text())
+          docs = (root / "docs/moldisc-006-nh-crossdock.md").read_text()
+
+          assert config["program_id"] == "MOLDISC-006"
+          assert config["program_version"] == "1.2"
+          assert config["status"] == "CLOSED_INDETERMINATE_TARGET_PREPARATION"
+          assert config["closure"]["accepted_docking_result"] is False
+          assert config["closure"]["valid_vina_score"] is False
+          assert config["closure"]["decision"].startswith("Do not introduce manual Fe/HEME")
+
+          assert v10["status"] == "INVALID_PREPARATION"
+          assert v10["observations"]["receptor_pdbqt_bytes"] == 0
+          assert v10["interpretation"] == "MOLDISC-006 v1.0 produced no valid docking evidence."
+
+          assert v11["status"] == "INDETERMINATE_TARGET_TEMPLATE"
+          assert v11["observations"]["docking_executed"] is False
+          assert v11["observations"]["valid_docking_evidence"] is False
+
+          assert v12["status"] == "INDETERMINATE_TARGET_PREPARATION"
+          assert v12["observations"]["receptor_pdbqt_produced"] is False
+          assert v12["observations"]["docking_executed"] is False
+          assert v12["observations"]["valid_docking_evidence"] is False
+          assert v12["closure"]["program_status"] == "CLOSED_INDETERMINATE_TARGET_PREPARATION"
+
+          assert "No valid docking score or pose was produced" in docs
+          assert "Do not construct manual Fe/HEME atom types" in json.dumps(v12)
+
+          print(json.dumps({
+              "program_id": config["program_id"],
+              "status": config["status"],
+              "accepted_docking_result": config["closure"]["accepted_docking_result"],
+              "history": [v10["status"], v11["status"], v12["status"]],
+              "next_step": config["closure"]["next_step"],
+          }, indent=2, sort_keys=True))
+          PY

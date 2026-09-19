@@ -1,0 +1,37 @@
+{
+  "schema_version": "research-os.molecular-discovery.invalid-run.v1",
+  "program_id": "MOLDISC-006",
+  "protocol_version": "1.1",
+  "status": "INDETERMINATE_TARGET_TEMPLATE",
+  "github_actions_run_id": 35298282952,
+  "artifact_id": 10528971828,
+  "reason": "Meeko 0.8.0 successfully installed and passed identity tests, but receptor preparation failed before docking because HEM residue A:430 was not present in the default residue templates and automatic CCD template construction failed.",
+  "observations": {
+    "meeko_version": "0.8.0",
+    "gemmi_version": "0.7.5",
+    "vina_version": "1.2.7",
+    "failure_stage": "RECEPTOR_PREPARATION",
+    "failure_message": "Input residues {'A:430': 'HEM'} not in residue_templates; Failed building template from CCD for resname='HEM'",
+    "docking_executed": false,
+    "valid_docking_evidence": false
+  },
+  "corrective_action": {
+    "next_protocol_version": "1.2",
+    "change": "Load an explicit HEM residue template from the official RCSB Chemical Component Dictionary ideal SDF using Meeko --add_templates HEM:<file>.",
+    "template_source": "https://files.rcsb.org/ligands/download/HEM_ideal.sdf",
+    "unchanged": [
+      "selected N-H candidate",
+      "PDB 1P2Y target",
+      "chain A + HEM receptor composition",
+      "NCT-derived grid rule",
+      "NON_COGNATE_HOLO_CROSSDOCKING context",
+      "Vina 1.2.7",
+      "seed 42",
+      "cpu 1",
+      "exhaustiveness 16",
+      "num_modes 20",
+      "no native-NCT RMSD endpoint"
+    ]
+  },
+  "interpretation": "MOLDISC-006 v1.1 produced no docking result and no valid docking evidence."
+}

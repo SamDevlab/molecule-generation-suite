@@ -1,0 +1,34 @@
+{
+  "schema_version": "research-os.molecular-discovery.invalid-run.v1",
+  "program_id": "MOLDISC-006",
+  "protocol_version": "1.2",
+  "status": "INDETERMINATE_TARGET_PREPARATION",
+  "github_actions_run_id": 35298512948,
+  "artifact_id": 10528054810,
+  "reason": "The official RCSB CCD HEM ideal SDF could not be sanitized by the RDKit/Meeko template path because the metal-containing heme representation triggered an explicit valence error. The run stopped before receptor PDBQT preparation and before Vina execution.",
+  "observations": {
+    "candidate_id": "MOLDISC-005-NCT-84632F8200",
+    "target_pdb_id": "1P2Y",
+    "required_cofactor": "HEM",
+    "template_source": "https://files.rcsb.org/ligands/download/HEM_ideal.sdf",
+    "meeko_version": "0.8.0",
+    "gemmi_version": "0.7.5",
+    "vina_version_installed": "1.2.7",
+    "failure_stage": "HEM_TEMPLATE_VALIDATION",
+    "failure_message": "Explicit valence for atom O is greater than permitted; official RCSB HEM ideal SDF is not parseable by the active RDKit template path",
+    "receptor_pdbqt_produced": false,
+    "docking_executed": false,
+    "valid_docking_evidence": false
+  },
+  "closure": {
+    "program_status": "CLOSED_INDETERMINATE_TARGET_PREPARATION",
+    "decision": "Do not construct manual Fe/HEME atom types, charges or custom metal chemistry merely to force execution inside this program.",
+    "rationale": "A target-specific metalloprotein parameterization effort would constitute a new scientific-method development project and falls outside the frozen MOLDISC-006 question.",
+    "unchanged_scientific_conclusion": "No valid docking score or pose was produced for N-H against 1P2Y."
+  },
+  "preserved_history": [
+    "v1.0 INVALID_PREPARATION: Open Babel produced an empty receptor PDBQT and zero-valued Vina outputs; no valid evidence.",
+    "v1.1 INDETERMINATE_TARGET_TEMPLATE: Meeko default/automatic templates could not resolve HEM; Vina not executed.",
+    "v1.2 INDETERMINATE_TARGET_PREPARATION: official RCSB HEM ideal SDF failed the active RDKit/Meeko metal-containing template path; Vina not executed."
+  ]
+}

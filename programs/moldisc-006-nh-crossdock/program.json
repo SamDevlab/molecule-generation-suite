@@ -1,0 +1,107 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-006",
+  "program_version": "1.2",
+  "title": "Selected N-H analog non-cognate holo docking against PDB 1P2Y",
+  "scientific_question": "Can the single MOLDISC-005 coverage-selected N-H analog be prepared and docked reproducibly into the frozen 1P2Y holo receptor/known pocket under the existing partially validated non-cognate cross-docking capability boundary?",
+  "parent_program": {
+    "program_id": "MOLDISC-005",
+    "program_version": "1.0",
+    "program_scientific_hash": "88e28697f8ce5ae14d0737089130c469275d28950c63e90053bc6fe6012dcac7",
+    "selected_candidate_id": "MOLDISC-005-NCT-84632F8200",
+    "selected_variant_id": "N-H",
+    "selection_rule": "highest nearest AqSolDB similarity among generated candidates with chemistry PASS and nearest AqSolDB Tanimoto >= 0.4",
+    "selected_nearest_aqsoldb_similarity": 0.896551724137931
+  },
+  "candidate": {
+    "candidate_id": "MOLDISC-005-NCT-84632F8200",
+    "variant_id": "N-H",
+    "canonical_smiles": "c1cncc(C2CCCN2)c1",
+    "generation_evidence_level": "E0_HEURISTIC",
+    "esol_status": "IN_DOMAIN",
+    "esol_prediction_not_used_for_docking_selection": true
+  },
+  "target": {
+    "case_id": "ATX-014",
+    "pdb_id": "1P2Y",
+    "native_chem_comp_id": "NCT",
+    "ligand_author_chain": "A",
+    "receptor_author_chains": [
+      "A"
+    ],
+    "target": "CYTOCHROME P450-CAM",
+    "resolution_angstrom": 2.3,
+    "source_url": "https://www.rcsb.org/structure/1P2Y"
+  },
+  "docking": {
+    "docking_context": "NON_COGNATE_HOLO_CROSSDOCKING",
+    "capability_classification": "PARTIALLY_VALIDATED",
+    "evidence_level": "E2_COMPUTATIONAL",
+    "grid_rule": "derive from exact crystallographic NCT reference coordinates using research-os.redocking.v1.1 native-ligand box rule",
+    "box_padding_angstrom": 6,
+    "box_min_side_angstrom": 20,
+    "box_max_side_angstrom": 30,
+    "vina_version_required": "1.2.7",
+    "seed": 42,
+    "cpu": 1,
+    "exhaustiveness": 16,
+    "num_modes": 20,
+    "scoring_function": "vina",
+    "ligand_conformer": {
+      "engine": "RDKit ETKDGv3",
+      "random_seed": 42,
+      "uff_optimize_when_parameters_available": true
+    },
+    "receptor_preparation": {
+      "engine": "Meeko",
+      "engine_version_required": "0.8.0",
+      "selected_author_chains": [
+        "A"
+      ],
+      "additional_residue_templates": [
+        {
+          "resname": "HEM",
+          "source": "RCSB_CCD_IDEAL_SDF",
+          "url": "https://files.rcsb.org/ligands/download/HEM_ideal.sdf"
+        }
+      ],
+      "retained_cofactors": [
+        "HEM"
+      ],
+      "removed_hetero_components": "all HETATM except HEM; crystallographic waters are not retained",
+      "command_contract": "mk_prepare_receptor.py --read_pdb INPUT --write_pdbqt OUTPUT"
+    },
+    "ligand_preparation": {
+      "engine": "Meeko",
+      "engine_version_required": "0.8.0",
+      "command_contract": "mk_prepare_ligand.py -i INPUT -o OUTPUT"
+    }
+  },
+  "primary_endpoint": {
+    "name": "technical docking completion under frozen non-cognate holo protocol",
+    "pass_condition": "Vina 1.2.7 returns zero, produces at least one parseable pose and preserves receptor/grid/input provenance",
+    "scientific_success_threshold": null,
+    "rmsd_to_native_nct": "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH"
+  },
+  "interpretation_boundaries": [
+    "MOLDISC-006 evaluates one preselected generated analog and performs no molecule selection.",
+    "A Vina score is E2 computational output and is not measured binding affinity, potency or free energy.",
+    "No RMSD to crystallographic NCT is reported because N-H and NCT are different molecular graphs.",
+    "The 1P2Y holo known-pocket context is NON_COGNATE_HOLO_CROSSDOCKING and remains only partially validated.",
+    "1P2Y is a heme enzyme; the receptor preparation must retain the crystallographic HEM cofactor and its iron atom. A receptor missing HEM is a protocol failure.",
+    "A technically completed docking run does not establish correct binding mode, CYP activity, metabolism, efficacy, safety or clinical utility.",
+    "Docking parameters, candidate identity and grid derivation may not be changed in response to the first valid observed score.",
+    "Protocol v1.0 is preserved as INVALID_PREPARATION because Open Babel produced an empty receptor PDBQT.",
+    "Protocol v1.1 is preserved as INDETERMINATE_TARGET_TEMPLATE because Meeko 0.8.0 could not resolve HEM from default/automatic templates and no docking was executed.",
+    "Protocol v1.2 changes only HEM template resolution by supplying the official RCSB CCD HEM ideal SDF through Meeko --add_templates; candidate, target, grid, Vina settings and endpoint remain unchanged."
+  ],
+  "status": "CLOSED_INDETERMINATE_TARGET_PREPARATION",
+  "closure": {
+    "accepted_docking_result": false,
+    "valid_vina_score": false,
+    "final_protocol_version": "1.2",
+    "reason": "1P2Y requires HEM. v1.0 produced an empty receptor with Open Babel; v1.1 could not resolve HEM in Meeko defaults; v1.2 supplied the official RCSB HEM CCD ideal SDF but the active RDKit/Meeko template path could not sanitize the metal-containing representation. No valid receptor PDBQT was produced.",
+    "decision": "Do not introduce manual Fe/HEME atom types, charges, or a new metalloprotein parameterization method inside MOLDISC-006.",
+    "next_step": "Return to a target whose preparation is already inside the validated non-metal docking capability envelope."
+  }
+}
