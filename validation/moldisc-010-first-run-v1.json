@@ -1,0 +1,118 @@
+{
+  "schema_version": "research-os.molecular-discovery.program-result.v1",
+  "program_id": "MOLDISC-010",
+  "program_version": "1.0",
+  "status": "CLOSED_FIRST_RESULT_PRESERVED",
+  "protocol_freeze_commit": "366a76aab59e732a6d1bf3ab2c3f67c1fa591c00",
+  "first_execution": {
+    "github_actions_run_id": 35474219286,
+    "workflow": "moldisc-010-ci",
+    "workflow_run_number": 3,
+    "result": "PASS",
+    "head_sha": "27e3c83146053c0fa8e6945897d601fa4de50557"
+  },
+  "parent": {
+    "program_id": "MOLDISC-009",
+    "program_scientific_hash": "75ffaf31d6df6983e7692fca4f0a3fa2277c743dcac2b99cee179c9b39116615",
+    "selected_variant_id": "DEMETHYL-03",
+    "selected_candidate_id": "MOLDISC-009-JE2-5461A4A267",
+    "selection_used_esol": false
+  },
+  "candidate": {
+    "candidate_id": "MOLDISC-009-JE2-5461A4A267",
+    "canonical_smiles": "Cc1ccccc1CNC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C",
+    "inchikey": "XBNKKAGGYBXOJG-GMQQYTKMSA-N",
+    "generation_evidence_level": "E0_HEURISTIC"
+  },
+  "target": {
+    "case_id": "ATX-007",
+    "pdb_id": "1KZK",
+    "native_ligand": "JE2",
+    "native_ligand_author_chain": "A",
+    "receptor_author_chains": [
+      "A",
+      "B"
+    ],
+    "native_reference_structure_hash": "82b48b534ff870fb8a922ed62da905bf77fe2e54f2420143986a4c5f9b9c9a4b"
+  },
+  "docking_protocol": {
+    "context": "NON_COGNATE_HOLO_CROSSDOCKING",
+    "capability_status": "PARTIALLY_VALIDATED",
+    "evidence_level": "E2_COMPUTATIONAL",
+    "vina_version": "AutoDock Vina v1.2.7",
+    "openbabel_version": "Open Babel 3.1.1 -- Mar 31 2024 -- 06:39:03",
+    "seed": 42,
+    "cpu": 1,
+    "exhaustiveness": 16,
+    "num_modes": 20,
+    "grid_hash": "a0bf032d8bdb1bc20f13f298d604673cac1d2c7da8596cc228ec6602b5989aef"
+  },
+  "execution_identity": {
+    "program_scientific_hash": "360ef9eb66981287781a971a7e09aebbe2749be765af5b4c6dcb33e3839eb48b",
+    "run_a_program_scientific_hash": "360ef9eb66981287781a971a7e09aebbe2749be765af5b4c6dcb33e3839eb48b",
+    "run_b_program_scientific_hash": "360ef9eb66981287781a971a7e09aebbe2749be765af5b4c6dcb33e3839eb48b",
+    "deterministic": true,
+    "receptor_scientific_identity": "f4182f7337c0509db49d34c97b6a1cf9639b0b3e3cb25735265fd8daede9b32c",
+    "ligand_scientific_identity": "0fc2ec1c34cc9abe2223d860c35fe2c64576e72f4ed4b3c9bd2b502c1d36290b",
+    "starting_conformer_sha256": "cfea10198a70dbee0e7bc05a5fd12d8480955f94ee7e4a6f7280683b1ff2154c",
+    "receptor_extracted_sha256": "3558cbae51e3becd057ef94d740625cf0924d75eaaa53231708dcd2df77d3fc8",
+    "pose_count": 20,
+    "pose_1_score_kcal_mol": -11.03,
+    "pose_scores_kcal_mol": [
+      -11.03,
+      -10.395,
+      -10.382,
+      -10.084,
+      -10.016,
+      -9.731,
+      -9.611,
+      -9.559,
+      -9.514,
+      -9.509,
+      -9.15,
+      -9.074,
+      -9.01,
+      -8.94,
+      -8.931,
+      -8.927,
+      -8.87,
+      -8.836,
+      -8.794,
+      -8.787
+    ],
+    "vina_output_sha256": "2b0566493d8842c1893b209a9591da42a567fd9baeb87249599736d411dcae94"
+  },
+  "transport_provenance": {
+    "raw_hashes_are_not_scientific_identity": true,
+    "run_a": {
+      "source_pdb_transport_sha256": "f8d26f3a32f04fb4878ecf38a7a026fcf94fa7bc7620f8c09d83ec53850cbe25",
+      "native_reference_transport_sha256": "1a609b52b89336c99da1c7dd3895daa37bc7cc087f9689f0a2b41b95b10b24d9",
+      "receptor_pdbqt_sha256": "2d6bf7db0b9a3b1c93d9799ac88c9ffc455dd60a1866f24eec49efd3489a516b",
+      "ligand_pdbqt_sha256": "ad4570e04d8a4e60230ce9d5309176f72a3d5ada7abd9c5f5f3dd56e79aef4ef",
+      "vina_output_sha256": "2b0566493d8842c1893b209a9591da42a567fd9baeb87249599736d411dcae94"
+    },
+    "run_b": {
+      "source_pdb_transport_sha256": "f8d26f3a32f04fb4878ecf38a7a026fcf94fa7bc7620f8c09d83ec53850cbe25",
+      "native_reference_transport_sha256": "c1080283c230b288dbe7c4bb9b38e50d857e41497adeb5a702a7a7e4265b2b2f",
+      "receptor_pdbqt_sha256": "3ab3b27973063674284bec227ac04baf06f5c1391d0a7e7695fa45d3eb8559c9",
+      "ligand_pdbqt_sha256": "ad4570e04d8a4e60230ce9d5309176f72a3d5ada7abd9c5f5f3dd56e79aef4ef",
+      "vina_output_sha256": "2b0566493d8842c1893b209a9591da42a567fd9baeb87249599736d411dcae94"
+    },
+    "observed_drift": [
+      "native_reference_transport_sha256 changed because the downloaded SDF contains ModelServer job, timestamp and timing metadata; native_reference_structure_hash remained equal",
+      "receptor_pdbqt_sha256 changed only in Open Babel REMARK Name temporary paths; receptor_scientific_identity remained equal"
+    ]
+  },
+  "primary_endpoint": {
+    "technical_status": "PASS",
+    "rmsd_to_native_je2": "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH",
+    "interpretation": "Bounded E2 computational non-cognate cross-docking result; not an experimental affinity or potency measurement."
+  },
+  "scientific_conclusion": [
+    "The frozen DEMETHYL-03 candidate completed the frozen ATX-007 / 1KZK / JE2-pocket cross-docking protocol.",
+    "Independent CI runs A and B produced identical scientific program hashes, scores, poses, grid, and canonical prepared-input identities.",
+    "The raw receptor PDBQT and native-reference transport hashes are preserved as provenance and are not used as scientific identity because their differences are incidental serialization metadata.",
+    "DEMETHYL-03 and JE2 are different molecular graphs, so no native-JE2 RMSD or native-like claim is made.",
+    "The Vina pose-1 score of -11.03 kcal/mol is retained as bounded computational docking output and is not promoted to experimental affinity."
+  ]
+}

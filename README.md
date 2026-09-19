@@ -289,6 +289,16 @@ coverage only; no docking or biological score is used.
 
 See [MOLDISC-009](docs/moldisc-009-je2-demethyl-series.md).
 
+### Selected JE2 analog docking: MOLDISC-010
+
+MOLDISC-010 takes only the MOLDISC-009-selected `DEMETHYL-03` analog and
+executes the already operational REDOCK-003 `ATX-007 / 1KZK / JE2` receptor,
+native-pocket grid, Open Babel preparation, and Vina 1.2.7 settings. The
+declared context is `NON_COGNATE_HOLO_CROSSDOCKING`; scores remain bounded
+E2 computational evidence and are not affinity, potency, or efficacy.
+
+See [MOLDISC-010](docs/moldisc-010-demethyl03-crossdock.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.

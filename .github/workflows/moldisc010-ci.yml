@@ -1,0 +1,133 @@
+name: moldisc-010-ci
+
+on:
+  pull_request:
+    paths:
+      - "src/research_os/molecular_discovery/moldisc010.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_010.py"
+      - "tests/test_moldisc_010.py"
+      - "programs/moldisc-010-demethyl03-crossdock/**"
+      - "docs/moldisc-010-demethyl03-crossdock.md"
+      - "validation/moldisc-010-first-run-v1.json"
+      - ".github/workflows/moldisc010-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/research_os/molecular_discovery/moldisc010.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_010.py"
+      - "tests/test_moldisc_010.py"
+      - "programs/moldisc-010-demethyl03-crossdock/**"
+      - "docs/moldisc-010-demethyl03-crossdock.md"
+      - "validation/moldisc-010-first-run-v1.json"
+      - ".github/workflows/moldisc010-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-demethyl03-crossdock:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Research OS discovery dependencies
+        run: python -m pip install -e ".[dev,discovery]"
+
+      - name: Install Open Babel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+
+      - name: Install official AutoDock Vina 1.2.7 binary
+        run: |
+          curl --fail --location --retry 3             https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64             --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          /tmp/vina_1.2.7 --version
+          sha256sum /tmp/vina_1.2.7
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+
+      - name: Check dependency consistency
+        run: python -m pip check
+
+      - name: Compile frozen MOLDISC-010
+        run: >-
+          python -m py_compile
+          src/research_os/molecular_discovery/moldisc010.py
+          scripts/run_moldisc_010.py
+          tests/test_moldisc_010.py
+
+      - name: Test frozen identities and capability boundary
+        run: python -m pytest -q tests/test_moldisc_010.py
+
+      - name: Execute frozen MOLDISC-010 run A
+        run: python scripts/run_moldisc_010.py --output /tmp/moldisc-010-a
+
+      - name: Execute frozen MOLDISC-010 run B
+        run: python scripts/run_moldisc_010.py --output /tmp/moldisc-010-b
+
+      - name: Require technical completion and deterministic scientific identity
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          a = json.loads((Path("/tmp/moldisc-010-a") / "program_manifest.json").read_text())
+          b = json.loads((Path("/tmp/moldisc-010-b") / "program_manifest.json").read_text())
+
+          for report in (a, b):
+              assert report["program_id"] == "MOLDISC-010"
+              assert report["candidate_id"] == "MOLDISC-009-JE2-5461A4A267"
+              assert report["candidate_inchikey"] == "XBNKKAGGYBXOJG-GMQQYTKMSA-N"
+              assert report["technical_status"] == "PASS"
+              assert report["pose_count"] >= 1
+              assert report["vina_pose_1_score_kcal_mol"] != 0.0
+              assert report["capability"]["docking_context"] == "NON_COGNATE_HOLO_CROSSDOCKING"
+              assert report["capability"]["capability_status"] == "PARTIALLY_VALIDATED"
+              assert report["capability"]["evidence_level"] == "E2_COMPUTATIONAL"
+              assert report["receptor_pdbqt_sha256"] != "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+              assert report["ligand_pdbqt_sha256"] != "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+              assert len(report["receptor_scientific_identity"]) == 64
+              assert len(report["ligand_scientific_identity"]) == 64
+
+          assert a["program_scientific_hash"] == b["program_scientific_hash"]
+          assert a["receptor_scientific_identity"] == b["receptor_scientific_identity"]
+          assert a["ligand_scientific_identity"] == b["ligand_scientific_identity"]
+          assert a["vina_output_sha256"] == b["vina_output_sha256"]
+
+          print(json.dumps({
+              "program_scientific_hash": a["program_scientific_hash"],
+              "pose_count": a["pose_count"],
+              "pose_scores_kcal_mol": a["pose_scores_kcal_mol"],
+              "grid_hash": a["grid"]["grid_hash"],
+              "native_reference_structure_hash": a["native_reference_structure_hash"],
+              "receptor_extracted_sha256": a["receptor_extracted_sha256"],
+              "receptor_pdbqt_sha256": a["receptor_pdbqt_sha256"],
+              "ligand_pdbqt_sha256": a["ligand_pdbqt_sha256"],
+              "receptor_scientific_identity": a["receptor_scientific_identity"],
+              "ligand_scientific_identity": a["ligand_scientific_identity"],
+              "vina_output_sha256": a["vina_output_sha256"],
+              "engines": a["engines"],
+              "capability": a["capability"],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Upload MOLDISC-010 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: moldisc-010-demethyl03-crossdock
+          path: |
+            /tmp/moldisc-010-a
+            /tmp/moldisc-010-b
+          if-no-files-found: warn
