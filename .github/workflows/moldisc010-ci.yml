@@ -97,10 +97,12 @@ jobs:
               assert report["capability"]["evidence_level"] == "E2_COMPUTATIONAL"
               assert report["receptor_pdbqt_sha256"] != "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
               assert report["ligand_pdbqt_sha256"] != "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+              assert len(report["receptor_scientific_identity"]) == 64
+              assert len(report["ligand_scientific_identity"]) == 64
 
           assert a["program_scientific_hash"] == b["program_scientific_hash"]
-          assert a["receptor_pdbqt_sha256"] == b["receptor_pdbqt_sha256"]
-          assert a["ligand_pdbqt_sha256"] == b["ligand_pdbqt_sha256"]
+          assert a["receptor_scientific_identity"] == b["receptor_scientific_identity"]
+          assert a["ligand_scientific_identity"] == b["ligand_scientific_identity"]
           assert a["vina_output_sha256"] == b["vina_output_sha256"]
 
           print(json.dumps({
@@ -112,6 +114,8 @@ jobs:
               "receptor_extracted_sha256": a["receptor_extracted_sha256"],
               "receptor_pdbqt_sha256": a["receptor_pdbqt_sha256"],
               "ligand_pdbqt_sha256": a["ligand_pdbqt_sha256"],
+              "receptor_scientific_identity": a["receptor_scientific_identity"],
+              "ligand_scientific_identity": a["ligand_scientific_identity"],
               "vina_output_sha256": a["vina_output_sha256"],
               "engines": a["engines"],
               "capability": a["capability"],
