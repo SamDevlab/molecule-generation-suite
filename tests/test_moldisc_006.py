@@ -10,9 +10,11 @@ from research_os.molecular_discovery.moldisc006 import (
     CANDIDATE_SMILES,
     DOCKING_CONTEXT,
     PROGRAM_ID,
+    MOLDISC006Error,
     _candidate_identity,
     _target_case,
     load_program_config_v6,
+    run_moldisc_006,
 )
 
 
@@ -71,3 +73,14 @@ def test_non_cognate_holo_capability_boundary_is_partial_e2():
     assert metadata["capability_status"] == "PARTIALLY_VALIDATED"
     assert metadata["evidence_level"] == "E2_COMPUTATIONAL"
     assert "CROSSDOCK-001" in metadata["validation_sources"]
+
+
+def test_moldisc_006_is_closed_and_default_runner_fails_before_external_execution(tmp_path: Path):
+    config = load_program_config_v6(CONFIG)
+    assert config["status"] == "CLOSED_INDETERMINATE_TARGET_PREPARATION"
+    assert config["closure"]["accepted_docking_result"] is False
+    assert config["closure"]["valid_vina_score"] is False
+    assert config["closure"]["final_protocol_version"] == "1.2"
+    with pytest.raises(MOLDISC006Error, match="closed as INDETERMINATE_TARGET_PREPARATION"):
+        run_moldisc_006(config_path=CONFIG, output_root=tmp_path / "closed")
+    assert not (tmp_path / "closed").exists()
