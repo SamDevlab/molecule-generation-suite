@@ -77,6 +77,11 @@ from research_os.molecular_discovery.moldisc011 import (
     generate_second_demethyl_series,
     run_moldisc_011,
 )
+from research_os.molecular_discovery.moldisc012 import (
+    MOLDISC012Error,
+    MOLDISC012Result,
+    run_moldisc_012,
+)
 from research_os.molecular_discovery.solubility import (
     FrozenESOLSolubilityPredictor,
     SolubilityCapabilityError,
@@ -116,6 +121,8 @@ __all__ = [
     "MOLDISC010Result",
     "MOLDISC011Error",
     "MOLDISC011Result",
+    "MOLDISC012Error",
+    "MOLDISC012Result",
     "JE2EvidenceProfile",
     "JE2AnalogProfile",
     "JE2AnalogSelection",
@@ -145,5 +152,6 @@ __all__ = [
     "run_moldisc_009",
     "run_moldisc_010",
     "run_moldisc_011",
+    "run_moldisc_012",
     "run_public_aqsoldb_coverage",
 ]

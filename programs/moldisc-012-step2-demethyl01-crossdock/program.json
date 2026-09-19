@@ -1,0 +1,86 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-012",
+  "program_version": "1.0",
+  "title": "STEP2-DEMETHYL-01 non-cognate docking in the frozen 1KZK JE2 pocket",
+  "scientific_question": "Can the single MOLDISC-011-selected STEP2-DEMETHYL-01 candidate execute reproducibly through the frozen 1KZK/JE2 pocket cross-docking protocol?",
+  "parent_program": {
+    "program_id": "MOLDISC-011",
+    "program_version": "1.0",
+    "program_scientific_hash": "8cb29619a82ca4680424c1b37c9bdce37b83e6cc8d570788435e1e9a62b159ff",
+    "selected_variant_id": "STEP2-DEMETHYL-01",
+    "selected_candidate_id": "MOLDISC-011-JE2-286E6F2BE8",
+    "selected_aqsoldb_nearest_similarity": 0.6857142857142857,
+    "selection_used_esol": false,
+    "docking_executed": false
+  },
+  "operational_moldisc010": {
+    "program_scientific_hash": "360ef9eb66981287781a971a7e09aebbe2749be765af5b4c6dcb33e3839eb48b",
+    "technical_status": "PASS",
+    "docking_context": "NON_COGNATE_HOLO_CROSSDOCKING",
+    "capability": "PARTIALLY_VALIDATED",
+    "evidence_level": "E2_COMPUTATIONAL",
+    "score_used_for_candidate_selection": false,
+    "score_used_for_protocol_selection": false,
+    "score_used_as_success_threshold": false
+  },
+  "candidate": {
+    "variant_id": "STEP2-DEMETHYL-01",
+    "candidate_id": "MOLDISC-011-JE2-286E6F2BE8",
+    "canonical_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)[C@@H]1C(=O)NCc1ccccc1",
+    "generation_evidence_level": "E0_HEURISTIC",
+    "inchikey": "DRIAWXDDGSORDT-KKUQBAQOSA-N"
+  },
+  "target": {
+    "case_id": "ATX-007",
+    "pdb_id": "1KZK",
+    "native_chem_comp_id": "JE2",
+    "ligand_author_chain": "A",
+    "receptor_author_chains": ["A", "B"],
+    "target": "PROTEASE",
+    "resolution_angstrom": 1.09,
+    "source_url": "https://www.rcsb.org/structure/1KZK",
+    "operational_parent": "REDOCK-003"
+  },
+  "docking": {
+    "docking_context": "NON_COGNATE_HOLO_CROSSDOCKING",
+    "capability_classification": "PARTIALLY_VALIDATED",
+    "evidence_level": "E2_COMPUTATIONAL",
+    "grid_rule": "derive from exact crystallographic JE2 reference coordinates using research-os.redocking.v1.1 native-ligand box rule",
+    "receptor_rule": "reuse REDOCK-003 ATX-007 receptor extraction: protein ATOM records from author chains A+B",
+    "receptor_preparation": {
+      "engine": "Open Babel",
+      "options": ["-h", "--partialcharge", "gasteiger", "-xr"]
+    },
+    "ligand_conformer": {
+      "engine": "RDKit ETKDGv3",
+      "random_seed": 42,
+      "uff_optimize_when_parameters_available": true
+    },
+    "ligand_preparation": {
+      "engine": "Open Babel",
+      "options": ["-h", "--partialcharge", "gasteiger"]
+    },
+    "vina_version_required": "1.2.7",
+    "seed": 42,
+    "cpu": 1,
+    "exhaustiveness": 16,
+    "num_modes": 20,
+    "scoring_function": "vina"
+  },
+  "primary_endpoint": {
+    "name": "technical completion under frozen non-cognate JE2-pocket protocol",
+    "pass_condition": "exact identities, non-empty receptor and ligand PDBQT, Vina 1.2.7 return code zero, complete ordered scored pose output and complete provenance",
+    "scientific_success_threshold": null,
+    "rmsd_to_native_je2": "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH"
+  },
+  "interpretation_boundaries": [
+    "Candidate selection was completed upstream in MOLDISC-011 using the declared AqSolDB rule; MOLDISC-012 does not select or rank candidates.",
+    "MOLDISC-010 docking score is explicitly excluded from candidate selection, protocol selection and success thresholding.",
+    "The receptor and grid are frozen from REDOCK-003 ATX-007 and are not tuned to the first observed MOLDISC-012 score.",
+    "No favorable-score threshold exists; the primary endpoint is reproducible technical completion.",
+    "No RMSD to native JE2 is reported because STEP2-DEMETHYL-01 and JE2 are different molecular graphs.",
+    "NON_COGNATE_HOLO_CROSSDOCKING remains PARTIALLY_VALIDATED with E2_COMPUTATIONAL evidence.",
+    "Technical completion does not establish affinity, free energy, a correct binding pose, protease inhibition, potency, efficacy, safety or clinical utility."
+  ]
+}
