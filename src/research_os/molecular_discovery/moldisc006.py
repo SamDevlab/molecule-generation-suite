@@ -420,8 +420,15 @@ def run_moldisc_006(
     output_root: str | Path,
     vina: VinaEngine | None = None,
     timeout: float = 120.0,
+    reproduce_closed_failure: bool = False,
 ) -> MOLDISC006Result:
     config = load_program_config_v6(config_path)
+    if config.get("status") == "CLOSED_INDETERMINATE_TARGET_PREPARATION" and not reproduce_closed_failure:
+        raise MOLDISC006Error(
+            "MOLDISC-006 is closed as INDETERMINATE_TARGET_PREPARATION; "
+            "no valid docking result exists. Pass reproduce_closed_failure=True "
+            "only to reproduce the preserved v1.2 target-preparation failure."
+        )
     config_hash = sha256_json(config)
     case = _target_case()
     root = Path(output_root)
