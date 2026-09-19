@@ -50,6 +50,8 @@ class MOLDISC010Result:
     starting_conformer_sha256: str
     receptor_pdbqt_sha256: str
     ligand_pdbqt_sha256: str
+    receptor_scientific_identity: str
+    ligand_scientific_identity: str
     vina_output_sha256: str
     grid: Mapping[str, Any]
     capability: Mapping[str, Any]
@@ -221,6 +223,44 @@ def _require_prepared(path: Path, label: str) -> str:
     return sha256_file(path)
 
 
+def _pdbqt_scientific_identity(path: Path, label: str) -> str:
+    """Hash parsed docking-relevant atom records, excluding transport metadata."""
+    atoms: list[dict[str, Any]] = []
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        record = line[0:6].strip()
+        if record not in {"ATOM", "HETATM"}:
+            continue
+        if len(line) < 78:
+            raise MOLDISC010Error(f"{label} PDBQT contains a truncated atom record")
+        try:
+            atoms.append(
+                {
+                    "record": record,
+                    "atom_name": line[12:16].strip(),
+                    "alternate_location": line[16].strip(),
+                    "residue_name": line[17:20].strip(),
+                    "chain": line[21].strip(),
+                    "residue_sequence": line[22:26].strip(),
+                    "insertion_code": line[26].strip(),
+                    "x": round(float(line[30:38]), 6),
+                    "y": round(float(line[38:46]), 6),
+                    "z": round(float(line[46:54]), 6),
+                    "partial_charge": round(float(line[70:76]), 6),
+                    "atom_type": line[77:].strip(),
+                }
+            )
+        except ValueError as exc:
+            raise MOLDISC010Error(f"{label} PDBQT contains a malformed atom record") from exc
+    if not atoms:
+        raise MOLDISC010Error(f"{label} PDBQT contains no atom records")
+    return sha256_json(
+        {
+            "schema": "moldisc-010.pdbqt-scientific-identity.v1",
+            "atoms_in_file_order": atoms,
+        }
+    )
+
+
 def _scientific_payload(
     *,
     config_hash: str,
@@ -228,8 +268,8 @@ def _scientific_payload(
     native_reference_structure_hash: str,
     receptor_extracted_sha256: str,
     starting_conformer: Mapping[str, Any],
-    receptor_pdbqt_sha256: str,
-    ligand_pdbqt_sha256: str,
+    receptor_scientific_identity: str,
+    ligand_scientific_identity: str,
     grid: Mapping[str, Any],
     pose_scores: Sequence[float],
     capability: Mapping[str, Any],
@@ -249,8 +289,8 @@ def _scientific_payload(
         },
         "starting_conformer": dict(starting_conformer),
         "prepared_inputs": {
-            "receptor_pdbqt_sha256": receptor_pdbqt_sha256,
-            "ligand_pdbqt_sha256": ligand_pdbqt_sha256,
+            "receptor_scientific_identity": receptor_scientific_identity,
+            "ligand_scientific_identity": ligand_scientific_identity,
         },
         "grid": dict(grid),
         "docking": {
@@ -343,6 +383,8 @@ def run_moldisc_010(
         raise MOLDISC010Error(f"Open Babel ligand preparation failed: {ligand_prep.stderr}")
     receptor_pdbqt_sha256 = _require_prepared(receptor_pdbqt, "receptor")
     ligand_pdbqt_sha256 = _require_prepared(ligand_pdbqt, "ligand")
+    receptor_scientific_identity = _pdbqt_scientific_identity(receptor_pdbqt, "receptor")
+    ligand_scientific_identity = _pdbqt_scientific_identity(ligand_pdbqt, "ligand")
 
     vina_output = root / "demethyl03_vina_poses.pdbqt"
     request = DockingRequest(
@@ -399,8 +441,8 @@ def run_moldisc_010(
         native_reference_structure_hash=str(reference_identity["structure_hash"]),
         receptor_extracted_sha256=receptor_extracted_sha256,
         starting_conformer=starting_conformer,
-        receptor_pdbqt_sha256=receptor_pdbqt_sha256,
-        ligand_pdbqt_sha256=ligand_pdbqt_sha256,
+        receptor_scientific_identity=receptor_scientific_identity,
+        ligand_scientific_identity=ligand_scientific_identity,
         grid=grid_payload,
         pose_scores=scores,
         capability=capability,
@@ -423,6 +465,8 @@ def run_moldisc_010(
         starting_conformer_sha256=str(starting_conformer["sha256"]),
         receptor_pdbqt_sha256=receptor_pdbqt_sha256,
         ligand_pdbqt_sha256=ligand_pdbqt_sha256,
+        receptor_scientific_identity=receptor_scientific_identity,
+        ligand_scientific_identity=ligand_scientific_identity,
         vina_output_sha256=vina_output_sha256,
         grid=grid_payload,
         capability=capability,
@@ -451,6 +495,8 @@ def run_moldisc_010(
                 "source_pdb_transport_sha256": source_pdb_sha256,
                 "native_reference_transport_sha256": native_reference_transport_sha256,
                 "native_reference_structure_hash": reference_identity["structure_hash"],
+                "receptor_pdbqt_sha256": receptor_pdbqt_sha256,
+                "ligand_pdbqt_sha256": ligand_pdbqt_sha256,
             },
             indent=2, sort_keys=True, ensure_ascii=False,
         ),
