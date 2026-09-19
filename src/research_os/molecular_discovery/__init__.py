@@ -49,6 +49,12 @@ from research_os.molecular_discovery.moldisc005 import (
     generate_nct_n_alkyl_series,
     run_moldisc_005,
 )
+from research_os.molecular_discovery.moldisc008 import (
+    JE2EvidenceProfile,
+    MOLDISC008Error,
+    MOLDISC008Result,
+    run_moldisc_008,
+)
 from research_os.molecular_discovery.solubility import (
     FrozenESOLSolubilityPredictor,
     SolubilityCapabilityError,
@@ -79,6 +85,9 @@ __all__ = [
     "MOLDISC004Result",
     "MOLDISC005Error",
     "MOLDISC005Result",
+    "MOLDISC008Error",
+    "MOLDISC008Result",
+    "JE2EvidenceProfile",
     "MolecularDiscoveryProgramError",
     "MeasuredSolubilityAnchor",
     "MolecularGenerationError",
@@ -97,5 +106,6 @@ __all__ = [
     "run_moldisc_003",
     "run_moldisc_004",
     "run_moldisc_005",
+    "run_moldisc_008",
     "run_public_aqsoldb_coverage",
 ]
