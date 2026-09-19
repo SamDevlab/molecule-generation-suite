@@ -1,0 +1,64 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-008",
+  "program_version": "1.0",
+  "title": "JE2 source-backed solubility evidence profile",
+  "scientific_question": "What is the bounded molecular-validity, frozen-ESOL applicability-domain, and immutable AqSolDB measured-source coverage profile of the MOLDISC-007-selected JE2 crystallographic seed before any new analog generation or docking?",
+  "parent_program": {
+    "program_id": "MOLDISC-007",
+    "program_version": "1.0",
+    "program_scientific_hash": "92ca1d06d3d1c01466d284910854f36f35949bf4ce8031cf10f869373ed419de",
+    "selected_case_id": "ATX-007",
+    "selected_pdb_id": "1KZK",
+    "selected_chem_comp_id": "JE2",
+    "selected_target": "PROTEASE",
+    "selected_aqsoldb_nearest_similarity": 0.569620253164557,
+    "selection_role": "operational fallback seed from previously observed evidence"
+  },
+  "seed": {
+    "case_id": "ATX-007",
+    "pdb_id": "1KZK",
+    "chem_comp_id": "JE2",
+    "target": "PROTEASE",
+    "source_type": "RCSB_crystallographic_chemical_component",
+    "source_url": "https://www.rcsb.org/structure/1KZK",
+    "chemical_identity_source": "https://data.rcsb.org/rest/v1/core/chemcomp/JE2"
+  },
+  "predictor": {
+    "capability_id": "research-os.molecular-discovery.solubility.esol-v2.v1",
+    "dataset_hash": "6de39771743dc4f15b191cffc27e1e02eb474457cc841afda565f31aff198e85",
+    "training_hash": "300ddc4981e1a9c2fb3735e598bcca89fb98a1cd4722cd58454e5d923781f00b",
+    "applicability_threshold": 0.26684684684684684,
+    "model_change_allowed": false,
+    "prediction_used_as_selection_score": false
+  },
+  "measured_source_coverage": {
+    "capability_id": "research-os.molecular-discovery.aqsoldb-coverage.v1",
+    "source_commit": "98cdd10a372058743e4f3fb950a1c9974ec9603a",
+    "source_blob_sha": "67016e030cf0a741e250ba0267bd84461041db5f",
+    "parsed_source_hash": "2c6e56f56389f0fd99fa2a3c843446f98b6b068a3f93aaab71a08822caa085f4",
+    "coverage_boundary": 0.4,
+    "expected_parent_nearest_similarity": 0.569620253164557
+  },
+  "execution": {
+    "molecule_generation": false,
+    "docking": false,
+    "model_training": false,
+    "hyperparameter_tuning": false
+  },
+  "followup_gate": {
+    "generation_source_ready_if": "chemistry PASS and nearest AqSolDB Tanimoto >= 0.4",
+    "esol_in_domain_required": false,
+    "reason_esol_not_required": "MOLDISC-004 demonstrated that IN_DOMAIN status is not an absolute calibration guarantee; ESOL status is recorded independently.",
+    "no_automatic_generation": true
+  },
+  "interpretation_boundaries": [
+    "MOLDISC-008 characterizes the selected JE2 seed and performs no candidate generation or docking.",
+    "Frozen ESOL output is E1_ML and is not an experimental solubility measurement.",
+    "IN_DOMAIN status indicates representation support under the frozen ESOL applicability rule; it does not establish calibration for JE2.",
+    "AqSolDB nearest-neighbor measurements are contextual measured-source evidence and are not transferred as JE2 experimental measurements unless an exact canonical-structure match is found.",
+    "Structural similarity does not establish shared biological mechanism, affinity, potency or efficacy.",
+    "A follow-up generation-ready state only means the source seed passed chemistry and retained the predeclared measured-source structural-coverage boundary.",
+    "No safety, synthesizability, metabolism, efficacy or clinical claim is supported."
+  ]
+}
