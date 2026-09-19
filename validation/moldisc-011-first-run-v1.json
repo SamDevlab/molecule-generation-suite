@@ -1,0 +1,163 @@
+{
+  "schema_version": "research-os.molecular-discovery.program-result.v1",
+  "program_id": "MOLDISC-011",
+  "program_version": "1.0",
+  "status": "CLOSED_FIRST_RESULT_PRESERVED",
+  "protocol_freeze_commit": "f43ca8182f48630a920588b46f5d3f5389720c37",
+  "first_execution": {
+    "github_actions_run_id": 35475997420,
+    "workflow": "molecular-discovery-ci",
+    "result": "PASS"
+  },
+  "parent": {
+    "moldisc009_program_scientific_hash": "75ffaf31d6df6983e7692fca4f0a3fa2277c743dcac2b99cee179c9b39116615",
+    "moldisc009_selected_variant_id": "DEMETHYL-03",
+    "moldisc009_selected_candidate_id": "MOLDISC-009-JE2-5461A4A267",
+    "moldisc009_selected_aqsoldb_similarity": 0.631578947368421,
+    "moldisc009_selection_used_esol": false,
+    "moldisc010_program_scientific_hash": "360ef9eb66981287781a971a7e09aebbe2749be765af5b4c6dcb33e3839eb48b",
+    "moldisc010_technical_status": "PASS",
+    "moldisc010_docking_context": "NON_COGNATE_HOLO_CROSSDOCKING",
+    "moldisc010_capability": "PARTIALLY_VALIDATED",
+    "moldisc010_evidence_level": "E2_COMPUTATIONAL",
+    "moldisc010_score_used_for_generation": false,
+    "moldisc010_score_used_for_selection": false
+  },
+  "execution_identity": {
+    "config_hash": "727ef510a740ef949c5f8c2090e5f3011f17207d8c02e02e85a7173ef8cb2dfc",
+    "generation_scientific_hash": "8551c4a860af8a7a0a014b107dd029699b4f030c581e80648fee0e9e9e0eaa6d",
+    "workflow_scientific_summary_hash": "852b45ff6a24d9778c4a61274bf4ccebe35970dd6feb02294052ddabdab75b67",
+    "coverage_scientific_hash": "a0c59efe789c9883cb52bf18343a82141fc24560e010fdcbd84f4d9631bcb062",
+    "program_scientific_hash": "8cb29619a82ca4680424c1b37c9bdce37b83e6cc8d570788435e1e9a62b159ff"
+  },
+  "generation": {
+    "generator_id": "research-os.molecular-discovery.demethyl03-single-terminal-methyl-deletion.v1",
+    "seed_candidate_id": "MOLDISC-009-JE2-5461A4A267",
+    "seed_canonical_smiles": "Cc1ccccc1CNC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C",
+    "seed_inchikey": "XBNKKAGGYBXOJG-GMQQYTKMSA-N",
+    "raw_terminal_methyl_sites": 3,
+    "unique_products": 2,
+    "products": [
+      {
+        "variant_id": "STEP2-DEMETHYL-01",
+        "candidate_id": "MOLDISC-011-JE2-286E6F2BE8",
+        "canonical_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)[C@@H]1C(=O)NCc1ccccc1",
+        "inchikey": "DRIAWXDDGSORDT-KKUQBAQOSA-N",
+        "removed_seed_atom_indices": [0],
+        "evidence_level": "E0_HEURISTIC"
+      },
+      {
+        "variant_id": "STEP2-DEMETHYL-02",
+        "candidate_id": "MOLDISC-011-JE2-A6269B3A36",
+        "canonical_smiles": "Cc1ccccc1CNC(=O)[C@@H]1C(C)SCN1C(=O)[C@@H](O)[C@H](Cc1ccccc1)NC(=O)c1cccc(O)c1",
+        "inchikey": "WKWQZNZXWQKASU-XVJGRJRPSA-N",
+        "removed_seed_atom_indices": [38, 39],
+        "evidence_level": "E0_HEURISTIC"
+      }
+    ]
+  },
+  "coverage_source": {
+    "capability_id": "research-os.molecular-discovery.aqsoldb-coverage.v1",
+    "source_id": "AqSolDB",
+    "source_doi": "10.1038/s41597-019-0151-1",
+    "source_commit": "98cdd10a372058743e4f3fb950a1c9974ec9603a",
+    "source_blob_sha": "67016e030cf0a741e250ba0267bd84461041db5f",
+    "source_row_count": 9982,
+    "parsed_source_hash": "2c6e56f56389f0fd99fa2a3c843446f98b6b068a3f93aaab71a08822caa085f4"
+  },
+  "profiles": [
+    {
+      "candidate_id": "MOLDISC-009-JE2-5461A4A267",
+      "variant_id": "DEMETHYL-03-SEED",
+      "source_role": "SEED",
+      "canonical_smiles": "Cc1ccccc1CNC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C",
+      "inchikey": "XBNKKAGGYBXOJG-GMQQYTKMSA-N",
+      "chemistry_status": "PASS",
+      "esol_status": "OUT_OF_DOMAIN",
+      "predicted_log_s_mol_l": -4.431760497354497,
+      "esol_max_training_tanimoto": 0.2261904761904762,
+      "aqsoldb_nearest_similarity": 0.631578947368421,
+      "aqsoldb_similarity_bin": "[0.6,0.8)",
+      "aqsoldb_neighbors_ge_0_4": 8,
+      "aqsoldb_neighbors_ge_0_6": 2,
+      "aqsoldb_neighbors_ge_0_8": 0,
+      "exact_aqsoldb_match": false,
+      "aqsoldb_top_neighbor_smiles": "CC(C)(C)NC(=O)C1N(C(=O)C(O)C(Cc2ccccc2)NC(=O)c2ccccc2)CSC1(C)C",
+      "aqsoldb_top_neighbor_inchikey": "URHJIBSBOJFXDI-UHFFFAOYSA-N",
+      "aqsoldb_top_neighbor_observation_count": 1,
+      "aqsoldb_top_neighbor_measured_log_s_mol_l_median": -3.62,
+      "aqsoldb_top_neighbor_measured_log_s_mol_l_min": -3.62,
+      "aqsoldb_top_neighbor_measured_log_s_mol_l_max": -3.62,
+      "followup_eligible": false
+    },
+    {
+      "candidate_id": "MOLDISC-011-JE2-286E6F2BE8",
+      "variant_id": "STEP2-DEMETHYL-01",
+      "source_role": "GENERATED",
+      "canonical_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)[C@@H]1C(=O)NCc1ccccc1",
+      "inchikey": "DRIAWXDDGSORDT-KKUQBAQOSA-N",
+      "chemistry_status": "PASS",
+      "esol_status": "OUT_OF_DOMAIN",
+      "predicted_log_s_mol_l": -4.081282342592595,
+      "esol_max_training_tanimoto": 0.2537313432835821,
+      "aqsoldb_nearest_similarity": 0.6857142857142857,
+      "aqsoldb_similarity_bin": "[0.6,0.8)",
+      "aqsoldb_neighbors_ge_0_4": 8,
+      "aqsoldb_neighbors_ge_0_6": 4,
+      "aqsoldb_neighbors_ge_0_8": 0,
+      "exact_aqsoldb_match": false,
+      "aqsoldb_top_neighbor_smiles": "CC(C)(C)NC(=O)C1N(C(=O)C(O)C(Cc2ccccc2)NC(=O)c2ccccc2)CSC1(C)C",
+      "aqsoldb_top_neighbor_inchikey": "URHJIBSBOJFXDI-UHFFFAOYSA-N",
+      "aqsoldb_top_neighbor_observation_count": 1,
+      "aqsoldb_top_neighbor_measured_log_s_mol_l_median": -3.62,
+      "aqsoldb_top_neighbor_measured_log_s_mol_l_min": -3.62,
+      "aqsoldb_top_neighbor_measured_log_s_mol_l_max": -3.62,
+      "followup_eligible": true
+    },
+    {
+      "candidate_id": "MOLDISC-011-JE2-A6269B3A36",
+      "variant_id": "STEP2-DEMETHYL-02",
+      "source_role": "GENERATED",
+      "canonical_smiles": "Cc1ccccc1CNC(=O)[C@@H]1C(C)SCN1C(=O)[C@@H](O)[C@H](Cc1ccccc1)NC(=O)c1cccc(O)c1",
+      "inchikey": "WKWQZNZXWQKASU-XVJGRJRPSA-N",
+      "chemistry_status": "PASS",
+      "esol_status": "OUT_OF_DOMAIN",
+      "predicted_log_s_mol_l": -4.069067251322752,
+      "esol_max_training_tanimoto": 0.2289156626506024,
+      "aqsoldb_nearest_similarity": 0.4470588235294118,
+      "aqsoldb_similarity_bin": "[0.4,0.6)",
+      "aqsoldb_neighbors_ge_0_4": 3,
+      "aqsoldb_neighbors_ge_0_6": 0,
+      "aqsoldb_neighbors_ge_0_8": 0,
+      "exact_aqsoldb_match": false,
+      "aqsoldb_top_neighbor_smiles": "CC(C)(C)NC(=O)C1N(C(=O)C(O)C(Cc2ccccc2)NC(=O)c2ccccc2)CSC1(C)C",
+      "aqsoldb_top_neighbor_inchikey": "URHJIBSBOJFXDI-UHFFFAOYSA-N",
+      "aqsoldb_top_neighbor_observation_count": 1,
+      "aqsoldb_top_neighbor_measured_log_s_mol_l_median": -3.62,
+      "aqsoldb_top_neighbor_measured_log_s_mol_l_min": -3.62,
+      "aqsoldb_top_neighbor_measured_log_s_mol_l_max": -3.62,
+      "followup_eligible": true
+    }
+  ],
+  "selection": {
+    "coverage_boundary": 0.4,
+    "eligible_generated_candidate_ids": [
+      "MOLDISC-011-JE2-286E6F2BE8",
+      "MOLDISC-011-JE2-A6269B3A36"
+    ],
+    "selected_variant_id": "STEP2-DEMETHYL-01",
+    "selected_candidate_id": "MOLDISC-011-JE2-286E6F2BE8",
+    "selected_nearest_similarity": 0.6857142857142857,
+    "selection_used_esol": false,
+    "moldisc010_score_used_for_selection": false,
+    "docking_executed": false
+  },
+  "scientific_conclusion": [
+    "The frozen generator found exactly three raw terminal-methyl sites and two unique products; the two symmetry-equivalent ring deletions collapsed into STEP2-DEMETHYL-02.",
+    "Both generated products passed MoleculeLab chemistry and exceeded the frozen AqSolDB nearest-similarity boundary of 0.4.",
+    "STEP2-DEMETHYL-01 was selected solely because its AqSolDB nearest similarity was higher: 0.6857142857142857 versus 0.4470588235294118.",
+    "The seed and both products were OUT_OF_DOMAIN for frozen ESOL; numeric values remain unsupported extrapolative model outputs and were not used for selection.",
+    "All top AqSolDB neighbors were non-exact structural neighbors; their measured values remain source context and were not transferred to candidates.",
+    "MOLDISC-010 docking evidence did not drive generation, filtering, ranking or selection, and no docking was executed in MOLDISC-011."
+  ]
+}

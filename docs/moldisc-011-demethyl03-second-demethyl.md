@@ -35,6 +35,16 @@ AqSolDB measurements belong to the source structures. They are not transferred t
 
 ## First result
 
-The first CI result will be preserved in `validation/moldisc-011-first-run-v1.json` after protocol freeze. This section will then record all profiles, hashes, eligibility and the observed selection without changing the protocol in response to the result.
+The first green Molecular Discovery CI execution is preserved in
+`validation/moldisc-011-first-run-v1.json`:
+
+- GitHub Actions run: `35475997420` (`molecular-discovery-ci`), result `PASS`;
+- protocol freeze commit: `f43ca8182f48630a920588b46f5d3f5389720c37`;
+- raw terminal-methyl sites: `3`; unique products: `2`;
+- `STEP2-DEMETHYL-01` / `MOLDISC-011-JE2-286E6F2BE8`: AqSolDB nearest `0.6857142857142857`, eligible `YES`;
+- `STEP2-DEMETHYL-02` / `MOLDISC-011-JE2-A6269B3A36`: AqSolDB nearest `0.4470588235294118`, eligible `YES`;
+- selected product: `STEP2-DEMETHYL-01` / `MOLDISC-011-JE2-286E6F2BE8`.
+
+Both generated products passed chemistry and remained `OUT_OF_DOMAIN` for frozen ESOL. Neither top AqSolDB neighbor was an exact canonical match, so measured neighbor values remain structural context only. The selection followed the predeclared AqSolDB coverage rule; no MOLDISC-010 score or docking was used.
 
 MOLDISC-011 makes no docking, affinity, potency, efficacy, safety, ADMET or biological claim, and it does not automatically authorize MOLDISC-012.

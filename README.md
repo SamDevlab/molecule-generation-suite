@@ -299,6 +299,19 @@ E2 computational evidence and are not affinity, potency, or efficacy.
 
 See [MOLDISC-010](docs/moldisc-010-demethyl03-crossdock.md).
 
+### Bounded second DEMETHYL-03 neighborhood: MOLDISC-011
+
+MOLDISC-011 enumerates the complete unique neighborhood obtained by deleting
+one more terminal methyl from the MOLDISC-009-selected `DEMETHYL-03`: three
+raw sites collapse to two `E0_HEURISTIC` products. Both generated products
+passed chemistry and exceeded the frozen AqSolDB nearest-similarity boundary;
+`STEP2-DEMETHYL-01` was selected at `0.6857142857142857` versus
+`0.4470588235294118` for `STEP2-DEMETHYL-02`. Both products were
+`OUT_OF_DOMAIN` for frozen ESOL. MOLDISC-010 docking did not drive generation
+or selection, and MOLDISC-011 executed no docking.
+
+See [MOLDISC-011](docs/moldisc-011-demethyl03-second-demethyl.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.
