@@ -1,0 +1,70 @@
+{
+  "schema_version": "research-os.molecular-discovery.program-result.v1",
+  "program_id": "MOLDISC-008",
+  "program_version": "1.0",
+  "status": "CLOSED_FIRST_RESULT_PRESERVED",
+  "protocol_freeze_commit": "3f49c2ae40df3fbeff284dd5c2622c8cf579d796",
+  "first_execution": {
+    "github_actions_run_id": 35416888562,
+    "workflow": "molecular-discovery-ci",
+    "workflow_run_number": 53,
+    "result": "PASS"
+  },
+  "seed_identity": {
+    "case_id": "ATX-007",
+    "pdb_id": "1KZK",
+    "chem_comp_id": "JE2",
+    "canonical_smiles": "Cc1ccccc1CNC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2C)CSC1(C)C",
+    "inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N",
+    "formula": "C32 H37 N3 O5 S",
+    "formula_weight": 575.718,
+    "inchikey_matches_reported": true
+  },
+  "chemistry": {
+    "status": "PASS"
+  },
+  "frozen_esol": {
+    "status": "OUT_OF_DOMAIN",
+    "predicted_log_s_mol_l": -4.715111341269841,
+    "max_training_tanimoto": 0.21052631578947367,
+    "applicability_threshold": 0.26684684684684684,
+    "predictor_model_identity": "2127d2aaa87cb83255f41ee2881a5691ccf63974c12e6cfb7502f6f24ed3ce61",
+    "interpretation": "The numeric prediction is retained as an out-of-domain model output and is not promoted to a reliable JE2 solubility estimate."
+  },
+  "aqsoldb_coverage": {
+    "nearest_similarity": 0.569620253164557,
+    "similarity_bin": "[0.4,0.6)",
+    "neighbors_ge_0_4": 8,
+    "neighbors_ge_0_6": 0,
+    "neighbors_ge_0_8": 0,
+    "exact_canonical_match": false,
+    "top_neighbor": {
+      "canonical_smiles": "CC(C)(C)NC(=O)C1N(C(=O)C(O)C(Cc2ccccc2)NC(=O)c2ccccc2)CSC1(C)C",
+      "inchikey": "URHJIBSBOJFXDI-UHFFFAOYSA-N",
+      "observation_count": 1,
+      "median_measured_log_s_mol_l": -3.62,
+      "minimum_measured_log_s_mol_l": -3.62,
+      "maximum_measured_log_s_mol_l": -3.62
+    },
+    "coverage_scientific_hash": "03e9cd9ddc33a21276f4c4fb6a1cde458dc1389b98a968138ad2c3e7b22f600b",
+    "interpretation": "Measured-source neighbors provide structural coverage only. The top-neighbor -3.62 logS is not a JE2 measurement."
+  },
+  "followup_gate": {
+    "generation_source_ready": true,
+    "reason": "JE2 passed chemistry and nearest AqSolDB Tanimoto reproduced the frozen >=0.4 coverage criterion.",
+    "esol_in_domain_required": false,
+    "automatic_generation_performed": false
+  },
+  "execution_identity": {
+    "workflow_scientific_summary_hash": "32de7d2b8d95ac0dd1a06020e1a3dbfc2a5fa6122e7852045b72be4ae2698a8e",
+    "aqsoldb_coverage_scientific_hash": "03e9cd9ddc33a21276f4c4fb6a1cde458dc1389b98a968138ad2c3e7b22f600b",
+    "program_scientific_hash": "fd2adf5923ba0ad822d14ee8a4c1199aa3bf6732b8c70cb396940951126d2b90"
+  },
+  "scientific_conclusion": [
+    "JE2 is chemically valid in the active Molecular Discovery workflow.",
+    "JE2 is outside the frozen ESOL applicability domain, so its numeric ESOL output is retained only as unsupported extrapolative model output.",
+    "JE2 has non-exact but meaningful measured-source structural coverage in immutable AqSolDB: nearest Tanimoto 0.569620253164557 and eight neighbors at or above 0.4.",
+    "No exact AqSolDB canonical structure match exists, so no experimental solubility measurement is assigned to JE2.",
+    "The predeclared source-readiness gate passes because chemistry is valid and measured-source structural coverage exceeds 0.4; this authorizes only a separately frozen generation study, not a solubility or biological claim."
+  ]
+}
