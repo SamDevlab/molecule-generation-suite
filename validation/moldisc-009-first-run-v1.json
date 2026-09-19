@@ -1,0 +1,108 @@
+{
+  "schema_version": "research-os.molecular-discovery.program-result.v1",
+  "program_id": "MOLDISC-009",
+  "program_version": "1.0",
+  "status": "CLOSED_FIRST_RESULT_PRESERVED",
+  "protocol_freeze_commit": "4daf693a28f2ff4bbf8bc9fa3c77a6a0a66919c5",
+  "first_execution": {
+    "github_actions_run_id": 35448228979,
+    "workflow": "molecular-discovery-ci",
+    "workflow_run_number": 56,
+    "result": "PASS"
+  },
+  "parent": {
+    "program_id": "MOLDISC-008",
+    "program_scientific_hash": "fd2adf5923ba0ad822d14ee8a4c1199aa3bf6732b8c70cb396940951126d2b90",
+    "seed": "ATX-007 / 1KZK / JE2",
+    "seed_aqsoldb_nearest_similarity": 0.569620253164557
+  },
+  "execution_identity": {
+    "generation_scientific_hash": "fcb80f20df6c7d283b84e902d4970036994490e13495ce22fdb51519d30b4334",
+    "workflow_scientific_summary_hash": "305e2275869101fea148da4cb817414c49258c95ca2c711b0c707ec04f762824",
+    "coverage_scientific_hash": "bf21f32a3ba5927dc87ae77bed811640da2edd5239bea01b22b7cc1afb57b69d",
+    "program_scientific_hash": "75ffaf31d6df6983e7692fca4f0a3fa2277c743dcac2b99cee179c9b39116615"
+  },
+  "selection": {
+    "coverage_boundary": 0.4,
+    "selected_variant_id": "DEMETHYL-03",
+    "selected_candidate_id": "MOLDISC-009-JE2-5461A4A267",
+    "selected_nearest_similarity": 0.631578947368421,
+    "eligible_generated_candidate_ids": [
+      "MOLDISC-009-JE2-5461A4A267",
+      "MOLDISC-009-JE2-4D34C203F8"
+    ],
+    "selection_used_esol": false
+  },
+  "profiles": [
+    {
+      "variant_id": "JE2-SEED",
+      "candidate_id": "MOLDISC-009-SEED-JE2",
+      "source_role": "SEED",
+      "chemistry_status": "PASS",
+      "aqsoldb_nearest_similarity": 0.569620253164557,
+      "aqsoldb_neighbors_ge_0_4": 8,
+      "esol_status": "OUT_OF_DOMAIN",
+      "esol_max_training_tanimoto": 0.21052631578947367,
+      "predicted_log_s_mol_l": -4.715111341269841,
+      "followup_eligible": false
+    },
+    {
+      "variant_id": "DEMETHYL-01",
+      "candidate_id": "MOLDISC-009-JE2-4D34C203F8",
+      "source_role": "GENERATED",
+      "structural_operation": "single terminal methyl deletion; unique product 1 in canonical-SMILES order",
+      "chemical_interpretation": "left peripheral aryl methyl deletion",
+      "chemistry_status": "PASS",
+      "aqsoldb_nearest_similarity": 0.6081081081081081,
+      "aqsoldb_neighbors_ge_0_4": 8,
+      "aqsoldb_neighbors_ge_0_6": 1,
+      "esol_status": "OUT_OF_DOMAIN",
+      "esol_max_training_tanimoto": 0.25,
+      "predicted_log_s_mol_l": -4.286529724867726,
+      "followup_eligible": true
+    },
+    {
+      "variant_id": "DEMETHYL-02",
+      "candidate_id": "MOLDISC-009-JE2-37CF0868AF",
+      "source_role": "GENERATED",
+      "structural_operation": "single terminal methyl deletion; symmetry-equivalent gem-dimethyl sites collapse to one product",
+      "chemical_interpretation": "ring gem-dimethyl to monomethyl",
+      "chemistry_status": "PASS",
+      "aqsoldb_nearest_similarity": 0.3977272727272727,
+      "aqsoldb_neighbors_ge_0_4": 0,
+      "aqsoldb_neighbors_ge_0_6": 0,
+      "esol_status": "OUT_OF_DOMAIN",
+      "esol_max_training_tanimoto": 0.22972972972972974,
+      "predicted_log_s_mol_l": -3.9870600608465643,
+      "followup_eligible": false
+    },
+    {
+      "variant_id": "DEMETHYL-03",
+      "candidate_id": "MOLDISC-009-JE2-5461A4A267",
+      "source_role": "GENERATED",
+      "structural_operation": "single terminal methyl deletion; unique product 3 in canonical-SMILES order",
+      "chemical_interpretation": "right peripheral aryl methyl deletion",
+      "chemistry_status": "PASS",
+      "canonical_smiles": "Cc1ccccc1CNC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C",
+      "aqsoldb_nearest_similarity": 0.631578947368421,
+      "aqsoldb_neighbors_ge_0_4": 8,
+      "aqsoldb_neighbors_ge_0_6": 2,
+      "esol_status": "OUT_OF_DOMAIN",
+      "esol_max_training_tanimoto": 0.2261904761904762,
+      "predicted_log_s_mol_l": -4.431760497354497,
+      "followup_eligible": true
+    }
+  ],
+  "shared_top_measured_source_neighbor": {
+    "inchikey": "URHJIBSBOJFXDI-UHFFFAOYSA-N",
+    "median_measured_log_s_mol_l": -3.62,
+    "interpretation": "The measurement belongs to the neighboring AqSolDB structure and is not transferred to JE2 or any generated analog."
+  },
+  "scientific_conclusion": [
+    "All three frozen generated structures passed molecular validation.",
+    "DEMETHYL-03 was selected solely by the frozen measured-source structural-coverage rule at AqSolDB nearest Tanimoto 0.631578947368421.",
+    "DEMETHYL-01 also passed the coverage gate at 0.6081081081081081; DEMETHYL-02 fell below the 0.4 boundary at 0.3977272727272727.",
+    "All seed/generated profiles remained OUT_OF_DOMAIN for frozen ESOL, so no ESOL numeric value is promoted to a reliable solubility estimate or used for selection.",
+    "MOLDISC-009 performs no docking; the selected DEMETHYL-03 structure is only authorized as the source for a separately frozen follow-up."
+  ]
+}

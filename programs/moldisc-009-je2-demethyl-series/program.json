@@ -1,0 +1,48 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-009",
+  "program_version": "1.0",
+  "title": "JE2 single-terminal-methyl deletion series",
+  "scientific_question": "What measured-source structural coverage and frozen ESOL applicability-domain profile is observed for the complete unique single-terminal-methyl deletion neighborhood of the MOLDISC-008 JE2 seed?",
+  "parent_program": {
+    "program_id": "MOLDISC-008",
+    "program_version": "1.0",
+    "program_scientific_hash": "fd2adf5923ba0ad822d14ee8a4c1199aa3bf6732b8c70cb396940951126d2b90",
+    "seed_case_id": "ATX-007",
+    "seed_pdb_id": "1KZK",
+    "seed_chem_comp_id": "JE2",
+    "generation_source_ready": true,
+    "parent_aqsoldb_nearest_similarity": 0.569620253164557,
+    "parent_esol_status": "OUT_OF_DOMAIN"
+  },
+  "seed": {
+    "candidate_id": "MOLDISC-009-SEED-JE2",
+    "canonical_smiles": "Cc1ccccc1CNC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2C)CSC1(C)C",
+    "inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N",
+    "source_type": "RCSB_crystallographic_chemical_component",
+    "evidence_level": "E4_CURATED_EXPERIMENTAL"
+  },
+  "generation": {
+    "generator_id": "research-os.molecular-discovery.je2-single-terminal-methyl-deletion.v1",
+    "evidence_level": "E0_HEURISTIC",
+    "rule": "enumerate every carbon atom with atomic number 6, degree 1 and exactly three hydrogens; delete exactly one such atom; sanitize; canonicalize; deduplicate; sort by canonical isomeric SMILES",
+    "expected_seed_terminal_methyl_sites": 4,
+    "expected_unique_generated_candidates": 3,
+    "variant_ids_in_sorted_product_order": ["DEMETHYL-01", "DEMETHYL-02", "DEMETHYL-03"],
+    "use_downstream_metrics_during_generation": false
+  },
+  "evidence": {
+    "aqsoldb_coverage_boundary": 0.4,
+    "selection_rule": "among generated candidates with chemistry PASS and AqSolDB nearest Tanimoto >= 0.4, select highest nearest AqSolDB similarity; exact tie by variant_id",
+    "esol_used_for_selection": false,
+    "docking_in_v1": false
+  },
+  "interpretation_boundaries": [
+    "Generated candidates are E0_HEURISTIC structures and are not experimental observations.",
+    "The generation rule is frozen upstream of all AqSolDB and ESOL outputs.",
+    "AqSolDB neighboring measurements are contextual source evidence and are not transferred to generated candidates unless an exact canonical structure match exists.",
+    "Frozen ESOL values are E1_ML outputs; OUT_OF_DOMAIN values are not promoted to reliable solubility estimates.",
+    "The generated candidate selected by structural coverage is not a biological winner and is not inferred to bind the 1KZK target.",
+    "No docking, affinity, potency, efficacy, safety, synthesizability or clinical claim is made in MOLDISC-009."
+  ]
+}

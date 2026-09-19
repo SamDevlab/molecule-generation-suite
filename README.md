@@ -278,6 +278,17 @@ generation or docking.
 
 See [MOLDISC-008](docs/moldisc-008-je2-evidence-profile.md).
 
+### Bounded JE2 generation: MOLDISC-009
+
+MOLDISC-009 takes the source-ready JE2 seed from MOLDISC-008 and enumerates
+the complete unique single-terminal-methyl deletion neighborhood: three
+E0 heuristic structures from four seed methyl sites after symmetry
+deduplication. Each receives independent frozen ESOL applicability-domain and
+immutable AqSolDB coverage evidence. Selection uses measured-source structural
+coverage only; no docking or biological score is used.
+
+See [MOLDISC-009](docs/moldisc-009-je2-demethyl-series.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.
