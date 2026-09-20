@@ -1,0 +1,75 @@
+name: moldisc-019-ci
+
+on:
+  pull_request:
+    paths:
+      - "programs/moldisc-019-experimental-bridge/**"
+      - "experimental_packages/biolab-physical-loop-0/**"
+      - "src/research_os/molecular_discovery/biolab_loop.py"
+      - "src/research_os/molecular_discovery/moldisc019.py"
+      - "scripts/run_moldisc_019.py"
+      - "tests/test_biolab_loop.py"
+      - "tests/test_moldisc_019.py"
+      - "tests/test_v32_live_contract.py"
+      - "docs/**"
+      - "README.md"
+      - ".github/workflows/moldisc019-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "programs/moldisc-019-experimental-bridge/**"
+      - "experimental_packages/biolab-physical-loop-0/**"
+      - "src/research_os/molecular_discovery/biolab_loop.py"
+      - "src/research_os/molecular_discovery/moldisc019.py"
+      - "scripts/run_moldisc_019.py"
+      - "tests/test_biolab_loop.py"
+      - "tests/test_moldisc_019.py"
+      - "tests/test_v32_live_contract.py"
+      - "docs/**"
+      - "README.md"
+      - ".github/workflows/moldisc019-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  contract-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install Research OS development dependencies
+        run: python -m pip install -e ".[dev,molecule]"
+      - name: Run bounded MOLDISC-019 contracts
+        run: |
+          python -m pytest -q tests/test_moldisc_019.py tests/test_biolab_loop.py tests/test_v32_live_contract.py
+      - name: Verify no computational campaign was opened
+        run: |
+          python scripts/run_moldisc_019.py prepare
+          python scripts/run_moldisc_019.py status
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          program = json.loads(Path("programs/moldisc-019-experimental-bridge/program.json").read_text())
+          assert program["boundaries"]["new_docking_runs"] == 0
+          assert program["boundaries"]["molecule_generation_executed"] is False
+          assert program["gates"]["next_generation_allowed"] is False
+          print("MOLDISC-019 computational boundary passed")
+          PY
+
+  static-validation:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Research OS development dependencies
+        run: python -m pip install -e ".[dev]"
+      - run: python -m compileall -q src scripts tests
+      - run: git diff --check

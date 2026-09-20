@@ -19,6 +19,7 @@ from research_os.molecular_discovery.moldisc012 import (
     _require_prepared,
     _scientific_payload,
     _target_case,
+    _load_frozen_capability_profile,
     load_program_config_v12,
 )
 
@@ -77,6 +78,13 @@ def test_non_cognate_holo_capability_boundary_remains_partial_e2():
     assert metadata["capability_status"] == "PARTIALLY_VALIDATED"
     assert metadata["evidence_level"] == "E2_COMPUTATIONAL"
     assert "CROSSDOCK-001" in metadata["validation_sources"]
+
+
+def test_historical_replay_uses_the_frozen_capability_snapshot():
+    profile = _load_frozen_capability_profile()
+    metadata = capability_metadata(DOCKING_CONTEXT, profile=profile)
+    assert profile.profile_hash == "b8c5c799b2035bae2796de714cc55dc4e607420e13b309b7f33792ebaf5597bb"
+    assert metadata["validation_sources"] == ["CROSSDOCK-001"]
 
 
 def _write_test_pdbqt(path: Path, remark: str, atom_line: str) -> None:

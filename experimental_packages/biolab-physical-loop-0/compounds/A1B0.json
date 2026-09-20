@@ -1,0 +1,15 @@
+{
+  "panel_key": "A1B0",
+  "candidate_id": "MOLDISC-014-SOURCE-DELTA-OH",
+  "variant_id": "A1B0-DELTA-OH",
+  "factor_a": "DELTA-OH",
+  "factor_b": "CONTROL",
+  "canonical_isomeric_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2ccccc2)[C@@H]1C(=O)NCc1ccccc1",
+  "inchikey": "NAZMDUVPQSKJEQ-KKUQBAQOSA-N",
+  "formula": "C30H33N3O4S",
+  "heavy_atom_count": 38,
+  "parent_program_ids": ["MOLDISC-014", "MOLDISC-018"],
+  "parent_scientific_hashes": ["f940d95189616131829a22f9e68a53a960eddf8fd05f5fd7ebac43ece85481ed", "7b900a85ef70b13120107ab7dca7e5c21da34053942b48379c4c4f51e418086a"],
+  "source_measurement_transfer_allowed": false,
+  "procurement_status": "UNKNOWN"
+}

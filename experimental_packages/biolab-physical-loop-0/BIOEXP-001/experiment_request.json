@@ -1,0 +1,23 @@
+{
+  "experiment_id": "BIOEXP-001-SOLUBILITY-2X2",
+  "experiment_family": "SOLUBILITY",
+  "measurement_name": "aqueous solubility",
+  "measurement_method": null,
+  "equilibrium_or_kinetic": null,
+  "temperature": null,
+  "pH": null,
+  "medium": null,
+  "buffer": null,
+  "ionic_strength_if_applicable": null,
+  "compound_form": null,
+  "target_concentration_range_if_applicable": null,
+  "units": null,
+  "replicate_policy": null,
+  "sample_identity_requirement": "InChIKey or equivalent isomeric identity plus batch traceability",
+  "sample_purity_requirement": null,
+  "raw_data_requirement": "raw or official report artifact with hash",
+  "report_requirement": "attributable laboratory report",
+  "panel_manifest": "../panel_manifest.json",
+  "status": "AWAITING_EXTERNAL_PROTOCOL_OR_QUOTE",
+  "actual_experiment": false
+}

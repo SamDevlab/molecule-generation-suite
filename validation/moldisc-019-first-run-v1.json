@@ -1,0 +1,43 @@
+{
+  "biolab_decision_hash": "7939c7e2879fb0943e3c2051c21772e52f15de78ceb8eb95f9a9a50dda2db14f",
+  "biolab_loop_version": "v0.1",
+  "computational_continuation_allowed": false,
+  "current_max_local_evidence": "E2_COMPUTATIONAL",
+  "e4_created": false,
+  "e5_created": false,
+  "experiment_statuses": {
+    "BIOEXP-001": "AWAITING_EXTERNAL_PROTOCOL_OR_QUOTE",
+    "BIOEXP-002": "PLANNED_NOT_EXECUTED"
+  },
+  "experimental_packet_hash": "35be943a37ea56468dbf00280a72d215dbc7feb949919988bdf7cd1757ecc04c",
+  "generation_executed": false,
+  "knowledge_gain": "MOLDISC-019 formalizes the evidence ceiling, freezes the first physical panel, and proves an explainable stop before same-level computation.",
+  "missing_external_dependencies": [
+    "external protocol or quote",
+    "sample identity and procurement",
+    "eligible measurement and report"
+  ],
+  "new_docking_runs": 0,
+  "new_molecules_generated": 0,
+  "next_generation_allowed": false,
+  "phase_transition_hash": "0202220e571af451ea964d5f9d4dee31c586fc12e3a8543d6b83e7ce18e40754",
+  "program_id": "MOLDISC-019",
+  "program_protocol_hash": "33419fa9061987b4d55041723d3a631b33d78c3e79f841ee9bff30e9ce56095e",
+  "program_scientific_hash": "96e54d935ecbbb1b66bf2b704ac9defdecc02f8409996e96fbd9ddcf0b3f4e1b",
+  "program_version": "1.0",
+  "project_phase_after": "BIOLAB_EXPERIMENTAL_FEEDBACK",
+  "project_phase_before": "COMPUTATIONAL_MOLECULAR_DISCOVERY",
+  "real_experiment_executed": false,
+  "required_next_evidence": "E4_CURATED_EXPERIMENTAL",
+  "result_schema_hash": "a381d62d100ef5f76f9a8893753272fcc722963eea82fd112ffaae7bb950cf50",
+  "schema_version": "research-os.molecular-discovery.moldisc019.first-run.v1",
+  "selected_next_action": "EXPERIMENT",
+  "selected_target_gap": "GAP-EXPERIMENTAL-SOLUBILITY",
+  "stop_reason": "EXPERIMENTAL_VALIDATION_REQUIRED",
+  "unresolved": [
+    "no new physical panel measurement",
+    "no experimental target activity",
+    "no independent E5",
+    "no closed physical loop yet"
+  ]
+}

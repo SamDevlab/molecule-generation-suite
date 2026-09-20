@@ -202,10 +202,20 @@ Successful runs emit an auditable package with the protocol, metrics, provenance
 
 The v1 declarative protocol intentionally exposes a small generic regression route rather than pretending to support arbitrary scientific domains. See [`docs/research-os-5.1-declarative-experiment-engine.md`](docs/research-os-5.1-declarative-experiment-engine.md).
 
-## Molecular Discovery — active vertical
+## Biolab / Molecular Discovery — active vertical
 
 Research OS 5.1 is now treated as stable infrastructure. The active product/science
-vertical is **Molecular Discovery**, beginning with a bounded end-to-end workflow:
+vertical is **Biolab / Molecular Discovery**.
+
+```text
+PHASE 1: COMPUTATIONAL CHARACTERIZATION
+CLOSED
+
+PHASE 2: EXPERIMENTAL FEEDBACK BRIDGE
+ACTIVE
+```
+
+The active computational lineage begins with a bounded end-to-end workflow:
 
 ```text
 SMILES -> MoleculeLab -> frozen ESOL solubility + AD -> optional DockingLab -> auditable triage/report
@@ -219,6 +229,13 @@ out-of-domain predictions explicitly.
 
 No universal efficacy score is produced. Candidate ordering is computational
 review triage only.
+
+MOLDISC-019 closes the computation-only frontier and freezes the first
+vendor-neutral four-member physical solubility panel. The Biolab loop stops
+with `EXPERIMENTAL_VALIDATION_REQUIRED` when the next decision-changing
+evidence requires E4, and does not open a same-level docking or generation
+campaign by default. See [MOLDISC-019](docs/moldisc-019-experimental-bridge.md)
+and the [Biolab roadmap](docs/BIOLAB_DESTINATION_AND_ROADMAP.md).
 
 See [Molecular Discovery Program v0.1](docs/molecular-discovery-program-v0.1.md).
 

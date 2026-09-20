@@ -14,7 +14,7 @@ from rdkit.Chem import AllChem, inchi
 from research_os.core.hashing import sha256_file, sha256_json
 from research_os.docking import redocking as base
 from research_os.docking.astex20 import FROZEN_PROSPECTIVE_CASES
-from research_os.docking.capability import capability_metadata
+from research_os.docking.capability import capability_metadata, load_profile
 from research_os.docking.schema import DockingRequest, GridBox
 from research_os.engines.openbabel import OpenBabelEngine
 from research_os.engines.vina import VinaEngine
@@ -30,10 +30,25 @@ CANDIDATE_INCHIKEY = "DRIAWXDDGSORDT-KKUQBAQOSA-N"
 TARGET_CASE_ID = "ATX-007"
 DOCKING_CONTEXT = "NON_COGNATE_HOLO_CROSSDOCKING"
 RMSD_BOUNDARY = "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH"
+FROZEN_CAPABILITY_PROFILE_HASH = "b8c5c799b2035bae2796de714cc55dc4e607420e13b309b7f33792ebaf5597bb"
+FROZEN_CAPABILITY_PROFILE_ID = "research-os.docking.capability-profile.v1+b8c5c799b2035bae"
+FROZEN_CAPABILITY_PROFILE_PATH = Path(__file__).resolve().parents[3] / "configs" / "docking-capability-profile-snapshots" / f"{FROZEN_CAPABILITY_PROFILE_HASH}.json"
 
 
 class MOLDISC012Error(RuntimeError):
     """Fail-closed error for frozen MOLDISC-012 protocol drift."""
+
+
+def _load_frozen_capability_profile():
+    try:
+        profile = load_profile(FROZEN_CAPABILITY_PROFILE_PATH)
+    except (OSError, ValueError) as exc:
+        raise MOLDISC012Error("historical docking capability profile is unavailable or invalid") from exc
+    if profile.profile_hash != FROZEN_CAPABILITY_PROFILE_HASH or profile.profile_id != FROZEN_CAPABILITY_PROFILE_ID:
+        raise MOLDISC012Error("historical docking capability profile identity drifted")
+    if tuple(profile.context_record(DOCKING_CONTEXT).get("evidence_source_ids", ())) != ("CROSSDOCK-001",):
+        raise MOLDISC012Error("historical non-cognate capability evidence sources drifted")
+    return profile
 
 
 @dataclass(frozen=True)
@@ -343,6 +358,7 @@ def run_moldisc_012(
     obabel: OpenBabelEngine | None = None,
     timeout: float = 120.0,
 ) -> MOLDISC012Result:
+    frozen_profile = _load_frozen_capability_profile()
     config = load_program_config_v12(config_path)
     config_hash = sha256_json(config)
     case = _target_case()
@@ -420,7 +436,7 @@ def run_moldisc_012(
     vina_output_transport_sha256 = sha256_file(vina_output)
     vina_output_scientific_hash = _vina_scientific_identity(models, scores)
 
-    capability = capability_metadata(DOCKING_CONTEXT)
+    capability = capability_metadata(DOCKING_CONTEXT, profile=frozen_profile)
     if capability["capability_status"] != "PARTIALLY_VALIDATED" or capability["evidence_level"] != "E2_COMPUTATIONAL":
         raise MOLDISC012Error("non-cognate docking capability classification drifted")
 

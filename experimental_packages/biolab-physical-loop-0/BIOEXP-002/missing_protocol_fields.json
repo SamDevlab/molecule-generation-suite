@@ -1,0 +1,19 @@
+{
+  "experiment_id": "BIOEXP-002-PROTEASE-2X2",
+  "status": "PLANNED_NOT_EXECUTED",
+  "missing_fields": [
+    "protein_construct_identity",
+    "sequence_or_background",
+    "mutation_state",
+    "assay_type",
+    "substrate",
+    "conditions",
+    "measurement_endpoint",
+    "units",
+    "replicates",
+    "positive_controls",
+    "negative_controls",
+    "raw_data_requirement",
+    "report_requirement"
+  ]
+}

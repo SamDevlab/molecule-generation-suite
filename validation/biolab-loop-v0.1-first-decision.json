@@ -1,0 +1,349 @@
+{
+  "COMPUTATIONAL_CONTINUATION_ALLOWED": false,
+  "CURRENT_MAX_LOCAL_EVIDENCE": "E2_COMPUTATIONAL",
+  "CURRENT_PROGRAM": "MOLDISC-018",
+  "REQUIRED_EVIDENCE": "E4_CURATED_EXPERIMENTAL",
+  "SELECTED_ACTION": "EXPERIMENT",
+  "STOP_REASON": "EXPERIMENTAL_VALIDATION_REQUIRED",
+  "TARGET_GAP": "GAP-EXPERIMENTAL-SOLUBILITY",
+  "assessments": [
+    {
+      "action": "COMPUTE",
+      "action_id": "BIO-ACTION-A",
+      "assessment": {
+        "assessment_id": "BIO-ACTION-A",
+        "candidate_gap_id": "GAP-EXPERIMENTAL-SOLUBILITY",
+        "candidate_question_id": "ACTION-A-MORE-DOCKING",
+        "current_evidence": [
+          "E2_COMPUTATIONAL"
+        ],
+        "execution_scope": "Molecular Discovery E2 computation only",
+        "expected_information_gain": "decision-relevant gain is low while the evidence ceiling remains E2",
+        "external_dependency": null,
+        "rationale": "Existing MOLDISC-016 through MOLDISC-018 results already characterize the local docking boundary; new external information would be required to reopen this route.",
+        "recommendation": "LOW_INFORMATION_GAIN",
+        "redundancy_risk": "high same-level repetition",
+        "required_dataset_state": [],
+        "required_engine_state": [],
+        "required_source_state": [],
+        "resolvability": "bounded computationally",
+        "safety_status": "WITHIN_SCOPE",
+        "scientific_relevance": "first physical feedback for the active panel",
+        "supersedes_assessment_id": null,
+        "target_evidence": [
+          "E4_CURATED_EXPERIMENTAL"
+        ]
+      },
+      "candidate_question_id": "ACTION-A-MORE-DOCKING",
+      "current_evidence": [
+        "E2_COMPUTATIONAL"
+      ],
+      "execution_scope": "Molecular Discovery E2 computation only",
+      "expected_information_gain": "decision-relevant gain is low while the evidence ceiling remains E2",
+      "external_dependency": null,
+      "label": "repeat/expand docking",
+      "rationale": "Existing MOLDISC-016 through MOLDISC-018 results already characterize the local docking boundary; new external information would be required to reopen this route.",
+      "recommendation": "LOW_INFORMATION_GAIN",
+      "redundancy_risk": "high same-level repetition",
+      "required_dataset_state": [],
+      "required_engine_state": [],
+      "required_source_state": [],
+      "resolvability": "bounded computationally",
+      "safety_status": "WITHIN_SCOPE",
+      "scientific_relevance": "first physical feedback for the active panel",
+      "target_evidence": [
+        "E4_CURATED_EXPERIMENTAL"
+      ],
+      "target_gap": "GAP-EXPERIMENTAL-SOLUBILITY"
+    },
+    {
+      "action": "COMPUTE",
+      "action_id": "BIO-ACTION-B",
+      "assessment": {
+        "assessment_id": "BIO-ACTION-B",
+        "candidate_gap_id": "GAP-EXPERIMENTAL-SOLUBILITY",
+        "candidate_question_id": "ACTION-B-POSE-BASIN",
+        "current_evidence": [
+          "E2_COMPUTATIONAL"
+        ],
+        "execution_scope": "Molecular Discovery E2 diagnostic only",
+        "expected_information_gain": "diagnostic rather than decision-changing",
+        "external_dependency": null,
+        "rationale": "A pose diagnostic can explain E2 behavior but cannot substitute for the missing physical solubility measurement.",
+        "recommendation": "DEFER",
+        "redundancy_risk": "same-level explanation of an already characterized result",
+        "required_dataset_state": [],
+        "required_engine_state": [],
+        "required_source_state": [],
+        "resolvability": "bounded computationally",
+        "safety_status": "WITHIN_SCOPE",
+        "scientific_relevance": "first physical feedback for the active panel",
+        "supersedes_assessment_id": null,
+        "target_evidence": [
+          "E4_CURATED_EXPERIMENTAL"
+        ]
+      },
+      "candidate_question_id": "ACTION-B-POSE-BASIN",
+      "current_evidence": [
+        "E2_COMPUTATIONAL"
+      ],
+      "execution_scope": "Molecular Discovery E2 diagnostic only",
+      "expected_information_gain": "diagnostic rather than decision-changing",
+      "external_dependency": null,
+      "label": "pose-basin / reranking analysis",
+      "rationale": "A pose diagnostic can explain E2 behavior but cannot substitute for the missing physical solubility measurement.",
+      "recommendation": "DEFER",
+      "redundancy_risk": "same-level explanation of an already characterized result",
+      "required_dataset_state": [],
+      "required_engine_state": [],
+      "required_source_state": [],
+      "resolvability": "bounded computationally",
+      "safety_status": "WITHIN_SCOPE",
+      "scientific_relevance": "first physical feedback for the active panel",
+      "target_evidence": [
+        "E4_CURATED_EXPERIMENTAL"
+      ],
+      "target_gap": "GAP-EXPERIMENTAL-SOLUBILITY"
+    },
+    {
+      "action": "COMPUTE",
+      "action_id": "BIO-ACTION-C",
+      "assessment": {
+        "assessment_id": "BIO-ACTION-C",
+        "candidate_gap_id": "GAP-EXPERIMENTAL-SOLUBILITY",
+        "candidate_question_id": "ACTION-C-NEW-SERIES",
+        "current_evidence": [
+          "E2_COMPUTATIONAL"
+        ],
+        "execution_scope": "Molecular generation is not opened by this state",
+        "expected_information_gain": "not interpretable before physical feedback",
+        "external_dependency": "REAL_E4_EXPERIMENTAL_FEEDBACK_REQUIRED",
+        "rationale": "Generation cannot be selected as a default continuation while the next decision-changing evidence requires E4.",
+        "recommendation": "BLOCKED",
+        "redundancy_risk": "would expand the open loop",
+        "required_dataset_state": [],
+        "required_engine_state": [],
+        "required_source_state": [],
+        "resolvability": "blocked by evidence gate",
+        "safety_status": "WITHIN_SCOPE",
+        "scientific_relevance": "first physical feedback for the active panel",
+        "supersedes_assessment_id": null,
+        "target_evidence": [
+          "E4_CURATED_EXPERIMENTAL"
+        ]
+      },
+      "candidate_question_id": "ACTION-C-NEW-SERIES",
+      "current_evidence": [
+        "E2_COMPUTATIONAL"
+      ],
+      "execution_scope": "Molecular generation is not opened by this state",
+      "expected_information_gain": "not interpretable before physical feedback",
+      "external_dependency": "REAL_E4_EXPERIMENTAL_FEEDBACK_REQUIRED",
+      "label": "generate another molecular series",
+      "rationale": "Generation cannot be selected as a default continuation while the next decision-changing evidence requires E4.",
+      "recommendation": "BLOCKED",
+      "redundancy_risk": "would expand the open loop",
+      "required_dataset_state": [],
+      "required_engine_state": [],
+      "required_source_state": [],
+      "resolvability": "blocked by evidence gate",
+      "safety_status": "WITHIN_SCOPE",
+      "scientific_relevance": "first physical feedback for the active panel",
+      "target_evidence": [
+        "E4_CURATED_EXPERIMENTAL"
+      ],
+      "target_gap": "GAP-EXPERIMENTAL-SOLUBILITY"
+    },
+    {
+      "action": "EXPERIMENT",
+      "action_id": "BIO-ACTION-D",
+      "assessment": {
+        "assessment_id": "BIO-ACTION-D",
+        "candidate_gap_id": "GAP-EXPERIMENTAL-SOLUBILITY",
+        "candidate_question_id": "ACTION-D-SOLUBILITY-EXPERIMENT",
+        "current_evidence": [
+          "E2_COMPUTATIONAL"
+        ],
+        "execution_scope": "vendor-neutral external BIOEXP-001 package",
+        "expected_information_gain": "directly addresses the highest open evidence gap",
+        "external_dependency": "AWAITING_EXTERNAL_PROTOCOL_OR_QUOTE",
+        "rationale": "The frozen four-member panel is ready for external protocol, procurement and measurement; this is the first decision-changing evidence class beyond local E2.",
+        "recommendation": "PRIORITIZE_NOW",
+        "redundancy_risk": "low; this is a new evidence class",
+        "required_dataset_state": [],
+        "required_engine_state": [],
+        "required_source_state": [],
+        "resolvability": "actionable through an attributable external laboratory",
+        "safety_status": "WITHIN_SCOPE",
+        "scientific_relevance": "first physical feedback for the active panel",
+        "supersedes_assessment_id": null,
+        "target_evidence": [
+          "E4_CURATED_EXPERIMENTAL"
+        ]
+      },
+      "candidate_question_id": "ACTION-D-SOLUBILITY-EXPERIMENT",
+      "current_evidence": [
+        "E2_COMPUTATIONAL"
+      ],
+      "execution_scope": "vendor-neutral external BIOEXP-001 package",
+      "expected_information_gain": "directly addresses the highest open evidence gap",
+      "external_dependency": "AWAITING_EXTERNAL_PROTOCOL_OR_QUOTE",
+      "label": "prepare physical solubility experiment",
+      "rationale": "The frozen four-member panel is ready for external protocol, procurement and measurement; this is the first decision-changing evidence class beyond local E2.",
+      "recommendation": "PRIORITIZE_NOW",
+      "redundancy_risk": "low; this is a new evidence class",
+      "required_dataset_state": [],
+      "required_engine_state": [],
+      "required_source_state": [],
+      "resolvability": "actionable through an attributable external laboratory",
+      "safety_status": "WITHIN_SCOPE",
+      "scientific_relevance": "first physical feedback for the active panel",
+      "target_evidence": [
+        "E4_CURATED_EXPERIMENTAL"
+      ],
+      "target_gap": "GAP-EXPERIMENTAL-SOLUBILITY"
+    }
+  ],
+  "blocked_actions": [
+    "COMPUTE"
+  ],
+  "computational_continuation_allowed": false,
+  "current_max_local_evidence": "E2_COMPUTATIONAL",
+  "current_program": "MOLDISC-018",
+  "next_external_requirement": "AWAITING_EXTERNAL_PROTOCOL_OR_QUOTE",
+  "next_generation_allowed": false,
+  "priority_queue": {
+    "assessment_history": [
+      {
+        "assessment_id": "BIO-ACTION-A",
+        "candidate_gap_id": "GAP-EXPERIMENTAL-SOLUBILITY",
+        "candidate_question_id": "ACTION-A-MORE-DOCKING",
+        "current_evidence": [
+          "E2_COMPUTATIONAL"
+        ],
+        "execution_scope": "Molecular Discovery E2 computation only",
+        "expected_information_gain": "decision-relevant gain is low while the evidence ceiling remains E2",
+        "external_dependency": null,
+        "rationale": "Existing MOLDISC-016 through MOLDISC-018 results already characterize the local docking boundary; new external information would be required to reopen this route.",
+        "recommendation": "LOW_INFORMATION_GAIN",
+        "redundancy_risk": "high same-level repetition",
+        "required_dataset_state": [],
+        "required_engine_state": [],
+        "required_source_state": [],
+        "resolvability": "bounded computationally",
+        "safety_status": "WITHIN_SCOPE",
+        "scientific_relevance": "first physical feedback for the active panel",
+        "supersedes_assessment_id": null,
+        "target_evidence": [
+          "E4_CURATED_EXPERIMENTAL"
+        ]
+      },
+      {
+        "assessment_id": "BIO-ACTION-B",
+        "candidate_gap_id": "GAP-EXPERIMENTAL-SOLUBILITY",
+        "candidate_question_id": "ACTION-B-POSE-BASIN",
+        "current_evidence": [
+          "E2_COMPUTATIONAL"
+        ],
+        "execution_scope": "Molecular Discovery E2 diagnostic only",
+        "expected_information_gain": "diagnostic rather than decision-changing",
+        "external_dependency": null,
+        "rationale": "A pose diagnostic can explain E2 behavior but cannot substitute for the missing physical solubility measurement.",
+        "recommendation": "DEFER",
+        "redundancy_risk": "same-level explanation of an already characterized result",
+        "required_dataset_state": [],
+        "required_engine_state": [],
+        "required_source_state": [],
+        "resolvability": "bounded computationally",
+        "safety_status": "WITHIN_SCOPE",
+        "scientific_relevance": "first physical feedback for the active panel",
+        "supersedes_assessment_id": null,
+        "target_evidence": [
+          "E4_CURATED_EXPERIMENTAL"
+        ]
+      },
+      {
+        "assessment_id": "BIO-ACTION-C",
+        "candidate_gap_id": "GAP-EXPERIMENTAL-SOLUBILITY",
+        "candidate_question_id": "ACTION-C-NEW-SERIES",
+        "current_evidence": [
+          "E2_COMPUTATIONAL"
+        ],
+        "execution_scope": "Molecular generation is not opened by this state",
+        "expected_information_gain": "not interpretable before physical feedback",
+        "external_dependency": "REAL_E4_EXPERIMENTAL_FEEDBACK_REQUIRED",
+        "rationale": "Generation cannot be selected as a default continuation while the next decision-changing evidence requires E4.",
+        "recommendation": "BLOCKED",
+        "redundancy_risk": "would expand the open loop",
+        "required_dataset_state": [],
+        "required_engine_state": [],
+        "required_source_state": [],
+        "resolvability": "blocked by evidence gate",
+        "safety_status": "WITHIN_SCOPE",
+        "scientific_relevance": "first physical feedback for the active panel",
+        "supersedes_assessment_id": null,
+        "target_evidence": [
+          "E4_CURATED_EXPERIMENTAL"
+        ]
+      },
+      {
+        "assessment_id": "BIO-ACTION-D",
+        "candidate_gap_id": "GAP-EXPERIMENTAL-SOLUBILITY",
+        "candidate_question_id": "ACTION-D-SOLUBILITY-EXPERIMENT",
+        "current_evidence": [
+          "E2_COMPUTATIONAL"
+        ],
+        "execution_scope": "vendor-neutral external BIOEXP-001 package",
+        "expected_information_gain": "directly addresses the highest open evidence gap",
+        "external_dependency": "AWAITING_EXTERNAL_PROTOCOL_OR_QUOTE",
+        "rationale": "The frozen four-member panel is ready for external protocol, procurement and measurement; this is the first decision-changing evidence class beyond local E2.",
+        "recommendation": "PRIORITIZE_NOW",
+        "redundancy_risk": "low; this is a new evidence class",
+        "required_dataset_state": [],
+        "required_engine_state": [],
+        "required_source_state": [],
+        "resolvability": "actionable through an attributable external laboratory",
+        "safety_status": "WITHIN_SCOPE",
+        "scientific_relevance": "first physical feedback for the active panel",
+        "supersedes_assessment_id": null,
+        "target_evidence": [
+          "E4_CURATED_EXPERIMENTAL"
+        ]
+      }
+    ],
+    "entries": [
+      {
+        "assessment_id": "BIO-ACTION-D",
+        "candidate_question_id": "ACTION-D-SOLUBILITY-EXPERIMENT",
+        "position": 1,
+        "reason_for_order": "ordered first because the gap is important, locally actionable and could change a decision"
+      },
+      {
+        "assessment_id": "BIO-ACTION-B",
+        "candidate_question_id": "ACTION-B-POSE-BASIN",
+        "position": 2,
+        "reason_for_order": "ordered by the declared recommendation and explicit gap state; queue position 2 is not a scientific ranking value"
+      },
+      {
+        "assessment_id": "BIO-ACTION-C",
+        "candidate_question_id": "ACTION-C-NEW-SERIES",
+        "position": 3,
+        "reason_for_order": "retained after actionable work because an external dependency blocks execution"
+      },
+      {
+        "assessment_id": "BIO-ACTION-A",
+        "candidate_question_id": "ACTION-A-MORE-DOCKING",
+        "position": 4,
+        "reason_for_order": "ordered after actionable gaps because the proposed repetition adds little information"
+      }
+    ],
+    "queue_id": "BIO-LAB-PRIORITY-v0.1"
+  },
+  "reason": "The frozen four-member panel is ready for external protocol, procurement and measurement; this is the first decision-changing evidence class beyond local E2.",
+  "required_evidence": "E4_CURATED_EXPERIMENTAL",
+  "schema_version": "research-os.molecular-discovery.biolab-loop.v0.1",
+  "selected_action": "EXPERIMENT",
+  "status": "STOPPED",
+  "stop_reason": "EXPERIMENTAL_VALIDATION_REQUIRED",
+  "target_gap": "GAP-EXPERIMENTAL-SOLUBILITY"
+}

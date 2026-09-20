@@ -14,7 +14,7 @@ from rdkit.Chem import AllChem, inchi
 from research_os.core.hashing import sha256_file, sha256_json
 from research_os.docking import redocking as base
 from research_os.docking.astex20 import FROZEN_PROSPECTIVE_CASES
-from research_os.docking.capability import capability_metadata
+from research_os.docking.capability import capability_metadata, load_profile
 from research_os.docking.schema import DockingRequest, GridBox
 from research_os.engines.openbabel import OpenBabelEngine
 from research_os.engines.vina import VinaEngine
@@ -27,10 +27,25 @@ CANDIDATE_INCHIKEY = "XBNKKAGGYBXOJG-GMQQYTKMSA-N"
 PARENT_PROGRAM_HASH = "75ffaf31d6df6983e7692fca4f0a3fa2277c743dcac2b99cee179c9b39116615"
 TARGET_CASE_ID = "ATX-007"
 DOCKING_CONTEXT = "NON_COGNATE_HOLO_CROSSDOCKING"
+FROZEN_CAPABILITY_PROFILE_HASH = "b8c5c799b2035bae2796de714cc55dc4e607420e13b309b7f33792ebaf5597bb"
+FROZEN_CAPABILITY_PROFILE_ID = "research-os.docking.capability-profile.v1+b8c5c799b2035bae"
+FROZEN_CAPABILITY_PROFILE_PATH = Path(__file__).resolve().parents[3] / "configs" / "docking-capability-profile-snapshots" / f"{FROZEN_CAPABILITY_PROFILE_HASH}.json"
 
 
 class MOLDISC010Error(RuntimeError):
     """Fail-closed error for frozen 1KZK non-cognate docking drift."""
+
+
+def _load_frozen_capability_profile():
+    try:
+        profile = load_profile(FROZEN_CAPABILITY_PROFILE_PATH)
+    except (OSError, ValueError) as exc:
+        raise MOLDISC010Error("historical docking capability profile is unavailable or invalid") from exc
+    if profile.profile_hash != FROZEN_CAPABILITY_PROFILE_HASH or profile.profile_id != FROZEN_CAPABILITY_PROFILE_ID:
+        raise MOLDISC010Error("historical docking capability profile identity drifted")
+    if tuple(profile.context_record(DOCKING_CONTEXT).get("evidence_source_ids", ())) != ("CROSSDOCK-001",):
+        raise MOLDISC010Error("historical non-cognate capability evidence sources drifted")
+    return profile
 
 
 @dataclass(frozen=True)
@@ -316,6 +331,7 @@ def run_moldisc_010(
     obabel: OpenBabelEngine | None = None,
     timeout: float = 120.0,
 ) -> MOLDISC010Result:
+    frozen_profile = _load_frozen_capability_profile()
     config = load_program_config_v10(config_path)
     config_hash = sha256_json(config)
     case = _target_case()
@@ -421,7 +437,7 @@ def run_moldisc_010(
         raise MOLDISC010Error("Vina emitted only zero-valued scores; rejecting invalid evidence")
     vina_output_sha256 = sha256_file(vina_output)
 
-    capability = capability_metadata(DOCKING_CONTEXT)
+    capability = capability_metadata(DOCKING_CONTEXT, profile=frozen_profile)
     if capability["capability_status"] != "PARTIALLY_VALIDATED":
         raise MOLDISC010Error("non-cognate docking capability classification drifted")
     if capability["evidence_level"] != "E2_COMPUTATIONAL":
