@@ -94,7 +94,13 @@ jobs:
           assert manifest["generation_executed"] is False
           assert manifest["source_measurement_transfer_allowed"] is False
           assert len(geometry["edges"]) == 4
-          assert all(edge["status"] == "PASS" for edge in geometry["edges"])
+          geometry_status = {edge["edge_id"]: edge["status"] for edge in geometry["edges"]}
+          assert geometry_status == {
+              "EDGE-OH-BENZYL": "PASS",
+              "EDGE-OH-TERTBUTYL": "PASS",
+              "EDGE-NSUB-OH_PRESENT": "EDGE_GEOMETRY_INDETERMINATE",
+              "EDGE-NSUB-OH_DELETED": "EDGE_GEOMETRY_INDETERMINATE",
+          }
           assert all(item["status"] == "PASS" for item in factorial["contrasts_by_condition"].values())
           print(json.dumps({
               "program_protocol_hash": manifest["program_protocol_hash"],

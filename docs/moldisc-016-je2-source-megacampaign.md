@@ -22,8 +22,13 @@ created.
 The MOLDISC-015 C-2545 `-3.62` measurement remains source context and is not
 transferred to any candidate. The evidence ceiling is `E2_COMPUTATIONAL`, with
 experimental binding, exact C-2545 stereochemistry, single-structure, and
-non-cognate-capability gaps retained explicitly. The first result is preserved
-by the result manifest and its campaign hashes after execution.
+non-cognate-capability gaps retained explicitly. In the first complete result,
+the two phenolic-OH geometry edges are PASS, while both N-substituent edges are
+`EDGE_GEOMETRY_INDETERMINATE`: their source-directed child graph is not a valid
+parent subgraph, so the preregistered chemical mapping correctly provides no
+fallback geometry. Baseline, sensitivity, contact, factorial, and synthesis
+outputs are preserved in the validation record, including those indeterminate
+geometry endpoints.
 
 The canonical frozen configuration is
 `programs/moldisc-016-je2-source-megacampaign/program.json`; the runner is

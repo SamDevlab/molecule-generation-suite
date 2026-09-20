@@ -1,0 +1,127 @@
+{
+  "schema_version": "research-os.molecular-discovery.megacampaign-validation.v1",
+  "program_id": "MOLDISC-016",
+  "program_version": "1.0",
+  "status": "CLOSED_FIRST_RESULT_PRESERVED",
+  "first_execution": {
+    "github_actions_run_id": 35490233290,
+    "workflow": "moldisc016-ci",
+    "docking_result": "COMPLETE",
+    "validation_note": "The first complete 32-run artifact exposed an overstrict CI assertion; the frozen geometry semantics preserve two EDGE_GEOMETRY_INDETERMINATE N-substituent edges rather than forcing PASS."
+  },
+  "parents": {
+    "moldisc014_program_scientific_hash": "f940d95189616131829a22f9e68a53a960eddf8fd05f5fd7ebac43ece85481ed",
+    "moldisc015_program_scientific_hash": "8e22c0565f2d78dc16468c8edb8f8f0b90a4007e50ced99e00e3d7a0b0f63e5d",
+    "moldisc012_program_scientific_hash": "e8c66a7726a3b191723e0dea072afdb5e4d4d9202b142eff83fe6d19c623f776"
+  },
+  "program_identity": {
+    "program_protocol_hash": "67a127a651df771f7789cd8f4e4933575f81d7ee91d0dae2219921c6a2dc3e70",
+    "program_scientific_hash": "68472cbc795ccb9cbbaef083bdc44819218c2b3f29b50ff7481ff99097687095",
+    "candidate_count": 4,
+    "campaign_count": 8,
+    "docking_runs_planned": 32,
+    "docking_runs_executed": 32,
+    "docking_runs_skipped": 0,
+    "docking_runs_nonpass": 0,
+    "source_measurement_transfer_allowed": false,
+    "candidate_selection_executed": false,
+    "lead_selection_executed": false,
+    "generation_executed": false
+  },
+  "target": {
+    "case_id": "ATX-007",
+    "pdb_id": "1KZK",
+    "native_ligand": "JE2",
+    "receptor_author_chains": ["A", "B"],
+    "grid_hash": "a0bf032d8bdb1bc20f13f298d604673cac1d2c7da8596cc228ec6602b5989aef",
+    "target_snapshot_scientific_hash": "ab33780a77f0cbe923fdd93b2a480ae72041b2b2e0771b26d0398ef722af612f",
+    "native_reference_structure_hash": "82b48b534ff870fb8a922ed62da905bf77fe2e54f2420143986a4c5f9b9c9a4b",
+    "receptor_scientific_identity": "ec55df9f302eb6b63669085023520cb66eb224c66ab15368a95997dc2fcd7c55",
+    "coordinate_frame": "RECEPTOR_FRAME"
+  },
+  "control_replay": {
+    "status": "PASS",
+    "pose_1_score_kcal_mol": -11.6,
+    "pose_count": 16,
+    "expected_pose_scores_kcal_mol": [-11.6, -10.194, -9.739, -9.411, -9.251, -9.111, -9.044, -9.01, -8.914, -8.849, -8.813, -8.781, -8.759, -8.718, -8.674, -8.656],
+    "native_reference_structure_hash": "82b48b534ff870fb8a922ed62da905bf77fe2e54f2420143986a4c5f9b9c9a4b",
+    "receptor_scientific_identity": "ec55df9f302eb6b63669085023520cb66eb224c66ab15368a95997dc2fcd7c55",
+    "ligand_scientific_identity": "609b8d75caf0018e1d704a24976f622c51fbfcff61d7554a55fe12be1f864f30",
+    "vina_output_scientific_hash": "09a014a56ab3eb31c6e419d618a3b381e6357c2ccd18c387ce8acba5d08ddf07"
+  },
+  "summary_matrix": {
+    "order": ["A0B0", "A1B0", "A0B1", "A1B1"],
+    "rows": [
+      {"cell": "A0B0", "candidate": "MOLDISC-011-JE2-286E6F2BE8", "factor_A": "A0", "factor_B": "B0", "baseline_status": "PASS", "baseline_pose_count": 16, "baseline_pose1_score": -11.6, "vina_seed_42": -11.6, "vina_seed_1337": -11.582, "vina_seed_2025": -11.331, "etkdg_42": -11.6, "etkdg_1337": -10.964, "etkdg_2025": -11.073, "exhaustiveness_8": -11.6, "exhaustiveness_16": -11.6, "exhaustiveness_32": -11.423, "AqSolDB_nearest": 0.6857142857142857, "ESOL_status": "IN_DOMAIN", "source_connectivity_match": true, "measurement_transfer_allowed": false},
+      {"cell": "A1B0", "candidate": "MOLDISC-014-SOURCE-DELTA-OH", "factor_A": "A1", "factor_B": "B0", "baseline_status": "PASS", "baseline_pose_count": 20, "baseline_pose1_score": -10.388, "vina_seed_42": -10.388, "vina_seed_1337": -10.377, "vina_seed_2025": -10.398, "etkdg_42": -10.388, "etkdg_1337": -10.876, "etkdg_2025": -10.028, "exhaustiveness_8": -10.397, "exhaustiveness_16": -10.388, "exhaustiveness_32": -10.418, "AqSolDB_nearest": 0.7903225806451613, "ESOL_status": "IN_DOMAIN", "source_connectivity_match": true, "measurement_transfer_allowed": false},
+      {"cell": "A0B1", "candidate": "MOLDISC-014-SOURCE-DELTA-NSUB", "factor_A": "A0", "factor_B": "B1", "baseline_status": "PASS", "baseline_pose_count": 20, "baseline_pose1_score": -9.748, "vina_seed_42": -9.748, "vina_seed_1337": -9.648, "vina_seed_2025": -9.67, "etkdg_42": -9.748, "etkdg_1337": -10.432, "etkdg_2025": -10.187, "exhaustiveness_8": -9.701, "exhaustiveness_16": -9.748, "exhaustiveness_32": -9.748, "AqSolDB_nearest": 0.859375, "ESOL_status": "OUT_OF_DOMAIN", "source_connectivity_match": true, "measurement_transfer_allowed": false},
+      {"cell": "A1B1", "candidate": "MOLDISC-014-SOURCE-DELTA-BOTH", "factor_A": "A1", "factor_B": "B1", "baseline_status": "PASS", "baseline_pose_count": 20, "baseline_pose1_score": -9.854, "vina_seed_42": -9.854, "vina_seed_1337": -9.816, "vina_seed_2025": -9.82, "etkdg_42": -9.854, "etkdg_1337": -9.517, "etkdg_2025": -9.707, "exhaustiveness_8": -9.854, "exhaustiveness_16": -9.854, "exhaustiveness_32": -9.792, "AqSolDB_nearest": 1.0, "ESOL_status": "OUT_OF_DOMAIN", "source_connectivity_match": true, "measurement_transfer_allowed": false}
+    ]
+  },
+  "sensitivity_rank1_score_ranges": {
+    "vina_seed_42_1337_2025": {"A0B0": 0.269, "A1B0": 0.021, "A0B1": 0.1, "A1B1": 0.038},
+    "etkdg_seed_42_1337_2025": {"A0B0": 0.636, "A1B0": 0.848, "A0B1": 0.684, "A1B1": 0.337},
+    "exhaustiveness_8_16_32": {"A0B0": 0.177, "A1B0": 0.03, "A0B1": 0.047, "A1B1": 0.062}
+  },
+  "geometry": {
+    "metric": "RECEPTOR_FRAME_COMMON_CORE_RMSD",
+    "no_rigid_body_alignment": true,
+    "edges": [
+      {"edge_id": "EDGE-OH-BENZYL", "left": "A0B0", "right": "A1B0", "status": "PASS", "common_core_heavy_atoms": 38, "rank1_pair_rmsd": 2.031392166, "minimum_all_pose_pairs_rmsd": 1.318682207, "left_rank1_to_right_ensemble_min": 1.527263239, "right_rank1_to_left_ensemble_min": 2.031392166, "matrix_shape": [16, 20]},
+      {"edge_id": "EDGE-OH-TERTBUTYL", "left": "A0B1", "right": "A1B1", "status": "PASS", "common_core_heavy_atoms": 35, "rank1_pair_rmsd": 7.09613347, "minimum_all_pose_pairs_rmsd": 0.90073045, "left_rank1_to_right_ensemble_min": 2.896538234, "right_rank1_to_left_ensemble_min": 0.90073045, "matrix_shape": [20, 20]},
+      {"edge_id": "EDGE-NSUB-OH_PRESENT", "left": "A0B0", "right": "A0B1", "status": "EDGE_GEOMETRY_INDETERMINATE", "reason": "child heavy graph is not a valid parent subgraph", "matrix_shape": [0, 0]},
+      {"edge_id": "EDGE-NSUB-OH_DELETED", "left": "A1B0", "right": "A1B1", "status": "EDGE_GEOMETRY_INDETERMINATE", "reason": "child heavy graph is not a valid parent subgraph", "matrix_shape": [0, 0]}
+    ]
+  },
+  "contacts": {
+    "cutoff_angstrom": 4.0,
+    "rank1_contact_count": {"A0B0": 27, "A1B0": 27, "A0B1": 22, "A1B1": 27},
+    "rank1_contact_fingerprint_hash": {"A0B0": "7cb0d8fb2cb3a91ba7cc14d47300d4c5bf0b82a266d3e8253940743cf7a377d3", "A1B0": "7fa1bdee8b609f3309bf606f8b11d33e7df4a6d063183c96fd89ab1381f8dde9", "A0B1": "8973d0687d8c5edddd916a8f44b5b0c13c0e346ba4c5c20657e9cc5ef6ce40f3", "A1B1": "179d194d470351261a5184396fed054c21c2bf972316739edc32a7e456b1d273"},
+    "edge_jaccard": {"EDGE-OH-BENZYL": 0.7419354838709677, "EDGE-OH-TERTBUTYL": 0.6896551724137931, "EDGE-NSUB-OH_PRESENT": 0.75, "EDGE-NSUB-OH_DELETED": 0.8}
+  },
+  "factorial": {
+    "mode": "DESCRIPTIVE_ONLY",
+    "baseline": {"oh_contrast": 0.553, "nsub_contrast": 1.193, "interaction_contrast": -1.318},
+    "oh_sign_consistent": true,
+    "nsub_sign_consistent": true,
+    "interaction_sign_consistent": false,
+    "oh_contrast_range": 0.371,
+    "nsub_contrast_range": 0.644,
+    "interaction_contrast_range": 2.2
+  },
+  "campaign_status": {
+    "CAMP-016-A": "PASS_8_OF_8",
+    "CAMP-016-B": "PASS_8_OF_8",
+    "CAMP-016-C": "PASS_8_OF_8",
+    "CAMP-016-D": "PASS_8_OF_8",
+    "CAMP-016-E": "PASS_WITH_2_GEOMETRY_INDETERMINATE_EDGES",
+    "CAMP-016-F": "PASS",
+    "CAMP-016-G": "PASS",
+    "CAMP-016-H": "PASS_WITH_CLAIM_016_04_CONTRADICTS"
+  },
+  "claims": {
+    "CLAIM-016-01": "SUPPORTS",
+    "CLAIM-016-02": "SUPPORTS",
+    "CLAIM-016-03": "SUPPORTS",
+    "CLAIM-016-04": "CONTRADICTS",
+    "CLAIM-016-05": "SUPPORTS"
+  },
+  "hashes": {
+    "baseline_campaign_hash": "7173f3046310c4b0d3eda8dbd9c09e6a72dd30879df02703f05117bde19e9f5d",
+    "vina_seed_campaign_hash": "2fb503c9fe808dccd85e7f015ddd9be3177c3167abd69bb1d5970446fe301ece",
+    "conformer_campaign_hash": "611e7fc0ef12f7593d9fc563998f25454a125e5b7d018ddf3912f47d47d2198a",
+    "exhaustiveness_campaign_hash": "f3ab24756b625d70a8e066cbc90789b99a7ce209750bdd24ca22be0eb736279b",
+    "geometry_campaign_hash": "8816ab9a59033dc6ee0415ddd5e6219edb22baf223ce17ccf5abe7f765ae707c",
+    "contact_campaign_hash": "7ec8bdcbb905d5704b8ceeb0c6b760d8cc62cdf0fdee89f80e597e3b40be3f63",
+    "factorial_campaign_hash": "7198a1c32ed2858b6059ef547bf42095b9171445383d52f9a8bf6803edfeca94",
+    "synthesis_hash": "54c0e11f3734b098253be69c1d5a7e95b2c969b9486ca75e8b2918b2bcd12a37"
+  },
+  "knowledge_gain": {
+    "new_evidence_ids": ["MOLDISC-016-E2-STATIC-ROBUSTNESS"],
+    "resolved_gap_ids": [],
+    "partially_resolved_gap_ids": ["GAP-DOCKING-PROTOCOL-SENSITIVITY", "GAP-JE2-FACTORIAL-COMPUTATIONAL-LANDSCAPE"],
+    "new_gap_ids": ["GAP-EXPERIMENTAL-BINDING-VALIDATION", "GAP-C2545-STEREOCHEMISTRY", "GAP-NONCOGNATE-CAPABILITY"],
+    "unresolved_uncertainty": ["experimental binding validation unavailable", "exact C-2545 stereochemistry unresolved", "single receptor structure limitation", "non-cognate docking capability only partially validated"]
+  },
+  "run_bundle": "GitHub Actions artifact moldisc-016-je2-source-megacampaign from run 35490233290"
+}
