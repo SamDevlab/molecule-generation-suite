@@ -1,6 +1,6 @@
 # MOLDISC-013 — common-core pose geometry diagnostic
 
-Status: **protocol frozen; execution pending**
+Status: **CLOSED_FIRST_RESULT_PRESERVED**
 
 ## Scientific question
 
@@ -57,3 +57,23 @@ MOLDISC-013 inherits at most `E2_COMPUTATIONAL` evidence from the
 `NON_COGNATE_HOLO_CROSSDOCKING` / `PARTIALLY_VALIDATED` parent context. It is a
 derived descriptive geometry analysis and does not establish affinity, binding
 conservation experimentally, potency, efficacy, safety, or superiority.
+
+## First CI execution
+
+The first complete execution passed in GitHub Actions run `35480342435` from
+the protocol-freeze commit `7947adf1a7653926c9756d414d44bd182a295ec4`.
+MOLDISC-010 replayed with hash
+`360ef9eb66981287781a971a7e09aebbe2749be765af5b4c6dcb33e3839eb48b` and
+MOLDISC-012 replayed with hash
+`e8c66a7726a3b191723e0dea072afdb5e4d4d9202b142eff83fe6d19c623f776`.
+
+The resulting matrix contained 320 cells (`20 x 16`). The rank-1 pair was
+`1.828019792 Å`; the global minimum was `1.675514326 Å` at parent rank 3 and
+child rank 5. The parent rank-1 to child-ensemble minimum and the child
+rank-1 to parent-ensemble minimum were both `1.828019792 Å`, at the opposite
+rank-1 pose. Analysis A/B produced identical hashes, including mapping hash
+`3e59b38463d647c88816927ad23d038b574b4b7d3138ae33714978d9e471bd32` and
+matrix hash `d580968a05a03053269421bebaae1eb03aa80ab9b62cd3fadee2538fb5591386`.
+
+The preserved validation record is
+[`validation/moldisc-013-first-run-v1.json`](../validation/moldisc-013-first-run-v1.json).

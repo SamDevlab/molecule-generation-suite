@@ -1,0 +1,91 @@
+{
+  "schema_version": "research-os.molecular-discovery.program-result.v1",
+  "program_id": "MOLDISC-013",
+  "program_version": "1.0",
+  "status": "CLOSED_FIRST_RESULT_PRESERVED",
+  "protocol_freeze_commit": "7947adf1a7653926c9756d414d44bd182a295ec4",
+  "first_execution": {
+    "github_actions_run_id": 35480342435,
+    "workflow": "moldisc-013-ci",
+    "result": "PASS",
+    "head_sha": "7947adf1a7653926c9756d414d44bd182a295ec4"
+  },
+  "parents": {
+    "moldisc010_frozen_program_scientific_hash": "360ef9eb66981287781a971a7e09aebbe2749be765af5b4c6dcb33e3839eb48b",
+    "moldisc010_replay_program_scientific_hash": "360ef9eb66981287781a971a7e09aebbe2749be765af5b4c6dcb33e3839eb48b",
+    "moldisc010_replay_match": true,
+    "moldisc012_frozen_program_scientific_hash": "e8c66a7726a3b191723e0dea072afdb5e4d4d9202b142eff83fe6d19c623f776",
+    "moldisc012_replay_program_scientific_hash": "e8c66a7726a3b191723e0dea072afdb5e4d4d9202b142eff83fe6d19c623f776",
+    "moldisc012_replay_match": true
+  },
+  "candidates": {
+    "parent": {
+      "candidate_id": "MOLDISC-009-JE2-5461A4A267",
+      "canonical_smiles": "Cc1ccccc1CNC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C",
+      "inchikey": "XBNKKAGGYBXOJG-GMQQYTKMSA-N",
+      "heavy_atoms": 40,
+      "pose_count": 20
+    },
+    "child": {
+      "candidate_id": "MOLDISC-011-JE2-286E6F2BE8",
+      "canonical_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)[C@@H]1C(=O)NCc1ccccc1",
+      "inchikey": "DRIAWXDDGSORDT-KKUQBAQOSA-N",
+      "heavy_atoms": 39,
+      "pose_count": 16
+    },
+    "common_core_heavy_atoms": 39,
+    "exact_heavy_element_connectivity_subgraph": true
+  },
+  "target": {
+    "case_id": "ATX-007",
+    "pdb_id": "1KZK",
+    "native_ligand": "JE2",
+    "native_ligand_author_chain": "A",
+    "receptor_author_chains": ["A", "B"],
+    "native_reference_structure_hash": "82b48b534ff870fb8a922ed62da905bf77fe2e54f2420143986a4c5f9b9c9a4b",
+    "grid_hash": "a0bf032d8bdb1bc20f13f298d604673cac1d2c7da8596cc228ec6602b5989aef",
+    "receptor_frame_identity": "88ac89479e6162e6c647ab992c58e48d007a023952e3b10d8fa224da195dfd13"
+  },
+  "diagnostic": {
+    "metric": "RECEPTOR_FRAME_COMMON_CORE_RMSD",
+    "matrix_shape": [20, 16],
+    "matrix_cells": 320,
+    "rank1_pair_common_core_rmsd_angstrom": 1.828019792,
+    "minimum_all_pairs_common_core_rmsd_angstrom": 1.675514326,
+    "minimum_all_pairs_parent_rank": 3,
+    "minimum_all_pairs_child_rank": 5,
+    "parent_rank1_to_child_ensemble_min_rmsd_angstrom": 1.828019792,
+    "parent_rank1_to_child_ensemble_child_rank": 1,
+    "child_rank1_to_parent_ensemble_min_rmsd_angstrom": 1.828019792,
+    "child_rank1_to_parent_ensemble_parent_rank": 1,
+    "common_core_mapping_hash": "3e59b38463d647c88816927ad23d038b574b4b7d3138ae33714978d9e471bd32",
+    "matrix_hash": "d580968a05a03053269421bebaae1eb03aa80ab9b62cd3fadee2538fb5591386",
+    "no_rigid_body_alignment": true,
+    "geometry_threshold": null,
+    "scores_used_for_candidate_selection": false,
+    "scores_used_for_common_core_definition": false,
+    "scores_used_for_pair_selection": false
+  },
+  "execution_identity": {
+    "analysis_a_program_hash": "198f83e35a4d733a797fdaeb7c89303abd7a1b7035e94942c40520eaf54465c4",
+    "analysis_b_program_hash": "198f83e35a4d733a797fdaeb7c89303abd7a1b7035e94942c40520eaf54465c4",
+    "deterministic": true,
+    "config_hash": "cda4659074f1434846e7053e8bb2b315c95779078f823823ab906675002c6695",
+    "program_scientific_hash": "325edfa890dabc1f8640f9977c6b2e308b582293493631a040752739fd6d89a4"
+  },
+  "evidence_boundary": {
+    "evidence_level": "E2_COMPUTATIONAL",
+    "parent_docking_capability": "NON_COGNATE_HOLO_CROSSDOCKING / PARTIALLY_VALIDATED",
+    "generation_executed": false,
+    "candidate_selection_executed": false,
+    "interpretation": "Descriptive derived geometry over frozen computational docking outputs; no experimental pose-truth, affinity, binding-conservation, potency, efficacy, safety, or superiority claim."
+  },
+  "ci": {
+    "moldisc013_run_id": 35480342435,
+    "moldisc010_run_id": 35480342411,
+    "moldisc012_run_id": 35480342395,
+    "moldisc006_run_id": 35480342413,
+    "molecular_discovery_run_id": 35480342406,
+    "all_relevant_checks_passed": true
+  }
+}
