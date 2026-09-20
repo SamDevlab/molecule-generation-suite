@@ -662,7 +662,7 @@ def run_moldisc_017(*, config_path: str | Path, output_root: str | Path, timeout
         try:
             if spec["campaign_id"]=="CAMP-017-B": ligand=native_prepared[spec["receptor"]]
             else: ligand=Path(prepared[(spec["candidate_key"],int(spec["etkdg_seed"]))]["pdbqt_path"])
-            records[spec["run_id"]]=_run_vina(spec,root,receptors[spec["receptor"]],ligand,vina)
+            records[spec["run_id"]]=_run_vina(spec,root=root,receptor=receptors[spec["receptor"]],ligand_path=ligand,vina=vina)
         except (OSError,ValueError,RuntimeError,MOLDISC017Error) as exc:
             records[spec["run_id"]]=_failure_record(spec,"EXECUTION_INDETERMINATE","NONPASS"); records[spec["run_id"]]["error"]=str(exc); _write_json(root/"runs"/spec["run_id"]/"run_manifest.json",records[spec["run_id"]])
         if records[spec["run_id"]].get("technical_status")!="PASS": failures+=1
