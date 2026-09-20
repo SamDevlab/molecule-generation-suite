@@ -1,0 +1,130 @@
+name: moldisc-018-ci
+
+on:
+  pull_request:
+    paths:
+      - "programs/moldisc-018-reciprocal-holo-validation/**"
+      - "src/research_os/molecular_discovery/moldisc018.py"
+      - "scripts/run_moldisc_018.py"
+      - "tests/test_moldisc_018.py"
+      - "tests/test_docking_capability.py"
+      - "configs/docking-capability-profile-v1.json"
+      - "validation/moldisc-018-first-run-v1.json"
+      - "docs/moldisc-018-reciprocal-holo-validation.md"
+      - ".github/workflows/moldisc018-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "programs/moldisc-018-reciprocal-holo-validation/**"
+      - "src/research_os/molecular_discovery/moldisc018.py"
+      - "scripts/run_moldisc_018.py"
+      - "tests/test_moldisc_018.py"
+      - "tests/test_docking_capability.py"
+      - "configs/docking-capability-profile-v1.json"
+      - "validation/moldisc-018-first-run-v1.json"
+      - "docs/moldisc-018-reciprocal-holo-validation.md"
+      - ".github/workflows/moldisc018-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-protocol:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install discovery dependencies
+        run: python -m pip install -e ".[dev,discovery]"
+      - name: Install Open Babel for the source audit
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+      - name: Source audit and exact-plan checks
+        run: |
+          python scripts/run_moldisc_018.py --source-audit-only --output /tmp/moldisc018-source-audit
+          python - <<'PY'
+          from research_os.molecular_discovery.moldisc018 import build_execution_plan, load_program_config_v18
+
+          config = load_program_config_v18("programs/moldisc-018-reciprocal-holo-validation/program.json")
+          plan = build_execution_plan(config)
+          assert len(plan) == 20
+          assert sum(item["kind"] == "RECIPROCAL_CROSSDOCK" and item["etkdg_seed"] == 42 and item["replicate"] == "RUN_A" for item in plan) == 4
+          assert all(item["kind"] != "GENERATED_CANDIDATE_DOCKING" for item in plan)
+          assert config["native_context"]["k57_is_generated_candidate"] is False
+          assert config["native_context"]["generated_candidate_is_k57"] is False
+          assert config["alignment"]["exclude_residues"] == []
+          assert config["native_context"]["frozen_classification_after_campaign"] == "PARTIALLY_VALIDATED"
+          print("MOLDISC-018 frozen protocol passed")
+          PY
+      - run: python -m pytest -q tests/test_moldisc_018.py
+
+  execution:
+    needs: frozen-protocol
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install discovery and docking dependencies
+        run: python -m pip install -e ".[dev,discovery,docking]"
+      - name: Install official AutoDock Vina 1.2.7
+        run: |
+          curl --fail --location --retry 3 https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          test "$(sha256sum /tmp/vina_1.2.7 | cut -d ' ' -f1)" = "f31f774f723bba7bbe6e9d1c47577020eea9a8da16424284c043d22593570644"
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+      - name: Install Open Babel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+      - name: Execute exactly the frozen 20 runs
+        run: python scripts/run_moldisc_018.py --output /tmp/moldisc018-result
+      - name: Validate accounting and claim boundaries
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("/tmp/moldisc018-result")
+          result = json.loads((root / "moldisc-018-first-run-v1.json").read_text())
+          assert result["new_docking_runs"] == {"planned": 20, "executed": 20, "skipped": 0, "nonpass": 0}
+          assert result["failure_decomposition"]["primary_sample_size"] == 4
+          assert result["failure_decomposition"]["rank1_success_count"] == 2
+          assert result["failure_decomposition"]["any_pose_success_count"] == 4
+          assert result["capability_classification"] == "PARTIALLY_VALIDATED"
+          assert result["generation_executed"] is False
+          assert result["generated_candidate_docking_executed"] is False
+          assert result["candidate_selection_executed"] is False
+          assert result["lead_selection_executed"] is False
+          assert result["profile_update"]["evidence_source_ids"] == ["CROSSDOCK-001", "MOLDISC-018-RECIPROCAL-HOLO"]
+          print(result["program_scientific_hash"])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: moldisc-018-reciprocal-holo-validation
+          path: /tmp/moldisc018-result
+
+  focused-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install -e ".[dev,discovery]"
+      - run: python -m pytest -q tests/test_docking_capability.py tests/test_moldisc_016.py tests/test_moldisc_017.py tests/test_moldisc_018.py
+      - run: python -m compileall -q src scripts tests
+      - run: git diff --check

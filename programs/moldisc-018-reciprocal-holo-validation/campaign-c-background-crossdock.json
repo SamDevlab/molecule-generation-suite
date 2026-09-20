@@ -1,0 +1,1 @@
+{"campaign_id":"CAMP-018-C","name":"BACKGROUND_RECIPROCAL_CROSSDOCK","kind":"CROSSDOCK","planned_runs":8,"primary_cases":["RX-01","RX-02"],"seeds":[42,1337,2025],"replicates":{"42":["RUN_A","RUN_B"],"1337":["RUN_A"],"2025":["RUN_A"]}}

@@ -1,0 +1,1 @@
+{"campaign_id":"CAMP-018-E","name":"RECEPTOR_ALIGNMENT_AND_REFERENCE_TRANSFER","kind":"ANALYSIS","planned_runs":0,"pairs":["1MRW->1MSM","1MSM->1MRW","1MRX->1MSN","1MSN->1MRX"],"ligand_fit_applied":false}
