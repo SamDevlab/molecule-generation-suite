@@ -1,0 +1,1 @@
+{"campaign_id":"CAMP-017-G","name":"CROSS_RECEPTOR_FACTORIAL_ANALYSIS","kind":"ANALYSIS","planned_runs":0,"conditions":{"receptors":["R0","R1","R2"],"conformer_seeds":[42,1337,2025],"mode":"DESCRIPTIVE_ONLY","mutation_shift":"R2-R1"}}

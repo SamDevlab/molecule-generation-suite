@@ -14,6 +14,7 @@ from research_os.molecular_discovery.moldisc016 import (
     load_program_config_v16,
     receptor_frame_rmsd,
     sign_consistent,
+    _summary_matrix,
 )
 
 
@@ -68,3 +69,18 @@ def test_contacts_use_four_angstrom_heavy_atom_boundary() -> None:
     assert len(contact_residues([(3.9, 0.0, 0.0)], receptor)) == 1
     assert len(contact_residues([(4.0, 0.0, 0.0)], receptor)) == 1
     assert contact_residues([(4.1, 0.0, 0.0)], receptor) == []
+
+
+def test_contextual_summary_matrix_matches_moldisc_014_source_profiles() -> None:
+    candidates = {candidate.key: candidate for candidate in CANDIDATES}
+    records = {
+        f"{key}__baseline__RUN_A": {"technical_status": "PASS", "pose_count": 20, "pose_1_score_kcal_mol": -9.0}
+        for key in candidates
+    }
+    rows = _summary_matrix(records, candidates)
+    assert [(row["factor_A"], row["factor_B"], row["source_connectivity_match"], row["ESOL_status"]) for row in rows] == [
+        ("A0", "B0", False, "OUT_OF_DOMAIN"),
+        ("A1", "B0", False, "IN_DOMAIN"),
+        ("A0", "B1", False, "OUT_OF_DOMAIN"),
+        ("A1", "B1", True, "OUT_OF_DOMAIN"),
+    ]

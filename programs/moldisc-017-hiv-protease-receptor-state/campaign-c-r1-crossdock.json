@@ -1,0 +1,1 @@
+{"campaign_id":"CAMP-017-C","name":"R1_PANEL_CROSSDOCK","kind":"DOCKING","planned_runs":16,"conditions":{"receptor":"R1","candidate_count":4,"etkdg_seeds":[42,1337,2025],"replicates":{"42":["RUN_A","RUN_B"],"1337":["RUN_A"],"2025":["RUN_A"]},"vina_seed":42,"cpu":1,"exhaustiveness":16,"num_modes":20}}

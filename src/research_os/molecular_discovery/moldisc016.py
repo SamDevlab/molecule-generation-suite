@@ -72,6 +72,18 @@ ANALYSIS_CONDITIONS = (
     "exhaustiveness_8",
     "exhaustiveness_32",
 )
+SUMMARY_MATRIX_SOURCE_CONNECTIVITY = {
+    "A0B0": False,
+    "A1B0": False,
+    "A0B1": False,
+    "A1B1": True,
+}
+SUMMARY_MATRIX_ESOL_STATUS = {
+    "A0B0": "OUT_OF_DOMAIN",
+    "A1B0": "IN_DOMAIN",
+    "A0B1": "OUT_OF_DOMAIN",
+    "A1B1": "OUT_OF_DOMAIN",
+}
 
 
 class MOLDISC016Error(RuntimeError):
@@ -566,11 +578,10 @@ def _synthesis(records: Mapping[str, Mapping[str, Any]], factorial: Mapping[str,
 
 def _summary_matrix(records: Mapping[str, Mapping[str, Any]], candidates: Mapping[str, CandidateSpec]) -> list[dict[str, Any]]:
     nearest = {"A0B0": 0.6857142857142857, "A1B0": 0.7903225806451613, "A0B1": 0.859375, "A1B1": 1.0}
-    esol = {"A0B0": "IN_DOMAIN", "A1B0": "IN_DOMAIN", "A0B1": "OUT_OF_DOMAIN", "A1B1": "OUT_OF_DOMAIN"}
     rows = []
     for key in ("A0B0", "A1B0", "A0B1", "A1B1"):
         candidate = candidates[key]
-        row = {"candidate": candidate.candidate_id, "variant_id": candidate.variant_id, "factor_A": candidate.factor_a, "factor_B": candidate.factor_b, "baseline_A_status": records.get(f"{key}__baseline__RUN_A", {}).get("technical_status"), "baseline_B_status": records.get(f"{key}__baseline__RUN_B", {}).get("technical_status"), "baseline_pose_count": records.get(f"{key}__baseline__RUN_A", {}).get("pose_count"), "baseline_pose1_score": records.get(f"{key}__baseline__RUN_A", {}).get("pose_1_score_kcal_mol"), "AqSolDB_nearest": nearest[key], "ESOL_status": esol[key], "source_connectivity_match": True, "measurement_transfer_allowed": False}
+        row = {"candidate": candidate.candidate_id, "variant_id": candidate.variant_id, "factor_A": candidate.factor_a, "factor_B": candidate.factor_b, "baseline_A_status": records.get(f"{key}__baseline__RUN_A", {}).get("technical_status"), "baseline_B_status": records.get(f"{key}__baseline__RUN_B", {}).get("technical_status"), "baseline_pose_count": records.get(f"{key}__baseline__RUN_A", {}).get("pose_count"), "baseline_pose1_score": records.get(f"{key}__baseline__RUN_A", {}).get("pose_1_score_kcal_mol"), "AqSolDB_nearest": nearest[key], "ESOL_status": SUMMARY_MATRIX_ESOL_STATUS[key], "source_connectivity_match": SUMMARY_MATRIX_SOURCE_CONNECTIVITY[key], "measurement_transfer_allowed": False}
         for condition in ANALYSIS_CONDITIONS:
             run_id = f"{key}__baseline__RUN_A" if condition == "baseline" else f"{key}__{condition}"
             row[condition] = records.get(run_id, {}).get("pose_1_score_kcal_mol") if records.get(run_id, {}).get("technical_status") == "PASS" else None
