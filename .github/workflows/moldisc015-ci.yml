@@ -1,0 +1,96 @@
+name: moldisc-015-ci
+
+on:
+  pull_request:
+    paths:
+      - "src/research_os/molecular_discovery/moldisc015.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_015.py"
+      - "tests/test_moldisc_015.py"
+      - "programs/moldisc-015-c2545-source-resolution/**"
+      - "docs/moldisc-015-c2545-source-resolution.md"
+      - "validation/moldisc-015-*.json"
+      - "validation/moldisc-015-first-run-v1/**"
+      - ".github/workflows/moldisc015-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/research_os/molecular_discovery/moldisc015.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_015.py"
+      - "tests/test_moldisc_015.py"
+      - "programs/moldisc-015-c2545-source-resolution/**"
+      - "docs/moldisc-015-c2545-source-resolution.md"
+      - "validation/moldisc-015-*.json"
+      - "validation/moldisc-015-first-run-v1/**"
+      - ".github/workflows/moldisc015-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  source-resolution:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Research OS discovery dependencies
+        run: python -m pip install -e ".[dev,discovery]"
+
+      - name: Check dependency consistency
+        run: python -m pip check
+
+      - name: Compile MOLDISC-015
+        run: >-
+          python -m py_compile
+          src/research_os/molecular_discovery/moldisc015.py
+          scripts/run_moldisc_015.py
+          tests/test_moldisc_015.py
+
+      - name: Run focused source-resolution tests
+        run: python -m pytest -q tests/test_moldisc_015.py
+
+      - name: Verify preserved first-run record
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("validation/moldisc-015-first-run-v1")
+          canonical = json.loads(Path("validation/moldisc-015-first-run-v1.json").read_text())
+          manifest = json.loads((root / "program_manifest.json").read_text())
+          source = json.loads((root / "source_trace.json").read_text())
+          resolution = json.loads((root / "identity_resolution.json").read_text())
+          supporting = json.loads(Path("validation/moldisc-015-supporting-information-v1.json").read_text())
+
+          assert canonical["status"] == "CLOSED_FIRST_RESULT_PRESERVED"
+          assert canonical["execution_identity"]["program_scientific_hash"] == manifest["program_scientific_hash"]
+          assert canonical["execution_identity"]["source_trace_hash"] == source["scientific_hash"]
+          assert canonical["execution_identity"]["identity_resolution_hash"] == resolution["scientific_hash"]
+          assert resolution["status"] == "UNRESOLVED_SOURCE_STEREOCHEMISTRY"
+          assert resolution["measurement_transfer"]["measurement_transfer_allowed"] is False
+          assert source["aqsoldb_record"]["record_id"] == "C-2545"
+          assert source["aqsoldb_record"]["inchikey"] == "URHJIBSBOJFXDI-UHFFFAOYSA-N"
+          assert supporting["matched_record"]["name"] == "PHENYL-KNI-727"
+          assert supporting["matched_record"]["inchi"] is None
+          assert supporting["matched_record"]["inchikey"] is None
+          assert supporting["matched_record"]["stereochemistry_specified"] is False
+          assert manifest["generation_executed"] is False
+          assert manifest["docking_executed"] is False
+          assert manifest["candidate_selection_executed"] is False
+          assert manifest["aqsoldb_modified"] is False
+          print(json.dumps({
+              "program_scientific_hash": manifest["program_scientific_hash"],
+              "source_trace_hash": source["scientific_hash"],
+              "identity_resolution_hash": resolution["scientific_hash"],
+              "status": resolution["status"],
+              "supporting_information_sha256": supporting["transport_sha256"],
+          }, indent=2, sort_keys=True))
+          PY

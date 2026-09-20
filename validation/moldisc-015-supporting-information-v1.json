@@ -1,0 +1,70 @@
+{
+  "recovered": true,
+  "source_url": "https://pubs.acs.org/jcisd8/article-supplement/940911/xls/ci400692n_si_001/",
+  "transport_url": "https://ndownloader.figstatic.com/files/3958366",
+  "publisher": "American Chemical Society (ACS Publications), publisher-hosted Figshare mirror",
+  "filename": "ci400692n_si_001.xls",
+  "transport_sha256": "4E3DD0EB7170CDB580A1D73E1CB7BA44D6D02E512D3D9C50365C1F8E47E7658E",
+  "file_size_bytes": 778752,
+  "retrieval_date": "2026-09-19",
+  "publication_doi": "10.1021/ci400692n",
+  "matched_record": {
+    "compound_number": null,
+    "cas_number": null,
+    "name": "PHENYL-KNI-727",
+    "raw_structure_representation": "SMILES",
+    "structure_representation_type": "non-isomeric SMILES; no explicit stereochemistry",
+    "smiles": "CC(C)(C)NC(=O)C1N(CSC1(C)C)C(=O)C(O)C(CC2=CC=CC=C2)NC(=O)C3=CC=CC=C3",
+    "inchi": null,
+    "inchikey": null,
+    "formula": null,
+    "stereochemistry_specified": false,
+    "stereo_representation": null,
+    "measured_log_s_exp": -3.62,
+    "measured_log_s_uni": -3.62,
+    "measured_solubility_g_l": 0.119,
+    "measured_solubility_mol_l": 0.00024,
+    "measurement_temperature_c": 25.0,
+    "molecular_weight": 498.0,
+    "excel_sheet": "Support_info",
+    "excel_row_1_based": 2567,
+    "original_source_locator": null,
+    "raw_fields": {
+      "Smiles": "CC(C)(C)NC(=O)C1N(CSC1(C)C)C(=O)C(O)C(CC2=CC=CC=C2)NC(=O)C3=CC=CC=C3",
+      "name": "PHENYL-KNI-727",
+      "Molecular weight": 498.0,
+      "S(g/L)": 0.119,
+      "S(M/L)": 0.00024,
+      "logSexp": -3.62,
+      "logP": null,
+      "Tmp, C": null,
+      "pK1": null,
+      "pK2": null,
+      "pK3": null,
+      "pH (buffer)": null,
+      "pH cal": null,
+      "f(ui)": 1.0,
+      "log (1/f(ui))": 0.0,
+      "logS(uni)": -3.62,
+      "T measmt, C": 25.0,
+      "AlogP": 3.17,
+      "alpha": 55.375
+    }
+  },
+  "upstream_original_source": {
+    "identified": false,
+    "locator": null,
+    "reason": "The recovered SI table has no compound-level original-source locator; it identifies the publication dataset row only."
+  },
+  "rejected_identity_candidates": [
+    {
+      "name": "KNI-727",
+      "source_url": "https://pubchem.ncbi.nlm.nih.gov/compound/KNI-727",
+      "formula": "C30H41N3O5S",
+      "inchikey": "CSWRAOHDICNMPU-LLZJGCNPSA-N",
+      "connectivity_block": "CSWRAOHDICNMPU",
+      "stereochemistry_specified": true,
+      "rejection_reason": "Generic KNI-727 has incompatible formula and connectivity identity; name-family similarity cannot resolve C-2545."
+    }
+  ]
+}

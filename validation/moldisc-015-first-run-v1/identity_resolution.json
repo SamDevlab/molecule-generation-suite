@@ -1,0 +1,69 @@
+{
+  "connectivity_block": "URHJIBSBOJFXDI",
+  "formula": "C27H35N3O4S",
+  "matched_supporting_record": {
+    "cas_number": null,
+    "compound_number": null,
+    "excel_row_1_based": 2567,
+    "excel_sheet": "Support_info",
+    "formula": null,
+    "inchi": null,
+    "inchikey": null,
+    "measured_log_s_exp": -3.62,
+    "measured_log_s_uni": -3.62,
+    "measured_solubility_g_l": 0.119,
+    "measured_solubility_mol_l": 0.00024,
+    "measurement_temperature_c": 25.0,
+    "molecular_weight": 498.0,
+    "name": "PHENYL-KNI-727",
+    "original_source_locator": null,
+    "raw_fields": {
+      "AlogP": 3.17,
+      "Molecular weight": 498.0,
+      "S(M/L)": 0.00024,
+      "S(g/L)": 0.119,
+      "Smiles": "CC(C)(C)NC(=O)C1N(CSC1(C)C)C(=O)C(O)C(CC2=CC=CC=C2)NC(=O)C3=CC=CC=C3",
+      "T measmt, C": 25.0,
+      "Tmp, C": null,
+      "alpha": 55.375,
+      "f(ui)": 1.0,
+      "log (1/f(ui))": 0.0,
+      "logP": null,
+      "logS(uni)": -3.62,
+      "logSexp": -3.62,
+      "name": "PHENYL-KNI-727",
+      "pH (buffer)": null,
+      "pH cal": null,
+      "pK1": null,
+      "pK2": null,
+      "pK3": null
+    },
+    "raw_structure_representation": "SMILES",
+    "smiles": "CC(C)(C)NC(=O)C1N(CSC1(C)C)C(=O)C(O)C(CC2=CC=CC=C2)NC(=O)C3=CC=CC=C3",
+    "stereo_representation": null,
+    "stereochemistry_specified": false,
+    "structure_representation_type": "non-isomeric SMILES; no explicit stereochemistry"
+  },
+  "measurement_traceable": true,
+  "measurement_transfer": {
+    "exact_stereo_identity": false,
+    "full_inchikey_match": false,
+    "measurement_transfer_allowed": false,
+    "same_connectivity": false
+  },
+  "rejected_identity_candidates": [
+    {
+      "connectivity_block": "CSWRAOHDICNMPU",
+      "formula": "C30H41N3O5S",
+      "inchikey": "CSWRAOHDICNMPU-LLZJGCNPSA-N",
+      "name": "KNI-727",
+      "rejection_reason": "Generic KNI-727 has incompatible formula and connectivity identity; name-family similarity cannot resolve C-2545.",
+      "source_url": "https://pubchem.ncbi.nlm.nih.gov/compound/KNI-727",
+      "stereochemistry_specified": true
+    }
+  ],
+  "scientific_hash": "984e0deb92949dd6953c6641b8ad469b35d442012ba331536ae73bde260a0693",
+  "source_record_recoverable": true,
+  "source_stereochemistry_specified": false,
+  "status": "UNRESOLVED_SOURCE_STEREOCHEMISTRY"
+}

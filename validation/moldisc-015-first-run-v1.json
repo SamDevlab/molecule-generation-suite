@@ -1,0 +1,97 @@
+{
+  "schema_version": "research-os.molecular-discovery.program-result.v1",
+  "program_id": "MOLDISC-015",
+  "program_version": "1.0",
+  "status": "CLOSED_FIRST_RESULT_PRESERVED",
+  "protocol_freeze_commit": "e647aa3f68f352a5ff405dda02c63d17c598c12c",
+  "first_execution": {
+    "github_actions_run_id": 35485056612,
+    "workflow": "moldisc-015-ci",
+    "result": "PASS",
+    "head_sha": "6d1826b60f2d983d8932f5ab9a217f75bab8f8a1"
+  },
+  "parents": {
+    "moldisc014_program_scientific_hash": "f940d95189616131829a22f9e68a53a960eddf8fd05f5fd7ebac43ece85481ed"
+  },
+  "execution_identity": {
+    "config_hash": "7e482cbc138c008eb190782a18ccaccfba7df8822339991291276c89c35fdabb",
+    "source_trace_hash": "7e10824b6ef60006da23e3b26f63737cb8717476d05ca3371022164d94f78599",
+    "identity_resolution_hash": "984e0deb92949dd6953c6641b8ad469b35d442012ba331536ae73bde260a0693",
+    "program_scientific_hash": "8e22c0565f2d78dc16468c8edb8f8f0b90a4007e50ced99e00e3d7a0b0f63e5d"
+  },
+  "source": {
+    "source_id": "AqSolDB",
+    "record_id": "C-2545",
+    "name": "phenyl-kni-727",
+    "inchi": "InChI=1S/C27H35N3O4S/c1-26(2,3)29-24(33)22-27(4,5)35-17-30(22)25(34)21(31)20(16-18-12-8-6-9-13-18)28-23(32)19-14-10-7-11-15-19/h6-15,20-22,31H,16-17H2,1-5H3,(H,28,32)(H,29,33)",
+    "inchikey": "URHJIBSBOJFXDI-UHFFFAOYSA-N",
+    "formula": "C27H35N3O4S",
+    "connectivity_block": "URHJIBSBOJFXDI",
+    "measured_log_s_mol_l": -3.62,
+    "observation_count": 1,
+    "stereochemistry_specified": false,
+    "source_commit": "98cdd10a372058743e4f3fb950a1c9974ec9603a",
+    "source_blob_sha": "67016e030cf0a741e250ba0267bd84461041db5f",
+    "parsed_source_hash": "2c6e56f56389f0fd99fa2a3c843446f98b6b068a3f93aaab71a08822caa085f4",
+    "readme_mapping": "3. dataset-C.csv [3]"
+  },
+  "publication": {
+    "doi": "10.1021/ci400692n",
+    "citation": "Raevsky OA; Grigor'ev VY; Polianczyk DE; Raevskaja OE; Dearden JC. J Chem Inf Model. 2014;54:683-691."
+  },
+  "supporting_information": {
+    "recovered": true,
+    "source_url": "https://pubs.acs.org/jcisd8/article-supplement/940911/xls/ci400692n_si_001/",
+    "transport_url": "https://ndownloader.figstatic.com/files/3958366",
+    "publisher": "American Chemical Society (ACS Publications), publisher-hosted Figshare mirror",
+    "filename": "ci400692n_si_001.xls",
+    "transport_sha256": "4E3DD0EB7170CDB580A1D73E1CB7BA44D6D02E512D3D9C50365C1F8E47E7658E",
+    "file_size_bytes": 778752,
+    "retrieval_date": "2026-09-19",
+    "matched_record": {
+      "name": "PHENYL-KNI-727",
+      "excel_sheet": "Support_info",
+      "excel_row_1_based": 2567,
+      "smiles": "CC(C)(C)NC(=O)C1N(CSC1(C)C)C(=O)C(O)C(CC2=CC=CC=C2)NC(=O)C3=CC=CC=C3",
+      "inchi": null,
+      "inchikey": null,
+      "formula": null,
+      "stereochemistry_specified": false,
+      "stereo_representation": null,
+      "measured_log_s_exp": -3.62,
+      "measured_solubility_g_l": 0.119,
+      "measured_solubility_mol_l": 0.00024,
+      "measurement_temperature_c": 25.0,
+      "original_source_locator": null,
+      "raw_fields_preserved_in": "validation/moldisc-015-supporting-information-v1.json"
+    },
+    "original_source_identified": false
+  },
+  "resolution": {
+    "status": "UNRESOLVED_SOURCE_STEREOCHEMISTRY",
+    "source_stereochemistry_specified": false,
+    "source_record_recoverable": true,
+    "measurement_traceable": true,
+    "source_delta_both_inchikey": "URHJIBSBOJFXDI-FDFHNCONSA-N",
+    "connectivity_match": true,
+    "full_inchikey_match": false,
+    "measurement_transfer_allowed": false,
+    "rejected_identity_candidates_preserved": [
+      {
+        "name": "KNI-727",
+        "formula": "C30H41N3O5S",
+        "inchikey": "CSWRAOHDICNMPU-LLZJGCNPSA-N",
+        "reason": "incompatible formula and connectivity identity"
+      }
+    ]
+  },
+  "boundaries": {
+    "generation_executed": false,
+    "docking_executed": false,
+    "candidate_selection_executed": false,
+    "esol_executed": false,
+    "vina_used": false,
+    "aqsoldb_modified": false
+  },
+  "run_bundle": "validation/moldisc-015-first-run-v1/"
+}
