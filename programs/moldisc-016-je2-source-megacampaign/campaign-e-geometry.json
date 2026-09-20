@@ -1,0 +1,1 @@
+{"campaign_id":"CAMP-016-E","name":"FACTORIAL_POSE_GEOMETRY","kind":"ANALYSIS","planned_runs":0,"conditions":{"input":"baseline RUN_A only","metric":"RECEPTOR_FRAME_COMMON_CORE_RMSD","threshold_angstrom":null}}

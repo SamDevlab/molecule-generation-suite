@@ -1,0 +1,1 @@
+{"campaign_id":"CAMP-016-D","name":"EXHAUSTIVENESS_SENSITIVITY","kind":"DOCKING","planned_runs":8,"conditions":{"vina_seed":42,"etkdg_seed":42,"exhaustiveness_values":[8,32],"prepared_input":"baseline"}}

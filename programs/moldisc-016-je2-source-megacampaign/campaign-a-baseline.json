@@ -1,0 +1,1 @@
+{"campaign_id":"CAMP-016-A","name":"BASELINE_2X2_DOCKING","kind":"DOCKING","planned_runs":8,"conditions":{"vina_seed":42,"etkdg_seed":42,"exhaustiveness":16,"replicates":["RUN_A","RUN_B"]}}

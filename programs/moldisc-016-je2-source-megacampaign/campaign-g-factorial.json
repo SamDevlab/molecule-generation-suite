@@ -1,0 +1,1 @@
+{"campaign_id":"CAMP-016-G","name":"DESCRIPTIVE_FACTORIAL_SYNTHESIS","kind":"ANALYSIS","planned_runs":0,"conditions":{"mode":"DESCRIPTIVE_ONLY","conditions":["baseline","vina_seed_1337","vina_seed_2025","etkdg_seed_1337","etkdg_seed_2025","exhaustiveness_8","exhaustiveness_32"]}}

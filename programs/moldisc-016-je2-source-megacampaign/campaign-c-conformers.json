@@ -1,0 +1,1 @@
+{"campaign_id":"CAMP-016-C","name":"STARTING_CONFORMER_SENSITIVITY","kind":"DOCKING","planned_runs":8,"conditions":{"vina_seed":42,"etkdg_seeds":[1337,2025],"exhaustiveness":16}}
