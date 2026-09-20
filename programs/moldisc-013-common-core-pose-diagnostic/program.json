@@ -1,0 +1,101 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-013",
+  "program_version": "1.0",
+  "title": "DEMETHYL-03 / STEP2-DEMETHYL-01 common-core pose geometry diagnostic",
+  "scientific_question": "Under the unchanged ATX-007 / 1KZK / JE2 receptor frame and frozen docking outputs, what receptor-frame displacement is observed between DEMETHYL-03 and STEP2-DEMETHYL-01 over their exact shared heavy-atom core?",
+  "parents": {
+    "moldisc010": {
+      "program_id": "MOLDISC-010",
+      "program_scientific_hash": "360ef9eb66981287781a971a7e09aebbe2749be765af5b4c6dcb33e3839eb48b",
+      "candidate_variant_id": "DEMETHYL-03",
+      "candidate_id": "MOLDISC-009-JE2-5461A4A267",
+      "pose_count": 20,
+      "pose_1_score_kcal_mol": -11.03
+    },
+    "moldisc012": {
+      "program_id": "MOLDISC-012",
+      "program_scientific_hash": "e8c66a7726a3b191723e0dea072afdb5e4d4d9202b142eff83fe6d19c623f776",
+      "candidate_variant_id": "STEP2-DEMETHYL-01",
+      "candidate_id": "MOLDISC-011-JE2-286E6F2BE8",
+      "pose_count": 16,
+      "pose_1_score_kcal_mol": -11.6
+    }
+  },
+  "parent_candidate": {
+    "candidate_id": "MOLDISC-009-JE2-5461A4A267",
+    "canonical_smiles": "Cc1ccccc1CNC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C",
+    "inchikey": "XBNKKAGGYBXOJG-GMQQYTKMSA-N"
+  },
+  "child_candidate": {
+    "candidate_id": "MOLDISC-011-JE2-286E6F2BE8",
+    "canonical_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)[C@@H]1C(=O)NCc1ccccc1",
+    "inchikey": "DRIAWXDDGSORDT-KKUQBAQOSA-N"
+  },
+  "chemistry": {
+    "relation": "child_is_parent_with_one_terminal_methyl_carbon_removed",
+    "parent_heavy_atoms": 40,
+    "child_heavy_atoms": 39,
+    "common_core_heavy_atoms": 39,
+    "heavy_atom_difference": 1,
+    "child_must_be_exact_heavy_substructure": true
+  },
+  "target": {
+    "case_id": "ATX-007",
+    "pdb_id": "1KZK",
+    "native_ligand": "JE2",
+    "native_ligand_author_chain": "A",
+    "receptor_author_chains": ["A", "B"],
+    "native_reference_structure_hash": "82b48b534ff870fb8a922ed62da905bf77fe2e54f2420143986a4c5f9b9c9a4b",
+    "grid_hash": "a0bf032d8bdb1bc20f13f298d604673cac1d2c7da8596cc228ec6602b5989aef",
+    "coordinate_frame": "RECEPTOR_FRAME"
+  },
+  "mapping": {
+    "mapping_rule_id": "research-os.moldisc-013.common-core-receptor-frame.v1",
+    "metric": "RECEPTOR_FRAME_COMMON_CORE_RMSD",
+    "element_identity_required": true,
+    "heavy_atom_connectivity_required": true,
+    "graph_mapping_required": true,
+    "allow_graph_automorphisms": true,
+    "no_coordinate_only_fallback": true,
+    "no_rigid_body_alignment": true,
+    "coordinate_frame": "RECEPTOR_FRAME",
+    "pairwise_matrix_complete": true
+  },
+  "endpoints": {
+    "rank1_pair_metric": "rank1_pair_common_core_rmsd_angstrom",
+    "all_pairs_minimum_metric": "minimum_all_pairs_common_core_rmsd_angstrom",
+    "rank1_to_opposite_ensemble_metrics": [
+      "parent_rank1_to_child_ensemble_min_rmsd_angstrom",
+      "child_rank1_to_parent_ensemble_min_rmsd_angstrom"
+    ],
+    "required_summaries": [
+      "rank1_pair_common_core_rmsd_angstrom",
+      "minimum_all_pairs_common_core_rmsd_angstrom",
+      "parent_rank1_to_child_ensemble_min_rmsd_angstrom",
+      "child_rank1_to_parent_ensemble_min_rmsd_angstrom"
+    ],
+    "score_success_threshold": null,
+    "geometry_threshold": null,
+    "scores_used_for_candidate_selection": false,
+    "scores_used_for_common_core_definition": false,
+    "scores_used_for_pair_selection": false
+  },
+  "execution_boundary": {
+    "generation_executed": false,
+    "candidate_selection_executed": false,
+    "aqsoldb_selection_executed": false,
+    "docking_candidate_selection_executed": false,
+    "replay_parent_dockings": true,
+    "analysis_repeated_twice": true
+  },
+  "interpretation_boundaries": [
+    "MOLDISC-013 performs no molecular generation and no candidate selection.",
+    "MOLDISC-013 replays the already frozen MOLDISC-010 and MOLDISC-012 programs and fails closed on scientific-hash drift.",
+    "Coordinates are compared directly in the unchanged receptor frame; no Kabsch alignment, rigid-body fitting, centering, or translation/rotation normalization is used.",
+    "Rank 1 is a docking-engine rank, not an experimentally validated pose.",
+    "The global-minimum pair is descriptive only and is not declared correct.",
+    "Docking scores are provenance only and are not used to define the common core, select a pair, or define success.",
+    "This is an E2 computational derived geometry analysis and does not establish affinity, potency, efficacy, safety, or experimental binding conservation."
+  ]
+}
