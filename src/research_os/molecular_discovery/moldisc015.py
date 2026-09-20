@@ -234,6 +234,7 @@ class SupportingInformationArtifact:
     file_size_bytes: int | None
     retrieval_date: str | None
     publication_doi: str
+    transport_url: str | None = None
     matched_record: dict[str, Any] | None = None
     upstream_original_source: dict[str, Any] | None = None
     rejected_identity_candidates: tuple[dict[str, Any], ...] = ()
@@ -261,13 +262,18 @@ class SupportingInformationArtifact:
             raise MOLDISC015Error("supporting information is not attributable to the frozen publication")
         if self.temporary_path:
             path = Path(self.temporary_path)
-            if not path.is_file() or path.stat().st_size != self.file_size_bytes or sha256_file(path) != self.transport_sha256:
+            if (
+                not path.is_file()
+                or path.stat().st_size != self.file_size_bytes
+                or sha256_file(path).casefold() != self.transport_sha256.casefold()
+            ):
                 raise MOLDISC015Error("supporting-information transport artifact hash or size drifted")
 
     def scientific_payload(self) -> dict[str, Any]:
         return {
             "recovered": self.recovered,
             "source_url": self.source_url,
+            "transport_url": self.transport_url,
             "publisher": self.publisher,
             "filename": self.filename,
             "transport_sha256": self.transport_sha256,
@@ -393,12 +399,12 @@ def build_source_trace(
 ) -> SourceTrace:
     validate_aqsoldb_record(aqsoldb_record)
     supporting_information.verify_artifact()
-    if dataset_c_identity.get("readme_mapping") != "dataset-C.csv -> reference [3]":
+    if dataset_c_identity.get("readme_mapping") != "3. dataset-C.csv [3]":
         raise MOLDISC015Error("dataset-C README mapping is not preserved")
     rejected = tuple(supporting_information.rejected_identity_candidates)
     chain = (
         {"source_type": "AQSOLDB_RECORD", "locator": "data/dataset-C.csv", "identifier": "C-2545", "claim_supported": "measured logS and raw identity record", "identity_evidence": "exact record ID plus formula/connectivity fields"},
-        {"source_type": "DATASET_C_REFERENCE", "locator": "AqSolDB README dataset-C.csv -> [3]", "identifier": "reference [3]", "claim_supported": "dataset-C provenance", "identity_evidence": "frozen README mapping"},
+        {"source_type": "DATASET_C_REFERENCE", "locator": "AqSolDB README line 56: 3. dataset-C.csv [3]", "identifier": "reference [3]", "claim_supported": "dataset-C provenance", "identity_evidence": "frozen README mapping"},
         {"source_type": "PUBLICATION", "locator": "doi:10.1021/ci400692n", "identifier": "10.1021/ci400692n", "claim_supported": "dataset-C publication", "identity_evidence": "frozen citation metadata"},
     )
     return SourceTrace(
@@ -495,7 +501,7 @@ def run_moldisc_015(
     record = parse_aqsoldb_csv(aqsoldb_csv_path)
     readme_bytes = Path(dataset_c_readme_path).read_bytes()
     readme_text = readme_bytes.decode("utf-8", errors="replace")
-    mapping = "dataset-C.csv -> reference [3]"
+    mapping = "3. dataset-C.csv [3]"
     if mapping not in readme_text:
         raise MOLDISC015Error("AqSolDB README does not map dataset-C.csv to reference [3]")
     if supporting_information_manifest_path:

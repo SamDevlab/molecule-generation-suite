@@ -1,6 +1,6 @@
 # MOLDISC-015 — C-2545 source-provenance and stereochemistry resolution
 
-Status: **protocol frozen; external source-resolution execution pending**
+Status: **CLOSED_FIRST_RESULT_PRESERVED**
 
 ## Scientific question
 
@@ -43,7 +43,7 @@ The immutable AqSolDB lineage is commit
 
 ## Dataset-C provenance
 
-The AqSolDB README mapping `dataset-C.csv -> reference [3]` is frozen before
+The AqSolDB README mapping `3. dataset-C.csv [3]` (README line 56) is frozen before
 external source research. Reference [3] is:
 
 > Raevsky OA, Grigor'ev VY, Polianczyk DE, Raevskaja OE, Dearden JC.
@@ -80,3 +80,40 @@ and attribution of `-3.62` specifically to that resolved structure.
 
 No stereochemistry is borrowed retrospectively from the JE2 lineage, and no
 stereoisomer is chosen using docking or biological evidence.
+
+## First result preserved
+
+The first source-resolution execution recovered the publisher's supporting
+information workbook from the ACS Publications locator via its publisher-hosted
+Figshare transport mirror. The artifact is `ci400692n_si_001.xls`, 778752 bytes,
+with transport SHA256
+`4E3DD0EB7170CDB580A1D73E1CB7BA44D6D02E512D3D9C50365C1F8E47E7658E`.
+
+The workbook contains an exact row match at `Support_info` row 2567:
+`PHENYL-KNI-727`, the frozen raw SMILES, and `logSexp=-3.62`. It has no
+compound number, CAS number, InChI, InChIKey, original-source locator, or
+stereochemical representation. Therefore the record is source-recoverable but
+the original experimental stereochemistry remains unresolved:
+`UNRESOLVED_SOURCE_STEREOCHEMISTRY`.
+
+The generic public `KNI-727` identity remains preserved as a rejected candidate
+because its formula is `C30H41N3O5S` and its InChIKey connectivity block is
+`CSWRAOHDICNMPU`, both incompatible with C-2545. The C-2545/source-delta
+connectivity block matches (`URHJIBSBOJFXDI`), but the full InChIKey does not,
+so measurement transfer remains `false`.
+
+The canonical first-run validation record is
+[`validation/moldisc-015-first-run-v1.json`](../validation/moldisc-015-first-run-v1.json);
+the raw supporting-information manifest is
+[`validation/moldisc-015-supporting-information-v1.json`](../validation/moldisc-015-supporting-information-v1.json),
+and the complete generated run bundle is in
+[`validation/moldisc-015-first-run-v1/`](../validation/moldisc-015-first-run-v1/).
+The preserved scientific hashes are:
+
+- source trace: `7e10824b6ef60006da23e3b26f63737cb8717476d05ca3371022164d94f78599`;
+- identity resolution: `984e0deb92949dd6953c6641b8ad469b35d442012ba331536ae73bde260a0693`;
+- program: `8e22c0565f2d78dc16468c8edb8f8f0b90a4007e50ced99e00e3d7a0b0f63e5d`.
+
+MOLDISC-015 executes no molecule generation, docking, ESOL, candidate
+selection, Vina use, biological-property import, or AqSolDB mutation. It does
+not open MOLDISC-016.

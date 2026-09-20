@@ -1,0 +1,139 @@
+{
+  "aqsoldb_record": {
+    "connectivity_block": "URHJIBSBOJFXDI",
+    "formula": "C27H35N3O4S",
+    "inchi": "InChI=1S/C27H35N3O4S/c1-26(2,3)29-24(33)22-27(4,5)35-17-30(22)25(34)21(31)20(16-18-12-8-6-9-13-18)28-23(32)19-14-10-7-11-15-19/h6-15,20-22,31H,16-17H2,1-5H3,(H,28,32)(H,29,33)",
+    "inchikey": "URHJIBSBOJFXDI-UHFFFAOYSA-N",
+    "measured_log_s_mol_l": -3.62,
+    "name": "phenyl-kni-727",
+    "observation_count": 1,
+    "raw_fields": {
+      "ID": "C-2545",
+      "InChI": "InChI=1S/C27H35N3O4S/c1-26(2,3)29-24(33)22-27(4,5)35-17-30(22)25(34)21(31)20(16-18-12-8-6-9-13-18)28-23(32)19-14-10-7-11-15-19/h6-15,20-22,31H,16-17H2,1-5H3,(H,28,32)(H,29,33)",
+      "InChIKey": "URHJIBSBOJFXDI-UHFFFAOYSA-N",
+      "Name": "phenyl-kni-727",
+      "Prediction": "-5.2",
+      "SMILES": "CC(C)(C)NC(=O)C1N(CSC1(C)C)C(=O)C(O)C(CC2=CC=CC=C2)NC(=O)C3=CC=CC=C3",
+      "Solubility": "-3.62"
+    },
+    "raw_smiles": "CC(C)(C)NC(=O)C1N(CSC1(C)C)C(=O)C(O)C(CC2=CC=CC=C2)NC(=O)C3=CC=CC=C3",
+    "record_id": "C-2545",
+    "stereochemistry_specified": false
+  },
+  "dataset_c_identity": {
+    "readme_mapping": "3. dataset-C.csv [3]",
+    "readme_sha256": "68d90db044883533458c41a86ba1ced3c3a4a77fc2e41510f54b9fcc99e87038",
+    "readme_size_bytes": 5135,
+    "source_path": "data/dataset-C.csv"
+  },
+  "provenance_chain": [
+    {
+      "claim_supported": "measured logS and raw identity record",
+      "identifier": "C-2545",
+      "identity_evidence": "exact record ID plus formula/connectivity fields",
+      "locator": "data/dataset-C.csv",
+      "source_type": "AQSOLDB_RECORD"
+    },
+    {
+      "claim_supported": "dataset-C provenance",
+      "identifier": "reference [3]",
+      "identity_evidence": "frozen README mapping",
+      "locator": "AqSolDB README line 56: 3. dataset-C.csv [3]",
+      "source_type": "DATASET_C_REFERENCE"
+    },
+    {
+      "claim_supported": "dataset-C publication",
+      "identifier": "10.1021/ci400692n",
+      "identity_evidence": "frozen citation metadata",
+      "locator": "doi:10.1021/ci400692n",
+      "source_type": "PUBLICATION"
+    }
+  ],
+  "raevsky_publication": {
+    "authors": [
+      "Raevsky OA",
+      "Grigor'ev VY",
+      "Polianczyk DE",
+      "Raevskaja OE",
+      "Dearden JC"
+    ],
+    "doi": "10.1021/ci400692n",
+    "journal": "J Chem Inf Model",
+    "pages": "683-691",
+    "title": "Calculation of aqueous solubility of crystalline un-ionized organic chemicals and drugs based on structural similarity and physicochemical descriptors",
+    "volume": "54",
+    "year": 2014
+  },
+  "scientific_hash": "7e10824b6ef60006da23e3b26f63737cb8717476d05ca3371022164d94f78599",
+  "supporting_information": {
+    "file_size_bytes": 778752,
+    "filename": "ci400692n_si_001.xls",
+    "matched_record": {
+      "cas_number": null,
+      "compound_number": null,
+      "excel_row_1_based": 2567,
+      "excel_sheet": "Support_info",
+      "formula": null,
+      "inchi": null,
+      "inchikey": null,
+      "measured_log_s_exp": -3.62,
+      "measured_log_s_uni": -3.62,
+      "measured_solubility_g_l": 0.119,
+      "measured_solubility_mol_l": 0.00024,
+      "measurement_temperature_c": 25.0,
+      "molecular_weight": 498.0,
+      "name": "PHENYL-KNI-727",
+      "original_source_locator": null,
+      "raw_fields": {
+        "AlogP": 3.17,
+        "Molecular weight": 498.0,
+        "S(M/L)": 0.00024,
+        "S(g/L)": 0.119,
+        "Smiles": "CC(C)(C)NC(=O)C1N(CSC1(C)C)C(=O)C(O)C(CC2=CC=CC=C2)NC(=O)C3=CC=CC=C3",
+        "T measmt, C": 25.0,
+        "Tmp, C": null,
+        "alpha": 55.375,
+        "f(ui)": 1.0,
+        "log (1/f(ui))": 0.0,
+        "logP": null,
+        "logS(uni)": -3.62,
+        "logSexp": -3.62,
+        "name": "PHENYL-KNI-727",
+        "pH (buffer)": null,
+        "pH cal": null,
+        "pK1": null,
+        "pK2": null,
+        "pK3": null
+      },
+      "raw_structure_representation": "SMILES",
+      "smiles": "CC(C)(C)NC(=O)C1N(CSC1(C)C)C(=O)C(O)C(CC2=CC=CC=C2)NC(=O)C3=CC=CC=C3",
+      "stereo_representation": null,
+      "stereochemistry_specified": false,
+      "structure_representation_type": "non-isomeric SMILES; no explicit stereochemistry"
+    },
+    "publication_doi": "10.1021/ci400692n",
+    "publisher": "American Chemical Society (ACS Publications), publisher-hosted Figshare mirror",
+    "recovered": true,
+    "rejected_identity_candidates": [
+      {
+        "connectivity_block": "CSWRAOHDICNMPU",
+        "formula": "C30H41N3O5S",
+        "inchikey": "CSWRAOHDICNMPU-LLZJGCNPSA-N",
+        "name": "KNI-727",
+        "rejection_reason": "Generic KNI-727 has incompatible formula and connectivity identity; name-family similarity cannot resolve C-2545.",
+        "source_url": "https://pubchem.ncbi.nlm.nih.gov/compound/KNI-727",
+        "stereochemistry_specified": true
+      }
+    ],
+    "retrieval_date": "2026-09-19",
+    "source_url": "https://pubs.acs.org/jcisd8/article-supplement/940911/xls/ci400692n_si_001/",
+    "temporary_path": null,
+    "transport_sha256": "4E3DD0EB7170CDB580A1D73E1CB7BA44D6D02E512D3D9C50365C1F8E47E7658E",
+    "transport_url": "https://ndownloader.figstatic.com/files/3958366",
+    "upstream_original_source": {
+      "identified": false,
+      "locator": null,
+      "reason": "The recovered SI table has no compound-level original-source locator; it identifies the publication dataset row only."
+    }
+  }
+}

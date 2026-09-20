@@ -340,6 +340,18 @@ The first CI result is preserved in
 
 See [MOLDISC-014](docs/moldisc-014-aqsoldb-source-interpolation.md).
 
+### C-2545 source provenance and stereochemistry resolution: MOLDISC-015
+
+MOLDISC-015 traces AqSolDB `C-2545 / phenyl-kni-727 / logS -3.62` to the
+publisher's supporting information, preserves the exact raw row, and checks
+whether the original source identifies a stereochemical structure. The recovered
+workbook matches the name, SMILES, and measurement but contains no InChI,
+InChIKey, or stereochemical representation, so the result remains
+`UNRESOLVED_SOURCE_STEREOCHEMISTRY` and measurement transfer is not allowed.
+No molecule generation, docking, ESOL, or candidate selection is executed.
+
+See [MOLDISC-015](docs/moldisc-015-c2545-source-resolution.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.

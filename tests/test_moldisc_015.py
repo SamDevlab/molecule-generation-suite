@@ -32,6 +32,7 @@ def test_frozen_program_config_and_boundaries() -> None:
     config = load_program_config_v15("programs/moldisc-015-c2545-source-resolution/program.json")
     assert config["program_id"] == "MOLDISC-015"
     assert config["upstream"]["source_record_id"] == "C-2545"
+    assert config["immutable_aqsoldb_lineage"]["dataset_c_readme_mapping"] == "3. dataset-C.csv [3]"
     assert config["boundaries"]["generation_executed"] is False
     assert config["boundaries"]["docking_executed"] is False
     assert config["boundaries"]["esol_executed"] is False

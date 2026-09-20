@@ -23,7 +23,7 @@
     "source_blob_sha": "67016e030cf0a741e250ba0267bd84461041db5f",
     "parsed_source_hash": "2c6e56f56389f0fd99fa2a3c843446f98b6b068a3f93aaab71a08822caa085f4",
     "source_path": "data/dataset-C.csv",
-    "dataset_c_readme_mapping": "dataset-C.csv -> reference [3]"
+    "dataset_c_readme_mapping": "3. dataset-C.csv [3]"
   },
   "dataset_c_reference": {
     "reference_number": 3,
@@ -67,6 +67,7 @@
     "preserve_raw_record_before_normalization": true,
     "transport_metadata": [
       "source_url",
+      "transport_url",
       "publisher",
       "filename",
       "transport_sha256",
