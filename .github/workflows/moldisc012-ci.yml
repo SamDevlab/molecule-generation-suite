@@ -1,0 +1,142 @@
+name: moldisc-012-ci
+
+on:
+  pull_request:
+    paths:
+      - "src/research_os/molecular_discovery/moldisc012.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_012.py"
+      - "tests/test_moldisc_012.py"
+      - "programs/moldisc-012-step2-demethyl01-crossdock/**"
+      - "docs/moldisc-012-step2-demethyl01-crossdock.md"
+      - "validation/moldisc-012-first-run-v1.json"
+      - ".github/workflows/moldisc012-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/research_os/molecular_discovery/moldisc012.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_012.py"
+      - "tests/test_moldisc_012.py"
+      - "programs/moldisc-012-step2-demethyl01-crossdock/**"
+      - "docs/moldisc-012-step2-demethyl01-crossdock.md"
+      - "validation/moldisc-012-first-run-v1.json"
+      - ".github/workflows/moldisc012-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-step2-demethyl01-crossdock:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Research OS discovery dependencies
+        run: python -m pip install -e ".[dev,discovery]"
+
+      - name: Install Open Babel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+
+      - name: Install official AutoDock Vina 1.2.7 binary
+        run: |
+          curl --fail --location --retry 3 https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          /tmp/vina_1.2.7 --version
+          sha256sum /tmp/vina_1.2.7
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+
+      - name: Check dependency consistency
+        run: python -m pip check
+
+      - name: Compile frozen MOLDISC-012
+        run: >-
+          python -m py_compile
+          src/research_os/molecular_discovery/moldisc012.py
+          scripts/run_moldisc_012.py
+          tests/test_moldisc_012.py
+
+      - name: Test frozen identities and score boundary
+        run: python -m pytest -q tests/test_moldisc_012.py
+
+      - name: Execute frozen MOLDISC-012 run A
+        run: python scripts/run_moldisc_012.py --output /tmp/moldisc-012-a
+
+      - name: Execute frozen MOLDISC-012 run B
+        run: python scripts/run_moldisc_012.py --output /tmp/moldisc-012-b
+
+      - name: Require technical completion and deterministic scientific identity
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          a = json.loads((Path("/tmp/moldisc-012-a") / "program_manifest.json").read_text())
+          b = json.loads((Path("/tmp/moldisc-012-b") / "program_manifest.json").read_text())
+
+          for report in (a, b):
+              assert report["program_id"] == "MOLDISC-012"
+              assert report["candidate_variant_id"] == "STEP2-DEMETHYL-01"
+              assert report["candidate_id"] == "MOLDISC-011-JE2-286E6F2BE8"
+              assert report["candidate_inchikey"] == "DRIAWXDDGSORDT-KKUQBAQOSA-N"
+              assert report["technical_status"] == "PASS"
+              assert report["target"] == {"case_id": "ATX-007", "pdb_id": "1KZK", "native_ligand": "JE2", "ligand_author_chain": "A", "receptor_author_chains": ["A", "B"]}
+              assert report["pose_count"] == len(report["pose_scores_kcal_mol"]) >= 1
+              assert all(isinstance(score, (int, float)) for score in report["pose_scores_kcal_mol"])
+              assert report["capability"]["docking_context"] == "NON_COGNATE_HOLO_CROSSDOCKING"
+              assert report["capability"]["capability_status"] == "PARTIALLY_VALIDATED"
+              assert report["capability"]["evidence_level"] == "E2_COMPUTATIONAL"
+              assert report["native_reference_structure_hash"]
+              assert len(report["receptor_scientific_identity"]) == 64
+              assert len(report["ligand_scientific_identity"]) == 64
+              assert len(report["vina_output_scientific_hash"]) == 64
+              assert report["rmsd_to_native_je2"] == "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH"
+
+          scientific_fields = [
+              "program_scientific_hash", "candidate_variant_id", "candidate_id",
+              "candidate_smiles", "candidate_inchikey", "target",
+              "native_reference_structure_hash", "receptor_scientific_identity",
+              "ligand_scientific_identity", "grid", "pose_count",
+              "pose_scores_kcal_mol", "vina_output_scientific_hash",
+          ]
+          for field in scientific_fields:
+              assert a[field] == b[field], field
+          assert a["program_scientific_hash"] == b["program_scientific_hash"]
+          assert a["source_pdb_transport_sha256"]
+          assert a["native_reference_transport_sha256"]
+          assert a["vina_output_transport_sha256"]
+
+          print(json.dumps({
+              "program_scientific_hash": a["program_scientific_hash"],
+              "pose_count": a["pose_count"],
+              "pose_scores_kcal_mol": a["pose_scores_kcal_mol"],
+              "grid_hash": a["grid"]["grid_hash"],
+              "native_reference_structure_hash": a["native_reference_structure_hash"],
+              "receptor_scientific_identity": a["receptor_scientific_identity"],
+              "ligand_scientific_identity": a["ligand_scientific_identity"],
+              "vina_output_scientific_hash": a["vina_output_scientific_hash"],
+              "engines": a["engines"],
+              "capability": a["capability"],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Upload MOLDISC-012 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: moldisc-012-step2-demethyl01-crossdock
+          path: |
+            /tmp/moldisc-012-a
+            /tmp/moldisc-012-b
+          if-no-files-found: warn
