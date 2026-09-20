@@ -445,10 +445,8 @@ def _kabsch_from_pdbs(reference: Path, moving: Path) -> dict[str, Any]:
         return out
     ref, mov = cas(reference), cas(moving)
     if set(ref) != set(mov) or len(ref) < 3:
-        common = sorted(set(ref) & set(mov))
-        if len(common) < 3:
-            raise MOLDISC017Error("receptor alignment lacks matched C-alpha atoms")
-    keys = sorted(set(ref) & set(mov))
+        raise MOLDISC017Error("receptor alignment lacks an exact matched C-alpha key set")
+    keys = sorted(ref)
     p = np.asarray([mov[key] for key in keys], dtype=float)
     q = np.asarray([ref[key] for key in keys], dtype=float)
     pc, qc = p.mean(axis=0), q.mean(axis=0)
@@ -604,15 +602,19 @@ def _geometry_analysis(records: Mapping[str, Mapping[str, Any]], source: Mapping
     return {**payload,"geometry_scientific_hash":sha256_json(payload)}
 
 
-def _contact_analysis(records: Mapping[str, Mapping[str, Any]], source: Mapping[str, Any], root: Path, obabel: OpenBabelEngine) -> dict[str, Any]:
+def _contact_analysis(records: Mapping[str, Mapping[str, Any]], source: Mapping[str, Any], r0: Mapping[str, Any], root: Path, obabel: OpenBabelEngine) -> dict[str, Any]:
     profiles={}
     mutation_profiles={}
     cache={}
-    for receptor in ("R1","R2"):
-        receptor_atoms=_receptor_atoms(Path(source["states"][receptor]["receptor_pdb_path"]))
+    receptor_sources = {"R0": r0.get("receptor_pdb_path"), "R1": source["states"]["R1"]["receptor_pdb_path"], "R2": source["states"]["R2"]["receptor_pdb_path"]}
+    for receptor in ("R0","R1","R2"):
+        if not receptor_sources[receptor] or not Path(receptor_sources[receptor]).is_file():
+            continue
+        receptor_atoms=_receptor_atoms(Path(receptor_sources[receptor]))
         for candidate in CANDIDATES:
-            run_id=f"{receptor}__{candidate.key}__etkdg_42__RUN_A"
-            molecules=cache.setdefault(run_id,_load_pose_models(records.get(run_id,{}),obabel,root))
+            run_id = f"{receptor}__{candidate.key}__etkdg_42__RUN_A"
+            record = records.get(run_id, {}) if receptor != "R0" else r0["records"].get(run_id, {})
+            molecules=cache.setdefault(run_id,_load_pose_models(record,obabel,root))
             profiles[f"{receptor}:{candidate.key}"]=_contact_profile(molecules,receptor_atoms) if molecules else {"status":"INDETERMINATE"}
             mutation_profiles[f"{receptor}:{candidate.key}"]=_mutation_site_profile(molecules,receptor_atoms) if molecules else {}
     changes={}
@@ -693,19 +695,22 @@ def run_moldisc_017(*, config_path: str | Path, output_root: str | Path, timeout
             for pose in poses:
                 rms=base.symmetry_aware_heavy_atom_rmsd(reference,pose).rmsd_angstrom
                 if rms is not None: rmsds.append(float(rms))
-            values.append({"status":record.get("technical_status"),"rank1_rmsd_angstrom":rmsds[0] if rmsds else None,"minimum_rmsd_angstrom":min(rmsds) if rmsds else None,"minimum_rmsd_rank":(rmsds.index(min(rmsds))+1) if rmsds else None,"pose_count":len(poses),"classification":"NATIVE_POSE_RECOVERY_LIMITATION" if rmsds and rmsds[0]>2.0 else "DIAGNOSTIC"})
+            values.append({"status":record.get("technical_status"),"rank1_rmsd_angstrom":rmsds[0] if rmsds else None,"minimum_rmsd_angstrom":min(rmsds) if rmsds else None,"minimum_rmsd_rank":(rmsds.index(min(rmsds))+1) if rmsds else None,"pose_count":len(poses),"pose_scores_kcal_mol":record.get("pose_scores_kcal_mol",[]),"rank1_within_2A":bool(rmsds and rmsds[0] <= 2.0),"any_pose_within_2A":bool(rmsds and min(rmsds) <= 2.0),"classification":"NATIVE_POSE_RECOVERY_LIMITATION" if rmsds and rmsds[0]>2.0 else "DIAGNOSTIC"})
         redock[receptor]={"run_a":values[0],"run_b":values[1]}
     factorials={"R0":_factorial_matrix(_r0_score_matrix(r0),"R0"),"R1":_factorial_matrix(_score_matrix(records,"R1"),"R1"),"R2":_factorial_matrix(_score_matrix(records,"R2"),"R2")}
     shifts=_mutation_shifts(factorials)
     geometry=_geometry_analysis(records,source,r0,root,obabel)
-    contacts=_contact_analysis(records,source,root,obabel)
+    contacts=_contact_analysis(records,source,r0,root,obabel)
     synthesis,knowledge=_claim_synthesis(source,records,factorials,shifts,geometry,r0)
     campaign_hashes={"source_audit_hash":source["source_audit_hash"],"redock_campaign_hash":sha256_json(redock),"r1_campaign_hash":sha256_json([records[x["run_id"]] for x in plan if x["campaign_id"]=="CAMP-017-C"]),"r2_campaign_hash":sha256_json([records[x["run_id"]] for x in plan if x["campaign_id"]=="CAMP-017-D"]),"geometry_campaign_hash":geometry["geometry_scientific_hash"],"contact_campaign_hash":contacts["contact_scientific_hash"],"factorial_campaign_hash":sha256_json(factorials),"crystal_context_hash":sha256_json({key:source["states"][key] for key in ("K57_WT","K57_MUTANT")}),"synthesis_hash":sha256_json(synthesis)}
     scientific={"program_id":PROGRAM_ID,"program_version":PROGRAM_VERSION,"program_protocol_hash":protocol_hash(config),"parent_hashes":{"moldisc016":PARENT_MOLDISC016_HASH,"moldisc015":PARENT_MOLDISC015_HASH,"moldisc014":PARENT_MOLDISC014_HASH},"source_audit_hash":source["source_audit_hash"],"redocking":redock,"factorials":factorials,"mutation_shifts":shifts,"geometry_hash":geometry["geometry_scientific_hash"],"contact_hash":contacts["contact_scientific_hash"],"campaign_hashes":campaign_hashes,"records":[{key:value for key,value in records[item["run_id"]].items() if key not in {"error"}} for item in plan],"generation_executed":False,"candidate_selection_executed":False,"lead_selection_executed":False,"source_measurement_transfer_allowed":False,"evidence_ceiling":"E2_COMPUTATIONAL"}
     program_scientific_hash=sha256_json(scientific)
     executed=sum(record.get("technical_status") in {"PASS","NONPASS"} for record in records.values()); nonpass=sum(record.get("technical_status")!="PASS" for record in records.values())
     manifest={"schema_version":"research-os.molecular-discovery.megacampaign-result.v1","program_id":PROGRAM_ID,"program_version":PROGRAM_VERSION,"status":"CLOSED_FIRST_RESULT_PRESERVED","program_protocol_hash":protocol_hash(config),"program_scientific_hash":program_scientific_hash,"parent_hashes":scientific["parent_hashes"],"docking_runs_planned":36,"docking_runs_executed":executed,"docking_runs_skipped":36-executed,"docking_runs_nonpass":nonpass,"source_audit_hash":source["source_audit_hash"],"campaign_hashes":campaign_hashes,"redocking":redock,"factorials":factorials,"mutation_shifts":shifts,"geometry":geometry,"contacts":contacts,"claims":synthesis["claim_status"],"knowledge_gain_summary":knowledge["summary"],"generation_executed":False,"candidate_selection_executed":False,"lead_selection_executed":False,"source_measurement_transfer_allowed":False,"new_molecules_generated":False}
+    strict_extension={"schema_version":"research-os.molecular-discovery.strict-mcs-geometry-extension.v1","program_id":"MOLDISC-016","parent_first_result":"validation/moldisc-016-first-run-v1.json","parent_first_result_immutable":True,"parent_program_scientific_hash":PARENT_MOLDISC016_HASH,"reanalysis_mode":"ADDITIVE_ONLY","strict_mcs":geometry["strict_mcs"],"r0_geometry":geometry["same_receptor_edges"].get("R0",{}),"generation_executed":False,"candidate_selection_executed":False,"lead_selection_executed":False}
+    strict_extension["extension_scientific_hash"] = sha256_json({key:value for key,value in strict_extension.items() if key != "extension_scientific_hash"})
+    _write_json(root/"moldisc016_strict_mcs_geometry_extension.json",strict_extension)
     _write_json(root/"program_manifest.json",manifest); _write_json(root/"program_scientific_payload.json",scientific); _write_json(root/"redocking_analysis.json",redock); _write_json(root/"factorial_analysis.json",factorials); _write_json(root/"mutation_shifts.json",shifts); _write_json(root/"geometry_analysis.json",geometry); _write_json(root/"contact_analysis.json",contacts); _write_json(root/"program_synthesis.json",synthesis); _write_json(root/"knowledge_gain.json",knowledge)
-    validation={"schema_version":"research-os.molecular-discovery.megacampaign-validation.v1","program_id":PROGRAM_ID,"program_version":PROGRAM_VERSION,"status":"CLOSED_FIRST_RESULT_PRESERVED","program_protocol_hash":protocol_hash(config),"program_scientific_hash":program_scientific_hash,"parent_moldisc016_hash":PARENT_MOLDISC016_HASH,"parent_moldisc015_hash":PARENT_MOLDISC015_HASH,"r0_import":{"source_artifact":r0.get("source_artifact"),"no_rerun":True,"imported_record_count":len(r0["records"]),"parent_validation_sha256":r0["parent_validation_hash"]},"source_audit":source,"redocking":redock,"docking_runs":{"planned":36,"executed":executed,"skipped":36-executed,"nonpass":nonpass},"factorials":factorials,"mutation_shifts":shifts,"strict_mcs":geometry["strict_mcs"],"geometry":geometry,"contacts":contacts,"claims":synthesis["claim_status"],"knowledge_gain":knowledge,"generation_executed":False,"candidate_selection_executed":False,"lead_selection_executed":False,"source_measurement_transfer_allowed":False,"negative_results":{"winner_created":False,"universal_metric_created":False,"experimental_activity_transferred":False,"k57_docking_executed":False},"hashes":campaign_hashes}
+    validation={"schema_version":"research-os.molecular-discovery.megacampaign-validation.v1","program_id":PROGRAM_ID,"program_version":PROGRAM_VERSION,"status":"CLOSED_FIRST_RESULT_PRESERVED","program_protocol_hash":protocol_hash(config),"program_scientific_hash":program_scientific_hash,"parent_moldisc016_hash":PARENT_MOLDISC016_HASH,"parent_moldisc015_hash":PARENT_MOLDISC015_HASH,"r0_import":{"source_artifact":r0.get("source_artifact"),"no_rerun":True,"imported_record_count":len(r0["records"]),"parent_validation_sha256":r0["parent_validation_hash"]},"source_audit":source,"redocking":redock,"docking_runs":{"planned":36,"executed":executed,"skipped":36-executed,"nonpass":nonpass},"factorials":factorials,"mutation_shifts":shifts,"strict_mcs":geometry["strict_mcs"],"moldisc016_strict_mcs_geometry_extension":strict_extension,"geometry":geometry,"contacts":contacts,"claims":synthesis["claim_status"],"knowledge_gain":knowledge,"generation_executed":False,"candidate_selection_executed":False,"lead_selection_executed":False,"source_measurement_transfer_allowed":False,"negative_results":{"winner_created":False,"universal_metric_created":False,"experimental_activity_transferred":False,"k57_docking_executed":False},"hashes":campaign_hashes}
     _write_json(root/"moldisc-017-first-run-v1.json",validation)
     return {**manifest,"validation_file":str(root/"moldisc-017-first-run-v1.json")}
