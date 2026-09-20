@@ -1,0 +1,112 @@
+{
+  "program_id": "MOLDISC-017",
+  "program_version": "1.0",
+  "title": "HIV-1 Protease Receptor-State and Resistance Megacampaign",
+  "domain": "molecular-discovery",
+  "evidence_target": "E2_COMPUTATIONAL",
+  "execution_mode": "STATIC_PREDECLARED",
+  "retry_count": 0,
+  "failure_policy": "continue_independent",
+  "parents": {
+    "moldisc016": {
+      "program_id": "MOLDISC-016",
+      "program_scientific_hash": "68472cbc795ccb9cbbaef083bdc44819218c2b3f29b50ff7481ff99097687095",
+      "protocol_hash": "67a127a651df771f7789cd8f4e4933575f81d7ee91d0dae2219921c6a2dc3e70",
+      "context_erratum_file": "validation/moldisc-016-context-erratum-v1.json",
+      "measurement_transfer_allowed": false
+    },
+    "moldisc015": {
+      "program_id": "MOLDISC-015",
+      "program_scientific_hash": "8e22c0565f2d78dc16468c8edb8f8f0b90a4007e50ced99e00e3d7a0b0f63e5d",
+      "source_record_id": "C-2545",
+      "measurement_transfer_allowed": false
+    },
+    "moldisc014": {
+      "program_id": "MOLDISC-014",
+      "program_scientific_hash": "f940d95189616131829a22f9e68a53a960eddf8fd05f5fd7ebac43ece85481ed"
+    }
+  },
+  "resource_bounds": {
+    "max_campaigns": 9,
+    "max_candidates": 4,
+    "max_docking_runs": 40,
+    "planned_new_docking_runs": 36,
+    "max_failures": 12
+  },
+  "panel": [
+    {"variant_id":"STEP2-DEMETHYL-01","candidate_id":"MOLDISC-011-JE2-286E6F2BE8","factor_a":"A0","factor_b":"B0","label":"CONTROL","canonical_smiles":"CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)[C@@H]1C(=O)NCc1ccccc1","inchikey":"DRIAWXDDGSORDT-KKUQBAQOSA-N","heavy_atom_count":39},
+    {"variant_id":"SOURCE-DELTA-OH","candidate_id":"MOLDISC-014-SOURCE-DELTA-OH","factor_a":"A1","factor_b":"B0","label":"DELTA-OH","canonical_smiles":"CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2ccccc2)[C@@H]1C(=O)NCc1ccccc1","inchikey":"NAZMDUVPQSKJEQ-KKUQBAQOSA-N","heavy_atom_count":38},
+    {"variant_id":"SOURCE-DELTA-NSUB","candidate_id":"MOLDISC-014-SOURCE-DELTA-NSUB","factor_a":"A0","factor_b":"B1","label":"DELTA-NSUB","canonical_smiles":"CC(C)(C)NC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C","inchikey":"DMSDTDPQGPRTNA-FDFHNCONSA-N","heavy_atom_count":36},
+    {"variant_id":"SOURCE-DELTA-BOTH","candidate_id":"MOLDISC-014-SOURCE-DELTA-BOTH","factor_a":"A1","factor_b":"B1","label":"DELTA-BOTH","canonical_smiles":"CC(C)(C)NC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2ccccc2)CSC1(C)C","inchikey":"URHJIBSBOJFXDI-FDFHNCONSA-N","heavy_atom_count":35}
+  ],
+  "target_panel": {
+    "R0": {"pdb_id":"1KZK","native_ligand":"JE2","receptor_author_chains":["A","B"],"label":"IMPORTED_MOLDISC_016","rerun":false},
+    "R1": {"pdb_id":"1MSM","native_ligand":"JE2","native_ligand_inchikey":"CUFQBQOBLVLKRF-RZDMPUFOSA-N","ligand_author_chain":"B","ligand_auth_seq_id":1001,"receptor_author_chains":["A","B"],"mutations":["Q7K","L33I","L63I"],"label":"R1_MATCHED_BACKGROUND","resolution_angstrom":2.0,"grid_hash":"5967ad06319d2d02646f96bf9ed70769eb345d76e1e50e2ab29aedb348ed0766"},
+    "R2": {"pdb_id":"1MSN","native_ligand":"JE2","native_ligand_inchikey":"CUFQBQOBLVLKRF-RZDMPUFOSA-N","ligand_author_chain":"B","ligand_auth_seq_id":1001,"receptor_author_chains":["A","B"],"mutations":["Q7K","L33I","L63I","V82F","I84V"],"label":"R2_V82F_I84V","resolution_angstrom":2.0,"grid_hash":"ddcc2e6bb18e78e0517380a168496db1f5fab16407861189c2f3f89842fcf40a"}
+  },
+  "native_context_only": {
+    "K57_WT": {"pdb_id":"1MRW","ligand":"K57","ligand_author_chain":"A","ligand_auth_seq_id":1001,"expected_inchikey":"CGFVYUGIPISJQG-ACIOBRDBSA-N","formula":"C28H37N3O5S","mutations":["Q7K","L33I","L63I"]},
+    "K57_MUTANT": {"pdb_id":"1MRX","ligand":"K57","ligand_author_chain":"B","ligand_auth_seq_id":1001,"expected_inchikey":"CGFVYUGIPISJQG-ACIOBRDBSA-N","formula":"C28H37N3O5S","mutations":["Q7K","L33I","L63I","V82F","I84V"]},
+    "docking_allowed": false,
+    "experimental_activity_transfer_allowed": false
+  },
+  "docking_protocol": {
+    "rdkit_conformer_engine":"ETKDGv3",
+    "etkdg_seeds":[42,1337,2025],
+    "vina_seed":42,
+    "cpu":1,
+    "exhaustiveness":16,
+    "num_modes":20,
+    "scoring_function":"vina",
+    "vina_version":"1.2.7",
+    "retry_count":0,
+    "no_vina_seed_grid":true,
+    "no_vina_exhaustiveness_grid":true,
+    "openbabel_receptor_options":["-h","--partialcharge","gasteiger","-xr"],
+    "openbabel_ligand_options":["-h","--partialcharge","gasteiger"]
+  },
+  "campaigns": [
+    {"campaign_id":"CAMP-017-A","name":"SOURCE_AND_RECEPTOR_AUDIT","kind":"AUDIT","planned_runs":0},
+    {"campaign_id":"CAMP-017-B","name":"JE2_NATIVE_REDOCK_DIAGNOSTIC","kind":"REDOCKING","planned_runs":4,"conditions":{"receptors":["R1","R2"],"replicates":["RUN_A","RUN_B"]}},
+    {"campaign_id":"CAMP-017-C","name":"R1_PANEL_CROSSDOCK","kind":"DOCKING","planned_runs":16,"conditions":{"receptor":"R1","candidates":4,"etkdg_seeds":[42,1337,2025],"replicates":{"42":["RUN_A","RUN_B"],"1337":["RUN_A"],"2025":["RUN_A"]}}},
+    {"campaign_id":"CAMP-017-D","name":"R2_PANEL_CROSSDOCK","kind":"DOCKING","planned_runs":16,"conditions":{"receptor":"R2","candidates":4,"etkdg_seeds":[42,1337,2025],"replicates":{"42":["RUN_A","RUN_B"],"1337":["RUN_A"],"2025":["RUN_A"]}}},
+    {"campaign_id":"CAMP-017-E","name":"STRICT_MCS_AND_RECEPTOR_ALIGNED_GEOMETRY","kind":"ANALYSIS","planned_runs":0},
+    {"campaign_id":"CAMP-017-F","name":"CONTACT_AND_MUTATION_SITE_GEOMETRY","kind":"ANALYSIS","planned_runs":0},
+    {"campaign_id":"CAMP-017-G","name":"CROSS_RECEPTOR_FACTORIAL_ANALYSIS","kind":"ANALYSIS","planned_runs":0},
+    {"campaign_id":"CAMP-017-H","name":"NATIVE_CRYSTALLOGRAPHIC_QUARTET_CONTEXT","kind":"CONTEXT","planned_runs":0},
+    {"campaign_id":"CAMP-017-I","name":"CLAIM_LEVEL_SYNTHESIS","kind":"SYNTHESIS","planned_runs":0}
+  ],
+  "geometry": {
+    "coordinate_frame":"RECEPTOR_FRAME",
+    "same_receptor_alignment":false,
+    "receptor_alignment":"KABSCH_CHAIN_A_B_CA_EXCLUDING_82_84",
+    "receptor_alignment_excluded_residues":[82,84],
+    "edges":["EDGE-OH-BENZYL","EDGE-OH-TERTBUTYL","EDGE-NSUB-OH_PRESENT","EDGE-NSUB-OH_DELETED"],
+    "cross_receptor_endpoints":["rank1_R1_to_rank1_R2","minimum_cross_ensemble_each_direction"],
+    "two_angstrom_interpretation":"DIAGNOSTIC_ONLY"
+  },
+  "strict_mcs": {
+    "rule_id":"STRICT_MAXIMUM_COMMON_HEAVY_ATOM_SUBSTRUCTURE",
+    "chemical_originals_before_pose_coordinates":true,
+    "atom_compare":"element identity",
+    "bond_compare":"bond order",
+    "matchValences":true,
+    "ringMatchesRingOnly":true,
+    "completeRingsOnly":true,
+    "expected_heavy_atoms":{"OH_BENZYL":38,"OH_TERTBUTYL":35,"NSUB_OH_PRESENT":33,"NSUB_OH_DELETED":32},
+    "runtime_mismatch":"FAIL_CLOSED_BEFORE_POSE_ANALYSIS"
+  },
+  "contacts": {"cutoff_angstrom":4.0,"heavy_atom_residue_distance":true,"mutation_sites":[82,84],"energy_or_interaction_classification":false},
+  "factorial": {"mode":"DESCRIPTIVE_ONLY","conditions":["ETKDG_42","ETKDG_1337","ETKDG_2025"],"no_p_values":true,"no_significance_testing":true,"sign_consistency_is_numerical_only":true,"formulas":{"oh":"0.5*((Y10-Y00)+(Y11-Y01))","nsub":"0.5*((Y01-Y00)+(Y11-Y10))","interaction":"(Y11-Y01)-(Y10-Y00)"}},
+  "claims": [
+    {"claim_id":"CLAIM-017-01","statement":"The matched R1/R2 receptor-state panel completes the predeclared technical execution.","minimum_evidence_level":"E2_COMPUTATIONAL"},
+    {"claim_id":"CLAIM-017-02","statement":"The OH contrast sign is invariant across the nine receptor-state/conformer conditions.","minimum_evidence_level":"E2_COMPUTATIONAL"},
+    {"claim_id":"CLAIM-017-03","statement":"The NSUB contrast sign is invariant across the nine receptor-state/conformer conditions.","minimum_evidence_level":"E2_COMPUTATIONAL"},
+    {"claim_id":"CLAIM-017-04","statement":"The interaction contrast sign is invariant across the nine receptor-state/conformer conditions.","minimum_evidence_level":"E2_COMPUTATIONAL"},
+    {"claim_id":"CLAIM-017-05","statement":"The NSUB mutation-shift sign is invariant across the three conformer seeds.","minimum_evidence_level":"E2_COMPUTATIONAL"},
+    {"claim_id":"CLAIM-017-06","statement":"All four predeclared chemical edges admit the strict maximum common heavy-atom substructure.","minimum_evidence_level":"E2_COMPUTATIONAL"},
+    {"claim_id":"CLAIM-017-07","statement":"The MOLDISC-015 C-2545 -3.62 measurement remains non-transferable to this panel.","minimum_evidence_level":"E1_SOURCE_CONTEXT"}
+  ],
+  "boundaries": {"generation_executed":false,"candidate_selection_executed":false,"lead_selection_executed":false,"measurement_transfer_allowed":false,"universal_metric_created":false,"winner_created":false,"adaptive_execution":false,"new_molecules_generated":false,"evidence_ceiling":"E2_COMPUTATIONAL"},
+  "campaign_files": ["campaign-a-source-audit.json","campaign-b-redocking.json","campaign-c-r1-crossdock.json","campaign-d-r2-crossdock.json","campaign-e-geometry.json","campaign-f-contacts.json","campaign-g-factorial.json","campaign-h-context.json","campaign-i-synthesis.json"]
+}

@@ -1,0 +1,1 @@
+{"campaign_id":"CAMP-017-A","name":"SOURCE_AND_RECEPTOR_AUDIT","kind":"AUDIT","planned_runs":0,"conditions":{"raw_rcsb_transport_hashes":true,"normalized_identity_and_mutation_mapping":true,"fail_closed_on_mismatch":true}}

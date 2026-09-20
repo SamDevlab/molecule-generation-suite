@@ -1,0 +1,1 @@
+{"campaign_id":"CAMP-017-E","name":"STRICT_MCS_AND_RECEPTOR_ALIGNED_GEOMETRY","kind":"ANALYSIS","planned_runs":0,"conditions":{"same_receptor_rigid_body_alignment":false,"r1_r2_alignment":"Kabsch receptor C-alpha chain A->A B->B excluding residues 82/84","strict_mcs":true}}

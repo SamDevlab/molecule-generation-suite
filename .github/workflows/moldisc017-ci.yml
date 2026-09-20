@@ -1,0 +1,97 @@
+name: moldisc017-ci
+
+on:
+  push:
+    paths:
+      - "programs/moldisc-017-hiv-protease-receptor-state/**"
+      - "src/research_os/molecular_discovery/moldisc017.py"
+      - "scripts/run_moldisc_017.py"
+      - "tests/test_moldisc_017.py"
+      - "validation/moldisc-017-first-run-v1.json"
+      - ".github/workflows/moldisc017-ci.yml"
+  pull_request:
+    paths:
+      - "programs/moldisc-017-hiv-protease-receptor-state/**"
+      - "src/research_os/molecular_discovery/moldisc017.py"
+      - "scripts/run_moldisc_017.py"
+      - "tests/test_moldisc_017.py"
+      - "validation/moldisc-017-first-run-v1.json"
+      - ".github/workflows/moldisc017-ci.yml"
+
+jobs:
+  frozen-protocol:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[molecule]" pytest
+      - name: Source audit and strict-MCS freeze checks
+        run: |
+          python scripts/run_moldisc_017.py --source-audit-only --output /tmp/moldisc017-source-audit
+          python - <<'PY'
+          import json
+          from research_os.molecular_discovery.moldisc017 import build_execution_plan, load_program_config_v17
+          config = load_program_config_v17('programs/moldisc-017-hiv-protease-receptor-state/program.json')
+          assert len(build_execution_plan(config)) == 36
+          assert config['native_context_only']['docking_allowed'] is False
+          assert config['target_panel']['R0']['rerun'] is False
+          print('protocol source audit passed')
+          PY
+      - run: python -m pytest -q tests/test_moldisc_017.py
+
+  execution:
+    needs: frozen-protocol
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[molecule,docking]" pytest
+      - name: Install frozen AutoDock Vina
+        run: |
+          curl --fail --location --retry 3 https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          test "$(sha256sum /tmp/vina_1.2.7 | cut -d ' ' -f1)" = "f31f774f723bba7bbe6e9d1c47577020eea9a8da16424284c043d22593570644"
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+      - name: Import the closed MOLDISC-016 artifact without rerunning R0
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download 35490233290 --name moldisc-016-je2-source-megacampaign --dir /tmp/moldisc016-artifact
+      - name: Execute exactly the frozen 36 new runs
+        run: python scripts/run_moldisc_017.py --output /tmp/moldisc017-result --moldisc016-artifact /tmp/moldisc016-artifact
+      - name: Validate result boundaries and accounting
+        run: |
+          python - <<'PY'
+          import json
+          p = json.load(open('/tmp/moldisc017-result/moldisc-017-first-run-v1.json'))
+          assert p['docking_runs'] == {'planned': 36, 'executed': 36, 'skipped': 0, 'nonpass': 0}
+          assert p['negative_results']['k57_docking_executed'] is False
+          assert p['generation_executed'] is False
+          assert p['candidate_selection_executed'] is False
+          assert p['lead_selection_executed'] is False
+          assert p['source_measurement_transfer_allowed'] is False
+          print(p['program_scientific_hash'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: moldisc-017-hiv-protease-receptor-state
+          path: /tmp/moldisc017-result
+
+  focused-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[molecule]" pytest
+      - run: python -m pytest -q tests/test_moldisc_014.py tests/test_moldisc_015.py tests/test_moldisc_016.py tests/test_moldisc_017.py
+      - run: python -m compileall -q src scripts tests
+      - run: git diff --check

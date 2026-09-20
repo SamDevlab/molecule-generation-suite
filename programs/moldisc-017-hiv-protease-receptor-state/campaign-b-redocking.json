@@ -1,0 +1,1 @@
+{"campaign_id":"CAMP-017-B","name":"JE2_NATIVE_REDOCK_DIAGNOSTIC","kind":"REDOCKING","planned_runs":4,"conditions":{"receptors":["R1","R2"],"replicates":["RUN_A","RUN_B"],"vina_seed":42,"cpu":1,"exhaustiveness":16,"num_modes":20,"rmsd_threshold_angstrom":2.0,"threshold_interpretation":"DIAGNOSTIC_ONLY"}}
