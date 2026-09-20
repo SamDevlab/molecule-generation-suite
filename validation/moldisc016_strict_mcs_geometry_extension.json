@@ -1,0 +1,94 @@
+{
+  "candidate_selection_executed": false,
+  "extension_scientific_hash": "6131eb69e3629324cd661075bd9311887814a26a8930f91ee189584620d18665",
+  "generation_executed": false,
+  "lead_selection_executed": false,
+  "parent_first_result": "validation/moldisc-016-first-run-v1.json",
+  "parent_first_result_immutable": true,
+  "parent_program_scientific_hash": "68472cbc795ccb9cbbaef083bdc44819218c2b3f29b50ff7481ff99097687095",
+  "program_id": "MOLDISC-016",
+  "r0_geometry": {
+    "NSUB_OH_DELETED": {
+      "common_core_heavy_atoms": 32,
+      "expected_heavy_atoms": 32,
+      "rank1_rmsd_angstrom": 6.9954398449990265,
+      "status": "PASS"
+    },
+    "NSUB_OH_PRESENT": {
+      "common_core_heavy_atoms": 33,
+      "expected_heavy_atoms": 33,
+      "rank1_rmsd_angstrom": 7.191306515087463,
+      "status": "PASS"
+    },
+    "OH_BENZYL": {
+      "common_core_heavy_atoms": 38,
+      "expected_heavy_atoms": 38,
+      "rank1_rmsd_angstrom": 2.4848920711498033,
+      "status": "PASS"
+    },
+    "OH_TERTBUTYL": {
+      "common_core_heavy_atoms": 35,
+      "expected_heavy_atoms": 35,
+      "rank1_rmsd_angstrom": 7.369059087059313,
+      "status": "PASS"
+    }
+  },
+  "reanalysis_mode": "ADDITIVE_ONLY",
+  "schema_version": "research-os.molecular-discovery.strict-mcs-geometry-extension.v1",
+  "strict_mcs": {
+    "edges": {
+      "NSUB_OH_DELETED": {
+        "atom_compare": "element identity",
+        "bond_compare": "bond order",
+        "completeRingsOnly": true,
+        "matchValences": true,
+        "num_atoms": 32,
+        "num_bonds": 34,
+        "ringMatchesRingOnly": true,
+        "rule_id": "STRICT_MAXIMUM_COMMON_HEAVY_ATOM_SUBSTRUCTURE",
+        "smarts": "[#6&!R]-&!@[#7&!R]-&!@[#6&!R](=&!@[#8&!R])-&!@[#6]1-&@[#7](-&!@[#6&!R](=&!@[#8&!R])-&!@[#6&!R](-&!@[#8&!R])-&!@[#6&!R](-&!@[#6&!R]-&!@[#6]2:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@2)-&!@[#7&!R]-&!@[#6&!R](=&!@[#8&!R])-&!@[#6]2:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@2)-&@[#6]-&@[#16]-&@[#6]-&@1(-&!@[#6&!R])-&!@[#6&!R]"
+      },
+      "NSUB_OH_PRESENT": {
+        "atom_compare": "element identity",
+        "bond_compare": "bond order",
+        "completeRingsOnly": true,
+        "matchValences": true,
+        "num_atoms": 33,
+        "num_bonds": 35,
+        "ringMatchesRingOnly": true,
+        "rule_id": "STRICT_MAXIMUM_COMMON_HEAVY_ATOM_SUBSTRUCTURE",
+        "smarts": "[#6&!R]-&!@[#7&!R]-&!@[#6&!R](=&!@[#8&!R])-&!@[#6]1-&@[#7](-&!@[#6&!R](=&!@[#8&!R])-&!@[#6&!R](-&!@[#8&!R])-&!@[#6&!R](-&!@[#6&!R]-&!@[#6]2:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@2)-&!@[#7&!R]-&!@[#6&!R](=&!@[#8&!R])-&!@[#6]2:&@[#6]:&@[#6]:&@[#6]:&@[#6](:&@[#6]:&@2)-&!@[#8&!R])-&@[#6]-&@[#16]-&@[#6]-&@1(-&!@[#6&!R])-&!@[#6&!R]"
+      },
+      "OH_BENZYL": {
+        "atom_compare": "element identity",
+        "bond_compare": "bond order",
+        "completeRingsOnly": true,
+        "matchValences": true,
+        "num_atoms": 38,
+        "num_bonds": 41,
+        "ringMatchesRingOnly": true,
+        "rule_id": "STRICT_MAXIMUM_COMMON_HEAVY_ATOM_SUBSTRUCTURE",
+        "smarts": "[#6&!R]-&!@[#6]1(-&!@[#6&!R])-&@[#16]-&@[#6]-&@[#7](-&@[#6]-&@1-&!@[#6&!R](=&!@[#8&!R])-&!@[#7&!R]-&!@[#6&!R]-&!@[#6]1:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@1)-&!@[#6&!R](=&!@[#8&!R])-&!@[#6&!R](-&!@[#8&!R])-&!@[#6&!R](-&!@[#6&!R]-&!@[#6]1:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@1)-&!@[#7&!R]-&!@[#6&!R](=&!@[#8&!R])-&!@[#6]1:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@1"
+      },
+      "OH_TERTBUTYL": {
+        "atom_compare": "element identity",
+        "bond_compare": "bond order",
+        "completeRingsOnly": true,
+        "matchValences": true,
+        "num_atoms": 35,
+        "num_bonds": 37,
+        "ringMatchesRingOnly": true,
+        "rule_id": "STRICT_MAXIMUM_COMMON_HEAVY_ATOM_SUBSTRUCTURE",
+        "smarts": "[#6&!R]-&!@[#6&!R](-&!@[#6&!R])(-&!@[#6&!R])-&!@[#7&!R]-&!@[#6&!R](=&!@[#8&!R])-&!@[#6]1-&@[#7](-&!@[#6&!R](=&!@[#8&!R])-&!@[#6&!R](-&!@[#8&!R])-&!@[#6&!R](-&!@[#6&!R]-&!@[#6]2:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@2)-&!@[#7&!R]-&!@[#6&!R](=&!@[#8&!R])-&!@[#6]2:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@[#6]:&@2)-&@[#6]-&@[#16]-&@[#6]-&@1(-&!@[#6&!R])-&!@[#6&!R]"
+      }
+    },
+    "expected_heavy_atoms": {
+      "NSUB_OH_DELETED": 32,
+      "NSUB_OH_PRESENT": 33,
+      "OH_BENZYL": 38,
+      "OH_TERTBUTYL": 35
+    },
+    "rule_id": "STRICT_MAXIMUM_COMMON_HEAVY_ATOM_SUBSTRUCTURE",
+    "scientific_hash": "4865ff2920c139ed4424169bd9e6f2da742ab64c7349cd4549aeca5cabd03755"
+  }
+}
