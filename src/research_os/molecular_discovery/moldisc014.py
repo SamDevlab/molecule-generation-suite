@@ -395,9 +395,9 @@ class SourceNeighborAudit:
 
     @property
     def scientific_hash(self) -> str:
-        return sha256_json(self.to_dict())
+        return sha256_json(self._scientific_payload())
 
-    def to_dict(self) -> dict[str, Any]:
+    def _scientific_payload(self) -> dict[str, Any]:
         return {
             "source_id": self.source_id,
             "doi": self.doi,
@@ -414,8 +414,13 @@ class SourceNeighborAudit:
             "observation_count": self.observation_count,
             "measured_log_s_values": list(self.measured_log_s_values),
             "stereochemistry_specified": self.stereo_specified,
-            "stereochemistry_specified_label": "YES" if self.stereo_specified else "NO",
             "measurement_transfer_rule": "exact_canonical_isomeric_structure_match_only",
+        }
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            **self._scientific_payload(),
+            "stereochemistry_specified_label": "YES" if self.stereo_specified else "NO",
             "scientific_hash": self.scientific_hash,
         }
 
