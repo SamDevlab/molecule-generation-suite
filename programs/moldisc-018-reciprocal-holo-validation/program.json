@@ -1,0 +1,90 @@
+{
+  "program_id": "MOLDISC-018",
+  "program_version": "1.0",
+  "title": "Reciprocal Holo Cross-Docking Validation Megacampaign",
+  "domain": "molecular-discovery",
+  "evidence_target": "E2_COMPUTATIONAL",
+  "execution_mode": "STATIC_PREDECLARED",
+  "retry_count": 0,
+  "failure_policy": "continue_independent",
+  "parents": {
+    "moldisc017": {
+      "program_id": "MOLDISC-017",
+      "program_scientific_hash": "6508ac7b0e658bc67b10a835f4f172ff95426f648ace89755d41197ae2019724",
+      "protocol_hash": "c4dac30cfe54363d8468ccc2532d4010653f117c56e4aa3401e79eac13502270",
+      "measurement_transfer_allowed": false,
+      "imported_je2_redock_rank1_rmsd": {
+        "1MSM": 0.17251487113482522,
+        "1MSN": 0.15616339755381625
+      }
+    }
+  },
+  "resource_bounds": {
+    "max_campaigns": 9,
+    "planned_new_docking_runs": 20,
+    "max_failures": 8
+  },
+  "structures": {
+    "JE2_BACKGROUND": {"pdb_id": "1MSM", "ligand": "JE2", "ligand_alias": "KNI-764", "inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N", "ligand_author_chain": "B", "ligand_auth_seq_id": 1001, "receptor_author_chains": ["A", "B"], "mutations": ["Q7K", "L33I", "L63I"], "grid_hash": "5967ad06319d2d02646f96bf9ed70769eb345d76e1e50e2ab29aedb348ed0766"},
+    "K57_BACKGROUND": {"pdb_id": "1MRW", "ligand": "K57", "ligand_alias": "KNI-577", "inchikey": "CGFVYUGIPISJQG-ACIOBRDBSA-N", "formula": "C28H37N3O5S", "ligand_author_chain": "A", "ligand_auth_seq_id": 1001, "receptor_author_chains": ["A", "B"], "mutations": ["Q7K", "L33I", "L63I"], "grid_hash": "e8a22e5c534876dd50bcddfc14faa00df25b73f5f9243fbb777b9377e5e359f7"},
+    "JE2_MUTANT": {"pdb_id": "1MSN", "ligand": "JE2", "ligand_alias": "KNI-764", "inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N", "ligand_author_chain": "B", "ligand_auth_seq_id": 1001, "receptor_author_chains": ["A", "B"], "mutations": ["Q7K", "L33I", "L63I", "V82F", "I84V"], "grid_hash": "ddcc2e6bb18e78e0517380a168496db1f5fab16407861189c2f3f89842fcf40a"},
+    "K57_MUTANT": {"pdb_id": "1MRX", "ligand": "K57", "ligand_alias": "KNI-577", "inchikey": "CGFVYUGIPISJQG-ACIOBRDBSA-N", "formula": "C28H37N3O5S", "ligand_author_chain": "B", "ligand_auth_seq_id": 1001, "receptor_author_chains": ["A", "B"], "mutations": ["Q7K", "L33I", "L63I", "V82F", "I84V"], "grid_hash": "7f2972c64361d59491280b1415c150c3bab238952ce5188f65bbcf18e36fc847"}
+  },
+  "native_context": {
+    "capability_context": "NON_COGNATE_HOLO_CROSSDOCKING",
+    "frozen_classification_after_campaign": "PARTIALLY_VALIDATED",
+    "k57_is_generated_candidate": false,
+    "generated_candidate_is_k57": false,
+    "experimental_activity_transfer_allowed": false,
+    "no_affinity_inference": true,
+    "no_efficacy_inference": true,
+    "no_experimental_truth": true,
+    "no_universal_validation": true
+  },
+  "docking_protocol": {
+    "rdkit_conformer_engine": "ETKDGv3",
+    "etkdg_seeds": [42, 1337, 2025],
+    "vina_seed": 42,
+    "cpu": 1,
+    "exhaustiveness": 16,
+    "num_modes": 20,
+    "scoring_function": "vina",
+    "vina_version": "1.2.7",
+    "retry_count": 0,
+    "rmsd_threshold_angstrom": 2.0,
+    "scores_used_for_success": false,
+    "scores_used_for_pose_selection": false,
+    "scores_used_for_capability_classification": false,
+    "receptor_preparation_options": ["-h", "--partialcharge", "gasteiger", "-xr"],
+    "ligand_preparation_options": ["-h", "--partialcharge", "gasteiger"]
+  },
+  "cases": [
+    {"case_id": "RX-01", "label": "BACKGROUND_K57_IN_JE2_HOLO", "background": "BACKGROUND", "mutation_state": "BACKGROUND", "ligand": "K57", "target": "JE2_BACKGROUND", "reference": "K57_BACKGROUND"},
+    {"case_id": "RX-02", "label": "BACKGROUND_JE2_IN_K57_HOLO", "background": "BACKGROUND", "mutation_state": "BACKGROUND", "ligand": "JE2", "target": "K57_BACKGROUND", "reference": "JE2_BACKGROUND"},
+    {"case_id": "RX-03", "label": "MUTANT_K57_IN_JE2_HOLO", "background": "MUTANT", "mutation_state": "V82F_I84V", "ligand": "K57", "target": "JE2_MUTANT", "reference": "K57_MUTANT"},
+    {"case_id": "RX-04", "label": "MUTANT_JE2_IN_K57_HOLO", "background": "MUTANT", "mutation_state": "V82F_I84V", "ligand": "JE2", "target": "K57_MUTANT", "reference": "JE2_MUTANT"}
+  ],
+  "campaigns": [
+    {"campaign_id": "CAMP-018-A", "name": "SOURCE_AND_PAIR_AUDIT", "kind": "AUDIT", "planned_runs": 0},
+    {"campaign_id": "CAMP-018-B", "name": "K57_COGNATE_REDOCK", "kind": "REDOCKING", "planned_runs": 4},
+    {"campaign_id": "CAMP-018-C", "name": "BACKGROUND_RECIPROCAL_CROSSDOCK", "kind": "CROSSDOCK", "planned_runs": 8},
+    {"campaign_id": "CAMP-018-D", "name": "MUTANT_RECIPROCAL_CROSSDOCK", "kind": "CROSSDOCK", "planned_runs": 8},
+    {"campaign_id": "CAMP-018-E", "name": "RECEPTOR_ALIGNMENT_AND_REFERENCE_TRANSFER", "kind": "ANALYSIS", "planned_runs": 0},
+    {"campaign_id": "CAMP-018-F", "name": "POSE_RECOVERY_AND_FAILURE_DECOMPOSITION", "kind": "ANALYSIS", "planned_runs": 0},
+    {"campaign_id": "CAMP-018-G", "name": "CONFORMER_ROBUSTNESS", "kind": "ANALYSIS", "planned_runs": 0},
+    {"campaign_id": "CAMP-018-H", "name": "CAPABILITY_EVIDENCE_SYNTHESIS", "kind": "SYNTHESIS", "planned_runs": 0},
+    {"campaign_id": "CAMP-018-I", "name": "CAPABILITY_PROFILE_APPEND", "kind": "PROFILE", "planned_runs": 0}
+  ],
+  "alignment": {"algorithm": "KABSCH", "chain_mapping": {"A": "A", "B": "B"}, "same_author_residue_number": true, "same_residue_identity": true, "exclude_residues": [], "ligand_fit_applied": false},
+  "success_and_failure": {"threshold_angstrom": 2.0, "primary_sample_size": 4, "classes": ["RANK1_NEAR_NATIVE", "NEAR_NATIVE_POSE_MISRANKED", "NO_NEAR_NATIVE_POSE_RETURNED", "ANALYSIS_INDETERMINATE", "EXECUTION_FAILED"]},
+  "claims": [
+    {"claim_id": "CLAIM-018-01", "statement": "K57 cognate redocking in 1MRW and 1MRX produces deterministic technical pose-recovery evidence under the frozen protocol."},
+    {"claim_id": "CLAIM-018-02", "statement": "At least one experimental reciprocal holo cross-docking case returns a <=2 Å pose."},
+    {"claim_id": "CLAIM-018-03", "statement": "All four reciprocal holo cross-docking primary cases return at least one <=2 Å pose."},
+    {"claim_id": "CLAIM-018-04", "statement": "All four reciprocal holo cross-docking primary cases rank a <=2 Å pose first."},
+    {"claim_id": "CLAIM-018-05", "statement": "Any observed cross-docking failures can be partitioned using the frozen ranking-versus-sampling failure taxonomy."},
+    {"claim_id": "CLAIM-018-06", "statement": "The reciprocal-case primary result is reproducible without changing Vina seed, exhaustiveness, receptor coordinates, grid definition or success threshold."}
+  ],
+  "boundaries": {"molecule_generation_executed": false, "generated_candidate_docking_executed": false, "candidate_selection_executed": false, "lead_selection_executed": false, "affinity_inference": false, "adaptive_execution": false, "evidence_ceiling": "E2_COMPUTATIONAL"},
+  "campaign_files": ["campaign-a-source-audit.json", "campaign-b-k57-redock.json", "campaign-c-background-crossdock.json", "campaign-d-mutant-crossdock.json", "campaign-e-alignment.json", "campaign-f-pose-recovery.json", "campaign-g-conformer-robustness.json", "campaign-h-capability-synthesis.json", "campaign-i-profile-append.json"]
+}
