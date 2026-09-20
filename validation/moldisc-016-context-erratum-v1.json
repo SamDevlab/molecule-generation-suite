@@ -1,0 +1,34 @@
+{
+  "schema_version": "research-os.molecular-discovery.context-erratum.v1",
+  "program_id": "MOLDISC-016",
+  "erratum_id": "MOLDISC-016-CONTEXT-ERRATUM-001",
+  "status": "CLOSED_CONTEXT_ONLY",
+  "original_first_result": "validation/moldisc-016-first-run-v1.json",
+  "original_program_hash": "68472cbc795ccb9cbbaef083bdc44819218c2b3f29b50ff7481ff99097687095",
+  "original_protocol_hash": "67a127a651df771f7789cd8f4e4933575f81d7ee91d0dae2219921c6a2dc3e70",
+  "corrected_summary_matrix": {
+    "source_connectivity_match": {
+      "A0B0": false,
+      "A1B0": false,
+      "A0B1": false,
+      "A1B1": true
+    },
+    "ESOL_status": {
+      "A0B0": "OUT_OF_DOMAIN",
+      "A1B0": "IN_DOMAIN",
+      "A0B1": "OUT_OF_DOMAIN",
+      "A1B1": "OUT_OF_DOMAIN"
+    },
+    "ESOL_max_training_tanimoto": 0.2537313432835821,
+    "ESOL_applicability_threshold": 0.26684684684684684
+  },
+  "immutability_assertions": {
+    "MOLDISC016_DOCKING_OUTPUTS_CHANGED": false,
+    "MOLDISC016_FACTORIAL_OUTPUTS_CHANGED": false,
+    "MOLDISC016_GEOMETRY_CHANGED": false,
+    "MOLDISC016_CONTACTS_CHANGED": false,
+    "MOLDISC016_CLAIMS_CHANGED": false,
+    "MOLDISC016_PROGRAM_HASH_CHANGED": false
+  },
+  "interpretation": "This erratum corrects contextual summary fields only. The preserved first-result validation and all scientific docking, factorial, geometry, contact, claim, and program identity outputs remain immutable."
+}
