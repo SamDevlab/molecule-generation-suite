@@ -9,8 +9,10 @@ claim-level endpoints.  It never generates molecules or selects a candidate.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+from concurrent.futures import ThreadPoolExecutor
 import json
 import math
+import os
 from pathlib import Path
 import statistics
 from typing import Any, Mapping, Sequence
@@ -351,7 +353,7 @@ def _failure_record(spec: Mapping[str, Any], reason: str, status: str = "NONPASS
 
 def _write_run_record(root: Path, spec: Mapping[str, Any], record: Mapping[str, Any]) -> None:
     run_root = root / "runs" / str(spec["run_id"])
-    run_root.mkdir(parents=True, exist_ok=False)
+    run_root.mkdir(parents=True, exist_ok=True)
     _write_json(run_root / "run_manifest.json", dict(record))
 
 
@@ -604,6 +606,7 @@ def run_moldisc_016(*, config_path: str | Path, output_root: str | Path, timeout
 
     def execute_specs(specs: Sequence[Mapping[str, Any]]) -> None:
         nonlocal failures, executed, skipped, nonpass, halted
+        pending: list[tuple[Mapping[str, Any], CandidateSpec, Mapping[str, Any]]] = []
         for spec in specs:
             if halted:
                 break
@@ -625,18 +628,40 @@ def run_moldisc_016(*, config_path: str | Path, output_root: str | Path, timeout
             try:
                 if input_key not in prepared:
                     prepared[input_key] = _prepare_input(candidate, input_seed, root, obabel, timeout)
-                record = _execute_run(spec, candidate, target, prepared[input_key], root, vina, timeout)
             except (MOLDISC016Error, OSError, ValueError) as exc:
                 record = _failure_record(spec, "PREPARATION_INDETERMINATE")
                 record["error"] = str(exc)
                 _write_run_record(root, spec, record)
-            records[spec["run_id"]] = record
-            executed += 1
-            if record["technical_status"] != "PASS":
+                records[spec["run_id"]] = record
+                executed += 1
                 nonpass += 1
                 failures += 1
                 if failures >= MAX_FAILURES:
                     halted = True
+                continue
+            pending.append((spec, candidate, prepared[input_key]))
+
+        worker_limit = max(1, min(4, int(os.environ.get("MOLDISC016_MAX_WORKERS", "4")), len(pending))) if pending else 0
+        if worker_limit:
+            with ThreadPoolExecutor(max_workers=worker_limit, thread_name_prefix="moldisc016-vina") as executor:
+                futures = {
+                    spec["run_id"]: executor.submit(_execute_run, spec, candidate, target, input_data, root, vina, timeout)
+                    for spec, candidate, input_data in pending
+                }
+                for spec, _candidate, _input_data in pending:
+                    try:
+                        record = futures[spec["run_id"]].result()
+                    except (MOLDISC016Error, OSError, ValueError, RuntimeError) as exc:
+                        record = _failure_record(spec, "DOCKING_INDETERMINATE")
+                        record["error"] = str(exc)
+                        _write_run_record(root, spec, record)
+                    records[spec["run_id"]] = record
+                    executed += 1
+                    if record["technical_status"] != "PASS":
+                        nonpass += 1
+                        failures += 1
+                        if failures >= MAX_FAILURES:
+                            halted = True
 
     baseline_plan = [item for item in plan if item["campaign_id"] == "CAMP-016-A"]
     sensitivity_plan = [item for item in plan if item["campaign_id"] != "CAMP-016-A"]
