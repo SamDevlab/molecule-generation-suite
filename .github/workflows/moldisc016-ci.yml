@@ -1,0 +1,120 @@
+name: moldisc-016-ci
+
+on:
+  pull_request:
+    paths:
+      - "src/research_os/molecular_discovery/moldisc016.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_016.py"
+      - "tests/test_moldisc_016.py"
+      - "programs/moldisc-016-je2-source-megacampaign/**"
+      - "docs/moldisc-016-je2-source-megacampaign.md"
+      - "validation/moldisc-016-*.json"
+      - ".github/workflows/moldisc016-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/research_os/molecular_discovery/moldisc016.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_016.py"
+      - "tests/test_moldisc_016.py"
+      - "programs/moldisc-016-je2-source-megacampaign/**"
+      - "docs/moldisc-016-je2-source-megacampaign.md"
+      - "validation/moldisc-016-*.json"
+      - ".github/workflows/moldisc016-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-je2-source-megacampaign:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Research OS discovery dependencies
+        run: python -m pip install -e ".[dev,discovery]"
+
+      - name: Install Open Babel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+
+      - name: Install official AutoDock Vina 1.2.7 binary
+        run: |
+          curl --fail --location --retry 3 https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          /tmp/vina_1.2.7 --version
+          sha256sum /tmp/vina_1.2.7
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+
+      - name: Check dependency consistency
+        run: python -m pip check
+
+      - name: Compile frozen MOLDISC-016
+        run: >-
+          python -m py_compile
+          src/research_os/molecular_discovery/moldisc016.py
+          scripts/run_moldisc_016.py
+          tests/test_moldisc_016.py
+
+      - name: Run focused protocol tests
+        run: python -m pytest -q tests/test_moldisc_016.py
+
+      - name: Execute all frozen MOLDISC-016 campaigns
+        run: python scripts/run_moldisc_016.py --output /tmp/moldisc-016
+
+      - name: Require complete first result and frozen boundaries
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("/tmp/moldisc-016")
+          manifest = json.loads((root / "program_manifest.json").read_text())
+          factorial = json.loads((root / "factorial_analysis.json").read_text())
+          geometry = json.loads((root / "geometry_analysis.json").read_text())
+          assert manifest["program_id"] == "MOLDISC-016"
+          assert manifest["control_replay"]["status"] == "PASS"
+          assert manifest["docking_runs_planned"] == 32
+          assert manifest["docking_runs_executed"] == 32
+          assert manifest["docking_runs_skipped"] == 0
+          assert manifest["docking_runs_nonpass"] == 0
+          assert manifest["candidate_selection_executed"] is False
+          assert manifest["lead_selection_executed"] is False
+          assert manifest["generation_executed"] is False
+          assert manifest["source_measurement_transfer_allowed"] is False
+          assert len(geometry["edges"]) == 4
+          geometry_status = {edge["edge_id"]: edge["status"] for edge in geometry["edges"]}
+          assert geometry_status == {
+              "EDGE-OH-BENZYL": "PASS",
+              "EDGE-OH-TERTBUTYL": "PASS",
+              "EDGE-NSUB-OH_PRESENT": "EDGE_GEOMETRY_INDETERMINATE",
+              "EDGE-NSUB-OH_DELETED": "EDGE_GEOMETRY_INDETERMINATE",
+          }
+          assert all(item["status"] == "PASS" for item in factorial["contrasts_by_condition"].values())
+          print(json.dumps({
+              "program_protocol_hash": manifest["program_protocol_hash"],
+              "program_scientific_hash": manifest["program_scientific_hash"],
+              "campaign_hashes": manifest["campaign_hashes"],
+              "docking_runs": [manifest["docking_runs_planned"], manifest["docking_runs_executed"], manifest["docking_runs_skipped"], manifest["docking_runs_nonpass"]],
+              "control_replay": manifest["control_replay"],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Upload MOLDISC-016 first result artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: moldisc-016-je2-source-megacampaign
+          path: /tmp/moldisc-016
+          if-no-files-found: warn

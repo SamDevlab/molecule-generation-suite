@@ -1,0 +1,182 @@
+{
+  "schema_version": "research-os.molecular-discovery.megacampaign.v1",
+  "program_id": "MOLDISC-016",
+  "program_version": "1.0",
+  "title": "JE2 Source-Directed Robustness Megacampaign",
+  "domain": "molecular-discovery",
+  "evidence_target": "E2_COMPUTATIONAL",
+  "execution_mode": "STATIC_PREDECLARED",
+  "retry_count": 0,
+  "failure_policy": "continue_independent",
+  "parents": {
+    "moldisc014": {
+      "program_id": "MOLDISC-014",
+      "program_scientific_hash": "f940d95189616131829a22f9e68a53a960eddf8fd05f5fd7ebac43ece85481ed"
+    },
+    "moldisc015": {
+      "program_id": "MOLDISC-015",
+      "program_scientific_hash": "8e22c0565f2d78dc16468c8edb8f8f0b90a4007e50ced99e00e3d7a0b0f63e5d",
+      "source_record_id": "C-2545",
+      "source_name": "PHENYL-KNI-727",
+      "measured_log_s": -3.62,
+      "source_stereochemistry_specified": false,
+      "resolution_status": "UNRESOLVED_SOURCE_STEREOCHEMISTRY",
+      "source_delta_both_connectivity_match": true,
+      "source_delta_both_full_inchikey_match": false,
+      "measurement_transfer_allowed": false
+    },
+    "moldisc012": {
+      "program_id": "MOLDISC-012",
+      "program_scientific_hash": "e8c66a7726a3b191723e0dea072afdb5e4d4d9202b142eff83fe6d19c623f776",
+      "target_case_id": "ATX-007",
+      "pdb_id": "1KZK",
+      "native_ligand": "JE2",
+      "receptor_author_chains": ["A", "B"],
+      "grid_hash": "a0bf032d8bdb1bc20f13f298d604673cac1d2c7da8596cc228ec6602b5989aef",
+      "capability_classification": "PARTIALLY_VALIDATED",
+      "docking_context": "NON_COGNATE_HOLO_CROSSDOCKING",
+      "evidence_level": "E2_COMPUTATIONAL"
+    }
+  },
+  "resource_bounds": {
+    "max_campaigns": 8,
+    "max_docking_runs": 40,
+    "max_failures": 12,
+    "max_candidates": 4,
+    "planned_docking_runs": 32
+  },
+  "panel": [
+    {
+      "variant_id": "STEP2-DEMETHYL-01",
+      "candidate_id": "MOLDISC-011-JE2-286E6F2BE8",
+      "factor_a": "A0",
+      "factor_b": "B0",
+      "label": "CONTROL",
+      "canonical_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)[C@@H]1C(=O)NCc1ccccc1",
+      "inchikey": "DRIAWXDDGSORDT-KKUQBAQOSA-N",
+      "heavy_atom_count": 39
+    },
+    {
+      "variant_id": "SOURCE-DELTA-OH",
+      "candidate_id": "MOLDISC-014-SOURCE-DELTA-OH",
+      "factor_a": "A1",
+      "factor_b": "B0",
+      "label": "DELTA-OH",
+      "canonical_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2ccccc2)[C@@H]1C(=O)NCc1ccccc1",
+      "inchikey": "NAZMDUVPQSKJEQ-KKUQBAQOSA-N",
+      "heavy_atom_count": 38
+    },
+    {
+      "variant_id": "SOURCE-DELTA-NSUB",
+      "candidate_id": "MOLDISC-014-SOURCE-DELTA-NSUB",
+      "factor_a": "A0",
+      "factor_b": "B1",
+      "label": "DELTA-NSUB",
+      "canonical_smiles": "CC(C)(C)NC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C",
+      "inchikey": "DMSDTDPQGPRTNA-FDFHNCONSA-N",
+      "heavy_atom_count": 36
+    },
+    {
+      "variant_id": "SOURCE-DELTA-BOTH",
+      "candidate_id": "MOLDISC-014-SOURCE-DELTA-BOTH",
+      "factor_a": "A1",
+      "factor_b": "B1",
+      "label": "DELTA-BOTH",
+      "canonical_smiles": "CC(C)(C)NC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2ccccc2)CSC1(C)C",
+      "inchikey": "URHJIBSBOJFXDI-FDFHNCONSA-N",
+      "heavy_atom_count": 35
+    }
+  ],
+  "target": {
+    "case_id": "ATX-007",
+    "pdb_id": "1KZK",
+    "native_ligand": "JE2",
+    "ligand_author_chain": "A",
+    "receptor_author_chains": ["A", "B"],
+    "grid_hash": "a0bf032d8bdb1bc20f13f298d604673cac1d2c7da8596cc228ec6602b5989aef",
+    "coordinate_frame": "RECEPTOR_FRAME",
+    "snapshot_policy": "one shared PDB/receptor/native-reference/grid snapshot for every run"
+  },
+  "docking_protocol": {
+    "rdkit_conformer_engine": "ETKDGv3",
+    "etkdg_seeds": [42, 1337, 2025],
+    "uff_when_available": true,
+    "openbabel_receptor_options": ["-h", "--partialcharge", "gasteiger", "-xr"],
+    "openbabel_ligand_options": ["-h", "--partialcharge", "gasteiger"],
+    "vina_version": "1.2.7",
+    "vina_seeds": [42, 1337, 2025],
+    "cpu": 1,
+    "exhaustiveness_values": [8, 16, 32],
+    "num_modes": 20,
+    "scoring_function": "vina",
+    "retry_count": 0,
+    "analysis_replicate": "RUN_A"
+  },
+  "campaigns": [
+    {"campaign_id": "CAMP-016-A", "name": "BASELINE_2X2_DOCKING", "kind": "DOCKING", "planned_runs": 8, "conditions": {"vina_seed": 42, "etkdg_seed": 42, "exhaustiveness": 16, "replicates": ["RUN_A", "RUN_B"]}},
+    {"campaign_id": "CAMP-016-B", "name": "VINA_SEED_SENSITIVITY", "kind": "DOCKING", "planned_runs": 8, "conditions": {"vina_seeds": [1337, 2025], "etkdg_seed": 42, "exhaustiveness": 16, "prepared_input": "baseline"}},
+    {"campaign_id": "CAMP-016-C", "name": "STARTING_CONFORMER_SENSITIVITY", "kind": "DOCKING", "planned_runs": 8, "conditions": {"vina_seed": 42, "etkdg_seeds": [1337, 2025], "exhaustiveness": 16}},
+    {"campaign_id": "CAMP-016-D", "name": "EXHAUSTIVENESS_SENSITIVITY", "kind": "DOCKING", "planned_runs": 8, "conditions": {"vina_seed": 42, "etkdg_seed": 42, "exhaustiveness_values": [8, 32], "prepared_input": "baseline"}},
+    {"campaign_id": "CAMP-016-E", "name": "FACTORIAL_POSE_GEOMETRY", "kind": "ANALYSIS", "planned_runs": 0, "conditions": {"input": "baseline RUN_A only", "metric": "RECEPTOR_FRAME_COMMON_CORE_RMSD"}},
+    {"campaign_id": "CAMP-016-F", "name": "POCKET_CONTACT_ANALYSIS", "kind": "ANALYSIS", "planned_runs": 0, "conditions": {"input": "baseline RUN_A only", "cutoff_angstrom": 4.0}},
+    {"campaign_id": "CAMP-016-G", "name": "DESCRIPTIVE_FACTORIAL_SYNTHESIS", "kind": "ANALYSIS", "planned_runs": 0, "conditions": {"mode": "DESCRIPTIVE_ONLY", "conditions": ["baseline", "vina_seed_1337", "vina_seed_2025", "etkdg_seed_1337", "etkdg_seed_2025", "exhaustiveness_8", "exhaustiveness_32"]}},
+    {"campaign_id": "CAMP-016-H", "name": "CROSS_CAMPAIGN_EVIDENCE_SYNTHESIS", "kind": "SYNTHESIS", "planned_runs": 0, "conditions": {"evidence_ceiling": "E2_COMPUTATIONAL", "candidate_selection": false}}
+  ],
+  "geometry": {
+    "metric": "RECEPTOR_FRAME_COMMON_CORE_RMSD",
+    "coordinate_frame": "RECEPTOR_FRAME",
+    "no_rigid_body_alignment": true,
+    "no_coordinate_centering": true,
+    "mapping_requires": ["element identity", "connectivity", "ring consistency where relevant"],
+    "edges": [
+      {"edge_id": "EDGE-OH-BENZYL", "left": "A0B0", "right": "A1B0"},
+      {"edge_id": "EDGE-OH-TERTBUTYL", "left": "A0B1", "right": "A1B1"},
+      {"edge_id": "EDGE-NSUB-OH_PRESENT", "left": "A0B0", "right": "A0B1"},
+      {"edge_id": "EDGE-NSUB-OH_DELETED", "left": "A1B0", "right": "A1B1"}
+    ],
+    "threshold_angstrom": null
+  },
+  "contacts": {
+    "cutoff_angstrom": 4.0,
+    "heavy_atom_residue_distance": true,
+    "energy_or_interaction_classification": false
+  },
+  "factorial": {
+    "mode": "DESCRIPTIVE_ONLY",
+    "formulas": {
+      "oh_main_effect": "0.5*((Y10-Y00)+(Y11-Y01))",
+      "nsub_main_effect": "0.5*((Y01-Y00)+(Y11-Y10))",
+      "interaction": "(Y11-Y01)-(Y10-Y00)"
+    },
+    "no_p_values": true,
+    "no_significance_testing": true,
+    "sign_consistency_is_numerical_only": true
+  },
+  "claims": [
+    {"claim_id": "CLAIM-016-01", "statement": "The fixed four-member chemical panel has a complete baseline technical docking characterization under the frozen 1KZK protocol.", "minimum_evidence_level": "E2_COMPUTATIONAL"},
+    {"claim_id": "CLAIM-016-02", "statement": "The numerical sign of the phenolic-hydroxyl Vina rank-1 score contrast is invariant across all predeclared comparable protocol conditions.", "minimum_evidence_level": "E2_COMPUTATIONAL"},
+    {"claim_id": "CLAIM-016-03", "statement": "The numerical sign of the N-substituent Vina rank-1 score contrast is invariant across all predeclared comparable protocol conditions.", "minimum_evidence_level": "E2_COMPUTATIONAL"},
+    {"claim_id": "CLAIM-016-04", "statement": "The numerical sign of the 2x2 Vina rank-1 score interaction contrast is invariant across all predeclared comparable protocol conditions.", "minimum_evidence_level": "E2_COMPUTATIONAL"},
+    {"claim_id": "CLAIM-016-05", "statement": "The AqSolDB -3.62 measurement remains non-transferable to SOURCE-DELTA-BOTH.", "minimum_evidence_level": "E1_SOURCE_CONTEXT"}
+  ],
+  "boundaries": {
+    "generation_executed": false,
+    "candidate_selection_executed": false,
+    "lead_selection_executed": false,
+    "measurement_transfer_allowed": false,
+    "universal_metric_created": false,
+    "winner_created": false,
+    "adaptive_execution": false,
+    "evidence_ceiling": "E2_COMPUTATIONAL"
+  },
+  "campaign_files": [
+    "campaign-a-baseline.json",
+    "campaign-b-vina-seeds.json",
+    "campaign-c-conformers.json",
+    "campaign-d-exhaustiveness.json",
+    "campaign-e-geometry.json",
+    "campaign-f-contacts.json",
+    "campaign-g-factorial.json",
+    "campaign-h-synthesis.json"
+  ]
+}
