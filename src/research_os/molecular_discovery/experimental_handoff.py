@@ -341,7 +341,6 @@ def _build_request(source_package: Path, records: Sequence[Mapping[str, Any]]) -
         "protocol_status": source_request.get("status", "AWAITING_EXTERNAL_PROTOCOL_OR_QUOTE"),
         "experimental_handoff_ready": True,
         "biolab_package_ready": True,
-        "engagement_type": "SCIENTIFIC_COLLABORATION",
         "scientific_question": "Measure aqueous solubility for the same frozen 2x2 panel under one pre-declared laboratory protocol.",
         "purpose": [
             "estimate the factor A effect",

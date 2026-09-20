@@ -63,6 +63,7 @@ def test_checked_in_handoff_contains_four_identity_preserving_formats() -> None:
     assert request["protocol_status"] == "AWAITING_EXTERNAL_PROTOCOL_OR_QUOTE"
     assert request["actual_experiment"] is False
     assert request["experimental_handoff_ready"] is True
+    assert "engagement_type" not in request
     assert [item["panel_key"] for item in request["panel"]] == list(PANEL_KEYS)
     assert set(request["unknown"]["protocol_fields"]) >= {"temperature", "pH", "medium", "units"}
 
@@ -134,3 +135,9 @@ def test_result_schema_declares_frozen_protocol_gate() -> None:
         "FROZEN",
     ]
     assert schema["allOf"][0]["then"]["properties"]["protocol_status"] == {"const": "FROZEN"}
+
+
+def test_relationship_engagement_types_live_only_in_tracker() -> None:
+    tracker = (SOURCE / "COLLABORATION_TRACKER.md").read_text(encoding="utf-8")
+    assert "COMMERCIAL_SERVICE" in tracker
+    assert "SCIENTIFIC_COLLABORATION" in tracker

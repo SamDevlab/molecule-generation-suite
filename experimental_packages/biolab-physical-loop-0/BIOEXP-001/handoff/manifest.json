@@ -27,9 +27,9 @@
       "sha256": "069ccca98e91b0c206ac81d52564bb1f0711cc8bf08c6300f0c4c6c48edec986"
     },
     {
-      "bytes": 4268,
+      "bytes": 4219,
       "path": "experiment_request.json",
-      "sha256": "29b7a90759de763c258169c9d6fc3196b6466d06bacb627f57f7c607124fc921"
+      "sha256": "ab58a632acc9179627fca43d50c9f7443ad7d875337cc54b21de3623709ea267"
     },
     {
       "bytes": 3577,
@@ -120,6 +120,6 @@
   "handoff_version": "0.2",
   "manifest_scope": "manifest.json is excluded from package_hash and artifacts",
   "next_generation_allowed": false,
-  "package_hash": "60f3daa256285a3a6a494260f1a8b112a7aae3e35df0b9606737dd73bb8bcc50",
+  "package_hash": "caa34a456b2c2b36ac9534900242b8c73967b07ca0cea977ff2ce7ecde35cb01",
   "schema_version": "research-os.biolab.experimental-handoff.v0.2"
 }
