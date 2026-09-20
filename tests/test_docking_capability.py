@@ -15,6 +15,7 @@ from research_os.docking.claims import docking_capability_claim_gate
 
 
 PROFILE_PATH = Path(__file__).parents[1] / "configs" / "docking-capability-profile-v1.json"
+HISTORICAL_PROFILE_PATH = Path(__file__).parents[1] / "configs" / "docking-capability-profile-snapshots" / "b8c5c799b2035bae2796de714cc55dc4e607420e13b309b7f33792ebaf5597bb.json"
 
 
 def test_profile_loads_with_deterministic_identity_and_e2_level():
@@ -22,6 +23,13 @@ def test_profile_loads_with_deterministic_identity_and_e2_level():
     assert profile.profile_id == "research-os.docking.capability-profile.v1+1f33fae86f78827f"
     assert profile.profile_hash == "1f33fae86f78827f954597b8e0bec455e696fec560ac74f014049c0759d7f8ea"
     assert profile.evidence_level is EvidenceLevel.E2_COMPUTATIONAL
+
+
+def test_historical_profile_snapshot_preserves_frozen_identity_and_sources():
+    profile = load_profile(HISTORICAL_PROFILE_PATH)
+    assert profile.profile_id == "research-os.docking.capability-profile.v1+b8c5c799b2035bae"
+    assert profile.profile_hash == "b8c5c799b2035bae2796de714cc55dc4e607420e13b309b7f33792ebaf5597bb"
+    assert profile.context_record("NON_COGNATE_HOLO_CROSSDOCKING")["evidence_source_ids"] == ["CROSSDOCK-001"]
 
 
 def test_context_classification_is_explicit_and_unknown_is_out_of_domain():

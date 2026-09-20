@@ -75,3 +75,11 @@ timestamps, branch names, formatting, and key order do not change it.
 
 The profile is a validation layer, not a new docking benchmark. It was frozen
 after the historical campaign and before any new docking experiment.
+
+## Historical replay snapshots
+
+Scientific programs whose frozen identity embeds a capability assessment must
+replay against the capability snapshot that existed when the program was
+frozen. Later evidence updates are append-only and apply to new
+interpretation/current programs; they do not retroactively rewrite historical
+program identity.
