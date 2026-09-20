@@ -1,0 +1,20 @@
+{
+  "panel_id": "BIOEXP-001-SOLUBILITY-2X2",
+  "experiment_family": "SOLUBILITY",
+  "design": "2x2 source-directed factor panel",
+  "measurement_transfer_allowed": false,
+  "c2545_boundary": {
+    "name": "PHENYL-KNI-727",
+    "measured_log_s": -3.62,
+    "source_stereochemistry": "UNRESOLVED",
+    "delta_both_connectivity_match": true,
+    "full_identity_match": false,
+    "measurement_transfer_allowed": false
+  },
+  "members": [
+    {"panel_key": "A0B0", "candidate_id": "MOLDISC-011-JE2-286E6F2BE8", "variant_id": "A0B0-CONTROL", "factor_a": "CONTROL", "factor_b": "CONTROL", "compound_file": "compounds/A0B0.json"},
+    {"panel_key": "A1B0", "candidate_id": "MOLDISC-014-SOURCE-DELTA-OH", "variant_id": "A1B0-DELTA-OH", "factor_a": "DELTA-OH", "factor_b": "CONTROL", "compound_file": "compounds/A1B0.json"},
+    {"panel_key": "A0B1", "candidate_id": "MOLDISC-014-SOURCE-DELTA-NSUB", "variant_id": "A0B1-DELTA-NSUB", "factor_a": "CONTROL", "factor_b": "DELTA-NSUB", "compound_file": "compounds/A0B1.json"},
+    {"panel_key": "A1B1", "candidate_id": "MOLDISC-014-SOURCE-DELTA-BOTH", "variant_id": "A1B1-DELTA-BOTH", "factor_a": "DELTA-OH", "factor_b": "DELTA-NSUB", "compound_file": "compounds/A1B1.json"}
+  ]
+}

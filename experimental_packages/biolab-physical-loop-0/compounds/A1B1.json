@@ -1,0 +1,15 @@
+{
+  "panel_key": "A1B1",
+  "candidate_id": "MOLDISC-014-SOURCE-DELTA-BOTH",
+  "variant_id": "A1B1-DELTA-BOTH",
+  "factor_a": "DELTA-OH",
+  "factor_b": "DELTA-NSUB",
+  "canonical_isomeric_smiles": "CC(C)(C)NC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2ccccc2)CSC1(C)C",
+  "inchikey": "URHJIBSBOJFXDI-FDFHNCONSA-N",
+  "formula": "C27H35N3O4S",
+  "heavy_atom_count": 35,
+  "parent_program_ids": ["MOLDISC-014", "MOLDISC-018"],
+  "parent_scientific_hashes": ["f940d95189616131829a22f9e68a53a960eddf8fd05f5fd7ebac43ece85481ed", "7b900a85ef70b13120107ab7dca7e5c21da34053942b48379c4c4f51e418086a"],
+  "source_measurement_transfer_allowed": false,
+  "procurement_status": "UNKNOWN"
+}

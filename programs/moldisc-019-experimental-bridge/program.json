@@ -1,0 +1,85 @@
+{
+  "program_id": "MOLDISC-019",
+  "program_version": "1.0",
+  "title": "First Experimental Bridge and Biolab Autonomous-Loop Transition",
+  "domain": "molecular-discovery",
+  "evidence_target": "E4_CURATED_EXPERIMENTAL",
+  "execution_mode": "STATIC_DECLARATIVE",
+  "parents": {
+    "moldisc018": {
+      "program_id": "MOLDISC-018",
+      "program_scientific_hash": "7b900a85ef70b13120107ab7dca7e5c21da34053942b48379c4c4f51e418086a",
+      "protocol_hash": "403907a0a9e911a313bfaf27d01b75d8b11d84dc742eac40caf9c7dc020cbb66",
+      "measurement_transfer_allowed": false
+    }
+  },
+  "phase_transition": {
+    "before": "COMPUTATIONAL_MOLECULAR_DISCOVERY",
+    "after": "BIOLAB_EXPERIMENTAL_FEEDBACK",
+    "phase_1_status": "CLOSED_ENOUGH_TO_TRANSITION",
+    "phase_2_status": "ACTIVE",
+    "phase_3_status": "BLOCKED_ON_FIRST_NEW_E4"
+  },
+  "panel": {
+    "panel_id": "BIOEXP-001-SOLUBILITY-2X2",
+    "member_count": 4,
+    "factor_design": ["A0B0_CONTROL", "A1B0_DELTA_OH", "A0B1_DELTA_NSUB", "A1B1_DELTA_BOTH"],
+    "members": {
+      "A0B0": {"candidate_id": "MOLDISC-011-JE2-286E6F2BE8", "variant_id": "A0B0-CONTROL", "factor_a": "CONTROL", "factor_b": "CONTROL", "canonical_isomeric_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)[C@@H]1C(=O)NCc1ccccc1", "inchikey": "DRIAWXDDGSORDT-KKUQBAQOSA-N", "formula": "C30H33N3O5S", "heavy_atom_count": 39},
+      "A1B0": {"candidate_id": "MOLDISC-014-SOURCE-DELTA-OH", "variant_id": "A1B0-DELTA-OH", "factor_a": "DELTA-OH", "factor_b": "CONTROL", "canonical_isomeric_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2ccccc2)[C@@H]1C(=O)NCc1ccccc1", "inchikey": "NAZMDUVPQSKJEQ-KKUQBAQOSA-N", "formula": "C30H33N3O4S", "heavy_atom_count": 38},
+      "A0B1": {"candidate_id": "MOLDISC-014-SOURCE-DELTA-NSUB", "variant_id": "A0B1-DELTA-NSUB", "factor_a": "CONTROL", "factor_b": "DELTA-NSUB", "canonical_isomeric_smiles": "CC(C)(C)NC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C", "inchikey": "DMSDTDPQGPRTNA-FDFHNCONSA-N", "formula": "C27H35N3O5S", "heavy_atom_count": 36},
+      "A1B1": {"candidate_id": "MOLDISC-014-SOURCE-DELTA-BOTH", "variant_id": "A1B1-DELTA-BOTH", "factor_a": "DELTA-OH", "factor_b": "DELTA-NSUB", "canonical_isomeric_smiles": "CC(C)(C)NC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2ccccc2)CSC1(C)C", "inchikey": "URHJIBSBOJFXDI-FDFHNCONSA-N", "formula": "C27H35N3O4S", "heavy_atom_count": 35}
+    }
+  },
+  "experiments": {
+    "primary": {"experiment_id": "BIOEXP-001-SOLUBILITY-2X2", "family": "SOLUBILITY", "status": "AWAITING_EXTERNAL_PROTOCOL_OR_QUOTE"},
+    "secondary": {"experiment_id": "BIOEXP-002-PROTEASE-2X2", "family": "BIOCHEMICAL_TARGET_ACTIVITY", "status": "PLANNED_NOT_EXECUTED"}
+  },
+  "gates": {
+    "same_level_continuation_allowed": false,
+    "next_generation_allowed": false,
+    "next_generation_gate": "REAL_E4_EXPERIMENTAL_FEEDBACK_REQUIRED",
+    "synthetic_fixture_is_scientific_evidence": false,
+    "identity_mismatch_action": "EXPERIMENT_IDENTITY_MISMATCH",
+    "e5_requires_independent_validation": true
+  },
+  "boundaries": {
+    "new_docking_runs": 0,
+    "molecule_generation_executed": false,
+    "candidate_selection_executed": false,
+    "lead_selection_executed": false,
+    "ml_training_executed": false,
+    "experimental_result_ingested_on_first_run": false
+  },
+  "protocol": {
+    "loop_version": "v0.1",
+    "physical_loop": "BIOLAB_PHYSICAL_LOOP_0",
+    "package_path": "experimental_packages/biolab-physical-loop-0",
+    "decision_input": ["current_program", "current_evidence_levels", "open_gaps", "available_capabilities", "external_dependencies", "experiment_status"],
+    "action_types": ["COMPUTE", "EXTERNAL_EVIDENCE", "EXPERIMENT", "STOP"],
+    "highest_local_evidence": "E2_COMPUTATIONAL",
+    "required_next_evidence": "E4_CURATED_EXPERIMENTAL",
+    "first_action": "EXPERIMENT",
+    "stop_reason": "EXPERIMENTAL_VALIDATION_REQUIRED",
+    "new_docking_runs": 0,
+    "new_molecules_generated": 0
+  },
+  "scientific_identity": {
+    "program_id": "MOLDISC-019",
+    "parent_program_id": "MOLDISC-018",
+    "parent_program_scientific_hash": "7b900a85ef70b13120107ab7dca7e5c21da34053942b48379c4c4f51e418086a",
+    "parent_program_protocol_hash": "403907a0a9e911a313bfaf27d01b75d8b11d84dc742eac40caf9c7dc020cbb66",
+    "phase_transition": ["COMPUTATIONAL_MOLECULAR_DISCOVERY", "BIOLAB_EXPERIMENTAL_FEEDBACK"],
+    "panel_id": "BIOEXP-001-SOLUBILITY-2X2",
+    "panel_member_keys": ["A0B0", "A1B0", "A0B1", "A1B1"],
+    "bioexp_001_id": "BIOEXP-001-SOLUBILITY-2X2",
+    "bioexp_002_id": "BIOEXP-002-PROTEASE-2X2",
+    "external_result_schema": "vendor-neutral-v1",
+    "e4_eligibility": ["actual_experiment", "attributable_provider", "recorded_protocol", "valid_sample_identity", "recorded_conditions", "actual_result", "raw_or_official_artifact", "artifact_hash"],
+    "e5_independence_rule": "same laboratory/report/run or shared provenance is not independent validation",
+    "anti_loop_rule": "do not repeat same-level computation without decision-changing external information or a direct experiment blocker",
+    "autonomous_stop_rule": "E2 local state plus E4-required gap and absent experiment yields EXPERIMENTAL_VALIDATION_REQUIRED",
+    "next_generation_gate": "REAL_E4_EXPERIMENTAL_FEEDBACK_REQUIRED",
+    "feedback_contract": ["new_experimental_evidence_ids", "affected_claim_ids", "affected_gap_ids", "superseded_assumptions", "new_uncertainties", "open_questions"]
+  }
+}

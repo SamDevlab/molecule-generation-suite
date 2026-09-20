@@ -1,0 +1,18 @@
+{
+  "decision_id": "BIOLAB-NEXT-ACTION-v0.1",
+  "current_program": "MOLDISC-018",
+  "current_max_local_evidence": "E2_COMPUTATIONAL",
+  "target_gap": "GAP-EXPERIMENTAL-SOLUBILITY",
+  "required_evidence": "E4_CURATED_EXPERIMENTAL",
+  "candidates": {
+    "ACTION-A": "LOW_INFORMATION_GAIN",
+    "ACTION-B": "DEFER",
+    "ACTION-C": "BLOCKED",
+    "ACTION-D": "PRIORITIZE_NOW"
+  },
+  "selected_action": "EXPERIMENT",
+  "computational_continuation_allowed": false,
+  "next_generation_allowed": false,
+  "stop_reason": "EXPERIMENTAL_VALIDATION_REQUIRED",
+  "no_hidden_universal_score": true
+}

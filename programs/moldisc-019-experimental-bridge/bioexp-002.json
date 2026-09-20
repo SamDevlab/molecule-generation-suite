@@ -1,0 +1,21 @@
+{
+  "experiment_id": "BIOEXP-002-PROTEASE-2X2",
+  "experiment_family": "BIOCHEMICAL_TARGET_ACTIVITY",
+  "objective": "external biochemical HIV-1 protease measurement",
+  "protein_construct_identity": null,
+  "sequence_or_background": null,
+  "mutation_state": null,
+  "assay_type": null,
+  "substrate": null,
+  "conditions": null,
+  "measurement_endpoint": null,
+  "units": null,
+  "replicates": null,
+  "positive_controls": null,
+  "negative_controls": null,
+  "raw_data_requirement": null,
+  "report_requirement": null,
+  "status": "PLANNED_NOT_EXECUTED",
+  "pathogen_handling": false,
+  "culture_or_infection": false
+}

@@ -113,6 +113,24 @@ from research_os.molecular_discovery.workflow import (
     MolecularDiscoveryReport,
     MolecularDiscoveryWorkflow,
 )
+from research_os.molecular_discovery.biolab_loop import (
+    ACTION_TYPES,
+    BiolabActionCandidate,
+    BiolabDecision,
+    BiolabLoopSnapshot,
+    BiolabScientificState,
+    apply_e4_feedback,
+    default_moldisc018_state,
+    evaluate_next_action,
+)
+from research_os.molecular_discovery.moldisc019 import (
+    MOLDISC019Error,
+    build_first_decision,
+    ingest_result,
+    package_status,
+    prepare_package,
+    validate_result,
+)
 
 __all__ = [
     "AqSolDBCoverageError",
@@ -187,5 +205,19 @@ __all__ = [
     "run_moldisc_015",
     "build_moldisc016_execution_plan",
     "run_moldisc_016",
+    "ACTION_TYPES",
+    "BiolabActionCandidate",
+    "BiolabDecision",
+    "BiolabLoopSnapshot",
+    "BiolabScientificState",
+    "MOLDISC019Error",
+    "apply_e4_feedback",
+    "build_first_decision",
+    "default_moldisc018_state",
+    "evaluate_next_action",
+    "ingest_result",
+    "package_status",
+    "prepare_package",
     "run_public_aqsoldb_coverage",
+    "validate_result",
 ]

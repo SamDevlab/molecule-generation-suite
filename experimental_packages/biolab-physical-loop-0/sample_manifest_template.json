@@ -1,0 +1,17 @@
+{
+  "sample_manifest_id": "SAMPLE-MANIFEST-TEMPLATE",
+  "panel_id": "BIOEXP-001-SOLUBILITY-2X2",
+  "samples": [
+    {
+      "panel_key": "A0B0",
+      "supplier_or_lab": null,
+      "compound_identity": null,
+      "batch_id": null,
+      "purity": null,
+      "identity_method": null,
+      "certificate_or_report_locator": null,
+      "artifact_hashes": []
+    }
+  ],
+  "note": "Template only; no sample is represented as available."
+}

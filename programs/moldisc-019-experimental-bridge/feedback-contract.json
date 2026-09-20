@@ -1,0 +1,9 @@
+{
+  "contract_id": "BIOLAB-E4-FEEDBACK-v0.1",
+  "trigger": "eligible E4 external result is ingested",
+  "required_state_fields": ["new_experimental_evidence_ids", "affected_claim_ids", "affected_gap_ids", "superseded_assumptions", "new_uncertainties", "open_questions"],
+  "reassessment_required": true,
+  "next_generation_automatic": false,
+  "e5_automatic": false,
+  "scientific_evidence_source": "ExternalEvidenceIntegrator"
+}

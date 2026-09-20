@@ -1,0 +1,17 @@
+{
+  "chain_of_custody_id": "CHAIN-OF-CUSTODY-TEMPLATE",
+  "experiment_id": "BIOEXP-001-SOLUBILITY-2X2",
+  "entries": [
+    {
+      "timestamp": null,
+      "from_party": null,
+      "to_party": null,
+      "sample_id": null,
+      "batch_id": null,
+      "condition": null,
+      "record_artifact": null,
+      "record_hash": null
+    }
+  ],
+  "status": "TEMPLATE_ONLY"
+}
