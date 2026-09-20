@@ -9,8 +9,10 @@ molecule and does not interpret a Vina score as affinity.
 from __future__ import annotations
 
 from dataclasses import asdict
+from concurrent.futures import ThreadPoolExecutor
 import json
 import math
+import os
 from pathlib import Path
 import re
 import statistics
@@ -658,14 +660,30 @@ def run_moldisc_017(*, config_path: str | Path, output_root: str | Path, timeout
         if conversion.returncode != 0 or not pdbqt.is_file(): raise MOLDISC017Error(f"native ligand preparation failed for {receptor}")
         native_prepared[receptor]=pdbqt
     records={}; failures=0
-    for spec in plan:
+    def execute_spec(spec: Mapping[str, Any]) -> dict[str, Any]:
         try:
-            if spec["campaign_id"]=="CAMP-017-B": ligand=native_prepared[spec["receptor"]]
-            else: ligand=Path(prepared[(spec["candidate_key"],int(spec["etkdg_seed"]))]["pdbqt_path"])
-            records[spec["run_id"]]=_run_vina(spec,root=root,receptor=receptors[spec["receptor"]],ligand_path=ligand,vina=vina)
-        except (OSError,ValueError,RuntimeError,MOLDISC017Error) as exc:
-            records[spec["run_id"]]=_failure_record(spec,"EXECUTION_INDETERMINATE","NONPASS"); records[spec["run_id"]]["error"]=str(exc); _write_json(root/"runs"/spec["run_id"]/"run_manifest.json",records[spec["run_id"]])
-        if records[spec["run_id"]].get("technical_status")!="PASS": failures+=1
+            if spec["campaign_id"] == "CAMP-017-B":
+                ligand = native_prepared[spec["receptor"]]
+            else:
+                ligand = Path(prepared[(spec["candidate_key"], int(spec["etkdg_seed"]))]["pdbqt_path"])
+            # Each Vina invocation remains cpu=1.  Separate engine instances
+            # keep independent process boundaries while the frozen protocol
+            # permits independent runs to proceed concurrently.
+            return _run_vina(spec, root=root, receptor=receptors[spec["receptor"]], ligand_path=ligand, vina=VinaEngine())
+        except (OSError, ValueError, RuntimeError, MOLDISC017Error) as exc:
+            record = _failure_record(spec, "EXECUTION_INDETERMINATE", "NONPASS")
+            record["error"] = str(exc)
+            _write_json(root / "runs" / spec["run_id"] / "run_manifest.json", record)
+            return record
+
+    worker_count = max(1, min(4, int(os.environ.get("MOLDISC017_MAX_WORKERS", "4"))))
+    with ThreadPoolExecutor(max_workers=worker_count, thread_name_prefix="moldisc017-vina") as executor:
+        futures = {spec["run_id"]: executor.submit(execute_spec, spec) for spec in plan}
+        for spec in plan:
+            record = futures[spec["run_id"]].result()
+            records[spec["run_id"]] = record
+            if record.get("technical_status") != "PASS":
+                failures += 1
     redock={}
     for receptor in ("R1","R2"):
         values=[]
