@@ -1,6 +1,6 @@
 # MOLDISC-012 — STEP2-DEMETHYL-01 non-cognate docking in 1KZK
 
-Status: **protocol frozen; execution pending**
+Status: **executed and closed; first CI result preserved with deterministic scientific identity**
 
 ## Scientific question
 
@@ -47,6 +47,36 @@ an input to any MOLDISC-012 decision.
 
 The grid is recalculated and its hash is recorded at execution time. The
 historical grid hash is not substituted for a newly derived grid.
+
+## First preserved result
+
+The first green CI execution is preserved in
+`validation/moldisc-012-first-run-v1.json`:
+
+- GitHub Actions run: `35477594856` (`moldisc-012-ci`), result `PASS`;
+- independent runs A/B: identical program scientific hash;
+  `e8c66a7726a3b191723e0dea072afdb5e4d4d9202b142eff83fe6d19c623f776`;
+- technical status: `PASS` for both runs;
+- returned scored poses: `16`;
+- ordered pose scores (kcal/mol): `[-11.6, -10.194, -9.739, -9.411,
+  -9.251, -9.111, -9.044, -9.01, -8.914, -8.849, -8.813, -8.781,
+  -8.759, -8.718, -8.674, -8.656]`;
+- pose 1: `-11.6 kcal/mol`;
+- derived grid hash:
+  `a0bf032d8bdb1bc20f13f298d604673cac1d2c7da8596cc228ec6602b5989aef`;
+- native JE2 structure hash:
+  `82b48b534ff870fb8a922ed62da905bf77fe2e54f2420143986a4c5f9b9c9a4b`;
+- receptor scientific identity:
+  `ec55df9f302eb6b63669085023520cb66eb224c66ab15368a95997dc2fcd7c55`;
+- ligand scientific identity:
+  `609b8d75caf0018e1d704a24976f622c51fbfcff61d7554a55fe12be1f864f30`;
+- Vina scientific output hash:
+  `09a014a56ab3eb31c6e419d618a3b381e6357c2ccd18c387ce8acba5d08ddf07`.
+
+The raw native-reference SDF and receptor PDBQT hashes differed between A/B
+only because of transport metadata and temporary paths. Their normalized
+scientific identities were identical and the raw values are preserved in the
+validation artifact.
 
 ## Identity and reproduction
 

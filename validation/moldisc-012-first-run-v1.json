@@ -1,0 +1,129 @@
+{
+  "schema_version": "research-os.molecular-discovery.program-result.v1",
+  "program_id": "MOLDISC-012",
+  "program_version": "1.0",
+  "status": "CLOSED_FIRST_RESULT_PRESERVED",
+  "protocol_freeze_commit": "99b3170226ccdd0c8e1100b8f61ee90181db9d10",
+  "first_execution": {
+    "github_actions_run_id": 35477594856,
+    "workflow": "moldisc-012-ci",
+    "result": "PASS",
+    "head_sha": "99b3170226ccdd0c8e1100b8f61ee90181db9d10"
+  },
+  "parent": {
+    "moldisc011_program_scientific_hash": "8cb29619a82ca4680424c1b37c9bdce37b83e6cc8d570788435e1e9a62b159ff",
+    "moldisc011_selected_variant_id": "STEP2-DEMETHYL-01",
+    "moldisc011_selected_candidate_id": "MOLDISC-011-JE2-286E6F2BE8",
+    "moldisc011_selected_aqsoldb_similarity": 0.6857142857142857,
+    "moldisc011_selection_used_esol": false,
+    "moldisc011_docking_executed": false,
+    "moldisc010_operational_program_scientific_hash": "360ef9eb66981287781a971a7e09aebbe2749be765af5b4c6dcb33e3839eb48b",
+    "moldisc010_technical_status": "PASS",
+    "moldisc010_score_used_for_candidate_selection": false,
+    "moldisc010_score_used_for_protocol_selection": false,
+    "moldisc010_score_used_as_success_threshold": false
+  },
+  "candidate": {
+    "variant_id": "STEP2-DEMETHYL-01",
+    "candidate_id": "MOLDISC-011-JE2-286E6F2BE8",
+    "canonical_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)[C@@H]1C(=O)NCc1ccccc1",
+    "inchikey": "DRIAWXDDGSORDT-KKUQBAQOSA-N",
+    "generation_evidence_level": "E0_HEURISTIC"
+  },
+  "target": {
+    "case_id": "ATX-007",
+    "pdb_id": "1KZK",
+    "native_ligand": "JE2",
+    "native_ligand_author_chain": "A",
+    "receptor_author_chains": ["A", "B"],
+    "native_reference_structure_hash": "82b48b534ff870fb8a922ed62da905bf77fe2e54f2420143986a4c5f9b9c9a4b"
+  },
+  "docking_protocol": {
+    "context": "NON_COGNATE_HOLO_CROSSDOCKING",
+    "capability_status": "PARTIALLY_VALIDATED",
+    "evidence_level": "E2_COMPUTATIONAL",
+    "vina_version": "AutoDock Vina v1.2.7",
+    "openbabel_version": "Open Babel 3.1.1 -- Mar 31 2024 -- 06:39:03",
+    "seed": 42,
+    "cpu": 1,
+    "exhaustiveness": 16,
+    "num_modes": 20,
+    "scoring_function": "vina",
+    "grid_hash": "a0bf032d8bdb1bc20f13f298d604673cac1d2c7da8596cc228ec6602b5989aef",
+    "grid_derivation": "derived from exact crystallographic JE2 reference using research-os.redocking.v1.1 native-ligand box rule"
+  },
+  "execution_identity": {
+    "run_a_status": "PASS",
+    "run_b_status": "PASS",
+    "run_a_program_scientific_hash": "e8c66a7726a3b191723e0dea072afdb5e4d4d9202b142eff83fe6d19c623f776",
+    "run_b_program_scientific_hash": "e8c66a7726a3b191723e0dea072afdb5e4d4d9202b142eff83fe6d19c623f776",
+    "program_scientific_hash": "e8c66a7726a3b191723e0dea072afdb5e4d4d9202b142eff83fe6d19c623f776",
+    "deterministic": true,
+    "config_hash": "cd80c87d8248b3f0b0e8fd79a98d6bd298c6edf6c0d8aa540c9966a7a4a22b2f",
+    "receptor_scientific_identity": "ec55df9f302eb6b63669085023520cb66eb224c66ab15368a95997dc2fcd7c55",
+    "ligand_scientific_identity": "609b8d75caf0018e1d704a24976f622c51fbfcff61d7554a55fe12be1f864f30",
+    "starting_conformer_sha256": "22dd950658cd0de00d1c8106db8138fa2f43b9eb5c630e658beed8840b0e509b",
+    "receptor_extracted_sha256": "3558cbae51e3becd057ef94d740625cf0924d75eaaa53231708dcd2df77d3fc8",
+    "vina_output_scientific_hash": "09a014a56ab3eb31c6e419d618a3b381e6357c2ccd18c387ce8acba5d08ddf07",
+    "pose_count": 16,
+    "pose_1_score_kcal_mol": -11.6,
+    "pose_scores_kcal_mol": [
+      -11.6,
+      -10.194,
+      -9.739,
+      -9.411,
+      -9.251,
+      -9.111,
+      -9.044,
+      -9.01,
+      -8.914,
+      -8.849,
+      -8.813,
+      -8.781,
+      -8.759,
+      -8.718,
+      -8.674,
+      -8.656
+    ]
+  },
+  "scientific_identity": {
+    "native_reference_structure_hash": "82b48b534ff870fb8a922ed62da905bf77fe2e54f2420143986a4c5f9b9c9a4b",
+    "receptor_scientific_identity": "ec55df9f302eb6b63669085023520cb66eb224c66ab15368a95997dc2fcd7c55",
+    "ligand_scientific_identity": "609b8d75caf0018e1d704a24976f622c51fbfcff61d7554a55fe12be1f864f30",
+    "vina_output_scientific_hash": "09a014a56ab3eb31c6e419d618a3b381e6357c2ccd18c387ce8acba5d08ddf07"
+  },
+  "transport_provenance": {
+    "raw_hashes_are_not_scientific_identity": true,
+    "run_a": {
+      "source_pdb_transport_sha256": "f8d26f3a32f04fb4878ecf38a7a026fcf94fa7bc7620f8c09d83ec53850cbe25",
+      "native_reference_transport_sha256": "9be6f87bd8650d6ccb4fa8977aef0b7fba26d8da917e5119174eb02ace54fdf7",
+      "receptor_pdbqt_sha256": "c1be5279f7a435b130a204e82bb160461e7f71bd9780d637a9a46c2c06978b5d",
+      "ligand_pdbqt_sha256": "8eb015eb88be02a8205a059d5bacc32896a1a4ca9294dc2abba86e9e2e129661",
+      "vina_output_transport_sha256": "e188f4e6a24511f472589569fc216e74fb9da1ed6a7db36b42ae50ac1e3160a8"
+    },
+    "run_b": {
+      "source_pdb_transport_sha256": "f8d26f3a32f04fb4878ecf38a7a026fcf94fa7bc7620f8c09d83ec53850cbe25",
+      "native_reference_transport_sha256": "c67a9a7376a7fe19b38655ae00ce23cff86c8967a76bcdfac5a152d76312267e",
+      "receptor_pdbqt_sha256": "483cac58e6b2fe7b8409f58abbaac9cbed0d119e27f6c30407cd40d0359680a1",
+      "ligand_pdbqt_sha256": "8eb015eb88be02a8205a059d5bacc32896a1a4ca9294dc2abba86e9e2e129661",
+      "vina_output_transport_sha256": "e188f4e6a24511f472589569fc216e74fb9da1ed6a7db36b42ae50ac1e3160a8"
+    },
+    "observed_drift": [
+      "native_reference_transport_sha256 differed because ModelServer transport metadata and timing fields differed; native_reference_structure_hash remained equal",
+      "receptor_pdbqt_sha256 differed only in Open Babel REMARK Name temporary paths; receptor_scientific_identity remained equal"
+    ]
+  },
+  "primary_endpoint": {
+    "technical_status": "PASS",
+    "rmsd_to_native_je2": "NOT_APPLICABLE_DIFFERENT_LIGAND_GRAPH",
+    "scientific_success_threshold": null,
+    "interpretation": "Bounded E2 computational non-cognate cross-docking result; reproducible technical completion only, not experimental affinity or potency."
+  },
+  "scientific_conclusion": [
+    "The exact MOLDISC-011-selected STEP2-DEMETHYL-01 candidate completed the frozen ATX-007 / 1KZK / JE2-pocket cross-docking protocol.",
+    "Independent CI runs A and B produced identical candidate identity, native reference identity, receptor and ligand scientific identities, derived grid, ordered pose scores, Vina scientific output and program scientific hash.",
+    "Sixteen scored poses were returned under the frozen request for up to twenty modes; this is a technical output and no favorable-score threshold was applied.",
+    "MOLDISC-010 docking score did not select the candidate, select the protocol, or define a success threshold.",
+    "STEP2-DEMETHYL-01 and JE2 are different molecular graphs, so RMSD to native JE2 is not applicable and no native-like claim is made."
+  ]
+}

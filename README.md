@@ -312,6 +312,21 @@ or selection, and MOLDISC-011 executed no docking.
 
 See [MOLDISC-011](docs/moldisc-011-demethyl03-second-demethyl.md).
 
+### Selected STEP2-DEMETHYL-01 cross-docking: MOLDISC-012
+
+MOLDISC-012 docks only the MOLDISC-011-selected `STEP2-DEMETHYL-01` candidate
+in the frozen REDOCK-003 `ATX-007 / 1KZK / JE2` pocket. Candidate selection was
+completed upstream; the MOLDISC-010 docking score did not select the candidate,
+select the protocol, or define a success threshold. The primary endpoint is
+reproducible technical completion under the bounded
+`NON_COGNATE_HOLO_CROSSDOCKING` / `E2_COMPUTATIONAL` capability boundary.
+
+The first independent A/B CI execution passed with identical scientific
+identity and is preserved in
+[`validation/moldisc-012-first-run-v1.json`](validation/moldisc-012-first-run-v1.json).
+
+See [MOLDISC-012](docs/moldisc-012-step2-demethyl01-crossdock.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.
