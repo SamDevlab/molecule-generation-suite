@@ -1,0 +1,125 @@
+{
+  "actual_experiment": false,
+  "artifacts": [
+    {
+      "bytes": 913,
+      "path": "compound_identity_table.csv",
+      "sha256": "187edc33bac05e6e9c81866d7b16f16549ed54b09e888e79f8ed292f743f7612"
+    },
+    {
+      "bytes": 3379,
+      "path": "compounds/A0B0.mol",
+      "sha256": "42842b32015f8d0cacda010490a3113d34d1966db78290407af8f19c09d0b1f1"
+    },
+    {
+      "bytes": 3120,
+      "path": "compounds/A0B1.mol",
+      "sha256": "3f410df8e316720b156736c9b745d1c187bc9299168a3563ade8be08698ef8bd"
+    },
+    {
+      "bytes": 3297,
+      "path": "compounds/A1B0.mol",
+      "sha256": "42241c7d3d0f6000c0262ed63687e7268d97815f873383d27a2708a094fb0866"
+    },
+    {
+      "bytes": 3037,
+      "path": "compounds/A1B1.mol",
+      "sha256": "069ccca98e91b0c206ac81d52564bb1f0711cc8bf08c6300f0c4c6c48edec986"
+    },
+    {
+      "bytes": 4219,
+      "path": "experiment_request.json",
+      "sha256": "ab58a632acc9179627fca43d50c9f7443ad7d875337cc54b21de3623709ea267"
+    },
+    {
+      "bytes": 3577,
+      "path": "laboratory_result_schema.json",
+      "sha256": "a88aa74bec81de65ecbd640d4a4fab46da7b601e25b2e33725e44f21fe9c1730"
+    },
+    {
+      "bytes": 530,
+      "path": "laboratory_result_template.csv",
+      "sha256": "0667cc4c54218c5a1b7f8987461a52e759a581a6b34464fa81dd3bf3761ff1b5"
+    },
+    {
+      "bytes": 14281,
+      "path": "panel.sdf",
+      "sha256": "3013609ce12e1529ce1a113d5aa437e1935c67a4075349e755be7d86f5d9fceb"
+    },
+    {
+      "bytes": 2430,
+      "path": "README.md",
+      "sha256": "f833ecd447420c92d737d8698e06f64a9c5bfb6a9eb489eb239dbb8fd8928f88"
+    },
+    {
+      "bytes": 25782,
+      "path": "structures/A0B0.svg",
+      "sha256": "1175ec9e43a462773b2194646f61423305af68818538f840ca64cda227e70061"
+    },
+    {
+      "bytes": 23277,
+      "path": "structures/A0B1.svg",
+      "sha256": "a09fa9adadf152c8e49dc6ecd55a9b6ccca4e712b7fde990bc2177ba6dd4e3a1"
+    },
+    {
+      "bytes": 24882,
+      "path": "structures/A1B0.svg",
+      "sha256": "ae18aa7fbb0932c2f231030259716b9fd0d7e52739a8c9af3f69a095d08ed6f4"
+    },
+    {
+      "bytes": 22380,
+      "path": "structures/A1B1.svg",
+      "sha256": "a32216ccb40b5e9ce375bc592fd137b71343e002a281340ccf4bc900d88c8d50"
+    }
+  ],
+  "biolab_package_ready": true,
+  "canonical_input_hash": "662bcd778b96340861f4f21c13a394f0fb228f09e2ece50001925f5c97fc07cc",
+  "canonical_inputs": [
+    {
+      "path": "experimental_packages/biolab-physical-loop-0/panel_manifest.json",
+      "sha256": "9c1901c9c569d08213c94337e0f28fb9d361c92c1cc369670bba5124a7f35fc4"
+    },
+    {
+      "path": "experimental_packages/biolab-physical-loop-0/compound_identity_table.csv",
+      "sha256": "4b92ffb151e278f789b2f9c0afb7f702a863f9c165e239a7dbdc15682eaa623f"
+    },
+    {
+      "path": "experimental_packages/biolab-physical-loop-0/compounds/A0B0.json",
+      "sha256": "912143d6d816f91d08aed3b016f196228f22bca65faf75d9aadb549af5b46907"
+    },
+    {
+      "path": "experimental_packages/biolab-physical-loop-0/compounds/A0B1.json",
+      "sha256": "e143687d3b10df345a914a8db6fbfe51460545fe9f072947008e0c2e83f598dc"
+    },
+    {
+      "path": "experimental_packages/biolab-physical-loop-0/compounds/A1B0.json",
+      "sha256": "438e63b63f6607ac9c0b27da93568da637ceabe1d08be04956a2a0cb1e9b38ac"
+    },
+    {
+      "path": "experimental_packages/biolab-physical-loop-0/compounds/A1B1.json",
+      "sha256": "74c8ba11b8a3b471c11194fbd87ecc45b5e21d9948e53a30269586d63205e7d6"
+    },
+    {
+      "path": "experimental_packages/biolab-physical-loop-0/BIOEXP-001/experiment_request.json",
+      "sha256": "70d57159948e3fb72a12a82740a8b027c58eef95f629aff154f8883d4307e8ec"
+    },
+    {
+      "path": "experimental_packages/biolab-physical-loop-0/BIOEXP-001/missing_protocol_fields.json",
+      "sha256": "8589b70adcf7886adcce74c0dfd91331664dd06f73c09a52991997885242be7c"
+    },
+    {
+      "path": "programs/moldisc-019-experimental-bridge/program.json",
+      "sha256": "b8130785d582d24e5438f40f593acc6e09ae6495cb39dead96d4f28cc243aa8d"
+    }
+  ],
+  "e4_created": false,
+  "evidence_classification": "EXPERIMENT_REQUEST",
+  "experiment_id": "BIOEXP-001-SOLUBILITY-2X2",
+  "experimental_handoff_ready": true,
+  "generator": "research_os.molecular_discovery.experimental_handoff",
+  "handoff_version": "0.2",
+  "manifest_scope": "manifest.json is excluded from package_hash and artifacts",
+  "next_generation_allowed": false,
+  "package_hash": "caa34a456b2c2b36ac9534900242b8c73967b07ca0cea977ff2ce7ecde35cb01",
+  "schema_version": "research-os.biolab.experimental-handoff.v0.2"
+}

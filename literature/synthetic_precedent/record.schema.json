@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research-os.biolab.synthetic-precedent.v0.2",
+  "title": "Synthetic precedent reference record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["route_status", "records"],
+  "properties": {
+    "route_status": {"const": "UNASSESSED"},
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "citation",
+          "compound_relation",
+          "evidence_type",
+          "notes",
+          "source_identifier"
+        ],
+        "properties": {
+          "citation": {"type": "string"},
+          "compound_relation": {"type": "string"},
+          "evidence_type": {"type": "string"},
+          "notes": {"type": "string"},
+          "source_identifier": {"type": "string"}
+        }
+      }
+    }
+  }
+}

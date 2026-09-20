@@ -1,0 +1,139 @@
+{
+  "actual_experiment": false,
+  "analytical_characterization_requested": [
+    "HPLC/equivalent",
+    "MS/LC-MS",
+    "NMR"
+  ],
+  "biolab_package_ready": true,
+  "e4_boundary": {
+    "e4_created": false,
+    "evidence_class": "EXPERIMENT_REQUEST",
+    "interpret_as_e4": false,
+    "real_experiment_executed": false
+  },
+  "experiment_id": "BIOEXP-001-SOLUBILITY-2X2",
+  "experimental_handoff_ready": true,
+  "family": "SOLUBILITY",
+  "handoff_version": "0.2",
+  "known": {
+    "compound_identity": "exact isomeric identity, formula and InChIKey per panel member",
+    "evidence_boundary": "EXPERIMENT_REQUEST, not E4 evidence",
+    "generation_gate": "NEXT_GENERATION_ALLOWED=NO",
+    "panel_membership": [
+      "A0B0",
+      "A1B0",
+      "A0B1",
+      "A1B1"
+    ]
+  },
+  "measurement_name": "aqueous solubility",
+  "panel": [
+    {
+      "compound_id": "MOLDISC-011-JE2-286E6F2BE8",
+      "factor_a": "CONTROL",
+      "factor_b": "CONTROL",
+      "formula": "C30H33N3O5S",
+      "inchikey": "DRIAWXDDGSORDT-KKUQBAQOSA-N",
+      "isomeric_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)[C@@H]1C(=O)NCc1ccccc1",
+      "panel_key": "A0B0",
+      "variant_id": "A0B0-CONTROL"
+    },
+    {
+      "compound_id": "MOLDISC-014-SOURCE-DELTA-OH",
+      "factor_a": "DELTA-OH",
+      "factor_b": "CONTROL",
+      "formula": "C30H33N3O4S",
+      "inchikey": "NAZMDUVPQSKJEQ-KKUQBAQOSA-N",
+      "isomeric_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2ccccc2)[C@@H]1C(=O)NCc1ccccc1",
+      "panel_key": "A1B0",
+      "variant_id": "A1B0-DELTA-OH"
+    },
+    {
+      "compound_id": "MOLDISC-014-SOURCE-DELTA-NSUB",
+      "factor_a": "CONTROL",
+      "factor_b": "DELTA-NSUB",
+      "formula": "C27H35N3O5S",
+      "inchikey": "DMSDTDPQGPRTNA-FDFHNCONSA-N",
+      "isomeric_smiles": "CC(C)(C)NC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C",
+      "panel_key": "A0B1",
+      "variant_id": "A0B1-DELTA-NSUB"
+    },
+    {
+      "compound_id": "MOLDISC-014-SOURCE-DELTA-BOTH",
+      "factor_a": "DELTA-OH",
+      "factor_b": "DELTA-NSUB",
+      "formula": "C27H35N3O4S",
+      "inchikey": "URHJIBSBOJFXDI-FDFHNCONSA-N",
+      "isomeric_smiles": "CC(C)(C)NC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2ccccc2)CSC1(C)C",
+      "panel_key": "A1B1",
+      "variant_id": "A1B1-DELTA-BOTH"
+    }
+  ],
+  "protocol_status": "AWAITING_EXTERNAL_PROTOCOL_OR_QUOTE",
+  "purpose": [
+    "estimate the factor A effect",
+    "estimate the factor B effect",
+    "describe the A×B interaction"
+  ],
+  "requested_from_lab": [
+    "measurement_method",
+    "equilibrium_or_kinetic",
+    "temperature",
+    "pH",
+    "medium",
+    "buffer",
+    "ionic_strength_if_applicable",
+    "compound_form",
+    "target_concentration_range_if_applicable",
+    "units",
+    "replicate_policy",
+    "sample_purity_requirement",
+    "required_sample_amount",
+    "analytical_quantification_method",
+    "lod_loq_if_applicable",
+    "raw_data_format",
+    "protocol_identifier_and_hash_after_freeze",
+    "batch_identity_and_chain_of_custody"
+  ],
+  "requested_material": {
+    "optional_purity": ">=98%",
+    "preferred_purity": ">=95%",
+    "quantity_options_per_compound": [
+      "25 mg",
+      "50 mg"
+    ]
+  },
+  "schema_version": "research-os.biolab.experimental-handoff.v0.2",
+  "scientific_question": "Measure aqueous solubility for the same frozen 2x2 panel under one pre-declared laboratory protocol.",
+  "unknown": {
+    "missing_protocol_fields": [
+      "measurement_method",
+      "equilibrium_or_kinetic",
+      "temperature",
+      "pH",
+      "medium",
+      "buffer",
+      "ionic_strength_if_applicable",
+      "compound_form",
+      "target_concentration_range_if_applicable",
+      "units",
+      "replicate_policy",
+      "sample_purity_requirement"
+    ],
+    "protocol_fields": {
+      "buffer": null,
+      "compound_form": null,
+      "equilibrium_or_kinetic": null,
+      "ionic_strength_if_applicable": null,
+      "measurement_method": null,
+      "medium": null,
+      "pH": null,
+      "replicate_policy": null,
+      "sample_purity_requirement": null,
+      "target_concentration_range_if_applicable": null,
+      "temperature": null,
+      "units": null
+    }
+  }
+}
