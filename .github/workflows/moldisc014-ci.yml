@@ -1,0 +1,105 @@
+name: moldisc-014-ci
+
+on:
+  pull_request:
+    paths:
+      - "src/research_os/molecular_discovery/moldisc014.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_014.py"
+      - "tests/test_moldisc_014.py"
+      - "programs/moldisc-014-aqsoldb-source-interpolation/**"
+      - "docs/moldisc-014-aqsoldb-source-interpolation.md"
+      - "validation/moldisc-014-first-run-v1.json"
+      - ".github/workflows/moldisc014-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/research_os/molecular_discovery/moldisc014.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_014.py"
+      - "tests/test_moldisc_014.py"
+      - "programs/moldisc-014-aqsoldb-source-interpolation/**"
+      - "docs/moldisc-014-aqsoldb-source-interpolation.md"
+      - "validation/moldisc-014-first-run-v1.json"
+      - ".github/workflows/moldisc014-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  aqsoldb-source-interpolation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Research OS discovery dependencies
+        run: python -m pip install -e ".[dev,discovery]"
+
+      - name: Compile MOLDISC-014
+        run: >-
+          python -m py_compile
+          src/research_os/molecular_discovery/moldisc014.py
+          scripts/run_moldisc_014.py
+          tests/test_moldisc_014.py
+
+      - name: Run focused generation and transfer-boundary tests
+        run: python -m pytest -q tests/test_moldisc_014.py
+
+      - name: Execute frozen MOLDISC-014 panel
+        run: python scripts/run_moldisc_014.py --output /tmp/moldisc-014
+
+      - name: Require frozen identities and no-selection boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("/tmp/moldisc-014")
+          manifest = json.loads((root / "program_manifest.json").read_text())
+          generation = json.loads((root / "generation.json").read_text())
+          source = json.loads((root / "source_neighbor_audit.json").read_text())
+          evidence = json.loads((root / "evidence_profiles.json").read_text())
+
+          assert [item["variant_id"] for item in manifest["panel"]] == [
+              "STEP2-DEMETHYL-01", "SOURCE-DELTA-OH", "SOURCE-DELTA-NSUB", "SOURCE-DELTA-BOTH"
+          ]
+          assert [item["heavy_atom_count"] for item in manifest["panel"]] == [39, 38, 36, 35]
+          assert manifest["candidate_selection_executed"] is False
+          assert manifest["selected_candidate_id"] is None
+          assert manifest["docking_executed"] is False
+          assert manifest["source_measurement_used_for_generation"] is False
+          assert manifest["source_measurement_used_for_ranking"] is False
+          assert source["source_ids"] == ["C-2545"]
+          assert source["active_runtime_inchikey"] == "URHJIBSBOJFXDI-UHFFFAOYSA-N"
+          assert source["stereochemistry_specified"] is False
+          assert source["measured_log_s_values"] == [-3.62]
+          assert len(evidence["profiles"]) == 4
+          both = next(item for item in evidence["profiles"] if item["variant_id"] == "SOURCE-DELTA-BOTH")
+          assert both["same_connectivity_as_recurring_source"] is True
+          assert both["full_inchikey_match_to_recurring_source"] is False
+          assert both["exact_canonical_match"] is False
+          assert both["measurement_transfer_allowed"] is False
+          for key in ("generation_scientific_hash", "source_audit_scientific_hash", "workflow_scientific_summary_hash", "coverage_scientific_hash", "program_scientific_hash"):
+              assert isinstance(manifest[key], str) and len(manifest[key]) == 64
+          print(json.dumps({
+              "program_scientific_hash": manifest["program_scientific_hash"],
+              "source_audit_scientific_hash": manifest["source_audit_scientific_hash"],
+              "coverage_scientific_hash": manifest["coverage_scientific_hash"],
+              "panel": [item["variant_id"] for item in manifest["panel"]],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Upload MOLDISC-014 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: moldisc-014-aqsoldb-source-interpolation
+          path: /tmp/moldisc-014
+          if-no-files-found: warn

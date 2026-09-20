@@ -1,0 +1,90 @@
+{
+  "schema_version": "research-os.molecular-discovery.program.v1",
+  "program_id": "MOLDISC-014",
+  "program_version": "1.0",
+  "title": "STEP2-DEMETHYL-01 / AqSolDB source-neighbor interpolation panel",
+  "scientific_question": "What chemistry status, immutable AqSolDB structural coverage and frozen ESOL applicability profile are obtained by applying, independently and together, the two connectivity deltas separating the MOLDISC-011-selected STEP2-DEMETHYL-01 from its recurring measured AqSolDB neighbor?",
+  "generator_id": "research-os.molecular-discovery.aqsoldb-source-interpolation.v1",
+  "evidence_level": "E0_HEURISTIC",
+  "upstream": {
+    "moldisc011_program_scientific_hash": "8cb29619a82ca4680424c1b37c9bdce37b83e6cc8d570788435e1e9a62b159ff",
+    "selected_variant_id": "STEP2-DEMETHYL-01",
+    "selected_candidate_id": "MOLDISC-011-JE2-286E6F2BE8",
+    "moldisc013_program_scientific_hash": "325edfa890dabc1f8640f9977c6b2e308b582293493631a040752739fd6d89a4",
+    "moldisc013_geometry_used_for_generation": false,
+    "moldisc013_geometry_used_for_selection": false
+  },
+  "seed": {
+    "variant_id": "STEP2-DEMETHYL-01",
+    "candidate_id": "MOLDISC-011-JE2-286E6F2BE8",
+    "canonical_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)[C@@H]1C(=O)NCc1ccccc1",
+    "inchikey": "DRIAWXDDGSORDT-KKUQBAQOSA-N",
+    "heavy_atoms": 39,
+    "source_role": "UPSTREAM_SELECTED_SEED"
+  },
+  "source": {
+    "source_id": "AqSolDB",
+    "doi": "10.1038/s41597-019-0151-1",
+    "source_commit": "98cdd10a372058743e4f3fb950a1c9974ec9603a",
+    "source_blob_sha": "67016e030cf0a741e250ba0267bd84461041db5f",
+    "parsed_source_hash": "2c6e56f56389f0fd99fa2a3c843446f98b6b068a3f93aaab71a08822caa085f4",
+    "expected_source_ids": ["C-2545"],
+    "expected_raw_smiles": "CC(C)(C)NC(=O)C1N(CSC1(C)C)C(=O)C(O)C(CC2=CC=CC=C2)NC(=O)C3=CC=CC=C3",
+    "expected_canonical_nonisomeric_smiles": "CC(C)(C)NC(=O)C1N(C(=O)C(O)C(Cc2ccccc2)NC(=O)c2ccccc2)CSC1(C)C",
+    "expected_inchikey": "URHJIBSBOJFXDI-UHFFFAOYSA-N",
+    "expected_connectivity_block": "URHJIBSBOJFXDI",
+    "expected_observation_count": 1,
+    "expected_measured_log_s_mol_l": -3.62,
+    "stereochemistry_rule": "record active source stereo exactly; do not invent lineage stereocenters"
+  },
+  "deltas": {
+    "SOURCE-DELTA-OH": {
+      "operation": "phenolic_hydroxyl_deletion",
+      "candidate_id": "MOLDISC-014-SOURCE-DELTA-OH",
+      "canonical_smiles": "CC1(C)SCN(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2ccccc2)[C@@H]1C(=O)NCc1ccccc1",
+      "inchikey": "NAZMDUVPQSKJEQ-KKUQBAQOSA-N",
+      "expected_heavy_atoms": 38
+    },
+    "SOURCE-DELTA-NSUB": {
+      "operation": "N_benzyl_to_N_tert_butyl",
+      "candidate_id": "MOLDISC-014-SOURCE-DELTA-NSUB",
+      "canonical_smiles": "CC(C)(C)NC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2cccc(O)c2)CSC1(C)C",
+      "inchikey": "DMSDTDPQGPRTNA-FDFHNCONSA-N",
+      "expected_heavy_atoms": 36
+    },
+    "SOURCE-DELTA-BOTH": {
+      "operation": "phenolic_hydroxyl_deletion_plus_N_benzyl_to_N_tert_butyl",
+      "candidate_id": "MOLDISC-014-SOURCE-DELTA-BOTH",
+      "canonical_smiles": "CC(C)(C)NC(=O)[C@H]1N(C(=O)[C@@H](O)[C@H](Cc2ccccc2)NC(=O)c2ccccc2)CSC1(C)C",
+      "inchikey": "URHJIBSBOJFXDI-FDFHNCONSA-N",
+      "expected_heavy_atoms": 35
+    }
+  },
+  "panel_variant_ids": [
+    "STEP2-DEMETHYL-01",
+    "SOURCE-DELTA-OH",
+    "SOURCE-DELTA-NSUB",
+    "SOURCE-DELTA-BOTH"
+  ],
+  "boundaries": {
+    "source_structure_used_for_edit_definition": true,
+    "source_measurement_used_for_edit_definition": false,
+    "source_measurement_used_for_generation": false,
+    "source_measurement_used_for_filtering": false,
+    "source_measurement_used_for_ranking": false,
+    "candidate_selection_executed": false,
+    "selected_candidate_id": null,
+    "docking_executed": false,
+    "moldisc010_score_used": false,
+    "moldisc012_score_used": false,
+    "moldisc013_geometry_used": false,
+    "measurement_transfer_rule": "exact_canonical_isomeric_structure_match_only"
+  },
+  "interpretation_boundaries": [
+    "All three products are generated E0 heuristic structures even though the edits are source-directed.",
+    "AqSolDB measurements remain attached to the immutable source structure and are not transferred by Tanimoto, connectivity, or partial InChIKey identity.",
+    "The active AqSolDB source does not specify the same stereochemistry as the JE2 lineage; no stereocenters are invented or borrowed from the seed.",
+    "Frozen ESOL is an E1_ML applicability-domain profile; OUT_OF_DOMAIN values are unsupported extrapolative model outputs, not measurements.",
+    "MOLDISC-014 performs no docking and makes no affinity, potency, efficacy, safety, or superiority claim."
+  ]
+}

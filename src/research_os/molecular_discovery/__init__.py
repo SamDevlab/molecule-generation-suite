@@ -87,6 +87,11 @@ from research_os.molecular_discovery.moldisc013 import (
     MOLDISC013Result,
     run_moldisc_013,
 )
+from research_os.molecular_discovery.moldisc014 import (
+    MOLDISC014Error,
+    MOLDISC014Result,
+    run_moldisc_014,
+)
 from research_os.molecular_discovery.solubility import (
     FrozenESOLSolubilityPredictor,
     SolubilityCapabilityError,
@@ -130,6 +135,8 @@ __all__ = [
     "MOLDISC012Result",
     "MOLDISC013Error",
     "MOLDISC013Result",
+    "MOLDISC014Error",
+    "MOLDISC014Result",
     "JE2EvidenceProfile",
     "JE2AnalogProfile",
     "JE2AnalogSelection",
@@ -161,5 +168,6 @@ __all__ = [
     "run_moldisc_011",
     "run_moldisc_012",
     "run_moldisc_013",
+    "run_moldisc_014",
     "run_public_aqsoldb_coverage",
 ]
