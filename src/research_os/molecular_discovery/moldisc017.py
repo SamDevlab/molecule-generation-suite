@@ -351,7 +351,7 @@ def _load_r0_import(artifact: str | Path | None, root: Path) -> dict[str, Any]:
     if validation.get("program_identity", {}).get("program_scientific_hash") != PARENT_MOLDISC016_HASH:
         raise MOLDISC017Error("MOLDISC-016 imported validation hash drifted")
     source = Path(artifact) if artifact else None
-    summary = {row["factor_a"] + row["factor_b"]: row for row in validation.get("summary_matrix", {}).get("rows", [])}
+    summary = {row["cell"]: row for row in validation.get("summary_matrix", {}).get("rows", [])}
     records: dict[str, Any] = {}
     if source and source.is_dir():
         for candidate in CANDIDATES:
