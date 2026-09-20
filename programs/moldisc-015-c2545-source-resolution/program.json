@@ -1,0 +1,119 @@
+{
+  "program_id": "MOLDISC-015",
+  "program_version": "1.0",
+  "title": "C-2545 / phenyl-kni-727 source-provenance and stereochemistry resolution",
+  "scientific_question": "Can the experimental identity associated with AqSolDB C-2545 / phenyl-kni-727 / logS -3.62 be traced to a sufficiently specific source to resolve its stereochemistry, or must the available evidence remain explicitly non-stereodefined?",
+  "upstream": {
+    "moldisc014_program_scientific_hash": "f940d95189616131829a22f9e68a53a960eddf8fd05f5fd7ebac43ece85481ed",
+    "source_id": "AqSolDB",
+    "source_record_id": "C-2545",
+    "source_name": "phenyl-kni-727",
+    "source_inchikey": "URHJIBSBOJFXDI-UHFFFAOYSA-N",
+    "source_connectivity_block": "URHJIBSBOJFXDI",
+    "source_measured_log_s_mol_l": -3.62,
+    "source_observation_count": 1,
+    "source_stereochemistry_specified": false,
+    "source_delta_both_inchikey": "URHJIBSBOJFXDI-FDFHNCONSA-N",
+    "source_delta_both_same_connectivity": true,
+    "source_delta_both_full_inchikey_match": false,
+    "source_delta_both_measurement_transfer_allowed": false
+  },
+  "immutable_aqsoldb_lineage": {
+    "source_commit": "98cdd10a372058743e4f3fb950a1c9974ec9603a",
+    "source_blob_sha": "67016e030cf0a741e250ba0267bd84461041db5f",
+    "parsed_source_hash": "2c6e56f56389f0fd99fa2a3c843446f98b6b068a3f93aaab71a08822caa085f4",
+    "source_path": "data/dataset-C.csv",
+    "dataset_c_readme_mapping": "dataset-C.csv -> reference [3]"
+  },
+  "dataset_c_reference": {
+    "reference_number": 3,
+    "authors": [
+      "Raevsky OA",
+      "Grigor'ev VY",
+      "Polianczyk DE",
+      "Raevskaja OE",
+      "Dearden JC"
+    ],
+    "title": "Calculation of aqueous solubility of crystalline un-ionized organic chemicals and drugs based on structural similarity and physicochemical descriptors",
+    "journal": "J Chem Inf Model",
+    "year": 2014,
+    "volume": "54",
+    "pages": "683-691",
+    "doi": "10.1021/ci400692n"
+  },
+  "supporting_information_search": {
+    "allowed_source_classes": [
+      "ACS_OFFICIAL_SUPPORTING_INFORMATION",
+      "PUBLISHER_HOSTED_ATTRIBUTABLE_MIRROR",
+      "IMMUTABLE_PUBLIC_ARCHIVAL_COPY_WITH_VERIFIABLE_HASH"
+    ],
+    "rejected_source_classes": [
+      "RANDOM_CHEMICAL_WEBSITE",
+      "SEO_AGGREGATOR",
+      "AI_GENERATED_PAGE",
+      "UNCITED_STRUCTURE_DATABASE"
+    ],
+    "aliases": [
+      "phenyl-kni-727",
+      "phenyl KNI-727",
+      "phenyl derivative of KNI-727",
+      "KNI-727 phenyl analog"
+    ],
+    "compound_level_match_requires": [
+      "formula C27H35N3O4S",
+      "connectivity InChIKey block URHJIBSBOJFXDI or demonstrably equivalent structure"
+    ],
+    "generic_kni_727_formula_rejected": "C30H41N3O5S",
+    "preserve_raw_record_before_normalization": true,
+    "transport_metadata": [
+      "source_url",
+      "publisher",
+      "filename",
+      "transport_sha256",
+      "file_size_bytes",
+      "retrieval_date",
+      "publication_doi"
+    ]
+  },
+  "matching_criteria": {
+    "source_record_id_exact": true,
+    "name_alone_is_sufficient": false,
+    "formula_required": true,
+    "connectivity_required": true,
+    "stereo_resolution_requires": [
+      "attributable source for the measured record",
+      "explicit stereochemical representation of the same structure",
+      "full source InChIKey or demonstrably exact equivalent"
+    ],
+    "measurement_transfer_requires": [
+      "measured C-2545 record tied to exact stereochemical structure",
+      "same canonical isomeric structure as SOURCE-DELTA-BOTH",
+      "full InChIKey match",
+      "-3.62 attributable specifically to the resolved structure"
+    ]
+  },
+  "resolution_statuses": [
+    "RESOLVED_EXACT_STEREOCHEMICAL_IDENTITY",
+    "UNRESOLVED_SOURCE_STEREOCHEMISTRY",
+    "CONFLICTING_SOURCE_IDENTITIES",
+    "SOURCE_RECORD_NOT_RECOVERABLE"
+  ],
+  "boundaries": {
+    "generation_executed": false,
+    "docking_executed": false,
+    "esol_executed": false,
+    "candidate_selection_executed": false,
+    "vina_used": false,
+    "aqsoldb_modified": false,
+    "retrospective_stereo_borrowing_allowed": false,
+    "biological_properties_imported": false,
+    "measurement_transfer_initial": false,
+    "measurement_transfer_requires_exact_full_identity": true
+  },
+  "evidence_boundary": "Provenance and identity resolution only; no molecule generation, docking, model prediction, selection, biological-property transfer, or AqSolDB mutation.",
+  "program_hash_excludes": [
+    "retrieval timestamps",
+    "temporary paths",
+    "transport cache paths"
+  ]
+}
