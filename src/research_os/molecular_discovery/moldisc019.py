@@ -22,6 +22,10 @@ from research_os.molecular_discovery.biolab_loop import (
     default_moldisc018_state,
     evaluate_next_action,
 )
+from research_os.molecular_discovery.experimental_handoff import (
+    is_synthetic_result,
+    protocol_freeze_gate,
+)
 
 
 PROGRAM_ID = "MOLDISC-019"
@@ -35,6 +39,8 @@ BIOEXP002_ID = "BIOEXP-002-PROTEASE-2X2"
 REQUIRED_RESULT_FIELDS = (
     "experiment_id",
     "protocol_id",
+    "protocol_hash",
+    "protocol_status",
     "experiment_family",
     "laboratory",
     "laboratory_report_id",
@@ -197,7 +203,21 @@ def load_program_config_v19(path: str | Path) -> dict[str, Any]:
 
 
 def _package_files(package_root: Path) -> tuple[Path, ...]:
-    return tuple(sorted(path for path in package_root.rglob("*") if path.is_file()))
+    derived_prefixes = (
+        "BIOEXP-001/handoff/",
+        "COLLABORATION_BRIEF.md",
+        "COLLABORATION_TRACKER.md",
+        "literature/",
+    )
+    files = []
+    for path in package_root.rglob("*"):
+        if not path.is_file():
+            continue
+        relative = path.relative_to(package_root).as_posix()
+        if any(relative == prefix.rstrip("/") or relative.startswith(prefix) for prefix in derived_prefixes):
+            continue
+        files.append(path)
+    return tuple(sorted(files))
 
 
 def package_identity(package_root: str | Path) -> dict[str, Any]:
@@ -315,12 +335,15 @@ def validate_result(result: str | Path | Mapping[str, Any], package_root: str | 
     for field in REQUIRED_RESULT_FIELDS:
         if not _as_nonempty(value.get(field)):
             errors.append({"code": "MISSING_REQUIRED_FIELD", "field": field})
-    if value.get("evidence_classification") == "TEST_SYNTHETIC" or value.get("synthetic") is True or value.get("actual_experiment") is False:
+    if is_synthetic_result(value):
         errors.append({"code": "TEST_SYNTHETIC_NOT_SCIENTIFIC_EVIDENCE", "reason": "synthetic or non-experimental fixtures cannot become E4"})
     if value.get("actual_experiment") is not True:
         errors.append({"code": "ACTUAL_EXPERIMENT_REQUIRED", "reason": "actual_experiment=true is required for E4 eligibility"})
     if value.get("experiment_id") not in {BIOEXP001_ID, BIOEXP002_ID}:
         errors.append({"code": "UNKNOWN_EXPERIMENT_ID", "experiment_id": value.get("experiment_id")})
+    protocol_gate = protocol_freeze_gate(value)
+    if value.get("actual_experiment") is True and not protocol_gate["allowed"]:
+        errors.append({"code": protocol_gate["code"], "reason": protocol_gate["reason"]})
 
     panel_key = str(value.get("panel_key", ""))
     requested = compounds.get(panel_key)
@@ -342,7 +365,7 @@ def validate_result(result: str | Path | Mapping[str, Any], package_root: str | 
             errors.append({"code": "REPORT_HASH_MISMATCH", "report_file": str(report_path)})
     if value.get("sample_identity_method") and value.get("batch_id") in {None, ""}:
         errors.append({"code": "BATCH_ID_REQUIRED", "reason": "sample identity must be traceable to a batch"})
-    if value.get("laboratory") and value.get("provider") and not str(value["laboratory"]).strip() and not str(value["provider"]).strip():
+    if not any(str(value.get(field) or "").strip() for field in ("laboratory", "provider")):
         errors.append({"code": "ATTRIBUTABLE_PROVIDER_REQUIRED"})
     guard = ExternalEvidenceIntegrator.level_guard("E2_COMPUTATIONAL", "E4_CURATED_EXPERIMENTAL", actual_experiment=value.get("actual_experiment") is True)
     eligible = not errors and guard["promotion_allowed"]

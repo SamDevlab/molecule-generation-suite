@@ -65,7 +65,22 @@ def test_result_validation_requires_all_gates_and_ingestion_is_fail_closed() -> 
 
 def test_eligible_result_creates_update_and_recomputes_state() -> None:
     result = json.loads((PACKAGE / "external_result_example_TEST_SYNTHETIC.json").read_text(encoding="utf-8"))
-    result.update({"actual_experiment": True, "synthetic": False, "evidence_classification": "E4_CURATED_EXPERIMENTAL", "fixture_classification": "EXTERNAL_RESULT"})
+    result.update(
+        {
+            "actual_experiment": True,
+            "synthetic": False,
+            "evidence_classification": "E4_CURATED_EXPERIMENTAL",
+            "fixture_classification": "EXTERNAL_RESULT",
+            "sample_identity_method": "InChIKey",
+            "protocol_status": "FROZEN",
+            "protocol_hash": "a" * 64,
+            "provenance": {"classification": "EXTERNAL_RESULT", "source": "contract-test"},
+            "raw_artifacts": ["official-report.pdf"],
+            "raw_artifact_hashes": ["b" * 64],
+            "report_file": "official-report.pdf",
+            "report_hash": "c" * 64,
+        }
+    )
     validation = moldisc019.validate_result(result, PACKAGE)
     assert validation["eligible_for_e4"] is True
     ingested = moldisc019.ingest_result(result, PACKAGE)

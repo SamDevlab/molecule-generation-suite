@@ -1,0 +1,170 @@
+{
+  "$id": "research-os.biolab.experimental-handoff.result.v0.2",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "actual_experiment": {
+            "const": true
+          }
+        },
+        "required": [
+          "actual_experiment"
+        ]
+      },
+      "then": {
+        "properties": {
+          "protocol_status": {
+            "const": "FROZEN"
+          }
+        },
+        "required": [
+          "protocol_id",
+          "protocol_hash",
+          "laboratory",
+          "source",
+          "report_id"
+        ]
+      }
+    }
+  ],
+  "description": "Future result contract. It is not evidence and cannot bypass the protocol freeze gate.",
+  "properties": {
+    "actual_experiment": {
+      "type": "boolean"
+    },
+    "experiment_id": {
+      "const": "BIOEXP-001-SOLUBILITY-2X2"
+    },
+    "family": {
+      "const": "SOLUBILITY"
+    },
+    "laboratory": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "protocol_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "protocol_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "protocol_status": {
+      "enum": [
+        "AWAITING_EXTERNAL_PROTOCOL_OR_QUOTE",
+        "PROPOSED",
+        "FROZEN"
+      ]
+    },
+    "report_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "results": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "batch_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "compound_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "conditions": {
+            "type": "object"
+          },
+          "measurement": {},
+          "notes": {
+            "type": "string"
+          },
+          "panel_key": {
+            "enum": [
+              "A0B0",
+              "A1B0",
+              "A0B1",
+              "A1B1"
+            ]
+          },
+          "qualifier": {
+            "enum": [
+              "EXACT",
+              "LESS_THAN",
+              "GREATER_THAN",
+              "NOT_QUANTIFIABLE",
+              "FAILED"
+            ]
+          },
+          "replicates": {
+            "items": {
+              "properties": {
+                "qualifier": {
+                  "enum": [
+                    "EXACT",
+                    "LESS_THAN",
+                    "GREATER_THAN",
+                    "NOT_QUANTIFIABLE",
+                    "FAILED"
+                  ]
+                },
+                "uncertainty": {},
+                "value": {}
+              },
+              "required": [
+                "value",
+                "qualifier"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "uncertainty": {},
+          "units": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "compound_id",
+          "panel_key",
+          "batch_id",
+          "measurement",
+          "units",
+          "replicates"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "experiment_id",
+    "family",
+    "protocol_status",
+    "actual_experiment",
+    "results"
+  ],
+  "title": "BIOEXP-001 laboratory result package",
+  "type": "object"
+}

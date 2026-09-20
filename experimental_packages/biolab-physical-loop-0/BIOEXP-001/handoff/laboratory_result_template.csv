@@ -1,0 +1,5 @@
+experiment_id,compound_id,panel_key,batch_id,replicate_id,measurement_value,measurement_units,qualifier,uncertainty,temperature_c,pH,medium,method,protocol_id,protocol_hash,protocol_status,laboratory,source,report_id,notes
+BIOEXP-001-SOLUBILITY-2X2,MOLDISC-011-JE2-286E6F2BE8,A0B0,,,,,,,,,,,,,,,,,
+BIOEXP-001-SOLUBILITY-2X2,MOLDISC-014-SOURCE-DELTA-OH,A1B0,,,,,,,,,,,,,,,,,
+BIOEXP-001-SOLUBILITY-2X2,MOLDISC-014-SOURCE-DELTA-NSUB,A0B1,,,,,,,,,,,,,,,,,
+BIOEXP-001-SOLUBILITY-2X2,MOLDISC-014-SOURCE-DELTA-BOTH,A1B1,,,,,,,,,,,,,,,,,
