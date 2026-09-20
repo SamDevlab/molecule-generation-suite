@@ -1,0 +1,119 @@
+name: moldisc-013-ci
+
+on:
+  pull_request:
+    paths:
+      - "src/research_os/molecular_discovery/moldisc013.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_013.py"
+      - "tests/test_moldisc_013.py"
+      - "programs/moldisc-013-common-core-pose-diagnostic/**"
+      - "docs/moldisc-013-common-core-pose-diagnostic.md"
+      - "validation/moldisc-013-first-run-v1.json"
+      - ".github/workflows/moldisc013-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/research_os/molecular_discovery/moldisc013.py"
+      - "src/research_os/molecular_discovery/__init__.py"
+      - "scripts/run_moldisc_013.py"
+      - "tests/test_moldisc_013.py"
+      - "programs/moldisc-013-common-core-pose-diagnostic/**"
+      - "docs/moldisc-013-common-core-pose-diagnostic.md"
+      - "validation/moldisc-013-first-run-v1.json"
+      - ".github/workflows/moldisc013-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  common-core-pose-diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Research OS discovery dependencies
+        run: python -m pip install -e ".[dev,discovery]"
+
+      - name: Install Open Babel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openbabel
+          obabel -V
+          echo "RESEARCH_OS_OPENBABEL_EXECUTABLE=$(command -v obabel)" >> "$GITHUB_ENV"
+
+      - name: Install official AutoDock Vina 1.2.7 binary
+        run: |
+          curl --fail --location --retry 3 https://github.com/ccsb-scripps/AutoDock-Vina/releases/download/v1.2.7/vina_1.2.7_linux_x86_64 --output /tmp/vina_1.2.7
+          chmod +x /tmp/vina_1.2.7
+          /tmp/vina_1.2.7 --version
+          echo "RESEARCH_OS_VINA_EXECUTABLE=/tmp/vina_1.2.7" >> "$GITHUB_ENV"
+
+      - name: Compile MOLDISC-013
+        run: >-
+          python -m py_compile
+          src/research_os/molecular_discovery/moldisc013.py
+          scripts/run_moldisc_013.py
+          tests/test_moldisc_013.py
+
+      - name: Run focused synthetic tests
+        run: python -m pytest -q tests/test_moldisc_013.py
+
+      - name: Execute parent replay and duplicate geometry analysis A/B
+        run: python scripts/run_moldisc_013.py --output /tmp/moldisc-013
+
+      - name: Require frozen parent replay and deterministic geometry
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("/tmp/moldisc-013")
+          manifest = json.loads((root / "program_manifest.json").read_text())
+          parent = json.loads((root / "parent_replay_manifest.json").read_text())
+          child = json.loads((root / "child_replay_manifest.json").read_text())
+          matrix = json.loads((root / "common_core_pose_matrix.json").read_text())
+          analysis_a = json.loads((root / "analysis" / "a" / "analysis_scientific_payload.json").read_text())
+          analysis_b = json.loads((root / "analysis" / "b" / "analysis_scientific_payload.json").read_text())
+
+          assert parent["replay_match"] is True
+          assert child["replay_match"] is True
+          assert parent["replayed_program_scientific_hash"] == "360ef9eb66981287781a971a7e09aebbe2749be765af5b4c6dcb33e3839eb48b"
+          assert child["replayed_program_scientific_hash"] == "e8c66a7726a3b191723e0dea072afdb5e4d4d9202b142eff83fe6d19c623f776"
+          assert manifest["matrix_shape"] == [20, 16]
+          assert len(matrix["cells"]) == 320
+          assert analysis_a["matrix_scientific_hash"] == analysis_b["matrix_scientific_hash"]
+          assert analysis_a["mapping_scientific_hash"] == analysis_b["mapping_scientific_hash"]
+          assert analysis_a["summary"] == analysis_b["summary"]
+          assert manifest["analysis_a_program_hash"] == manifest["analysis_b_program_hash"]
+          assert manifest["no_rigid_body_alignment"] is True
+          assert manifest["geometry_threshold"] is None
+          assert manifest["scores_used_for_pair_selection"] is False
+          assert manifest["generation_executed"] is False
+          assert manifest["candidate_selection_executed"] is False
+          print(json.dumps({
+              "program_scientific_hash": manifest["program_scientific_hash"],
+              "parent_replay_hash": parent["replayed_program_scientific_hash"],
+              "child_replay_hash": child["replayed_program_scientific_hash"],
+              "matrix_shape": manifest["matrix_shape"],
+              "matrix_hash": manifest["matrix_hash"],
+              "rank1_pair_common_core_rmsd_angstrom": manifest["rank1_pair_common_core_rmsd_angstrom"],
+              "minimum_all_pairs_common_core_rmsd_angstrom": manifest["minimum_all_pairs_common_core_rmsd_angstrom"],
+              "minimum_pair": [manifest["minimum_all_pairs_parent_rank"], manifest["minimum_all_pairs_child_rank"]],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Upload MOLDISC-013 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: moldisc-013-common-core-pose-diagnostic
+          path: /tmp/moldisc-013
+          if-no-files-found: warn
