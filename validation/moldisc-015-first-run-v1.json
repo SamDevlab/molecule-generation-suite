@@ -5,9 +5,10 @@
   "status": "CLOSED_FIRST_RESULT_PRESERVED",
   "protocol_freeze_commit": "e647aa3f68f352a5ff405dda02c63d17c598c12c",
   "first_execution": {
+    "github_actions_run_id": 35485056612,
     "workflow": "moldisc-015-ci",
     "result": "PASS",
-    "head_sha": null
+    "head_sha": "6d1826b60f2d983d8932f5ab9a217f75bab8f8a1"
   },
   "parents": {
     "moldisc014_program_scientific_hash": "f940d95189616131829a22f9e68a53a960eddf8fd05f5fd7ebac43ece85481ed"
