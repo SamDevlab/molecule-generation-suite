@@ -20,6 +20,7 @@ from rdkit.Chem import AllChem, inchi
 
 from research_os.core.hashing import sha256_file, sha256_json
 from research_os.docking import redocking as base
+from research_os.docking.astex20 import FROZEN_PROSPECTIVE_CASES
 from research_os.docking.schema import DockingRequest, GridBox
 from research_os.engines.openbabel import OpenBabelEngine
 from research_os.engines.vina import VinaEngine
@@ -314,7 +315,7 @@ def _write_json(path: Path, value: Any) -> None:
 
 
 def _target_snapshot(root: Path, obabel: OpenBabelEngine, timeout: float) -> dict[str, Any]:
-    case = next((item for item in base.FROZEN_PROSPECTIVE_CASES if item.case_id == TARGET_CASE_ID), None)
+    case = next((item for item in FROZEN_PROSPECTIVE_CASES if item.case_id == TARGET_CASE_ID), None)
     if case is None or case.pdb_id != PDB_ID or case.ligand_id != NATIVE_LIGAND or tuple(case.receptor_author_chains) != RECEPTOR_CHAINS:
         raise MOLDISC016Error("ATX-007 target case drifted")
     snapshot = root / "target_snapshot"
