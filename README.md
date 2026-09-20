@@ -327,6 +327,19 @@ identity and is preserved in
 
 See [MOLDISC-012](docs/moldisc-012-step2-demethyl01-crossdock.md).
 
+### AqSolDB source-directed interpolation panel: MOLDISC-014
+
+MOLDISC-014 preserves a bounded E0 panel around the MOLDISC-011-selected
+`STEP2-DEMETHYL-01` candidate using exactly two source-directed connectivity
+edits. It characterizes the seed and three products against the immutable
+AqSolDB source-neighbor record, with strict exact-structure measurement
+transfer rules; no docking, ranking, or candidate selection is executed.
+
+The first CI result is preserved in
+[`validation/moldisc-014-first-run-v1.json`](validation/moldisc-014-first-run-v1.json).
+
+See [MOLDISC-014](docs/moldisc-014-aqsoldb-source-interpolation.md).
+
 ## Installation
 
 Python **3.10+** is required. CI currently exercises Python 3.11 and 3.12.

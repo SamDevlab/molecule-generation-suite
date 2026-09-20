@@ -1,6 +1,6 @@
 # MOLDISC-014 — AqSolDB source-directed interpolation panel
 
-Status: **protocol frozen; execution pending**
+Status: **CLOSED_FIRST_RESULT_PRESERVED**
 
 ## Scientific question
 
@@ -60,3 +60,32 @@ output, not as a measurement.
 MOLDISC-014 executes no Vina docking, does not use MOLDISC-010/012 scores or
 MOLDISC-013 geometry, and records `candidate_selection_executed=false` with
 `selected_candidate_id=null`.
+
+## First result preserved
+
+The first independent CI execution passed as run `35482672526` on head
+`4c4662aa12c42e1935243cc366ffbbf43bbf7170`. The complete preserved record is
+[`validation/moldisc-014-first-run-v1.json`](../validation/moldisc-014-first-run-v1.json).
+
+The panel contained the upstream seed plus exactly three generated products;
+all four passed chemistry characterization. AqSolDB nearest similarities were
+`0.6857142857142857` for the seed, `0.7903225806451613` for
+`SOURCE-DELTA-OH`, `0.859375` for `SOURCE-DELTA-NSUB`, and `1.0` for
+`SOURCE-DELTA-BOTH`. The final product shared the source connectivity block
+but not the full source InChIKey, so no panel measurement transfer was
+allowed. The source observation remains preserved as `C-2545`, with measured
+logS `-3.62`, only as source-neighbor context.
+
+The frozen ESOL statuses were `OUT_OF_DOMAIN`, `IN_DOMAIN`, `OUT_OF_DOMAIN`,
+and `OUT_OF_DOMAIN` in panel order. These model outputs were not used for
+generation, filtering, ranking, or selection. The scientific hashes are:
+
+- generation: `45936d983a148bbb62d9be45de4aefa53f632c877320c92dc84e615b7e96700e`;
+- source audit: `b6b663b811e39b92b7db93e2c645f7016fbea73d924fb01695283e193feed383`;
+- workflow: `6fdfa84f3bc737cf22217f3fb4512f5739fa7369d38f1e429edc577ec0af0f58`;
+- AqSolDB coverage: `e49c660026e3ef16c638558885bcd80f130ab60ebfe36aa7baf17bc45c4bb095`;
+- program: `f940d95189616131829a22f9e68a53a960eddf8fd05f5fd7ebac43ece85481ed`.
+
+This first result is a bounded E0 characterization record. It does not
+establish experimental solubility, safety, efficacy, synthesizability, or
+clinical validity, and it does not open MOLDISC-015.
