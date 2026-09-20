@@ -1,0 +1,1502 @@
+{
+  "candidate_selection_executed": false,
+  "capability_classification": "PARTIALLY_VALIDATED",
+  "claims": {
+    "CLAIM-018-01": "SUPPORTS",
+    "CLAIM-018-02": "SUPPORTS",
+    "CLAIM-018-03": "SUPPORTS",
+    "CLAIM-018-04": "CONTRADICTS",
+    "CLAIM-018-05": "SUPPORTS",
+    "CLAIM-018-06": "SUPPORTS"
+  },
+  "conformer_robustness": {
+    "RX-01": [
+      {
+        "run_a_any_pose_success": true,
+        "run_a_failure_class": "RANK1_NEAR_NATIVE",
+        "run_a_minimum_pose_rank": 1,
+        "run_a_minimum_rmsd_angstrom": 0.4928192499598017,
+        "run_a_rank1_rmsd_angstrom": 0.4928192499598017,
+        "run_a_rank1_success": true,
+        "run_b_scientific_identity_equal": true,
+        "seed": 42
+      },
+      {
+        "run_a_any_pose_success": true,
+        "run_a_failure_class": "RANK1_NEAR_NATIVE",
+        "run_a_minimum_pose_rank": 1,
+        "run_a_minimum_rmsd_angstrom": 1.1130213725044849,
+        "run_a_rank1_rmsd_angstrom": 1.1130213725044849,
+        "run_a_rank1_success": true,
+        "run_b_scientific_identity_equal": null,
+        "seed": 1337
+      },
+      {
+        "run_a_any_pose_success": false,
+        "run_a_failure_class": "NO_NEAR_NATIVE_POSE_RETURNED",
+        "run_a_minimum_pose_rank": 1,
+        "run_a_minimum_rmsd_angstrom": 2.0077554260617907,
+        "run_a_rank1_rmsd_angstrom": 2.0077554260617907,
+        "run_a_rank1_success": false,
+        "run_b_scientific_identity_equal": null,
+        "seed": 2025
+      }
+    ],
+    "RX-02": [
+      {
+        "run_a_any_pose_success": true,
+        "run_a_failure_class": "RANK1_NEAR_NATIVE",
+        "run_a_minimum_pose_rank": 1,
+        "run_a_minimum_rmsd_angstrom": 1.4456283337990998,
+        "run_a_rank1_rmsd_angstrom": 1.4456283337990998,
+        "run_a_rank1_success": true,
+        "run_b_scientific_identity_equal": true,
+        "seed": 42
+      },
+      {
+        "run_a_any_pose_success": true,
+        "run_a_failure_class": "RANK1_NEAR_NATIVE",
+        "run_a_minimum_pose_rank": 1,
+        "run_a_minimum_rmsd_angstrom": 1.0316249396864556,
+        "run_a_rank1_rmsd_angstrom": 1.0316249396864556,
+        "run_a_rank1_success": true,
+        "run_b_scientific_identity_equal": null,
+        "seed": 1337
+      },
+      {
+        "run_a_any_pose_success": true,
+        "run_a_failure_class": "RANK1_NEAR_NATIVE",
+        "run_a_minimum_pose_rank": 2,
+        "run_a_minimum_rmsd_angstrom": 1.3761871407210011,
+        "run_a_rank1_rmsd_angstrom": 1.646921748117841,
+        "run_a_rank1_success": true,
+        "run_b_scientific_identity_equal": null,
+        "seed": 2025
+      }
+    ],
+    "RX-03": [
+      {
+        "run_a_any_pose_success": true,
+        "run_a_failure_class": "NEAR_NATIVE_POSE_MISRANKED",
+        "run_a_minimum_pose_rank": 5,
+        "run_a_minimum_rmsd_angstrom": 0.6974774339895227,
+        "run_a_rank1_rmsd_angstrom": 4.147705675817189,
+        "run_a_rank1_success": false,
+        "run_b_scientific_identity_equal": true,
+        "seed": 42
+      },
+      {
+        "run_a_any_pose_success": true,
+        "run_a_failure_class": "NEAR_NATIVE_POSE_MISRANKED",
+        "run_a_minimum_pose_rank": 7,
+        "run_a_minimum_rmsd_angstrom": 1.0543417491059013,
+        "run_a_rank1_rmsd_angstrom": 9.136186674762254,
+        "run_a_rank1_success": false,
+        "run_b_scientific_identity_equal": null,
+        "seed": 1337
+      },
+      {
+        "run_a_any_pose_success": true,
+        "run_a_failure_class": "NEAR_NATIVE_POSE_MISRANKED",
+        "run_a_minimum_pose_rank": 2,
+        "run_a_minimum_rmsd_angstrom": 1.9818538493274378,
+        "run_a_rank1_rmsd_angstrom": 8.819413063178054,
+        "run_a_rank1_success": false,
+        "run_b_scientific_identity_equal": null,
+        "seed": 2025
+      }
+    ],
+    "RX-04": [
+      {
+        "run_a_any_pose_success": true,
+        "run_a_failure_class": "NEAR_NATIVE_POSE_MISRANKED",
+        "run_a_minimum_pose_rank": 5,
+        "run_a_minimum_rmsd_angstrom": 1.1687104194275337,
+        "run_a_rank1_rmsd_angstrom": 3.395280154813073,
+        "run_a_rank1_success": false,
+        "run_b_scientific_identity_equal": true,
+        "seed": 42
+      },
+      {
+        "run_a_any_pose_success": true,
+        "run_a_failure_class": "NEAR_NATIVE_POSE_MISRANKED",
+        "run_a_minimum_pose_rank": 2,
+        "run_a_minimum_rmsd_angstrom": 1.663975634867893,
+        "run_a_rank1_rmsd_angstrom": 10.019718938013126,
+        "run_a_rank1_success": false,
+        "run_b_scientific_identity_equal": null,
+        "seed": 1337
+      },
+      {
+        "run_a_any_pose_success": true,
+        "run_a_failure_class": "RANK1_NEAR_NATIVE",
+        "run_a_minimum_pose_rank": 1,
+        "run_a_minimum_rmsd_angstrom": 0.9987418252535601,
+        "run_a_rank1_rmsd_angstrom": 0.9987418252535601,
+        "run_a_rank1_success": true,
+        "run_b_scientific_identity_equal": null,
+        "seed": 2025
+      }
+    ]
+  },
+  "docking_runs_executed": 20,
+  "docking_runs_nonpass": 0,
+  "docking_runs_planned": 20,
+  "docking_runs_skipped": 0,
+  "evidence_ceiling": "E2_COMPUTATIONAL",
+  "failure_decomposition": {
+    "any_pose_success_count": 4,
+    "cases": {
+      "RX-01": "RANK1_NEAR_NATIVE",
+      "RX-02": "RANK1_NEAR_NATIVE",
+      "RX-03": "NEAR_NATIVE_POSE_MISRANKED",
+      "RX-04": "NEAR_NATIVE_POSE_MISRANKED"
+    },
+    "indeterminate_count": 0,
+    "misranking_count": 2,
+    "primary_sample_size": 4,
+    "rank1_success_count": 2,
+    "sampling_failure_count": 0,
+    "threshold_angstrom": 2.0,
+    "vocabulary": [
+      "RANK1_NEAR_NATIVE",
+      "NEAR_NATIVE_POSE_MISRANKED",
+      "NO_NEAR_NATIVE_POSE_RETURNED",
+      "ANALYSIS_INDETERMINATE",
+      "EXECUTION_FAILED"
+    ]
+  },
+  "generated_candidate_docking_executed": false,
+  "generation_executed": false,
+  "hashes": {
+    "alignment_hash": "06b62a1f75b90ca1293d564d96d40a70c6833160dbc1c4773b16f06d415210f2",
+    "background_crossdock_hash": "f32417d37f6c714a556ee1f714b03901ef948850955f760cebbc347af373991d",
+    "capability_evidence_hash": "fbb1799b3d3e0fa546691fcd7c7bd3c53aa0e4b53bb5736550def8d9b3077c9c",
+    "conformer_robustness_hash": "0b5ff85f0b83e124e32999bec96dd4db958b329c9fb9992bf61871cc897b9dab",
+    "failure_decomposition_hash": "571daafc4bc4da8cee87015f6ed803d2a4a03f9443aa1ab4a8bef9f9039e574a",
+    "k57_redock_hash": "ae6b0d5840a9e49ef260106bd398602b36253169516f3a10bca37232b338f4b5",
+    "mutant_crossdock_hash": "3173b48ad88ab0e105273b6e283e5ea640e0042a5626ae86f733a866144299c6",
+    "pose_recovery_hash": "80d7f984cef34d22706699bc7670fe23fc5170b70887bebc6078b3ac4a8b11f2",
+    "source_audit_hash": "120fe0bf9c7c56e809515b55fd1904df1679e2d18fa28728b388b297942dd142",
+    "synthesis_hash": "dfaf68fbdf9e52c0659814a03e215462afaa8265ff9637ae84c51d8727ba6618"
+  },
+  "k57_redocking": {
+    "K57_BACKGROUND": {
+      "RUN_A": {
+        "any_pose_success": true,
+        "case_id": "K57_BACKGROUND",
+        "failure_class": "RANK1_NEAR_NATIVE",
+        "minimum_pose_rank": 1,
+        "minimum_rmsd_angstrom": 0.5276116251818446,
+        "pose_analysis": [
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 0.5276116251818446,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 1.4316227892887188,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 9.293266588874543,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 9.200501746012463,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 3.997906671841748,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 9.022944175522456,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 8.847661060599194,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 8.365061510896442,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 3.823623430090251,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 3.6290571554933986,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          }
+        ],
+        "pose_count": 10,
+        "pose_scores_kcal_mol": [
+          -10.871,
+          -10.311,
+          -9.746,
+          -9.521,
+          -8.791,
+          -8.568,
+          -8.358,
+          -8.331,
+          -8.207,
+          -8.166
+        ],
+        "rank1_rmsd_angstrom": 0.5276116251818446,
+        "rank1_success": true,
+        "scores_used_for_capability_classification": false,
+        "scores_used_for_pose_selection": false,
+        "scores_used_for_success": false,
+        "technical_status": "PASS"
+      },
+      "RUN_B": {
+        "any_pose_success": true,
+        "case_id": "K57_BACKGROUND",
+        "failure_class": "RANK1_NEAR_NATIVE",
+        "minimum_pose_rank": 1,
+        "minimum_rmsd_angstrom": 0.5276116251818446,
+        "pose_analysis": [
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 0.5276116251818446,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 1.4316227892887188,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 9.293266588874543,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 9.200501746012463,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 3.997906671841748,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 9.022944175522456,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 8.847661060599194,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 8.365061510896442,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 3.823623430090251,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 3.6290571554933986,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          }
+        ],
+        "pose_count": 10,
+        "pose_scores_kcal_mol": [
+          -10.871,
+          -10.311,
+          -9.746,
+          -9.521,
+          -8.791,
+          -8.568,
+          -8.358,
+          -8.331,
+          -8.207,
+          -8.166
+        ],
+        "rank1_rmsd_angstrom": 0.5276116251818446,
+        "rank1_success": true,
+        "scores_used_for_capability_classification": false,
+        "scores_used_for_pose_selection": false,
+        "scores_used_for_success": false,
+        "technical_status": "PASS"
+      }
+    },
+    "K57_MUTANT": {
+      "RUN_A": {
+        "any_pose_success": true,
+        "case_id": "K57_MUTANT",
+        "failure_class": "RANK1_NEAR_NATIVE",
+        "minimum_pose_rank": 1,
+        "minimum_rmsd_angstrom": 0.42325026141017763,
+        "pose_analysis": [
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 0.42325026141017763,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 1.3764197682314718,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 8.115235553025006,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 4.963149223649861,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 3.8785417397556814,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 4.0603535427216055,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 9.052972908745861,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 3.710793329617689,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 4.890343841888001,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 2.1043617379919084,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 8.506611603510118,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 4.675835361122579,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 5.607595461948451,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 4.168882917975004,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 8.973459134460793,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 4.9786801572412855,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 8.468024480042237,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 11.106827983941448,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 7.090298415554992,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          }
+        ],
+        "pose_count": 19,
+        "pose_scores_kcal_mol": [
+          -11.127,
+          -10.734,
+          -10.406,
+          -9.73,
+          -9.729,
+          -9.649,
+          -9.548,
+          -9.154,
+          -8.953,
+          -8.953,
+          -8.793,
+          -8.698,
+          -8.502,
+          -8.5,
+          -8.431,
+          -8.397,
+          -8.346,
+          -8.308,
+          -8.139
+        ],
+        "rank1_rmsd_angstrom": 0.42325026141017763,
+        "rank1_success": true,
+        "scores_used_for_capability_classification": false,
+        "scores_used_for_pose_selection": false,
+        "scores_used_for_success": false,
+        "technical_status": "PASS"
+      },
+      "RUN_B": {
+        "any_pose_success": true,
+        "case_id": "K57_MUTANT",
+        "failure_class": "RANK1_NEAR_NATIVE",
+        "minimum_pose_rank": 1,
+        "minimum_rmsd_angstrom": 0.42325026141017763,
+        "pose_analysis": [
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 0.42325026141017763,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 1.3764197682314718,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 8.115235553025006,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 4.963149223649861,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 3.8785417397556814,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 4.0603535427216055,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 9.052972908745861,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 3.710793329617689,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 4.890343841888001,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 2.1043617379919084,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 8.506611603510118,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 4.675835361122579,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 5.607595461948451,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 4.168882917975004,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 8.973459134460793,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 4.9786801572412855,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 8.468024480042237,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 11.106827983941448,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          },
+          {
+            "ligand_fit_applied": false,
+            "predicted_heavy_atoms": 37,
+            "reference_heavy_atoms": 37,
+            "rmsd_angstrom": 7.090298415554992,
+            "status": "PASS",
+            "symmetry_match_count": 24
+          }
+        ],
+        "pose_count": 19,
+        "pose_scores_kcal_mol": [
+          -11.127,
+          -10.734,
+          -10.406,
+          -9.73,
+          -9.729,
+          -9.649,
+          -9.548,
+          -9.154,
+          -8.953,
+          -8.953,
+          -8.793,
+          -8.698,
+          -8.502,
+          -8.5,
+          -8.431,
+          -8.397,
+          -8.346,
+          -8.308,
+          -8.139
+        ],
+        "rank1_rmsd_angstrom": 0.42325026141017763,
+        "rank1_success": true,
+        "scores_used_for_capability_classification": false,
+        "scores_used_for_pose_selection": false,
+        "scores_used_for_success": false,
+        "technical_status": "PASS"
+      }
+    }
+  },
+  "knowledge_gain": {
+    "evidence_ids": [
+      "MOLDISC-018-RECIPROCAL-HOLO"
+    ],
+    "gap_assessment": {
+      "GAP-EXPERIMENTAL-BINDING-VALIDATION": "UNRESOLVED",
+      "GAP-NONCOGNATE-CAPABILITY": "PARTIALLY_RESOLVED",
+      "GAP-RANKING-VS-SAMPLING": "DIRECTLY_TARGETED"
+    },
+    "summary": "MOLDISC-018 directly characterizes reciprocal non-cognate holo pose recovery and separates ranking from sampling failures while keeping the capability classification PARTIALLY_VALIDATED and experimental binding unresolved."
+  },
+  "lead_selection_executed": false,
+  "negative_results": {
+    "affinity_inference": false,
+    "efficacy_inference": false,
+    "experimental_activity_transferred": false,
+    "experimental_truth_claim": false,
+    "generated_candidate_is_k57": false,
+    "k57_is_generated_candidate": false,
+    "universal_validation": false
+  },
+  "new_docking_runs": {
+    "executed": 20,
+    "nonpass": 0,
+    "planned": 20,
+    "skipped": 0
+  },
+  "profile_update": {
+    "classification_after_campaign": "PARTIALLY_VALIDATED",
+    "evidence_source_ids": [
+      "CROSSDOCK-001",
+      "MOLDISC-018-RECIPROCAL-HOLO"
+    ],
+    "new_profile_hash": "1f33fae86f78827f954597b8e0bec455e696fec560ac74f014049c0759d7f8ea",
+    "new_profile_id": "research-os.docking.capability-profile.v1+1f33fae86f78827f",
+    "old_profile_hash": "b8c5c799b2035bae2796de714cc55dc4e607420e13b309b7f33792ebaf5597bb",
+    "old_profile_id": "research-os.docking.capability-profile.v1+b8c5c799b2035bae",
+    "profile_path": "configs\\docking-capability-profile-v1.json"
+  },
+  "program_id": "MOLDISC-018",
+  "program_protocol_hash": "403907a0a9e911a313bfaf27d01b75d8b11d84dc742eac40caf9c7dc020cbb66",
+  "program_scientific_hash": "7b900a85ef70b13120107ab7dca7e5c21da34053942b48379c4c4f51e418086a",
+  "program_version": "1.0",
+  "receptor_alignment": {
+    "background_je2_target": {
+      "algorithm": "KABSCH",
+      "alignment_hash": "1b12a06227628c17800f1ce07127d01f09d3ad1c2c2bb2e0f582e3bdffe9f230",
+      "atom_count": 198,
+      "atom_selection": "C-alpha; same chain; same author residue number; same residue identity; C-alpha present in both",
+      "chain_mapping": {
+        "A": "A",
+        "B": "B"
+      },
+      "keys_hash": "f1b86e0f0de9d68d3bfbbfd2b460a84244d473cc65831b31c09f104fa8b955e1",
+      "post_alignment_rmsd_angstrom": 0.19878344819443647,
+      "pre_alignment_rmsd_angstrom": 0.27167996806997935,
+      "rotation": [
+        [
+          0.999999163019,
+          0.000355987934,
+          0.0012438787
+        ],
+        [
+          -0.000359950844,
+          0.99999485621,
+          0.003187160079
+        ],
+        [
+          -0.001242737712,
+          -0.003187605147,
+          0.999994147371
+        ]
+      ],
+      "translation": [
+        -0.063896177614,
+        0.11766710596,
+        0.091480587293
+      ]
+    },
+    "background_k57_target": {
+      "algorithm": "KABSCH",
+      "alignment_hash": "7ec3706b534ef9fc6e38cb285fe99444acdb84a19944201ecb750aa540493ab2",
+      "atom_count": 198,
+      "atom_selection": "C-alpha; same chain; same author residue number; same residue identity; C-alpha present in both",
+      "chain_mapping": {
+        "A": "A",
+        "B": "B"
+      },
+      "keys_hash": "f1b86e0f0de9d68d3bfbbfd2b460a84244d473cc65831b31c09f104fa8b955e1",
+      "post_alignment_rmsd_angstrom": 0.19878344819443752,
+      "pre_alignment_rmsd_angstrom": 0.27167996806997935,
+      "rotation": [
+        [
+          0.999999163019,
+          -0.000359950844,
+          -0.001242737712
+        ],
+        [
+          0.000355987934,
+          0.99999485621,
+          -0.003187605147
+        ],
+        [
+          0.0012438787,
+          0.003187160079,
+          0.999994147371
+        ]
+      ],
+      "translation": [
+        0.064052164883,
+        -0.117352150446,
+        -0.0917755967
+      ]
+    },
+    "background_receptor_post_alignment_rmsd": 0.19878344819443647,
+    "mutant_je2_target": {
+      "algorithm": "KABSCH",
+      "alignment_hash": "2721e632bcb3f42d2f3590a88658bdfef2ef61a8d7c81433a342041a551c790b",
+      "atom_count": 198,
+      "atom_selection": "C-alpha; same chain; same author residue number; same residue identity; C-alpha present in both",
+      "chain_mapping": {
+        "A": "A",
+        "B": "B"
+      },
+      "keys_hash": "643993d18d63a7db4fe9a61df300d1f768e0e17ac0e9678e40c7d13e56cf2764",
+      "post_alignment_rmsd_angstrom": 0.22488121951351642,
+      "pre_alignment_rmsd_angstrom": 0.3155203574408407,
+      "rotation": [
+        [
+          0.999971843491,
+          0.006691314923,
+          0.003396841175
+        ],
+        [
+          -0.006685356028,
+          0.999976099377,
+          -0.001762580095
+        ],
+        [
+          -0.003408553967,
+          0.001739821375,
+          0.999992677364
+        ]
+      ],
+      "translation": [
+        -0.373448203634,
+        0.257413386116,
+        -0.088966123163
+      ]
+    },
+    "mutant_k57_target": {
+      "algorithm": "KABSCH",
+      "alignment_hash": "6b97fc8f63db01b1017c47332cb947b197a5cef07e983f42f56e99eb0ee6bfd4",
+      "atom_count": 198,
+      "atom_selection": "C-alpha; same chain; same author residue number; same residue identity; C-alpha present in both",
+      "chain_mapping": {
+        "A": "A",
+        "B": "B"
+      },
+      "keys_hash": "643993d18d63a7db4fe9a61df300d1f768e0e17ac0e9678e40c7d13e56cf2764",
+      "post_alignment_rmsd_angstrom": 0.22488121951351875,
+      "pre_alignment_rmsd_angstrom": 0.3155203574408407,
+      "rotation": [
+        [
+          0.999971843491,
+          -0.006685356028,
+          -0.003408553967
+        ],
+        [
+          0.006691314923,
+          0.999976099377,
+          0.001739821375
+        ],
+        [
+          0.003396841175,
+          -0.001762580095,
+          0.999992677364
+        ]
+      ],
+      "translation": [
+        0.374855342936,
+        -0.254753589075,
+        0.090687727642
+      ]
+    },
+    "mutant_receptor_post_alignment_rmsd": 0.22488121951351642
+  },
+  "reciprocal_pose_recovery_matrix": {
+    "RX-01": {
+      "any_pose_success": true,
+      "case_id": "RX-01",
+      "failure_classification": "RANK1_NEAR_NATIVE",
+      "ligand": "K57",
+      "minimum_pose_rank": 1,
+      "minimum_rmsd_angstrom": 0.4928192499598017,
+      "mutation_state": "BACKGROUND",
+      "rank1_rmsd_angstrom": 0.4928192499598017,
+      "rank1_success": true,
+      "reference_receptor": "K57_BACKGROUND",
+      "scores_used_for_capability_classification": false,
+      "scores_used_for_pose_selection": false,
+      "scores_used_for_success": false,
+      "target_receptor": "JE2_BACKGROUND"
+    },
+    "RX-02": {
+      "any_pose_success": true,
+      "case_id": "RX-02",
+      "failure_classification": "RANK1_NEAR_NATIVE",
+      "ligand": "JE2",
+      "minimum_pose_rank": 1,
+      "minimum_rmsd_angstrom": 1.4456283337990998,
+      "mutation_state": "BACKGROUND",
+      "rank1_rmsd_angstrom": 1.4456283337990998,
+      "rank1_success": true,
+      "reference_receptor": "JE2_BACKGROUND",
+      "scores_used_for_capability_classification": false,
+      "scores_used_for_pose_selection": false,
+      "scores_used_for_success": false,
+      "target_receptor": "K57_BACKGROUND"
+    },
+    "RX-03": {
+      "any_pose_success": true,
+      "case_id": "RX-03",
+      "failure_classification": "NEAR_NATIVE_POSE_MISRANKED",
+      "ligand": "K57",
+      "minimum_pose_rank": 5,
+      "minimum_rmsd_angstrom": 0.6974774339895227,
+      "mutation_state": "V82F_I84V",
+      "rank1_rmsd_angstrom": 4.147705675817189,
+      "rank1_success": false,
+      "reference_receptor": "K57_MUTANT",
+      "scores_used_for_capability_classification": false,
+      "scores_used_for_pose_selection": false,
+      "scores_used_for_success": false,
+      "target_receptor": "JE2_MUTANT"
+    },
+    "RX-04": {
+      "any_pose_success": true,
+      "case_id": "RX-04",
+      "failure_classification": "NEAR_NATIVE_POSE_MISRANKED",
+      "ligand": "JE2",
+      "minimum_pose_rank": 5,
+      "minimum_rmsd_angstrom": 1.1687104194275337,
+      "mutation_state": "V82F_I84V",
+      "rank1_rmsd_angstrom": 3.395280154813073,
+      "rank1_success": false,
+      "reference_receptor": "JE2_MUTANT",
+      "scores_used_for_capability_classification": false,
+      "scores_used_for_pose_selection": false,
+      "scores_used_for_success": false,
+      "target_receptor": "K57_MUTANT"
+    }
+  },
+  "reference_pose_transfer": {
+    "RX-01": {
+      "coordinates_hash": "ce2384772a0c497b078df1a0776dfb2d7efad5e6309ab3ba3030034a77a010e8",
+      "ligand_fit_applied": false,
+      "reference_state": "K57_BACKGROUND",
+      "reference_transform_alignment_hash": "1b12a06227628c17800f1ce07127d01f09d3ad1c2c2bb2e0f582e3bdffe9f230",
+      "target_state": "JE2_BACKGROUND",
+      "transformed_heavy_atom_count": 37
+    },
+    "RX-02": {
+      "coordinates_hash": "0eedc8293a3d0a1df85ad52f6cb54493e5eb3f42839e90b7ac1bbad55b8c5ab3",
+      "ligand_fit_applied": false,
+      "reference_state": "JE2_BACKGROUND",
+      "reference_transform_alignment_hash": "7ec3706b534ef9fc6e38cb285fe99444acdb84a19944201ecb750aa540493ab2",
+      "target_state": "K57_BACKGROUND",
+      "transformed_heavy_atom_count": 41
+    },
+    "RX-03": {
+      "coordinates_hash": "1bc41d37090814937763791785fb8b884e49a9181a4bed72fa374f238da0d2d0",
+      "ligand_fit_applied": false,
+      "reference_state": "K57_MUTANT",
+      "reference_transform_alignment_hash": "2721e632bcb3f42d2f3590a88658bdfef2ef61a8d7c81433a342041a551c790b",
+      "target_state": "JE2_MUTANT",
+      "transformed_heavy_atom_count": 37
+    },
+    "RX-04": {
+      "coordinates_hash": "54adce7e0baa65bfe133a2386651e3dcda4bf48dc13a6b0f68b505cc16478a16",
+      "ligand_fit_applied": false,
+      "reference_state": "JE2_MUTANT",
+      "reference_transform_alignment_hash": "6b97fc8f63db01b1017c47332cb947b197a5cef07e983f42f56e99eb0ee6bfd4",
+      "target_state": "K57_MUTANT",
+      "transformed_heavy_atom_count": 41
+    }
+  },
+  "schema_version": "research-os.molecular-discovery.megacampaign-result.v1",
+  "source_audit": {
+    "experimental_activity_transfer_allowed": false,
+    "generated_candidate_is_k57": false,
+    "k57_is_generated_candidate": false,
+    "schema_version": "research-os.molecular-discovery.moldisc018.source-audit.v1",
+    "source_audit_hash": "120fe0bf9c7c56e809515b55fd1904df1679e2d18fa28728b388b297942dd142",
+    "source_contract": {
+      "chains_verified": true,
+      "mutation_sets_verified": true,
+      "native_identity_verified": true,
+      "official_rcsb_resources_only": true,
+      "resolution_verified": true
+    },
+    "states": {
+      "JE2_BACKGROUND": {
+        "ccd_identity": {
+          "canonical_smiles": "Cc1ccccc1CNC(=O)C2C(SCN2C(=O)C(C(Cc3ccccc3)NC(=O)c4cccc(c4C)O)O)(C)C",
+          "component_id": "JE2",
+          "formula": "C32 H37 N3 O5 S",
+          "inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N"
+        },
+        "docking_allowed": true,
+        "formula": "C32H37N3O5S",
+        "grid": {
+          "center_x": 16.402,
+          "center_y": 22.990000000000002,
+          "center_z": 17.2385,
+          "grid_hash": "5967ad06319d2d02646f96bf9ed70769eb345d76e1e50e2ab29aedb348ed0766",
+          "reason": null,
+          "size_x": 22.63,
+          "size_y": 23.45,
+          "size_z": 20.271,
+          "status": "PASS",
+          "unclamped_size_x": 22.63,
+          "unclamped_size_y": 23.45,
+          "unclamped_size_z": 20.271
+        },
+        "grid_hash": "5967ad06319d2d02646f96bf9ed70769eb345d76e1e50e2ab29aedb348ed0766",
+        "inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N",
+        "label": "JE2_BACKGROUND",
+        "ligand": "JE2",
+        "ligand_alias": "KNI-764",
+        "ligand_auth_seq_id": 1001,
+        "ligand_author_chain": "B",
+        "mutations": [
+          "Q7K",
+          "L33I",
+          "L63I"
+        ],
+        "native_sdf_rdkit_inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N",
+        "native_sdf_sha256": "37f0ca257d492721bd9c749bd3f2589934428ca2a1ca05cd46d5f2732b6a3b74",
+        "native_sdf_transport_sha256": "37f0ca257d492721bd9c749bd3f2589934428ca2a1ca05cd46d5f2732b6a3b74",
+        "pdb_id": "1MSM",
+        "raw_pdb_transport_sha256": "bc4af5c04dc0a03ac10199e61f528066b7d5bc573cb3de72c7653381dccefdcf",
+        "receptor_author_chains": [
+          "A",
+          "B"
+        ],
+        "receptor_pdb_sha256": "316eaac4eba5ecaefb48235b33ef9ad718f601ebcec059a0b9953300f97f10ef",
+        "receptor_pdbqt_sha256": "d58248cf12497a510e9933cd7109a70921357115a298526135499899e6dff210",
+        "resolution_angstrom": 2.0,
+        "state_hash": "e2b94babe1423669ec8437bc082a03bacdf49a372784e9f7e8dd47c1177877a6"
+      },
+      "JE2_MUTANT": {
+        "ccd_identity": {
+          "canonical_smiles": "Cc1ccccc1CNC(=O)C2C(SCN2C(=O)C(C(Cc3ccccc3)NC(=O)c4cccc(c4C)O)O)(C)C",
+          "component_id": "JE2",
+          "formula": "C32 H37 N3 O5 S",
+          "inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N"
+        },
+        "docking_allowed": true,
+        "formula": "C32H37N3O5S",
+        "grid": {
+          "center_x": 16.377,
+          "center_y": 23.238500000000002,
+          "center_z": 16.825,
+          "grid_hash": "ddcc2e6bb18e78e0517380a168496db1f5fab16407861189c2f3f89842fcf40a",
+          "reason": null,
+          "size_x": 24.054000000000002,
+          "size_y": 23.693,
+          "size_z": 20.646,
+          "status": "PASS",
+          "unclamped_size_x": 24.054000000000002,
+          "unclamped_size_y": 23.693,
+          "unclamped_size_z": 20.646
+        },
+        "grid_hash": "ddcc2e6bb18e78e0517380a168496db1f5fab16407861189c2f3f89842fcf40a",
+        "inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N",
+        "label": "JE2_MUTANT",
+        "ligand": "JE2",
+        "ligand_alias": "KNI-764",
+        "ligand_auth_seq_id": 1001,
+        "ligand_author_chain": "B",
+        "mutations": [
+          "Q7K",
+          "L33I",
+          "L63I",
+          "V82F",
+          "I84V"
+        ],
+        "native_sdf_rdkit_inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N",
+        "native_sdf_sha256": "6c8d64f00501b3da7867e6fccaa2a77260259ac787a278ee04ffe306c25e72f2",
+        "native_sdf_transport_sha256": "6c8d64f00501b3da7867e6fccaa2a77260259ac787a278ee04ffe306c25e72f2",
+        "pdb_id": "1MSN",
+        "raw_pdb_transport_sha256": "501c7a8b230de7657d8365195c1ae33aac210bfdc7b938a3a98feb9224f46d8e",
+        "receptor_author_chains": [
+          "A",
+          "B"
+        ],
+        "receptor_pdb_sha256": "74b95df8877bd7a4ae58111bd02749d164d6f4ceb018ed7d4e2f5a4142deea0e",
+        "receptor_pdbqt_sha256": "69f19b7118b4883cd04294d3c043b6fc876c682fb090b468d18ef5a8df6914f7",
+        "resolution_angstrom": 2.0,
+        "state_hash": "37c772d40bbd479cd46c9875d7a2f710ecaa2838d9df0c2c84cd8a39493aaa22"
+      },
+      "K57_BACKGROUND": {
+        "ccd_identity": {
+          "canonical_smiles": "Cc1c(cccc1O)C(=O)NC(Cc2ccccc2)C(C(=O)N3CSC(C3C(=O)NC(C)(C)C)(C)C)O",
+          "component_id": "K57",
+          "formula": "C28 H37 N3 O5 S",
+          "inchikey": "CGFVYUGIPISJQG-ACIOBRDBSA-N"
+        },
+        "docking_allowed": true,
+        "formula": "C28H37N3O5S",
+        "grid": {
+          "center_x": 16.2275,
+          "center_y": 22.2235,
+          "center_z": 17.3155,
+          "grid_hash": "e8a22e5c534876dd50bcddfc14faa00df25b73f5f9243fbb777b9377e5e359f7",
+          "reason": null,
+          "size_x": 22.227,
+          "size_y": 22.035,
+          "size_z": 20.0,
+          "status": "PASS",
+          "unclamped_size_x": 22.227,
+          "unclamped_size_y": 22.035,
+          "unclamped_size_z": 19.975
+        },
+        "grid_hash": "e8a22e5c534876dd50bcddfc14faa00df25b73f5f9243fbb777b9377e5e359f7",
+        "inchikey": "CGFVYUGIPISJQG-ACIOBRDBSA-N",
+        "label": "K57_BACKGROUND",
+        "ligand": "K57",
+        "ligand_alias": "KNI-577",
+        "ligand_auth_seq_id": 1001,
+        "ligand_author_chain": "A",
+        "mutations": [
+          "Q7K",
+          "L33I",
+          "L63I"
+        ],
+        "native_sdf_rdkit_inchikey": "CGFVYUGIPISJQG-XLSWHLDHSA-N",
+        "native_sdf_sha256": "6c2cc6f56013712a9f340e7ac0ece211810c9373b6920fc98f22043350b4d19a",
+        "native_sdf_transport_sha256": "6c2cc6f56013712a9f340e7ac0ece211810c9373b6920fc98f22043350b4d19a",
+        "pdb_id": "1MRW",
+        "raw_pdb_transport_sha256": "7e1e15b69e1b9335bfb448336fd0a37d3f5694d28278fe92fe551d6b97f060cc",
+        "receptor_author_chains": [
+          "A",
+          "B"
+        ],
+        "receptor_pdb_sha256": "a5c6b94e7925b78be0822fb832d5c21af93eb7460df340ca5366ff6393fa3a43",
+        "receptor_pdbqt_sha256": "e7061de9c308a06b9642189bab67ce5ec1896cee8d70fecdf74b1055163fe604",
+        "resolution_angstrom": 2.0,
+        "state_hash": "984413139086c74c887dcbe7aeb0091d5c5d69c0c9ecbe2a0973418c9fcce9ac"
+      },
+      "K57_MUTANT": {
+        "ccd_identity": {
+          "canonical_smiles": "Cc1c(cccc1O)C(=O)NC(Cc2ccccc2)C(C(=O)N3CSC(C3C(=O)NC(C)(C)C)(C)C)O",
+          "component_id": "K57",
+          "formula": "C28 H37 N3 O5 S",
+          "inchikey": "CGFVYUGIPISJQG-ACIOBRDBSA-N"
+        },
+        "docking_allowed": true,
+        "formula": "C28H37N3O5S",
+        "grid": {
+          "center_x": 16.0685,
+          "center_y": 22.3325,
+          "center_z": 16.7915,
+          "grid_hash": "7f2972c64361d59491280b1415c150c3bab238952ce5188f65bbcf18e36fc847",
+          "reason": null,
+          "size_x": 22.445,
+          "size_y": 22.045,
+          "size_z": 20.635,
+          "status": "PASS",
+          "unclamped_size_x": 22.445,
+          "unclamped_size_y": 22.045,
+          "unclamped_size_z": 20.635
+        },
+        "grid_hash": "7f2972c64361d59491280b1415c150c3bab238952ce5188f65bbcf18e36fc847",
+        "inchikey": "CGFVYUGIPISJQG-ACIOBRDBSA-N",
+        "label": "K57_MUTANT",
+        "ligand": "K57",
+        "ligand_alias": "KNI-577",
+        "ligand_auth_seq_id": 1001,
+        "ligand_author_chain": "B",
+        "mutations": [
+          "Q7K",
+          "L33I",
+          "L63I",
+          "V82F",
+          "I84V"
+        ],
+        "native_sdf_rdkit_inchikey": "CGFVYUGIPISJQG-XLSWHLDHSA-N",
+        "native_sdf_sha256": "f82e83541ca0bc5b95a630947b92d234e774c328d1a9232fd185af7a483119cb",
+        "native_sdf_transport_sha256": "f82e83541ca0bc5b95a630947b92d234e774c328d1a9232fd185af7a483119cb",
+        "pdb_id": "1MRX",
+        "raw_pdb_transport_sha256": "963d3ad7c0fc8394fc126f5762333bcc9651a3d082027266466bdabed658cb42",
+        "receptor_author_chains": [
+          "A",
+          "B"
+        ],
+        "receptor_pdb_sha256": "e2c83974606e0cd84dd6535c10a91068e575fe6e934350f2e9edec97f08bc22d",
+        "receptor_pdbqt_sha256": "15ae5718646abfb9a00ff6449279e8b27328ab67f9d51c3ada65cf21776ea33f",
+        "resolution_angstrom": 2.0,
+        "state_hash": "f50831a040a18c34a054d8e66d9924b660768c811f3fe742562c69336d19d385"
+      }
+    },
+    "states_with_paths": {
+      "JE2_BACKGROUND": {
+        "ccd_identity": {
+          "canonical_smiles": "Cc1ccccc1CNC(=O)C2C(SCN2C(=O)C(C(Cc3ccccc3)NC(=O)c4cccc(c4C)O)O)(C)C",
+          "component_id": "JE2",
+          "formula": "C32 H37 N3 O5 S",
+          "inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N"
+        },
+        "docking_allowed": true,
+        "formula": "C32H37N3O5S",
+        "grid": {
+          "center_x": 16.402,
+          "center_y": 22.990000000000002,
+          "center_z": 17.2385,
+          "grid_hash": "5967ad06319d2d02646f96bf9ed70769eb345d76e1e50e2ab29aedb348ed0766",
+          "reason": null,
+          "size_x": 22.63,
+          "size_y": 23.45,
+          "size_z": 20.271,
+          "status": "PASS",
+          "unclamped_size_x": 22.63,
+          "unclamped_size_y": 23.45,
+          "unclamped_size_z": 20.271
+        },
+        "grid_hash": "5967ad06319d2d02646f96bf9ed70769eb345d76e1e50e2ab29aedb348ed0766",
+        "inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N",
+        "label": "JE2_BACKGROUND",
+        "ligand": "JE2",
+        "ligand_alias": "KNI-764",
+        "ligand_auth_seq_id": 1001,
+        "ligand_author_chain": "B",
+        "mutations": [
+          "Q7K",
+          "L33I",
+          "L63I"
+        ],
+        "native_sdf_path": "C:\\Users\\samue\\Desktop\\Bio\\moldisc018-result-local\\source_audit\\JE2_BACKGROUND\\JE2_native.sdf",
+        "native_sdf_rdkit_inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N",
+        "native_sdf_sha256": "37f0ca257d492721bd9c749bd3f2589934428ca2a1ca05cd46d5f2732b6a3b74",
+        "native_sdf_transport_sha256": "37f0ca257d492721bd9c749bd3f2589934428ca2a1ca05cd46d5f2732b6a3b74",
+        "pdb_id": "1MSM",
+        "raw_pdb_transport_sha256": "bc4af5c04dc0a03ac10199e61f528066b7d5bc573cb3de72c7653381dccefdcf",
+        "receptor_author_chains": [
+          "A",
+          "B"
+        ],
+        "receptor_pdb_path": "C:\\Users\\samue\\Desktop\\Bio\\moldisc018-result-local\\source_audit\\JE2_BACKGROUND\\receptor_extracted.pdb",
+        "receptor_pdb_sha256": "316eaac4eba5ecaefb48235b33ef9ad718f601ebcec059a0b9953300f97f10ef",
+        "receptor_pdbqt_path": "C:\\Users\\samue\\Desktop\\Bio\\moldisc018-result-local\\source_audit\\JE2_BACKGROUND\\receptor.pdbqt",
+        "receptor_pdbqt_sha256": "d58248cf12497a510e9933cd7109a70921357115a298526135499899e6dff210",
+        "resolution_angstrom": 2.0,
+        "state_hash": "e2b94babe1423669ec8437bc082a03bacdf49a372784e9f7e8dd47c1177877a6"
+      },
+      "JE2_MUTANT": {
+        "ccd_identity": {
+          "canonical_smiles": "Cc1ccccc1CNC(=O)C2C(SCN2C(=O)C(C(Cc3ccccc3)NC(=O)c4cccc(c4C)O)O)(C)C",
+          "component_id": "JE2",
+          "formula": "C32 H37 N3 O5 S",
+          "inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N"
+        },
+        "docking_allowed": true,
+        "formula": "C32H37N3O5S",
+        "grid": {
+          "center_x": 16.377,
+          "center_y": 23.238500000000002,
+          "center_z": 16.825,
+          "grid_hash": "ddcc2e6bb18e78e0517380a168496db1f5fab16407861189c2f3f89842fcf40a",
+          "reason": null,
+          "size_x": 24.054000000000002,
+          "size_y": 23.693,
+          "size_z": 20.646,
+          "status": "PASS",
+          "unclamped_size_x": 24.054000000000002,
+          "unclamped_size_y": 23.693,
+          "unclamped_size_z": 20.646
+        },
+        "grid_hash": "ddcc2e6bb18e78e0517380a168496db1f5fab16407861189c2f3f89842fcf40a",
+        "inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N",
+        "label": "JE2_MUTANT",
+        "ligand": "JE2",
+        "ligand_alias": "KNI-764",
+        "ligand_auth_seq_id": 1001,
+        "ligand_author_chain": "B",
+        "mutations": [
+          "Q7K",
+          "L33I",
+          "L63I",
+          "V82F",
+          "I84V"
+        ],
+        "native_sdf_path": "C:\\Users\\samue\\Desktop\\Bio\\moldisc018-result-local\\source_audit\\JE2_MUTANT\\JE2_native.sdf",
+        "native_sdf_rdkit_inchikey": "CUFQBQOBLVLKRF-RZDMPUFOSA-N",
+        "native_sdf_sha256": "6c8d64f00501b3da7867e6fccaa2a77260259ac787a278ee04ffe306c25e72f2",
+        "native_sdf_transport_sha256": "6c8d64f00501b3da7867e6fccaa2a77260259ac787a278ee04ffe306c25e72f2",
+        "pdb_id": "1MSN",
+        "raw_pdb_transport_sha256": "501c7a8b230de7657d8365195c1ae33aac210bfdc7b938a3a98feb9224f46d8e",
+        "receptor_author_chains": [
+          "A",
+          "B"
+        ],
+        "receptor_pdb_path": "C:\\Users\\samue\\Desktop\\Bio\\moldisc018-result-local\\source_audit\\JE2_MUTANT\\receptor_extracted.pdb",
+        "receptor_pdb_sha256": "74b95df8877bd7a4ae58111bd02749d164d6f4ceb018ed7d4e2f5a4142deea0e",
+        "receptor_pdbqt_path": "C:\\Users\\samue\\Desktop\\Bio\\moldisc018-result-local\\source_audit\\JE2_MUTANT\\receptor.pdbqt",
+        "receptor_pdbqt_sha256": "69f19b7118b4883cd04294d3c043b6fc876c682fb090b468d18ef5a8df6914f7",
+        "resolution_angstrom": 2.0,
+        "state_hash": "37c772d40bbd479cd46c9875d7a2f710ecaa2838d9df0c2c84cd8a39493aaa22"
+      },
+      "K57_BACKGROUND": {
+        "ccd_identity": {
+          "canonical_smiles": "Cc1c(cccc1O)C(=O)NC(Cc2ccccc2)C(C(=O)N3CSC(C3C(=O)NC(C)(C)C)(C)C)O",
+          "component_id": "K57",
+          "formula": "C28 H37 N3 O5 S",
+          "inchikey": "CGFVYUGIPISJQG-ACIOBRDBSA-N"
+        },
+        "docking_allowed": true,
+        "formula": "C28H37N3O5S",
+        "grid": {
+          "center_x": 16.2275,
+          "center_y": 22.2235,
+          "center_z": 17.3155,
+          "grid_hash": "e8a22e5c534876dd50bcddfc14faa00df25b73f5f9243fbb777b9377e5e359f7",
+          "reason": null,
+          "size_x": 22.227,
+          "size_y": 22.035,
+          "size_z": 20.0,
+          "status": "PASS",
+          "unclamped_size_x": 22.227,
+          "unclamped_size_y": 22.035,
+          "unclamped_size_z": 19.975
+        },
+        "grid_hash": "e8a22e5c534876dd50bcddfc14faa00df25b73f5f9243fbb777b9377e5e359f7",
+        "inchikey": "CGFVYUGIPISJQG-ACIOBRDBSA-N",
+        "label": "K57_BACKGROUND",
+        "ligand": "K57",
+        "ligand_alias": "KNI-577",
+        "ligand_auth_seq_id": 1001,
+        "ligand_author_chain": "A",
+        "mutations": [
+          "Q7K",
+          "L33I",
+          "L63I"
+        ],
+        "native_sdf_path": "C:\\Users\\samue\\Desktop\\Bio\\moldisc018-result-local\\source_audit\\K57_BACKGROUND\\K57_native.sdf",
+        "native_sdf_rdkit_inchikey": "CGFVYUGIPISJQG-XLSWHLDHSA-N",
+        "native_sdf_sha256": "6c2cc6f56013712a9f340e7ac0ece211810c9373b6920fc98f22043350b4d19a",
+        "native_sdf_transport_sha256": "6c2cc6f56013712a9f340e7ac0ece211810c9373b6920fc98f22043350b4d19a",
+        "pdb_id": "1MRW",
+        "raw_pdb_transport_sha256": "7e1e15b69e1b9335bfb448336fd0a37d3f5694d28278fe92fe551d6b97f060cc",
+        "receptor_author_chains": [
+          "A",
+          "B"
+        ],
+        "receptor_pdb_path": "C:\\Users\\samue\\Desktop\\Bio\\moldisc018-result-local\\source_audit\\K57_BACKGROUND\\receptor_extracted.pdb",
+        "receptor_pdb_sha256": "a5c6b94e7925b78be0822fb832d5c21af93eb7460df340ca5366ff6393fa3a43",
+        "receptor_pdbqt_path": "C:\\Users\\samue\\Desktop\\Bio\\moldisc018-result-local\\source_audit\\K57_BACKGROUND\\receptor.pdbqt",
+        "receptor_pdbqt_sha256": "e7061de9c308a06b9642189bab67ce5ec1896cee8d70fecdf74b1055163fe604",
+        "resolution_angstrom": 2.0,
+        "state_hash": "984413139086c74c887dcbe7aeb0091d5c5d69c0c9ecbe2a0973418c9fcce9ac"
+      },
+      "K57_MUTANT": {
+        "ccd_identity": {
+          "canonical_smiles": "Cc1c(cccc1O)C(=O)NC(Cc2ccccc2)C(C(=O)N3CSC(C3C(=O)NC(C)(C)C)(C)C)O",
+          "component_id": "K57",
+          "formula": "C28 H37 N3 O5 S",
+          "inchikey": "CGFVYUGIPISJQG-ACIOBRDBSA-N"
+        },
+        "docking_allowed": true,
+        "formula": "C28H37N3O5S",
+        "grid": {
+          "center_x": 16.0685,
+          "center_y": 22.3325,
+          "center_z": 16.7915,
+          "grid_hash": "7f2972c64361d59491280b1415c150c3bab238952ce5188f65bbcf18e36fc847",
+          "reason": null,
+          "size_x": 22.445,
+          "size_y": 22.045,
+          "size_z": 20.635,
+          "status": "PASS",
+          "unclamped_size_x": 22.445,
+          "unclamped_size_y": 22.045,
+          "unclamped_size_z": 20.635
+        },
+        "grid_hash": "7f2972c64361d59491280b1415c150c3bab238952ce5188f65bbcf18e36fc847",
+        "inchikey": "CGFVYUGIPISJQG-ACIOBRDBSA-N",
+        "label": "K57_MUTANT",
+        "ligand": "K57",
+        "ligand_alias": "KNI-577",
+        "ligand_auth_seq_id": 1001,
+        "ligand_author_chain": "B",
+        "mutations": [
+          "Q7K",
+          "L33I",
+          "L63I",
+          "V82F",
+          "I84V"
+        ],
+        "native_sdf_path": "C:\\Users\\samue\\Desktop\\Bio\\moldisc018-result-local\\source_audit\\K57_MUTANT\\K57_native.sdf",
+        "native_sdf_rdkit_inchikey": "CGFVYUGIPISJQG-XLSWHLDHSA-N",
+        "native_sdf_sha256": "f82e83541ca0bc5b95a630947b92d234e774c328d1a9232fd185af7a483119cb",
+        "native_sdf_transport_sha256": "f82e83541ca0bc5b95a630947b92d234e774c328d1a9232fd185af7a483119cb",
+        "pdb_id": "1MRX",
+        "raw_pdb_transport_sha256": "963d3ad7c0fc8394fc126f5762333bcc9651a3d082027266466bdabed658cb42",
+        "receptor_author_chains": [
+          "A",
+          "B"
+        ],
+        "receptor_pdb_path": "C:\\Users\\samue\\Desktop\\Bio\\moldisc018-result-local\\source_audit\\K57_MUTANT\\receptor_extracted.pdb",
+        "receptor_pdb_sha256": "e2c83974606e0cd84dd6535c10a91068e575fe6e934350f2e9edec97f08bc22d",
+        "receptor_pdbqt_path": "C:\\Users\\samue\\Desktop\\Bio\\moldisc018-result-local\\source_audit\\K57_MUTANT\\receptor.pdbqt",
+        "receptor_pdbqt_sha256": "15ae5718646abfb9a00ff6449279e8b27328ab67f9d51c3ada65cf21776ea33f",
+        "resolution_angstrom": 2.0,
+        "state_hash": "f50831a040a18c34a054d8e66d9924b660768c811f3fe742562c69336d19d385"
+      }
+    }
+  },
+  "status": "CLOSED_FIRST_RESULT_PRESERVED"
+}

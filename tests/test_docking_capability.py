@@ -19,8 +19,8 @@ PROFILE_PATH = Path(__file__).parents[1] / "configs" / "docking-capability-profi
 
 def test_profile_loads_with_deterministic_identity_and_e2_level():
     profile = load_profile(PROFILE_PATH)
-    assert profile.profile_id == "research-os.docking.capability-profile.v1+b8c5c799b2035bae"
-    assert profile.profile_hash == "b8c5c799b2035bae2796de714cc55dc4e607420e13b309b7f33792ebaf5597bb"
+    assert profile.profile_id == "research-os.docking.capability-profile.v1+1f33fae86f78827f"
+    assert profile.profile_hash == "1f33fae86f78827f954597b8e0bec455e696fec560ac74f014049c0759d7f8ea"
     assert profile.evidence_level is EvidenceLevel.E2_COMPUTATIONAL
 
 
@@ -83,5 +83,5 @@ def test_capability_metadata_is_machine_readable_and_preserves_limitations():
     assert metadata["docking_context"] == "NON_COGNATE_HOLO_CROSSDOCKING"
     assert metadata["capability_status"] == "PARTIALLY_VALIDATED"
     assert metadata["evidence_level"] == "E2_COMPUTATIONAL"
-    assert metadata["validation_sources"] == ["CROSSDOCK-001"]
+    assert metadata["validation_sources"] == ["CROSSDOCK-001", "MOLDISC-018-RECIPROCAL-HOLO"]
     assert metadata["known_limitations"]

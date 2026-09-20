@@ -436,7 +436,25 @@ def run_moldisc_018(*, config_path: str | Path, output_root: str | Path, timeout
         "RX-03": _transform_coords(native["K57_MUTANT"], alignments["MUTANT"]),
         "RX-04": _transform_coords(native["JE2_MUTANT"], reverse_alignments["MUTANT"]),
     }
-    reference_pose_transfer = {case_id: {"reference_state": _case_map(config)[case_id]["reference"], "target_state": _case_map(config)[case_id]["target"], "transformed_heavy_atom_count": len(coords), "reference_transform_alignment_hash": (alignments["BACKGROUND"] if case_id in {"RX-01", "RX-02"} else alignments["MUTANT"])["alignment_hash"], "ligand_fit_applied": False, "coordinates_hash": sha256_json(coords)} for case_id, coords in reference_coords.items()}
+    reference_pose_transfer = {
+        case_id: {
+            "reference_state": _case_map(config)[case_id]["reference"],
+            "target_state": _case_map(config)[case_id]["target"],
+            "transformed_heavy_atom_count": len(coords),
+            "reference_transform_alignment_hash": (
+                alignments["BACKGROUND"]
+                if case_id == "RX-01"
+                else reverse_alignments["BACKGROUND"]
+                if case_id == "RX-02"
+                else alignments["MUTANT"]
+                if case_id == "RX-03"
+                else reverse_alignments["MUTANT"]
+            )["alignment_hash"],
+            "ligand_fit_applied": False,
+            "coordinates_hash": sha256_json(coords),
+        }
+        for case_id, coords in reference_coords.items()
+    }
     _write_json(root / "reference_pose_transfer.json", reference_pose_transfer)
     metrics: dict[str, Any] = {}
     for spec in plan:
