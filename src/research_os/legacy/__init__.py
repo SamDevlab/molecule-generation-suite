@@ -8,6 +8,10 @@ from .migration import (
 )
 from .parity import DETERMINISTIC_FIELDS, compare_property_records, deterministic_property_parity
 from .rules import LEGACY_ML_RESUBSTITUTION_RULE, LEGACY_TARGET_SPECIES_RULE, LegacyRuleFinding, resubstitution_finding, species_finding
+from .biolab_archaeology import (
+    CURRENT_PANEL_INCHIKEYS, CURRENT_PANEL_KEYS, LegacyArchaeologyError,
+    PRIORITY_SOURCES, VERSION, build_artifacts, dry_run,
+)
 
 __all__ = [
     "LegacyTargetClass", "classify_legacy_target", "migration_plan_for_targets", "legacy_engine_audit",
@@ -16,4 +20,5 @@ __all__ = [
     "legacy_datasets", "legacy_target_species", "migration_decisions", "scan_legacy", "write_inventory",
     "DETERMINISTIC_FIELDS", "compare_property_records", "deterministic_property_parity",
     "LEGACY_ML_RESUBSTITUTION_RULE", "LEGACY_TARGET_SPECIES_RULE", "LegacyRuleFinding", "resubstitution_finding", "species_finding",
+    "CURRENT_PANEL_INCHIKEYS", "CURRENT_PANEL_KEYS", "LegacyArchaeologyError", "PRIORITY_SOURCES", "VERSION", "build_artifacts", "dry_run",
 ]

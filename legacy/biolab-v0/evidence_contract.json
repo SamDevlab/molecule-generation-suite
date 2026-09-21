@@ -1,0 +1,9 @@
+{
+  "evidence_level": "COMPUTATIONAL",
+  "experimental_validation": "NONE",
+  "may_create_e4": false,
+  "may_inform_historical_context": true,
+  "may_open_generation_gate": false,
+  "origin": "LEGACY",
+  "promotion_to_current_evidence": false
+}

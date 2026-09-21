@@ -1,0 +1,240 @@
+{
+  "canonical_corpus_hash": "e69e7894401250c123a5f420ead080e015d18588ffc8a396afbfaa7fb979daa6",
+  "classification": {
+    "evidence_level": "COMPUTATIONAL",
+    "evidence_origin": "LEGACY",
+    "experimental_validation": "NONE",
+    "promotion_to_current_evidence": "FORBIDDEN"
+  },
+  "current_panel": {
+    "comparison": {
+      "match_counts": {
+        "NO_MATCH": 15180
+      },
+      "no_ranking_created": true,
+      "pair_count": 15180,
+      "parameters": {
+        "fingerprint": "Morgan",
+        "metric": "Tanimoto",
+        "nBits": 2048,
+        "radius": 2,
+        "structural_similarity_threshold": 0.4
+      }
+    },
+    "inchikeys": {
+      "A0B0": "DRIAWXDDGSORDT-KKUQBAQOSA-N",
+      "A0B1": "DMSDTDPQGPRTNA-FDFHNCONSA-N",
+      "A1B0": "NAZMDUVPQSKJEQ-KKUQBAQOSA-N",
+      "A1B1": "URHJIBSBOJFXDI-FDFHNCONSA-N"
+    },
+    "kni_c2545": {
+      "current_boundary": {
+        "full_identity_match": false,
+        "measurement_transfer_allowed": false,
+        "name": "PHENYL-KNI-727",
+        "source_stereochemistry": "UNRESOLVED"
+      },
+      "explicit_legacy_hits": [],
+      "interpretation": "same connectivity does not imply same stereochemical identity; no measurement transfer",
+      "status": "NO_EXPLICIT_LEGACY_IDENTITY_FOUND"
+    },
+    "panel_keys": [
+      "A0B0",
+      "A1B0",
+      "A0B1",
+      "A1B1"
+    ],
+    "status": {
+      "connectivity_matches": {},
+      "exact_matches": {},
+      "structural_similarity_pairs": {}
+    }
+  },
+  "invariants": {
+    "e4_created": false,
+    "legacy_can_create_e4": false,
+    "next_generation_allowed": false,
+    "raw_data_committed": false,
+    "real_experiment_executed": false
+  },
+  "legacy_root": "G:\\Meu Drive\\Samuel – Pessoal\\03 Projetos e programação\\02 - Ciência, IA e dados\\molecule-generation-suite",
+  "manifest_hash_scope": "generated outputs excluding manifest.json to avoid self-reference",
+  "model_inventory": {
+    "pickle_files_executed": 0,
+    "pickle_files_inventoried": 7
+  },
+  "outputs": {
+    "CURRENT_PANEL_COMPARISON.md": "57b608cb3c2463a8070fdd108af36c0c7027c58155704a64f8a9023d4019f93a",
+    "MODEL_AUDIT_BACKLOG.md": "c00f9304ea9001dd5b8939ba113559264a9b1e66aff45416d7ce7e33e43501a9",
+    "MODEL_INVENTORY.md": "2e3abda193ad12cc2d2d117ba662f4e809e163a4ba772c88ace20717d15fe607",
+    "README.md": "2293b4ec81f99baf6edc18e4044ac81377d248db135fcb1d6d637233ce417198",
+    "current_panel_matches.csv": "f1f414615e22ba036bcc0b87b14f2866dbe53ba5f5b7f1d85d4d79e3c7aadb8b",
+    "datasets.json": "4177815e801e4abe23788c51b2fe3e52570b1d63e2b4fefc3d552372feed644d",
+    "evidence_contract.json": "0b0dd80e70fe7a31e00c83108105f2d97e4f33f7593c62020d0ae8e5d96bc523",
+    "legacy_molecular_index.csv": "af7e4703148f445fb484aeebcecafa3d4b633f37205d3c51ef5abdcc5fab5b3e",
+    "model_inventory.json": "963bf590686f650df4087abbe74b592b276e8dce0c725ac9a75b00165ad1e1de",
+    "source_overlap.csv": "0e4d04982627e89ac5a1ecdd68ebdd6666965e3004ef4038d4d781a9531ee340"
+  },
+  "scope": "priority",
+  "sources": [
+    {
+      "classification": "LEGACY_COMPUTATIONAL_RESULT",
+      "columns": [
+        "Par_Molecular",
+        "E_Isolada",
+        "E_Sinergica",
+        "Delta_G_Consenso_C2",
+        "Desvio_Padrão_C2",
+        "Índice_Seletividade",
+        "LE_Isolado",
+        "Delta_LE",
+        "MW_Complexo",
+        "LogP_Complexo",
+        "TPSA_Complexo",
+        "Filtro_Lipinski_ADME",
+        "Ki_Isolado_uM",
+        "Ki_Sinergico_uM",
+        "Docking_Reverso_Tox",
+        "Veredito"
+      ],
+      "delimiter": ",",
+      "encoding": "utf-8",
+      "file_size": 1601,
+      "malformed_row_count": 0,
+      "row_count": 10,
+      "source_path": "Biolab/TOP_10_HITS_REFINADOS.csv",
+      "source_sha256": "d2ef4bf35f6374d0de9865275b7e57da285d1c90e89fac89749a3b07f3b029d8"
+    },
+    {
+      "classification": "LEGACY_COMPUTATIONAL_RESULT",
+      "columns": [
+        "Nome",
+        "Classe",
+        "Smiles",
+        "Peso_Molecular",
+        "logP",
+        "TPSA",
+        "Lig_Rotacionaveis"
+      ],
+      "delimiter": ",",
+      "encoding": "utf-8",
+      "file_size": 1219,
+      "malformed_row_count": 0,
+      "row_count": 14,
+      "source_path": "Biolab/matriz_compostos_filtrados.csv",
+      "source_sha256": "325c52067bebda3b83833eaacfb9850308dc052eaa35b53d791f284348ffe49c"
+    },
+    {
+      "classification": "LEGACY_COMPUTATIONAL_RESULT",
+      "columns": [
+        "ID",
+        "SMILES",
+        "Peso_Molar",
+        "Qtd_Aneis",
+        "LogP",
+        "TPSA",
+        "Complexidade",
+        "Score_QED",
+        "OB_Pct",
+        "Energia_3D_Kcal",
+        "Num_S",
+        "Num_Si",
+        "Num_B",
+        "Num_P",
+        "Num_Cl",
+        "Categoria",
+        "Num_N",
+        "PHARMA_Lipinski_Pass",
+        "PHARMA_Qtd_O",
+        "PHARMA_Qtd_N",
+        "PHARMA_Qtd_F",
+        "ADMET_FractionCSP3",
+        "ADMET_RotatableBonds",
+        "ADMET_AromaticRings",
+        "ADMET_HDonors",
+        "ADMET_HAcceptors",
+        "IA_Pred_Score_QED"
+      ],
+      "delimiter": ",",
+      "encoding": "utf-8",
+      "file_size": 9476,
+      "malformed_row_count": 0,
+      "row_count": 50,
+      "source_path": "formolecular/csv_elite_farma/RANKING_FARMACOS_ELITE_ADMET.csv",
+      "source_sha256": "512426e5e840f6b8eb097719e4c68db11582d35e5e9a93f8b83fcab2a04b1532"
+    },
+    {
+      "classification": "LEGACY_COMPUTATIONAL_RESULT",
+      "columns": [
+        "ID_Mestre",
+        "SMILES",
+        "Eficacia_Humana_4EY7",
+        "5W8K_Risco",
+        "Novo_Fitness_Score",
+        "Diferenca_Bio"
+      ],
+      "delimiter": ",",
+      "encoding": "utf-8",
+      "file_size": 1075,
+      "malformed_row_count": 0,
+      "row_count": 10,
+      "source_path": "formolecular/novo_horizonte/top10_validado_4EY7.csv",
+      "source_sha256": "67a03e9da9626a0e65a97c2723a8d38ea9174df1b79e9154f0566fe356f86471"
+    },
+    {
+      "classification": "LEGACY_COMPUTATIONAL_RESULT",
+      "columns": [
+        "ID_Mestre",
+        "SMILES",
+        "1EVE_Eficacia",
+        "5W8K_Risco",
+        "Indice_Seletividade",
+        "Fitness_Score",
+        "Origem_Historica"
+      ],
+      "delimiter": ",",
+      "encoding": "utf-8",
+      "file_size": 1122,
+      "malformed_row_count": 0,
+      "row_count": 10,
+      "source_path": "formolecular/novo_horizonte/top10_isolado.csv",
+      "source_sha256": "fe0ab6f1b946013d4c114856ab5bbfff3c03572f657b12eb7b80c686685a6059"
+    },
+    {
+      "classification": "LEGACY_COMPUTATIONAL_RESULT",
+      "columns": [
+        "ID_Mestre",
+        "SMILES",
+        "1EVE_Eficacia",
+        "5W8K_Risco",
+        "Indice_Seletividade",
+        "Fitness_Score",
+        "Origem_Historica"
+      ],
+      "delimiter": ",",
+      "encoding": "utf-8",
+      "file_size": 376967,
+      "malformed_row_count": 0,
+      "row_count": 3733,
+      "source_path": "formolecular/novo_horizonte/banco_mestre_unificado.csv",
+      "source_sha256": "57bfc3ecf9219e1cb7017892371771f82bd473cdf13250d0643fbf1dac12cb4b"
+    }
+  ],
+  "statistics": {
+    "duplicate_identities": 22,
+    "identity_invalid": 0,
+    "identity_missing": 10,
+    "identity_partial": 0,
+    "identity_valid": 3817,
+    "index_rows": 3805,
+    "molecular_rows": 3817,
+    "multi_source_identities": 10,
+    "pickle_files_executed": 0,
+    "pickle_files_inventoried": 7,
+    "priority_sources_expected": 6,
+    "priority_sources_found": 6,
+    "rows_scanned": 3827,
+    "unique_exact_identities": 3795
+  },
+  "version": "biolab-legacy-archaeology.v0.1"
+}
